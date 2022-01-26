@@ -30,3 +30,5 @@ object
 fm.dat
 *_OLD.lgc
 LOGIC.*
+layout_errors.txt
+*.ass
