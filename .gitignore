@@ -1,1 +1,26 @@
-#
+# interpreter files
+agi.exe
+*.exe
+*.com
+*.ovl
+logdir
+picdir
+snddir
+viewdir
+*dir
+vol.*
+*vol.*
+errlog.txt
+hgc_font
+logfile
+*.old
+*.bat
+*.sublime-project
+*.sublime-workspace
+*.agl
+*.agp
+*.ags
+*.agv
+*sg.*
+*.bmp
+*.png
