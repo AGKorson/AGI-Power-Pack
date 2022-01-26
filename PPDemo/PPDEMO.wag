@@ -1,0 +1,534 @@
+#
+# WinAGI Game Property File
+#
+[General]
+   WinAGIVersion = 2.1.1
+   GameID = PPDEMO
+   Interpreter = 2.917
+   LastEdit = "1/22/2022 3:46:43 PM"
+   Description = "WinAGI v2 Template Game"
+   GameVersion = "AGI Game version 0.0"
+   About = "AGI Game by <author>"
+   ResDir = src
+   UseResNames = True
+   Author = "Andrew Korson"
+   PlatformType = 1
+   Platform = "C:\Program Files (x86)\DOSBox-0.74-3\DOSBoxDB.exe"
+   PlatformOpts = \exit
+   DOSExec = agi.exe
+   UseLE = True
+
+[Palette]
+   Color0 = &H00000000
+   Color1 = &H00A00000
+   Color2 = &H0000A000
+   Color3 = &H00A0A000
+   Color4 = &H000000A0
+   Color5 = &H00A00080
+   Color6 = &H000050A0
+   Color7 = &H00A0A0A0
+   Color8 = &H00505050
+   Color9 = &H00FF5050
+   Color10 = &H0050FF00
+   Color11 = &H00FFFF50
+   Color12 = &H005050FF
+   Color13 = &H00FF50FF
+   Color14 = &H0050FFFF
+   Color15 = &H00FFFFFF
+
+[WORDS.TOK]
+   Description = ""
+
+[OBJECT]
+   Description = ""
+
+[::BEGIN Logics::]
+[Logic0]
+   CompCRC32 = &H0
+   CRC32 = &H16FC08B3
+   ID = lgc.Main
+   IsRoom = False
+   Size = 1636
+   Description = "This logic runs in every interpreter cycle and calls other logics as needed."
+
+[Logic1]
+   CompCRC32 = &H0
+   CRC32 = &HE8350E48
+   ID = rm.Terminal
+   IsRoom = True
+   Size = 144
+   Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
+
+[Logic2]
+   ID = rm.Outside
+   Description = "An example room with an automatic door and sound effects."
+   CRC32 = &H8A939E0D
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 506
+
+[Logic3]
+   ID = rm.Sound
+   Description = "this has the control panel to enable four-channel sound, and also to edit instruments"
+   CRC32 = &H520D8862
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 944
+
+[Logic4]
+   ID = rm.Colors
+   Description = "This room has control panels to make changes to display, including colors"
+   CRC32 = &HE9CB41C
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 108
+
+[Logic5]
+   ID = rm.Mouse
+   Description = "This room has some control panels to let player adjust mouse parameters, and game speed"
+   CRC32 = &H261BD6E2
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 105
+
+[Logic90]
+   CompCRC32 = &H0
+   CRC32 = &H4A12AD1A
+   ID = lgc.GameFunctions
+   IsRoom = False
+   Size = 646
+   Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
+
+[Logic91]
+   CompCRC32 = &H0
+   CRC32 = &H6DB767FE
+   IsRoom = False
+   ID = lgc.Init
+   Size = 162
+   Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
+
+[Logic92]
+   ID = lgc.RoomInit
+   Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
+   CRC32 = &H54841752
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 64
+
+[Logic93]
+   ID = lgc.GameHelp
+   Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
+   CRC32 = &HD1325A44
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 842
+
+[Logic94]
+   ID = lgc.DebugHelp
+   Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
+   CRC32 = &HD29E0328
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 1031
+
+[Logic95]
+   ID = lgc.Death
+   Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
+   CRC32 = &HE8149290
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 407
+
+[Logic96]
+   ID = lgc.TraceInfo
+   Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
+   CRC32 = &HF1D0C7D9
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 2617
+
+[Logic98]
+   CompCRC32 = &H0
+   CRC32 = &H4F89015C
+   ID = lgc.Error
+   IsRoom = False
+   Size = 813
+   Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
+
+[Logic99]
+   CompCRC32 = &H0
+   CRC32 = &H86C6495C
+   ID = lgc.Debug
+   IsRoom = False
+   Size = 1153
+   Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
+
+[Logic100]
+   CompCRC32 = &H0
+   CRC32 = &HD48301A3
+   ID = rm.Title
+   IsRoom = True
+   Size = 338
+   Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
+
+[Logic201]
+   ID = lgc.mod2272
+   Description = ""
+   CRC32 = &HD6844D54
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17126
+
+[Logic200]
+   ID = lgc.mod2089
+   Description = ""
+   CRC32 = &HB0C2CB02
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17012
+
+[Logic202]
+   ID = lgc.mod2411
+   Description = ""
+   CRC32 = &H7AC98C3E
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17863
+
+[Logic203]
+   ID = lgc.mod2425
+   Description = ""
+   CRC32 = &HEE3B80C7
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17845
+
+[Logic204]
+   ID = lgc.mod2426
+   Description = ""
+   CRC32 = &HDCFC2B9A
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17845
+
+[Logic205]
+   ID = lgc.mod2435
+   Description = ""
+   CRC32 = &H67B18D7F
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17849
+
+[Logic206]
+   ID = lgc.mod2439
+   Description = ""
+   CRC32 = &H2E870CA2
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17849
+
+[Logic207]
+   ID = lgc.mod2440
+   Description = ""
+   CRC32 = &H52160FF1
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17849
+
+[Logic208]
+   ID = lgc.mod2903
+   Description = ""
+   CRC32 = &H5761F8E4
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17492
+
+[Logic209]
+   ID = lgc.mod2911
+   Description = ""
+   CRC32 = &HA487A639
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17492
+
+[Logic210]
+   ID = lgc.mod2912
+   Description = ""
+   CRC32 = &H5E7F2C99
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17492
+
+[Logic211]
+   ID = lgc.mod2915
+   Description = ""
+   CRC32 = &H98238EE6
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17492
+
+[Logic212]
+   ID = lgc.mod2917
+   Description = ""
+   CRC32 = &HD2A89517
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17492
+
+[Logic213]
+   ID = lgc.mod2936
+   Description = ""
+   CRC32 = &H8DA3E467
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 17514
+
+[Logic6]
+   ID = cp.MsgBox
+   Description = ""
+   CRC32 = &HBB64BC99
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 1725
+
+[Logic7]
+   ID = rm.Palette
+   Description = ""
+   CRC32 = &HC761C085
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 75
+
+[Logic8]
+   ID = cp.Terminal
+   Description = ""
+   CRC32 = &HCCE6F06E
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 296
+
+[Logic9]
+   ID = cp.Sound
+   Description = ""
+   CRC32 = &H8209466
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 75
+
+[Logic10]
+   ID = cp.Instrument
+   Description = ""
+   CRC32 = &H878381F9
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 75
+
+[Logic11]
+   ID = cp.Mouse
+   Description = ""
+   CRC32 = &H87F8DB12
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 75
+
+[Logic12]
+   ID = cp.SpeedStatus
+   Description = ""
+   CRC32 = &HE06A3BBF
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 75
+
+[::END Logics::]
+
+[::BEGIN Pictures::]
+[Picture1]
+   ID = pic.Entrance
+   Description = ""
+   BkgdImg = ""
+   Size = 251
+
+[Picture2]
+   ID = pic.Outside
+   Description = ""
+   BkgdImg = ""
+   Size = 954
+
+[Picture3]
+   ID = pic.WestRoom
+   Description = ""
+   BkgdImg = ""
+   Size = 165
+
+[Picture4]
+   ID = pic.NorthRoom
+   Description = ""
+   BkgdImg = ""
+   Size = 125
+
+[Picture5]
+   ID = pic.EastRoom
+   Description = ""
+   BkgdImg = ""
+   Size = 169
+
+[Picture100]
+   ID = pic.Introduction
+   Description = "A simple introductory screen picture. Add scrolling credits for a nice effect."
+   BkgdImg = ""
+   Size = 38
+
+[Picture6]
+   ID = pic.cp.MsgBox
+   Size = 632
+   BkgdImg = ""
+   Description = ""
+   BkgdShow = ""
+   BkgdTrans = ""
+   BkgdPosn = ""
+   BkgdSize = ""
+
+[Picture7]
+   ID = pic.rm.Terminal
+   Description = ""
+   Size = 6
+   BkgdImg = ""
+
+[Picture8]
+   ID = pic.Range
+   Description = ""
+   Size = 15
+   BkgdImg = ""
+
+[Picture9]
+   ID = Picture9
+   Description = ""
+   Size = 1
+   BkgdImg = ""
+
+[Picture10]
+   ID = Picture10
+   Description = ""
+   Size = 1
+   BkgdImg = ""
+
+[Picture11]
+   ID = Picture11
+   Description = ""
+   Size = 1
+   BkgdImg = ""
+
+[Picture12]
+   ID = Picture12
+   Description = ""
+   Size = 1
+   BkgdImg = ""
+[::END Pictures::]
+
+[::BEGIN Sounds::]
+[Sound0]
+   ID = m.Theme
+   Description = "A theme song that can be played while title screen is shown."
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = False
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Size = 1586
+
+[Sound1]
+   ID = s.DoorClose
+   Description = "A simple sound effect for an automatic opening door."
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 31
+
+[Sound2]
+   ID = s.DoorOpen
+   Description = "A simple sound effect for an automatic closing door."
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 31
+[::END Sounds::]
+
+[::BEGIN Views::]
+[View1]
+   ID = vw.EgoDead
+   Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
+   Size = 224
+
+[View2]
+   ID = vw.Door
+   Description = ""
+   Size = 4926
+
+[View218]
+   ID = vw.OpeningCredits
+   Description = "Example of startup credits that fade in and fade out. Used on the introduction page."
+   Size = 3451
+
+[View220]
+   ID = vw.Inv.TestItem
+   Description = "Inventory view of a sample item that includes a border."
+   Size = 286
+
+[View3]
+   ID = vw.rmWestArt
+   Description = "it's handy to keep cels and loops that are added to a room's picture in one view"
+   Size = 168
+
+[View4]
+   ID = vw.OldEgo
+   Description = "This is the default ego view"
+   Size = -1
+
+[View0]
+   ID = vw.Ego
+   Description = "this is Drew"
+   Size = 2784
+
+[View5]
+   ID = vw.MsgBoxColors
+   Description = ""
+   Size = 199
+
+[View6]
+   ID = vw.rmMsgBoxArt
+   Description = ""
+   Size = 1067
+
+[View7]
+   ID = vw.movetest
+   Description = ""
+   Size = 7131
+[::END Views::]
