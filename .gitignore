@@ -24,3 +24,9 @@ logfile
 *sg.*
 *.bmp
 *.png
+agi
+words.tok
+object
+fm.dat
+*_OLD.lgc
+LOGIC.*
