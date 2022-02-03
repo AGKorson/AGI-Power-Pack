@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "1/22/2022 3:46:43 PM"
+   LastEdit = "2/2/2022 4:54:16 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,15 +45,15 @@
 [::BEGIN Logics::]
 [Logic0]
    CompCRC32 = &H0
-   CRC32 = &H16FC08B3
+   CRC32 = &H39EE9A0E
    ID = lgc.Main
    IsRoom = False
-   Size = 1636
+   Size = 1586
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
    CompCRC32 = &H0
-   CRC32 = &HE8350E48
+   CRC32 = &H16501432
    ID = rm.Terminal
    IsRoom = True
    Size = 144
@@ -62,7 +62,7 @@
 [Logic2]
    ID = rm.Outside
    Description = "An example room with an automatic door and sound effects."
-   CRC32 = &H8A939E0D
+   CRC32 = &H5B5862E0
    CompCRC32 = &H0
    IsRoom = True
    Size = 506
@@ -78,42 +78,42 @@
 [Logic4]
    ID = rm.Colors
    Description = "This room has control panels to make changes to display, including colors"
-   CRC32 = &HE9CB41C
+   CRC32 = &H858D44EA
    CompCRC32 = &H0
    IsRoom = True
-   Size = 108
+   Size = 111
 
 [Logic5]
    ID = rm.Mouse
    Description = "This room has some control panels to let player adjust mouse parameters, and game speed"
-   CRC32 = &H261BD6E2
-   CompCRC32 = &H0
+   CRC32 = &H2F938887
+   CompCRC32 = &H2F938887
    IsRoom = True
-   Size = 105
+   Size = 111
 
 [Logic90]
    CompCRC32 = &H0
-   CRC32 = &H4A12AD1A
+   CRC32 = &H85BE7FA1
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 646
+   Size = 807
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
    CompCRC32 = &H0
-   CRC32 = &H6DB767FE
+   CRC32 = &HFA2C2729
    IsRoom = False
    ID = lgc.Init
-   Size = 162
+   Size = 264
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H54841752
+   CRC32 = &H767F55D5
    CompCRC32 = &H0
    IsRoom = False
-   Size = 64
+   Size = 67
 
 [Logic93]
    ID = lgc.GameHelp
@@ -157,7 +157,7 @@
 
 [Logic99]
    CompCRC32 = &H0
-   CRC32 = &H86C6495C
+   CRC32 = &HA3B5802B
    ID = lgc.Debug
    IsRoom = False
    Size = 1153
@@ -174,7 +174,7 @@
 [Logic201]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &HD6844D54
+   CRC32 = &H7878AF7C
    CompCRC32 = &H0
    IsRoom = False
    Size = 17126
@@ -182,7 +182,7 @@
 [Logic200]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &HB0C2CB02
+   CRC32 = &HE770B9C6
    CompCRC32 = &H0
    IsRoom = False
    Size = 17012
@@ -190,7 +190,7 @@
 [Logic202]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &H7AC98C3E
+   CRC32 = &HC0F3245
    CompCRC32 = &H0
    IsRoom = False
    Size = 17863
@@ -198,7 +198,7 @@
 [Logic203]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HEE3B80C7
+   CRC32 = &H2CBA0AE2
    CompCRC32 = &H0
    IsRoom = False
    Size = 17845
@@ -206,7 +206,7 @@
 [Logic204]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &HDCFC2B9A
+   CRC32 = &H634E5EB4
    CompCRC32 = &H0
    IsRoom = False
    Size = 17845
@@ -214,7 +214,7 @@
 [Logic205]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H67B18D7F
+   CRC32 = &HC3046706
    CompCRC32 = &H0
    IsRoom = False
    Size = 17849
@@ -222,7 +222,7 @@
 [Logic206]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H2E870CA2
+   CRC32 = &H462A0580
    CompCRC32 = &H0
    IsRoom = False
    Size = 17849
@@ -230,7 +230,7 @@
 [Logic207]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H52160FF1
+   CRC32 = &H1E82CB18
    CompCRC32 = &H0
    IsRoom = False
    Size = 17849
@@ -238,7 +238,7 @@
 [Logic208]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &H5761F8E4
+   CRC32 = &HC0B2ECA9
    CompCRC32 = &H0
    IsRoom = False
    Size = 17492
@@ -246,7 +246,7 @@
 [Logic209]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HA487A639
+   CRC32 = &H1515857A
    CompCRC32 = &H0
    IsRoom = False
    Size = 17492
@@ -254,7 +254,7 @@
 [Logic210]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H5E7F2C99
+   CRC32 = &HE81A9CC1
    CompCRC32 = &H0
    IsRoom = False
    Size = 17492
@@ -262,7 +262,7 @@
 [Logic211]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H98238EE6
+   CRC32 = &HB6CD971F
    CompCRC32 = &H0
    IsRoom = False
    Size = 17492
@@ -270,15 +270,15 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HD2A89517
+   CRC32 = &HC72CA5AA
    CompCRC32 = &H0
    IsRoom = False
-   Size = 17492
+   Size = 17511
 
 [Logic213]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H8DA3E467
+   CRC32 = &HB071DFF0
    CompCRC32 = &H0
    IsRoom = False
    Size = 17514
@@ -286,26 +286,26 @@
 [Logic6]
    ID = cp.MsgBox
    Description = ""
-   CRC32 = &HBB64BC99
-   CompCRC32 = &H0
+   CRC32 = &H5CD11D8D
+   CompCRC32 = &H5CD11D8D
    IsRoom = True
-   Size = 1725
+   Size = 1752
 
 [Logic7]
-   ID = rm.Palette
+   ID = cp.Palette
    Description = ""
-   CRC32 = &HC761C085
+   CRC32 = &HF5139AA8
    CompCRC32 = &H0
    IsRoom = True
-   Size = 75
+   Size = 2997
 
 [Logic8]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &HCCE6F06E
-   CompCRC32 = &H0
+   CRC32 = &HA66D3A50
+   CompCRC32 = &HA66D3A50
    IsRoom = True
-   Size = 296
+   Size = 329
 
 [Logic9]
    ID = cp.Sound
@@ -326,10 +326,10 @@
 [Logic11]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &H87F8DB12
-   CompCRC32 = &H0
+   CRC32 = &H8DE55321
+   CompCRC32 = &H8DE55321
    IsRoom = True
-   Size = 75
+   Size = 929
 
 [Logic12]
    ID = cp.SpeedStatus
@@ -339,11 +339,26 @@
    IsRoom = True
    Size = 75
 
+[Logic13]
+   ID = lgc.TerminalFunctions
+   Description = ""
+   CRC32 = &H2661F3BD
+   CompCRC32 = &H2661F3BD
+   IsRoom = False
+   Size = 35
+
+[Logic14]
+   ID = cp.Paint
+   Description = ""
+   CRC32 = &HE08B0FCD
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 6
 [::END Logics::]
 
 [::BEGIN Pictures::]
 [Picture1]
-   ID = pic.Entrance
+   ID = pic.rm.Terminal
    Description = ""
    BkgdImg = ""
    Size = 251
@@ -355,19 +370,19 @@
    Size = 954
 
 [Picture3]
-   ID = pic.WestRoom
+   ID = pic.rm.Sound
    Description = ""
    BkgdImg = ""
    Size = 165
 
 [Picture4]
-   ID = pic.NorthRoom
+   ID = pic.rm.Colors
    Description = ""
    BkgdImg = ""
    Size = 125
 
 [Picture5]
-   ID = pic.EastRoom
+   ID = pic.rm.Mouse
    Description = ""
    BkgdImg = ""
    Size = 169
@@ -381,45 +396,57 @@
 [Picture6]
    ID = pic.cp.MsgBox
    Size = 632
-   BkgdImg = ""
    Description = ""
-   BkgdShow = ""
-   BkgdTrans = ""
-   BkgdPosn = ""
-   BkgdSize = ""
+   BkgdImg = ""
 
 [Picture7]
-   ID = pic.rm.Terminal
+   ID = pic.cp.Palette
    Description = ""
-   Size = 6
+   Size = 548
    BkgdImg = ""
 
 [Picture8]
-   ID = pic.Range
+   ID = pic.cp.Terminal
    Description = ""
-   Size = 15
+   Size = 357
    BkgdImg = ""
 
 [Picture9]
-   ID = Picture9
+   ID = pic.cp.Sound
    Description = ""
    Size = 1
    BkgdImg = ""
 
 [Picture10]
-   ID = Picture10
+   ID = pic.cp.Instrument
    Description = ""
    Size = 1
    BkgdImg = ""
 
 [Picture11]
-   ID = Picture11
+   ID = pic.cp.Mouse
+   Description = ""
+   Size = 443
+   BkgdImg = "C:\Users\d3m294\OneDrive - PNNL\Desktop\agisound\PP\PPDemo\src\text template.bmp"
+   BkgdShow = True
+   BkgdTrans = 161
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|2560|1344
+
+[Picture12]
+   ID = pic.cp.SpeedStatus
    Description = ""
    Size = 1
    BkgdImg = ""
 
-[Picture12]
-   ID = Picture12
+[Picture13]
+   ID = pic.TestPalette
+   Description = ""
+   Size = 2402
+   BkgdImg = ""
+
+[Picture14]
+   ID = pic.cp.Paint
    Description = ""
    Size = 1
    BkgdImg = ""
@@ -523,7 +550,7 @@
    Size = 199
 
 [View6]
-   ID = vw.rmMsgBoxArt
+   ID = vw.cp.MsgBoxArt
    Description = ""
    Size = 1067
 
@@ -531,4 +558,9 @@
    ID = vw.movetest
    Description = ""
    Size = 7131
+
+[View8]
+   ID = vw.cp.PaletteArt
+   Description = ""
+   Size = 371
 [::END Views::]

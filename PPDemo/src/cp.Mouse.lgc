@@ -1,60 +1,1 @@
-[ ********************************************************************
-[
-[ cp.Mouse
-[
-[ 
-[
-[ ********************************************************************
-
-if(newRoom) 
-  {
-  [ this is the first cycle through this room
-  [ load, draw and discard the picture resource for the current room
-  load.pic(currentRoom);
-  draw.pic(currentRoom);
-  discard.pic(currentRoom);
-  
-  [ the horizon defines the upper limit of ego's movement
-  set.horizon(36);
-  
-  [ add additional room initialization here
-  
-  [ load ego view, animate and draw ego
-  [ this is sometimes handled in logic 0
-  [ instead of in each individual logic
-  
-  [ display the picture on screen
-  show.pic();
-  return();
-  }
-
-[*****
-:handleInput       [ check for input from player
-[*****
-if(haveInput && !haveMatch && unknownWordNum == 0) 
-  {
-  [ place said tests here
-  if(said("look"))
-    {
-    print("You see nothing of interest.");
-    }
-  }
-
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
-[ add other room specific statements here
-
-
-[*****
-:exit              [  test for leaving the room
-[*****
-
-[ add exit checks here (or use layout editor)
-return();
-
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "You see nothing of interest." 
+[ ********************************************************************[[ cp.Mouse[[ Emulated Rodent Input Device Option Control Console[ ERIDOCC[[ ********************************************************************#define oCursorB       o1  [ need four objects for cursor otherwise#define oCursorT       o2  [ text gets erased#define oCursorL       o3#define oCursorR       o4#define optCursor      o5#define cursorpos    v220#define newpos       v221#define    CP_MOUSE  1#define    CP_KEYB   2#define    CP_OK     8#define    CP_CANCEL 9#define    CP_RESET 10#define    CP_PREVP 11#define    CP_SET   12#define    CP_RESTORE 13#define tmpRow       v222#define tmpCol       v223#define tmpVal       v224#define cursorX      v231#define cursorY      v232#define btnAction    v233#define    B_OK       1#define    B_CANCEL   2#define    B_RESET    3#define    B_IDX_DN   4#define    B_IDX_UP   5#define    B_PREV_PAL 6#define    B_SET_COL  7#define    B_RESTORE  8#define egoPrevX     v234#define egoPrevY     v235#define egoPrevDir   v236#define update       f220#define cursormode   f221#define refresh      f222 [ used to redraw text on screen when the screen is first displayed[ loop values assigned to objects#define LP_OPT      0#define LP_CUR_1    1#define LP_CUR_2    2#define LP_CUR_3    3#define LP_CUR_4    4if(newRoom)   {  [ this is the first cycle through this room  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    call(lgc.RoomInit);    [ this view has all the art for cursors and buttons[  load.view(vw.cp.MouseArt);  load.view(vw.cp.PaletteArt);  [ option button that determines input mode; mouse or keyboard  animate.obj(optCursor);  set.view(optCursor, vw.cp.PaletteArt);  set.loop(optCursor, LP_OPT);  set.cel(optCursor, 0);  stop.cycling(optCursor);  position(optCursor, 8, 97);  draw(optCursor);    [ cursor is in four parts; used to highlight command buttons  [ and option buttons  animate.obj(oCursorB);  ignore.objs(oCursorB);  set.view(oCursorB, vw.cp.PaletteArt);  set.loop(oCursorB, LP_CUR_1);  set.cel(oCursorB, 0);  stop.cycling(oCursorB);  position(oCursorB, 30, 97);    animate.obj(oCursorT);  ignore.objs(oCursorT);  set.view(oCursorT, vw.cp.PaletteArt);  set.loop(oCursorT, LP_CUR_1);  set.cel(oCursorT, 0);  stop.cycling(oCursorT);  position(oCursorT, 30, 86);    animate.obj(oCursorL);  ignore.objs(oCursorL);  set.view(oCursorL, vw.cp.PaletteArt);  set.loop(oCursorL, LP_CUR_1);  set.cel(oCursorL, 1);  stop.cycling(oCursorL);  position(oCursorL, 30, 96);    animate.obj(oCursorR);  ignore.objs(oCursorR);  set.view(oCursorR, vw.cp.PaletteArt);  set.loop(oCursorR, LP_CUR_1);  set.cel(oCursorR, 1);  stop.cycling(oCursorR);  position(oCursorR, 47, 97);    cursorpos = 2;  newpos = 2;    [ no text input in this room  prevent.input();  lastChar = 0;  [ arrow keys control cursor here  egoDir = 0;    [ mouse is enabled, not cursor  enable.item(mouse);  reset(cursormode);  btnAction = 0;    [ set speed to fast for best mouse performance  animationInterval = 1;  [ buttons... show the cursors?  [ 'save' to update cursor for a particular function  [ 'restore' to return a cursor to it's default  [ 'close/exit' to stop editing  [ 'test/preview' to load the cursor, and drive it around  [  (click anywhere to go back to editing)    [left click to set a pixel; right click to clear a pixel  [ should be able to do drag operations pretty easily  [  [    [ load ego view, animate and draw ego  [ this is sometimes handled in logic 0  [ instead of in each individual logic    [ cache ego movement parameters (to be restored  [ when returning to the control room)  egoPrevX = egoX;  egoPrevY = egoY;  egoPrevDir = egoDir;    [ set speed to fst for best mouse performance  animationInterval = 1;  [ need to show the pic before text can be added  show.pic();  }[ if room is being drawn or redrawn, need to add textif ((newRoom || refresh)) {  [ push display colors  set.text.attribute(-1, 0);    [ add button text  set.text.attribute(BLACK, WHITE);  display(16, 1, "  OK");  display(18, 1, " Cancel");  display(20, 1, " Reset");    display(16, 10, "Preview");  display(17, 10, "Palette");    display(16, 19, "  Set");  display(18, 19, "Restore");    set.text.attribute(BLACK, LT_GRAY);  display(6, 2, "  Cursor");  display(8, 4, "Ms");  display(8, 10, "Kb");    [ pop display colors  set.text.attribute(0, -1);    if (refresh) {    reset(refresh);    return();  }}[ is cursor in text mode?if (cursormode) {  [ check for direction arrow keypress  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      if (cursorpos == CP_OK) {        newpos = CP_MOUSE;      }    }        [ cursor right    if (egoDir == RIGHT) {    }        [ cursor down    if (egoDir == DOWN) {      if (cursorpos == CP_MOUSE) {        newpos = CP_OK;      }    }        [ cursor left    if (egoDir == LEFT) {    }        [ always reset dir so another keypress can be detected    egoDir = 0;        [ check for new cursor position    if (cursorpos != newpos) {      [ update the position      cursorpos = newpos;      [ depending on where cursor is, set the position and size/shape      [ option buttons      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {        set.loop(oCursorB, LP_CUR_1);        set.loop(oCursorT, LP_CUR_1);        set.loop(oCursorL, LP_CUR_1);        set.loop(oCursorR, LP_CUR_1);                cursorY = 97;        if (cursorpos == CP_MOUSE) {          cursorX = 7;        } else {          cursorX = 31;        }      }            [ OK, Cancel, and Restore buttons      if ((cursorpos == CP_OK || cursorpos < CP_CANCEL)) {        set.loop(oCursorB, LP_CUR_2);        set.loop(oCursorT, LP_CUR_2);        set.loop(oCursorL, LP_CUR_2);        set.loop(oCursorR, LP_CUR_2);                cursorX = 3;        [ convert cursorpos into desired y value        cursorY = cursorpos;        cursorY -= 8;        cursorY *= 16;        cursorY += 128;      }            [ preview cursor button      if (cursorpos == CP_PREVP) {        set.loop(oCursorB, LP_CUR_3);        set.loop(oCursorT, LP_CUR_3);        set.loop(oCursorL, LP_CUR_3);        set.loop(oCursorR, LP_CUR_3);                cursorX = 39;        cursorY = 136;      }            [ to move cursor, erase it first, otherwise, it will      [ clear any text that is present anywhere between the      [ new position and the old position      erase(oCursorB);      erase(oCursorL);      erase(oCursorT);      erase(oCursorR);            [ reposition the four-part cursor and       [ show it      position.v(oCursorB, cursorX, cursorY);      draw(oCursorB);      --cursorY;      [ save ypos to restore it later      work = cursorY;      position.v(oCursorL, cursorX, cursorY);      draw(oCursorL);      [ adjust for height (depends on button type)      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {        cursorY -= 10;      }      if ((cursorpos == CP_OK || cursorpos == CP_CANCEL ||           cursorpos == CP_RESET || cursorpos == CP_RESTORE)) {          cursorY -= 8;      }      if (cursorpos == CP_PREVP) {        cursorY -= 16;      }      position.v(oCursorT, cursorX, cursorY);      draw(oCursorT);      [ reset y      cursorY = work;      [ adjust for width      cursorX += 29;            position.v(oCursorR, cursorX, cursorY);      draw(oCursorR);    }  }    [ check for selection (space/enter for button)  if (have.key()) {    [ space/enter    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {      if (cursorpos  == CP_MOUSE) {        [ switch to mouse control        reset(cursormode);        enable.item(mouse);        erase(optCursor);        position(optCursor, 8, 97);        draw(optCursor);        [ erase the cursor objects        erase(oCursorB);        erase(oCursorT);        erase(oCursorL);        erase(oCursorR);      }      if (cursorpos  == CP_OK) {        btnAction = B_OK;      }      if (cursorpos  == CP_CANCEL) {        btnAction = B_CANCEL;      }      if (cursorpos  == CP_RESET) {        btnAction = B_RESET;      }      if (cursorpos == CP_SET) {        btnAction = B_SET_COL;      }      if (cursorpos == CP_RESTORE) {        btnAction = B_RESTORE;      }      if (cursorpos == CP_PREVP) {        btnAction = B_PREV_PAL;      }    }  }} else {  [ mouse is active: check for mouse actions    [ check for mouse clicks  if (controller(cLeftClick)) {    [ over cursor type keyboard option     if (mouseX > 30 && mouseX < 38 && mouseY > 95 && mouseY < 104) {      [ switch to keyboard cursor      set(cursormode);      disable.item(mouse);      erase(optCursor);      position(optCursor, 32, 97);      draw(optCursor);      [ show the cursor object      cursorpos = 2;      newpos = 2;      position(oCursorB, 31, 97);      draw(oCursorB);      position(oCursorT, 31, 86);      draw(oCursorT);      position(oCursorL, 31, 96);      draw(oCursorL);      position(oCursorR, 48, 96);      draw(oCursorR);    }    [ over OK button [2, 118 - 33, 129] (need to add 8 to y due to pic offset)    if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 137) {      btnAction = B_OK;    }          [ over Cancel button [2, 134 - 33, 145]    if (mouseX > 2 && mouseX < 33 && mouseY > 142 && mouseY < 153) {      btnAction = B_CANCEL;    }        [ over Reset button [2, 150 - 33, 161]    if (mouseX > 2 && mouseX < 33 && mouseY > 158 && mouseY < 169) {      btnAction = B_RESET;    }        [ over SetColor button [74, 118 - 105, 129]    if (mouseX > 74 && mouseX < 105 && mouseY > 126 && mouseY < 137) {      btnAction = B_SET_COL;    }        [ over RestoreColor button [74, 134 - 105, 145]    if (mouseX > 74 && mouseX < 105 && mouseY > 142 && mouseY < 153) {      btnAction = B_RESTORE;    }    [ over PreviewPalette button [38, 118 - 69, 137]    if (mouseX > 38 && mouseX < 69 && mouseY > 126 && mouseY < 145) {      btnAction = B_PREV_PAL;    }  }}[ check for button actionif ((btnAction == B_OK || btnAction == B_CANCEL)) {    if (btnAction == B_OK) {    [ save the palette  }  [ restore ego movement parameters  egoX = egoPrevX;  egoY = egoPrevY;  egoDir = egoPrevDir;    [restore speed  animationInterval = NORMAL_SPEED;    [ go back to previous room  new.room.v(previousRoom); }if (btnAction == B_RESET) {}if (btnAction == B_SET_COL) {  [ set a new value for this color  }if (btnAction == B_PREV_PAL) {  [ show a sample screen with entire color palette  }[ always reset button actionbtnAction = 0;  return();[*****[ messages         [  declared messages go here[*****#message 1 "" 

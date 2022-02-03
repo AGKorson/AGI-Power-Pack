@@ -55,6 +55,7 @@
 #define egoExplored            f38 [ a typical 'score' flag; after player scores point for exploring, set this flag so it only happens once
 #define terminalOn             f39 [ when true, terminal is active; need to disable printing, menus, help, etc to preserve the display
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
+#define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
 #define mouseY                 v28
 #define mouseBtn               v29
@@ -89,6 +90,8 @@
 #define msgBoxFG               v44
 #define msgBoxBorder           v45
 #define work                   v46 [ this is a globally available flag that can be used for counting or any other temporary purpose
+#define tmpVar1                v47
+#define tmpVar2                v48
 #define egoCycleTime           v59 [ current ego cycle time
 #define egoStepTime            v60 [ current ego step time
 #define egoStepSize            v61 [ current ego step size

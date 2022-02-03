@@ -1,0 +1,4 @@
+if (v46 == 1)
+  {  if (v240 < 16)
+    {    ++v240;    }  else
+    {    clear.text.rect(5, 11, 16, 46, 255);    }  v241 = 11;  return();  }return();[ Messages
