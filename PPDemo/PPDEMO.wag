@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/2/2022 4:54:16 PM"
+   LastEdit = "2/18/2022 9:19:05 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -70,10 +70,10 @@
 [Logic3]
    ID = rm.Sound
    Description = "this has the control panel to enable four-channel sound, and also to edit instruments"
-   CRC32 = &H520D8862
-   CompCRC32 = &H0
+   CRC32 = &H4EC7AC83
+   CompCRC32 = &H4EC7AC83
    IsRoom = True
-   Size = 944
+   Size = 952
 
 [Logic4]
    ID = rm.Colors
@@ -87,7 +87,7 @@
    ID = rm.Mouse
    Description = "This room has some control panels to let player adjust mouse parameters, and game speed"
    CRC32 = &H2F938887
-   CompCRC32 = &H2F938887
+   CompCRC32 = &H0
    IsRoom = True
    Size = 111
 
@@ -271,7 +271,7 @@
    ID = lgc.mod2917
    Description = ""
    CRC32 = &HC72CA5AA
-   CompCRC32 = &H0
+   CompCRC32 = &HC72CA5AA
    IsRoom = False
    Size = 17511
 
@@ -287,7 +287,7 @@
    ID = cp.MsgBox
    Description = ""
    CRC32 = &H5CD11D8D
-   CompCRC32 = &H5CD11D8D
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1752
 
@@ -303,17 +303,17 @@
    ID = cp.Terminal
    Description = ""
    CRC32 = &HA66D3A50
-   CompCRC32 = &HA66D3A50
+   CompCRC32 = &H0
    IsRoom = True
    Size = 329
 
 [Logic9]
    ID = cp.Sound
    Description = ""
-   CRC32 = &H8209466
-   CompCRC32 = &H0
+   CRC32 = &HD61AE1EE
+   CompCRC32 = &HD61AE1EE
    IsRoom = True
-   Size = 75
+   Size = 113
 
 [Logic10]
    ID = cp.Instrument
@@ -326,10 +326,10 @@
 [Logic11]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &H8DE55321
-   CompCRC32 = &H8DE55321
+   CRC32 = &HDECA5CAF
+   CompCRC32 = &HDECA5CAF
    IsRoom = True
-   Size = 929
+   Size = 780
 
 [Logic12]
    ID = cp.SpeedStatus
@@ -343,7 +343,7 @@
    ID = lgc.TerminalFunctions
    Description = ""
    CRC32 = &H2661F3BD
-   CompCRC32 = &H2661F3BD
+   CompCRC32 = &H0
    IsRoom = False
    Size = 35
 
@@ -426,10 +426,10 @@
 [Picture11]
    ID = pic.cp.Mouse
    Description = ""
-   Size = 443
-   BkgdImg = "C:\Users\d3m294\OneDrive - PNNL\Desktop\agisound\PP\PPDemo\src\text template.bmp"
+   Size = 445
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI Test Games\PPDemo\src\text template.bmp"
    BkgdShow = True
-   BkgdTrans = 161
+   BkgdTrans = 163
    BkgdPosn = 0|0|0|0
    BkgdSize = 320|168|2560|1344
 
@@ -561,6 +561,11 @@
 
 [View8]
    ID = vw.cp.PaletteArt
+   Description = ""
+   Size = 371
+
+[View9]
+   ID = vw.cp.MouseArt
    Description = ""
    Size = 371
 [::END Views::]
