@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/18/2022 9:19:05 PM"
+   LastEdit = "2/21/2022 1:22:40 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -44,11 +44,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &H39EE9A0E
+   CompCRC32 = &H32712395
+   CRC32 = &H32712395
    ID = lgc.Main
    IsRoom = False
-   Size = 1586
+   Size = 1912
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
@@ -270,8 +270,8 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HC72CA5AA
-   CompCRC32 = &HC72CA5AA
+   CRC32 = &HAE6C3816
+   CompCRC32 = &HAE6C3816
    IsRoom = False
    Size = 17511
 
@@ -294,10 +294,10 @@
 [Logic7]
    ID = cp.Palette
    Description = ""
-   CRC32 = &HF5139AA8
-   CompCRC32 = &H0
+   CRC32 = &H2B9C929A
+   CompCRC32 = &H2B9C929A
    IsRoom = True
-   Size = 2997
+   Size = 3004
 
 [Logic8]
    ID = cp.Terminal
@@ -326,10 +326,10 @@
 [Logic11]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &HDECA5CAF
-   CompCRC32 = &HDECA5CAF
+   CRC32 = &HFD3E49D9
+   CompCRC32 = &HFD3E49D9
    IsRoom = True
-   Size = 780
+   Size = 1581
 
 [Logic12]
    ID = cp.SpeedStatus
@@ -426,7 +426,7 @@
 [Picture11]
    ID = pic.cp.Mouse
    Description = ""
-   Size = 445
+   Size = 473
    BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI Test Games\PPDemo\src\text template.bmp"
    BkgdShow = True
    BkgdTrans = 163
@@ -567,5 +567,5 @@
 [View9]
    ID = vw.cp.MouseArt
    Description = ""
-   Size = 371
+   Size = 337
 [::END Views::]
