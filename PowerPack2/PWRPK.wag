@@ -6,7 +6,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
    WinAGIVersion = 2.1.1
    GameID = PWRPK
    Interpreter = 2.917
-   LastEdit = "2/21/2022 12:45:47 AM"
+   LastEdit = "2/22/2022 8:57:11 PM"
    Description = "AGI Power Pack Demo"
    GameVersion = "AGI Game version 0.0"
    About = "  AGI Power Pack Demo\n\nSee what's possible with advanced AGI coding techniques!"
@@ -93,11 +93,11 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
    Size = 109
 
 [Logic90]
-   CompCRC32 = &H212E6A1A
-   CRC32 = &H212E6A1A
+   CompCRC32 = &H4D2B83B9
+   CRC32 = &H4D2B83B9
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 6008
+   Size = 6188
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -167,7 +167,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic203]
    ID = lgc.mod2411
    Description = "contains modification and patch code for version 2.411"
-   CRC32 = &H7AC98C3E
+   CRC32 = &HAF0CE40
    CompCRC32 = &H7AC98C3E
    IsRoom = False
    Size = 17882
@@ -183,7 +183,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic201]
    ID = lgc.mod2089
    Description = "contains modification and patch code for version 2.089"
-   CRC32 = &HB0C2CB02
+   CRC32 = &H3035198E
    CompCRC32 = &HB0C2CB02
    IsRoom = False
    Size = 17031
@@ -191,7 +191,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic202]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &HD6844D54
+   CRC32 = &HD93A38C0
    CompCRC32 = &HD6844D54
    IsRoom = False
    Size = 17145
@@ -199,7 +199,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic209]
    ID = lgc.mod2903
    Description = "contains modification and patch code for version 2.903"
-   CRC32 = &H5761F8E4
+   CRC32 = &H6DDBE795
    CompCRC32 = &H5761F8E4
    IsRoom = False
    Size = 17511
@@ -207,7 +207,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic212]
    ID = lgc.mod2915
    Description = "contains modification and patch code for version 2.915"
-   CRC32 = &H98238EE6
+   CRC32 = &HA3E68EA7
    CompCRC32 = &H98238EE6
    IsRoom = False
    Size = 17511
@@ -231,7 +231,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic206]
    ID = lgc.mod2435
    Description = "contains modification and patch code for version 2.435"
-   CRC32 = &H67B18D7F
+   CRC32 = &H997ECF4E
    CompCRC32 = &H67B18D7F
    IsRoom = False
    Size = 17868
@@ -239,7 +239,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic204]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HEE3B80C7
+   CRC32 = &H19E9FA47
    CompCRC32 = &HEE3B80C7
    IsRoom = False
    Size = 17864
@@ -247,7 +247,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic205]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &HDCFC2B9A
+   CRC32 = &HDDAFAC92
    CompCRC32 = &HDCFC2B9A
    IsRoom = False
    Size = 17864
@@ -255,7 +255,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic207]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H2E870CA2
+   CRC32 = &H7ED302C2
    CompCRC32 = &H2E870CA2
    IsRoom = False
    Size = 17868
@@ -263,7 +263,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic208]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H52160FF1
+   CRC32 = &H7F817685
    CompCRC32 = &H52160FF1
    IsRoom = False
    Size = 17868
@@ -271,7 +271,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic210]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HA487A639
+   CRC32 = &HD365B9D1
    CompCRC32 = &HA487A639
    IsRoom = False
    Size = 17511
@@ -279,7 +279,7 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic211]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H5E7F2C99
+   CRC32 = &H16187199
    CompCRC32 = &H5E7F2C99
    IsRoom = False
    Size = 17511
@@ -287,15 +287,15 @@ C:\Users\d3m294\OneDrive - PNNL\Documents\WinAGI\Test\Power Pack\PWRPK.wag
 [Logic213]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HD2A89517
-   CompCRC32 = &HD2A89517
+   CRC32 = &H2A56FEBA
+   CompCRC32 = &HFBB7B55C
    IsRoom = False
-   Size = 17511
+   Size = 17631
 
 [Logic214]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H8DA3E467
+   CRC32 = &H3CD85621
    CompCRC32 = &H8DA3E467
    IsRoom = False
    Size = 17533

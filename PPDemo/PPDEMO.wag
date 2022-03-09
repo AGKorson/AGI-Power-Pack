@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/21/2022 1:22:40 AM"
+   LastEdit = "3/2/2022 5:40:33 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -44,11 +44,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H32712395
-   CRC32 = &H32712395
+   CompCRC32 = &H0
+   CRC32 = &HCBD30E7
    ID = lgc.Main
    IsRoom = False
-   Size = 1912
+   Size = 3256
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
@@ -71,7 +71,7 @@
    ID = rm.Sound
    Description = "this has the control panel to enable four-channel sound, and also to edit instruments"
    CRC32 = &H4EC7AC83
-   CompCRC32 = &H4EC7AC83
+   CompCRC32 = &H0
    IsRoom = True
    Size = 952
 
@@ -270,10 +270,10 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HAE6C3816
-   CompCRC32 = &HAE6C3816
+   CRC32 = &HFB7CE392
+   CompCRC32 = &H0
    IsRoom = False
-   Size = 17511
+   Size = 17631
 
 [Logic213]
    ID = lgc.mod2936
@@ -295,7 +295,7 @@
    ID = cp.Palette
    Description = ""
    CRC32 = &H2B9C929A
-   CompCRC32 = &H2B9C929A
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3004
 
@@ -311,7 +311,7 @@
    ID = cp.Sound
    Description = ""
    CRC32 = &HD61AE1EE
-   CompCRC32 = &HD61AE1EE
+   CompCRC32 = &H0
    IsRoom = True
    Size = 113
 
@@ -326,10 +326,10 @@
 [Logic11]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &HFD3E49D9
-   CompCRC32 = &HFD3E49D9
+   CRC32 = &HCA95A3AF
+   CompCRC32 = &HCA95A3AF
    IsRoom = True
-   Size = 1581
+   Size = 3807
 
 [Logic12]
    ID = cp.SpeedStatus
@@ -567,5 +567,5 @@
 [View9]
    ID = vw.cp.MouseArt
    Description = ""
-   Size = 337
+   Size = 420
 [::END Views::]

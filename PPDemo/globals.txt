@@ -54,6 +54,8 @@
 #define musicDone              f37 [ use this when playing music if no specific action is needed after the music ends
 #define egoExplored            f38 [ a typical 'score' flag; after player scores point for exploring, set this flag so it only happens once
 #define terminalOn             f39 [ when true, terminal is active; need to disable printing, menus, help, etc to preserve the display
+#define saveCursor             f40 [ when set, the current cursor gets saved in logic 0
+#define restoreCursor          f41 [ when set, the default data for current cursor is restored
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
@@ -124,3 +126,9 @@
 #define GET.PIXEL              -26
 #define START.TIMER            -27
 #define TOGGLE.TIMER           -28
+#define BIT.AND                -29
+#define BIT.OR                 -30
+#define BIT.XOR                -31
+#define BIT.NOT                -32
+#define BIT.SHL                -33
+#define BIT.SHR                -34
