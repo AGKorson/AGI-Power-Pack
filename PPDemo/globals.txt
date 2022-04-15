@@ -45,6 +45,7 @@
 #define cRightDblClick         c34
 #define cDummy                 c35
 #define mouse                 c255
+#define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
 #define cycleEgoAtRest         f30 [ when set to TRUE, ego will cycle even when position does not change
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
 #define disableGameFunctions   f33 [ when set to TRUE
@@ -99,6 +100,11 @@
 #define egoStepTime            v60 [ current ego step time
 #define egoStepSize            v61 [ current ego step size
 #define badWordCount           v62 [ number of times player has entered a word that is on the 'bad word' list
+#define instrument1            v63 [ instrument number for channel 1
+#define instrument2            v64 [ instrument number for channel 2
+#define instrument3            v65 [ instrument number for channel 3
+#define instrument4            v66 [ instrument number for noise noise
+#define instrument5            v67 [ instrument number for noise tone
 #define MSGBOX.COL.V            -1
 #define MSGBOX.COL              -2
 #define CONFIGURE.MOUSE         -3

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/11/2022 11:19:01 PM"
+   LastEdit = "4/15/2022 12:05:47 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -100,11 +100,11 @@
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H0
-   CRC32 = &HFA2C2729
+   CompCRC32 = &H402FEF55
+   CRC32 = &H402FEF55
    IsRoom = False
    ID = lgc.Init
-   Size = 264
+   Size = 287
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
@@ -287,7 +287,7 @@
    ID = cp.MsgBox
    Description = ""
    CRC32 = &HBE269A9
-   CompCRC32 = &HBE269A9
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1760
 
@@ -295,7 +295,7 @@
    ID = cp.Palette
    Description = ""
    CRC32 = &H6C28A6A2
-   CompCRC32 = &H6C28A6A2
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3012
 
@@ -310,10 +310,10 @@
 [Logic9]
    ID = cp.Sound
    Description = ""
-   CRC32 = &HC44B4885
-   CompCRC32 = &H0
+   CRC32 = &HAC586EE7
+   CompCRC32 = &H991BA2FF
    IsRoom = True
-   Size = 113
+   Size = 3196
 
 [Logic10]
    ID = cp.Instrument
@@ -327,17 +327,17 @@
    ID = cp.Mouse
    Description = ""
    CRC32 = &HFFB25F7C
-   CompCRC32 = &HFFB25F7C
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3815
 
 [Logic12]
    ID = cp.SpeedStatus
    Description = ""
-   CRC32 = &H3592AF16
-   CompCRC32 = &H3592AF16
+   CRC32 = &H801EDA12
+   CompCRC32 = &H0
    IsRoom = True
-   Size = 1689
+   Size = 1676
 
 [Logic13]
    ID = lgc.TerminalFunctions
@@ -414,8 +414,12 @@
 [Picture9]
    ID = pic.cp.Sound
    Description = ""
-   Size = 1
-   BkgdImg = ""
+   Size = 553
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\text template.bmp"
+   BkgdShow = True
+   BkgdTrans = 178
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|2560|1344
 
 [Picture10]
    ID = pic.cp.Instrument
@@ -510,6 +514,42 @@
    Visible2 = True
    Visible3 = True
    Size = 31
+
+[Sound3]
+   ID = s.InstTest
+   Description = "used in sound control panel to test instruments"
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 56
+
+[Sound4]
+   ID = s.NoiseTest
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 46
 [::END Sounds::]
 
 [::BEGIN Views::]
@@ -576,5 +616,10 @@
 [View10]
    ID = vw.cp.Speed
    Size = 1513
+   Description = ""
+
+[View11]
+   ID = vw.cp.Sound
+   Size = 244
    Description = ""
 [::END Views::]
