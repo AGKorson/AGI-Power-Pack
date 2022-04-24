@@ -1,60 +1,1 @@
-[ ********************************************************************
-[
-[ cp.Instrument
-[
-[ 
-[
-[ ********************************************************************
-
-if(newRoom) 
-  {
-  [ this is the first cycle through this room
-  [ load, draw and discard the picture resource for the current room
-  load.pic(currentRoom);
-  draw.pic(currentRoom);
-  discard.pic(currentRoom);
-  
-  [ the horizon defines the upper limit of ego's movement
-  set.horizon(36);
-  
-  [ add additional room initialization here
-  
-  [ load ego view, animate and draw ego
-  [ this is sometimes handled in logic 0
-  [ instead of in each individual logic
-  
-  [ display the picture on screen
-  show.pic();
-  return();
-  }
-
-[*****
-:handleInput       [ check for input from player
-[*****
-if(haveInput && !haveMatch && unknownWordNum == 0) 
-  {
-  [ place said tests here
-  if(said("look"))
-    {
-    print("You see nothing of interest.");
-    }
-  }
-
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
-[ add other room specific statements here
-
-
-[*****
-:exit              [  test for leaving the room
-[*****
-
-[ add exit checks here (or use layout editor)
-return();
-
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "You see nothing of interest." 
+[ ********************************************************************[[ cp.Instrument[acc is[ custom acoustic instrument settings occ[ CAISOCC[[ ********************************************************************#define oCursorB       o1  [ need four objects for cursor otherwise#define oCursorT       o2  [ text gets erased#define oCursorL       o3#define oCursorR       o4#define oMode          o5[ **************************************[ FIRST CYCLE ONLY[ **************************************if(newRoom) {  [ this is the first cycle through this room  [ use eighty column mode  configure.screen(-1, 0, 1);    [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    [ do basic room initialization  call(lgc.RoomInit);  lastChar = 0;    [ disable game functions  set(disableGameFunctions);    [ this view has all the art for cursors and buttons  load.view(vw.cp.Instrument);    [ no horizon    [ option button that determines input mode; mouse or keyboard  animate.obj(oMode);  set.view(oMode, vw.cp.Instrument);  set.loop(oMode, 0);  set.cel(oMode, 0);  stop.cycling(oMode);  position(oMode, 8, 65);  draw(oMode);    [ display the picture on screen  show.pic();    [ clear line 22 to match the picture  clear.lines(22, 22, LT_GRAY);    [ add all button/label text  set.text.attribute(-1, 0);  set.text.attribute(BLACK, WHITE);  display(3, 11, "OK");  display(3, 65, "Cancel");  display(11, 2, "Grand Piano");    set.text.attribute(WHITE, LT_GRAY);  display(5, 36, "Modulator");  display(5, 62, "Carrier");    set.text.attribute(BLACK, LT_GRAY);  display(11, 26, "\x1E");  display(20, 26, "\x1F");  display(8, 8, "Mouse");  display(8, 20, "Keybd");  display(11, 30, "Freq Multiplier");  display(12, 30, "KSL");  display(13, 30, "Level");  display(14, 30, "Attack");  display(15, 30, "Decay");  display(16, 30, "Sustain");  display(17, 30, "Release");  display(18, 30, "Wave Shape");  display(20, 30, "Feedback");  display(11, 55, "Freq Multiplier");  display(12, 55, "KSL");  display(13, 55, "Level");  display(14, 55, "Attack");  display(15, 55, "Decay");  display(16, 55, "Sustain");  display(17, 55, "Release");  display(18, 55, "Wave Shape");    set.text.attribute(BLACK, CYAN);  display(6, 30, "[ ] Tremolo");  display(7, 30, "[ ] Vibrato");  display(8, 30, "[ ] Envelope Type");  display(9, 30, "[ ] Kybd scaling");    display(6, 55, "[ ] Tremolo");  display(7, 55, "[ ] Vibrato");  display(8, 55, "[ ] Envelope Type");  display(9, 55, "[ ] Kybd scaling");  display(20, 55, "[ ] Connection");    set.text.attribute(WHITE, BLUE);  display(11, 46, "  0 ");  display(12, 46, "  0 ");  display(13, 46, "  0 ");  display(14, 46, " 15 ");  display(15, 46, "  0 ");  display(16, 46, " 15 ");  display(17, 46, "  0 ");  display(18, 46, "  3_");    display(11, 71, "  0 ");  display(12, 71, "  0 ");  display(13, 71, "  0 ");  display(14, 71, " 15 ");  display(15, 71, "  0 ");  display(16, 71, " 15 ");  display(17, 71, "  0 ");  display(18, 71, "  3_"); }if (have.key()) {  [ restore 40 col  configure.screen(-1, 0, 0);  [ restore default colors  set.text.attribute(0, -1);  [ restore game functions  reset(disableGameFunctions);    new.room.v(previousRoom);}return();[ **************************************[ MESSAGES[ ************************************** 

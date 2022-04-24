@@ -93,18 +93,18 @@
 #define msgBoxBG               v43
 #define msgBoxFG               v44
 #define msgBoxBorder           v45
-#define work                   v46 [ this is a globally available flag that can be used for counting or any other temporary purpose
-#define tmpVar1                v47
-#define tmpVar2                v48
+#define work1                  v46 [ this is a globally available flag that can be used for counting or any other temporary purpose
+#define work2                  v47
+#define work3                  v48
 #define egoCycleTime           v59 [ current ego cycle time
 #define egoStepTime            v60 [ current ego step time
 #define egoStepSize            v61 [ current ego step size
 #define badWordCount           v62 [ number of times player has entered a word that is on the 'bad word' list
-#define instrument1            v63 [ instrument number for channel 1
-#define instrument2            v64 [ instrument number for channel 2
-#define instrument3            v65 [ instrument number for channel 3
-#define instrument4            v66 [ instrument number for noise noise
-#define instrument5            v67 [ instrument number for noise tone
+#define instrument0            v63 [ instrument number for channel 1
+#define instrument1            v64 [ instrument number for channel 2
+#define instrument2            v65 [ instrument number for channel 3
+#define instrument3            v66 [ instrument number for noise noise
+#define instrument4            v67 [ instrument number for noise tone
 #define MSGBOX.COL.V            -1
 #define MSGBOX.COL              -2
 #define CONFIGURE.MOUSE         -3

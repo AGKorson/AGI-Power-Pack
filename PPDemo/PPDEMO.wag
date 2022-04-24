@@ -2,10 +2,10 @@
 # WinAGI Game Property File
 #
 [General]
-   WinAGIVersion = 2.1.1
+   WinAGIVersion = 2.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/15/2022 12:05:47 AM"
+   LastEdit = "4/22/2022 7:33:11 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -44,34 +44,34 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &HCBD30E7
+   CompCRC32 = &HD5CA0B8B
+   CRC32 = &HD5CA0B8B
    ID = lgc.Main
    IsRoom = False
-   Size = 3341
+   Size = 3353
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
-   CompCRC32 = &H0
-   CRC32 = &H16501432
+   CompCRC32 = &H25D1634F
+   CRC32 = &H25D1634F
    ID = rm.Terminal
    IsRoom = True
-   Size = 144
+   Size = 154
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
 
 [Logic2]
    ID = rm.Outside
    Description = "An example room with an automatic door and sound effects."
    CRC32 = &H5B5862E0
-   CompCRC32 = &H0
+   CompCRC32 = &H5B5862E0
    IsRoom = True
    Size = 506
 
 [Logic3]
    ID = rm.Sound
    Description = "this has the control panel to enable four-channel sound, and also to edit instruments"
-   CRC32 = &H4EC7AC83
-   CompCRC32 = &H0
+   CRC32 = &H2FF2A05
+   CompCRC32 = &H2FF2A05
    IsRoom = True
    Size = 952
 
@@ -79,7 +79,7 @@
    ID = rm.Colors
    Description = "This room has control panels to make changes to display, including colors"
    CRC32 = &H858D44EA
-   CompCRC32 = &H0
+   CompCRC32 = &H858D44EA
    IsRoom = True
    Size = 111
 
@@ -87,21 +87,21 @@
    ID = rm.Mouse
    Description = "This room has some control panels to let player adjust mouse parameters, and game speed"
    CRC32 = &H2F938887
-   CompCRC32 = &H0
+   CompCRC32 = &H2F938887
    IsRoom = True
    Size = 111
 
 [Logic90]
-   CompCRC32 = &H0
-   CRC32 = &H85BE7FA1
+   CompCRC32 = &H73EFCA18
+   CRC32 = &H73EFCA18
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 807
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H402FEF55
-   CRC32 = &H402FEF55
+   CompCRC32 = &HE13CD176
+   CRC32 = &HE13CD176
    IsRoom = False
    ID = lgc.Init
    Size = 287
@@ -110,8 +110,8 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H767F55D5
-   CompCRC32 = &H0
+   CRC32 = &HDFEBDD14
+   CompCRC32 = &HDFEBDD14
    IsRoom = False
    Size = 67
 
@@ -119,7 +119,7 @@
    ID = lgc.GameHelp
    Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
    CRC32 = &HD1325A44
-   CompCRC32 = &H0
+   CompCRC32 = &HD1325A44
    IsRoom = False
    Size = 842
 
@@ -127,7 +127,7 @@
    ID = lgc.DebugHelp
    Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
    CRC32 = &HD29E0328
-   CompCRC32 = &H0
+   CompCRC32 = &HD29E0328
    IsRoom = False
    Size = 1031
 
@@ -135,7 +135,7 @@
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
    CRC32 = &HE8149290
-   CompCRC32 = &H0
+   CompCRC32 = &HE8149290
    IsRoom = False
    Size = 407
 
@@ -143,12 +143,12 @@
    ID = lgc.TraceInfo
    Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
    CRC32 = &HF1D0C7D9
-   CompCRC32 = &H0
+   CompCRC32 = &HF1D0C7D9
    IsRoom = False
    Size = 2617
 
 [Logic98]
-   CompCRC32 = &H0
+   CompCRC32 = &H4F89015C
    CRC32 = &H4F89015C
    ID = lgc.Error
    IsRoom = False
@@ -156,204 +156,204 @@
    Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
 
 [Logic99]
-   CompCRC32 = &H0
-   CRC32 = &HA3B5802B
+   CompCRC32 = &H94051CA3
+   CRC32 = &H94051CA3
    ID = lgc.Debug
    IsRoom = False
    Size = 1153
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
 
 [Logic100]
-   CompCRC32 = &H0
-   CRC32 = &HD48301A3
+   CompCRC32 = &H6B15ABD6
+   CRC32 = &H6B15ABD6
    ID = rm.Title
    IsRoom = True
-   Size = 338
+   Size = 339
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
 
 [Logic201]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &H7878AF7C
-   CompCRC32 = &H0
+   CRC32 = &HFB25E936
+   CompCRC32 = &HFB25E936
    IsRoom = False
-   Size = 17126
+   Size = 17289
 
 [Logic200]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &HE770B9C6
-   CompCRC32 = &H0
+   CRC32 = &H1E25CE96
+   CompCRC32 = &H1E25CE96
    IsRoom = False
-   Size = 17012
+   Size = 17175
 
 [Logic202]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &HC0F3245
-   CompCRC32 = &H0
+   CRC32 = &HD97DACB4
+   CompCRC32 = &HD97DACB4
    IsRoom = False
-   Size = 17863
+   Size = 18026
 
 [Logic203]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H2CBA0AE2
-   CompCRC32 = &H0
+   CRC32 = &HC1D202FB
+   CompCRC32 = &HC1D202FB
    IsRoom = False
-   Size = 17845
+   Size = 18008
 
 [Logic204]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H634E5EB4
-   CompCRC32 = &H0
+   CRC32 = &H84F53A84
+   CompCRC32 = &H84F53A84
    IsRoom = False
-   Size = 17845
+   Size = 18008
 
 [Logic205]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &HC3046706
-   CompCRC32 = &H0
+   CRC32 = &H1D949A66
+   CompCRC32 = &H1D949A66
    IsRoom = False
-   Size = 17849
+   Size = 18012
 
 [Logic206]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H462A0580
-   CompCRC32 = &H0
+   CRC32 = &H1F8C18E
+   CompCRC32 = &H1F8C18E
    IsRoom = False
-   Size = 17849
+   Size = 18012
 
 [Logic207]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H1E82CB18
-   CompCRC32 = &H0
+   CRC32 = &HEF4366A4
+   CompCRC32 = &HEF4366A4
    IsRoom = False
-   Size = 17849
+   Size = 18012
 
 [Logic208]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HC0B2ECA9
-   CompCRC32 = &H0
+   CRC32 = &H6A42A731
+   CompCRC32 = &H6A42A731
    IsRoom = False
-   Size = 17492
+   Size = 17655
 
 [Logic209]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &H1515857A
-   CompCRC32 = &H0
+   CRC32 = &HD928B3D6
+   CompCRC32 = &HD928B3D6
    IsRoom = False
-   Size = 17492
+   Size = 17655
 
 [Logic210]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &HE81A9CC1
-   CompCRC32 = &H0
+   CRC32 = &HB2EE95A8
+   CompCRC32 = &HB2EE95A8
    IsRoom = False
-   Size = 17492
+   Size = 17655
 
 [Logic211]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &HB6CD971F
-   CompCRC32 = &H0
+   CRC32 = &H4D706318
+   CompCRC32 = &H4D706318
    IsRoom = False
-   Size = 17492
+   Size = 17655
 
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HFB7CE392
-   CompCRC32 = &H0
+   CRC32 = &H83CBF8A
+   CompCRC32 = &H83CBF8A
    IsRoom = False
-   Size = 17631
+   Size = 17673
 
 [Logic213]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &HB071DFF0
-   CompCRC32 = &H0
+   CRC32 = &HA786B2D8
+   CompCRC32 = &HA786B2D8
    IsRoom = False
-   Size = 17514
+   Size = 17677
 
 [Logic6]
    ID = cp.MsgBox
    Description = ""
    CRC32 = &HBE269A9
-   CompCRC32 = &H0
+   CompCRC32 = &HBE269A9
    IsRoom = True
    Size = 1760
 
 [Logic7]
    ID = cp.Palette
    Description = ""
-   CRC32 = &H6C28A6A2
-   CompCRC32 = &H0
+   CRC32 = &HD25CDAD
+   CompCRC32 = &HD25CDAD
    IsRoom = True
-   Size = 3012
+   Size = 2998
 
 [Logic8]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H259BFAB1
-   CompCRC32 = &H0
+   CRC32 = &HC9ACB684
+   CompCRC32 = &HC9ACB684
    IsRoom = True
    Size = 329
 
 [Logic9]
    ID = cp.Sound
    Description = ""
-   CRC32 = &HAC586EE7
-   CompCRC32 = &H991BA2FF
+   CRC32 = &H636BB866
+   CompCRC32 = &H636BB866
    IsRoom = True
-   Size = 3196
+   Size = 6259
 
 [Logic10]
    ID = cp.Instrument
    Description = ""
    CRC32 = &H878381F9
-   CompCRC32 = &H0
+   CompCRC32 = &H878381F9
    IsRoom = True
    Size = 75
 
 [Logic11]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &HFFB25F7C
-   CompCRC32 = &H0
+   CRC32 = &H81F944E5
+   CompCRC32 = &H81F944E5
    IsRoom = True
    Size = 3815
 
 [Logic12]
    ID = cp.SpeedStatus
    Description = ""
-   CRC32 = &H801EDA12
-   CompCRC32 = &H0
+   CRC32 = &HC1CB7194
+   CompCRC32 = &HC1CB7194
    IsRoom = True
    Size = 1676
 
-[Logic13]
+[Logic15]
    ID = lgc.TerminalFunctions
    Description = ""
-   CRC32 = &H2661F3BD
-   CompCRC32 = &H0
+   CRC32 = &HDD98C2EB
+   CompCRC32 = &HDD98C2EB
    IsRoom = False
    Size = 35
 
-[Logic14]
+[Logic13]
    ID = cp.Paint
    Description = ""
-   CRC32 = &HE08B0FCD
-   CompCRC32 = &H0
+   CRC32 = &HDF0D44B4
+   CompCRC32 = &HDF0D44B4
    IsRoom = True
-   Size = 6
+   Size = 85
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -534,7 +534,25 @@
    Size = 56
 
 [Sound4]
-   ID = s.NoiseTest
+   ID = s.NoiseTest1
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 46
+
+[Sound5]
+   ID = s.NoiseTest2
    Description = ""
    Key = 0
    TPQN = 16
@@ -620,6 +638,6 @@
 
 [View11]
    ID = vw.cp.Sound
-   Size = 244
+   Size = 308
    Description = ""
 [::END Views::]
