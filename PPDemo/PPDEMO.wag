@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/22/2022 7:33:11 PM"
+   LastEdit = "4/26/2022 6:48:47 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -44,11 +44,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HD5CA0B8B
-   CRC32 = &HD5CA0B8B
+   CompCRC32 = &H63464FFA
+   CRC32 = &H63464FFA
    ID = lgc.Main
    IsRoom = False
-   Size = 3353
+   Size = 3501
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
@@ -165,7 +165,7 @@
 
 [Logic100]
    CompCRC32 = &H6B15ABD6
-   CRC32 = &H6B15ABD6
+   CRC32 = &H7A0472FF
    ID = rm.Title
    IsRoom = True
    Size = 339
@@ -174,7 +174,7 @@
 [Logic201]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &HFB25E936
+   CRC32 = &HEEE4F6A4
    CompCRC32 = &HFB25E936
    IsRoom = False
    Size = 17289
@@ -182,7 +182,7 @@
 [Logic200]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &H1E25CE96
+   CRC32 = &HCFE69036
    CompCRC32 = &H1E25CE96
    IsRoom = False
    Size = 17175
@@ -190,7 +190,7 @@
 [Logic202]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &HD97DACB4
+   CRC32 = &HCE2C8EB1
    CompCRC32 = &HD97DACB4
    IsRoom = False
    Size = 18026
@@ -198,7 +198,7 @@
 [Logic203]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HC1D202FB
+   CRC32 = &H8111AB92
    CompCRC32 = &HC1D202FB
    IsRoom = False
    Size = 18008
@@ -206,7 +206,7 @@
 [Logic204]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H84F53A84
+   CRC32 = &H50184223
    CompCRC32 = &H84F53A84
    IsRoom = False
    Size = 18008
@@ -214,7 +214,7 @@
 [Logic205]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H1D949A66
+   CRC32 = &H263AA470
    CompCRC32 = &H1D949A66
    IsRoom = False
    Size = 18012
@@ -222,7 +222,7 @@
 [Logic206]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H1F8C18E
+   CRC32 = &HD96EAAD6
    CompCRC32 = &H1F8C18E
    IsRoom = False
    Size = 18012
@@ -230,7 +230,7 @@
 [Logic207]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &HEF4366A4
+   CRC32 = &H9BD08FDA
    CompCRC32 = &HEF4366A4
    IsRoom = False
    Size = 18012
@@ -238,7 +238,7 @@
 [Logic208]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &H6A42A731
+   CRC32 = &HB816891A
    CompCRC32 = &H6A42A731
    IsRoom = False
    Size = 17655
@@ -246,7 +246,7 @@
 [Logic209]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HD928B3D6
+   CRC32 = &HFB656E8
    CompCRC32 = &HD928B3D6
    IsRoom = False
    Size = 17655
@@ -254,7 +254,7 @@
 [Logic210]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &HB2EE95A8
+   CRC32 = &H700D773E
    CompCRC32 = &HB2EE95A8
    IsRoom = False
    Size = 17655
@@ -262,7 +262,7 @@
 [Logic211]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H4D706318
+   CRC32 = &H5B928A1B
    CompCRC32 = &H4D706318
    IsRoom = False
    Size = 17655
@@ -270,7 +270,7 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H83CBF8A
+   CRC32 = &H68696D89
    CompCRC32 = &H83CBF8A
    IsRoom = False
    Size = 17673
@@ -278,7 +278,7 @@
 [Logic213]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &HA786B2D8
+   CRC32 = &H1DDAF900
    CompCRC32 = &HA786B2D8
    IsRoom = False
    Size = 17677
@@ -310,18 +310,18 @@
 [Logic9]
    ID = cp.Sound
    Description = ""
-   CRC32 = &H636BB866
-   CompCRC32 = &H636BB866
+   CRC32 = &HD3139A33
+   CompCRC32 = &HD3139A33
    IsRoom = True
-   Size = 6259
+   Size = 7250
 
 [Logic10]
    ID = cp.Instrument
    Description = ""
-   CRC32 = &H878381F9
-   CompCRC32 = &H878381F9
+   CRC32 = &HDD171176
+   CompCRC32 = &HEAE46385
    IsRoom = True
-   Size = 75
+   Size = 1842
 
 [Logic11]
    ID = cp.Mouse
@@ -424,8 +424,12 @@
 [Picture10]
    ID = pic.cp.Instrument
    Description = ""
-   Size = 1
-   BkgdImg = ""
+   Size = 446
+   BkgdImg = "C:\Users\d3m294\OneDrive - PNNL\Desktop\agisound\test\src\text template.bmp"
+   BkgdShow = True
+   BkgdTrans = 201
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|2560|1344
 
 [Picture11]
    ID = pic.cp.Mouse
@@ -639,5 +643,10 @@
 [View11]
    ID = vw.cp.Sound
    Size = 308
+   Description = ""
+
+[View12]
+   ID = vw.cp.Instrument
+   Size = 292
    Description = ""
 [::END Views::]
