@@ -5,7 +5,7 @@
    WinAGIVersion = 2.1
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/26/2022 6:48:47 AM"
+   LastEdit = "5/1/2022 3:20:05 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -44,16 +44,16 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H63464FFA
-   CRC32 = &H63464FFA
+   CompCRC32 = &HC50D489A
+   CRC32 = &HC50D489A
    ID = lgc.Main
    IsRoom = False
-   Size = 3501
+   Size = 3494
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
-   CompCRC32 = &H25D1634F
-   CRC32 = &H25D1634F
+   CompCRC32 = &HE63C15AD
+   CRC32 = &HE63C15AD
    ID = rm.Terminal
    IsRoom = True
    Size = 154
@@ -174,7 +174,7 @@
 [Logic201]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &HEEE4F6A4
+   CRC32 = &H372F8B86
    CompCRC32 = &HFB25E936
    IsRoom = False
    Size = 17289
@@ -182,7 +182,7 @@
 [Logic200]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &HCFE69036
+   CRC32 = &H5B6BC8EB
    CompCRC32 = &H1E25CE96
    IsRoom = False
    Size = 17175
@@ -190,7 +190,7 @@
 [Logic202]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &HCE2C8EB1
+   CRC32 = &HB2A026FB
    CompCRC32 = &HD97DACB4
    IsRoom = False
    Size = 18026
@@ -198,7 +198,7 @@
 [Logic203]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H8111AB92
+   CRC32 = &HFA5244D0
    CompCRC32 = &HC1D202FB
    IsRoom = False
    Size = 18008
@@ -206,7 +206,7 @@
 [Logic204]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H50184223
+   CRC32 = &HA4ED126A
    CompCRC32 = &H84F53A84
    IsRoom = False
    Size = 18008
@@ -214,7 +214,7 @@
 [Logic205]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H263AA470
+   CRC32 = &H3C88FA32
    CompCRC32 = &H1D949A66
    IsRoom = False
    Size = 18012
@@ -222,7 +222,7 @@
 [Logic206]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &HD96EAAD6
+   CRC32 = &H718D5DBE
    CompCRC32 = &H1F8C18E
    IsRoom = False
    Size = 18012
@@ -230,7 +230,7 @@
 [Logic207]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H9BD08FDA
+   CRC32 = &H3F15A1E3
    CompCRC32 = &HEF4366A4
    IsRoom = False
    Size = 18012
@@ -238,7 +238,7 @@
 [Logic208]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HB816891A
+   CRC32 = &HE7E1B42C
    CompCRC32 = &H6A42A731
    IsRoom = False
    Size = 17655
@@ -246,7 +246,7 @@
 [Logic209]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HFB656E8
+   CRC32 = &H7D49AA53
    CompCRC32 = &HD928B3D6
    IsRoom = False
    Size = 17655
@@ -254,7 +254,7 @@
 [Logic210]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H700D773E
+   CRC32 = &H99C80521
    CompCRC32 = &HB2EE95A8
    IsRoom = False
    Size = 17655
@@ -262,7 +262,7 @@
 [Logic211]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H5B928A1B
+   CRC32 = &H7498EC9A
    CompCRC32 = &H4D706318
    IsRoom = False
    Size = 17655
@@ -270,15 +270,15 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H68696D89
-   CompCRC32 = &H83CBF8A
+   CRC32 = &HDAC4B14D
+   CompCRC32 = &HDAC4B14D
    IsRoom = False
-   Size = 17673
+   Size = 18151
 
 [Logic213]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H1DDAF900
+   CRC32 = &HAF1BDDC9
    CompCRC32 = &HA786B2D8
    IsRoom = False
    Size = 17677
@@ -318,10 +318,10 @@
 [Logic10]
    ID = cp.Instrument
    Description = ""
-   CRC32 = &HDD171176
-   CompCRC32 = &HEAE46385
+   CRC32 = &H3B7189AE
+   CompCRC32 = &H3B7189AE
    IsRoom = True
-   Size = 1842
+   Size = 7604
 
 [Logic11]
    ID = cp.Mouse
