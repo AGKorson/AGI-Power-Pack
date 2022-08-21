@@ -1,0 +1,76 @@
+six control consoles and one terminal:
+
+1. Indexed Chromatic Association Properties Options Control Console
+   palette control
+
+2. Electronic Synthesized Audio Data Options Control Console
+   sound mode/instrument selection
+
+3. Custom Acoustic Instrument Setting Options Control Console
+   fm instrument editor
+
+4. Emulated Rodent Input Device Options Control Console
+   mouse settings
+
+5. Overall Frame Rate Options Control Console
+   turbo mode/speed control
+
+6. Rectangular Alpha-Numeric Display Options Control Console
+   msgbox customizer
+
+7. Master Options Control Console
+   terminal
+
+
+start room: sierra ol hq bldg, parking lot. for years you wanted to visit. it's a 
+medical center now, you decide to go in to look around. 
+
+lobby: med center; if asked, receptionist tells you it's ok to look around, stay out
+of offices
+
+hallway: several doors- offices (no entry), rest room (it's occupied), broom closet
+
+broom closet: if you go far enough, you trip over a broom, and fall through the 
+backwall, opening up to a hidden staircase
+
+staircase: one level, ends in a door; looks like a cypher lock, but it's malfunctioning
+door opens to the PP control room
+
+when you go through the door, it locks behind you; you will need to restore the PP system 
+to get it open!
+
+PP control room: in main room, there is a terminal, and six panels; none are powered
+on; two small rooms adjoin; one looks like a supply/storage room. Other is a small office.
+
+one terminal, with three double paneled control stations (a desk level, and upper level)
+panels are dark until turned on with the terminal
+terminal takes test commands to control the powerpack, and to enable the control panels
+uses a dos-like syntax; missing key to turn it on
+!key is your car key!
+find the password file; it's corrupted, only powerpack password works; player has to
+find other six
+
+when powerpack enabled, turn on all advanced interface options: mouse, toolbar, 
+fade in/out; 80col, click2move
+
+ 
+office: door locked until cypher lock disabled in MOCC
+rolodex has password for xxxx
+folder in desk drawer has password for xxxx
+under desk blotter is  password for ERIDOCC
+
+storeroom: door locked until cypher lock disabled in MOCC
+file cabinet- slip of paper with password
+box on shelf -
+
+
+
+
+
+find a key to turn on terminal; enter help to see that there are six panels 
+that will enable some new features
+
+use terminal to enable each panel (each has a different password)
+
+find the passwords in various places in the room suite 
+

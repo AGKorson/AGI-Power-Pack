@@ -1,0 +1,475 @@
+#
+# WinAGI Game Property File
+#
+[General]
+   WinAGIVersion = 2.2
+   GameID = DGN
+   Interpreter = 2.917
+   LastEdit = "8/18/2022 8:20:13 PM"
+   Description = "WinAGI v2 Template Game"
+   GameVersion = "AGI Game version 0.0"
+   About = "AGI Game by <author>"
+   ResDir = src
+   UseResNames = True
+   Author = "Andrew Korson"
+   UseLE = True
+   PlatformType = 1
+   Platform = "C:\Program Files (x86)\DOSBox-0.74-3\DOSBoxDB.exe"
+   DOSExec = agi.exe
+   PlatformOpts = ""
+   CodePage = 437
+
+[Palette]
+   Color0 = &H00000000
+   Color1 = &H00A00000
+   Color2 = &H0000A000
+   Color3 = &H00A0A000
+   Color4 = &H000000A0
+   Color5 = &H00A00080
+   Color6 = &H000050A0
+   Color7 = &H00A0A0A0
+   Color8 = &H00505050
+   Color9 = &H00FF5050
+   Color10 = &H0050FF00
+   Color11 = &H00FFFF50
+   Color12 = &H005050FF
+   Color13 = &H00FF50FF
+   Color14 = &H0050FFFF
+   Color15 = &H00FFFFFF
+
+[WORDS.TOK]
+   Description = ""
+
+[OBJECT]
+   Description = ""
+
+[::BEGIN Logics::]
+[Logic0]
+   CompCRC32 = &H0
+   CRC32 = &HA8303519
+   ID = lgc.Main
+   IsRoom = False
+   Size = 2522
+   Description = "This logic runs in every interpreter cycle and calls other logics as needed."
+
+[Logic1]
+   CompCRC32 = &H0
+   CRC32 = &H228F1A43
+   ID = rm.Entrance
+   IsRoom = True
+   Size = 790
+   Description = "An example room with several exits."
+
+[Logic2]
+   ID = rm.Outside
+   Description = "An example room with an automatic door and sound effects."
+   CRC32 = &HF364A11A
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 494
+
+[Logic3]
+   ID = rm.WestRoom
+   Description = "An example room."
+   CRC32 = &HD573564A
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 921
+
+[Logic4]
+   ID = rm.NorthRoom
+   Description = "An example room."
+   CRC32 = &H60DCB320
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 82
+
+[Logic5]
+   ID = rm.EastRoom
+   Description = "An example room."
+   CRC32 = &HC5652E1F
+   CompCRC32 = &H0
+   IsRoom = True
+   Size = 82
+
+[Logic90]
+   CompCRC32 = &H0
+   CRC32 = &H3AD8ECC2
+   ID = lgc.GameFunctions
+   IsRoom = False
+   Size = 659
+   Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
+
+[Logic91]
+   CompCRC32 = &H0
+   CRC32 = &H4255E7E7
+   IsRoom = False
+   ID = lgc.Init
+   Size = 155
+   Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
+
+[Logic92]
+   ID = lgc.RoomInit
+   Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
+   CRC32 = &HA162DA53
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 56
+
+[Logic94]
+   ID = lgc.DebugHelp
+   Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
+   CRC32 = &HE0B7C956
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 1077
+
+[Logic95]
+   ID = lgc.Death
+   Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
+   CRC32 = &H4BCF4BE4
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 409
+
+[Logic96]
+   ID = lgc.TraceInfo
+   Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
+   CRC32 = &HEBBB5B84
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 2617
+
+[Logic98]
+   CompCRC32 = &H0
+   CRC32 = &H9F4A8739
+   ID = lgc.Error
+   IsRoom = False
+   Size = 821
+   Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
+
+[Logic99]
+   CompCRC32 = &H0
+   CRC32 = &H5E9E9A55
+   ID = lgc.Debug
+   IsRoom = False
+   Size = 1147
+   Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
+
+[Logic101]
+   ID = lgc.mod2089
+   Description = ""
+   CRC32 = &HF2EFB3D7
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 20970
+
+[Logic102]
+   ID = lgc.mod2272
+   Description = ""
+   CRC32 = &H45D938E6
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21053
+
+[Logic103]
+   ID = lgc.mod2411
+   Description = ""
+   CRC32 = &H45E28A2F
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21833
+
+[Logic104]
+   ID = lgc.mod2425
+   Description = ""
+   CRC32 = &HA75847B7
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21833
+
+[Logic105]
+   ID = lgc.mod2426
+   Description = ""
+   CRC32 = &H5FBE9C02
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21833
+
+[Logic106]
+   ID = lgc.mod2435
+   Description = ""
+   CRC32 = &HA375AFBE
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21837
+
+[Logic107]
+   ID = lgc.mod2439
+   Description = ""
+   CRC32 = &H33ED40F0
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21837
+
+[Logic108]
+   ID = lgc.mod2440
+   Description = ""
+   CRC32 = &H32ED910C
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21837
+
+[Logic109]
+   ID = lgc.mod2903
+   Description = ""
+   CRC32 = &H4232AC50
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21480
+
+[Logic110]
+   ID = lgc.mod2911
+   Description = ""
+   CRC32 = &H9DEF49A3
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21480
+
+[Logic111]
+   ID = lgc.mod2912
+   Description = ""
+   CRC32 = &H873CE460
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21480
+
+[Logic112]
+   ID = lgc.mod2915
+   Description = ""
+   CRC32 = &H48D79875
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21480
+
+[Logic113]
+   ID = lgc.mod2917
+   Description = ""
+   CRC32 = &H934CB2C6
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21480
+
+[Logic114]
+   ID = lgc.mod2936
+   Description = ""
+   CRC32 = &HE025769B
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 21502
+
+[Logic97]
+   ID = lgc.traceinfo160
+   Description = ""
+   CRC32 = &HC95B9F9A
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 2238
+
+[Logic6]
+   ID = lgc.StatusLine
+   Description = ""
+   CRC32 = &H341395DA
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 200
+
+[Logic7]
+   ID = lgc.TestPart1
+   Description = ""
+   CRC32 = &H63DCED02
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 10212
+
+[Logic8]
+   ID = lgc.TestPart2
+   Description = ""
+   CRC32 = &H93E2E091
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 10607
+
+[Logic9]
+   ID = lgc.TestPart3
+   Description = ""
+   CRC32 = &HB7353969
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 9385
+
+[Logic93]
+   ID = lgc.GameHelp
+   Description = ""
+   CRC32 = &H4F4E821F
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 1363
+[::END Logics::]
+
+[::BEGIN Pictures::]
+[Picture1]
+   ID = pic.Entrance
+   Description = ""
+   Size = 251
+   BkgdImg = ""
+
+[Picture2]
+   ID = pic.Outside
+   Description = ""
+   BkgdImg = ""
+   Size = 954
+
+[Picture3]
+   ID = pic.WestRoom
+   Description = ""
+   BkgdImg = ""
+   Size = 165
+
+[Picture4]
+   ID = pic.NorthRoom
+   Description = ""
+   BkgdImg = ""
+   Size = 125
+
+[Picture5]
+   ID = pic.EastRoom
+   Description = ""
+   BkgdImg = ""
+   Size = 169
+
+[::END Pictures::]
+
+[::BEGIN Sounds::]
+[Sound0]
+   ID = m.Theme
+   Description = "A theme song that can be played while title screen is shown."
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = False
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Size = 1586
+
+[Sound1]
+   ID = s.DoorOpen
+   Description = "A simple sound effect for an automatic opening door."
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 31
+
+[Sound2]
+   ID = s.DoorClose
+   Description = "A simple sound effect for an automatic closing door."
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 31
+
+[Sound3]
+   ID = kq1theme
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 1201
+
+[Sound4]
+   ID = s.Noise
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Size = 61
+[::END Sounds::]
+
+[::BEGIN Views::]
+[View0]
+   ID = vw.Ego
+   Description = "This is the default ego view"
+   Size = 2854
+
+[View1]
+   ID = vw.EgoDead
+   Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
+   Size = 224
+
+[View2]
+   ID = vw.Door
+   Description = ""
+   Size = 4926
+
+[View218]
+   ID = vw.OpeningCredits
+   Description = "Example of startup credits that fade in and fade out. Used on the introduction page."
+   Size = 3451
+
+[View220]
+   ID = vw.Inv.TestItem
+   Description = "Inventory view of a sample item that includes a border."
+   Size = 286
+
+[View3]
+   ID = vw.WestRoomArt
+   Description = "it's handy to keep cels and loops that are added to a room's picture in one view"
+   Size = 168
+[::END Views::]

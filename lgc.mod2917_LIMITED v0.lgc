@@ -1,0 +1,251 @@
+[******************************************************************************
+[
+[ lgc.mod2917_LIMITED
+[
+[ Power Pack v1.0 [LIMITED EDITION] source code (for AGI version 2.917)
+[
+[ This limited edition of the AGI power pack only includes the following 
+[ modifications:
+[
+[   - fixes a bug in controller assignment function to allow all 49 
+[     slots to be used
+[ 
+[   - fixes 'set.game.id' so it does not quit the game when id gets set
+[
+[   - modifies the character printing functions to allow use of
+[     extended characters in graphics and text modes
+[
+[   - adds support for words to start with non-letters, and also for
+[    words to contain extended characters
+[
+[
+[ Detailed explanations of each power pack feature are included in its 
+[ respective code block below, including syntax, limitations and 
+[ considerations. Examples of all features provided in the full Power Pack
+[ are provided in the AGI Power Pack Demo game.
+[
+[******************************************************************************
+
+
+[******************************************************************************
+[ a null string is needed in several of the patches; instead of using a 
+[ separate message for each, declare it once, then use it as needed
+#message 254 "" [ /x00
+#define NULLMSG    254
+[******************************************************************************
+
+
+[******************************************************************************
+[ 
+[ confirm version number before continuing
+[
+[ s56=".xxx" means 2.903 through 2.917
+s1 = ".917";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2917;
+} else {
+  return();
+}
+[******************************************************************************
+
+
+[******************************************************************************
+[
+[ SET.STRING PATCH AND MEMCOPY FUNCTION
+[ 
+[ This patch is the first step in gaining access to power pack features. It 
+[ modifies the set.string command so it can copy more than 40 characters and 
+[ fixes the bug that adds an extra null character to the end of the string.
+[ 
+[ put patch function in s1
+#message  1 "\xB8\x90\x90\x2E\xA3\x50\x0D\x2E\xA3\x52\x0D\xB8\x86\x3F\x2E\xA3"
+            "\x65\x0D\xB0\x04\x2E\xA2\x69\x0D\x8B\xC6\xC3"
+s1 = m1;
+[ use stop.sound to run the patch
+#message  2 "\x85\xA1"
+s36 = m2;
+stop.sound();
+[ The next step is to modify the 'said' command so it will run a custom 
+[ memory copy function that will be stored in s1. (The said command is used
+[ because it accepts 16 bit unsigned integers, which makes it much easier to 
+[ access memory addresses.)
+#message  3 "\xB8\x85\xA1\xA3\x2D\x09\x8B\xC6\xC3"
+s1 = m3;
+stop.sound();
+[ Put the custom memcopy function in s1, so calls to said command will
+[ run it. The syntax used is:
+[     if (said(numbytes, msgnum, tgtaddr[, 0]) {}
+[        - numbytes is the number of bytes to be copied
+[        - msgnum is the message number in this logic that the data
+[          will be copied from 
+[        - tgtaddr is the target memory address where the data will be
+[          copied to
+[        if a fourth argument is used (value doesn't matter), then the target
+[        segment will be the data segment, otherwise it'll be the code segment
+#message  4 "\xAC\x8A\xD0\xAD\x50\xAD\x50\xE8\x61\x80\x83\xC4\x02\x50\x1E\xAD"
+            "\x50\x80\xFA\x04\x75\x03\x1E\xEB\x01\x0E\xE8\x97\xB8\x83\xC4\x0A"
+            "\x8B\xC6\xC3"
+s1 = m4;
+[ 'said' patch is now set; restore stop.sound command
+#message  5 "\x5D\x51"
+if (said(2, 5, 1965, 0)){} [ DS:07AD
+[******************************************************************************
+
+
+[******************************************************************************
+[
+[ CONTROLLER TABLE BUGFIX
+[
+[ Although AGI allocates space to store and evaluate 49 controllers, there is a
+[ bug in the set.key command that limits the number of controllers that can be
+[ assigned to 39. This patch adjusts the controller count to allow up to 49
+[ assignments. 
+[ 
+[ SYNTAX:  n/a - patch does not modify any command syntax
+[
+[ LIMITATIONS/CONSIDERATIONS: none - all 49 controller slots are now available
+[
+[ PATCH CODE:
+#message 6 "\x31"
+if (said(1, 6, 19569)){} [ 4C71
+[******************************************************************************
+
+
+[******************************************************************************
+[
+[ SET.GAME.ID PATCH
+[ 
+[ This patch skips the check against the built-in gameID, allowing changes to  
+[ the game ID with the 'set.game.id' command without causing AGI to quit.
+[
+[ SYNTAX: n/a - patch does not modify any command syntax
+[  
+[ LIMITATIONS/CONSIDERATIONS:  The string assigned to gameID is limited to six 
+[ characters, but can now include formatting codes (such as '%v1', '%s1', 
+[ '%m1', etc). If you do use formatting codes, you should make sure the 
+[ formatted string is six or less characters. (The patch uses a buffer of ~40 
+[ characters when doing the conversion before truncating it to 6; if your 
+[ formatted string exceeds that, it may result in crashing AGI.)
+[
+[ With the ID check removed, you can now change the ID multiple times during a 
+[ game to give users access to more save game slots, because the save game 
+[ files would have different names. So you could save by 'chapter', or allow 
+[ users to choose an ID to sort their save game files.
+[
+[ PATCH CODE:
+#message 7 "\x68\x9F\x0C\x6A\x02\xC6\x06\x11\x0D\xFF\xE8\x85\x1F\x83\xC4\x04"
+            "\x6A\x07\x68\x9F\x0C\x6A\x02\xE8\x06\x4D\x83\xC4\x06\xC3"
+if (said(30, 7, 1)){} [ 0001
+#message 8 "\xE8\x5B\xF1"
+if (said(3, 8, 3747)){} [ 0EA3
+[******************************************************************************
+
+
+[******************************************************************************
+[
+[ EXTENDED CHARACTER SUPPORT PATCH
+[
+[ This patch fixes the graphics character display functions so that extended
+[ characters (ascii values 128 - 254) will display properly just as they do in
+[ the text mode.
+[
+[ SYNTAX: n/a - patch does not modify any command syntax
+[
+[ LIMITATIONS/CONSIDERATIONS: DOS includes character glyphs for all ascii 
+[ values except 255. Backspace, linefeed and carriage return (8, 10, 13) have
+[ glyphs, but the internal print functions adjusts cursor position for these
+[ values instead of printing the associated glyph. 
+[
+[ PATCH CODE:
+[ modify CopyGlyph to point to correct location for glyphs
+#message 9 "\xC0"
+if (said(1, 9, 11358)){} [ 2C5E
+#message 10 "" [ \x00
+#message 11 "\x01"
+if (said(2, 10, 11365)){} [ 2C65
+[ modify character checks to 0FFh instead of 80h
+#message 12 "\xFF"
+if (said(1, 12, 11332)){} [ 2C44
+if (said(1, 12, 11347)){} [ 2C53
+if (said(1, 12, 10931)){} [ 2AB3
+#message 13 "\xF8\x07"
+if (said(2, 13, 10942)){} [ 2ABE
+[******************************************************************************
+
+
+[******************************************************************************
+[ 
+[ EXTENDED CHARACTER WORDS
+[
+[ This patch modifies AGI to allow use of extended characters in vocabulary
+[ words, and also allows words to start with non-alphabet characters.
+[
+[ SYNTAX:  n/a - patch does not modify any command syntax
+[
+[ LIMITATIONS/CONSIDERATIONS: This patch allows parsing of words that contain
+[ extended characters. This improves support for languages other than English.
+[ It also allows words to start with any letter, not just 'a' to 'z'. 
+[
+[ Because of how AGI stores word text data, the patch also requires a special 
+[ format in WORDS.TOK for words containing extended characters.
+[
+[ The format used is to treat character 0x7F as a 'marker'; when that character
+[ is encountered, the patch will take the next character and add 128 to it,
+[ generating the desired extended character. This means the words are still 
+[ compatible with unmodified AGI engines, including modern programs such as 
+[ ScummVM and NAGI. The words will just look a little strange and will never
+[ match anything a player could type in, but the file will still be 100%
+[ compatible with AGI.
+[
+[ If you are using WinAGI version 2.2.1 or greater, it will automatically do 
+[ the formatting for you when you add words to WORDS.TOK.
+[
+[ The AGI Power Pack demo game uses this patch, and provides detailed 
+[ information on how to work with extended character words.
+[
+[ This patch also fixes a minor coding flaw in AGI's word search function. The 
+[ flaw has no impact because there's duplicate code in the function that masks 
+[ the error. The function is supposed to return a null pointer when the starting
+[ changes (e.g. going from 'a' to 'b'), which should tell the interpreter that
+[ a word match is impossible. But the function checks the wrong location, so it
+[ will never return a null value. It doesn't cause a problem though, because
+[ there is a second check in the function that identifies the change and exits
+[ the function.
+[
+[ PATCH CODE:
+            [ FindWordPatch1
+#message 14 "\x3C\x61\x72\x08\x3C\x7A\x77\x04\x83\xE8\x61\xC3\x2B\xC0\xC3"
+            [ FindWordPatch2
+            "\x46\x8A\x04\x34\x7F\x0C\x80\x34\x7F\xC3"
+            [ NextWordPatch
+            "\x80\x7C\x03\x01\x73\x11\x8A\x44\x04\x24\x7F\x3C\x05\x72\x08\x3C"
+            "\x1D\x77\x04\x2B\xC0\xEB\x03\x8D\x44\x03\x5D\x5F\x5E\xC3"
+if (said(55, 14, 31)){} [ 001F
+[ change start letter check to allow ALL characters
+#message 15 "\xEB\x10"
+if (said(2, 15, 6799)){} [ 1A8F
+[ use patch to calculate starting offset for any starting character
+#message 16 "\xE8\x43\xE5"
+if (said(3, 16, 6873)){} [ 1AD9
+[ check for extended character marker in the wordlist
+#message 17 "\x8A\x04\x24\x7F\x75\x03\xE8\xCD\xE4\x34\x7F"
+if (said(11, 17, 7000)){} [ 1B58
+[ fix nextword function to work with non-alphabet characters
+#message 18 "\xE9\x41\xE4"
+if (said(3, 18, 7156)){} [ 1BF4
+[******************************************************************************
+
+
+[******************************************************************************
+[ when done with memCopy, restore said command pointer
+#message 19 "\x5C\x09"
+if (said(2, 19, 2349, 0)){} [ DS:092D
+[******************************************************************************
+
+return();
+
+
+[ **************************************
+[ MESSAGES
+[ **************************************
+[ for easier reference, messages are declared as they are used
