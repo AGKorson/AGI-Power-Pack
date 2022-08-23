@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/20/2022 9:24:56 PM"
+   LastEdit = "8/22/2022 12:03:55 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,15 +45,15 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HA48E3D2B
-   CRC32 = &HA48E3D2B
+   CompCRC32 = &H0
+   CRC32 = &HBCE0FC43
    ID = lgc.Main
    IsRoom = False
-   Size = 4288
+   Size = 4361
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &HD38B1F89
+   CompCRC32 = &H0
    CRC32 = &HD38B1F89
    ID = lgc.GameFunctions
    IsRoom = False
@@ -61,7 +61,7 @@
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H1C1C6511
+   CompCRC32 = &H0
    CRC32 = &H1C1C6511
    IsRoom = False
    ID = lgc.Init
@@ -72,7 +72,7 @@
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
    CRC32 = &H4548AFEC
-   CompCRC32 = &H4548AFEC
+   CompCRC32 = &H0
    IsRoom = False
    Size = 208
 
@@ -80,7 +80,7 @@
    ID = lgc.GameHelp
    Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
    CRC32 = &H1E7EFA71
-   CompCRC32 = &H1E7EFA71
+   CompCRC32 = &H0
    IsRoom = False
    Size = 842
 
@@ -88,7 +88,7 @@
    ID = lgc.DebugHelp
    Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
    CRC32 = &HD29E0328
-   CompCRC32 = &HD29E0328
+   CompCRC32 = &H0
    IsRoom = False
    Size = 1031
 
@@ -96,7 +96,7 @@
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
    CRC32 = &HE8149290
-   CompCRC32 = &HE8149290
+   CompCRC32 = &H0
    IsRoom = False
    Size = 407
 
@@ -104,12 +104,12 @@
    ID = lgc.TraceInfo
    Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
    CRC32 = &HF1D0C7D9
-   CompCRC32 = &HF1D0C7D9
+   CompCRC32 = &H0
    IsRoom = False
    Size = 2617
 
 [Logic98]
-   CompCRC32 = &H4F89015C
+   CompCRC32 = &H0
    CRC32 = &H4F89015C
    ID = lgc.Error
    IsRoom = False
@@ -117,7 +117,7 @@
    Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
 
 [Logic99]
-   CompCRC32 = &H94051CA3
+   CompCRC32 = &H0
    CRC32 = &H94051CA3
    ID = lgc.Debug
    IsRoom = False
@@ -128,7 +128,7 @@
    ID = lgc.mod2272
    Description = ""
    CRC32 = &HF5F58BE5
-   CompCRC32 = &HF5F58BE5
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21121
 
@@ -136,7 +136,7 @@
    ID = lgc.mod2089
    Description = ""
    CRC32 = &H985E090C
-   CompCRC32 = &H985E090C
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21038
 
@@ -144,7 +144,7 @@
    ID = lgc.mod2411
    Description = ""
    CRC32 = &H9F79A09C
-   CompCRC32 = &H9F79A09C
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21914
 
@@ -152,7 +152,7 @@
    ID = lgc.mod2425
    Description = ""
    CRC32 = &H422AFB6D
-   CompCRC32 = &H422AFB6D
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21914
 
@@ -160,7 +160,7 @@
    ID = lgc.mod2426
    Description = ""
    CRC32 = &H209231A
-   CompCRC32 = &H209231A
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21914
 
@@ -168,7 +168,7 @@
    ID = lgc.mod2435
    Description = ""
    CRC32 = &H612DF33D
-   CompCRC32 = &H612DF33D
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21918
 
@@ -176,7 +176,7 @@
    ID = lgc.mod2439
    Description = ""
    CRC32 = &H65C1DADB
-   CompCRC32 = &H65C1DADB
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21918
 
@@ -184,7 +184,7 @@
    ID = lgc.mod2440
    Description = ""
    CRC32 = &H5AA050D9
-   CompCRC32 = &H5AA050D9
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21918
 
@@ -192,7 +192,7 @@
    ID = lgc.mod2903
    Description = ""
    CRC32 = &H7FE9754B
-   CompCRC32 = &H7FE9754B
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21561
 
@@ -200,7 +200,7 @@
    ID = lgc.mod2911
    Description = ""
    CRC32 = &H627D4DE2
-   CompCRC32 = &H627D4DE2
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21561
 
@@ -208,7 +208,7 @@
    ID = lgc.mod2912
    Description = ""
    CRC32 = &H80C4B828
-   CompCRC32 = &H80C4B828
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21561
 
@@ -216,7 +216,7 @@
    ID = lgc.mod2915
    Description = ""
    CRC32 = &HC76D5DD9
-   CompCRC32 = &HC76D5DD9
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21561
 
@@ -224,7 +224,7 @@
    ID = lgc.mod2917
    Description = ""
    CRC32 = &H3A9C9FA1
-   CompCRC32 = &H3A9C9FA1
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21561
 
@@ -232,7 +232,7 @@
    ID = lgc.mod2936
    Description = ""
    CRC32 = &HCD212F94
-   CompCRC32 = &HCD212F94
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21583
 
@@ -240,7 +240,7 @@
    ID = lgc.TerminalFunctions
    Description = ""
    CRC32 = &HDD98C2EB
-   CompCRC32 = &HDD98C2EB
+   CompCRC32 = &H0
    IsRoom = False
    Size = 35
 
@@ -248,7 +248,7 @@
    ID = cp.Terminal
    Description = ""
    CRC32 = &HFE891AC7
-   CompCRC32 = &HFE891AC7
+   CompCRC32 = &H0
    IsRoom = True
    Size = 450
 
@@ -256,7 +256,7 @@
    ID = cp.MsgBox
    Description = ""
    CRC32 = &HB2B6D93D
-   CompCRC32 = &HB2B6D93D
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1777
 
@@ -264,7 +264,7 @@
    ID = cp.Palette
    Description = ""
    CRC32 = &H5F90674D
-   CompCRC32 = &H5F90674D
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3148
 
@@ -272,7 +272,7 @@
    ID = cp.Sound
    Description = ""
    CRC32 = &H31DBF3FC
-   CompCRC32 = &H31DBF3FC
+   CompCRC32 = &H0
    IsRoom = True
    Size = 7407
 
@@ -280,7 +280,7 @@
    ID = cp.Paint
    Description = ""
    CRC32 = &H62D17863
-   CompCRC32 = &H62D17863
+   CompCRC32 = &H0
    IsRoom = True
    Size = 83
 
@@ -288,7 +288,7 @@
    ID = cp.Instrument
    Description = ""
    CRC32 = &HB701E405
-   CompCRC32 = &HB701E405
+   CompCRC32 = &H0
    IsRoom = True
    Size = 12201
 
@@ -296,7 +296,7 @@
    ID = cp.SpeedStatus
    Description = ""
    CRC32 = &HD02E78C3
-   CompCRC32 = &HD02E78C3
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1718
 
@@ -304,7 +304,7 @@
    ID = cp.Mouse
    Description = ""
    CRC32 = &HFA8E9B85
-   CompCRC32 = &HFA8E9B85
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3846
 
@@ -312,55 +312,55 @@
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
    CRC32 = &H4C835108
-   CompCRC32 = &H4C835108
+   CompCRC32 = &H0
    IsRoom = True
    Size = 389
 
 [Logic2]
    ID = rm.ParkingLot
-   Description = ""
-   CRC32 = &HE4AD949F
-   CompCRC32 = &HE4AD949F
+   Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
+   CRC32 = &H321FE789
+   CompCRC32 = &H321FE789
    IsRoom = True
-   Size = 434
+   Size = 374
 
 [Logic3]
    ID = rm.Lobby
-   Description = ""
-   CRC32 = &H515F25D0
-   CompCRC32 = &H515F25D0
+   Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
+   CRC32 = &H16F073C1
+   CompCRC32 = &H16F073C1
    IsRoom = True
-   Size = 494
+   Size = 540
 
 [Logic4]
    ID = rm.Hallway
-   Description = ""
-   CRC32 = &H4BD7C386
-   CompCRC32 = &H4BD7C386
+   Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
+   CRC32 = &HF5493F80
+   CompCRC32 = &HF5493F80
    IsRoom = True
-   Size = 709
+   Size = 733
 
 [Logic8]
    ID = rm.Terminal
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
    CRC32 = &H1803CFE9
-   CompCRC32 = &H1803CFE9
+   CompCRC32 = &H0
    IsRoom = True
    Size = 281
 
 [Logic5]
    ID = rm.Closet
-   Description = ""
-   CRC32 = &H5D429987
-   CompCRC32 = &H5D429987
+   Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
+   CRC32 = &H68698B79
+   CompCRC32 = &H68698B79
    IsRoom = True
-   Size = 1635
+   Size = 4316
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
    CRC32 = &H86E54F72
-   CompCRC32 = &H86E54F72
+   CompCRC32 = &H0
    IsRoom = True
    Size = 198
 
@@ -368,7 +368,7 @@
    ID = rm.Entrance
    Description = ""
    CRC32 = &H41FEE5D5
-   CompCRC32 = &H41FEE5D5
+   CompCRC32 = &H0
    IsRoom = True
    Size = 312
 
@@ -376,7 +376,7 @@
    ID = rm.Office
    Description = ""
    CRC32 = &HDE15A352
-   CompCRC32 = &HDE15A352
+   CompCRC32 = &H0
    IsRoom = True
    Size = 102
 
@@ -384,7 +384,7 @@
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
    CRC32 = &HF0546BB6
-   CompCRC32 = &HF0546BB6
+   CompCRC32 = &H0
    IsRoom = True
    Size = 102
 
@@ -392,7 +392,7 @@
    ID = lgc.InitToolbar
    Description = ""
    CRC32 = &H7032FEB1
-   CompCRC32 = &H7032FEB1
+   CompCRC32 = &H0
    IsRoom = False
    Size = 176
 
@@ -494,7 +494,7 @@
    ID = pic.Lobby
    Description = ""
    BkgdImg = ""
-   Size = 1609
+   Size = 1641
 
 [Picture4]
    ID = pic.Hallway
@@ -680,7 +680,7 @@
 [View14]
    ID = vw.ClosetArt
    Description = ""
-   Size = 1741
+   Size = 1865
 
 [View15]
    ID = vw.Assorted
@@ -720,10 +720,10 @@
 [View5]
    ID = vw.HallwayArt
    Description = ""
-   Size = 898
+   Size = 1278
 
 [View7]
    ID = vw.LobbyArt
    Description = ""
-   Size = 1067
+   Size = 1999
 [::END Views::]
