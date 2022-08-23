@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/22/2022 12:03:55 PM"
+   LastEdit = "8/23/2022 3:34:48 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -320,7 +320,7 @@
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
    CRC32 = &H321FE789
-   CompCRC32 = &H321FE789
+   CompCRC32 = &H0
    IsRoom = True
    Size = 374
 
@@ -328,7 +328,7 @@
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
    CRC32 = &H16F073C1
-   CompCRC32 = &H16F073C1
+   CompCRC32 = &H0
    IsRoom = True
    Size = 540
 
@@ -336,7 +336,7 @@
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
    CRC32 = &HF5493F80
-   CompCRC32 = &HF5493F80
+   CompCRC32 = &H0
    IsRoom = True
    Size = 733
 
@@ -351,10 +351,10 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H68698B79
-   CompCRC32 = &H68698B79
+   CRC32 = &HEFADFF8B
+   CompCRC32 = &H0
    IsRoom = True
-   Size = 4316
+   Size = 3965
 
 [Logic6]
    ID = rm.SecretRoom
@@ -400,7 +400,7 @@
    ID = lgc.ToolbarFunctions
    Description = ""
    CRC32 = &HC1265EDF
-   CompCRC32 = &HC1265EDF
+   CompCRC32 = &H0
    IsRoom = False
    Size = 333
 [::END Logics::]
