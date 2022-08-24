@@ -481,13 +481,13 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     }
     
     [ floor drain (74, 142, 81, 158)
-    if (mouseX > 74 && mouseX < 88 && mouseY > 150 && mouseY < 166) {
-      if (obj.in.box(ego, 66, 142, 81, 153)) {
+    if (mouseX > 74 && mouseX < 81 && mouseY > 150 && mouseY < 162) {
+      if (obj.in.box(ego, 66, 142, 81, 156)) {
         egodir = STOPPED;
         
         print("The drain is firmly attached to the floor. You can't pull it up.");
       } else {
-        print("You can't reach that from here. drain");
+        print("You can't reach that from here.");
       }
       goto(doneclick);
     }
@@ -523,6 +523,8 @@ if (egoHitSpecial && !wallbreak && fallstatus == NOFALL) {
 }
 if (fallstatus == STARTFALL) {
   fallstatus = MOVE2WALL1;
+  set.loop(ego, 2);
+  fix.loop(ego);
   move.obj(ego, 72, 146, 1, fDone);
   prevent.input();
 }
@@ -543,13 +545,14 @@ if (fDone && fallstatus == BREAKWALL) {
   stop.update(wall);
   print("As you fall against the wall, it caves in, revealing a large hole.");
   ignore.objs(wall);
+  release.loop(ego);
   player.control();
   accept.input();
   triptimer = 40;
 }
 
-[ trip over broom even after first fall
-if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED) {
+[ trip over broom even after first fall, unless it's been moved
+if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
   print("You trip over the broom again!");
   reset(cantrip);
   triptimer = 40;

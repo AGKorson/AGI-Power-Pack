@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/23/2022 8:55:54 PM"
+   LastEdit = "8/23/2022 9:23:53 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -327,10 +327,10 @@
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H299A7197
-   CompCRC32 = &H299A7197
+   CRC32 = &HEBED826C
+   CompCRC32 = &HEBED826C
    IsRoom = True
-   Size = 548
+   Size = 540
 
 [Logic4]
    ID = rm.Hallway
@@ -351,10 +351,10 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H49F73F11
-   CompCRC32 = &H49F73F11
+   CRC32 = &H38A06877
+   CompCRC32 = &H38A06877
    IsRoom = True
-   Size = 3965
+   Size = 3975
 
 [Logic6]
    ID = rm.SecretRoom
