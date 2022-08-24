@@ -24,8 +24,6 @@ logfile
 *.bmp
 *.png
 agi
-words.tok
-object
 fm.dat
 *_OLD.*
 LOGIC.*
