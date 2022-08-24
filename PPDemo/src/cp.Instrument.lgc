@@ -1,1 +1,2323 @@
-[ ********************************************************************[[ cp.Instrument[[ Custom Acoustic Instrument Setting Options Control Console[ CAISOCC[[ ********************************************************************#define oCursorB       o1  [ need four objects for cursor otherwise#define oCursorT       o2  [ text gets erased#define oCursorL       o3#define oCursorR       o4#define oMode          o5#define oScrlBox       o6#define oScrlBkgd      o7[ loop values assigned to cursor objects#define LP_OPT      0 [ option button states#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons#define LP_CF_CMD1  2 [    "     "    "  OK, Test command buttons#define LP_CF_CMD2  3 [    "     "    "  Save, Reset command buttons#define LP_CF_CMD3  4 [    "     "    "  Copy Instrument command button#define LP_CF_PNL1  5 [    "     "    "  display instrument listbox#define LP_CF_PNL2  6 [    "     "    "  select instrument listbox#define LP_CF_TEXT1 7 [ text cursor for check boxes#define LP_CF_TEXT2 8 [ text cursor for edit boxes#define LP_SCROLL   9 [ scroll bar components#define tmpVal       v220#define selinst      v221#define cursorX      v222#define cursorY      v223#define cursorpos    v224#define  CP_MOUSE     1#define  CP_KEYB      2#define  CP_INST      3#define  CP_DONE      4#define  CP_TEST      5#define  CP_COPY      6#define  CP_SAVE      7#define  CP_RESET     8#define  CP_M_TREM    9#define  CP_M_VIB    10#define  CP_M_SNDSUS 11#define  CP_M_KEYB   12#define  CP_M_FREQ   13#define  CP_M_KSL    14#define  CP_M_LVL    15#define  CP_M_ATTK   16#define  CP_M_DECAY  17#define  CP_M_SUST   18#define  CP_M_REL    19#define  CP_M_SHAPE  20#define  CP_FDBACK   21#define  CP_C_TREM   22#define  CP_C_VIB    23#define  CP_C_SNDSUS 24#define  CP_C_KEYB   25#define  CP_C_FREQ   26#define  CP_C_KSL    27#define  CP_C_LVL    28#define  CP_C_ATTK   29#define  CP_C_DECAY  30#define  CP_C_SUST   31#define  CP_C_REL    32#define  CP_C_SHAPE  33#define  CP_CONN     34#define newpos       v225#define btnAction    v226#define   B_MOUSE     1#define   B_KYBD      2#define   B_DONE      3#define   B_TEST      4#define   B_COPY      5#define   B_SAVE      6#define   B_RESET     7#define   B_STOP      8#define    SC_UP      9#define    SC_DOWN   10#define    SC_PGUP   11#define    SC_PGDN   12#define egoPrevX     v227#define egoPrevY     v228#define egoPrevDir   v229#define tmpRow       v230#define tmpCol       v231#define dropmode     v232#define    NODROP     0#define    DROPDOWN   1#define    CHOOSING   2#define    DROPUP     3#define listindex    v233 [ inst index of currently selected instrument                          [ in the dropdown list[ v234 - v242 are used as instrument data variables#define topinst      v243 [ index of instrument at top row of dropdown list#define listrow      v244 [ row index (0-4) of currently selected list item                          [ (topinst + listrow = listindex)[ and v247 - v254[ are used as instrument data variables#define update           f220#define loadinst         f221#define cursormode       f222#define inTextBox        f223#define toggleCheck      f224#define typeText         f225#define sndTest          f226#define selectItem       f227#define redrawList       f228#define instDirty        f229[ f230 - f233 used as instrument parameters#define old4chan         f234#define oldMIDI          f235[ instrument parameter flags and variables#define modTremolo       f230#define modVibrato       f231#define modSustain       f232#define modKyScale       f233#define modFreqMult      v234#define modKSL           v235#define modLevel         v236#define modAttack        v237#define modDecay         v238#define modSusLvl        v239#define modRelease       v240#define modWaveForm      v241#define feedback         v242#define carTremolo       f243#define carVibrato       f244#define carSustain       f245#define carKyScale       f246#define carFreqMult      v247#define carKSL           v248#define carLevel         v249#define carAttack        v250#define carDecay         v251#define carSusLvl        v252#define carRelease       v253#define carWaveForm      v254#define connect          f255[ strings#define strInst       s12#define strByte       s13#define sTemp         s14 [ s15#define sTemp2        s16[ **************************************[ FIRST CYCLE ONLY[ **************************************if(newRoom) {  [ this is the first cycle through this room  [ do basic room initialization  call(lgc.RoomInit);    [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    lastChar = 0;    [ this view has all the art for cursors and buttons  load.view(vw.cp.Instrument);    [ test sound   load.sound(s.InstTest);    [ make sure sound mode is 4channel FMsynth  if (4channelsound) {    [ save current value    set(old4chan);  } else {    [ temporarily set to 4chan    set(4channelsound);    reset(old4chan);  }  if (useMIDI) {    [ temporarily set to FMsynth    set(oldMIDI);    reset(useMIDI);  } else {    [ save current value    reset(oldMIDI);  }    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);    [ option button that determines input mode; mouse or keyboard  animate.obj(oMode);  set.view(oMode, vw.cp.Instrument);  set.loop(oMode, LP_OPT);  set.cel(oMode, 0);  stop.cycling(oMode);  position(oMode, 8, 65);  draw(oMode);    [ cursor, in four parts, default to keyboard option position  animate.obj(oCursorB);  ignore.objs(oCursorB);  set.view(oCursorB, vw.cp.Instrument);  set.loop(oCursorB, LP_CF_OPT);  set.cel(oCursorB, 0);  stop.cycling(oCursorB);    animate.obj(oCursorL);  ignore.objs(oCursorL);  set.view(oCursorL, vw.cp.Instrument);  set.loop(oCursorL, LP_CF_OPT);  set.cel(oCursorL, 1);  stop.cycling(oCursorL);    animate.obj(oCursorT);  ignore.objs(oCursorT);  set.view(oCursorT, vw.cp.Instrument);  set.loop(oCursorT, LP_CF_OPT);  set.cel(oCursorT, 0);  stop.cycling(oCursorT);    animate.obj(oCursorR);  ignore.objs(oCursorR);  set.view(oCursorR, vw.cp.Instrument);  set.loop(oCursorR, LP_CF_OPT);  set.cel(oCursorR, 1);  stop.cycling(oCursorR);    [ scrollbar background  animate.obj(oScrlBkgd);  ignore.objs(oScrlBkgd);  set.view(oScrlBkgd, vw.cp.Instrument);  set.loop(oScrlBkgd, LP_SCROLL);  set.cel(oScrlBkgd, 2);  stop.cycling(oScrlBkgd);  set.priority(oScrlBkgd, 14);    [ scrollbar box  animate.obj(oScrlBox);  ignore.objs(oScrlBox);  set.view(oScrlBox, vw.cp.Instrument);  set.loop(oScrlBox, LP_SCROLL);  set.cel(oScrlBox, 0);  stop.cycling(oScrlBox);  set.priority(oScrlBox, 15);    [ cursor starts on keyboard option button  cursorpos = CP_KEYB;  newpos = CP_KEYB;  [ don't draw it yet though    [ cache ego movement parameters (to be restored  [ when returning to the control room)  egoPrevX = egoX;  egoPrevY = egoY;  egoPrevDir = egoDir;    [ no text input in this room  prevent.input();  lastChar = 0;  [ arrow keys control cursor in this room  egoDir = 0;    [ mouse is enabled, not cursor; no button active  enable.item(mouse);  reset(cursormode);  btnAction = 0;  [ copy the custom instrument values from lgc.Main  work1 = 1;  work2 = 53;  work3 = &m132;  tmpVal = &sTemp;  :Loop1    sTemp = "%g";    strByte = "%v47Custom Inst %v46       ";    block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);    block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)    block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)    ++work1;    ++work2;    ++work3;  if (work1 < 6) {    goto(Loop1);  }    [ display the picture on screen  show.pic();    [ clear line 22 to match the picture  clear.lines(22, 22, LT_GRAY);    [ add labels  set.text.attribute(-1, 0);  set.text.attribute(WHITE, LT_GRAY);  display(5, 37, "Modulator");  display(5, 63, "Carrier");    set.text.attribute(BLACK, LT_GRAY);  display(6, 10, "Input Mode");  display(8, 8, "Mouse");  display(8, 20, "Keybd");  display(11, 31, "Freq Mult");  display(12, 31, "KSL");  display(13, 31, "Level");  display(14, 31, "Attack");  display(15, 31, "Decay");  display(16, 31, "Sustain");  display(17, 31, "Release");  display(18, 31, "Wave Shape");  display(20, 31, "Feedback");  display(11, 56, "Freq Mult");  display(12, 56, "KSL");  display(13, 56, "Level");  display(14, 56, "Attack");  display(15, 56, "Decay");  display(16, 56, "Sustain");  display(17, 56, "Release");  display(18, 56, "Wave Shape");    set.text.attribute(BLACK, CYAN);  display(6, 31, "[ ] Tremolo");  display(7, 31, "[ ] Vibrato");  display(8, 31, "[ ] Sound Sustain");  display(9, 31, "[ ] Kybd Scaling");    display(6, 56, "[ ] Tremolo");  display(7, 56, "[ ] Vibrato");  display(8, 56, "[ ] Sound Sustain");  display(9, 56, "[ ] Kybd Scaling");  display(20, 56, "[ ] Connection");    set.text.attribute(BLACK, WHITE);  display(18, 6, "Done");  display(18, 19, "Test");  display(20, 6, "Copy Instrument...");  [ Save/Reset are disabled on startup  reset(instDirty);  set.text.attribute(LT_GRAY, WHITE);  display(3, 60, "Save");  display(3, 71, "Reset");    [ pop colors  set.text.attribute(0, -1);    [ default to first custom instrument  selinst = 1;  work1 = 22;  sTemp = m132;  block(STR.LEFT, &sTemp, &strInst, &work1); [ str.Left(sINPUT, sRESULT, vLEN);    [ selection listbox starts at top  listindex = 0;  listrow = 2;    [ force update of button text  set(update);    [ force reload of instrument parameters  set(loadinst);    [ remember to fade in to be able to see the screen again  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);}[ check for forced screen updateif (update) {  [ redraw the list box  set.text.attribute(-1, 0);    [ instrument choices  work1 = 11;  work2 = 4;  work3 = 1;  tmpVal = &m137;  :Loop2    if (work3 == selinst) {      set.text.attribute(WHITE, BLACK);      [ select the instrument data      tmpCol = &sTemp;      tmpRow = selinst;      tmpRow += 131;      block(SET.STRING.V, &tmpCol, &tmpRow, 0); [ set.string.v(vSTR, vMSG);      tmpRow = 22;      block(STR.LEFT, &sTemp, &strInst, &tmpRow); [ str.left(sINPUT, sRESULT, vLEN);      [ loadinst is handled separately       } else {      set.text.attribute(BLACK, WHITE);    }    display.v(work1, work2, tmpVal);    ++work1;    ++work3;  if (work1 < 16) {    goto(Loop2);  }  set.text.attribute(0, -1);    [ always reset  reset(update);     [ end drop mode  if (dropmode == DROPUP) {    dropmode = NODROP;  }}[ display dropdown list to select an instrument to copyif (dropmode == DROPDOWN) {  [ determine top instrument  topinst = listindex;  topinst -= listrow;  if (topinst > 250) {    [ readjust listrow    listrow += topinst;    topinst = 0;  }    [ position cursor to draw the box frame  erase(oCursorB);  erase(oCursorT);[  erase(oCursorL);  erase(oCursorR);  cursorX = 7;  cursorY = 128;  set.loop(oCursorB, LP_CF_PNL2);  [ bottom is used for flashing text cursor, so cycling  [ needs to be off here  stop.cycling(oCursorB);  set.loop(oCursorL, LP_CF_PNL2);  set.loop(oCursorT, LP_CF_PNL2);  set.loop(oCursorR, LP_CF_PNL2);  set.cel(oCursorB, 0);  position.v(oCursorB, cursorX, cursorY);  --cursorY;  position.v(oCursorL, cursorX, cursorY);  cursorY -= 56;  position.v(oCursorT, cursorX, cursorY);  cursorX += 43;  cursorY += 56;  position.v(oCursorR, cursorX, cursorY);    draw(oCursorB);  draw(oCursorL);  draw(oCursorT);  draw(oCursorR);    [ add arrows  set.text.attribute(-1, 0);  set.text.attribute(BLACK, LT_GRAY);  tmpRow = 10;  tmpCol = 24;  work3 = &m143;  display.v(tmpRow, tmpCol, work3);  tmpRow += 6; [4;  work3 = &m144;  display.v(tmpRow, tmpCol, work3);  set.text.attribute(0, -1);    [ show scrollbar background  cursorX = 48;  cursorY = 119;  erase(oScrlBkgd);  position.v(oScrlBkgd, cursorX, cursorY);  draw(oScrlBkgd);    [ buttons are disabled while dropdown has focus  set.text.attribute(-1, 0);  set.text.attribute(LT_GRAY, WHITE);  display(18, 6, "Done");  display(18, 19, "Test");  display(3, 60, "Save");  display(3, 71, "Reset");  display(20, 6, "Copy Instrument...");  set.text.attribute(0, -1);    [ begin choosing  dropmode = CHOOSING;    [ force redraw of listbox items  set(redrawList);}[ if choosing a new instrument to copyif (dropmode == CHOOSING) {  [ check for direction arrow keypress  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      [ it index not at top      if (listrow > 0) {        --listrow;        --listindex;        set(redrawList);      } else {        if (topinst > 0) {          listrow = -1; [ decrement doesn't wrap around          --listindex;          btnAction = SC_UP;        }      }    }    [ cursor down    if (egoDir == DOWN) {      [ if index not at bottom      if (listrow < 6) {        ++listrow;        ++listindex;        set(redrawList);      } else {        if (topinst < 129) {          ++listrow;          ++listindex;          btnAction = SC_DOWN;        }      }    }    [ page up    if (egoDir == UP_RIGHT) {      btnAction = SC_PGUP;    }    [ page down    if (egoDir == DOWN_RIGHT) {      btnAction = SC_PGDN;    }        [ always reset egodir    egoDir = 0;  }      [ keyboard works regardless of mode for listboxes  [ return to select  if (have.key()) {    if ((lastChar == 13 || lastChar == 10)) {      lastChar = 0;      [ make the selection      set(selectItem);      [ dropup to hide the list      dropmode = DROPUP;    }  }    [ escape cancels the selection  if (controller(cMenu)) {    reset(selectItem);    [ dropup to hide the list    dropmode = DROPUP;  }    [ check for right-click  if (controller(cRightClick)) {    reset(selectItem);    [ dropup to hide the list    dropmode = DROPUP;  }    [ if mouse is over the listbox text  if (mouseX > 7 && mouseX < 48 && mouseY > 79 && mouseY < 136) {    [ check for left click    if (controller(cLeftClick)) {      [ convert yvalue to index      work1 = mouseY;      work1 /= 8;      work1 -= 10;      [ is it a valid offset?      if (work1 != listrow) {        [ adjust row and index        listrow = work1;        listindex = topinst;        listindex += listrow;              set(redrawList);      }    }          [ check for dbl click over item    if (controller(cLeftDblClick)) {      [ make the selection      set(selectItem);      [ dropup to hide the list      dropmode = DROPUP;    }  }    [ if over the scrollbar   if (mouseX > 47 && mouseX < 50) {    [ check for click OR dblclick    if ((controller(cLeftClick) || controller(cLeftDblClick))) {      [ if on up arrow, scroll up      if (mouseY > 79 && mouseY < 86) {        btnAction = SC_UP;        goto(donemouse);      }            [ if on down arrow, scroll down      if (mouseY > 128 && mouseY < 136) {        btnAction = SC_DOWN;        goto(donemouse);      }            [ adjust compare values to top of scroll      [ window and scrollbox position      get.posn(oScrlBox, work3, work2);      work2 += 8;      [ if above scrollbox, page up      if (mouseY > 85 && mouseY < work2) {        btnAction = SC_PGUP;        goto(donemouse);      }      [ adjust compare values to scrollbox position      [ and bottom of scroll window      get.posn(oScrlBox, work3, work1);      work1 += 8;      [ if below scrollbox, page down      if (mouseY > work1 && mouseY < 129) {        btnAction = SC_PGDN;      }      :donemouse    }  }    [ check for scroll actions  if (btnAction == SC_UP) {    [ if not at top of list    if (topinst > 0) { [ && topinst != -1 -1 appears to be > since numbers are unsigned      --topinst;      [ selection also moves up      listrow += 1; [ increment doesn't wrap around      [ unless it's off screen      if (listrow > 6) {        [ reset it to bottom        listrow = 6;      }      [ recalculate listindex      listindex = topinst;      listindex += listrow;      [ redraw listbox text      set(redrawList);    }  }  if (btnAction == SC_DOWN) {    [ if not at bottom of list    if (topinst < 129) {      ++topinst;      [ selection stays the same, so adjust      [ listindex to match      listrow -= 1; [ (don't use decrement, because it doesn't wrap around)      [ unless it's off screen      if (listrow == -1) {        [ reset it to top        listrow = 0;      }      [ recalculate listindex      listindex = topinst;      listindex += listrow;      [ redraw listbox text      set(redrawList);    }  }  if (btnAction == SC_PGUP) {    [ if not at top of list    if (topinst > 1) {      topinst -= 8;      if ((topinst == 0 || topinst > 240)) {        topinst = 1;      }      [ reset selection to bottom      listrow = 6;      [ recalculate listindex      listindex = topinst;      listindex += listrow;      [ redraw listbox text      set(redrawList);    }  }  if (btnAction == SC_PGDN) {    [ if not at bottom of list    if (topinst < 129) {      topinst += 8;      if (topinst > 129) {        topinst = 129;      }      [ reset selection to top      listrow = 0;      [ recalculate listindex      listindex = topinst;      listindex += listrow;      [ redraw listbox text      set(redrawList);    }  }    [ always reset button action  btnAction = 0;  }[ redraw textif (redrawList) {  [ top row is always 10  tmpRow = 10;  [ column is always 4  tmpCol = 4;  work1 = &m145;    [ use a loop to draw the instrument text  cursorX = 0;  set.text.attribute(-1, 0);  :PrintInst    if (cursorX == listrow) {      set.text.attribute(WHITE, BLACK);    } else {      set.text.attribute(BLACK, WHITE);    }    [ get instrument data/name string    tmpVal = topinst;    tmpVal += cursorX;    ++tmpVal;    work2 = &sTemp;    block(SET.STRING.V, &work2, &tmpVal, 0); [ set.string.v(vSTR, vMSG);    [ strip off data chunk    tmpVal = 20;    block(STR.RIGHT, &sTemp, &sTemp, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN);    display.v(tmpRow, tmpCol, work1);    ++cursorX;    ++tmpRow;  if (cursorX < 7) {    goto(PrintInst);  }  set.text.attribute(0, -1);    [ position the scrollbar box  cursorX = 48;  [ adjust ypos based on current toprow offset  cursorY = topinst;  work1 = topinst;  work1 /= 18;  cursorY -= work1;  cursorY /= 3;  cursorY += 79;  erase(oScrlBox);  set.cel(oScrlBox, 0);  position.v(oScrlBox, cursorX, cursorY);  draw(oScrlBox);    reset(redrawList);}[ dropupif (dropmode == DROPUP) {  erase(oCursorB);  erase(oCursorL);  erase(oCursorT);  erase(oCursorR);  [ to restore the window, move an object across it  work1 = 7;  work2 = 72;  erase(oScrlBkgd);  erase(oScrlBox);  set.cel(oScrlBox, 1);  position.v(oScrlBox, work1, work2);  draw(oScrlBox);  work1 = 52;  work2 = 135;  reposition.to.v(oScrlBox, work1, work2);    if (cursormode) {    [ in kb mode, restore selection by forcing update    cursorpos = -1;    newpos = CP_COPY;  }  [ update instrument if not canceled  if (selectItem) {     [ instrument msg is actually index+1    ++listindex;    tmpCol = &sTemp;    [ get instrument data from the selected instrument    block(SET.STRING.V, &tmpCol, &listindex, 0); [ set.string.v(vSTR, vMSG);    [ restore listindex    --listindex;    tmpVal = 22;    block(STR.LEFT, &sTemp, &sTemp, &tmpVal); [ str.left(sINPUT, sRESULT, vLEN);    [ add it to current selected instrument    tmpVal = selinst;    tmpVal += 131;    tmpCol = &sTemp2;    block(SET.STRING.V, &tmpCol, &tmpVal, 0); [ set.string.v(vSTR, vMSG);    tmpVal = 20;    block(STR.RIGHT, &sTemp2, &sTemp2, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN);    block(STR.CONCAT, &sTemp, &sTemp2, 0); [ str.concat(sINPUT, sADD);    [ update the message value    tmpVal = &sTemp;    work1 = selinst;    work1 += 131;    block(SET.MSG, 1, &work1, &tmpVal); [ set.msg(BYVAL, MSGOLD, STRNEW);    [ mark it as dirty    set(instDirty);    [ redraw instrument    set(loadinst);  }    [ done - force an update  set(update);    [ re-enable buttons  set.text.attribute(-1, 0);  set.text.attribute(BLACK, WHITE);  display(18, 6, "Done");  display(18, 19, "Test");  display(20, 6, "Copy Instrument...");  [ Save/Restore depend on current dirty state  if (!instDirty) {    set.text.attribute(LT_GRAY, WHITE);  } else {    set.text.attribute(BLACK, WHITE);  }  display(3, 60, "Save");  display(3, 71, "Reset");  set.text.attribute(0, -1);}[ if showing dropbox, don't process other cursor statementsif (dropmode != NODROP) {  [ nothing else to do  return();}[ load instrument parametersif (loadinst) {  [ using instrument string, break out parameters as follows:  [  [              bit:    7   6   5   4   3   2   1   0  [ byte 1: modulator  |tre|vib|sus|KSF|    frq mul   |  [ byte 2: carrier    |tre|vib|sus|KSF|    frq mul   |  [ byte 3: modulator  | KSLvl |    output level      |  [ byte 4: carrier    | KSLvl |    output level      |  [ byte 5: modulator  | attack rate   | decay rate   |  [ byte 6: carrier    | attack rate   | decay rate   |  [ byte 7: modulator  | sustain lvl   | release rt   |  [ byte 8: carrier    | sustain lvl   | release rt   |  [ byte 9: modulator  |    not used           |wavfrm|  [ byte 10: carrier   |    not used           |wavfrm|  [ byte 11:           | 0   0   0   0 | feedback |con|    [ 'KSR' (the flag) vs. 'KSL' the value;  [ when flag set, "the sound's envelope is foreshortened as it rises in pitch"  [ KSL = "Level Key Scaling", or "Scaling Level"; 00 - no change  [  10 = 1.5 dB/8ve; 01 = -3 db/8ve; 11 = -6 dB/8ve  [  "causes output levels to decrease as the frequency rises"  [ I don't think they're related at all  set.text.attribute(-1, 0);  [  [ clear status/info line[  clear.lines(22, 22, LT_GRAY);[    [ if copying an instrument show all fields as 'edited'  if (selectItem) {    set.text.attribute(BLACK, LT_CYAN);  } else {    set.text.attribute(WHITE, CYAN);  }    [              bit:    7   6   5   4   3   2   1   0  [ byte 1: modulator  |tre|vib|sus|KSF|    frq mul   |  work1 = 2;  block(STR.LEFT, &strInst, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ mod Tremolo  if (work1 > 127) {    work2 = &m138;    set(modTremolo);  } else {    work2 = &m139;    reset(modTremolo);  }  tmpRow = 6;  tmpCol = 32;  display.v(tmpRow, tmpCol, work2);  block(BIT.AND, 0, &work1, 127);  [ mod Vibrato  if (work1 > 63) {    work2 = &m138;    set(modVibrato);  } else {    work2 = &m139;    reset(modVibrato);  }  ++tmpRow;  display.v(tmpRow, tmpCol, work2);  block(BIT.AND, 0, &work1, 63);  [ mod Sustain  if (work1 > 31) {    work2 = &m138;    set(modSustain);  } else {    work2 = &m139;    reset(modSustain);  }  ++tmpRow;  display.v(tmpRow, tmpCol, work2);  block(BIT.AND, 0, &work1, 31);  [ mod keyb scaling  if (work1 > 15) {    work2 = &m138;    set(modKyScale);  } else {    work2 = &m139;    reset(modKyScale);  }  ++tmpRow;  display.v(tmpRow, tmpCol, work2);    [ set color for edit boxes  if (selectItem) {    set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);  } else {    set.text.attribute(WHITE, BLUE);  }  [ freq mult  block(BIT.AND, 0, &work1, 15);  modFreqMult = work1;  tmpRow = 11;  tmpCol += 14;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);      [              bit:    7   6   5   4   3   2   1   0  [ byte 3: modulator  | KSLvl |    output level      |  work1 = 6;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ KSL  block(BIT.AND, 0, &work1, 192);  work1 /= 64;  modKSL = work1;  ++tmpRow;  work2 = &m140;  display.v(tmpRow, tmpCol, work2);  [ output level  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 63);  modLevel = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 5: modulator  | attack rate   | decay rate   |  work1 = 10;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ attack  block(BIT.AND, 0, &work1, 240);  work1 /= 16;  modAttack = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);  [ decay  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 15);  modDecay = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 7: modulator  | sustain lvl   | release rt   |  work1 = 14;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ sustainlvl  block(BIT.AND, 0, &work1, 240);  work1 /= 16;  modSusLvl = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);  [ release rate  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 15);  modRelease = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 9: modulator  |    not used           |wavfrm|  work1 = 18;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ wave form  block(BIT.AND, 0, &work1, 3);  modWaveForm = work1;  ++tmpRow;  work2 = &m140;  display.v(tmpRow, tmpCol, work2);    [***CARRIER***  [ set color for check boxes  if (selectItem) {    set.text.attribute(BLACK, LT_CYAN);  } else {    set.text.attribute(WHITE, CYAN);  }  [              bit:    7   6   5   4   3   2   1   0  [ byte 2: carrier    |tre|vib|sus|KSF|    frq mul   |  work1 = 4;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ car Tremolo  if (work1 > 127) {    work2 = &m138;    set(carTremolo);  } else {    work2 = &m139;    reset(carTremolo);  }  tmpRow = 6;  tmpCol = 57;  display.v(tmpRow, tmpCol, work2);  block(BIT.AND, 0, &work1, 127);  [ car Vibrato  if (work1 > 63) {    work2 = &m138;    set(carVibrato);  } else {    work2 = &m139;    reset(carVibrato);  }  ++tmpRow;  display.v(tmpRow, tmpCol, work2);  block(BIT.AND, 0, &work1, 63);  [ car Sustain  if (work1 > 31) {    work2 = &m138;    set(carSustain);  } else {    work2 = &m139;    reset(carSustain);  }  ++tmpRow;  display.v(tmpRow, tmpCol, work2);  block(BIT.AND, 0, &work1, 31);  [ car keyb scaling  if (work1 > 15) {    work2 = &m138;    set(carKyScale);  } else {    work2 = &m139;    reset(carKyScale);  }  ++tmpRow;  display.v(tmpRow, tmpCol, work2);    [ set color for edit boxes  if (selectItem) {    set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);  } else {    set.text.attribute(WHITE, BLUE);  }    [ freq mult  block(BIT.AND, 0, &work1, 15);  carFreqMult = work1;  tmpRow = 11;  tmpCol = 71;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 4: carrier    | KSLvl |    output level      |  work1 = 8;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ KSL  block(BIT.AND, 0, &work1, 192);  work1 /= 64;  carKSL = work1;  ++tmpRow;  work2 = &m140;  display.v(tmpRow, tmpCol, work2);  [ output level  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 63);  carLevel = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 6: carrier    | attack rate   | decay rate   |  work1 = 12;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ attack  block(BIT.AND, 0, &work1, 240);  work1 /= 16;  carAttack = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);  [ decay  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 15);  carDecay = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 8: carrier    | sustain lvl   | release rt   |  work1 = 16;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ sustainlvl  block(BIT.AND, 0, &work1, 240);  work1 /= 16;  carSusLvl = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);  [ release rate  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 15);  carRelease = work1;  ++tmpRow;  if (work1 < 10) {    work2 = &m140;  } else {    work2 = &m141;  }  display.v(tmpRow, tmpCol, work2);    [              bit:    7   6   5   4   3   2   1   0  [ byte 10: carrier   |    not used           |wavfrm|  work1 = 20;  block(STR.LEFT, &strInst, &strByte, &work1);  work1 = 2;  block(STR.RIGHT, &strByte, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ wave form  block(BIT.AND, 0, &work1, 3);  carWaveForm = work1;  ++tmpRow;  work2 = &m140;  display.v(tmpRow, tmpCol, work2);      [              bit:    7   6   5   4   3   2   1   0  [ byte 11:           | 0   0   0   0 | feedback |con|  work1 = 2;  block(STR.RIGHT, &strInst, &strByte, &work1);  block(HEX2BYTE, &strByte, &work1, 0);  [ feedback  block(BIT.AND, 0, &work1, 14);  work1 /= 2;  feedback = work1;  tmpRow = 20;  tmpCol = 46;  work2 = &m140;  display.v(tmpRow, tmpCol, work2);  [ connection  [ set color for check boxes  if (selectItem) {    set.text.attribute(BLACK, LT_CYAN);  } else {    set.text.attribute(WHITE, CYAN);  }  block(HEX2BYTE, &strByte, &work1, 0);  block(BIT.AND, 0, &work1, 1);  tmpCol = 57;  if (work1 > 0) {    work2 = &m138;    set(connect);  } else {    work2 = &m139;    reset(connect);  }  display.v(tmpRow, tmpCol, work2);    set.text.attribute(0, -1);    reset(loadinst);  [ if copying, instrument has changed  set.text.attribute(-1, 0);  if (selectItem) {    set.text.attribute(BLACK, WHITE);    set(instdirty);  } else {    set.text.attribute(LT_GRAY, WHITE);    reset(instdirty);  }  display(3, 60, "Save");  display(3, 71, "Reset");  set.text.attribute(0, -1);  reset(selectItem);}[ if cursor is in a flag or text field, both mouse and keyboard applyif (cursorpos > CP_RESET) {  [ check for direction arrow keypress  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      if (cursorpos > CP_M_TREM && cursorpos < CP_C_TREM) {        --newpos;      }      if (cursorpos > CP_C_TREM) {        --newpos;      }    }        [ cursor right    if (egoDir == RIGHT) {      if (cursorpos < CP_C_TREM) {        newpos += 13;      }    }        [ cursor down    if (egoDir == DOWN) {      if (cursorpos < CP_FDBACK) {        ++newpos;      }      if (cursorpos > CP_FDBACK && cursorpos < CP_CONN) {        ++newpos;      }    }        [ cursor left    if (egoDir == LEFT) {      if (cursorpos > CP_FDBACK) {        newpos -= 13;      }    }        [ only reset egoDir if in mouse mode; otherwise keyboard check    [ will fail    if (!cursormode) {      egoDir = 0;    }  }}[ is cursor in text mode?if (cursormode) {  [ check for direction arrow keypress, and select buttons as well  [ as flag and text fields  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      if (cursorpos == CP_INST) {        [ check for shift+up        block(CHECK.SHIFT, &tmpVal, 0, 0);        if (tmpVal == 1) {          [ SHIFT+UP          [ increment selected instrument, and redraw display          if (selinst > 1) {            --selinst;            set(update);            set(loadinst);          }        } else {          [ no shift          newpos = CP_MOUSE;        }      }      if ((cursorpos == CP_DONE || cursorpos == CP_TEST)) {        newpos = CP_INST;      }      if (cursorpos == CP_COPY) {        newpos = CP_DONE;      }      [ only move up to Save if it is enabled      if (cursorpos == CP_C_TREM && instDirty) {        newpos = CP_SAVE;      }    }        [ cursor right    if (egoDir == RIGHT) {      if (cursorpos == CP_MOUSE) {        newpos = CP_KEYB;      }      if (cursorpos == CP_KEYB) {        newpos = CP_M_SNDSUS;      }      if (cursorpos == CP_INST) {        newpos = CP_M_FREQ;        newpos += selinst;      }      if (cursorpos == CP_DONE) {        newpos = CP_TEST;      }      if (cursorpos == CP_TEST) {        newpos = CP_M_SHAPE;      }      if (cursorpos == CP_COPY) {        newpos = CP_FDBACK;      }      if (cursorpos == CP_SAVE) {        newpos = CP_RESET;      }    }        [ cursor down    if (egoDir == DOWN) {      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {        newpos = CP_INST;      }      if (cursorpos == CP_INST) {        [ check for shift+down        block(CHECK.SHIFT, &tmpVal, 0, 0);        if (tmpVal == 1) {          [ SHIFT+DOWN          [ decrement selected instrument, and redraw display          if (selinst < 5) {            ++selinst;            set(update);            set(loadinst);          }        } else {          [ no shift          newpos = CP_DONE;        }      }      if ((cursorpos == CP_DONE || cursorpos == CP_TEST)) {        newpos = CP_COPY;      }      if ((cursorpos == CP_SAVE || cursorpos == CP_RESET)) {        newpos = CP_C_TREM;      }    }        [ cursor left    if (egoDir == LEFT) {      if (cursorpos == CP_KEYB) {        newpos = CP_MOUSE;      }      if (cursorpos == CP_TEST) {        newpos = CP_DONE;      }      if (cursorpos == CP_RESET) {        newpos = CP_SAVE;      }      if (cursorpos > CP_RESET && cursorpos < CP_M_FREQ) {        newpos = CP_KEYB;      }      if (cursorpos > CP_M_KEYB && cursorpos < CP_M_REL) {        newpos = CP_INST;      }      if (cursorpos > CP_M_SUST && cursorpos < CP_FDBACK) {        newpos = CP_TEST;      }      if (cursorpos == CP_FDBACK) {        newpos = CP_COPY;      }    }        [ always reset dir so another keypress can be detected    egoDir = 0;  }    [ check for button selection (space/enter for buttons;  if (have.key()) {    [ space/enter    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {    [ on mouse button      if (cursorpos  == CP_MOUSE) {        [ switch to mouse control        reset(cursormode);        enable.item(mouse);        erase(oMode);        position(oMode, 8, 65);        draw(oMode);        [ erase the cursor objects        erase(oCursorB);        erase(oCursorT);        erase(oCursorL);        erase(oCursorR);      }      [ on Done/Test/Copy/Save/Reset button      if (cursorpos > CP_INST && cursorpos < CP_M_TREM) {        btnAction = cursorpos;        btnAction -= 1;        [ convert Test to Stop if sound is playing        if (btnAction == B_TEST && sndTest) {          btnAction = B_STOP;        }      }    }    }} else {  [ check for mouse click  if (controller(cLeftClick)) {    [ over cursor type keyboard option [33, 56 - 37, 63]    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {      [ switch to keyboard cursor      set(cursormode);      disable.item(mouse);      erase(oMode);      position(oMode, 32, 65);      draw(oMode);      [ start cursor on keyboard option button      cursorpos = CP_KEYB;      newpos = CP_KEYB;      set.loop(oCursorB, LP_CF_OPT);      set.cel(oCursorB, 0);      stop.cycling(oCursorB);      position(oCursorB, 31, 65);      draw(oCursorB);      set.loop(oCursorL, LP_CF_OPT);      position(oCursorL, 31, 64);      draw(oCursorL);      set.loop(oCursorT, LP_CF_OPT);      position(oCursorT, 31, 54);      draw(oCursorT);      set.loop(oCursorR, LP_CF_OPT);      position(oCursorR, 50, 64);      draw(oCursorR);    }        [ over Done button [5, 135 - 26, 144]    if (mouseX > 4 && mouseX < 27 && mouseY > 142 && mouseY < 153) {      btnAction = B_DONE;    }          [ over Test button [31, 135 - 52, 144]    if (mouseX > 30 && mouseX < 53 && mouseY > 142 && mouseY < 153) {      [ if a sound is playing, it's actually 'stop'      if (sndTest) {        btnAction = B_STOP;      } else {        btnAction = B_TEST;      }    }        [ over Copy Inst button [5, 151 - 52, 160]    if (mouseX > 4 && mouseX < 53 && mouseY > 158 && mouseY < 169) {      btnAction = B_COPY;    }        [ over Save button [115, 15 - 132, 24]    if (mouseX > 114 && mouseX < 133 && mouseY > 22 && mouseY < 33) {      [ only if enabled      if (instDirty) {        btnAction = B_SAVE;      }    }    [ over Reset button [139, 15 - 156, 24]    if (mouseX > 138 && mouseX < 157 && mouseY > 22 && mouseY < 33) {      btnAction = B_RESET;    }        [ over modulator checkbox zone (x between 63, 66)    if (mouseX > 62 && mouseX < 67) {      [ confirm within y bounds of checkboxes      if (mouseY > 47 && mouseY < 80) {        [ convert yval to checkbox offset        newpos = mouseY;        newpos += 24;        newpos /= 8;      }    }    [ over modulator checkbox zone (x between 113, 116)    if (mouseX > 112 && mouseX < 117) {      [ confirm within y bounds of checkboxes      if (mouseY > 47 && mouseY < 80) {        [ convert yval to checkbox offset        newpos = mouseY;        newpos += 128;        newpos /= 8;      }      [ check for connection checkbox      if (mouseY > 159 && mouseY < 168) {        [ convert yval to checkbox offset        newpos = CP_CONN;      }    }        [ over modulator text entry zone (x between 92, 99)    if (mouseX > 91 && mouseX < 100) {      if (mouseY > 87 && mouseY < 152) {        [ convert yval to checkbox offset        newpos = mouseY;        newpos /= 8;        newpos += 2;      }      if (mouseY >159 && mouseY < 168) {        newpos = CP_FDBACK;      }    }        [ over carrier text entry zone ( x between 142, 149)    if (mouseX > 141 && mouseX < 150) {      if (mouseY > 87 && mouseY < 152) {        [ convert yval to checkbox offset        newpos = mouseY;        newpos /= 8;        newpos += 15;      }    }        [ over instrument listbox zone    if (mouseX > 7 && mouseX < 50 && mouseY > 87 && mouseY < 128) {      [ select a new instrument      selinst = mouseY;      selinst /= 8;      selinst -= 10;      set(update);      set(loadinst);    }  }    [ check for dbl-click on checkboxes  if (controller(cLeftDblClick)) {    [ over modulator checkbox zone (x between 63, 66)    if (mouseX > 62 && mouseX < 67) {      [ confirm within y bounds of checkboxes      if (mouseY > 47 && mouseY < 80) {        set(toggleCheck);      }    }    [ over modulator checkbox zone (x between 113, 116)    if (mouseX > 112 && mouseX < 117) {      [ confirm within y bounds of checkboxes      if (mouseY > 47 && mouseY < 80) {        set(toggleCheck);      }      [ check for connection checkbox      if (mouseY > 159 && mouseY < 168) {        set(toggleCheck);      }    }  }}[ check for new cursor positionif (cursorpos != newpos) {  [ always stop test sound when cursor moves  stop.sound();  [ clear status/info line  clear.lines(22, 22, LT_GRAY);    [ to move cursor, erase it first, otherwise, it will  [ clear any text that is present anywhere between the  [ new position and the old position  erase(oCursorB);  erase(oCursorL);  erase(oCursorT);  erase(oCursorR);  [ reset bottom cursor  set.cel(oCursorB, 0);  stop.cycling(oCursorB);    [ update the position  cursorpos = newpos;  [ determine if in a textbox field  reset(inTextBox);  if (cursorpos > CP_M_KEYB && cursorpos < CP_C_TREM) {    set(inTextBox);  }  if (cursorpos > CP_C_KEYB && cursorpos < CP_CONN) {    set(inTextBox);  }  [ depending on where cursor is, set the position and size/shape  [ input mode options  if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {    [ option buttons    set.loop(oCursorB, LP_CF_OPT);    set.loop(oCursorT, LP_CF_OPT);    set.loop(oCursorL, LP_CF_OPT);    set.loop(oCursorR, LP_CF_OPT);    cursorY = 65;    if (cursorpos == CP_MOUSE) {      cursorX = 7;    }    if (cursorpos == CP_KEYB) {      cursorX = 31;    }  }    [ instrument listbox  if (cursorpos == CP_INST) {    set.loop(oCursorB, LP_CF_PNL1);    set.loop(oCursorT, LP_CF_PNL1);    set.loop(oCursorL, LP_CF_PNL1);    set.loop(oCursorR, LP_CF_PNL1);    [ convert cursorpos into desired y value    cursorX = 7;    cursorY = 120;  }      [ Done, Test  if ((cursorpos == CP_DONE || cursorpos == CP_TEST)) {    set.loop(oCursorB, LP_CF_CMD1);    set.loop(oCursorT, LP_CF_CMD1);    set.loop(oCursorL, LP_CF_CMD1);    set.loop(oCursorR, LP_CF_CMD1);        [ convert cursorpos into desired value    cursorX = cursorpos;    cursorX -= 4;    cursorX *= 26;    cursorX += 5;    cursorY = 144;    }    [ Save, Reset  if ((cursorpos == CP_SAVE || cursorpos == CP_RESET)) {    set.loop(oCursorB, LP_CF_CMD2);    set.loop(oCursorT, LP_CF_CMD2);    set.loop(oCursorL, LP_CF_CMD2);    set.loop(oCursorR, LP_CF_CMD2);        [ convert cursorpos into desired value    cursorX = cursorpos;    cursorX -= 7;    cursorX *= 24;    cursorX += 115;    cursorY = 24;    }    [ copy Inst  if (cursorpos == CP_COPY) {    set.loop(oCursorB, LP_CF_CMD3);    set.loop(oCursorT, LP_CF_CMD3);    set.loop(oCursorL, LP_CF_CMD3);    set.loop(oCursorR, LP_CF_CMD3);    cursorX = 5;    cursorY = 160;  }    [ non-text boxes show all four cursor parts  if (cursorpos < CP_M_TREM) {    [ redraw all four cursor parts    position.v(oCursorB, cursorX, cursorY);    draw(oCursorB);    --cursorY;    position.v(oCursorL, cursorX, cursorY);    draw(oCursorL);    if (cursorpos < CP_INST) {      cursorY -= 10;    } else {      if (cursorpos == CP_INST) {      cursorY -= 40;      } else {        cursorY -= 8;      }    }    position.v(oCursorT, cursorX, cursorY);    draw(oCursorT);    if (cursorpos < CP_INST) {      cursorX += 19;      cursorY += 10;    } else {      if (cursorpos == CP_INST) {        cursorX += 43;        cursorY += 40;      } else {        if (cursorpos == CP_COPY) {          cursorX += 47;        } else {          if (cursorpos > CP_COPY) {            cursorX += 17;          } else {            cursorX += 21;          }        }        cursorY += 8;      }    }    position.v(oCursorR, cursorX, cursorY);    draw(oCursorR);  } else {    [ button cursor already hidden;    [ select text cursor based on location    if (cursorpos < CP_M_FREQ) {      [ text check mark      set.loop(oCursorB, LP_CF_TEXT2); [LP_CF_TEXT1);      cursorX = 64;    } else {      if (cursorpos > CP_FDBACK && cursorpos < CP_C_FREQ) {        [ text check mark        set.loop(oCursorB, LP_CF_TEXT2); [LP_CF_TEXT1);        cursorX = 64;      } else {         if (cursorpos == CP_CONN) {          [ text check mark          set.loop(oCursorB, LP_CF_TEXT2); [LP_CF_TEXT1);          cursorX = 64;        } else {          [ text number          set.loop(oCursorB, LP_CF_TEXT2);          cursorX = 98;        }      }    }        [ adjust X value if in right column    if (cursorpos > CP_FDBACK) {      cursorX += 50;    }    [ convert Y value correct row    cursorY = cursorpos;    cursorY -= 3;        if (cursorpos > CP_FDBACK) {      cursorY -= 13;    }    if (cursorY > 17) {      ++cursorY;    }    if (cursorY > 9) {      ++cursorY;    }    cursorY *= 8;    --cursorY;        [ redraw the bottom cursor only    position.v(oCursorB, cursorX, cursorY);    start.cycling(oCursorB);    draw(oCursorB);        [ display info for current cursorpos    if (cursorpos == 34) {       work1 = 159;    } else {      work1 = cursorpos;      work1 += 137;      if (work1 > 158) {        work1 -= 13;      }    }    tmpRow = 22;    tmpCol = 5;    set.text.attribute(-1, 0);    set.text.attribute(BLACK, LT_GRAY);    display.v(tmpRow, tmpCol, work1);       set.text.attribute(0, -1);  }  } [ end if (cursorpos != newpos)[ check for button action (not text or check boxes)if (btnAction > 0) {  [ always stop sound when a new button is pushed  stop.sound();    [ Done button  if (btnAction == B_DONE) {    [ restore game functions    reset(disableGameFunctions);    [ restore ego movement parameters    egoX = egoPrevX;    egoY = egoPrevY;    egoDir = egoPrevDir;      [ restore instrument for channel 1 (it was used for     [ testing in this room)    tmpVal = 0;    if (FMInst0 < 131) {      set.key(&tmpVal, &FMInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);    } else {      [ assign appropriate custom instrument      [ copy inst msg      work1 = &sTemp;      block(SET.STRING.V, &work1, &FMInst0, 0); [ set.string.v(vSTR, vMSG);      [strip off name      work1 = 22;      block(STR.LEFT, &sTemp, &sTemp, &work1); [ strLeft(sINPUT, sRESULT, vLEN)      [ refresh the msg      block(SET.MSG, 1, &FMInst0, &sTemp); [ set.msg(BYVAR, MSGOLD, STRNEW)      [ set the instrument      set.key(&tmpVal, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);    }        [ restore sound settings    if (!old4chan) {      reset(4channelsound);    }    if (!oldMIDI) {      reset(useMIDI);      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);    }    [ fade out     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);        [ go back to previous room    new.room.v(previousRoom);  }    [ Copy Inst button  if (btnAction == B_COPY) {    [ use 'drop up' feature developed in sound panel    dropmode = DROPDOWN;  }    [ save and test buttons both need the instrument string re-built  if ((btnAction == B_SAVE || btnAction == B_TEST)) {    [ build new instrument string    [ byte 1    work1 = modFreqMult;    if (modTremolo) {      work1 += 128;    }    if (modVibrato) {      work1 += 64;    }    if (modSustain) {      work1 += 32;    }    if (modKyScale) {      work1 += 16;    }    block(BYTE2HEX, &strInst, &work1, 0); [ byte2hex(sRESULT, vINPUT);    [byte 2    work1 = carFreqMult;    if (carTremolo) {      work1 += 128;    }    if (carVibrato) {      work1 += 64;    }    if (carSustain) {      work1 += 32;    }    if (carKyScale) {      work1 += 16;    }    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 3    work1 = modKSL;    work1 *= 64;    work1 += modLevel;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 4    work1 = carKSL;    work1 *= 64;    work1 += carLevel;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 5    work1 = modAttack;    work1 *= 16;    work1 += modDecay;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 6    work1 = carAttack;    work1 *= 16;    work1 += carDecay;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 7    work1 = modSusLvl;    work1 *= 16;    work1 += modRelease;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 8    work1 = carSusLvl;    work1 *= 16;    work1 += carRelease;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 9    work1 = modWaveForm;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 10    work1 = carWaveForm;    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ byte 11    work1 = feedback;    work1 *= 2;    if (connect) {      ++work1;    }    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);    [ strInst now has the current instrument string  }       [ Save button  if (btnAction == B_SAVE) {    [ change msg value to match    work3 = 131;    work3 += selinst;    tmpVal = &sTemp;    block(STR.COPY, &strInst, &sTemp, 0); [ str.copy(sFROM, sTO);    strByte = "Custom Inst %v221       ";    block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);    block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)        [ tell logic0 to apply it    set(saveCustomInst);    print.at("Custom Instrument %v221 updated", 3, 3, 70);        [ reset dirty flag    reset(instDirty);    set.text.attribute(-1, 0);    set.text.attribute(LT_GRAY, WHITE);    display(3, 60, "Save");    display(3, 71, "Reset");    set.text.attribute(0, -1);        [ force reload to reset edit status    set(loadinst);  }    [ Test button  if (btnAction == B_TEST) {    block(SET.MSG, 0, &m142, &strInst); [ set.msg(BYVAR, MSGOLD, STRNEW)    work1 = 0;    work2 = &m142;    set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);    sound(s.InstTest, soundDone);    set(sndTest);    [ update button test    set.text.attribute(-1, 0);    set.text.attribute(BLACK, WHITE);    display(18, 19, "Stop");    set.text.attribute(0, -1);  }    [ Stop button  if (btnAction == B_STOP) {    stop.sound();  }    [ Reset button  if (btnAction == B_RESET) {    [ force an update and reload    set(update);    set(loadinst);  }  [ always reset button action  btnAction = 0;}[ if sound is done, restore Test button textif (soundDone) {  reset(soundDone);  reset(sndTest);  set.text.attribute(-1, 0);  set.text.attribute(BLACK, WHITE);  display(18, 19, "Test");  set.text.attribute(0, -1);}[ check for key press in a text box or check boxif (cursorpos > CP_TEST) {  if ((have.key() || toggleCheck)) {    [ space bar toggles check boxes    if ((lastChar == 32 || toggleCheck)) {      if (!inTextBox) {      [ push colors      set.text.attribute(-1, 0);      set.text.attribute(BLACK, LT_CYAN);        if (cursorpos < CP_M_FREQ) {          [ toggle modulator flag f230-f233          tmpVal = cursorpos;          tmpVal += 221;          toggle.v(tmpVal);          tmpRow = cursorpos;          tmpRow -= 3;          tmpCol = 32;          if (issetv(tmpVal)) {            tmpVal = 138;          } else {             tmpVal = 139;          }          display.v(tmpRow, tmpCol, tmpVal);        }        if (cursorpos > CP_FDBACK && cursorpos < CP_C_FREQ) {          [ toggle carrier flag f243-f246          tmpVal = cursorpos;          tmpVal += 221;          toggle.v(tmpVal);          tmpRow = cursorpos;          tmpRow -= 16;          tmpCol = 57;          if (issetv(tmpVal)) {            tmpVal = 138;          } else {             tmpVal = 139;          }          display.v(tmpRow, tmpCol, tmpVal);        }        if (cursorpos == CP_CONN) {          [ toggle connection          toggle(connect);          if (connect) {            display(20, 57, "X");          } else {            display(20, 57, " ");          }        }        [ enable save/reset        set(instDirty);        set.text.attribute(BLACK, WHITE);        display(3, 60, "Save");        display(3, 71, "Reset");        [ pop colors        set.text.attribute(0, -1);      }    }        reset(typeText);    if (lastChar > 47 && lastChar < 58 && inTextBox) {      set(typeText);    }    [ backspace, numbers only for text boxes    if ((lastChar == 8 || typeText)) {      [ modulator variable v234-v242      [ carrier variable v247-v254      tmpVal = cursorpos;      tmpVal += 221;      work1 = *tmpVal;      [ if backspacing, divide by ten;      if (lastChar == 8) {        work1 /= 10;      } else {        [ largest possible value is 63 for level        [ if current value is > 6, result would always        [ be a max value        if (work1 > 6) {            work1 = 63;        } else {          [ multiply by ten, add new digit, then validate          work1 *= 10;          work1 += lastChar;          work1 -= 48;        }        [ default limit is 15        work2 = 15;        [ adjust limit for KS Level, shape, feeback, and overall level        if ((cursorpos == CP_M_KSL || cursorpos == CP_C_KSL || cursorpos == CP_M_SHAPE || cursorpos == CP_C_SHAPE)) {          work2 = 3;        }        if (cursorpos == CP_FDBACK) {          work2 = 7;        }        if ((cursorpos == CP_M_LVL || cursorpos == CP_C_LVL)) {          work2 = 63;        }        if (work1 > work2) {          work1 = work2;        }      }      [ assign new value      *tmpVal = work1;      [ now update display      tmpRow = cursorpos;       tmpRow -= 2;      tmpCol = 46;      if (cursorpos > CP_C_KEYB) {        tmpRow -= 13;        tmpCol += 25;      }      if (cursorpos == CP_FDBACK) {        ++tmpRow;      }      set.text.attribute(-1, 0);      set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);      tmpVal = &m140;      if (work1 > 9) {        ++tmpVal;      }      display.v(tmpRow, tmpCol, tmpVal);      [ enable Save/Restore      set(instDirty);      set.text.attribute(BLACK, WHITE);      display(3, 60, "Save");      display(3, 71, "Reset");      set.text.attribute(0, -1);    }    reset(toggleCheck);  }}return();[ **************************************[ DECLARED MESSAGES[ **************************************#message 1 "02023000F1F58404000000Acoust. Grand Piano "#message 2 "82040500F1A50C35000002Bright Acous. Piano "#message 3 "42040805F1F401C4010002Elec. Grand Piano   "#message 4 "04420106A1F42143010100Honky-tonk Piano    "#message 5 "82442000F3F30303000100Electric Piano 1    "#message 6 "04042003A1A20102010100Electric Piano 2    "#message 7 "02C410087162E1E2030300Harpsichord         "#message 8 "08080707F7F70707030306Clavinet            "#message 9 "88842007F1F10303000000Celesta             "#message 10 "0C640707F7FE0723030100Glockenspiel        "#message 11 "02043F0100F50016000002Music Box           "#message 12 "C2C22000A1A12525000006Vibraphone          "#message 13 "8C040D0087F5812D030004Marimba             "#message 14 "02042100F1A71516020008Xylophone           "#message 15 "8C44200323438F1E000004Tubular Bells       "#message 16 "8202030388411C11000304Dulcimer            "#message 17 "8C440F0087A48718000106Drawbar Organ       "#message 18 "62C41F0016A5142502030EPercussive Organ    "#message 19 "84421C00FF812483000300Rock Organ          "#message 20 "0442070385A58722010006Church Organ        "#message 21 "04C4070387878734030306Reed Organ          "#message 22 "04821A0347428783000006Accordion           "#message 23 "04420F03FB410117000300Harmonica           "#message 24 "04C2000347438783010000Tango Accordion     "#message 25 "02821000F4F5F104010202Ac. Guitar (nylon)  "#message 26 "02020D00F3F44103000202Ac. Guitar (steel)  "#message 27 "84CC1100F26525D5020102Elec. Guitar (jazz) "#message 28 "02C21003F4F4F1F1000002El. Guitar (clean)  "#message 29 "C2042000F1F5F174000102El. Guitar (muted)  "#message 30 "08822F00F1F47474020308Overdriven Guitar   "#message 31 "0282030075A1A153000308Distortion Guitar   "#message 32 "82821002A3F3F3F3000004Guitar harmonics    "#message 33 "E2620000F1F2F1A1000000Acoustic Bass       "#message 34 "C2420000F973F193000200Elec. Bass (finger) "#message 35 "02C22000F1F3F1F3000200Elec. Bass (pick)   "#message 36 "2222050681F11111000000Fretless Bass       "#message 37 "42021700F5F30303010004Slap Bass 1         "#message 38 "02C2200051FF5112000200Slap Bass 2         "#message 39 "C8022000F4F104B6010108Synth Bass 1        "#message 40 "4C020305F5F5D305010104Synth Bass 2        "#message 41 "04420D038C530B5302030EViolin              "#message 42 "A2101700AE8F190501010EViola               "#message 43 "04440505F5F50515010104Cello               "#message 44 "08140505F5F50505010104Contrabass          "#message 45 "08440500F5F50517000100Tremolo Strings     "#message 46 "08440503F5F24C0503010CPizzicato Strings   "#message 47 "A4A41700F5F50303000006Orchestral Harp     "#message 48 "0202100013A31103000000Timpani             "#message 49 "02C2200051A50102000200String Ensemble 1   "#message 50 "0242090931510111000000String Ensemble 2   "#message 51 "02422008F1F20102000000Synth Strings 1     "#message 52 "82440808F1F10102010000Synth Strings 2     "#message 53 "84C4200811A10122000000Choir Aahs          "#message 54 "0844200811A10152000000Voice Oohs          "#message 55 "0244200811A101A2000000Synth Voice         "#message 56 "0282000055D40404000002Orchestra Hit       "#message 57 "04C21C0055FF0505000200Trumpet             "#message 58 "0242200345F10505000200Trombone            "#message 59 "0244000324280424020106Tuba                "#message 60 "C44211085A712424010200Muted Trumpet       "#message 61 "02480E0054542123020206French Horn         "#message 62 "02480E0A5451211402000ABrass Section       "#message 63 "02440006F6F40704010004Synth Brass 1       "#message 64 "0444100CF4FE030200000CSynth Brass 2       "#message 65 "02040800AAF51A0300020ASoprano Sax         "#message 66 "04021004F4F40404000004Alto Sax            "#message 67 "02020404F4F40404000004Tenor Sax           "#message 68 "02020400F4F80404000204Baritone Sax        "#message 69 "C2C21705FFFF0105010004Oboe                "#message 70 "0202040454A80411000104English Horn        "#message 71 "0204130BF1F11161020108Bassoon             "#message 72 "44481703F1311122000100Clarinet            "#message 73 "02423F0300F10005000204Piccolo             "#message 74 "44C4200355F1F105000002Flute               "#message 75 "02423F01FFFF0507000000Recorder            "#message 76 "42442103A1332113020000Pan Flute           "#message 77 "44C4200333F1F125000002Blown Bottle        "#message 78 "04020108F1F10101010100Shakuhachi          "#message 79 "02C43F0500A10054000000Whistle             "#message 80 "02040101F1220801020100Ocarina             "#message 81 "04020808F1F11101020102Lead 1 (square)     "#message 82 "0402080AE2F10104000000Lead 2 (sawtooth)   "#message 83 "02021703F1F30181000000Lead 3 (calliope)   "#message 84 "0202000381F38101000000Lead 4 (chiff)      "#message 85 "82021000F1F10301000300Lead 5 (charang)    "#message 86 "0442200011A101A2000000Lead 6 (voice)      "#message 87 "0202000081818181000000Lead 7 (fifths)     "#message 88 "0202080881F10101000000Lead 8 (bass+lead)  "#message 89 "0844200811A101A2000000Pad 1 (new age)     "#message 90 "0202200081818181000000Pad 2 (warm)        "#message 91 "0202080044818383000000Pad 3 (polysynth)   "#message 92 "0844200811A101A2000000Pad 4 (choir)       "#message 93 "02021000F18141C1000000Pad 5 (bowed)       "#message 94 "44A83200D2E2D2B2020202Pad 6 (metallic)    "#message 95 "E2041000F491F5F1020000Pad 7 (halo)        "#message 96 "82C410001181F2F2010002Pad 8 (sweep)       "#message 97 "02020010F1FF010100030EFX 1 (rain)         "#message 98 "0C680200FDF1C411000002FX 2 (soundtrack)   "#message 99 "C8441C0392825292020000FX 3 (crystal)      "#message 100 "C404000022518362010100FX 4 (atmosphere)   "#message 101 "4242200355F1F1F1010000FX 5 (brightness)   "#message 102 "C2C23000F1F1F1F1000000FX 6 (goblins)      "#message 103 "E2E83000F1F1F1F1000100FX 7 (echoes)       "#message 104 "2CA83000F1D1F1F6000306FX 8 (sci-fi)       "#message 105 "E2EC3000F172F174000000Sitar               "#message 106 "E4E83C007B553315030102Banjo               "#message 107 "F02C05002AF54F05010004Shamisen            "#message 108 "183C3100336C0378010004Koto                "#message 109 "C2C432047443159501020EKalimba             "#message 110 "0442100374310513000304Bag pipe            "#message 111 "7CF03B041A7C9E7C02020AFiddle              "#message 112 "38481B0545F59F0503010AShanai              "#message 113 "14140505F5F10504010004Tinkle Bell         "#message 114 "14140505F5F50505010104Agogo               "#message 115 "1414050345F54305010104Steel Drums         "#message 116 "14B00F057CF5DD05030104Woodblock           "#message 117 "0802110BF5F10401000000Taiko Drum          "#message 118 "02020003F1F10105000000Melodic Tom         "#message 119 "02023F0061F10106010000Synth Drum          "#message 120 "02020000F12F0107020204Reverse Cymbal      "#message 121 "02020E08F1F10103000008Guitar Fret Noise   "#message 122 "02020010F1F1010200000EBreath Noise        "#message 123 "02020010F1FF010100030ESeashore            "#message 124 "02083F00003F001A000000Bird Tweet          "#message 125 "02883F00F1550131000200Telephone Ring      "#message 126 "828200081111010100000EHelicopter          "#message 127 "828200081111010100000EApplause            "#message 128 "02020000FFF5150700000EGunshot             "#message 129 "22215909FFFF030F020000AGISB Default       "#message 130 "2F200000FFFF0F0F00030ESierra White Noise  "#message 131 "22242100C0C00C0C000000Sierra Tone Noise   "#message 132 "22215909FFFF030F020000Custom Inst 1       "#message 133 "22215909FFFF030F020000Custom Inst 2       "#message 134 "22215909FFFF030F020000Custom Inst 3       "#message 135 "22215909FFFF030F020000Custom Inst 4       "#message 136 "22215909FFFF030F020000Custom Inst 5       "#message 137 " Custom Instrument %v48 "#message 138 "X"#message 139 " "#message 140 "  %v46 "#message 141 " %v46 "#message 142 "0000000000000000000000"#message 143 "\x1E"#message 144 "\x1F"#message 145 "%s14"#message 146 "Amplitude modulation"#message 147 "Frequency modulation"#message 148 "If selected, the voice will sound until note off."#message 149 "If selected, higher notes are shortened."#message 150 "Frequency multiplier, from 0..15"#message 151 "If selected, higher notes sound softer."#message 152 "Volume. 63 is silence, 0 is loudest."#message 153 "Speed at which the note reaches full volume. from 0..15"#message 154 "Speed at which the volume drops to sustain level, from 0..15"#message 155 "Volume level while the note is on, from 0..15"#message 156 "Speed at which the note dies out when released, from 0..15"#message 157 "Shape of the waveform, from 0..3"#message 158 "Feedback strength, from 0..7"#message 159 "If selected, connects operators."
+[ ********************************************************************
+[
+[ cp.Instrument
+[
+[ Custom Acoustic Instrument Setting Options Control Console
+[ CAISOCC
+[
+[ ********************************************************************
+
+#define oCursorB       o1  [ need four objects for cursor otherwise
+#define oCursorT       o2  [ text gets erased
+#define oCursorL       o3
+#define oCursorR       o4
+#define oMode          o5
+#define oScrlBox       o6
+#define oScrlBkgd      o7
+
+[ loop values assigned to cursor objects
+#define LP_OPT      0 [ option button states
+#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_CMD1  2 [    "     "    "  OK, Test command buttons
+#define LP_CF_CMD2  3 [    "     "    "  Save, Reset command buttons
+#define LP_CF_CMD3  4 [    "     "    "  Copy Instrument command button
+#define LP_CF_PNL1  5 [    "     "    "  display instrument listbox
+#define LP_CF_PNL2  6 [    "     "    "  select instrument listbox
+#define LP_CF_TEXT1 7 [ text cursor for check boxes
+#define LP_CF_TEXT2 8 [ text cursor for edit boxes
+#define LP_SCROLL   9 [ scroll bar components
+
+#define tmpVal       v220
+#define selinst      v221
+#define cursorX      v222
+#define cursorY      v223
+#define cursorpos    v224
+#define  CP_MOUSE     1
+#define  CP_KEYB      2
+#define  CP_INST      3
+#define  CP_DONE      4
+#define  CP_TEST      5
+#define  CP_COPY      6
+#define  CP_SAVE      7
+#define  CP_RESET     8
+#define  CP_M_TREM    9
+#define  CP_M_VIB    10
+#define  CP_M_SNDSUS 11
+#define  CP_M_KEYB   12
+#define  CP_M_FREQ   13
+#define  CP_M_KSL    14
+#define  CP_M_LVL    15
+#define  CP_M_ATTK   16
+#define  CP_M_DECAY  17
+#define  CP_M_SUST   18
+#define  CP_M_REL    19
+#define  CP_M_SHAPE  20
+#define  CP_FDBACK   21
+#define  CP_C_TREM   22
+#define  CP_C_VIB    23
+#define  CP_C_SNDSUS 24
+#define  CP_C_KEYB   25
+#define  CP_C_FREQ   26
+#define  CP_C_KSL    27
+#define  CP_C_LVL    28
+#define  CP_C_ATTK   29
+#define  CP_C_DECAY  30
+#define  CP_C_SUST   31
+#define  CP_C_REL    32
+#define  CP_C_SHAPE  33
+#define  CP_CONN     34
+#define newpos       v225
+#define btnAction    v226
+#define   B_MOUSE     1
+#define   B_KYBD      2
+#define   B_DONE      3
+#define   B_TEST      4
+#define   B_COPY      5
+#define   B_SAVE      6
+#define   B_RESET     7
+#define   B_STOP      8
+#define    SC_UP      9
+#define    SC_DOWN   10
+#define    SC_PGUP   11
+#define    SC_PGDN   12
+#define egoPrevX     v227
+#define egoPrevY     v228
+#define egoPrevDir   v229
+#define tmpRow       v230
+#define tmpCol       v231
+#define dropmode     v232
+#define    NODROP     0
+#define    DROPDOWN   1
+#define    CHOOSING   2
+#define    DROPUP     3
+#define listindex    v233 [ inst index of currently selected instrument
+                          [ in the dropdown list
+[ v234 - v242 are used as instrument data variables
+#define topinst      v243 [ index of instrument at top row of dropdown list
+#define listrow      v244 [ row index (0-4) of currently selected list item
+                          [ (topinst + listrow = listindex)
+[ and v247 - v254
+[ are used as instrument data variables
+
+#define update           f220
+#define loadinst         f221
+#define cursormode       f222
+#define inTextBox        f223
+#define toggleCheck      f224
+#define typeText         f225
+#define sndTest          f226
+#define selectItem       f227
+#define redrawList       f228
+#define instDirty        f229
+[ f230 - f233 used as instrument parameters
+#define old4chan         f234
+#define oldMIDI          f235
+
+
+[ instrument parameter flags and variables
+#define modTremolo       f230
+#define modVibrato       f231
+#define modSustain       f232
+#define modKyScale       f233
+#define modFreqMult      v234
+#define modKSL           v235
+#define modLevel         v236
+#define modAttack        v237
+#define modDecay         v238
+#define modSusLvl        v239
+#define modRelease       v240
+#define modWaveForm      v241
+#define feedback         v242
+
+#define carTremolo       f243
+#define carVibrato       f244
+#define carSustain       f245
+#define carKyScale       f246
+#define carFreqMult      v247
+#define carKSL           v248
+#define carLevel         v249
+#define carAttack        v250
+#define carDecay         v251
+#define carSusLvl        v252
+#define carRelease       v253
+#define carWaveForm      v254
+#define connect          f255
+
+[ strings
+#define strInst       s12
+#define strByte       s13
+#define sTemp         s14 [ s15
+#define sTemp2        s16
+
+[ **************************************
+[ FIRST CYCLE ONLY
+[ **************************************
+if(newRoom) {
+  [ this is the first cycle through this room
+  [ do basic room initialization
+  call(lgc.RoomInit);
+  
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  lastChar = 0;
+  
+  [ this view has all the art for cursors and buttons
+  load.view(vw.cp.Instrument);
+  
+  [ test sound 
+  load.sound(s.InstTest);
+  
+  [ make sure sound mode is 4channel FMsynth
+  if (4channelsound) {
+    [ save current value
+    set(old4chan);
+  } else {
+    [ temporarily set to 4chan
+    set(4channelsound);
+    reset(old4chan);
+  }
+  if (useMIDI) {
+    [ temporarily set to FMsynth
+    set(oldMIDI);
+    reset(useMIDI);
+  } else {
+    [ save current value
+    reset(oldMIDI);
+  }
+    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+  
+  [ option button that determines input mode; mouse or keyboard
+  animate.obj(oMode);
+  set.view(oMode, vw.cp.Instrument);
+  set.loop(oMode, LP_OPT);
+  set.cel(oMode, 0);
+  stop.cycling(oMode);
+  position(oMode, 8, 65);
+  draw(oMode);
+  
+  [ cursor, in four parts, default to keyboard option position
+  animate.obj(oCursorB);
+  ignore.objs(oCursorB);
+  set.view(oCursorB, vw.cp.Instrument);
+  set.loop(oCursorB, LP_CF_OPT);
+  set.cel(oCursorB, 0);
+  stop.cycling(oCursorB);
+  
+  animate.obj(oCursorL);
+  ignore.objs(oCursorL);
+  set.view(oCursorL, vw.cp.Instrument);
+  set.loop(oCursorL, LP_CF_OPT);
+  set.cel(oCursorL, 1);
+  stop.cycling(oCursorL);
+  
+  animate.obj(oCursorT);
+  ignore.objs(oCursorT);
+  set.view(oCursorT, vw.cp.Instrument);
+  set.loop(oCursorT, LP_CF_OPT);
+  set.cel(oCursorT, 0);
+  stop.cycling(oCursorT);
+  
+  animate.obj(oCursorR);
+  ignore.objs(oCursorR);
+  set.view(oCursorR, vw.cp.Instrument);
+  set.loop(oCursorR, LP_CF_OPT);
+  set.cel(oCursorR, 1);
+  stop.cycling(oCursorR);
+  
+  [ scrollbar background
+  animate.obj(oScrlBkgd);
+  ignore.objs(oScrlBkgd);
+  set.view(oScrlBkgd, vw.cp.Instrument);
+  set.loop(oScrlBkgd, LP_SCROLL);
+  set.cel(oScrlBkgd, 2);
+  stop.cycling(oScrlBkgd);
+  set.priority(oScrlBkgd, 14);
+  
+  [ scrollbar box
+  animate.obj(oScrlBox);
+  ignore.objs(oScrlBox);
+  set.view(oScrlBox, vw.cp.Instrument);
+  set.loop(oScrlBox, LP_SCROLL);
+  set.cel(oScrlBox, 0);
+  stop.cycling(oScrlBox);
+  set.priority(oScrlBox, 15);
+  
+  [ cursor starts on keyboard option button
+  cursorpos = CP_KEYB;
+  newpos = CP_KEYB;
+  [ don't draw it yet though
+  
+  [ cache ego movement parameters (to be restored
+  [ when returning to the control room)
+  egoPrevX = egoX;
+  egoPrevY = egoY;
+  egoPrevDir = egoDir;
+  
+  [ no text input in this room
+  prevent.input();
+  lastChar = 0;
+  [ arrow keys control cursor in this room
+  egoDir = 0;
+  
+  [ mouse is enabled, not cursor; no button active
+  enable.item(mouse);
+  reset(cursormode);
+  btnAction = 0;
+
+  [ copy the custom instrument values from lgc.Main
+  work1 = 1;
+  work2 = 53;
+  work3 = &m132;
+  tmpVal = &sTemp;
+  :Loop1
+    sTemp = "%g";
+    strByte = "%v47Custom Inst %v46       ";
+    block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
+    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    ++work1;
+    ++work2;
+    ++work3;
+  if (work1 < 6) {
+    goto(Loop1);
+  }
+  
+  [ display the picture on screen
+  show.pic();
+  
+  [ clear line 22 to match the picture
+  clear.lines(22, 22, LT_GRAY);
+  
+  [ add labels
+  set.text.attribute(-1, 0);
+  set.text.attribute(WHITE, LT_GRAY);
+  display(5, 37, "Modulator");
+  display(5, 63, "Carrier");
+  
+  set.text.attribute(BLACK, LT_GRAY);
+  display(6, 10, "Input Mode");
+  display(8, 8, "Mouse");
+  display(8, 20, "Keybd");
+  display(11, 31, "Freq Mult");
+  display(12, 31, "KSL");
+  display(13, 31, "Level");
+  display(14, 31, "Attack");
+  display(15, 31, "Decay");
+  display(16, 31, "Sustain");
+  display(17, 31, "Release");
+  display(18, 31, "Wave Shape");
+  display(20, 31, "Feedback");
+  display(11, 56, "Freq Mult");
+  display(12, 56, "KSL");
+  display(13, 56, "Level");
+  display(14, 56, "Attack");
+  display(15, 56, "Decay");
+  display(16, 56, "Sustain");
+  display(17, 56, "Release");
+  display(18, 56, "Wave Shape");
+  
+  set.text.attribute(BLACK, CYAN);
+  display(6, 31, "[ ] Tremolo");
+  display(7, 31, "[ ] Vibrato");
+  display(8, 31, "[ ] Sound Sustain");
+  display(9, 31, "[ ] Kybd Scaling");
+  
+  display(6, 56, "[ ] Tremolo");
+  display(7, 56, "[ ] Vibrato");
+  display(8, 56, "[ ] Sound Sustain");
+  display(9, 56, "[ ] Kybd Scaling");
+  display(20, 56, "[ ] Connection");
+  
+  set.text.attribute(BLACK, WHITE);
+  display(18, 6, "Done");
+  display(18, 19, "Test");
+  display(20, 6, "Copy Instrument...");
+  [ Save/Reset are disabled on startup
+  reset(instDirty);
+  set.text.attribute(LT_GRAY, WHITE);
+  display(3, 60, "Save");
+  display(3, 71, "Reset");
+  
+  [ pop colors
+  set.text.attribute(0, -1);
+  
+  [ default to first custom instrument
+  selinst = 1;
+  work1 = 22;
+  sTemp = m132;
+  block(STR.LEFT, &sTemp, &strInst, &work1); [ str.Left(sINPUT, sRESULT, vLEN);
+  
+  [ selection listbox starts at top
+  listindex = 0;
+  listrow = 2;
+  
+  [ force update of button text
+  set(update);
+  
+  [ force reload of instrument parameters
+  set(loadinst);
+  
+  [ remember to fade in to be able to see the screen again
+  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+}
+
+[ check for forced screen update
+if (update) {
+  [ redraw the list box
+  set.text.attribute(-1, 0);
+  
+  [ instrument choices
+  work1 = 11;
+  work2 = 4;
+  work3 = 1;
+  tmpVal = &m137;
+  :Loop2
+    if (work3 == selinst) {
+      set.text.attribute(WHITE, BLACK);
+      [ select the instrument data
+      tmpCol = &sTemp;
+      tmpRow = selinst;
+      tmpRow += 131;
+      block(SET.STRING.V, &tmpCol, &tmpRow, 0); [ set.string.v(vSTR, vMSG);
+      tmpRow = 22;
+      block(STR.LEFT, &sTemp, &strInst, &tmpRow); [ str.left(sINPUT, sRESULT, vLEN);
+      [ loadinst is handled separately   
+    } else {
+      set.text.attribute(BLACK, WHITE);
+    }
+    display.v(work1, work2, tmpVal);
+    ++work1;
+    ++work3;
+  if (work1 < 16) {
+    goto(Loop2);
+  }
+  set.text.attribute(0, -1);
+  
+  [ always reset
+  reset(update); 
+  
+  [ end drop mode
+  if (dropmode == DROPUP) {
+    dropmode = NODROP;
+  }
+}
+
+[ display dropdown list to select an instrument to copy
+if (dropmode == DROPDOWN) {
+  [ determine top instrument
+  topinst = listindex;
+  topinst -= listrow;
+  if (topinst > 250) {
+    [ readjust listrow
+    listrow += topinst;
+    topinst = 0;
+  }
+  
+  [ position cursor to draw the box frame
+  erase(oCursorB);
+  erase(oCursorT);
+[  erase(oCursorL);
+  erase(oCursorR);
+  cursorX = 7;
+  cursorY = 128;
+  set.loop(oCursorB, LP_CF_PNL2);
+  [ bottom is used for flashing text cursor, so cycling
+  [ needs to be off here
+  stop.cycling(oCursorB);
+  set.loop(oCursorL, LP_CF_PNL2);
+  set.loop(oCursorT, LP_CF_PNL2);
+  set.loop(oCursorR, LP_CF_PNL2);
+  set.cel(oCursorB, 0);
+  position.v(oCursorB, cursorX, cursorY);
+  --cursorY;
+  position.v(oCursorL, cursorX, cursorY);
+  cursorY -= 56;
+  position.v(oCursorT, cursorX, cursorY);
+  cursorX += 43;
+  cursorY += 56;
+  position.v(oCursorR, cursorX, cursorY);
+  
+  draw(oCursorB);
+  draw(oCursorL);
+  draw(oCursorT);
+  draw(oCursorR);
+  
+  [ add arrows
+  set.text.attribute(-1, 0);
+  set.text.attribute(BLACK, LT_GRAY);
+  tmpRow = 10;
+  tmpCol = 24;
+  work3 = &m143;
+  display.v(tmpRow, tmpCol, work3);
+  tmpRow += 6; [4;
+  work3 = &m144;
+  display.v(tmpRow, tmpCol, work3);
+  set.text.attribute(0, -1);
+  
+  [ show scrollbar background
+  cursorX = 48;
+  cursorY = 119;
+  erase(oScrlBkgd);
+  position.v(oScrlBkgd, cursorX, cursorY);
+  draw(oScrlBkgd);
+  
+  [ buttons are disabled while dropdown has focus
+  set.text.attribute(-1, 0);
+  set.text.attribute(LT_GRAY, WHITE);
+  display(18, 6, "Done");
+  display(18, 19, "Test");
+  display(3, 60, "Save");
+  display(3, 71, "Reset");
+  display(20, 6, "Copy Instrument...");
+  set.text.attribute(0, -1);
+  
+  [ begin choosing
+  dropmode = CHOOSING;
+  
+  [ force redraw of listbox items
+  set(redrawList);
+}
+
+[ if choosing a new instrument to copy
+if (dropmode == CHOOSING) {
+  [ check for direction arrow keypress
+  if (egoDir != STOPPED) {
+    [ cursor up
+    if (egoDir == UP) {
+      [ it index not at top
+      if (listrow > 0) {
+        --listrow;
+        --listindex;
+        set(redrawList);
+      } else {
+        if (topinst > 0) {
+          listrow = -1; [ decrement doesn't wrap around
+          --listindex;
+          btnAction = SC_UP;
+        }
+      }
+    }
+    [ cursor down
+    if (egoDir == DOWN) {
+      [ if index not at bottom
+      if (listrow < 6) {
+        ++listrow;
+        ++listindex;
+        set(redrawList);
+      } else {
+        if (topinst < 129) {
+          ++listrow;
+          ++listindex;
+          btnAction = SC_DOWN;
+        }
+      }
+    }
+    [ page up
+    if (egoDir == UP_RIGHT) {
+      btnAction = SC_PGUP;
+    }
+    [ page down
+    if (egoDir == DOWN_RIGHT) {
+      btnAction = SC_PGDN;
+    }
+    
+    [ always reset egodir
+    egoDir = 0;
+  }
+    
+  [ keyboard works regardless of mode for listboxes
+  [ return to select
+  if (have.key()) {
+    if ((lastChar == 13 || lastChar == 10)) {
+      lastChar = 0;
+      [ make the selection
+      set(selectItem);
+      [ dropup to hide the list
+      dropmode = DROPUP;
+    }
+  }
+  
+  [ escape cancels the selection
+  if (controller(cMenu)) {
+    reset(selectItem);
+    [ dropup to hide the list
+    dropmode = DROPUP;
+  }
+  
+  [ check for right-click
+  if (controller(cRightClick)) {
+    reset(selectItem);
+    [ dropup to hide the list
+    dropmode = DROPUP;
+  }
+  
+  [ if mouse is over the listbox text
+  if (mouseX > 7 && mouseX < 48 && mouseY > 79 && mouseY < 136) {
+
+    [ check for left click
+    if (controller(cLeftClick)) {
+      [ convert yvalue to index
+      work1 = mouseY;
+      work1 /= 8;
+      work1 -= 10;
+      [ is it a valid offset?
+      if (work1 != listrow) {
+        [ adjust row and index
+        listrow = work1;
+        listindex = topinst;
+        listindex += listrow;
+      
+        set(redrawList);
+      }
+    }
+      
+    [ check for dbl click over item
+    if (controller(cLeftDblClick)) {
+      [ make the selection
+      set(selectItem);
+      [ dropup to hide the list
+      dropmode = DROPUP;
+    }
+  }
+  
+  [ if over the scrollbar 
+  if (mouseX > 47 && mouseX < 50) {
+    [ check for click OR dblclick
+    if ((controller(cLeftClick) || controller(cLeftDblClick))) {
+      [ if on up arrow, scroll up
+      if (mouseY > 79 && mouseY < 86) {
+        btnAction = SC_UP;
+        goto(donemouse);
+      }
+      
+      [ if on down arrow, scroll down
+      if (mouseY > 128 && mouseY < 136) {
+        btnAction = SC_DOWN;
+        goto(donemouse);
+      }
+      
+      [ adjust compare values to top of scroll
+      [ window and scrollbox position
+      get.posn(oScrlBox, work3, work2);
+      work2 += 8;
+      [ if above scrollbox, page up
+      if (mouseY > 85 && mouseY < work2) {
+        btnAction = SC_PGUP;
+        goto(donemouse);
+      }
+      [ adjust compare values to scrollbox position
+      [ and bottom of scroll window
+      get.posn(oScrlBox, work3, work1);
+      work1 += 8;
+      [ if below scrollbox, page down
+      if (mouseY > work1 && mouseY < 129) {
+        btnAction = SC_PGDN;
+      }
+      :donemouse
+    }
+  }
+  
+  [ check for scroll actions
+  if (btnAction == SC_UP) {
+    [ if not at top of list
+    if (topinst > 0) { [ && topinst != -1 -1 appears to be > since numbers are unsigned
+      --topinst;
+      [ selection also moves up
+      listrow += 1; [ increment doesn't wrap around
+      [ unless it's off screen
+      if (listrow > 6) {
+        [ reset it to bottom
+        listrow = 6;
+      }
+      [ recalculate listindex
+      listindex = topinst;
+      listindex += listrow;
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  if (btnAction == SC_DOWN) {
+    [ if not at bottom of list
+    if (topinst < 129) {
+      ++topinst;
+      [ selection stays the same, so adjust
+      [ listindex to match
+      listrow -= 1; [ (don't use decrement, because it doesn't wrap around)
+      [ unless it's off screen
+      if (listrow == -1) {
+        [ reset it to top
+        listrow = 0;
+      }
+      [ recalculate listindex
+      listindex = topinst;
+      listindex += listrow;
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  if (btnAction == SC_PGUP) {
+    [ if not at top of list
+    if (topinst > 1) {
+      topinst -= 8;
+      if ((topinst == 0 || topinst > 240)) {
+        topinst = 1;
+      }
+      [ reset selection to bottom
+      listrow = 6;
+      [ recalculate listindex
+      listindex = topinst;
+      listindex += listrow;
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  if (btnAction == SC_PGDN) {
+    [ if not at bottom of list
+    if (topinst < 129) {
+      topinst += 8;
+      if (topinst > 129) {
+        topinst = 129;
+      }
+      [ reset selection to top
+      listrow = 0;
+      [ recalculate listindex
+      listindex = topinst;
+      listindex += listrow;
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  
+  [ always reset button action
+  btnAction = 0;  
+}
+
+
+[ redraw text
+if (redrawList) {
+  [ top row is always 10
+  tmpRow = 10;
+  [ column is always 4
+  tmpCol = 4;
+  work1 = &m145;
+  
+  [ use a loop to draw the instrument text
+  cursorX = 0;
+  set.text.attribute(-1, 0);
+  :PrintInst
+    if (cursorX == listrow) {
+      set.text.attribute(WHITE, BLACK);
+    } else {
+      set.text.attribute(BLACK, WHITE);
+    }
+    [ get instrument data/name string
+    tmpVal = topinst;
+    tmpVal += cursorX;
+    ++tmpVal;
+    work2 = &sTemp;
+    block(SET.STRING.V, &work2, &tmpVal, 0); [ set.string.v(vSTR, vMSG);
+    [ strip off data chunk
+    tmpVal = 20;
+    block(STR.RIGHT, &sTemp, &sTemp, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN);
+    display.v(tmpRow, tmpCol, work1);
+    ++cursorX;
+    ++tmpRow;
+  if (cursorX < 7) {
+    goto(PrintInst);
+  }
+  set.text.attribute(0, -1);
+  
+  [ position the scrollbar box
+  cursorX = 48;
+  [ adjust ypos based on current toprow offset
+  cursorY = topinst;
+  work1 = topinst;
+  work1 /= 18;
+  cursorY -= work1;
+  cursorY /= 3;
+  cursorY += 79;
+  erase(oScrlBox);
+  set.cel(oScrlBox, 0);
+  position.v(oScrlBox, cursorX, cursorY);
+  draw(oScrlBox);
+  
+  reset(redrawList);
+}
+
+[ dropup
+if (dropmode == DROPUP) {
+  erase(oCursorB);
+  erase(oCursorL);
+  erase(oCursorT);
+  erase(oCursorR);
+  [ to restore the window, move an object across it
+  work1 = 7;
+  work2 = 72;
+  erase(oScrlBkgd);
+  erase(oScrlBox);
+  set.cel(oScrlBox, 1);
+  position.v(oScrlBox, work1, work2);
+  draw(oScrlBox);
+  work1 = 52;
+  work2 = 135;
+  reposition.to.v(oScrlBox, work1, work2);
+  
+  if (cursormode) {
+    [ in kb mode, restore selection by forcing update
+    cursorpos = -1;
+    newpos = CP_COPY;
+  }
+  [ update instrument if not canceled
+  if (selectItem) { 
+    [ instrument msg is actually index+1
+    ++listindex;
+    tmpCol = &sTemp;
+    [ get instrument data from the selected instrument
+    block(SET.STRING.V, &tmpCol, &listindex, 0); [ set.string.v(vSTR, vMSG);
+
+    [ restore listindex
+    --listindex;
+    tmpVal = 22;
+    block(STR.LEFT, &sTemp, &sTemp, &tmpVal); [ str.left(sINPUT, sRESULT, vLEN);
+    [ add it to current selected instrument
+    tmpVal = selinst;
+    tmpVal += 131;
+    tmpCol = &sTemp2;
+    block(SET.STRING.V, &tmpCol, &tmpVal, 0); [ set.string.v(vSTR, vMSG);
+    tmpVal = 20;
+    block(STR.RIGHT, &sTemp2, &sTemp2, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN);
+    block(STR.CONCAT, &sTemp, &sTemp2, 0); [ str.concat(sINPUT, sADD);
+    [ update the message value
+    tmpVal = &sTemp;
+    work1 = selinst;
+    work1 += 131;
+    block(SET.MSG, 1, &work1, &tmpVal); [ set.msg(BYVAL, MSGOLD, STRNEW);
+    [ mark it as dirty
+    set(instDirty);
+    [ redraw instrument
+    set(loadinst);
+  }
+  
+  [ done - force an update
+  set(update);
+  
+  [ re-enable buttons
+  set.text.attribute(-1, 0);
+  set.text.attribute(BLACK, WHITE);
+  display(18, 6, "Done");
+  display(18, 19, "Test");
+  display(20, 6, "Copy Instrument...");
+  [ Save/Restore depend on current dirty state
+  if (!instDirty) {
+    set.text.attribute(LT_GRAY, WHITE);
+  } else {
+    set.text.attribute(BLACK, WHITE);
+  }
+  display(3, 60, "Save");
+  display(3, 71, "Reset");
+  set.text.attribute(0, -1);
+}
+
+[ if showing dropbox, don't process other cursor statements
+if (dropmode != NODROP) {
+  [ nothing else to do
+  return();
+}
+
+[ load instrument parameters
+if (loadinst) {
+  [ using instrument string, break out parameters as follows:
+  [
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 1: modulator  |tre|vib|sus|KSF|    frq mul   |
+  [ byte 2: carrier    |tre|vib|sus|KSF|    frq mul   |
+  [ byte 3: modulator  | KSLvl |    output level      |
+  [ byte 4: carrier    | KSLvl |    output level      |
+  [ byte 5: modulator  | attack rate   | decay rate   |
+  [ byte 6: carrier    | attack rate   | decay rate   |
+  [ byte 7: modulator  | sustain lvl   | release rt   |
+  [ byte 8: carrier    | sustain lvl   | release rt   |
+  [ byte 9: modulator  |    not used           |wavfrm|
+  [ byte 10: carrier   |    not used           |wavfrm|
+  [ byte 11:           | 0   0   0   0 | feedback |con|
+  
+  [ 'KSR' (the flag) vs. 'KSL' the value;
+  [ when flag set, "the sound's envelope is foreshortened as it rises in pitch"
+  [ KSL = "Level Key Scaling", or "Scaling Level"; 00 - no change
+  [  10 = 1.5 dB/8ve; 01 = -3 db/8ve; 11 = -6 dB/8ve
+  [  "causes output levels to decrease as the frequency rises"
+  [ I don't think they're related at all
+  set.text.attribute(-1, 0);
+  
+[  [ clear status/info line
+[  clear.lines(22, 22, LT_GRAY);
+[  
+  [ if copying an instrument show all fields as 'edited'
+  if (selectItem) {
+    set.text.attribute(BLACK, LT_CYAN);
+  } else {
+    set.text.attribute(WHITE, CYAN);
+  }
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 1: modulator  |tre|vib|sus|KSF|    frq mul   |
+  work1 = 2;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ mod Tremolo
+  if (work1 > 127) {
+    work2 = &m138;
+    set(modTremolo);
+  } else {
+    work2 = &m139;
+    reset(modTremolo);
+  }
+  tmpRow = 6;
+  tmpCol = 32;
+  display.v(tmpRow, tmpCol, work2);
+  block(BIT.AND, 0, &work1, 127);
+  [ mod Vibrato
+  if (work1 > 63) {
+    work2 = &m138;
+    set(modVibrato);
+  } else {
+    work2 = &m139;
+    reset(modVibrato);
+  }
+  ++tmpRow;
+  display.v(tmpRow, tmpCol, work2);
+  block(BIT.AND, 0, &work1, 63);
+  [ mod Sustain
+  if (work1 > 31) {
+    work2 = &m138;
+    set(modSustain);
+  } else {
+    work2 = &m139;
+    reset(modSustain);
+  }
+  ++tmpRow;
+  display.v(tmpRow, tmpCol, work2);
+  block(BIT.AND, 0, &work1, 31);
+  [ mod keyb scaling
+  if (work1 > 15) {
+    work2 = &m138;
+    set(modKyScale);
+  } else {
+    work2 = &m139;
+    reset(modKyScale);
+  }
+  ++tmpRow;
+  display.v(tmpRow, tmpCol, work2);
+  
+  [ set color for edit boxes
+  if (selectItem) {
+    set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);
+  } else {
+    set.text.attribute(WHITE, BLUE);
+  }
+  [ freq mult
+  block(BIT.AND, 0, &work1, 15);
+  modFreqMult = work1;
+  tmpRow = 11;
+  tmpCol += 14;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+    
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 3: modulator  | KSLvl |    output level      |
+  work1 = 6;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ KSL
+  block(BIT.AND, 0, &work1, 192);
+  work1 /= 64;
+  modKSL = work1;
+  ++tmpRow;
+  work2 = &m140;
+  display.v(tmpRow, tmpCol, work2);
+  [ output level
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 63);
+  modLevel = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 5: modulator  | attack rate   | decay rate   |
+  work1 = 10;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ attack
+  block(BIT.AND, 0, &work1, 240);
+  work1 /= 16;
+  modAttack = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  [ decay
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 15);
+  modDecay = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 7: modulator  | sustain lvl   | release rt   |
+  work1 = 14;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ sustainlvl
+  block(BIT.AND, 0, &work1, 240);
+  work1 /= 16;
+  modSusLvl = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  [ release rate
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 15);
+  modRelease = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 9: modulator  |    not used           |wavfrm|
+  work1 = 18;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ wave form
+  block(BIT.AND, 0, &work1, 3);
+  modWaveForm = work1;
+  ++tmpRow;
+  work2 = &m140;
+  display.v(tmpRow, tmpCol, work2);
+  
+  [***CARRIER***
+  [ set color for check boxes
+  if (selectItem) {
+    set.text.attribute(BLACK, LT_CYAN);
+  } else {
+    set.text.attribute(WHITE, CYAN);
+  }
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 2: carrier    |tre|vib|sus|KSF|    frq mul   |
+  work1 = 4;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ car Tremolo
+  if (work1 > 127) {
+    work2 = &m138;
+    set(carTremolo);
+  } else {
+    work2 = &m139;
+    reset(carTremolo);
+  }
+  tmpRow = 6;
+  tmpCol = 57;
+  display.v(tmpRow, tmpCol, work2);
+  block(BIT.AND, 0, &work1, 127);
+  [ car Vibrato
+  if (work1 > 63) {
+    work2 = &m138;
+    set(carVibrato);
+  } else {
+    work2 = &m139;
+    reset(carVibrato);
+  }
+  ++tmpRow;
+  display.v(tmpRow, tmpCol, work2);
+  block(BIT.AND, 0, &work1, 63);
+  [ car Sustain
+  if (work1 > 31) {
+    work2 = &m138;
+    set(carSustain);
+  } else {
+    work2 = &m139;
+    reset(carSustain);
+  }
+  ++tmpRow;
+  display.v(tmpRow, tmpCol, work2);
+  block(BIT.AND, 0, &work1, 31);
+  [ car keyb scaling
+  if (work1 > 15) {
+    work2 = &m138;
+    set(carKyScale);
+  } else {
+    work2 = &m139;
+    reset(carKyScale);
+  }
+  ++tmpRow;
+  display.v(tmpRow, tmpCol, work2);
+  
+  [ set color for edit boxes
+  if (selectItem) {
+    set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);
+  } else {
+    set.text.attribute(WHITE, BLUE);
+  }
+  
+  [ freq mult
+  block(BIT.AND, 0, &work1, 15);
+  carFreqMult = work1;
+  tmpRow = 11;
+  tmpCol = 71;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 4: carrier    | KSLvl |    output level      |
+  work1 = 8;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ KSL
+  block(BIT.AND, 0, &work1, 192);
+  work1 /= 64;
+  carKSL = work1;
+  ++tmpRow;
+  work2 = &m140;
+  display.v(tmpRow, tmpCol, work2);
+  [ output level
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 63);
+  carLevel = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 6: carrier    | attack rate   | decay rate   |
+  work1 = 12;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ attack
+  block(BIT.AND, 0, &work1, 240);
+  work1 /= 16;
+  carAttack = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  [ decay
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 15);
+  carDecay = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 8: carrier    | sustain lvl   | release rt   |
+  work1 = 16;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ sustainlvl
+  block(BIT.AND, 0, &work1, 240);
+  work1 /= 16;
+  carSusLvl = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  [ release rate
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 15);
+  carRelease = work1;
+  ++tmpRow;
+  if (work1 < 10) {
+    work2 = &m140;
+  } else {
+    work2 = &m141;
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 10: carrier   |    not used           |wavfrm|
+  work1 = 20;
+  block(STR.LEFT, &strInst, &strByte, &work1);
+  work1 = 2;
+  block(STR.RIGHT, &strByte, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ wave form
+  block(BIT.AND, 0, &work1, 3);
+  carWaveForm = work1;
+  ++tmpRow;
+  work2 = &m140;
+  display.v(tmpRow, tmpCol, work2);
+  
+  
+  [              bit:    7   6   5   4   3   2   1   0
+  [ byte 11:           | 0   0   0   0 | feedback |con|
+  work1 = 2;
+  block(STR.RIGHT, &strInst, &strByte, &work1);
+  block(HEX2BYTE, &strByte, &work1, 0);
+  [ feedback
+  block(BIT.AND, 0, &work1, 14);
+  work1 /= 2;
+  feedback = work1;
+  tmpRow = 20;
+  tmpCol = 46;
+  work2 = &m140;
+  display.v(tmpRow, tmpCol, work2);
+  [ connection
+  [ set color for check boxes
+  if (selectItem) {
+    set.text.attribute(BLACK, LT_CYAN);
+  } else {
+    set.text.attribute(WHITE, CYAN);
+  }
+  block(HEX2BYTE, &strByte, &work1, 0);
+  block(BIT.AND, 0, &work1, 1);
+  tmpCol = 57;
+  if (work1 > 0) {
+    work2 = &m138;
+    set(connect);
+  } else {
+    work2 = &m139;
+    reset(connect);
+  }
+  display.v(tmpRow, tmpCol, work2);
+  
+  set.text.attribute(0, -1);
+  
+  reset(loadinst);
+  [ if copying, instrument has changed
+  set.text.attribute(-1, 0);
+  if (selectItem) {
+    set.text.attribute(BLACK, WHITE);
+    set(instdirty);
+  } else {
+    set.text.attribute(LT_GRAY, WHITE);
+    reset(instdirty);
+  }
+  display(3, 60, "Save");
+  display(3, 71, "Reset");
+  set.text.attribute(0, -1);
+  reset(selectItem);
+}
+
+[ if cursor is in a flag or text field, both mouse and keyboard apply
+if (cursorpos > CP_RESET) {
+  [ check for direction arrow keypress
+  if (egoDir != STOPPED) {
+    [ cursor up
+    if (egoDir == UP) {
+      if (cursorpos > CP_M_TREM && cursorpos < CP_C_TREM) {
+        --newpos;
+      }
+      if (cursorpos > CP_C_TREM) {
+        --newpos;
+      }
+    }
+    
+    [ cursor right
+    if (egoDir == RIGHT) {
+      if (cursorpos < CP_C_TREM) {
+        newpos += 13;
+      }
+    }
+    
+    [ cursor down
+    if (egoDir == DOWN) {
+      if (cursorpos < CP_FDBACK) {
+        ++newpos;
+      }
+      if (cursorpos > CP_FDBACK && cursorpos < CP_CONN) {
+        ++newpos;
+      }
+    }
+    
+    [ cursor left
+    if (egoDir == LEFT) {
+      if (cursorpos > CP_FDBACK) {
+        newpos -= 13;
+      }
+    }
+    
+    [ only reset egoDir if in mouse mode; otherwise keyboard check
+    [ will fail
+    if (!cursormode) {
+      egoDir = 0;
+    }
+  }
+}
+
+[ is cursor in text mode?
+if (cursormode) {
+  [ check for direction arrow keypress, and select buttons as well
+  [ as flag and text fields
+  if (egoDir != STOPPED) {
+    [ cursor up
+    if (egoDir == UP) {
+      if (cursorpos == CP_INST) {
+        [ check for shift+up
+        block(CHECK.SHIFT, &tmpVal, 0, 0);
+        if (tmpVal == 1) {
+          [ SHIFT+UP
+          [ increment selected instrument, and redraw display
+          if (selinst > 1) {
+            --selinst;
+            set(update);
+            set(loadinst);
+          }
+        } else {
+          [ no shift
+          newpos = CP_MOUSE;
+        }
+      }
+      if ((cursorpos == CP_DONE || cursorpos == CP_TEST)) {
+        newpos = CP_INST;
+      }
+      if (cursorpos == CP_COPY) {
+        newpos = CP_DONE;
+      }
+      [ only move up to Save if it is enabled
+      if (cursorpos == CP_C_TREM && instDirty) {
+        newpos = CP_SAVE;
+      }
+    }
+    
+    [ cursor right
+    if (egoDir == RIGHT) {
+      if (cursorpos == CP_MOUSE) {
+        newpos = CP_KEYB;
+      }
+      if (cursorpos == CP_KEYB) {
+        newpos = CP_M_SNDSUS;
+      }
+      if (cursorpos == CP_INST) {
+        newpos = CP_M_FREQ;
+        newpos += selinst;
+      }
+      if (cursorpos == CP_DONE) {
+        newpos = CP_TEST;
+      }
+      if (cursorpos == CP_TEST) {
+        newpos = CP_M_SHAPE;
+      }
+      if (cursorpos == CP_COPY) {
+        newpos = CP_FDBACK;
+      }
+      if (cursorpos == CP_SAVE) {
+        newpos = CP_RESET;
+      }
+    }
+    
+    [ cursor down
+    if (egoDir == DOWN) {
+      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
+        newpos = CP_INST;
+      }
+      if (cursorpos == CP_INST) {
+        [ check for shift+down
+        block(CHECK.SHIFT, &tmpVal, 0, 0);
+        if (tmpVal == 1) {
+          [ SHIFT+DOWN
+          [ decrement selected instrument, and redraw display
+          if (selinst < 5) {
+            ++selinst;
+            set(update);
+            set(loadinst);
+          }
+        } else {
+          [ no shift
+          newpos = CP_DONE;
+        }
+      }
+      if ((cursorpos == CP_DONE || cursorpos == CP_TEST)) {
+        newpos = CP_COPY;
+      }
+      if ((cursorpos == CP_SAVE || cursorpos == CP_RESET)) {
+        newpos = CP_C_TREM;
+      }
+    }
+    
+    [ cursor left
+    if (egoDir == LEFT) {
+      if (cursorpos == CP_KEYB) {
+        newpos = CP_MOUSE;
+      }
+      if (cursorpos == CP_TEST) {
+        newpos = CP_DONE;
+      }
+      if (cursorpos == CP_RESET) {
+        newpos = CP_SAVE;
+      }
+      if (cursorpos > CP_RESET && cursorpos < CP_M_FREQ) {
+        newpos = CP_KEYB;
+      }
+      if (cursorpos > CP_M_KEYB && cursorpos < CP_M_REL) {
+        newpos = CP_INST;
+      }
+      if (cursorpos > CP_M_SUST && cursorpos < CP_FDBACK) {
+        newpos = CP_TEST;
+      }
+      if (cursorpos == CP_FDBACK) {
+        newpos = CP_COPY;
+      }
+    }
+    
+    [ always reset dir so another keypress can be detected
+    egoDir = 0;
+  }
+  
+  [ check for button selection (space/enter for buttons;
+  if (have.key()) {
+    [ space/enter
+    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {
+    [ on mouse button
+      if (cursorpos  == CP_MOUSE) {
+        [ switch to mouse control
+        reset(cursormode);
+        enable.item(mouse);
+        erase(oMode);
+        position(oMode, 8, 65);
+        draw(oMode);
+        [ erase the cursor objects
+        erase(oCursorB);
+        erase(oCursorT);
+        erase(oCursorL);
+        erase(oCursorR);
+      }
+      [ on Done/Test/Copy/Save/Reset button
+      if (cursorpos > CP_INST && cursorpos < CP_M_TREM) {
+        btnAction = cursorpos;
+        btnAction -= 1;
+        [ convert Test to Stop if sound is playing
+        if (btnAction == B_TEST && sndTest) {
+          btnAction = B_STOP;
+        }
+      }
+    }  
+  }
+} else {
+  [ check for mouse click
+  if (controller(cLeftClick)) {
+    [ over cursor type keyboard option [33, 56 - 37, 63]
+    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+      [ switch to keyboard cursor
+      set(cursormode);
+      disable.item(mouse);
+      erase(oMode);
+      position(oMode, 32, 65);
+      draw(oMode);
+      [ start cursor on keyboard option button
+      cursorpos = CP_KEYB;
+      newpos = CP_KEYB;
+      set.loop(oCursorB, LP_CF_OPT);
+      set.cel(oCursorB, 0);
+      stop.cycling(oCursorB);
+      position(oCursorB, 31, 65);
+      draw(oCursorB);
+      set.loop(oCursorL, LP_CF_OPT);
+      position(oCursorL, 31, 64);
+      draw(oCursorL);
+      set.loop(oCursorT, LP_CF_OPT);
+      position(oCursorT, 31, 54);
+      draw(oCursorT);
+      set.loop(oCursorR, LP_CF_OPT);
+      position(oCursorR, 50, 64);
+      draw(oCursorR);
+    }
+    
+    [ over Done button [5, 135 - 26, 144]
+    if (mouseX > 4 && mouseX < 27 && mouseY > 142 && mouseY < 153) {
+      btnAction = B_DONE;
+    }
+      
+    [ over Test button [31, 135 - 52, 144]
+    if (mouseX > 30 && mouseX < 53 && mouseY > 142 && mouseY < 153) {
+      [ if a sound is playing, it's actually 'stop'
+      if (sndTest) {
+        btnAction = B_STOP;
+      } else {
+        btnAction = B_TEST;
+      }
+    }
+    
+    [ over Copy Inst button [5, 151 - 52, 160]
+    if (mouseX > 4 && mouseX < 53 && mouseY > 158 && mouseY < 169) {
+      btnAction = B_COPY;
+    }
+    
+    [ over Save button [115, 15 - 132, 24]
+    if (mouseX > 114 && mouseX < 133 && mouseY > 22 && mouseY < 33) {
+      [ only if enabled
+      if (instDirty) {
+        btnAction = B_SAVE;
+      }
+    }
+    [ over Reset button [139, 15 - 156, 24]
+    if (mouseX > 138 && mouseX < 157 && mouseY > 22 && mouseY < 33) {
+      btnAction = B_RESET;
+    }
+    
+    [ over modulator checkbox zone (x between 63, 66)
+    if (mouseX > 62 && mouseX < 67) {
+      [ confirm within y bounds of checkboxes
+      if (mouseY > 47 && mouseY < 80) {
+        [ convert yval to checkbox offset
+        newpos = mouseY;
+        newpos += 24;
+        newpos /= 8;
+      }
+    }
+    [ over modulator checkbox zone (x between 113, 116)
+    if (mouseX > 112 && mouseX < 117) {
+      [ confirm within y bounds of checkboxes
+      if (mouseY > 47 && mouseY < 80) {
+        [ convert yval to checkbox offset
+        newpos = mouseY;
+        newpos += 128;
+        newpos /= 8;
+      }
+      [ check for connection checkbox
+      if (mouseY > 159 && mouseY < 168) {
+        [ convert yval to checkbox offset
+        newpos = CP_CONN;
+      }
+    }
+    
+    [ over modulator text entry zone (x between 92, 99)
+    if (mouseX > 91 && mouseX < 100) {
+      if (mouseY > 87 && mouseY < 152) {
+        [ convert yval to checkbox offset
+        newpos = mouseY;
+        newpos /= 8;
+        newpos += 2;
+      }
+      if (mouseY >159 && mouseY < 168) {
+        newpos = CP_FDBACK;
+      }
+    }
+    
+    [ over carrier text entry zone ( x between 142, 149)
+    if (mouseX > 141 && mouseX < 150) {
+      if (mouseY > 87 && mouseY < 152) {
+        [ convert yval to checkbox offset
+        newpos = mouseY;
+        newpos /= 8;
+        newpos += 15;
+      }
+    }
+    
+    [ over instrument listbox zone
+    if (mouseX > 7 && mouseX < 50 && mouseY > 87 && mouseY < 128) {
+      [ select a new instrument
+      selinst = mouseY;
+      selinst /= 8;
+      selinst -= 10;
+      set(update);
+      set(loadinst);
+    }
+  }
+  
+  [ check for dbl-click on checkboxes
+  if (controller(cLeftDblClick)) {
+    [ over modulator checkbox zone (x between 63, 66)
+    if (mouseX > 62 && mouseX < 67) {
+      [ confirm within y bounds of checkboxes
+      if (mouseY > 47 && mouseY < 80) {
+        set(toggleCheck);
+      }
+    }
+    [ over modulator checkbox zone (x between 113, 116)
+    if (mouseX > 112 && mouseX < 117) {
+      [ confirm within y bounds of checkboxes
+      if (mouseY > 47 && mouseY < 80) {
+        set(toggleCheck);
+      }
+      [ check for connection checkbox
+      if (mouseY > 159 && mouseY < 168) {
+        set(toggleCheck);
+      }
+    }
+  }
+}
+
+[ check for new cursor position
+if (cursorpos != newpos) {
+  [ always stop test sound when cursor moves
+  stop.sound();
+
+  [ clear status/info line
+  clear.lines(22, 22, LT_GRAY);
+  
+  [ to move cursor, erase it first, otherwise, it will
+  [ clear any text that is present anywhere between the
+  [ new position and the old position
+  erase(oCursorB);
+  erase(oCursorL);
+  erase(oCursorT);
+  erase(oCursorR);
+  [ reset bottom cursor
+  set.cel(oCursorB, 0);
+  stop.cycling(oCursorB);
+  
+  [ update the position
+  cursorpos = newpos;
+  [ determine if in a textbox field
+  reset(inTextBox);
+  if (cursorpos > CP_M_KEYB && cursorpos < CP_C_TREM) {
+    set(inTextBox);
+  }
+  if (cursorpos > CP_C_KEYB && cursorpos < CP_CONN) {
+    set(inTextBox);
+  }
+
+  [ depending on where cursor is, set the position and size/shape
+
+  [ input mode options
+  if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
+    [ option buttons
+    set.loop(oCursorB, LP_CF_OPT);
+    set.loop(oCursorT, LP_CF_OPT);
+    set.loop(oCursorL, LP_CF_OPT);
+    set.loop(oCursorR, LP_CF_OPT);
+    cursorY = 65;
+    if (cursorpos == CP_MOUSE) {
+      cursorX = 7;
+    }
+    if (cursorpos == CP_KEYB) {
+      cursorX = 31;
+    }
+  }
+  
+  [ instrument listbox
+  if (cursorpos == CP_INST) {
+    set.loop(oCursorB, LP_CF_PNL1);
+    set.loop(oCursorT, LP_CF_PNL1);
+    set.loop(oCursorL, LP_CF_PNL1);
+    set.loop(oCursorR, LP_CF_PNL1);
+    [ convert cursorpos into desired y value
+    cursorX = 7;
+    cursorY = 120;
+  }
+    
+  [ Done, Test
+  if ((cursorpos == CP_DONE || cursorpos == CP_TEST)) {
+    set.loop(oCursorB, LP_CF_CMD1);
+    set.loop(oCursorT, LP_CF_CMD1);
+    set.loop(oCursorL, LP_CF_CMD1);
+    set.loop(oCursorR, LP_CF_CMD1);
+    
+    [ convert cursorpos into desired value
+    cursorX = cursorpos;
+    cursorX -= 4;
+    cursorX *= 26;
+    cursorX += 5;
+    cursorY = 144;
+  
+  }
+  
+  [ Save, Reset
+  if ((cursorpos == CP_SAVE || cursorpos == CP_RESET)) {
+    set.loop(oCursorB, LP_CF_CMD2);
+    set.loop(oCursorT, LP_CF_CMD2);
+    set.loop(oCursorL, LP_CF_CMD2);
+    set.loop(oCursorR, LP_CF_CMD2);
+    
+    [ convert cursorpos into desired value
+    cursorX = cursorpos;
+    cursorX -= 7;
+    cursorX *= 24;
+    cursorX += 115;
+    cursorY = 24;
+  
+  }
+  
+  [ copy Inst
+  if (cursorpos == CP_COPY) {
+    set.loop(oCursorB, LP_CF_CMD3);
+    set.loop(oCursorT, LP_CF_CMD3);
+    set.loop(oCursorL, LP_CF_CMD3);
+    set.loop(oCursorR, LP_CF_CMD3);
+    cursorX = 5;
+    cursorY = 160;
+  }
+  
+  [ non-text boxes show all four cursor parts
+  if (cursorpos < CP_M_TREM) {
+    [ redraw all four cursor parts
+    position.v(oCursorB, cursorX, cursorY);
+    draw(oCursorB);
+    --cursorY;
+    position.v(oCursorL, cursorX, cursorY);
+    draw(oCursorL);
+    if (cursorpos < CP_INST) {
+      cursorY -= 10;
+    } else {
+      if (cursorpos == CP_INST) {
+      cursorY -= 40;
+      } else {
+        cursorY -= 8;
+      }
+    }
+    position.v(oCursorT, cursorX, cursorY);
+    draw(oCursorT);
+    if (cursorpos < CP_INST) {
+      cursorX += 19;
+      cursorY += 10;
+    } else {
+      if (cursorpos == CP_INST) {
+        cursorX += 43;
+        cursorY += 40;
+      } else {
+        if (cursorpos == CP_COPY) {
+          cursorX += 47;
+        } else {
+          if (cursorpos > CP_COPY) {
+            cursorX += 17;
+          } else {
+            cursorX += 21;
+          }
+        }
+        cursorY += 8;
+      }
+    }
+    position.v(oCursorR, cursorX, cursorY);
+    draw(oCursorR);
+
+  } else {
+    [ button cursor already hidden;
+    [ select text cursor based on location
+    if (cursorpos < CP_M_FREQ) {
+      [ text check mark
+      set.loop(oCursorB, LP_CF_TEXT2); [LP_CF_TEXT1);
+      cursorX = 64;
+    } else {
+      if (cursorpos > CP_FDBACK && cursorpos < CP_C_FREQ) {
+        [ text check mark
+        set.loop(oCursorB, LP_CF_TEXT2); [LP_CF_TEXT1);
+        cursorX = 64;
+      } else { 
+        if (cursorpos == CP_CONN) {
+          [ text check mark
+          set.loop(oCursorB, LP_CF_TEXT2); [LP_CF_TEXT1);
+          cursorX = 64;
+        } else {
+          [ text number
+          set.loop(oCursorB, LP_CF_TEXT2);
+          cursorX = 98;
+        }
+      }
+    }
+    
+    [ adjust X value if in right column
+    if (cursorpos > CP_FDBACK) {
+      cursorX += 50;
+    }
+
+    [ convert Y value correct row
+    cursorY = cursorpos;
+    cursorY -= 3;
+    
+    if (cursorpos > CP_FDBACK) {
+      cursorY -= 13;
+    }
+    if (cursorY > 17) {
+      ++cursorY;
+    }
+    if (cursorY > 9) {
+      ++cursorY;
+    }
+    cursorY *= 8;
+    --cursorY;
+    
+    [ redraw the bottom cursor only
+    position.v(oCursorB, cursorX, cursorY);
+    start.cycling(oCursorB);
+    draw(oCursorB);
+    
+    [ display info for current cursorpos
+    if (cursorpos == 34) { 
+      work1 = 159;
+    } else {
+      work1 = cursorpos;
+      work1 += 137;
+      if (work1 > 158) {
+        work1 -= 13;
+      }
+    }
+    tmpRow = 22;
+    tmpCol = 5;
+    set.text.attribute(-1, 0);
+    set.text.attribute(BLACK, LT_GRAY);
+    display.v(tmpRow, tmpCol, work1);   
+    set.text.attribute(0, -1);
+  }
+  
+} [ end if (cursorpos != newpos)
+
+[ check for button action (not text or check boxes)
+if (btnAction > 0) {
+  [ always stop sound when a new button is pushed
+  stop.sound();
+  
+  [ Done button
+  if (btnAction == B_DONE) {
+    [ restore game functions
+    reset(disableGameFunctions);
+    [ restore ego movement parameters
+    egoX = egoPrevX;
+    egoY = egoPrevY;
+    egoDir = egoPrevDir;
+  
+    [ restore instrument for channel 1 (it was used for 
+    [ testing in this room)
+    tmpVal = 0;
+    if (FMInst0 < 131) {
+      set.key(&tmpVal, &FMInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    } else {
+      [ assign appropriate custom instrument
+      [ copy inst msg
+      work1 = &sTemp;
+      block(SET.STRING.V, &work1, &FMInst0, 0); [ set.string.v(vSTR, vMSG);
+      [strip off name
+      work1 = 22;
+      block(STR.LEFT, &sTemp, &sTemp, &work1); [ strLeft(sINPUT, sRESULT, vLEN)
+      [ refresh the msg
+      block(SET.MSG, 1, &FMInst0, &sTemp); [ set.msg(BYVAR, MSGOLD, STRNEW)
+      [ set the instrument
+      set.key(&tmpVal, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+    }
+    
+    [ restore sound settings
+    if (!old4chan) {
+      reset(4channelsound);
+    }
+    if (!oldMIDI) {
+      reset(useMIDI);
+      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+    }
+
+    [ fade out 
+    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    
+    [ go back to previous room
+    new.room.v(previousRoom);
+  }
+  
+  [ Copy Inst button
+  if (btnAction == B_COPY) {
+    [ use 'drop up' feature developed in sound panel
+    dropmode = DROPDOWN;
+  }
+  
+  [ save and test buttons both need the instrument string re-built
+  if ((btnAction == B_SAVE || btnAction == B_TEST)) {
+    [ build new instrument string
+    [ byte 1
+    work1 = modFreqMult;
+    if (modTremolo) {
+      work1 += 128;
+    }
+    if (modVibrato) {
+      work1 += 64;
+    }
+    if (modSustain) {
+      work1 += 32;
+    }
+    if (modKyScale) {
+      work1 += 16;
+    }
+    block(BYTE2HEX, &strInst, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    [byte 2
+    work1 = carFreqMult;
+    if (carTremolo) {
+      work1 += 128;
+    }
+    if (carVibrato) {
+      work1 += 64;
+    }
+    if (carSustain) {
+      work1 += 32;
+    }
+    if (carKyScale) {
+      work1 += 16;
+    }
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 3
+    work1 = modKSL;
+    work1 *= 64;
+    work1 += modLevel;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 4
+    work1 = carKSL;
+    work1 *= 64;
+    work1 += carLevel;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 5
+    work1 = modAttack;
+    work1 *= 16;
+    work1 += modDecay;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 6
+    work1 = carAttack;
+    work1 *= 16;
+    work1 += carDecay;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 7
+    work1 = modSusLvl;
+    work1 *= 16;
+    work1 += modRelease;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 8
+    work1 = carSusLvl;
+    work1 *= 16;
+    work1 += carRelease;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 9
+    work1 = modWaveForm;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 10
+    work1 = carWaveForm;
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ byte 11
+    work1 = feedback;
+    work1 *= 2;
+    if (connect) {
+      ++work1;
+    }
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    [ strInst now has the current instrument string
+  } 
+    
+  [ Save button
+  if (btnAction == B_SAVE) {
+    [ change msg value to match
+    work3 = 131;
+    work3 += selinst;
+    tmpVal = &sTemp;
+    block(STR.COPY, &strInst, &sTemp, 0); [ str.copy(sFROM, sTO);
+    strByte = "Custom Inst %v221       ";
+    block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
+    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    
+    [ tell logic0 to apply it
+    set(saveCustomInst);
+    print.at("Custom Instrument %v221 updated", 3, 3, 70);
+    
+    [ reset dirty flag
+    reset(instDirty);
+    set.text.attribute(-1, 0);
+    set.text.attribute(LT_GRAY, WHITE);
+    display(3, 60, "Save");
+    display(3, 71, "Reset");
+    set.text.attribute(0, -1);
+    
+    [ force reload to reset edit status
+    set(loadinst);
+  }
+  
+  [ Test button
+  if (btnAction == B_TEST) {
+    block(SET.MSG, 0, &m142, &strInst); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    work1 = 0;
+    work2 = &m142;
+    set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+    sound(s.InstTest, soundDone);
+    set(sndTest);
+    [ update button test
+    set.text.attribute(-1, 0);
+    set.text.attribute(BLACK, WHITE);
+    display(18, 19, "Stop");
+    set.text.attribute(0, -1);
+  }
+  
+  [ Stop button
+  if (btnAction == B_STOP) {
+    stop.sound();
+  }
+  
+  [ Reset button
+  if (btnAction == B_RESET) {
+    [ force an update and reload
+    set(update);
+    set(loadinst);
+  }
+  [ always reset button action
+  btnAction = 0;
+}
+
+[ if sound is done, restore Test button text
+if (soundDone) {
+  reset(soundDone);
+  reset(sndTest);
+  set.text.attribute(-1, 0);
+  set.text.attribute(BLACK, WHITE);
+  display(18, 19, "Test");
+  set.text.attribute(0, -1);
+}
+
+[ check for key press in a text box or check box
+if (cursorpos > CP_TEST) {
+  if ((have.key() || toggleCheck)) {
+    [ space bar toggles check boxes
+    if ((lastChar == 32 || toggleCheck)) {
+      if (!inTextBox) {
+      [ push colors
+      set.text.attribute(-1, 0);
+      set.text.attribute(BLACK, LT_CYAN);
+        if (cursorpos < CP_M_FREQ) {
+          [ toggle modulator flag f230-f233
+          tmpVal = cursorpos;
+          tmpVal += 221;
+          toggle.v(tmpVal);
+          tmpRow = cursorpos;
+          tmpRow -= 3;
+          tmpCol = 32;
+          if (issetv(tmpVal)) {
+            tmpVal = 138;
+          } else { 
+            tmpVal = 139;
+          }
+          display.v(tmpRow, tmpCol, tmpVal);
+        }
+        if (cursorpos > CP_FDBACK && cursorpos < CP_C_FREQ) {
+          [ toggle carrier flag f243-f246
+          tmpVal = cursorpos;
+          tmpVal += 221;
+          toggle.v(tmpVal);
+          tmpRow = cursorpos;
+          tmpRow -= 16;
+          tmpCol = 57;
+          if (issetv(tmpVal)) {
+            tmpVal = 138;
+          } else { 
+            tmpVal = 139;
+          }
+          display.v(tmpRow, tmpCol, tmpVal);
+        }
+        if (cursorpos == CP_CONN) {
+          [ toggle connection
+          toggle(connect);
+          if (connect) {
+            display(20, 57, "X");
+          } else {
+            display(20, 57, " ");
+          }
+        }
+        [ enable save/reset
+        set(instDirty);
+        set.text.attribute(BLACK, WHITE);
+        display(3, 60, "Save");
+        display(3, 71, "Reset");
+        [ pop colors
+        set.text.attribute(0, -1);
+      }
+    }
+    
+    reset(typeText);
+    if (lastChar > 47 && lastChar < 58 && inTextBox) {
+      set(typeText);
+    }
+    [ backspace, numbers only for text boxes
+    if ((lastChar == 8 || typeText)) {
+      [ modulator variable v234-v242
+      [ carrier variable v247-v254
+      tmpVal = cursorpos;
+      tmpVal += 221;
+      work1 = *tmpVal;
+      [ if backspacing, divide by ten;
+      if (lastChar == 8) {
+        work1 /= 10;
+      } else {
+        [ largest possible value is 63 for level
+        [ if current value is > 6, result would always
+        [ be a max value
+        if (work1 > 6) {
+            work1 = 63;
+        } else {
+          [ multiply by ten, add new digit, then validate
+          work1 *= 10;
+          work1 += lastChar;
+          work1 -= 48;
+        }
+        [ default limit is 15
+        work2 = 15;
+        [ adjust limit for KS Level, shape, feeback, and overall level
+        if ((cursorpos == CP_M_KSL || cursorpos == CP_C_KSL || cursorpos == CP_M_SHAPE || cursorpos == CP_C_SHAPE)) {
+          work2 = 3;
+        }
+        if (cursorpos == CP_FDBACK) {
+          work2 = 7;
+        }
+        if ((cursorpos == CP_M_LVL || cursorpos == CP_C_LVL)) {
+          work2 = 63;
+        }
+        if (work1 > work2) {
+          work1 = work2;
+        }
+      }
+      [ assign new value
+      *tmpVal = work1;
+      [ now update display
+      tmpRow = cursorpos; 
+      tmpRow -= 2;
+      tmpCol = 46;
+      if (cursorpos > CP_C_KEYB) {
+        tmpRow -= 13;
+        tmpCol += 25;
+      }
+      if (cursorpos == CP_FDBACK) {
+        ++tmpRow;
+      }
+      set.text.attribute(-1, 0);
+      set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);
+      tmpVal = &m140;
+      if (work1 > 9) {
+        ++tmpVal;
+      }
+      display.v(tmpRow, tmpCol, tmpVal);
+      [ enable Save/Restore
+      set(instDirty);
+      set.text.attribute(BLACK, WHITE);
+      display(3, 60, "Save");
+      display(3, 71, "Reset");
+      set.text.attribute(0, -1);
+    }
+    reset(toggleCheck);
+  }
+}
+
+return();
+
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "02023000F1F58404000000Acoust. Grand Piano "
+#message 2 "82040500F1A50C35000002Bright Acous. Piano "
+#message 3 "42040805F1F401C4010002Elec. Grand Piano   "
+#message 4 "04420106A1F42143010100Honky-tonk Piano    "
+#message 5 "82442000F3F30303000100Electric Piano 1    "
+#message 6 "04042003A1A20102010100Electric Piano 2    "
+#message 7 "02C410087162E1E2030300Harpsichord         "
+#message 8 "08080707F7F70707030306Clavinet            "
+#message 9 "88842007F1F10303000000Celesta             "
+#message 10 "0C640707F7FE0723030100Glockenspiel        "
+#message 11 "02043F0100F50016000002Music Box           "
+#message 12 "C2C22000A1A12525000006Vibraphone          "
+#message 13 "8C040D0087F5812D030004Marimba             "
+#message 14 "02042100F1A71516020008Xylophone           "
+#message 15 "8C44200323438F1E000004Tubular Bells       "
+#message 16 "8202030388411C11000304Dulcimer            "
+#message 17 "8C440F0087A48718000106Drawbar Organ       "
+#message 18 "62C41F0016A5142502030EPercussive Organ    "
+#message 19 "84421C00FF812483000300Rock Organ          "
+#message 20 "0442070385A58722010006Church Organ        "
+#message 21 "04C4070387878734030306Reed Organ          "
+#message 22 "04821A0347428783000006Accordion           "
+#message 23 "04420F03FB410117000300Harmonica           "
+#message 24 "04C2000347438783010000Tango Accordion     "
+#message 25 "02821000F4F5F104010202Ac. Guitar (nylon)  "
+#message 26 "02020D00F3F44103000202Ac. Guitar (steel)  "
+#message 27 "84CC1100F26525D5020102Elec. Guitar (jazz) "
+#message 28 "02C21003F4F4F1F1000002El. Guitar (clean)  "
+#message 29 "C2042000F1F5F174000102El. Guitar (muted)  "
+#message 30 "08822F00F1F47474020308Overdriven Guitar   "
+#message 31 "0282030075A1A153000308Distortion Guitar   "
+#message 32 "82821002A3F3F3F3000004Guitar harmonics    "
+#message 33 "E2620000F1F2F1A1000000Acoustic Bass       "
+#message 34 "C2420000F973F193000200Elec. Bass (finger) "
+#message 35 "02C22000F1F3F1F3000200Elec. Bass (pick)   "
+#message 36 "2222050681F11111000000Fretless Bass       "
+#message 37 "42021700F5F30303010004Slap Bass 1         "
+#message 38 "02C2200051FF5112000200Slap Bass 2         "
+#message 39 "C8022000F4F104B6010108Synth Bass 1        "
+#message 40 "4C020305F5F5D305010104Synth Bass 2        "
+#message 41 "04420D038C530B5302030EViolin              "
+#message 42 "A2101700AE8F190501010EViola               "
+#message 43 "04440505F5F50515010104Cello               "
+#message 44 "08140505F5F50505010104Contrabass          "
+#message 45 "08440500F5F50517000100Tremolo Strings     "
+#message 46 "08440503F5F24C0503010CPizzicato Strings   "
+#message 47 "A4A41700F5F50303000006Orchestral Harp     "
+#message 48 "0202100013A31103000000Timpani             "
+#message 49 "02C2200051A50102000200String Ensemble 1   "
+#message 50 "0242090931510111000000String Ensemble 2   "
+#message 51 "02422008F1F20102000000Synth Strings 1     "
+#message 52 "82440808F1F10102010000Synth Strings 2     "
+#message 53 "84C4200811A10122000000Choir Aahs          "
+#message 54 "0844200811A10152000000Voice Oohs          "
+#message 55 "0244200811A101A2000000Synth Voice         "
+#message 56 "0282000055D40404000002Orchestra Hit       "
+#message 57 "04C21C0055FF0505000200Trumpet             "
+#message 58 "0242200345F10505000200Trombone            "
+#message 59 "0244000324280424020106Tuba                "
+#message 60 "C44211085A712424010200Muted Trumpet       "
+#message 61 "02480E0054542123020206French Horn         "
+#message 62 "02480E0A5451211402000ABrass Section       "
+#message 63 "02440006F6F40704010004Synth Brass 1       "
+#message 64 "0444100CF4FE030200000CSynth Brass 2       "
+#message 65 "02040800AAF51A0300020ASoprano Sax         "
+#message 66 "04021004F4F40404000004Alto Sax            "
+#message 67 "02020404F4F40404000004Tenor Sax           "
+#message 68 "02020400F4F80404000204Baritone Sax        "
+#message 69 "C2C21705FFFF0105010004Oboe                "
+#message 70 "0202040454A80411000104English Horn        "
+#message 71 "0204130BF1F11161020108Bassoon             "
+#message 72 "44481703F1311122000100Clarinet            "
+#message 73 "02423F0300F10005000204Piccolo             "
+#message 74 "44C4200355F1F105000002Flute               "
+#message 75 "02423F01FFFF0507000000Recorder            "
+#message 76 "42442103A1332113020000Pan Flute           "
+#message 77 "44C4200333F1F125000002Blown Bottle        "
+#message 78 "04020108F1F10101010100Shakuhachi          "
+#message 79 "02C43F0500A10054000000Whistle             "
+#message 80 "02040101F1220801020100Ocarina             "
+#message 81 "04020808F1F11101020102Lead 1 (square)     "
+#message 82 "0402080AE2F10104000000Lead 2 (sawtooth)   "
+#message 83 "02021703F1F30181000000Lead 3 (calliope)   "
+#message 84 "0202000381F38101000000Lead 4 (chiff)      "
+#message 85 "82021000F1F10301000300Lead 5 (charang)    "
+#message 86 "0442200011A101A2000000Lead 6 (voice)      "
+#message 87 "0202000081818181000000Lead 7 (fifths)     "
+#message 88 "0202080881F10101000000Lead 8 (bass+lead)  "
+#message 89 "0844200811A101A2000000Pad 1 (new age)     "
+#message 90 "0202200081818181000000Pad 2 (warm)        "
+#message 91 "0202080044818383000000Pad 3 (polysynth)   "
+#message 92 "0844200811A101A2000000Pad 4 (choir)       "
+#message 93 "02021000F18141C1000000Pad 5 (bowed)       "
+#message 94 "44A83200D2E2D2B2020202Pad 6 (metallic)    "
+#message 95 "E2041000F491F5F1020000Pad 7 (halo)        "
+#message 96 "82C410001181F2F2010002Pad 8 (sweep)       "
+#message 97 "02020010F1FF010100030EFX 1 (rain)         "
+#message 98 "0C680200FDF1C411000002FX 2 (soundtrack)   "
+#message 99 "C8441C0392825292020000FX 3 (crystal)      "
+#message 100 "C404000022518362010100FX 4 (atmosphere)   "
+#message 101 "4242200355F1F1F1010000FX 5 (brightness)   "
+#message 102 "C2C23000F1F1F1F1000000FX 6 (goblins)      "
+#message 103 "E2E83000F1F1F1F1000100FX 7 (echoes)       "
+#message 104 "2CA83000F1D1F1F6000306FX 8 (sci-fi)       "
+#message 105 "E2EC3000F172F174000000Sitar               "
+#message 106 "E4E83C007B553315030102Banjo               "
+#message 107 "F02C05002AF54F05010004Shamisen            "
+#message 108 "183C3100336C0378010004Koto                "
+#message 109 "C2C432047443159501020EKalimba             "
+#message 110 "0442100374310513000304Bag pipe            "
+#message 111 "7CF03B041A7C9E7C02020AFiddle              "
+#message 112 "38481B0545F59F0503010AShanai              "
+#message 113 "14140505F5F10504010004Tinkle Bell         "
+#message 114 "14140505F5F50505010104Agogo               "
+#message 115 "1414050345F54305010104Steel Drums         "
+#message 116 "14B00F057CF5DD05030104Woodblock           "
+#message 117 "0802110BF5F10401000000Taiko Drum          "
+#message 118 "02020003F1F10105000000Melodic Tom         "
+#message 119 "02023F0061F10106010000Synth Drum          "
+#message 120 "02020000F12F0107020204Reverse Cymbal      "
+#message 121 "02020E08F1F10103000008Guitar Fret Noise   "
+#message 122 "02020010F1F1010200000EBreath Noise        "
+#message 123 "02020010F1FF010100030ESeashore            "
+#message 124 "02083F00003F001A000000Bird Tweet          "
+#message 125 "02883F00F1550131000200Telephone Ring      "
+#message 126 "828200081111010100000EHelicopter          "
+#message 127 "828200081111010100000EApplause            "
+#message 128 "02020000FFF5150700000EGunshot             "
+#message 129 "22215909FFFF030F020000AGISB Default       "
+#message 130 "2F200000FFFF0F0F00030ESierra White Noise  "
+#message 131 "22242100C0C00C0C000000Sierra Tone Noise   "
+#message 132 "22215909FFFF030F020000Custom Inst 1       "
+#message 133 "22215909FFFF030F020000Custom Inst 2       "
+#message 134 "22215909FFFF030F020000Custom Inst 3       "
+#message 135 "22215909FFFF030F020000Custom Inst 4       "
+#message 136 "22215909FFFF030F020000Custom Inst 5       "
+#message 137 " Custom Instrument %v48 "
+#message 138 "X"
+#message 139 " "
+#message 140 "  %v46 "
+#message 141 " %v46 "
+#message 142 "0000000000000000000000"
+#message 143 "\x1E"
+#message 144 "\x1F"
+#message 145 "%s14"
+#message 146 "Amplitude modulation"
+#message 147 "Frequency modulation"
+#message 148 "If selected, the voice will sound until note off."
+#message 149 "If selected, higher notes are shortened."
+#message 150 "Frequency multiplier, from 0..15"
+#message 151 "If selected, higher notes sound softer."
+#message 152 "Volume. 63 is silence, 0 is loudest."
+#message 153 "Speed at which the note reaches full volume. from 0..15"
+#message 154 "Speed at which the volume drops to sustain level, from 0..15"
+#message 155 "Volume level while the note is on, from 0..15"
+#message 156 "Speed at which the note dies out when released, from 0..15"
+#message 157 "Shape of the waveform, from 0..3"
+#message 158 "Feedback strength, from 0..7"
+#message 159 "If selected, connects operators."

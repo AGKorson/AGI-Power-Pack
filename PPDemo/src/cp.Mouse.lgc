@@ -1,1 +1,1438 @@
-[ ********************************************************************[[ cp.Mouse[[ Emulated Rodent Input Device Option Control Console[ ERIDOCC[[ cursors:[  - normal[  - walk[  - look[  - use[  - talk[  - hourglass[[ left click to set a pixel; right click to clear a pixel[ should be able to do drag operations pretty easily[[[[ ********************************************************************#define oCursorB       o1  [ need four objects for cursor otherwise#define oCursorT       o2  [ text gets erased#define oCursorL       o3#define oCursorR       o4#define optCursor      o5#define gridCursor     o6[ loop values assigned to cursor objects#define LP_OPT      0 [ option button states#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons#define LP_CF_CMD   2 [    "     "    "  OK, cancel, etc. command buttons#define LP_CF_IDX   3 [    "     "    "  index buttons#define LP_CF_TXT   4 [    "     "    "  textboxes#define cursorpos    v220#define newpos       v221#define    CP_MOUSE   1#define    CP_KEYB    2#define    CP_IDX_DN  3#define    CP_IDX_UP  4#define    CP_PREVIEW 5#define    CP_SAVE    6#define    CP_RESTORE 7#define    CP_EXPORT  8#define    CP_EXIT    9#define    CP_GRID   10#define    CP_HOTX   11#define    CP_HOTY   12#define gridX        v222#define gridY        v223#define gridmode     v224#define tmpX         v225#define tmpY         v226#define cIndex       v227#define newIndex     v228#define cursorX      v229  [ location of selected button/grid item#define cursorY      v230#define btnAction    v231#define    B_IDX_UP   1#define    B_IDX_DN   2#define    B_PREVIEW  3#define    B_SAVE     4#define    B_RESTORE  5#define    B_EXPORT   6#define    B_EXIT     7#define    B_SETGRID  8#define    B_RSTGRID  9#define    B_HOTX    10#define    B_HOTY    11#define egoPrevX     v232#define egoPrevY     v233#define egoPrevDir   v234#define vView        v235#define vLoop        v236#define vCel         v237#define vPri         v238#define vMgn         v239#define byteval      v240#define bitctr       v241#define strctr       v242#define hotX         v243#define hotY         v244#define hotXraw      v245#define hotYraw      v246#define oldHotval    v247#define tmpRow       v248#define tmpCol       v249#define update       f220#define cursormode   f221#define refresh      f222 [ used to redraw text on screen when the screen is first displayed#define updategrid   f223#define fOnGrid      f224#define fChgCursor   f225#define tmpFlag      f226#define flipbyte     f227#define maskgrid     f228#define prevcursor   f229#define sByte         s10 [ contains byte currently being modified#define sHotspot      s11 [ used to help set/display cursor hotspot#define sTemp         s12 [ uses s12, s13, s14, s15#define sCursor       s16 [ uses s16, s17, s18, s19[ **************************************[ FIRST CYCLE ONLY[ **************************************if (newRoom) {  call(lgc.RoomInit);    [ this is the first cycle through this room  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    [ this view has all the art for cursors and buttons  load.view(vw.cp.MouseArt);  [ option button that determines input mode; mouse or keyboard  animate.obj(optCursor);  set.view(optCursor, vw.cp.MouseArt);  set.loop(optCursor, LP_OPT);  set.cel(optCursor, 0);  stop.cycling(optCursor);  position(optCursor, 8, 65);  draw(optCursor);    [ cursor is in four parts; used to highlight command buttons  [ and option buttons  animate.obj(oCursorB);  ignore.objs(oCursorB);  set.view(oCursorB, vw.cp.MouseArt);  set.loop(oCursorB, LP_CF_OPT);  set.cel(oCursorB, 0);  stop.cycling(oCursorB);  set.priority(oCursorB, 15);  position(oCursorB, 30, 65);    animate.obj(oCursorT);  ignore.objs(oCursorT);  set.view(oCursorT, vw.cp.MouseArt);  set.loop(oCursorT, LP_CF_OPT);  set.cel(oCursorT, 0);  stop.cycling(oCursorT);  set.priority(oCursorT, 15);  position(oCursorT, 30, 54);    animate.obj(oCursorL);  ignore.objs(oCursorL);  set.view(oCursorL, vw.cp.MouseArt);  set.loop(oCursorL, LP_CF_OPT);  set.cel(oCursorL, 1);  stop.cycling(oCursorL);  set.priority(oCursorL, 15);  position(oCursorL, 30, 64);    animate.obj(oCursorR);  ignore.objs(oCursorR);  set.view(oCursorR, vw.cp.MouseArt);  set.loop(oCursorR, LP_CF_OPT);  set.cel(oCursorR, 1);  stop.cycling(oCursorR);  set.priority(oCursorR, 15);  position(oCursorR, 47, 65);    [ default cursorpos is keyboard option button  cursorpos = 2;  newpos = 2;    [ grid cursor object  animate.obj(gridCursor);  set.priority(gridCursor, 15);  position(gridCursor, 57, 44);  set.view(gridCursor, vw.cp.MouseArt);  set.loop(gridCursor, 5);  work1 = 2;  cycle.time(gridCursor, work1);    [ no text input in this room  prevent.input();  lastChar = 0;  [ arrow keys control cursor here  egoDir = 0;    [ mouse is enabled, but not cursor  reset(cursormode);  btnAction = 0;    [ no ego in this room, but cache ego movement parameters   [ (to be restored when returning to the control room)  egoPrevX = egoX;  egoPrevY = egoY;  egoPrevDir = egoDir;    [ set speed to fst for best mouse performance  animationInterval = 1;  [ need to show the pic before text can be added  show.pic();    [ disable scripting for rest of activity in this room  set(noScript);    [ setup for add.to.pic  vView = vw.cp.MouseArt;  vLoop = 6;  vPri = 14;   vMgn = 4;}[ check for preview modeif (prevcursor) {  if ((controller(cLeftClick) || have.key())) {    reset(prevcursor);    if (cursormode) {      [ hide the mouse      disable.item(mouse);    } else {      [ force cusor to update      set(fChgCursor);    }  }  return();}[ if room is being drawn or redrawn, need to add textif ((newRoom || refresh)) {  [ push display colors  set.text.attribute(-1, 0);    [ add button text  set.text.attribute(BLACK, WHITE);  display(12, 1, "Preview");  display(14, 1, " Save  ");  display(16, 1, "Restore");  display(18, 1, "Export ");  display(20, 1, " Exit  ");  display(4, 22, "\x11");  display(4, 32, "\x10");    set.text.attribute(BLACK, LT_GRAY);  display(6, 2, "   Mode");  display(8, 4, "Ms");  display(8, 10, "Kb");    display(15, 9, "GRID");  display(16, 9, "X:");  display(17, 9, "Y:");    display(20, 11, "HOTSPOT");  display(20, 19, "X:");  display(20, 29, "Y:");    display(3, 24, "CURSOR:");  [ default cursor starts  display(4, 24, "default");  [ pop display colors  set.text.attribute(0, -1);    if (newroom) {    [ force cursor update    cIndex = -1;    newIndex = 0;    goto(checkindex);  } else {    reset(refresh);  }  return();}[ is cursor in text mode?if (cursormode) {  [ check for direction arrow keypress  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      if (cursorpos == CP_PREVIEW) {        newpos = CP_MOUSE;      }      if (cursorpos > CP_PREVIEW && cursorpos <= CP_EXIT) {        --newpos;      }      if (cursorpos == CP_GRID) {        if (gridY == 0) {          if (gridmode == 0) {            newpos = CP_IDX_DN;          } else {            newpos = CP_IDX_UP;          }        } else {          --gridY;          set(updateGrid);        }      }            if (cursorpos == CP_HOTX) {        newpos = CP_GRID;        gridmode = 0;        gridX = 13;        gridY = 15;        set(updategrid);      }            if (cursorpos == CP_HOTY) {        newpos = CP_GRID;        gridmode = 1;        gridX = 8;        gridY = 15;        set(updategrid);      }    }        [ cursor right    if (egoDir == RIGHT) {      if (cursorpos == CP_MOUSE) {        newpos = CP_KEYB;      }            if (cursorpos == CP_KEYB) {        newpos = CP_GRID;        gridmode = 0;        gridX = 0;        gridY = 3;         set(updateGrid);      }                   if (cursorpos == CP_IDX_DN) {        newpos = CP_IDX_UP;      }            if (cursorpos > CP_IDX_UP && cursorpos < CP_EXPORT) {        newpos = CP_GRID;        gridmode = 0;        gridX = 0;        if (cursorpos == CP_PREVIEW) {          gridY = 8;        }        if (cursorpos == CP_SAVE) {          gridY = 11;        }        if (cursorpos == CP_RESTORE) {          gridY = 14;        }        set(updateGrid);      }            if ((cursorpos == CP_EXIT || cursorpos == CP_EXPORT)) {        newpos = CP_HOTX;      }            if (cursorpos == CP_HOTX) {        newpos = CP_HOTY;      }             if (cursorpos == CP_GRID) {        if (gridmode == 0) {          ++gridX;          if (gridX == 16) {            gridmode = 1;            gridX = 0;          }          set(updategrid);        } else {          if (gridX < 15) {            ++gridX;            set(updategrid);          }        }      }    } [ right        [ cursor down    if (egoDir == DOWN) {      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {        newpos = CP_PREVIEW;      }            if (cursorpos == CP_IDX_DN) {        newpos = CP_GRID;        gridmode = 0;        gridX = 10;        gridY = 0;        set(updategrid);      }      if (cursorpos == CP_IDX_UP) {        newpos = CP_GRID;        gridmode = 1;        gridX = 6;        gridY = 0;        set(updategrid);      }            if (cursorpos > CP_IDX_UP && cursorpos < CP_EXIT) {        ++newpos;      }            if (cursorpos == CP_GRID) {        if (gridY == 15) {          if (gridmode) {            newpos = CP_HOTY;          } else {            newpos = CP_HOTX;          }        }        if (gridY < 15) {          ++gridY;          set(updategrid);        }      }    } [ down        [ cursor left    if (egoDir == LEFT) {      if (cursorpos == CP_KEYB) {        newpos = CP_MOUSE;      }            if (cursorpos == CP_IDX_UP) {        newpos = CP_IDX_DN;      }            if (cursorpos == CP_HOTX) {        newpos = CP_EXIT;      }            if (cursorpos == CP_HOTY) {        newpos = CP_HOTX;      }            if (cursorpos == CP_GRID) {        if (gridmode == 0) {          if (gridX > 0) {            --gridX;            set(updategrid);          } else {            if (gridY < 6) {              newpos = CP_KEYB;            } else {              if (gridY < 10) {                newpos = CP_PREVIEW;              } else {                if (gridY < 13) {                  newpos = CP_SAVE;                } else {                  newpos = CP_RESTORE;                }              }            }          }        } else {          if (gridX > 0) {            --gridX;          } else {            gridmode = 0;            gridX = 15;          }          set(updategrid);        }      } [ grid    } [ left        [ always reset dir so another keypress can be detected    egoDir = 0;        [ check for new cursor position    if (cursorpos != newpos) {      [ if moving FROM grid to some other button      if (cursorpos == CP_GRID && newpos != CP_GRID) {        [ remove coordinates display        set.text.attribute(-1, 0);        set.text.attribute(BLACK, LT_GRAY);        display(16, 12, "  ");        display(17, 12, "  ");        set.text.attribute(0, -1);      }            [ update the position      cursorpos = newpos;      [ depending on where cursor is, set the position and size/shape      [ option buttons      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {        set.loop(oCursorB, LP_CF_OPT);        set.loop(oCursorT, LP_CF_OPT);        set.loop(oCursorL, LP_CF_OPT);        set.loop(oCursorR, LP_CF_OPT);                cursorY = 65;        if (cursorpos == CP_MOUSE) {          cursorX = 7;        } else {          cursorX = 31;        }      }            [ index up/down buttons      if ((cursorpos == CP_IDX_DN || cursorpos == CP_IDX_UP)) {        set.loop(oCursorB, LP_CF_IDX);        set.loop(oCursorT, LP_CF_IDX);        set.loop(oCursorL, LP_CF_IDX);        set.loop(oCursorR, LP_CF_IDX);        cursorY = 32;        cursorX = cursorpos;        cursorX -= 3;        cursorX *= 40;        cursorX += 87;      }            [ Preview, Save, Restore, Exit, Cancel buttons      if (cursorpos >= CP_PREVIEW && cursorpos <= CP_EXIT) {        set.loop(oCursorB, LP_CF_CMD);        set.loop(oCursorT, LP_CF_CMD);        set.loop(oCursorL, LP_CF_CMD);        set.loop(oCursorR, LP_CF_CMD);                cursorX = 3;        [ convert cursorpos into desired y value        cursorY = cursorpos;        cursorY -= 5;        cursorY *= 16;        cursorY += 96;      }            [ hotspot text boxes      if ((cursorpos == CP_HOTX || cursorpos == CP_HOTY)) {        set.loop(oCursorB, LP_CF_TXT);        set.loop(oCursorT, LP_CF_TXT);        set.loop(oCursorL, LP_CF_TXT);        set.loop(oCursorR, LP_CF_TXT);        cursorY = 161;        cursorX = cursorpos;        cursorX -= 11;        cursorX *= 40;        cursorX += 86;      }            [ to move cursor, erase it first, otherwise, it will      [ clear any text that is present anywhere between the      [ new position and the old position      erase(oCursorB);      erase(oCursorL);      erase(oCursorT);      erase(oCursorR);            [ if not on grid, draw the cursor frame      if (cursorpos != CP_GRID) {        [ hide grid cursor        erase(gridCursor);        [ reposition the four-part cursor frame and show it        position.v(oCursorB, cursorX, cursorY);        draw(oCursorB);        --cursorY;        [ save ypos to restore it later        work1 = cursorY;        position.v(oCursorL, cursorX, cursorY);        draw(oCursorL);        [ adjust for height (depends on button type)        if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {          cursorY -= 10;        }        if (cursorpos > CP_KEYB && cursorpos < CP_GRID) {          cursorY -= 8;        }         if ((cursorpos == CP_HOTX || cursorpos == CP_HOTY)) {            cursorY -= 10;        }        position.v(oCursorT, cursorX, cursorY);        draw(oCursorT);        [ reset y        cursorY = work1;        [ adjust for width        if (cursorpos < CP_IDX_DN) {          cursorX += 17;        }         if ((cursorpos == CP_IDX_DN || cursorpos == CP_IDX_UP)) {          cursorX += 5;        }        if (cursorpos > CP_IDX_UP && cursorpos < CP_GRID) {          cursorX += 29;        }        if (cursorpos > CP_GRID) {          cursorX += 19;        }        position.v(oCursorR, cursorX, cursorY);        draw(oCursorR);      } else {        [ draw the grid cursor        draw(gridCursor);      }    }        [ did grid cursor move?    if (updategrid) {      reset(updategrid);      tmpX = gridX;      tmpX *= 3;      tmpX += 57;      if (gridmode == 1) {        tmpX += 53;      }      tmpY = gridY;      tmpY *= 6;      tmpY += 44;      reposition.to.v(gridcursor, tmpX, tmpY);            [ update coordinate display      set.text.attribute(-1, 0);      set.text.attribute(BLACK, LT_GRAY);      if (gridX < 10) {        display(16, 12, " %v222");      } else {        display(16, 12, "%v222");      }      if (gridY < 10) {        display(17, 12, " %v223");      } else {        display(17, 12, "%v223");      }      set.text.attribute(0, -1);    }  }    [ check for selection (space/enter for button, space/bkspc for grid  if (have.key()) {    [ space and grid    if (lastChar == 32 && cursorpos == CP_GRID) {      btnAction = B_SETGRID;    }    [ bkspc and grid    if (lastChar == 8 && cursorpos == CP_GRID) {      btnAction = B_RSTGRID;    }        [ space/enter    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {      [      if (cursorpos  == CP_MOUSE) {        [ switch to mouse control        reset(cursormode);        enable.item(mouse);        erase(optCursor);        position(optCursor, 8, 65);        draw(optCursor);        [ erase the cursor objects        erase(oCursorB);        erase(oCursorT);        erase(oCursorL);        erase(oCursorR);      }            if (cursorpos  >= CP_PREVIEW && cursorpos <= CP_EXIT) {        btnAction = cursorpos;        btnAction -= 2;      }      if (cursorpos == CP_IDX_DN && cIndex > 0) {        btnAction = B_IDX_DN;      }      if (cursorpos == CP_IDX_UP && cIndex < 5) {        btnAction = B_IDX_UP;      }            if (cursorpos == CP_HOTX) {        btnAction = B_HOTX;      }      if (cursorpos == CP_HOTY) {        btnAction = B_HOTY;      }            if (cursorpos == CP_GRID) {        btnAction = B_SETGRID;      }    }  }} else {  [ mouse is active    [ first determine if cursor is over the grid  reset(tmpFlag);  [ (adjust yval for picture offset [8])  if (mouseX > 56 && mouseX < 105 && mouseY > 46 && mouseY < 143) {    set(tmpFlag);  }  if (mouseX > 109 && mouseX < 158 && mouseY > 46 && mouseY < 143) {    set(tmpFlag);  }  [ tmpFlag is set when cursor is over the grid  if (tmpFlag) {    [ if the ongrid flag is clear (last cycle was OFF grid)      if (!fOnGrid) {      [ cursor needs to be changed      set(fChgCursor);      set(fOnGrid);    }  }  else {    [ if ongrid flag is set (last cycle was ON grid)    if (fOnGrid) {      [ cursor needs to be changed)      set(fChgCursor);      reset(fOnGrid);    }  }    [ if cursor needs to be changed (going FROM or TO grid)  if (fChgCursor) {    reset(fChgCursor);    if (fOnGrid) {      sTemp = "%m1";    }    else {      sTemp = "%g40";      [ also remove coordinates display      set.text.attribute(-1, 0);      set.text.attribute(BLACK, LT_GRAY);      display(16, 12, "  ");      display(17, 12, "  ");      set.text.attribute(0, -1);    }    [ change the cursor    set.key(0, &m2, mouse); [ load.cursor(BYVAR, mCURSOR);  }    [ if on grid, determine gridx/gridy/gridmode  if (fOnGrid) {    tmpY = mousey;    tmpY -= 47;    tmpY /= 6;    [ x is a bit more complicated    tmpX = mousex;    if (tmpX > 109) {      [ on mask grid      gridmode = 1;      [ adjust x      tmpX -= 53;    } else {      gridmode = 0;    }    tmpX -= 57;    tmpX /= 3;    [ if different from current x/y    if((tmpX != gridX || tmpY != gridY)) {      [ update coordinate display      set.text.attribute(-1, 0);      set.text.attribute(BLACK, LT_GRAY);      if (tmpX < 10) {        display(16, 12, " %v225");      } else {        display(16, 12, "%v225");      }      if (tmpY < 10) {        display(17, 12, " %v226");      } else {        display(17, 12, "%v226");      }      set.text.attribute(0, -1);    }    gridX = tmpX;    gridY = tmpY;  } else {    [ clear grid values    gridX = -1;    gridY = -1;  }      [ check for mouse clicks     if (fOnGrid) {    [ right-click on grid    if (controller(cRightClick)) {      [ if on grid, reset the pixel      btnAction = B_RSTGRID;    }    [ left-click on grid    if (controller(cLeftClick)) {      [ if on grid, set the pixel      btnAction = B_SETGRID;    }    } else {    [ not on grid - check other buttons        [dbl-click on hotspot text    if (controller(cLeftDblClick)) {      [ hotX      if (mouseX > 86 && mouseX < 105 && mouseY > 158 && mouseY < 169) {        btnAction = B_HOTX;      }      [ hotY      if (mouseX > 126 && mouseX < 145 && mouseY > 158 && mouseY < 169) {        btnAction = B_HOTY;      }    }    [ left click on all other buttons    if (controller(cLeftClick)) {      [ over cursor type keyboard option  54-65      if (mouseX > 30 && mouseX < 38 && mouseY > 63 && mouseY < 72) {        [ switch to keyboard cursor        set(cursormode);        disable.item(mouse);        erase(optCursor);        position(optCursor, 32, 65);        draw(optCursor);        [ show the cursor object        cursorpos = 2;        newpos = 2;        position(oCursorB, 31, 65);        draw(oCursorB);        position(oCursorT, 31, 54);        draw(oCursorT);        position(oCursorL, 31, 64);        draw(oCursorL);        position(oCursorR, 48, 64);        draw(oCursorR);      }      [ over PREVIEW button [2, 102 - 33, 129] (need to add 8 to y due to pic offset)      if (mouseX > 2 && mouseX < 33 && mouseY > 94 && mouseY < 105) {        btnAction = B_PREVIEW;      }              [ over SAVE button [2, 102 - 33, 113] (need to add 8 to y due to pic offset)      if (mouseX > 2 && mouseX < 33 && mouseY > 110 && mouseY < 121) {        btnAction = B_SAVE;      }              [ over RESTORE button [2, 118 - 33, 129] (need to add 8 to y due to pic offset)      if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 137) {        btnAction = B_RESTORE;      }              [ over EXPORT button [2, 134 - 33, 145] (need to add 8 to y due to pic offset)      if (mouseX > 2 && mouseX < 33 && mouseY > 142 && mouseY < 153) {        btnAction = B_EXPORT;      }            [ over EXIT button [2, 150 - 33, 161] (need to add 8 to y due to pic offset)      if (mouseX > 2 && mouseX < 33 && mouseY > 158 && mouseY < 169) {        btnAction = B_EXIT;      }          [ over IDX_DN button [86, 22 - 93, 33] (need to add 8 to y due to pic offset)      if (mouseX > 86 && mouseX < 93 && mouseY > 30 && mouseY < 41) {        if (cIndex > 0) {          btnAction = B_IDX_DN;        }      }            [ over IDX_DN button [126, 22 - 133, 33] (need to add 8 to y due to pic offset)      if (mouseX > 126 && mouseX < 133 && mouseY > 30 && mouseY < 41) {        if (cIndex < 5) {          btnAction = B_IDX_UP;        }      }    }  }}[ check for button actions:if (btnAction == 0) {  return();}[ set/reset a grid pixelif ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {  [ convert grid x/y into byte offset/bit offset  strctr = gridY;  strctr *= 4;  if (gridmode) {    strctr += 64;  }  if (gridX > 7) {    bitctr = 15;  } else {    strctr += 2;    bitctr = 7;  }  bitctr -= gridX;  work1 = 126;  work1 -= strctr;  [ copy right portion of updated cursor to sTemp  block(STR.RIGHT, &sCursor, &sTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN)  [ add offsets for hotspot(4) and the target byte(2)  strctr += 6;  [ strip off the right portion  block(STR.LEFT, &sCursor, &sCursor, &strctr); [ str.left(sINPUT, sRESULT, vLEN)  [ save the byte of interest to a temp string  work1 = 2;  block(STR.RIGHT, &sCursor, &sByte, &work1); [ strRight(sINPUT, sRESULT, vLEN)  [ convert the hex string to a number  block(HEX2BYTE, &sByte, &work2, 0); [ hex2byte(sINPUT, vRESULT)  [ then remove that byte  strctr -= 2;  block(STR.LEFT, &sCursor, &sCursor, &strctr); [ str.left(sINPUT, sRESULT, vLEN)    [ setup the bitmask  work1 = 1;  block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)  [ convert gridx/y to screen coordinates for add.to.pic  tmpX = gridX;  tmpX *= 3;  tmpX += 57;  if (gridmode) {    tmpX += 53;  }  tmpY = gridY;  tmpY *= 6;  tmpY += 44;    [ set or clear the pixel as needed  if (btnAction == B_SETGRID) {    [ set the desired bit in designated byte    [ combine it with current byte    block(BIT.OR, 1, &work2, &work1); [ bit.OR(BYVAL, VAR, AMOUNT)    [ set cel to add new block to the grid    vCel = 0;  } else {    [ clear the desired bit in the designated byte    [ invert the mask    block(BIT.NOT, 0, &work1, 0); [ bit.not(VAR);    [ combine it with current byte    block(BIT.AND, 1, &work2, &work1); [ bit.and(BYVAL, VAR, AMOUNT)    [ set cel to add new block to the grid    vCel = 2;  }  [ if on hotspot and in first gridbox, show it   if (gridX == hotXraw && gridY == hotYraw && !gridmode) {   ++vCel;  }  [ rebuild the string  block(BYTE2HEX, &sByte, &work2, 0); [ byte2hex(sRESULT, vINPUT)  block(STR.CONCAT, &sCursor, &sByte, 0); [ sINPUT, sADD)  block(STR.CONCAT, &sCursor, &sTemp, 0); [ sINPUT, sADD)    [ update grid  add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);}if (btnAction == B_EXIT) {  [ restore ego movement parameters  egoX = egoPrevX;  egoY = egoPrevY;  egoDir = egoPrevDir;    [ restore speed  animationInterval = NORMAL_SPEED;    [ restore scripting  reset(noScript);    [ fade out   block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);    [ go back to previous room  new.room.v(previousRoom); }if (btnAction == B_PREVIEW) {  [ change current cursor, wait for any mouse press  set(prevcursor);  sTemp = "%s16";  set.key(0, &m2, mouse); [ load.cursor(BYVAR, mCURSOR);  [ if in text mode, temporarily enable the mouse  if (cursormode) {    enable.item(mouse);  }  [ make sure key buffer is clear  lastChar = 0;}if (btnAction == B_SAVE) {  [ to modify (save) the cursor, code must be run  [ from its owning logic (logic 0)  set(saveCursor);}if (btnAction == B_RESTORE) {  [ load default cursor, overwriting any changes made  [ (also must be run from logic 0)  set(restoreCursor);}if (btnAction == B_EXPORT) {  work1 = cIndex;  work1 += 14;  sTemp = "%m";  s13 = "%v46";  block(STR.FORMAT, &s13, &s13, 0); [ str.format(sINPUT, sRESULT)  block(STR.CONCAT, &sTemp, &s13, 0); [ sINPUT, sADD)  block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)  block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)  [ TODO: use file function to save the string  [ make a log entry:  log("%s12 cursor hex string: %s16");  [ provide feedback  print.at("Cursor exported to logfile", 14, 19, 16);}if (btnAction == B_IDX_DN) {  --newIndex;  tmpX = 4;  tmpY = 24;  work1 = newIndex;  work1 += 14;  set.text.attribute(BLACK, LT_GRAY);  display.v(tmpX, tmpY, work1);  [ pop display colors  set.text.attribute(0, -1);}if (btnAction == B_IDX_UP) {  ++newIndex;  tmpX = 4;  tmpY = 24;  work1 = newIndex;  work1 += 14;  set.text.attribute(BLACK, LT_GRAY);  display.v(tmpX, tmpY, work1);  [ pop display colors  set.text.attribute(0, -1);}[ textboxesif ((btnAction == B_HOTX || btnAction == B_HOTY)) {  [ invert the current value to indicate it is selected  set.text.attribute(-1, 0);  set.text.attribute(WHITE, BLACK);  tmpRow = 20;  tmpCol = 22;    [ get temp copy of hotspot value being edited  if (btnAction == B_HOTX) {    byteval = hotXraw;  } else {    byteval = hotYraw;    tmpCol += 10;  }  oldHotval = byteval;    sByte = " ";  sHotspot = " %v240";    block(STR.FORMAT, &sHotspot, &sHotspot, 0); [ str.format(sINPUT, sRESULT)  block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)  work2 = work1;  :checkLen  if (work1 < 4) {    block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)    block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)    goto(checkLen);  }  work1 = &m24;  display.v(tmpRow, tmpCol, work1);  [ adjust current column to length of text  tmpCol += work2;    [ allow user to press number keys, bkspc/enter/esc/minus;  [ up to three digits:getChar  lastChar = 0;  if (!have.key()) {    goto(getChar);  }  [ check for number press  if (lastChar > 47 && lastChar < 58) {    [ process a number press    [ current val *10, add newval    [ update display    if (byteval < 2) {      if ((byteval > 0 || lastChar > 0)) {        block(BYTE2CHAR, &sByte, &lastChar, 0); [ byte2char(sRESULT, vCHAR)        if (byteval == 0 && work2 > 0) {          --tmpCol;          --work2;        }        work1 = &m49;        display.v(tmpRow, tmpCol, work1);        ++tmpCol;        ++work2;        byteval *= 10;        byteval += lastChar;        byteval -= 48;      } else {        [value=0 and char=0; ignore unless line is completely blank?        if (work2 == 0) {          block(BYTE2CHAR, &sByte, &lastChar, 0); [ byte2char(sRESULT, vCHAR)          work1 = &m49;          display.v(tmpRow, tmpCol, work1);          ++tmpCol;          ++work2;        }      }    }    goto(getChar);      } else {    [ check for backspace, escape, enter    if ((lastChar == 8 || lastChar == 13 || lastChar == 27)) {      if (lastChar == 8) {        [ backspace        if (work2 > 0) {          if (byteval > 0) {            byteval /= 10;          }          --work2;          --tmpCol;          work1 = &m43;          display.v(tmpRow, tmpCol, work1);        }        goto(getChar);      }        if (lastChar == 13) {        [ limit value to 0 to +15         if (byteval > 15) {          byteval = 15;        }        [ rebuild hotspot value        sByte = " ";        sHotspot = " %v240";        block(STR.FORMAT, &sHotspot, &sHotspot, 0); [ str.format(sINPUT, sRESULT)        block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)        :checkLen2        if (work1 < 4) {          block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)          block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)          goto(checkLen2);        }                [ if value hasn't changed, do nothing        if (byteval != oldHotval) {                  [ unmark old:          [ convert hot x/y into byte offset/bit offset          strctr = hotYraw;          strctr *= 4;          if (hotXraw > 7) {            bitctr = 15;          } else {            strctr += 2;            bitctr = 7;          }          bitctr -= hotXraw;          strctr += 4;          work1 = 2;          [ copy cursor to sTemp          block(STR.COPY, &sCursor, &sTemp, 0); [ str.copy(sINPUT, sRESULT)          [ get byte of interest          block(STR.MID, &sTemp, &strctr, &work1); [ str.mid(sINPUT, vPOS, vLEN)          [ convert the hex string to a number          block(HEX2BYTE, &sTemp, &work3, 0); [ hex2byte(sINPUT, vRESULT)            [ setup the bitmask          work1 = 1;          block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)          [ apply bitmask to byte of interest          block(BIT.AND, 1, &work3, &work1); [ bit.and(BYVAL, VAR, AMOUNT)                    [ convert hotx/y to screen coordinates for add.to.pic          tmpX = hotXraw;          tmpX *= 3;          tmpX += 57;          tmpY = hotYraw;          tmpY *= 6;          tmpY += 44;                    [ set or clear the pixel as needed          if (work3) {            [ set the desired bit in designated byte            vCel = 0;          } else {            vCel = 2;          }                    [ update grid          add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);                    [ update the changed value          if (btnAction == B_HOTX) {            hotXraw = byteval;          } else {              hotYraw = byteval;          }          [ rebuild the cursor string          block(BYTE2HEX, &sByte, &hotXraw, 0); [ byte2hex(sRESULT, vINPUT)          block(BYTE2HEX, &sTemp, &hotYraw, 0); [ byte2hex(sRESULT, vINPUT)          block(STR.CONCAT, &sByte, &sTemp, 0); [ sINPUT, sADD)          work1 = 128;          block(STR.RIGHT, &sCursor, &sTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN)          block(STR.COPY, &sByte, &sCursor, 0); [ str.copy(sINPUT, sRESULT)          block(STR.CONCAT, &sCursor, &sTemp, 0); [ sINPUT, sADD)          [ add mark for new hotspot:          [ convert hot x/y into byte offset/bit offset          strctr = hotYraw;          strctr *= 4;          if (hotXraw > 7) {            bitctr = 15;          } else {            strctr += 2;            bitctr = 7;          }          bitctr -= hotXraw;          strctr += 4;          work1 = 2;          [ copy cursor to sTemp          block(STR.COPY, &sCursor, &sTemp, 0); [ str.copy(sINPUT, sRESULT)          [ get byte of interest          block(STR.MID, &sTemp, &strctr, &work1); [ str.mid(sINPUT, vPOS, vLEN)          [ convert the hex string to a number          block(HEX2BYTE, &sTemp, &work3, 0); [ hex2byte(sINPUT, vRESULT)            [ setup the bitmask          work1 = 1;          block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)          [ apply bitmask to byte of interest          block(BIT.AND, 1, &work3, &work1); [ bit.and(BYVAL, VAR, AMOUNT)                    [ convert hotx/y to screen coordinates for add.to.pic          tmpX = hotXraw;          tmpX *= 3;          tmpX += 57;          tmpY = hotYraw;          tmpY *= 6;          tmpY += 44;                    [ set or clear the pixel as needed          if (work3) {            [ set the desired bit in designated byte            vCel = 1;          } else {            vCel = 3;          }                    [ update grid          add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);        }      }            if (lastChar == 27) {        [ if esc pressed, exit without changing      }          } else {      [ ignore all others      goto(getChar);    }  }    [ always restore hs textbox  set.text.attribute(BLACK, WHITE);  work1 = &m24;  tmpCol -= work2;  display.v(tmpRow, tmpCol, work1);  set.text.attribute(0, -1);  }[ always reset button actionbtnAction = 0;lastChar = 0;:checkindex[ if index has changed, draw a new cursorif (newIndex != cIndex) {  cIndex = newIndex;  cIndex += 40;  sCursor = "%g";  s17 = "%v227";  block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)  block(STR.CONCAT, &sCursor, &s17, 0); [ sINPUT, sADD)  block(STR.FORMAT, &sCursor, &sCursor, 0); [ str.format(sINPUT, sRESULT)    [ extract out hotspot coordinates  work1 = 4;  block(STR.LEFT, &sCursor, &sHotspot, &work1); [ str.left(sINPUT, sRESULT, vLEN)  block(HEX2BYTE, &sHotspot, &hotX, 0); [ hex2byte(sINPUT, vRESULT)  work1 = 2;  block(STR.RIGHT, &sHotspot, &sHotspot, &work1); [ strRight(sINPUT, sRESULT, vLEN)  block(HEX2BYTE, &sHotspot, &hotY, 0); [ hex2byte(sINPUT, vRESULT)  [ update hotspot coordinate display  set.text.attribute(-1, 0);  set.text.attribute(BLACK, WHITE);  if (hotX > 15) {    [ limit to 15    hotX = 15;  }   hotXraw = hotX;  display(20, 22, " %v243 ");    if (hotY > 15) {    [ limit to 15    hotY = 15;  }  hotYraw = hotY;  display(20, 32, " %v244 ");  set.text.attribute(0, -1);  [ convert to grid offsets  [ to be able to compare when adding cels  hotX *= 3;  hotX += 57;  hotY *= 6;  hotY += 44;    [ step through one bit at a time to determine if pixels are set or clear  strctr = 128;  tmpY = 44;  reset(maskgrid);:nextbyte  block(STR.RIGHT, &sCursor, &sTemp, &strctr); [ strRight(sINPUT, sRESULT, vLEN)  [ get the next byte value  block(HEX2BYTE, &sTemp, &byteval, 0); [ hex2byte(sINPUT, vRESULT)    work1 = strctr;  work1 /= 4;  work1 *= 4;  if (work1 == strctr) {    set(flipbyte);  } else {    reset(flipbyte);  }    [ adjust column based on flipbyte value and mask being drawn  if (maskgrid) {    tmpX = 110;  } else {    tmpX = 57;  }  if (flipbyte) {    tmpX += 24;  }    [ step through all eight bits  bitctr = 128;:nextbit  work1 = byteval;  block(BIT.AND, 1, &work1, &bitctr); [ bit.and(BYVAL, VAR, AMOUNT)    if (work1) {    [ draw a block    vCel = 0;  } else {    [ clear the block    vCel = 2;  }  if (tmpX == hotX && tmpY == hotY) {    ++vCel;  }  add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);    bitctr /= 2;  if (bitctr) {    tmpX += 3;    goto(nextbit);  }    [ load next byte  strctr -= 2;  if (strctr > 0) {    if (!flipbyte) {      [ set correct row      tmpY += 6;      if (tmpY == 140) {        tmpY = 44;        set(maskgrid);      }    }    goto(nextbyte);  }  cIndex = newIndex;    if (newroom) {    [ remember to fade in to be able to see the screen again    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);  }}return();[ **************************************[ DECLARED MESSAGES[ **************************************#message 1 "07077FFE3FFC3FFC3FFC3FFC3FFC01808001800101803FFC3FFC3FFC3FFC3FFC7FFE00008001800180018001800180017E7E7E7E8001800180018001800180010000"#message 2 "%s12"#message 3 "Preview"#message 4 " Save  "#message 5 "Restore"#message 6 "Export "#message 7 " Exit  "#message 8 "\x11"#message 9 "\x10"#message 10 "   Mode"#message 11 "Ms"#message 12 "Kb"#message 13 "CURSOR:"#message 14 "default"#message 15 " walk  "#message 16 " look  "#message 17 " talk  "#message 18 "  use  "#message 19 " wait  "#message 20 "%m1"#message 21 "%g40"#message 22 "%g"#message 23 "%v227"#message 24 "%s11"#message 25 "GRID"#message 26 "X:"#message 27 "Y:"#message 28 "HOTSPOT"#message 29 "  "#message 30 " %v222"#message 31 "%v222"#message 32 " %v223"#message 33 "%v223"#message 34 " %v225"#message 35 "%v225"#message 36 " %v226"#message 37 "%v226"#message 38 "%s16"#message 39 "%m"#message 40 "%v46"#message 41 "%s12 cursor hex string: %s16"#message 42 "Cursor exported to logfile"#message 43 " "#message 44 "-%v240"#message 45 " %v240"#message 46 "-"#message 47 "%v243"#message 48 "%v244"#message 49 "%s10"
+[ ********************************************************************
+[
+[ cp.Mouse
+[
+[ Emulated Rodent Input Device Option Control Console
+[ ERIDOCC
+[
+[ cursors:
+[  - normal
+[  - walk
+[  - look
+[  - use
+[  - talk
+[  - hourglass
+[
+[ left click to set a pixel; right click to clear a pixel
+[ should be able to do drag operations pretty easily
+[
+[
+[
+[ ********************************************************************
+
+#define oCursorB       o1  [ need four objects for cursor otherwise
+#define oCursorT       o2  [ text gets erased
+#define oCursorL       o3
+#define oCursorR       o4
+#define optCursor      o5
+#define gridCursor     o6
+
+[ loop values assigned to cursor objects
+#define LP_OPT      0 [ option button states
+#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_CMD   2 [    "     "    "  OK, cancel, etc. command buttons
+#define LP_CF_IDX   3 [    "     "    "  index buttons
+#define LP_CF_TXT   4 [    "     "    "  textboxes
+
+#define cursorpos    v220
+#define newpos       v221
+#define    CP_MOUSE   1
+#define    CP_KEYB    2
+#define    CP_IDX_DN  3
+#define    CP_IDX_UP  4
+#define    CP_PREVIEW 5
+#define    CP_SAVE    6
+#define    CP_RESTORE 7
+#define    CP_EXPORT  8
+#define    CP_EXIT    9
+#define    CP_GRID   10
+#define    CP_HOTX   11
+#define    CP_HOTY   12
+#define gridX        v222
+#define gridY        v223
+#define gridmode     v224
+#define tmpX         v225
+#define tmpY         v226
+#define cIndex       v227
+#define newIndex     v228
+#define cursorX      v229  [ location of selected button/grid item
+#define cursorY      v230
+#define btnAction    v231
+#define    B_IDX_UP   1
+#define    B_IDX_DN   2
+#define    B_PREVIEW  3
+#define    B_SAVE     4
+#define    B_RESTORE  5
+#define    B_EXPORT   6
+#define    B_EXIT     7
+#define    B_SETGRID  8
+#define    B_RSTGRID  9
+#define    B_HOTX    10
+#define    B_HOTY    11
+#define egoPrevX     v232
+#define egoPrevY     v233
+#define egoPrevDir   v234
+#define vView        v235
+#define vLoop        v236
+#define vCel         v237
+#define vPri         v238
+#define vMgn         v239
+#define byteval      v240
+#define bitctr       v241
+#define strctr       v242
+#define hotX         v243
+#define hotY         v244
+#define hotXraw      v245
+#define hotYraw      v246
+#define oldHotval    v247
+#define tmpRow       v248
+#define tmpCol       v249
+
+#define update       f220
+#define cursormode   f221
+#define refresh      f222 [ used to redraw text on screen when the screen is first displayed
+#define updategrid   f223
+#define fOnGrid      f224
+#define fChgCursor   f225
+#define tmpFlag      f226
+#define flipbyte     f227
+#define maskgrid     f228
+#define prevcursor   f229
+
+#define sByte         s10 [ contains byte currently being modified
+#define sHotspot      s11 [ used to help set/display cursor hotspot
+#define sTemp         s12 [ uses s12, s13, s14, s15
+#define sCursor       s16 [ uses s16, s17, s18, s19
+
+[ **************************************
+[ FIRST CYCLE ONLY
+[ **************************************
+if (newRoom) {
+  call(lgc.RoomInit);
+  
+  [ this is the first cycle through this room
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  [ this view has all the art for cursors and buttons
+  load.view(vw.cp.MouseArt);
+
+  [ option button that determines input mode; mouse or keyboard
+  animate.obj(optCursor);
+  set.view(optCursor, vw.cp.MouseArt);
+  set.loop(optCursor, LP_OPT);
+  set.cel(optCursor, 0);
+  stop.cycling(optCursor);
+  position(optCursor, 8, 65);
+  draw(optCursor);
+  
+  [ cursor is in four parts; used to highlight command buttons
+  [ and option buttons
+  animate.obj(oCursorB);
+  ignore.objs(oCursorB);
+  set.view(oCursorB, vw.cp.MouseArt);
+  set.loop(oCursorB, LP_CF_OPT);
+  set.cel(oCursorB, 0);
+  stop.cycling(oCursorB);
+  set.priority(oCursorB, 15);
+  position(oCursorB, 30, 65);
+  
+  animate.obj(oCursorT);
+  ignore.objs(oCursorT);
+  set.view(oCursorT, vw.cp.MouseArt);
+  set.loop(oCursorT, LP_CF_OPT);
+  set.cel(oCursorT, 0);
+  stop.cycling(oCursorT);
+  set.priority(oCursorT, 15);
+  position(oCursorT, 30, 54);
+  
+  animate.obj(oCursorL);
+  ignore.objs(oCursorL);
+  set.view(oCursorL, vw.cp.MouseArt);
+  set.loop(oCursorL, LP_CF_OPT);
+  set.cel(oCursorL, 1);
+  stop.cycling(oCursorL);
+  set.priority(oCursorL, 15);
+  position(oCursorL, 30, 64);
+  
+  animate.obj(oCursorR);
+  ignore.objs(oCursorR);
+  set.view(oCursorR, vw.cp.MouseArt);
+  set.loop(oCursorR, LP_CF_OPT);
+  set.cel(oCursorR, 1);
+  stop.cycling(oCursorR);
+  set.priority(oCursorR, 15);
+  position(oCursorR, 47, 65);
+  
+  [ default cursorpos is keyboard option button
+  cursorpos = 2;
+  newpos = 2;
+  
+  [ grid cursor object
+  animate.obj(gridCursor);
+  set.priority(gridCursor, 15);
+  position(gridCursor, 57, 44);
+  set.view(gridCursor, vw.cp.MouseArt);
+  set.loop(gridCursor, 5);
+  work1 = 2;
+  cycle.time(gridCursor, work1);
+  
+  [ no text input in this room
+  prevent.input();
+  lastChar = 0;
+  [ arrow keys control cursor here
+  egoDir = 0;
+  
+  [ mouse is enabled, but not cursor
+  reset(cursormode);
+  btnAction = 0;
+  
+  [ no ego in this room, but cache ego movement parameters 
+  [ (to be restored when returning to the control room)
+  egoPrevX = egoX;
+  egoPrevY = egoY;
+  egoPrevDir = egoDir;
+  
+  [ set speed to fst for best mouse performance
+  animationInterval = 1;
+
+  [ need to show the pic before text can be added
+  show.pic();
+  
+  [ disable scripting for rest of activity in this room
+  set(noScript);
+  
+  [ setup for add.to.pic
+  vView = vw.cp.MouseArt;
+  vLoop = 6;
+  vPri = 14; 
+  vMgn = 4;
+}
+
+[ check for preview mode
+if (prevcursor) {
+  if ((controller(cLeftClick) || have.key())) {
+    reset(prevcursor);
+    if (cursormode) {
+      [ hide the mouse
+      disable.item(mouse);
+    } else {
+      [ force cusor to update
+      set(fChgCursor);
+    }
+  }
+  return();
+}
+
+[ if room is being drawn or redrawn, need to add text
+if ((newRoom || refresh)) {
+  [ push display colors
+  set.text.attribute(-1, 0);
+  
+  [ add button text
+  set.text.attribute(BLACK, WHITE);
+  display(12, 1, "Preview");
+  display(14, 1, " Save  ");
+  display(16, 1, "Restore");
+  display(18, 1, "Export ");
+  display(20, 1, " Exit  ");
+  display(4, 22, "\x11");
+  display(4, 32, "\x10");
+  
+  set.text.attribute(BLACK, LT_GRAY);
+  display(6, 2, "   Mode");
+  display(8, 4, "Ms");
+  display(8, 10, "Kb");
+  
+  display(15, 9, "GRID");
+  display(16, 9, "X:");
+  display(17, 9, "Y:");
+  
+  display(20, 11, "HOTSPOT");
+  display(20, 19, "X:");
+  display(20, 29, "Y:");
+  
+  display(3, 24, "CURSOR:");
+  [ default cursor starts
+  display(4, 24, "default");
+  [ pop display colors
+  set.text.attribute(0, -1);
+  
+  if (newroom) {
+    [ force cursor update
+    cIndex = -1;
+    newIndex = 0;
+    goto(checkindex);
+  } else {
+    reset(refresh);
+  }
+  return();
+}
+
+[ is cursor in text mode?
+if (cursormode) {
+  [ check for direction arrow keypress
+  if (egoDir != STOPPED) {
+    [ cursor up
+    if (egoDir == UP) {
+      if (cursorpos == CP_PREVIEW) {
+        newpos = CP_MOUSE;
+      }
+      if (cursorpos > CP_PREVIEW && cursorpos <= CP_EXIT) {
+        --newpos;
+      }
+      if (cursorpos == CP_GRID) {
+        if (gridY == 0) {
+          if (gridmode == 0) {
+            newpos = CP_IDX_DN;
+          } else {
+            newpos = CP_IDX_UP;
+          }
+        } else {
+          --gridY;
+          set(updateGrid);
+        }
+      }
+      
+      if (cursorpos == CP_HOTX) {
+        newpos = CP_GRID;
+        gridmode = 0;
+        gridX = 13;
+        gridY = 15;
+        set(updategrid);
+      }
+      
+      if (cursorpos == CP_HOTY) {
+        newpos = CP_GRID;
+        gridmode = 1;
+        gridX = 8;
+        gridY = 15;
+        set(updategrid);
+      }
+    }
+    
+    [ cursor right
+    if (egoDir == RIGHT) {
+      if (cursorpos == CP_MOUSE) {
+        newpos = CP_KEYB;
+      }
+      
+      if (cursorpos == CP_KEYB) {
+        newpos = CP_GRID;
+        gridmode = 0;
+        gridX = 0;
+        gridY = 3;
+         set(updateGrid);
+      }       
+      
+      if (cursorpos == CP_IDX_DN) {
+        newpos = CP_IDX_UP;
+      }
+      
+      if (cursorpos > CP_IDX_UP && cursorpos < CP_EXPORT) {
+        newpos = CP_GRID;
+        gridmode = 0;
+        gridX = 0;
+        if (cursorpos == CP_PREVIEW) {
+          gridY = 8;
+        }
+        if (cursorpos == CP_SAVE) {
+          gridY = 11;
+        }
+        if (cursorpos == CP_RESTORE) {
+          gridY = 14;
+        }
+        set(updateGrid);
+      }
+      
+      if ((cursorpos == CP_EXIT || cursorpos == CP_EXPORT)) {
+        newpos = CP_HOTX;
+      }
+      
+      if (cursorpos == CP_HOTX) {
+        newpos = CP_HOTY;
+      }
+       
+      if (cursorpos == CP_GRID) {
+        if (gridmode == 0) {
+          ++gridX;
+          if (gridX == 16) {
+            gridmode = 1;
+            gridX = 0;
+          }
+          set(updategrid);
+        } else {
+          if (gridX < 15) {
+            ++gridX;
+            set(updategrid);
+          }
+        }
+      }
+    } [ right
+    
+    [ cursor down
+    if (egoDir == DOWN) {
+      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
+        newpos = CP_PREVIEW;
+      }
+      
+      if (cursorpos == CP_IDX_DN) {
+        newpos = CP_GRID;
+        gridmode = 0;
+        gridX = 10;
+        gridY = 0;
+        set(updategrid);
+      }
+      if (cursorpos == CP_IDX_UP) {
+        newpos = CP_GRID;
+        gridmode = 1;
+        gridX = 6;
+        gridY = 0;
+        set(updategrid);
+      }
+      
+      if (cursorpos > CP_IDX_UP && cursorpos < CP_EXIT) {
+        ++newpos;
+      }
+      
+      if (cursorpos == CP_GRID) {
+        if (gridY == 15) {
+          if (gridmode) {
+            newpos = CP_HOTY;
+          } else {
+            newpos = CP_HOTX;
+          }
+        }
+        if (gridY < 15) {
+          ++gridY;
+          set(updategrid);
+        }
+      }
+    } [ down
+    
+    [ cursor left
+    if (egoDir == LEFT) {
+      if (cursorpos == CP_KEYB) {
+        newpos = CP_MOUSE;
+      }
+      
+      if (cursorpos == CP_IDX_UP) {
+        newpos = CP_IDX_DN;
+      }
+      
+      if (cursorpos == CP_HOTX) {
+        newpos = CP_EXIT;
+      }
+      
+      if (cursorpos == CP_HOTY) {
+        newpos = CP_HOTX;
+      }
+      
+      if (cursorpos == CP_GRID) {
+        if (gridmode == 0) {
+          if (gridX > 0) {
+            --gridX;
+            set(updategrid);
+          } else {
+            if (gridY < 6) {
+              newpos = CP_KEYB;
+            } else {
+              if (gridY < 10) {
+                newpos = CP_PREVIEW;
+              } else {
+                if (gridY < 13) {
+                  newpos = CP_SAVE;
+                } else {
+                  newpos = CP_RESTORE;
+                }
+              }
+            }
+          }
+        } else {
+          if (gridX > 0) {
+            --gridX;
+          } else {
+            gridmode = 0;
+            gridX = 15;
+          }
+          set(updategrid);
+        }
+      } [ grid
+    } [ left
+    
+    [ always reset dir so another keypress can be detected
+    egoDir = 0;
+    
+    [ check for new cursor position
+    if (cursorpos != newpos) {
+      [ if moving FROM grid to some other button
+      if (cursorpos == CP_GRID && newpos != CP_GRID) {
+        [ remove coordinates display
+        set.text.attribute(-1, 0);
+        set.text.attribute(BLACK, LT_GRAY);
+        display(16, 12, "  ");
+        display(17, 12, "  ");
+        set.text.attribute(0, -1);
+      }
+      
+      [ update the position
+      cursorpos = newpos;
+      [ depending on where cursor is, set the position and size/shape
+
+      [ option buttons
+      if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
+        set.loop(oCursorB, LP_CF_OPT);
+        set.loop(oCursorT, LP_CF_OPT);
+        set.loop(oCursorL, LP_CF_OPT);
+        set.loop(oCursorR, LP_CF_OPT);
+        
+        cursorY = 65;
+        if (cursorpos == CP_MOUSE) {
+          cursorX = 7;
+        } else {
+          cursorX = 31;
+        }
+      }
+      
+      [ index up/down buttons
+      if ((cursorpos == CP_IDX_DN || cursorpos == CP_IDX_UP)) {
+        set.loop(oCursorB, LP_CF_IDX);
+        set.loop(oCursorT, LP_CF_IDX);
+        set.loop(oCursorL, LP_CF_IDX);
+        set.loop(oCursorR, LP_CF_IDX);
+        cursorY = 32;
+        cursorX = cursorpos;
+        cursorX -= 3;
+        cursorX *= 40;
+        cursorX += 87;
+      }
+      
+      [ Preview, Save, Restore, Exit, Cancel buttons
+      if (cursorpos >= CP_PREVIEW && cursorpos <= CP_EXIT) {
+        set.loop(oCursorB, LP_CF_CMD);
+        set.loop(oCursorT, LP_CF_CMD);
+        set.loop(oCursorL, LP_CF_CMD);
+        set.loop(oCursorR, LP_CF_CMD);
+        
+        cursorX = 3;
+        [ convert cursorpos into desired y value
+        cursorY = cursorpos;
+        cursorY -= 5;
+        cursorY *= 16;
+        cursorY += 96;
+      }
+      
+      [ hotspot text boxes
+      if ((cursorpos == CP_HOTX || cursorpos == CP_HOTY)) {
+        set.loop(oCursorB, LP_CF_TXT);
+        set.loop(oCursorT, LP_CF_TXT);
+        set.loop(oCursorL, LP_CF_TXT);
+        set.loop(oCursorR, LP_CF_TXT);
+        cursorY = 161;
+        cursorX = cursorpos;
+        cursorX -= 11;
+        cursorX *= 40;
+        cursorX += 86;
+      }
+      
+      [ to move cursor, erase it first, otherwise, it will
+      [ clear any text that is present anywhere between the
+      [ new position and the old position
+      erase(oCursorB);
+      erase(oCursorL);
+      erase(oCursorT);
+      erase(oCursorR);
+      
+      [ if not on grid, draw the cursor frame
+      if (cursorpos != CP_GRID) {
+        [ hide grid cursor
+        erase(gridCursor);
+        [ reposition the four-part cursor frame and show it
+        position.v(oCursorB, cursorX, cursorY);
+        draw(oCursorB);
+        --cursorY;
+        [ save ypos to restore it later
+        work1 = cursorY;
+        position.v(oCursorL, cursorX, cursorY);
+        draw(oCursorL);
+        [ adjust for height (depends on button type)
+        if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
+          cursorY -= 10;
+        }
+        if (cursorpos > CP_KEYB && cursorpos < CP_GRID) {
+          cursorY -= 8;
+        } 
+        if ((cursorpos == CP_HOTX || cursorpos == CP_HOTY)) {
+            cursorY -= 10;
+        }
+        position.v(oCursorT, cursorX, cursorY);
+        draw(oCursorT);
+        [ reset y
+        cursorY = work1;
+        [ adjust for width
+        if (cursorpos < CP_IDX_DN) {
+          cursorX += 17;
+        } 
+        if ((cursorpos == CP_IDX_DN || cursorpos == CP_IDX_UP)) {
+          cursorX += 5;
+        }
+        if (cursorpos > CP_IDX_UP && cursorpos < CP_GRID) {
+          cursorX += 29;
+        }
+        if (cursorpos > CP_GRID) {
+          cursorX += 19;
+        }
+        position.v(oCursorR, cursorX, cursorY);
+        draw(oCursorR);
+      } else {
+        [ draw the grid cursor
+        draw(gridCursor);
+      }
+    }
+    
+    [ did grid cursor move?
+    if (updategrid) {
+      reset(updategrid);
+      tmpX = gridX;
+      tmpX *= 3;
+      tmpX += 57;
+      if (gridmode == 1) {
+        tmpX += 53;
+      }
+      tmpY = gridY;
+      tmpY *= 6;
+      tmpY += 44;
+      reposition.to.v(gridcursor, tmpX, tmpY);
+      
+      [ update coordinate display
+      set.text.attribute(-1, 0);
+      set.text.attribute(BLACK, LT_GRAY);
+      if (gridX < 10) {
+        display(16, 12, " %v222");
+      } else {
+        display(16, 12, "%v222");
+      }
+      if (gridY < 10) {
+        display(17, 12, " %v223");
+      } else {
+        display(17, 12, "%v223");
+      }
+      set.text.attribute(0, -1);
+    }
+  }
+  
+  [ check for selection (space/enter for button, space/bkspc for grid
+  if (have.key()) {
+    [ space and grid
+    if (lastChar == 32 && cursorpos == CP_GRID) {
+      btnAction = B_SETGRID;
+    }
+    [ bkspc and grid
+    if (lastChar == 8 && cursorpos == CP_GRID) {
+      btnAction = B_RSTGRID;
+    }
+    
+    [ space/enter
+    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {
+      [
+      if (cursorpos  == CP_MOUSE) {
+        [ switch to mouse control
+        reset(cursormode);
+        enable.item(mouse);
+        erase(optCursor);
+        position(optCursor, 8, 65);
+        draw(optCursor);
+        [ erase the cursor objects
+        erase(oCursorB);
+        erase(oCursorT);
+        erase(oCursorL);
+        erase(oCursorR);
+      }
+      
+      if (cursorpos  >= CP_PREVIEW && cursorpos <= CP_EXIT) {
+        btnAction = cursorpos;
+        btnAction -= 2;
+      }
+      if (cursorpos == CP_IDX_DN && cIndex > 0) {
+        btnAction = B_IDX_DN;
+      }
+      if (cursorpos == CP_IDX_UP && cIndex < 5) {
+        btnAction = B_IDX_UP;
+      }
+      
+      if (cursorpos == CP_HOTX) {
+        btnAction = B_HOTX;
+      }
+      if (cursorpos == CP_HOTY) {
+        btnAction = B_HOTY;
+      }
+      
+      if (cursorpos == CP_GRID) {
+        btnAction = B_SETGRID;
+      }
+    }
+  }
+} else {
+  [ mouse is active
+  
+  [ first determine if cursor is over the grid
+  reset(tmpFlag);
+  [ (adjust yval for picture offset [8])
+  if (mouseX > 56 && mouseX < 105 && mouseY > 46 && mouseY < 143) {
+    set(tmpFlag);
+  }
+  if (mouseX > 109 && mouseX < 158 && mouseY > 46 && mouseY < 143) {
+    set(tmpFlag);
+  }
+  [ tmpFlag is set when cursor is over the grid
+  if (tmpFlag) {
+    [ if the ongrid flag is clear (last cycle was OFF grid)  
+    if (!fOnGrid) {
+      [ cursor needs to be changed
+      set(fChgCursor);
+      set(fOnGrid);
+    }
+  }
+  else {
+    [ if ongrid flag is set (last cycle was ON grid)
+    if (fOnGrid) {
+      [ cursor needs to be changed)
+      set(fChgCursor);
+      reset(fOnGrid);
+    }
+  }
+  
+  [ if cursor needs to be changed (going FROM or TO grid)
+  if (fChgCursor) {
+    reset(fChgCursor);
+    if (fOnGrid) {
+      sTemp = "%m1";
+    }
+    else {
+      sTemp = "%g40";
+      [ also remove coordinates display
+      set.text.attribute(-1, 0);
+      set.text.attribute(BLACK, LT_GRAY);
+      display(16, 12, "  ");
+      display(17, 12, "  ");
+      set.text.attribute(0, -1);
+    }
+    [ change the cursor
+    set.key(0, &m2, mouse); [ load.cursor(BYVAR, mCURSOR);
+  }
+  
+  [ if on grid, determine gridx/gridy/gridmode
+  if (fOnGrid) {
+    tmpY = mousey;
+    tmpY -= 47;
+    tmpY /= 6;
+    [ x is a bit more complicated
+    tmpX = mousex;
+    if (tmpX > 109) {
+      [ on mask grid
+      gridmode = 1;
+      [ adjust x
+      tmpX -= 53;
+    } else {
+      gridmode = 0;
+    }
+    tmpX -= 57;
+    tmpX /= 3;
+    [ if different from current x/y
+    if((tmpX != gridX || tmpY != gridY)) {
+      [ update coordinate display
+      set.text.attribute(-1, 0);
+      set.text.attribute(BLACK, LT_GRAY);
+      if (tmpX < 10) {
+        display(16, 12, " %v225");
+      } else {
+        display(16, 12, "%v225");
+      }
+      if (tmpY < 10) {
+        display(17, 12, " %v226");
+      } else {
+        display(17, 12, "%v226");
+      }
+      set.text.attribute(0, -1);
+    }
+    gridX = tmpX;
+    gridY = tmpY;
+  } else {
+    [ clear grid values
+    gridX = -1;
+    gridY = -1;
+  }
+  
+  
+  [ check for mouse clicks 
+  
+  if (fOnGrid) {
+    [ right-click on grid
+    if (controller(cRightClick)) {
+      [ if on grid, reset the pixel
+      btnAction = B_RSTGRID;
+    }
+    [ left-click on grid
+    if (controller(cLeftClick)) {
+      [ if on grid, set the pixel
+      btnAction = B_SETGRID;
+    }  
+  } else {
+    [ not on grid - check other buttons
+    
+    [dbl-click on hotspot text
+    if (controller(cLeftDblClick)) {
+      [ hotX
+      if (mouseX > 86 && mouseX < 105 && mouseY > 158 && mouseY < 169) {
+        btnAction = B_HOTX;
+      }
+      [ hotY
+      if (mouseX > 126 && mouseX < 145 && mouseY > 158 && mouseY < 169) {
+        btnAction = B_HOTY;
+      }
+    }
+    [ left click on all other buttons
+    if (controller(cLeftClick)) {
+      [ over cursor type keyboard option  54-65
+      if (mouseX > 30 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+        [ switch to keyboard cursor
+        set(cursormode);
+        disable.item(mouse);
+        erase(optCursor);
+        position(optCursor, 32, 65);
+        draw(optCursor);
+        [ show the cursor object
+        cursorpos = 2;
+        newpos = 2;
+        position(oCursorB, 31, 65);
+        draw(oCursorB);
+        position(oCursorT, 31, 54);
+        draw(oCursorT);
+        position(oCursorL, 31, 64);
+        draw(oCursorL);
+        position(oCursorR, 48, 64);
+        draw(oCursorR);
+      }
+
+      [ over PREVIEW button [2, 102 - 33, 129] (need to add 8 to y due to pic offset)
+      if (mouseX > 2 && mouseX < 33 && mouseY > 94 && mouseY < 105) {
+        btnAction = B_PREVIEW;
+      }
+        
+      [ over SAVE button [2, 102 - 33, 113] (need to add 8 to y due to pic offset)
+      if (mouseX > 2 && mouseX < 33 && mouseY > 110 && mouseY < 121) {
+        btnAction = B_SAVE;
+      }
+        
+      [ over RESTORE button [2, 118 - 33, 129] (need to add 8 to y due to pic offset)
+      if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 137) {
+        btnAction = B_RESTORE;
+      }
+        
+      [ over EXPORT button [2, 134 - 33, 145] (need to add 8 to y due to pic offset)
+      if (mouseX > 2 && mouseX < 33 && mouseY > 142 && mouseY < 153) {
+        btnAction = B_EXPORT;
+      }
+      
+      [ over EXIT button [2, 150 - 33, 161] (need to add 8 to y due to pic offset)
+      if (mouseX > 2 && mouseX < 33 && mouseY > 158 && mouseY < 169) {
+        btnAction = B_EXIT;
+      }
+    
+      [ over IDX_DN button [86, 22 - 93, 33] (need to add 8 to y due to pic offset)
+      if (mouseX > 86 && mouseX < 93 && mouseY > 30 && mouseY < 41) {
+        if (cIndex > 0) {
+          btnAction = B_IDX_DN;
+        }
+      }
+      
+      [ over IDX_DN button [126, 22 - 133, 33] (need to add 8 to y due to pic offset)
+      if (mouseX > 126 && mouseX < 133 && mouseY > 30 && mouseY < 41) {
+        if (cIndex < 5) {
+          btnAction = B_IDX_UP;
+        }
+      }
+    }
+  }
+}
+
+[ check for button actions:
+if (btnAction == 0) {
+  return();
+}
+
+[ set/reset a grid pixel
+if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
+
+  [ convert grid x/y into byte offset/bit offset
+  strctr = gridY;
+  strctr *= 4;
+  if (gridmode) {
+    strctr += 64;
+  }
+  if (gridX > 7) {
+    bitctr = 15;
+  } else {
+    strctr += 2;
+    bitctr = 7;
+  }
+  bitctr -= gridX;
+  work1 = 126;
+  work1 -= strctr;
+  [ copy right portion of updated cursor to sTemp
+  block(STR.RIGHT, &sCursor, &sTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  [ add offsets for hotspot(4) and the target byte(2)
+  strctr += 6;
+  [ strip off the right portion
+  block(STR.LEFT, &sCursor, &sCursor, &strctr); [ str.left(sINPUT, sRESULT, vLEN)
+  [ save the byte of interest to a temp string
+  work1 = 2;
+  block(STR.RIGHT, &sCursor, &sByte, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  [ convert the hex string to a number
+  block(HEX2BYTE, &sByte, &work2, 0); [ hex2byte(sINPUT, vRESULT)
+  [ then remove that byte
+  strctr -= 2;
+  block(STR.LEFT, &sCursor, &sCursor, &strctr); [ str.left(sINPUT, sRESULT, vLEN)
+  
+  [ setup the bitmask
+  work1 = 1;
+  block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)
+  [ convert gridx/y to screen coordinates for add.to.pic
+  tmpX = gridX;
+  tmpX *= 3;
+  tmpX += 57;
+  if (gridmode) {
+    tmpX += 53;
+  }
+  tmpY = gridY;
+  tmpY *= 6;
+  tmpY += 44;
+  
+  [ set or clear the pixel as needed
+  if (btnAction == B_SETGRID) {
+    [ set the desired bit in designated byte
+    [ combine it with current byte
+    block(BIT.OR, 1, &work2, &work1); [ bit.OR(BYVAL, VAR, AMOUNT)
+    [ set cel to add new block to the grid
+    vCel = 0;
+  } else {
+    [ clear the desired bit in the designated byte
+    [ invert the mask
+    block(BIT.NOT, 0, &work1, 0); [ bit.not(VAR);
+    [ combine it with current byte
+    block(BIT.AND, 1, &work2, &work1); [ bit.and(BYVAL, VAR, AMOUNT)
+    [ set cel to add new block to the grid
+    vCel = 2;
+  }
+  [ if on hotspot and in first gridbox, show it 
+  if (gridX == hotXraw && gridY == hotYraw && !gridmode) {
+   ++vCel;
+  }
+  [ rebuild the string
+  block(BYTE2HEX, &sByte, &work2, 0); [ byte2hex(sRESULT, vINPUT)
+  block(STR.CONCAT, &sCursor, &sByte, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sCursor, &sTemp, 0); [ sINPUT, sADD)
+  
+  [ update grid
+  add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);
+}
+
+if (btnAction == B_EXIT) {
+  [ restore ego movement parameters
+  egoX = egoPrevX;
+  egoY = egoPrevY;
+  egoDir = egoPrevDir;
+  
+  [ restore speed
+  animationInterval = NORMAL_SPEED;
+  
+  [ restore scripting
+  reset(noScript);
+  
+  [ fade out 
+  block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+  
+  [ go back to previous room
+  new.room.v(previousRoom); 
+}
+
+if (btnAction == B_PREVIEW) {
+  [ change current cursor, wait for any mouse press
+  set(prevcursor);
+  sTemp = "%s16";
+  set.key(0, &m2, mouse); [ load.cursor(BYVAR, mCURSOR);
+  [ if in text mode, temporarily enable the mouse
+  if (cursormode) {
+    enable.item(mouse);
+  }
+  [ make sure key buffer is clear
+  lastChar = 0;
+}
+
+if (btnAction == B_SAVE) {
+  [ to modify (save) the cursor, code must be run
+  [ from its owning logic (logic 0)
+  set(saveCursor);
+}
+
+if (btnAction == B_RESTORE) {
+  [ load default cursor, overwriting any changes made
+  [ (also must be run from logic 0)
+  set(restoreCursor);
+}
+
+if (btnAction == B_EXPORT) {
+  work1 = cIndex;
+  work1 += 14;
+  sTemp = "%m";
+  s13 = "%v46";
+  block(STR.FORMAT, &s13, &s13, 0); [ str.format(sINPUT, sRESULT)
+  block(STR.CONCAT, &sTemp, &s13, 0); [ sINPUT, sADD)
+  block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
+  block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)
+  [ TODO: use file function to save the string
+  [ make a log entry:
+  log("%s12 cursor hex string: %s16");
+  [ provide feedback
+  print.at("Cursor exported to logfile", 14, 19, 16);
+}
+
+if (btnAction == B_IDX_DN) {
+  --newIndex;
+  tmpX = 4;
+  tmpY = 24;
+  work1 = newIndex;
+  work1 += 14;
+  set.text.attribute(BLACK, LT_GRAY);
+  display.v(tmpX, tmpY, work1);
+  [ pop display colors
+  set.text.attribute(0, -1);
+}
+
+if (btnAction == B_IDX_UP) {
+  ++newIndex;
+  tmpX = 4;
+  tmpY = 24;
+  work1 = newIndex;
+  work1 += 14;
+  set.text.attribute(BLACK, LT_GRAY);
+  display.v(tmpX, tmpY, work1);
+  [ pop display colors
+  set.text.attribute(0, -1);
+}
+
+[ textboxes
+if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
+
+  [ invert the current value to indicate it is selected
+  set.text.attribute(-1, 0);
+  set.text.attribute(WHITE, BLACK);
+  tmpRow = 20;
+  tmpCol = 22;
+  
+  [ get temp copy of hotspot value being edited
+  if (btnAction == B_HOTX) {
+    byteval = hotXraw;
+  } else {
+    byteval = hotYraw;
+    tmpCol += 10;
+  }
+  oldHotval = byteval;
+  
+  sByte = " ";
+  sHotspot = " %v240";
+  
+  block(STR.FORMAT, &sHotspot, &sHotspot, 0); [ str.format(sINPUT, sRESULT)
+  block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
+  work2 = work1;
+  :checkLen
+  if (work1 < 4) {
+    block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)
+    block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
+    goto(checkLen);
+  }
+  work1 = &m24;
+  display.v(tmpRow, tmpCol, work1);
+  [ adjust current column to length of text
+  tmpCol += work2;
+  
+  [ allow user to press number keys, bkspc/enter/esc/minus;
+  [ up to three digits
+:getChar
+  lastChar = 0;
+  if (!have.key()) {
+    goto(getChar);
+  }
+  [ check for number press
+  if (lastChar > 47 && lastChar < 58) {
+    [ process a number press
+    [ current val *10, add newval
+    [ update display
+    if (byteval < 2) {
+      if ((byteval > 0 || lastChar > 0)) {
+        block(BYTE2CHAR, &sByte, &lastChar, 0); [ byte2char(sRESULT, vCHAR)
+        if (byteval == 0 && work2 > 0) {
+          --tmpCol;
+          --work2;
+        }
+        work1 = &m49;
+        display.v(tmpRow, tmpCol, work1);
+        ++tmpCol;
+        ++work2;
+        byteval *= 10;
+        byteval += lastChar;
+        byteval -= 48;
+      } else {
+        [value=0 and char=0; ignore unless line is completely blank?
+        if (work2 == 0) {
+          block(BYTE2CHAR, &sByte, &lastChar, 0); [ byte2char(sRESULT, vCHAR)
+          work1 = &m49;
+          display.v(tmpRow, tmpCol, work1);
+          ++tmpCol;
+          ++work2;
+        }
+      }
+    }
+    goto(getChar);
+    
+  } else {
+    [ check for backspace, escape, enter
+    if ((lastChar == 8 || lastChar == 13 || lastChar == 27)) {
+      if (lastChar == 8) {
+        [ backspace
+        if (work2 > 0) {
+          if (byteval > 0) {
+            byteval /= 10;
+          }
+          --work2;
+          --tmpCol;
+          work1 = &m43;
+          display.v(tmpRow, tmpCol, work1);
+        }
+        goto(getChar);
+      }
+  
+      if (lastChar == 13) {
+        [ limit value to 0 to +15 
+        if (byteval > 15) {
+          byteval = 15;
+        }
+
+        [ rebuild hotspot value
+        sByte = " ";
+        sHotspot = " %v240";
+        block(STR.FORMAT, &sHotspot, &sHotspot, 0); [ str.format(sINPUT, sRESULT)
+        block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
+        :checkLen2
+        if (work1 < 4) {
+          block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)
+          block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
+          goto(checkLen2);
+        }
+        
+        [ if value hasn't changed, do nothing
+        if (byteval != oldHotval) {
+        
+          [ unmark old:
+          [ convert hot x/y into byte offset/bit offset
+          strctr = hotYraw;
+          strctr *= 4;
+          if (hotXraw > 7) {
+            bitctr = 15;
+          } else {
+            strctr += 2;
+            bitctr = 7;
+          }
+          bitctr -= hotXraw;
+          strctr += 4;
+          work1 = 2;
+          [ copy cursor to sTemp
+          block(STR.COPY, &sCursor, &sTemp, 0); [ str.copy(sINPUT, sRESULT)
+          [ get byte of interest
+          block(STR.MID, &sTemp, &strctr, &work1); [ str.mid(sINPUT, vPOS, vLEN)
+          [ convert the hex string to a number
+          block(HEX2BYTE, &sTemp, &work3, 0); [ hex2byte(sINPUT, vRESULT)
+  
+          [ setup the bitmask
+          work1 = 1;
+          block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)
+          [ apply bitmask to byte of interest
+          block(BIT.AND, 1, &work3, &work1); [ bit.and(BYVAL, VAR, AMOUNT)
+          
+          [ convert hotx/y to screen coordinates for add.to.pic
+          tmpX = hotXraw;
+          tmpX *= 3;
+          tmpX += 57;
+          tmpY = hotYraw;
+          tmpY *= 6;
+          tmpY += 44;
+          
+          [ set or clear the pixel as needed
+          if (work3) {
+            [ set the desired bit in designated byte
+            vCel = 0;
+          } else {
+            vCel = 2;
+          }
+          
+          [ update grid
+          add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);
+          
+          [ update the changed value
+          if (btnAction == B_HOTX) {
+            hotXraw = byteval;
+          } else {  
+            hotYraw = byteval;
+          }
+
+          [ rebuild the cursor string
+          block(BYTE2HEX, &sByte, &hotXraw, 0); [ byte2hex(sRESULT, vINPUT)
+          block(BYTE2HEX, &sTemp, &hotYraw, 0); [ byte2hex(sRESULT, vINPUT)
+          block(STR.CONCAT, &sByte, &sTemp, 0); [ sINPUT, sADD)
+          work1 = 128;
+          block(STR.RIGHT, &sCursor, &sTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+          block(STR.COPY, &sByte, &sCursor, 0); [ str.copy(sINPUT, sRESULT)
+          block(STR.CONCAT, &sCursor, &sTemp, 0); [ sINPUT, sADD)
+
+          [ add mark for new hotspot:
+          [ convert hot x/y into byte offset/bit offset
+          strctr = hotYraw;
+          strctr *= 4;
+          if (hotXraw > 7) {
+            bitctr = 15;
+          } else {
+            strctr += 2;
+            bitctr = 7;
+          }
+          bitctr -= hotXraw;
+          strctr += 4;
+          work1 = 2;
+          [ copy cursor to sTemp
+          block(STR.COPY, &sCursor, &sTemp, 0); [ str.copy(sINPUT, sRESULT)
+          [ get byte of interest
+          block(STR.MID, &sTemp, &strctr, &work1); [ str.mid(sINPUT, vPOS, vLEN)
+          [ convert the hex string to a number
+          block(HEX2BYTE, &sTemp, &work3, 0); [ hex2byte(sINPUT, vRESULT)
+  
+          [ setup the bitmask
+          work1 = 1;
+          block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)
+          [ apply bitmask to byte of interest
+          block(BIT.AND, 1, &work3, &work1); [ bit.and(BYVAL, VAR, AMOUNT)
+          
+          [ convert hotx/y to screen coordinates for add.to.pic
+          tmpX = hotXraw;
+          tmpX *= 3;
+          tmpX += 57;
+          tmpY = hotYraw;
+          tmpY *= 6;
+          tmpY += 44;
+          
+          [ set or clear the pixel as needed
+          if (work3) {
+            [ set the desired bit in designated byte
+            vCel = 1;
+          } else {
+            vCel = 3;
+          }
+          
+          [ update grid
+          add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);
+        }
+      }
+      
+      if (lastChar == 27) {
+        [ if esc pressed, exit without changing
+      }
+      
+    } else {
+      [ ignore all others
+      goto(getChar);
+    }
+  }
+  
+  [ always restore hs textbox
+  set.text.attribute(BLACK, WHITE);
+  work1 = &m24;
+  tmpCol -= work2;
+  display.v(tmpRow, tmpCol, work1);
+  set.text.attribute(0, -1);  
+}
+
+[ always reset button action
+btnAction = 0;
+lastChar = 0;
+
+:checkindex
+[ if index has changed, draw a new cursor
+if (newIndex != cIndex) {
+  cIndex = newIndex;
+  cIndex += 40;
+  sCursor = "%g";
+  s17 = "%v227";
+  block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
+  block(STR.CONCAT, &sCursor, &s17, 0); [ sINPUT, sADD)
+  block(STR.FORMAT, &sCursor, &sCursor, 0); [ str.format(sINPUT, sRESULT)
+  
+  [ extract out hotspot coordinates
+  work1 = 4;
+  block(STR.LEFT, &sCursor, &sHotspot, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &sHotspot, &hotX, 0); [ hex2byte(sINPUT, vRESULT)
+  work1 = 2;
+  block(STR.RIGHT, &sHotspot, &sHotspot, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &sHotspot, &hotY, 0); [ hex2byte(sINPUT, vRESULT)
+  [ update hotspot coordinate display
+  set.text.attribute(-1, 0);
+  set.text.attribute(BLACK, WHITE);
+  if (hotX > 15) {
+    [ limit to 15
+    hotX = 15;
+  } 
+  hotXraw = hotX;
+  display(20, 22, " %v243 ");
+  
+  if (hotY > 15) {
+    [ limit to 15
+    hotY = 15;
+  }
+  hotYraw = hotY;
+  display(20, 32, " %v244 ");
+  set.text.attribute(0, -1);
+  [ convert to grid offsets
+  [ to be able to compare when adding cels
+  hotX *= 3;
+  hotX += 57;
+  hotY *= 6;
+  hotY += 44;
+  
+  [ step through one bit at a time to determine if pixels are set or clear
+  strctr = 128;
+  tmpY = 44;
+  reset(maskgrid);
+:nextbyte
+  block(STR.RIGHT, &sCursor, &sTemp, &strctr); [ strRight(sINPUT, sRESULT, vLEN)
+  [ get the next byte value
+  block(HEX2BYTE, &sTemp, &byteval, 0); [ hex2byte(sINPUT, vRESULT)
+  
+  work1 = strctr;
+  work1 /= 4;
+  work1 *= 4;
+  if (work1 == strctr) {
+    set(flipbyte);
+  } else {
+    reset(flipbyte);
+  }
+  
+  [ adjust column based on flipbyte value and mask being drawn
+  if (maskgrid) {
+    tmpX = 110;
+  } else {
+    tmpX = 57;
+  }
+  if (flipbyte) {
+    tmpX += 24;
+  }
+  
+  [ step through all eight bits
+  bitctr = 128;
+:nextbit
+  work1 = byteval;
+  block(BIT.AND, 1, &work1, &bitctr); [ bit.and(BYVAL, VAR, AMOUNT)
+  
+  if (work1) {
+    [ draw a block
+    vCel = 0;
+  } else {
+    [ clear the block
+    vCel = 2;
+  }
+  if (tmpX == hotX && tmpY == hotY) {
+    ++vCel;
+  }
+  add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);
+  
+  bitctr /= 2;
+  if (bitctr) {
+    tmpX += 3;
+    goto(nextbit);
+  }
+  
+  [ load next byte
+  strctr -= 2;
+  if (strctr > 0) {
+    if (!flipbyte) {
+      [ set correct row
+      tmpY += 6;
+      if (tmpY == 140) {
+        tmpY = 44;
+        set(maskgrid);
+      }
+    }
+    goto(nextbyte);
+  }
+
+  cIndex = newIndex;
+  
+  if (newroom) {
+    [ remember to fade in to be able to see the screen again
+    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+  }
+}
+
+return();
+
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "07077FFE3FFC3FFC3FFC3FFC3FFC01808001800101803FFC3FFC3FFC3FFC3FFC7FFE00008001800180018001800180017E7E7E7E8001800180018001800180010000"
+#message 2 "%s12"
+#message 3 "Preview"
+#message 4 " Save  "
+#message 5 "Restore"
+#message 6 "Export "
+#message 7 " Exit  "
+#message 8 "\x11"
+#message 9 "\x10"
+#message 10 "   Mode"
+#message 11 "Ms"
+#message 12 "Kb"
+#message 13 "CURSOR:"
+#message 14 "default"
+#message 15 " walk  "
+#message 16 " look  "
+#message 17 " talk  "
+#message 18 "  use  "
+#message 19 " wait  "
+#message 20 "%m1"
+#message 21 "%g40"
+#message 22 "%g"
+#message 23 "%v227"
+#message 24 "%s11"
+#message 25 "GRID"
+#message 26 "X:"
+#message 27 "Y:"
+#message 28 "HOTSPOT"
+#message 29 "  "
+#message 30 " %v222"
+#message 31 "%v222"
+#message 32 " %v223"
+#message 33 "%v223"
+#message 34 " %v225"
+#message 35 "%v225"
+#message 36 " %v226"
+#message 37 "%v226"
+#message 38 "%s16"
+#message 39 "%m"
+#message 40 "%v46"
+#message 41 "%s12 cursor hex string: %s16"
+#message 42 "Cursor exported to logfile"
+#message 43 " "
+#message 44 "-%v240"
+#message 45 " %v240"
+#message 46 "-"
+#message 47 "%v243"
+#message 48 "%v244"
+#message 49 "%s10"

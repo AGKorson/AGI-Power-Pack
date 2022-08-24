@@ -1,1 +1,204 @@
-[ ********************************************************************[[ rm.Lobby[[ [[ ********************************************************************#define backpane   o1#define frontpane  o2#define frontdooropen  f220#define fDone          f221if (newRoom)  {  [ this is the first cycle through this room  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    [ do basic room initialization  call(lgc.RoomInit);    [ the horizon defines the upper limit of ego's movement  set.horizon(100);    [ add additional room initialization here  load.view(vw.LobbyArt);  animate.obj(backpane);  set.view(backpane, vw.LobbyArt);  set.loop(backpane, 0);  ignore.blocks(backpane);  ignore.objs(backpane);  position(backpane, 113, 167);  set.priority(backpane, 4);    animate.obj(frontpane);  set.view(frontpane, vw.LobbyArt);  set.loop(frontpane, 1);  ignore.blocks(frontpane);  ignore.objs(frontpane);  position(frontpane, 113, 167);  set.priority(frontpane, 15);    [ add toolbar buttons  load.view(vw.Toolbar);  call(lgc.InitToolbar);    [ load ego view, animate and draw ego  [ this is sometimes handled in logic 0  [ instead of in each individual logic  if (previousRoom == rm.ParkingLot) {    position(ego, 115, 163);    set.loop(ego, 3);    egodir = STOPPED;    set(frontdooropen);    set.cel(backpane, 12);    set.cel(frontpane, 12);    ignore.objs(backpane);  } else {    position(ego, 86, 105);    reset(frontdooropen);    set.cel(backpane, 0);    set.cel(frontpane, 0);    observe.objs(backpane);  }  egoDir = STOPPED;    draw(backpane);  stop.update(backpane);  draw(frontpane);  stop.update(frontpane);    [ add ego to the room  draw(ego);    [ display the picture on screen  show.pic();  [ fade in  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)  [ restore cursor  cursoricon = cursormode;  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);  return();  }[*****:handleInput       [ check for input from player[*****if (haveInput && !haveMatch && unknownWordNum == 0)  {  [ place said tests here  if (said("look"))    {    print("This is the lobby. There is a desk and some chairs in the waiting area.");    }  }[ toolbar button checksif (cursormode == C_LOOK) {  if (controller(cLeftClick)) {    [ same as 'look'    if (mouseY > 25) {      print("This is the lobby. There is a desk and some chairs in the waiting area.");    }  }}if (cursormode == C_TALK) {  if (controller(cLeftClick)) {    [ same as 'talk to'    if (mouseY > 25) {      print("There is no one here to talk to.");      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);    }  }}if (cursormode == C_USE) {  if (controller(cLeftClick)) {    [ same as 'use item'    if (mouseY > 25) {      print("There is nothing to manipulate here.");      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);    }  }}[*****:noInput           [  all non-input related code goes here [*****[ add other room specific statements hereif (posn(ego, 113, 156, 127, 167)) {  if (!frontdooropen) {    [ open it    set(frontdooropen);    start.update(backpane);    end.of.loop(backpane, fDone);    start.update(frontpane);    end.of.loop(frontpane, fDone); [ ok to re-use fDone here!  }} else {  if (frontdooropen) {    [ close it    reset(frontdooropen);    start.update(backpane);    reverse.loop(backpane, fDone);    start.update(frontpane);    reverse.loop(frontpane, fDone);  }}if (fDone) {  reset(fDone);  stop.update(backpane);  stop.update(frontpane);  if (frontdooropen) {    ignore.objs(backpane);  } else {    observe.objs(backpane);  }}      [*****:exit              [  test for leaving the room[*****[ add exit checks here (or use layout editor)if (edgeEgoHit == TOP_EDGE)  {  [ show wait cursor  cursoricon = C_WAIT;  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);  [ fade out, then change room  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)  new.room(rm.Hallway);  [ ##LE001##  }[if (posn(ego, 113, 167, 125, 167)) {if (edgeEgoHit == BOTTOM_EDGE) {  [ show wait cursor  cursoricon = C_WAIT;  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);  [ fade out, then change room  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)  new.room(rm.ParkingLot);  [ ##LE002##}return();[*****[ messages         [  declared messages go here[*****#message 1 "%g40"#message 2 "%g41"#message 3 "%g42"#message 4 "%g43"#message 5 "%g44"#message 6 "%g45"#message 7 "This is the lobby. There is a desk and some chairs in the waiting area."
+[ ********************************************************************
+[
+[ rm.Lobby
+[
+[ 
+[
+[ ********************************************************************
+
+#define backpane   o1
+#define frontpane  o2
+
+#define frontdooropen  f220
+#define fDone          f221
+
+
+if (newRoom)
+  {
+  [ this is the first cycle through this room
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  [ do basic room initialization
+  call(lgc.RoomInit);
+  
+  [ the horizon defines the upper limit of ego's movement
+  set.horizon(100);
+  
+  [ add additional room initialization here
+  load.view(vw.LobbyArt);
+  animate.obj(backpane);
+  set.view(backpane, vw.LobbyArt);
+  set.loop(backpane, 0);
+  ignore.blocks(backpane);
+  ignore.objs(backpane);
+  position(backpane, 113, 167);
+  set.priority(backpane, 4);
+  
+  animate.obj(frontpane);
+  set.view(frontpane, vw.LobbyArt);
+  set.loop(frontpane, 1);
+  ignore.blocks(frontpane);
+  ignore.objs(frontpane);
+  position(frontpane, 113, 167);
+  set.priority(frontpane, 15);
+  
+  [ add toolbar buttons
+  load.view(vw.Toolbar);
+  call(lgc.InitToolbar);
+  
+  [ load ego view, animate and draw ego
+  [ this is sometimes handled in logic 0
+  [ instead of in each individual logic
+  if (previousRoom == rm.ParkingLot) {
+    position(ego, 115, 163);
+    set.loop(ego, 3);
+    egodir = STOPPED;
+    set(frontdooropen);
+    set.cel(backpane, 12);
+    set.cel(frontpane, 12);
+    ignore.objs(backpane);
+  } else {
+    position(ego, 86, 105);
+    reset(frontdooropen);
+    set.cel(backpane, 0);
+    set.cel(frontpane, 0);
+    observe.objs(backpane);
+  }
+  egoDir = STOPPED;
+  
+  draw(backpane);
+  stop.update(backpane);
+  draw(frontpane);
+  stop.update(frontpane);
+  
+  [ add ego to the room
+  draw(ego);
+  
+  [ display the picture on screen
+  show.pic();
+  [ fade in
+  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  [ restore cursor
+  cursoricon = cursormode;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  return();
+  }
+
+[*****
+:handleInput       [ check for input from player
+[*****
+if (haveInput && !haveMatch && unknownWordNum == 0)
+  {
+  [ place said tests here
+  if (said("look"))
+    {
+    print("This is the lobby. There is a desk and some chairs in the waiting area.");
+    }
+  }
+
+[ toolbar button checks
+if (cursormode == C_LOOK) {
+  if (controller(cLeftClick)) {
+    [ same as 'look'
+    if (mouseY > 25) {
+      print("This is the lobby. There is a desk and some chairs in the waiting area.");
+    }
+  }
+}
+
+if (cursormode == C_TALK) {
+  if (controller(cLeftClick)) {
+    [ same as 'talk to'
+    if (mouseY > 25) {
+      print("There is no one here to talk to.");
+      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+    }
+  }
+}
+
+if (cursormode == C_USE) {
+  if (controller(cLeftClick)) {
+    [ same as 'use item'
+    if (mouseY > 25) {
+      print("There is nothing to manipulate here.");
+      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+    }
+  }
+}
+
+[*****
+:noInput           [  all non-input related code goes here 
+[*****
+
+[ add other room specific statements here
+if (posn(ego, 113, 156, 127, 167)) {
+  if (!frontdooropen) {
+    [ open it
+    set(frontdooropen);
+    start.update(backpane);
+    end.of.loop(backpane, fDone);
+    start.update(frontpane);
+    end.of.loop(frontpane, fDone); [ ok to re-use fDone here!
+  }
+} else {
+  if (frontdooropen) {
+    [ close it
+    reset(frontdooropen);
+    start.update(backpane);
+    reverse.loop(backpane, fDone);
+    start.update(frontpane);
+    reverse.loop(frontpane, fDone);
+  }
+}
+
+if (fDone) {
+  reset(fDone);
+  stop.update(backpane);
+  stop.update(frontpane);
+  if (frontdooropen) {
+    ignore.objs(backpane);
+  } else {
+    observe.objs(backpane);
+  }
+}  
+    
+[*****
+:exit              [  test for leaving the room
+[*****
+
+[ add exit checks here (or use layout editor)
+
+if (edgeEgoHit == TOP_EDGE)
+  {
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ fade out, then change room
+  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  new.room(rm.Hallway);  [ ##LE001##
+  }
+
+[if (posn(ego, 113, 167, 125, 167)) {
+if (edgeEgoHit == BOTTOM_EDGE) {
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ fade out, then change room
+  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  new.room(rm.ParkingLot);  [ ##LE002##
+}
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%g40"
+#message 2 "%g41"
+#message 3 "%g42"
+#message 4 "%g43"
+#message 5 "%g44"
+#message 6 "%g45"
+#message 7 "This is the lobby. There is a desk and some chairs in the waiting area."

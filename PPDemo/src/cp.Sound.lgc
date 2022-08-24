@@ -1,1 +1,1888 @@
-[ ********************************************************************[[ cp.Sound[[ Electronic Synthesized Audio Data Options Control Console[ [ ESADOCC[ toggle between pc speaker and 4chan[ allow instrument selection for each channel[ test button - play a short song[[ 4channelsound flag gets changed during editing; it has to be[ restored on cancel; instrument values don't; temp values are used[[ ********************************************************************#define oCursorB       o1  [ need four objects for cursor otherwise#define oCursorT       o2  [ text gets erased#define oCursorL       o3#define oCursorR       o4#define oMode          o5#define oChannels      o6#define oCheck         o7#define oTest          o8#define oScrlBox       o9#define oScrlBkgd     o10#define oVolSlider    o11[ loop values assigned to cursor objects#define LP_OPT      0 [ option button states#define LP_CF_OPT1  1 [ cursor frame for mouse/keyb option buttons#define LP_CF_OPT2  2 [    "     "    "  channel mode option buttons#define LP_CF_CMD1  3 [    "     "    "  OK, Cancel command buttons#define LP_CF_CMD2  4 [    "     "    "  Test All command button#define LP_CF_CMD3  5 [    "     "    "  channel Test command buttons#define LP_CF_PNL   6 [    "     "    "  listbox panel#define LP_CF_TXT   7 [    "     "    "  textboxes#define LP_SCROLL   8 [ scroll bar components#define LP_SLIDER   9 [ slider button for volume control#define currentInst   v220#define cursorpos     v221#define    CP_MOUSE   1#define    CP_KEYB    2#define    CP_1CHAN   3#define    CP_4CHFM   4#define    CP_4CHMD   5#define    CP_OK      6#define    CP_CANCEL  7#define    CP_TESTALL 8#define    CP_TEST0   9#define    CP_TEST1  10#define    CP_TEST2  11#define    CP_TEST3  12#define    CP_TEST4  13#define    CP_INST0  14#define    CP_INST1  15#define    CP_INST2  16#define    CP_INST3  17#define    CP_INST4  18#define    CP_VOLUME 19#define newpos       v222#define cursorX      v223 [ used byref!!!#define cursorY      v224#define btnAction    v225#define    B_1CHAN    1#define    B_4CHFM    2#define    B_4CHMD    3#define    B_OK       4#define    B_CANCEL   5#define    B_TESTALL  6#define    B_TEST0    7#define    B_TEST1    8#define    B_TEST2    9#define    B_TEST3   10#define    B_TEST4   11#define    B_INST0   12#define    B_INST1   13#define    B_INST2   14#define    B_INST3   15#define    B_INST4   16#define    B_VOLUME  17#define    B_UNSEL   18#define    SC_UP     19#define    SC_DOWN   20#define    SC_PGUP   21#define    SC_PGDN   22#define egoPrevX     v226#define egoPrevY     v227#define egoPrevDir   v228#define tmpFM0       v229#define tmpFM1       v230#define tmpFM2       v231#define tmpFM3       v232#define tmpFM4       v233#define dropmode     v234#define    NODROP     0#define    DROPDOWN   1#define    CHOOSING   2#define    DROPUP     3#define listrow      v235#define selinst      v236 [ instrument index of selected instrument#define selrow       v237 [ text row of selected instrument#define offsetinst   v238 [ instrument index of top row of listbox#define offsetrow    v239 [ top row of listbox[ a few more variable are needed than normally assigned to rooms[ the dynamic variables (240-255) can be safely used here#define tmpAttn      v240#define slideoffset  v241#define mode         v242#define     1CHAN     0#define     FMSYNTH   1#define     MIDI      2#define tmpMIDI0     v243#define tmpMIDI1     v244#define tmpMIDI2     v245#define update       f220#define old4chan     f221#define oldMIDI      f222#define cursormode   f223#define sndTest      f224#define sndDone      f225#define redrawList   f226#define sliding      f227[ **************************************[ FIRST CYCLE ONLY[ **************************************if(newRoom) {  [ this is the first cycle through this room  [ do basic room initialization  call(lgc.RoomInit);  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);  [ this view has all the art for cursors and buttons  load.view(vw.cp.Sound);    set.horizon(0);    [ load the test sounds  load.sound(m.Theme);  load.sound(s.InstTest);  load.sound(s.NoiseTest1);  load.sound(s.NoiseTest2);     [ option button that determines input mode; mouse or keyboard  animate.obj(oMode);  set.view(oMode, vw.cp.Sound);  set.loop(oMode, 0);  set.cel(oMode, 0);  stop.cycling(oMode);  position(oMode, 8, 65);  draw(oMode);    [ option button for channel count  animate.obj(oChannels);  set.view(oChannels, vw.cp.Sound);  set.loop(oChannels, 0);  set.cel(oChannels, 0);  stop.cycling(oChannels);  if (4channelsound) {    if (useMIDI) {     position(oChannels, 8, 121);    } else {     position(oChannels, 8, 105);    }  } else {    position(oChannels, 8, 89);  }  draw(oChannels);    [ cursor, in four parts, default to keyboard option position  animate.obj(oCursorB);  ignore.objs(oCursorB);  set.view(oCursorB, vw.cp.Sound);  set.loop(oCursorB, LP_CF_OPT1);  set.cel(oCursorB, 0);  stop.cycling(oCursorB);    animate.obj(oCursorL);  ignore.objs(oCursorL);  set.view(oCursorL, vw.cp.Sound);  set.loop(oCursorL, LP_CF_OPT1);  set.cel(oCursorL, 1);  stop.cycling(oCursorL);    animate.obj(oCursorT);  ignore.objs(oCursorT);  set.view(oCursorT, vw.cp.Sound);  set.loop(oCursorT, LP_CF_OPT1);  set.cel(oCursorT, 0);  stop.cycling(oCursorT);    animate.obj(oCursorR);  ignore.objs(oCursorR);  set.view(oCursorR, vw.cp.Sound);  set.loop(oCursorR, LP_CF_OPT1);  set.cel(oCursorR, 1);  stop.cycling(oCursorR);    [ cursor starts on keyboard option button  cursorpos = CP_KEYB;  newpos = CP_KEYB;  [ don't draw it yet though    [ scrollbar background  animate.obj(oScrlBkgd);  ignore.objs(oScrlBkgd);  set.view(oScrlBkgd, vw.cp.Sound);  set.loop(oScrlBkgd, LP_SCROLL);  set.cel(oScrlBkgd, 2);  stop.cycling(oScrlBkgd);  set.priority(oScrlBkgd, 14);    [ scrollbar box  animate.obj(oScrlBox);  ignore.objs(oScrlBox);  set.view(oScrlBox, vw.cp.Sound);  set.loop(oScrlBox, LP_SCROLL);  set.cel(oScrlBox, 0);  stop.cycling(oScrlBox);  set.priority(oScrlBox, 15);    [ volume slider button  animate.obj(oVolSlider);  ignore.objs(oVolSlider);  set.view(oVolSlider, vw.cp.Sound);  set.loop(oVolSlider, LP_SLIDER);  set.cel(oVolSlider, 0);  stop.cycling(oVolSlider);  set.priority(oVolSlider, 15);  [ position depends on current sound attenuation  tmpAttn = attenuation;  work1 = attenuation;  work1 *= -1;  work1 += 144;  work2 = 166;  position.v(oVolSlider, work1, work2);  [ (not used if 1chan)  if (4channelsound) {    draw(oVolSlider);  }    [ make copy of current mode  if (4channelsound) {    set(old4chan);  } else {    reset(old4chan);  }  if (useMIDI) {    set(oldMIDI);  } else {    reset(oldMIDI);  }    [ instrument values  tmpFM0 = FMInst0;  tmpFM1 = FMInst1;  tmpFM2 = FMInst2;  tmpFM3 = FMInst3;  tmpFM4 = FMInst4;  tmpMIDI0 = MIDIInst0;  tmpMIDI1 = MIDIInst1;  tmpMIDI2 = MIDIInst2;    [ need to adjust by one to allow access to msgs  ++tmpFM0;  ++tmpFM1;  ++tmpFM2;  ++tmpFM3;  ++tmpFM4;  ++tmpMIDI0;  ++tmpMIDI1;  ++tmpMIDI2;    [ no instrument listbox is currently being edited  currentInst = -1;    [ copy the custom FM instrument values from lgc.Main  s12 = "%g53";  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)  block(SET.MSG, 0, &m144, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)  s12 = "%g54";  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)  block(SET.MSG, 0, &m145, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)  s12 = "%g55";  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)  block(SET.MSG, 0, &m146, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)  s12 = "%g56";  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)  block(SET.MSG, 0, &m147, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)  s12 = "%g57";  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)  block(SET.MSG, 0, &m148, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)    [ mouse is enabled, not cursor; no button active  reset(cursormode);  btnAction = 0;  [ cache ego movement parameters (to be restored  [ when returning to the control room)  egoPrevX = egoX;  egoPrevY = egoY;  egoPrevDir = egoDir;  [ arrow keys control cursor here  egoDir = 0;    [ display the picture on screen  show.pic();  [ add a line below picture to 'extend' it  clear.lines(22, 22, LT_GRAY);    [ add label text  set.text.attribute(-1, 0);  set.text.attribute(BLACK, LT_GRAY);  display(6, 5, "Mode");  display(8, 4, "Ms");  display(8, 10, "Kb");  display(11, 4, "1chan PC");  display(13, 4, "4chan FM");  display(15, 4, "4chan MD");  set.text.attribute(DK_GRAY, LT_GRAY);  display(22, 19, "min");  display(22, 35, "max");    [ button text  set.text.attribute(BLACK, WHITE);  display(17, 3, "OK");  display(19, 1, "Cancel");  display(18, 9, "Test");    [ force update of channel buttons and text boxes  set(update);    [ remember to fade in to be able to see the screen again  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);}[ **************************************[ EVERY CYCLE[ **************************************if (update) {  [ set text color based on mode  if (4channelsound) {   work1 = BLACK;  } else {    work1 = LT_GRAY;  }  cursorX = WHITE;  [ colors byvar  toggle.monitor();  set.text.attribute(&work1, &cursorX);  display(6, 16, "\x0E");  display(9, 16, "\x0E");  display(12, 16, "\x0E");  [ current instruments  cursorY = 19;  cursorX = 6;  if (useMIDI) {    [ show MIDI instruments    display.v(cursorX, cursorY, tmpMIDI0);    cursorX += 3;    display.v(cursorX, cursorY, tmpMIDI1);    cursorX += 3;    display.v(cursorX, cursorY, tmpMIDI2);    cursorX += 3;    [ noise channels are not applicable    set.text.attribute(LT_GRAY, WHITE);    work1 = &m149;    display.v(cursorX, cursorY, work1);    cursorX += 3;    display.v(cursorX, cursorY, work1);    [ noise channel test btns    display(15, 16, "\x0E");    display(18, 16, "\x0E");      } else {    [ show FMsynth instruments    display.v(cursorX, cursorY, tmpFM0);    cursorX += 3;    display.v(cursorX, cursorY, tmpFM1);    cursorX += 3;    display.v(cursorX, cursorY, tmpFM2);    cursorX += 3;    display.v(cursorX, cursorY, tmpFM3);    cursorX += 3;    display.v(cursorX, cursorY, tmpFM4);    [ noise channel test btns    display(15, 16, "\x0E");    display(18, 16, "\x0E");  }    [ volume slider  if (4channelsound) {    set.text.attribute(BLACK, LT_GRAY);    draw(oVolSlider);  } else {    set.text.attribute(DK_GRAY, LT_GRAY);    erase(oVolSlider);  }  display(22, 26, "Volume");    set.text.attribute(0, -1);    reset(update);    [ cancel drop mode  if (dropmode == DROPUP) {    dropmode = NODROP;  }}[ display dropdown listif (dropmode == DROPDOWN) {  [ clear area for dropdown (can't do byvar)  if (currentInst == 0) {    clear.text.rect(4, 19, 8, 38, WHITE);  }  if (currentInst == 1) {    clear.text.rect(7, 19, 11, 38, WHITE);  }  if (currentInst == 2) {    clear.text.rect(10, 19, 14, 38, WHITE);  }  if (currentInst == 3) {    clear.text.rect(13, 19, 17, 38, WHITE);  }  if (currentInst == 4) {    clear.text.rect(16, 19, 20, 38, WHITE);  }  [ determine row offset (row value of listbox top)  work1 = currentInst;  work1 *= 3;  work1 += 4;  offsetrow = work1;  [ column is always 19  work2 = 19;  [ instrument index offset (index of top item in list)  [ (depends on mode; either FM or MIDI)  work3 = currentInst;  work3 += &tmpFM0;  if (useMIDI) {    work3 += 14;  }  work3 = *work3;  [ save this as the current selected instrument  selinst = work3;  work3 -= 2;  [ check for start/end of list  if ((work3 == 0 || work3 == 255)) {    work3 = 1;  }  if (useMIDI) {    if (work3 > 124) {      work3 = 124;    }  } else {    if (work3 > 132) {      work3 = 132;    }  }  offsetinst = work3;    [ use a loop to draw the instrument text  cursorX = 0;  set.text.attribute(-1, 0);  :PrintInst    if (work3 == selinst) {      set.text.attribute(WHITE, BLACK);      listrow = cursorX;    } else {      set.text.attribute(BLACK, WHITE);    }    display.v(work1, work2, work3);    ++work1;    ++work3;    ++cursorX;  if (cursorX < 5) {    goto(PrintInst);  }  [ row of selected inst = offsetrow+listrow  selrow = offsetrow;  selrow += listrow;    [position cursor to draw the box frame  erase(oCursorB);  erase(oCursorT);  erase(oCursorL);  erase(oCursorR);  cursorX = 75;  cursorY = currentInst;  cursorY *= 24;  cursorY += 64;  set.loop(oCursorB, LP_CF_PNL);  set.loop(oCursorL, LP_CF_PNL);  set.loop(oCursorT, LP_CF_PNL);  set.loop(oCursorR, LP_CF_PNL);  position.v(oCursorB, cursorX, cursorY);  --cursorY;  position.v(oCursorL, cursorX, cursorY);  cursorY -= 40;  position.v(oCursorT, cursorX, cursorY);  cursorX += 81;  cursorY += 40;  position.v(oCursorR, cursorX, cursorY);    draw(oCursorB);  draw(oCursorL);  draw(oCursorT);  draw(oCursorR);    [ add arrows  set.text.attribute(BLACK, LT_GRAY);  work1 = offsetrow;  work2 = 38;  work3 = &m137;  display.v(work1, work2, work3);  work1 += 4;  work3 = &m138;  display.v(work1, work2, work3);    [ show scrollbar background  work1 = 152;  work2 = currentInst;  work2 *= 24;  work2 += 56;  erase(oScrlBkgd);  position.v(oScrlBkgd, work1, work2);  draw(oScrlBkgd);    [ position the scrollbar box  work2 -= 26;  work3 = selinst;  work3 /= 3;  work3 *= 4;  work3 /= 7;  if (work3 > 25) {    work3 = 25;  }  work2 += work3;  erase(oScrlBox);  set.cel(oScrlBox, 0);  position.v(oScrlBox, work1, work2);  draw(oScrlBox);    set.text.attribute(0, -1);    [ begin choosing  dropmode = CHOOSING;}[ if choosing a new instrumentif (dropmode == CHOOSING) {  [ check for direction arrow keypress  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      [ it index not at top      if (listrow > 0) {        --listrow;        --selrow;        --selinst;        set(redrawList);      } else {        if (offsetinst > 0) {          btnAction = SC_UP;        }      }    }    [ cursor down    if (egoDir == DOWN) {      [ if index not at bottom      if (listrow < 4) {        ++listrow;        ++selrow;        ++selinst;        set(redrawList);      } else {        if (useMIDI) {          work1 = 124;        } else {          work1 = 132;        }        if (offsetinst < work1) {          btnAction = SC_DOWN;        }      }    }    [ page up    if (egoDir == UP_RIGHT) {      btnAction = SC_PGUP;    }    [ page down    if (egoDir == DOWN_RIGHT) {      btnAction = SC_PGDN;    }        [ always reset egodir    egoDir = 0;  }    [ escape cancels the selection  if (controller(cMenu)) {    [ dropup to hide the list    dropmode = DROPUP;  }    [ keyboard works regardless of mode for listboxes  [ return to select  if (have.key()) {    if ((lastChar == 13 || lastChar == 10)) {      lastChar = 0;      [ make the selection      work1 = &tmpFM0;      if (useMIDI) {        work1 += 14;      }      work1 += currentInst;      *work1 = selinst;            [ dropup to hide the list      dropmode = DROPUP;    }  }    [ check for right-click  if (controller(cRightClick)) {    [ dropup to hide the list    dropmode = DROPUP;  }    [ if mouse x value is over the listbox text  if (mouseX > 75 && mouseX < 152) {    [ check for left click    if (controller(cLeftClick)) {      [ convert yvalue to index      work1 = mouseY;      work1 /= 8;      work1 -= offsetrow;      [ is it a valid offset?      if (work1 < 5 && work1 != listrow) {        [ deselect old        cursorY = selrow;        cursorX = 19;        set.text.attribute(-1, 0);        set.text.attribute(BLACK, WHITE);        display.v(cursorY, cursorX, selinst);                [ select new        listrow = work1;        selrow = offsetrow;        selrow += listrow;        selinst = offsetinst;        selinst += listrow;        cursorY = selrow;        cursorX = 19;        set.text.attribute(WHITE, BLACK);        display.v(cursorY, cursorX, selinst);        set.text.attribute(0, -1);      }    }          [ check for dbl click    if (controller(cLeftDblClick)) {      [ make the selection      work1 = &tmpFM0;      if (useMIDI) {        work1 += 14;      }      work1 += currentInst;      *work1 = selinst;            [ dropup to hide the list      dropmode = DROPUP;    }  }    [ if over the scrollbar  if (mouseX > 151 && mouseX < 156) {    [ check for click OR dblclick    if ((controller(cLeftClick) || controller(cLeftDblClick))) {      [ convert offset row to y value      work1 = offsetrow;      work1 *= 8;      --work1;      [ bottom of up arrow      work2 = work1;      work2 += 8;      [ if on up arrow, scroll up      if (mouseY > work1 && mouseY < work2) {        btnAction = SC_UP;        goto(donemouse);      }            [ adjust compare values to bottom arrow      work1 += 33;      work2 += 33;      [ if on down arrow, scroll down      if (mouseY > work1 && mouseY < work2) {        btnAction = SC_DOWN;        goto(donemouse);      }            [ adjust compare values to top of scroll      [ window and scrollbox position      work1 -= 26;      get.posn(oScrlBox, work3, work2);      work2 += 8;      [ if above scrollbox, page up      if (mouseY > work1 && mouseY < work2) {        btnAction = SC_PGUP;        goto(donemouse);      }            [ adjust compare values to scrollbox position      [ and bottom of scroll window      work2 = work1;      work2 += 27;      get.posn(oScrlBox, work3, work1);      work1 += 8;      [ if below scrollbox, page down      if (mouseY > work1 && mouseY < work2) {        btnAction = SC_PGDN;      }      :donemouse    }  }    [ check for scroll actions  if (btnAction == SC_UP) {    [ if not at top of list    if (offsetinst > 1) {      --offsetinst;      [ selection stays the same, so adjust      [ listrow to match      ++listrow;      ++selrow;      [ unless it's off screen      if (listrow > 4) {        [ reset it to bottom        listrow = 4;        --selinst;        --selrow;      }      [ redraw listbox text      set(redrawList);    }  }  if (btnAction == SC_DOWN) {    [ if not at bottom of list    if (useMIDI) {      work1 = 124;    } else {      work1 = 132;    }      if (offsetinst < work1) {      ++offsetinst;      [ selection stays the same, so adjust      [ listrow to match      listrow -= 1; [ (can't use decrement, because it doesn't wrap around)      --selrow;      [ unless it's off screen      if (listrow == -1) {        [ reset it to top        listrow = 0;        ++selinst;        ++selrow;      }      [ redraw listbox text      set(redrawList);    }  }  if (btnAction == SC_PGUP) {    [ if not at top of list    if (offsetinst > 1) {      offsetinst -= 5;      if ((offsetinst == 0 || offsetinst > 250)) {        offsetinst = 1;      }      [ reset selection to bottom      listrow = 4;      selinst = offsetinst;      selinst += 4;      selrow = offsetrow;      selrow += 4;      [ redraw listbox text      set(redrawList);    }  }  if (btnAction == SC_PGDN) {    [ if not at bottom of list    if (useMIDI) {      work1 = 124;    } else {      work1 = 132;    }    if (offsetinst < work1) {      offsetinst += 5;      if (offsetinst > work1) {        offsetinst = work1;      }      [ reset selection to top      listrow = 0;      selinst = offsetinst;      selrow = offsetrow;      [ redraw listbox text      set(redrawList);    }  }    [ always reset button action  btnAction = 0;    }[ redraw textif (redrawList) {  [ use a loop to draw the instrument text  cursorX = 0;  work1 = offsetrow;  work2 = 19;  work3 = offsetinst;    set.text.attribute(-1, 0);  :redrawloop    if (work3 == selinst) {      set.text.attribute(WHITE, BLACK);    } else {      set.text.attribute(BLACK, WHITE);    }    display.v(work1, work2, work3);    ++work1;    ++work3;    ++cursorX;  if (cursorX < 5) {    goto(redrawloop);  }  set.text.attribute(0, -1);    [ position the scrollbar box  work1 = 152;  work2 = currentInst;  work2 *= 24;  work2 += 30; [ scroll arrow is not full eight characters tall  work3 = selinst;  work3 /= 3;  work3 *= 4;  work3 /= 7;  if (work3 > 25) {    work3 = 25;  }  work2 += work3;  erase(oScrlBox);  set.cel(oScrlBox, 0);  position.v(oScrlBox, work1, work2);  draw(oScrlBox);    reset(redrawList);}[ dropupif (dropmode == DROPUP) {  erase(oCursorB);  erase(oCursorL);  erase(oCursorT);  erase(oCursorR);  [ to restore the window, move an object across it  work1 = 72;  work2 = currentInst;  work2 *= 24;  work2 += 24;  erase(oScrlBkgd);  erase(oScrlBox);  set.cel(oScrlBox, 1);  position.v(oScrlBox, work1, work2);  draw(oScrlBox);  work1 = 156;  work2 += 39;  reposition.to.v(oScrlBox, work1, work2);    if (cursormode) {    [ in kb mode, restore selection by forcing update    cursorpos = -1;    btnAction = currentInst;    btnAction += 11;  }    [ done - force an update  set(update);}[ if showing dropbox, don't process other cursor statementsif (dropmode != NODROP) {  [ nothing else to do  return();}[ is cursor in text mode?if (cursormode) {  [ check for direction arrow keypress  if (egoDir != STOPPED) {    [ cursor up    if (egoDir == UP) {      if (cursorpos == CP_1CHAN) {        newpos = CP_MOUSE;      }      if (cursorpos > CP_1CHAN && cursorpos < CP_TESTALL) {        --newpos;      }      if (cursorpos == CP_TESTALL) {        newpos = CP_4CHMD;      }      if (cursorpos > CP_TEST0 && cursorpos < CP_INST0) {        --newpos;      }      if (cursorpos > CP_INST0) {        --newpos;      }      if (useMIDI) {        if (cursorpos == CP_VOLUME) {          newpos = CP_INST2;[        } else {[          newpos = CP_INST4;        }      }    }        [ cursor right    if (egoDir == RIGHT) {      if (cursorpos == CP_MOUSE) {        newpos = CP_KEYB;      }      if (useMIDI) {        work1 = CP_4CHMD;      } else {        work1 = CP_OK;      }      if (cursorpos > CP_MOUSE && cursorpos < work1) {        newpos += 7;      }      if ((cursorpos == CP_OK || cursorpos == CP_CANCEL)) {        newpos = CP_TESTALL;      }      if (cursorpos == CP_TESTALL && !useMIDI) {        newpos = CP_TEST4;      }      if (cursorpos > CP_TESTALL && cursorpos < CP_INST0) {        newpos += 5;      }      if (cursorpos == CP_VOLUME) {        if (attenuation > 0) {          --attenuation;          [ move slider          work1 = 144;          work1 -= attenuation;          work2 = 166;          reposition.to.v(oVolSlider, work1, work2);        }      }    }        [ cursor down    if (egoDir == DOWN) {      if (cursorpos < CP_1CHAN) {        newpos = CP_1CHAN;      }      if (cursorpos > CP_KEYB && cursorpos < CP_CANCEL) {        ++newpos;      }      if (useMIDI) {        work1 = CP_TEST2;      } else {        work1 = CP_TEST4;      }      if (cursorpos > CP_TESTALL && cursorpos < work1) {        ++newpos;      }      if (useMIDI) {        if (cursorpos > CP_TEST4 && cursorpos < CP_INST2) {          ++newpos;        }        if (cursorpos == CP_INST2) {          newpos = CP_VOLUME;        }      } else {        if (cursorpos > CP_TEST4 && cursorpos < CP_VOLUME) {          ++newpos;        }      }    }        [ cursor left    if (egoDir == LEFT) {      if (cursorpos == CP_KEYB) {        newpos = CP_MOUSE;      }      if (cursorpos == CP_TESTALL) {        newpos = CP_CANCEL;      }      if (cursorpos == CP_TEST0) {        newpos = CP_KEYB;      }      if (cursorpos == CP_TEST1) {        newpos = CP_1CHAN;      }      if (cursorpos == CP_TEST2) {        newpos = CP_4CHFM;      }      if (cursorpos == CP_TEST3) {        newpos = CP_4CHMD;      }      if (cursorpos == CP_TEST4) {        newpos = CP_TESTALL;      }      if (cursorpos > CP_TEST4 && cursorpos != CP_VOLUME) {        newpos -= 5;      }      if (cursorpos == CP_VOLUME) {        if (attenuation < 63) {          ++attenuation;          [ move slider          work1 = 144;          work1 -= attenuation;          work2 = 166;          reposition.to.v(oVolSlider, work1, work2);        }      }    }        [ always reset dir so another keypress can be detected    egoDir = 0;        [ ignore chages that move to disabled buttons    if (newpos > CP_TESTALL && !4channelsound) {      [reset back to current      newpos = cursorpos;    }  }    [ check for new cursor position  if (cursorpos != newpos) {    [ to move cursor, erase it first, otherwise, it will    [ clear any text that is present anywhere between the    [ new position and the old position    erase(oCursorB);    erase(oCursorL);    erase(oCursorT);    erase(oCursorR);    [ update the position    cursorpos = newpos;    [ depending on where cursor is, set the position and size/shape    [ input mode options    if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {      [ option buttons      set.loop(oCursorB, LP_CF_OPT1);      set.loop(oCursorT, LP_CF_OPT1);      set.loop(oCursorL, LP_CF_OPT1);      set.loop(oCursorR, LP_CF_OPT1);      cursorY = 65;      if (cursorpos == 1) {        cursorX = 7;      }      if (cursorpos == 2) {        cursorX = 31;      }    }        [ channel count options    if ((cursorpos == CP_1CHAN || cursorpos == CP_4CHFM || cursorpos == CP_4CHMD)) {      set.loop(oCursorB, LP_CF_OPT2);      set.loop(oCursorT, LP_CF_OPT2);      set.loop(oCursorL, LP_CF_OPT2);      set.loop(oCursorR, LP_CF_OPT2);      [ convert cursorpos into desired y value      cursorX = 7;      cursorY = cursorpos;      cursorY -= 3;      cursorY *= 16;      cursorY += 89;    }          [ OK, Cancel    if ((cursorpos == CP_OK || cursorpos == CP_CANCEL)) {      set.loop(oCursorB, LP_CF_CMD1);      set.loop(oCursorT, LP_CF_CMD1);      set.loop(oCursorL, LP_CF_CMD1);      set.loop(oCursorR, LP_CF_CMD1);            [ convert cursorpos into desired y value      cursorX = 3;      cursorY = cursorpos;      cursorY -= 6;      cursorY *= 16;      cursorY += 136;    }        [ test all    if (cursorpos == CP_TESTALL) {      set.loop(oCursorB, LP_CF_CMD2);      set.loop(oCursorT, LP_CF_CMD2);      set.loop(oCursorL, LP_CF_CMD2);      set.loop(oCursorR, LP_CF_CMD2);      cursorX = 35;      cursorY = 144;    }        [ test channel buttons    if (cursorpos > CP_TESTALL && cursorpos < CP_INST0) {      set.loop(oCursorB, LP_CF_CMD3);      set.loop(oCursorT, LP_CF_CMD3);      set.loop(oCursorL, LP_CF_CMD3);      set.loop(oCursorR, LP_CF_CMD3);            [ convert cursorpos into desired y value      cursorX = 63;      cursorY = cursorpos;      cursorY -= 9;      cursorY *= 24;      cursorY += 48;    }              [ instrument text boxes    if (cursorpos > CP_TEST4 && cursorpos < CP_VOLUME) {      set.loop(oCursorB, LP_CF_TXT);      set.loop(oCursorT, LP_CF_TXT);      set.loop(oCursorL, LP_CF_TXT);      set.loop(oCursorR, LP_CF_TXT);            [ convert cursorpos into desired y value      cursorX = 75;      cursorY = cursorpos;      cursorY -= 14;      cursorY *= 24;      cursorY += 48;    }        [ volume slider    if (cursorpos == CP_VOLUME) {     [ don't use the cursor, just change the cel      set.cel(oVolSlider, 1);      [ if something was selected      if (currentInst < 255) {        [ unselect it        btnAction = B_UNSEL;      }    } else {      [ always deselect the volume slider      set.cel(oVolSlider, 0);            [ redraw the cursor      position.v(oCursorB, cursorX, cursorY);      draw(oCursorB);      --cursorY;      position.v(oCursorL, cursorX, cursorY);      draw(oCursorL);      if (cursorpos < CP_OK) {        cursorY -= 10;      } else {        cursorY -= 8;      }      position.v(oCursorT, cursorX, cursorY);      draw(oCursorT);      if (cursorpos < CP_1CHAN) {        cursorX += 17;        cursorY += 10;      } else {        if ((cursorpos == CP_1CHAN || cursorpos == CP_4CHFM || cursorpos == CP_4CHMD)) {          cursorX += 41;          cursorY += 10;        } else {          if ((cursorpos == CP_OK || cursorpos == CP_CANCEL)) {            cursorX += 25;          }          if (cursorpos == CP_TESTALL) {            cursorX += 17;          }          if (cursorpos > CP_TESTALL && cursorpos < CP_INST0) {            cursorX += 5;          }          if (cursorpos > CP_TEST4) {            cursorX += 77;          }          cursorY += 8;        }      }      position.v(oCursorR, cursorX, cursorY);      draw(oCursorR);            [ if cursor moves to an instrument text box      [ automatically select it      if (cursorpos > CP_TEST4) {        [ select the highlighted text box        btnAction = cursorpos;        btnAction -= 2;      } else {        [ if something was selected        if (currentInst < 255) {          [ unselect it          btnAction = B_UNSEL;        }      }    }  }  [ check for selection (space/enter for buttons)  if (have.key()) {    [ space/enter    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {      if (cursorpos  == CP_MOUSE) {        [ switch to mouse control        reset(cursormode);        enable.item(mouse);        erase(oMode);        position(oMode, 8, 65);        draw(oMode);        [ erase the cursor objects        erase(oCursorB);        erase(oCursorT);        erase(oCursorL);        erase(oCursorR);      }      if (cursorpos > CP_KEYB && cursorpos < CP_INST0) {        btnAction = cursorpos;        btnAction -= 2;      }      if (cursorpos > CP_TEST4 && cursorpos < CP_VOLUME) {        [ if not using midi, OR on inst 0-2        if ((!useMIDI || cursorpos < CP_INST3)) {          [ display dropdown list          dropmode = DROPDOWN;        }      }    }    }} else {  [ check for mouse click  if (controller(cLeftClick)) {    [ over cursor type keyboard option [33, 56 - 37, 63]    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {      [ switch to keyboard cursor      set(cursormode);      disable.item(mouse);      erase(oMode);      position(oMode, 32, 65);      draw(oMode);      [ start cursor on keyboard option button      cursorpos = CP_KEYB;      newpos = CP_KEYB;      set.loop(oCursorB, LP_CF_OPT1);      position(oCursorB, 31, 65);      draw(oCursorB);      set.loop(oCursorL, LP_CF_OPT1);      position(oCursorL, 31, 64);      draw(oCursorL);      set.loop(oCursorT, LP_CF_OPT1);      position(oCursorT, 31, 54);      draw(oCursorT);      set.loop(oCursorR, LP_CF_OPT1);      position(oCursorR, 48, 64);      draw(oCursorR);    }    [ 1channel [9, 80 - 13, 87]    if (mouseX > 8 && mouseX < 14 && mouseY > 87 && mouseY < 96) {      btnAction = B_1CHAN;    }        [ 4channel FMsynth [9, 96 - 13, 103]    if (mouseX > 8 && mouseX < 14 && mouseY > 103 && mouseY < 112) {      btnAction = B_4CHFM;    }        [ 4channel MIDI [9, 112 - 13, 119]    if (mouseX > 8 && mouseX < 14 && mouseY > 119 && mouseY < 128) {      btnAction = B_4CHMD;    }        [ over OK button [3, 127 - 32, 136]    if (mouseX > 2 && mouseX < 33 && mouseY > 134 && mouseY < 145) {      btnAction = B_OK;    }          [ over Cancel button [3, 143 - 32, 152]    if (mouseX > 2 && mouseX < 33 && mouseY > 150 && mouseY < 161) {      btnAction = B_CANCEL;    }        [ test all [35, 135 - 52, 144]    if (mouseX > 34 && mouseX < 53 && mouseY > 142 && mouseY < 153) {      btnAction = B_TESTALL;    }        [ test 0 [63, 39 - 68, 48]    if (mouseX > 62 && mouseX < 69 && mouseY > 46 && mouseY < 57) {      btnAction = B_TEST0;    }        [ test 1 [63, 63 - 68, 72]    if (mouseX > 62 && mouseX < 69 && mouseY > 70 && mouseY < 81) {      btnAction = B_TEST1;    }        [ test 2 [63, 87 - 68, 96]    if (mouseX > 62 && mouseX < 69 && mouseY > 94 && mouseY < 105) {      btnAction = B_TEST2;    }        [ test 3 [63, 111 - 68, 120]    if (mouseX > 62 && mouseX < 69 && mouseY > 118 && mouseY < 129) {      btnAction = B_TEST3;    }        [ test 4 [63, 135 - 68, 144]    if (mouseX > 62 && mouseX < 69 && mouseY > 142 && mouseY < 153) {      btnAction = B_TEST4;    }        [ instrument 0 [75, 39 - 152, 48]    if (mouseX > 74 && mouseX < 153 && mouseY > 46 && mouseY < 57) {      btnAction = B_INST0;    }        [ instrument 1 [75, 63 - 152, 72]    if (mouseX > 74 && mouseX < 153 && mouseY > 70 && mouseY < 81) {      btnAction = B_INST1;   }        [ instrument 2 [75, 87 - 152, 96]    if (mouseX > 74 && mouseX < 153 && mouseY > 94 && mouseY < 105) {      btnAction = B_INST2;    }        [ instrument 3 [75, 111 - 152, 120]    if (mouseX > 74 && mouseX < 153 && mouseY > 118 && mouseY < 129) {      btnAction = B_INST3;    }        [ instrument 4 [75, 135 - 152, 144]    if (mouseX > 74 && mouseX < 153 && mouseY > 142 && mouseY < 153) {      btnAction = B_INST4;    }    [ over slider zone (y between 154, 167)    if (mouseY > 160 && mouseY < 175) {      get.posn(oVolSlider, cursorX, cursorY);      [ adjust for button width      cursorY = cursorX;      cursorY += 3;      [ is mouse on the slider?      if (mouseX >= cursorX && mouseX < cursorY) {        [ start slide action        set(sliding);        [ calculate offset from object position to mouse position        slideoffset = cursorX;        slideoffset -= mouseX;      }    }  }    [ check for mouse up, to clear slider movement  if (mouseBtn != 1) {    [ cancel slide operation    reset(sliding);  }    if (sliding) {    [ convert mousepos to a slider position    [ (slideX = mouseX + offset)    work1 = mouseX;    work1 += slideoffset;    [ limit to valid range (81-144)    if (work1 > 144) {      work1 = 144;    }    if (work1 < 81) {      work1 = 81;    }    [ reposition the slider    cursorY = 166;    reposition.to.v(oVolSlider, work1, cursorY);    [ convert position to attenuation value    work1 *= -1;    work1 += 144;    [ if it changed, update speed    if (work1 != attenuation) {      attenuation = work1;    }  }    [ check for dblclick (only if in 4channel mode)  if (controller(cLeftDblClick) && 4channelSound) {    [ instrument 0 [75, 39, - 152, 48]    if (mouseX > 74 && mouseX < 153 && mouseY > 46 && mouseY < 57) {      dropmode = DROPDOWN;    }        [ instrument 1 [75, 63 - 152, 72]    if (mouseX > 74 && mouseX < 153 && mouseY > 70 && mouseY < 81) {      dropmode = DROPDOWN;    }        [ instrument 2 [75, 87 - 152, 96]    if (mouseX > 74 && mouseX < 153 && mouseY > 94 && mouseY < 105) {      dropmode = DROPDOWN;    }        [ noise channels only if not in midi mode    if (!useMIDI) {      [ instrument 3 [75, 111 - 152, 120]      if (mouseX > 74 && mouseX < 153 && mouseY > 118 && mouseY < 129) {        dropmode = DROPDOWN;      }            [ instrument 4 [75, 135 - 152, 144]      if (mouseX > 74 && mouseX < 153 && mouseY > 142 && mouseY < 153) {        dropmode = DROPDOWN;      }    }  }}[ check for button actionif (btnAction > 0) {  [ always stop sound when a new button is pushed  stop.sound();    [ 1channel  if (btnAction == B_1CHAN) {    [ if currently 4chan    if (4channelsound) {      [ switch to one channel      reset(4channelsound);      [ move the button      erase(oChannels);      position(oChannels, 8, 89);      draw(oChannels);      [ and update button colors      set(update);    }  }    [ 4channel FMsynth  if (btnAction == B_4CHFM) {    [ if not 4chan FM    if ((!4channelsound || useMIDI)) {      [ switch to four channel      set(4channelsound);      [ FMsynth      reset(useMIDI);      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);      [ move the button      erase(oChannels);      position(oChannels, 8, 105);      draw(oChannels);      [ and update button colors      set(update);    }  }    [ 4channel MIDI  if (btnAction == B_4CHMD) {    [ if not 4chan MIDI    if ((!4channelsound || !useMIDI)) {      [ switch to four channel      set(4channelsound);      [ MIDI      set(useMIDI);      set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);      [ move the button      erase(oChannels);      position(oChannels, 8, 121);      draw(oChannels);      [ and update button colors      set(update);    }  }    [ ok or cancel  if ((btnAction == B_OK || btnAction == B_CANCEL)) {    [ restore ego movement parameters    egoX = egoPrevX;    egoY = egoPrevY;    egoDir = egoPrevDir;    if (btnAction == B_CANCEL) {      [ restore sound settings      if (old4chan) {        set(4channelsound);      } else {        reset(4channelsound);      }      if (oldMIDI) {        set(useMIDI);        set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);      } else {        reset(useMIDI);        set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);      }      attenuation = tmpAttn;    } else {      [ OK - keep current sound settings            [ save new instrument values      print.at("Sound parameters updated.", 5, 6, 31);      [ update instruments      FMInst0 = tmpFM0;      --FMInst0;      FMInst1 = tmpFM1;      --FMInst1;      FMInst2 = tmpFM2;      --FMInst2;      FMInst3 = tmpFM3;      --FMInst3;      FMInst4 = tmpFM4;      --FMInst4;      [ update the FM instrument settings      cursorX = 0;      if (FMInst0 < 131) {        set.key(&cursorX, &FMInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);      } else {        [ assign a custom instrument        work1 = FMInst0;        work1 += 13;        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);      }      ++cursorX;      if (FMInst1 < 131) {        set.key(&cursorX, &FMInst1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);      } else {        [ assign a custom instrument        work1 = FMInst1;        work1 += 13;        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);      }      ++cursorX;      if (FMInst2 < 131) {        set.key(&cursorX, &FMInst2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);      } else {        [ assign a custom instrument        work1 = FMInst2;        work1 += 13;        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);      }      ++cursorX;      if (FMInst3 < 131) {        set.key(&cursorX, &FMInst3, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);      } else {        [ assign a custom instrument        work1 = FMInst3;        work1 += 13;        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);      }      ++cursorX;      if (FMInst4 < 131) {        set.key(&cursorX, &FMInst4, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);      } else {        [ assign a custom instrument        work1 = FMInst4;        work1 += 13;        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);      }    }        [ fade out     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);        [ go back to previous room    new.room.v(previousRoom);   }    [ test all sound channels  if (btnAction == B_TESTALL) {    [ if sound is not already playing start a sound    if (!sndTest) {      [ set all music channel instruments (not noise)      cursorX = 0;      :setinst              work1 = &tmpFM0;        if (useMIDI) {          work1 += 14;        }        work1 += cursorX;        work1 = *work1;        --work1;        if (work1 < 131) {          set.key(&cursorX, &work1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);        } else {          [ assign a custom instrument          work2 = work1;          work2 += 13;          set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);        }      if (cursorX < 2) {        ++cursorX;        goto(SETINST);      }            sound(m.Theme, sndDone);      [ update button text      set.text.attribute(-1, 0);      set.text.attribute(BLACK, WHITE);      display(18, 9, "Stop");      set.text.attribute(0, -1);      set(sndTest);    }  }    [ if any non-textbox button OR unselecting  if ((btnAction < B_INST0 || btnAction == B_UNSEL)) {    [ deselect instrument    if (currentInst < 255) {      set.text.attribute(-1, 0);      set.text.attribute(BLACK, WHITE);      cursorY = 19;      cursorX = currentInst;      cursorX *= 3;      cursorX += 6;      [ convert selection to instrument value      work1 = currentInst;      work1 += &tmpFM0;      if (useMIDI) {        work1 += 14;      }      work1 = *work1;      display.v(cursorX, cursorY, work1);      set.text.attribute(0, -1);            [ reset selection      currentInst = -1;    }    [ if forcing,     if (btnAction == B_UNSEL) {      [ reset button value here      btnAction = 0;      return();    }  }    [ instrument buttons only work if 4chan is active  if (4channelsound) {      [ if an instrument test box    [ (noise channels only if not in midi mode)    if (btnAction > B_TESTALL && btnAction < B_INST0) {      if ((!useMIDI || btnAction < B_TEST3)) {        [ convert button to correct instrument value        work2 = btnAction;        work2 -= 7;        work2 += &tmpFM0;        if (useMIDI) {          work2 += 14;        }        work2 = *work2;        [ tmp values are 1-based; convert to 0-base        --work2;        [ use channel 0 for test        work1 = 0;        [ change instrument        if (work2 < 131) {          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);        } else {          [ assign a custom instrument          work2 += 13;          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);        }        sound(s.InstTest, sndDone);      }    }          [ if an instrument text box, selection is shown by inverting colors    [ (noise channels only if not in midi mode)    if (btnAction > B_TEST4 && btnAction < B_VOLUME) {      if ((!useMIDI || btnAction < B_INST3)) {        [ deselect current instrument        if (currentInst < 255) {          set.text.attribute(-1, 0);          set.text.attribute(BLACK, WHITE);          cursorY = 19;          cursorX = currentInst;          cursorX *= 3;          cursorX += 6;          [ convert selection to instrument value          work1 = currentInst;          work1 += &tmpFM0;          if (useMIDI) {            work1 += 14;          }          work1 = *work1;          display.v(cursorX, cursorY, work1);          set.text.attribute(0, -1);        }        [ reselect new instrument        currentInst = btnAction;        currentInst -= 12;                set.text.attribute(-1, 0);        set.text.attribute(WHITE, BLACK);        cursorY = 19;        cursorX = currentInst;        cursorX *= 3;        cursorX += 6;        [ convert selection to instrument value        work1 = currentInst;        work1 += &tmpFM0;        if (useMIDI) {          work1 += 14;        }        work1 = *work1;        display.v(cursorX, cursorY, work1);        set.text.attribute(0, -1);      }    }  }}[ if sound stopped, reset buttonif (sndDone) {  reset(sndDone);  reset(sndTest);  set.text.attribute(-1, 0);  set.text.attribute(BLACK, WHITE);  display(18, 9, "Test");  set.text.attribute(0, -1);}[ always reset button actionbtnAction = 0;return();[ **************************************[ DECLARED MESSAGES[ **************************************#message 1 "Acoust. Grand Piano"#message 2 "Bright Acous. Piano"#message 3 "Elec. Grand Piano  "#message 4 "Honky-tonk Piano   "#message 5 "Electric Piano 1   "#message 6 "Electric Piano 2   "#message 7 "Harpsichord        "#message 8 "Clavinet           "#message 9 "Celesta            "#message 10 "Glockenspiel       "#message 11 "Music Box          "#message 12 "Vibraphone         "#message 13 "Marimba            "#message 14 "Xylophone          "#message 15 "Tubular Bells      "#message 16 "Dulcimer           "#message 17 "Drawbar Organ      "#message 18 "Percussive Organ   "#message 19 "Rock Organ         "#message 20 "Church Organ       "#message 21 "Reed Organ         "#message 22 "Accordion          "#message 23 "Harmonica          "#message 24 "Tango Accordion    "#message 25 "Ac. Guitar (nylon) "#message 26 "Ac. Guitar (steel) "#message 27 "Elec. Guitar (jazz)"#message 28 "El. Guitar (clean) "#message 29 "El. Guitar (muted) "#message 30 "Overdriven Guitar  "#message 31 "Distortion Guitar  "#message 32 "Guitar harmonics   "#message 33 "Acoustic Bass      "#message 34 "Elec. Bass (finger)"#message 35 "Elec. Bass (pick)  "#message 36 "Fretless Bass      "#message 37 "Slap Bass 1        "#message 38 "Slap Bass 2        "#message 39 "Synth Bass 1       "#message 40 "Synth Bass 2       "#message 41 "Violin             "#message 42 "Viola              "#message 43 "Cello              "#message 44 "Contrabass         "#message 45 "Tremolo Strings    "#message 46 "Pizzicato Strings  "#message 47 "Orchestral Harp    "#message 48 "Timpani            "#message 49 "String Ensemble 1  "#message 50 "String Ensemble 2  "#message 51 "Synth Strings 1    "#message 52 "Synth Strings 2    "#message 53 "Choir Aahs         "#message 54 "Voice Oohs         "#message 55 "Synth Voice        "#message 56 "Orchestra Hit      "#message 57 "Trumpet            "#message 58 "Trombone           "#message 59 "Tuba               "#message 60 "Muted Trumpet      "#message 61 "French Horn        "#message 62 "Brass Section      "#message 63 "Synth Brass 1      "#message 64 "Synth Brass 2      "#message 65 "Soprano Sax        "#message 66 "Alto Sax           "#message 67 "Tenor Sax          "#message 68 "Baritone Sax       "#message 69 "Oboe               "#message 70 "English Horn       "#message 71 "Bassoon            "#message 72 "Clarinet           "#message 73 "Piccolo            "#message 74 "Flute              "#message 75 "Recorder           "#message 76 "Pan Flute          "#message 77 "Blown Bottle       "#message 78 "Shakuhachi         "#message 79 "Whistle            "#message 80 "Ocarina            "#message 81 "Lead 1 (square)    "#message 82 "Lead 2 (sawtooth)  "#message 83 "Lead 3 (calliope)  "#message 84 "Lead 4 (chiff)     "#message 85 "Lead 5 (charang)   "#message 86 "Lead 6 (voice)     "#message 87 "Lead 7 (fifths)    "#message 88 "Lead 8 (bass+lead) "#message 89 "Pad 1 (new age)    "#message 90 "Pad 2 (warm)       "#message 91 "Pad 3 (polysynth)  "#message 92 "Pad 4 (choir)      "#message 93 "Pad 5 (bowed)      "#message 94 "Pad 6 (metallic)   "#message 95 "Pad 7 (halo)       "#message 96 "Pad 8 (sweep)      "#message 97 "FX 1 (rain)        "#message 98 "FX 2 (soundtrack)  "#message 99 "FX 3 (crystal)     "#message 100 "FX 4 (atmosphere)  "#message 101 "FX 5 (brightness)  "#message 102 "FX 6 (goblins)     "#message 103 "FX 7 (echoes)      "#message 104 "FX 8 (sci-fi)      "#message 105 "Sitar              "#message 106 "Banjo              "#message 107 "Shamisen           "#message 108 "Koto               "#message 109 "Kalimba            "#message 110 "Bag pipe           "#message 111 "Fiddle             "#message 112 "Shanai             "#message 113 "Tinkle Bell        "#message 114 "Agogo              "#message 115 "Steel Drums        "#message 116 "Woodblock          "#message 117 "Taiko Drum         "#message 118 "Melodic Tom        "#message 119 "Synth Drum         "#message 120 "Reverse Cymbal     "#message 121 "Guitar Fret Noise  "#message 122 "Breath Noise       "#message 123 "Seashore           "#message 124 "Bird Tweet         "#message 125 "Telephone Ring     "#message 126 "Helicopter         "#message 127 "Applause           "#message 128 "Gunshot            "#message 129 "AGISB Default      "#message 130 "Sierra White Noise "#message 131 "Sierra Tone Noise  "#message 132 "Custom Inst 1      "#message 133 "Custom Inst 2      "#message 134 "Custom Inst 3      "#message 135 "Custom Inst 4      "#message 136 "Custom Inst 5      "#message 137 "\x1E"#message 138 "\x1F"#message 139 "%g53"#message 140 "%g54"#message 141 "%g55"#message 142 "%g56"#message 143 "%g57"#message 144 "0000000000000000000000"#message 145 "0000000000000000000000"#message 146 "0000000000000000000000"#message 147 "0000000000000000000000"#message 148 "0000000000000000000000"#message 149 "   ----            "
+[ ********************************************************************
+[
+[ cp.Sound
+[
+[ Electronic Synthesized Audio Data Options Control Console
+[ 
+[ ESADOCC
+[ toggle between pc speaker and 4chan
+[ allow instrument selection for each channel
+[ test button - play a short song
+[
+[ 4channelsound flag gets changed during editing; it has to be
+[ restored on cancel; instrument values don't; temp values are used
+[
+[ ********************************************************************
+
+#define oCursorB       o1  [ need four objects for cursor otherwise
+#define oCursorT       o2  [ text gets erased
+#define oCursorL       o3
+#define oCursorR       o4
+#define oMode          o5
+#define oChannels      o6
+#define oCheck         o7
+#define oTest          o8
+#define oScrlBox       o9
+#define oScrlBkgd     o10
+#define oVolSlider    o11
+
+[ loop values assigned to cursor objects
+#define LP_OPT      0 [ option button states
+#define LP_CF_OPT1  1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_OPT2  2 [    "     "    "  channel mode option buttons
+#define LP_CF_CMD1  3 [    "     "    "  OK, Cancel command buttons
+#define LP_CF_CMD2  4 [    "     "    "  Test All command button
+#define LP_CF_CMD3  5 [    "     "    "  channel Test command buttons
+#define LP_CF_PNL   6 [    "     "    "  listbox panel
+#define LP_CF_TXT   7 [    "     "    "  textboxes
+#define LP_SCROLL   8 [ scroll bar components
+#define LP_SLIDER   9 [ slider button for volume control
+
+#define currentInst   v220
+#define cursorpos     v221
+#define    CP_MOUSE   1
+#define    CP_KEYB    2
+#define    CP_1CHAN   3
+#define    CP_4CHFM   4
+#define    CP_4CHMD   5
+#define    CP_OK      6
+#define    CP_CANCEL  7
+#define    CP_TESTALL 8
+#define    CP_TEST0   9
+#define    CP_TEST1  10
+#define    CP_TEST2  11
+#define    CP_TEST3  12
+#define    CP_TEST4  13
+#define    CP_INST0  14
+#define    CP_INST1  15
+#define    CP_INST2  16
+#define    CP_INST3  17
+#define    CP_INST4  18
+#define    CP_VOLUME 19
+#define newpos       v222
+#define cursorX      v223 [ used byref!!!
+#define cursorY      v224
+#define btnAction    v225
+#define    B_1CHAN    1
+#define    B_4CHFM    2
+#define    B_4CHMD    3
+#define    B_OK       4
+#define    B_CANCEL   5
+#define    B_TESTALL  6
+#define    B_TEST0    7
+#define    B_TEST1    8
+#define    B_TEST2    9
+#define    B_TEST3   10
+#define    B_TEST4   11
+#define    B_INST0   12
+#define    B_INST1   13
+#define    B_INST2   14
+#define    B_INST3   15
+#define    B_INST4   16
+#define    B_VOLUME  17
+#define    B_UNSEL   18
+#define    SC_UP     19
+#define    SC_DOWN   20
+#define    SC_PGUP   21
+#define    SC_PGDN   22
+#define egoPrevX     v226
+#define egoPrevY     v227
+#define egoPrevDir   v228
+#define tmpFM0       v229
+#define tmpFM1       v230
+#define tmpFM2       v231
+#define tmpFM3       v232
+#define tmpFM4       v233
+#define dropmode     v234
+#define    NODROP     0
+#define    DROPDOWN   1
+#define    CHOOSING   2
+#define    DROPUP     3
+#define listrow      v235
+#define selinst      v236 [ instrument index of selected instrument
+#define selrow       v237 [ text row of selected instrument
+#define offsetinst   v238 [ instrument index of top row of listbox
+#define offsetrow    v239 [ top row of listbox
+[ a few more variable are needed than normally assigned to rooms
+[ the dynamic variables (240-255) can be safely used here
+#define tmpAttn      v240
+#define slideoffset  v241
+#define mode         v242
+#define     1CHAN     0
+#define     FMSYNTH   1
+#define     MIDI      2
+#define tmpMIDI0     v243
+#define tmpMIDI1     v244
+#define tmpMIDI2     v245
+
+#define update       f220
+#define old4chan     f221
+#define oldMIDI      f222
+#define cursormode   f223
+#define sndTest      f224
+#define sndDone      f225
+#define redrawList   f226
+#define sliding      f227
+
+[ **************************************
+[ FIRST CYCLE ONLY
+[ **************************************
+if(newRoom) {
+  [ this is the first cycle through this room
+  [ do basic room initialization
+  call(lgc.RoomInit);
+
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+
+  [ this view has all the art for cursors and buttons
+  load.view(vw.cp.Sound);
+  
+  set.horizon(0);
+  
+  [ load the test sounds
+  load.sound(m.Theme);
+  load.sound(s.InstTest);
+  load.sound(s.NoiseTest1);
+  load.sound(s.NoiseTest2);
+   
+  [ option button that determines input mode; mouse or keyboard
+  animate.obj(oMode);
+  set.view(oMode, vw.cp.Sound);
+  set.loop(oMode, 0);
+  set.cel(oMode, 0);
+  stop.cycling(oMode);
+  position(oMode, 8, 65);
+  draw(oMode);
+  
+  [ option button for channel count
+  animate.obj(oChannels);
+  set.view(oChannels, vw.cp.Sound);
+  set.loop(oChannels, 0);
+  set.cel(oChannels, 0);
+  stop.cycling(oChannels);
+  if (4channelsound) {
+    if (useMIDI) {
+     position(oChannels, 8, 121);
+    } else {
+     position(oChannels, 8, 105);
+    }
+  } else {
+    position(oChannels, 8, 89);
+  }
+  draw(oChannels);
+  
+  [ cursor, in four parts, default to keyboard option position
+  animate.obj(oCursorB);
+  ignore.objs(oCursorB);
+  set.view(oCursorB, vw.cp.Sound);
+  set.loop(oCursorB, LP_CF_OPT1);
+  set.cel(oCursorB, 0);
+  stop.cycling(oCursorB);
+  
+  animate.obj(oCursorL);
+  ignore.objs(oCursorL);
+  set.view(oCursorL, vw.cp.Sound);
+  set.loop(oCursorL, LP_CF_OPT1);
+  set.cel(oCursorL, 1);
+  stop.cycling(oCursorL);
+  
+  animate.obj(oCursorT);
+  ignore.objs(oCursorT);
+  set.view(oCursorT, vw.cp.Sound);
+  set.loop(oCursorT, LP_CF_OPT1);
+  set.cel(oCursorT, 0);
+  stop.cycling(oCursorT);
+  
+  animate.obj(oCursorR);
+  ignore.objs(oCursorR);
+  set.view(oCursorR, vw.cp.Sound);
+  set.loop(oCursorR, LP_CF_OPT1);
+  set.cel(oCursorR, 1);
+  stop.cycling(oCursorR);
+  
+  [ cursor starts on keyboard option button
+  cursorpos = CP_KEYB;
+  newpos = CP_KEYB;
+  [ don't draw it yet though
+  
+  [ scrollbar background
+  animate.obj(oScrlBkgd);
+  ignore.objs(oScrlBkgd);
+  set.view(oScrlBkgd, vw.cp.Sound);
+  set.loop(oScrlBkgd, LP_SCROLL);
+  set.cel(oScrlBkgd, 2);
+  stop.cycling(oScrlBkgd);
+  set.priority(oScrlBkgd, 14);
+  
+  [ scrollbar box
+  animate.obj(oScrlBox);
+  ignore.objs(oScrlBox);
+  set.view(oScrlBox, vw.cp.Sound);
+  set.loop(oScrlBox, LP_SCROLL);
+  set.cel(oScrlBox, 0);
+  stop.cycling(oScrlBox);
+  set.priority(oScrlBox, 15);
+  
+  [ volume slider button
+  animate.obj(oVolSlider);
+  ignore.objs(oVolSlider);
+  set.view(oVolSlider, vw.cp.Sound);
+  set.loop(oVolSlider, LP_SLIDER);
+  set.cel(oVolSlider, 0);
+  stop.cycling(oVolSlider);
+  set.priority(oVolSlider, 15);
+  [ position depends on current sound attenuation
+  tmpAttn = attenuation;
+  work1 = attenuation;
+  work1 *= -1;
+  work1 += 144;
+  work2 = 166;
+  position.v(oVolSlider, work1, work2);
+  [ (not used if 1chan)
+  if (4channelsound) {
+    draw(oVolSlider);
+  }
+  
+  [ make copy of current mode
+  if (4channelsound) {
+    set(old4chan);
+  } else {
+    reset(old4chan);
+  }
+  if (useMIDI) {
+    set(oldMIDI);
+  } else {
+    reset(oldMIDI);
+  }
+  
+  [ instrument values
+  tmpFM0 = FMInst0;
+  tmpFM1 = FMInst1;
+  tmpFM2 = FMInst2;
+  tmpFM3 = FMInst3;
+  tmpFM4 = FMInst4;
+  tmpMIDI0 = MIDIInst0;
+  tmpMIDI1 = MIDIInst1;
+  tmpMIDI2 = MIDIInst2;
+  
+  [ need to adjust by one to allow access to msgs
+  ++tmpFM0;
+  ++tmpFM1;
+  ++tmpFM2;
+  ++tmpFM3;
+  ++tmpFM4;
+  ++tmpMIDI0;
+  ++tmpMIDI1;
+  ++tmpMIDI2;
+  
+  [ no instrument listbox is currently being edited
+  currentInst = -1;
+  
+  [ copy the custom FM instrument values from lgc.Main
+  s12 = "%g53";
+  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m144, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  s12 = "%g54";
+  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m145, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  s12 = "%g55";
+  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m146, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  s12 = "%g56";
+  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m147, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  s12 = "%g57";
+  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m148, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  
+  [ mouse is enabled, not cursor; no button active
+  reset(cursormode);
+  btnAction = 0;
+
+  [ cache ego movement parameters (to be restored
+  [ when returning to the control room)
+  egoPrevX = egoX;
+  egoPrevY = egoY;
+  egoPrevDir = egoDir;
+
+  [ arrow keys control cursor here
+  egoDir = 0;
+  
+  [ display the picture on screen
+  show.pic();
+  [ add a line below picture to 'extend' it
+  clear.lines(22, 22, LT_GRAY);
+  
+  [ add label text
+  set.text.attribute(-1, 0);
+  set.text.attribute(BLACK, LT_GRAY);
+  display(6, 5, "Mode");
+  display(8, 4, "Ms");
+  display(8, 10, "Kb");
+  display(11, 4, "1chan PC");
+  display(13, 4, "4chan FM");
+  display(15, 4, "4chan MD");
+  set.text.attribute(DK_GRAY, LT_GRAY);
+  display(22, 19, "min");
+  display(22, 35, "max");
+  
+  [ button text
+  set.text.attribute(BLACK, WHITE);
+  display(17, 3, "OK");
+  display(19, 1, "Cancel");
+  display(18, 9, "Test");
+  
+  [ force update of channel buttons and text boxes
+  set(update);
+  
+  [ remember to fade in to be able to see the screen again
+  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+}
+
+[ **************************************
+[ EVERY CYCLE
+[ **************************************
+if (update) {
+  [ set text color based on mode
+  if (4channelsound) {
+   work1 = BLACK;
+  } else {
+    work1 = LT_GRAY;
+  }
+  cursorX = WHITE;
+  [ colors byvar
+  toggle.monitor();
+  set.text.attribute(&work1, &cursorX);
+  display(6, 16, "\x0E");
+  display(9, 16, "\x0E");
+  display(12, 16, "\x0E");
+  [ current instruments
+  cursorY = 19;
+  cursorX = 6;
+  if (useMIDI) {
+    [ show MIDI instruments
+    display.v(cursorX, cursorY, tmpMIDI0);
+    cursorX += 3;
+    display.v(cursorX, cursorY, tmpMIDI1);
+    cursorX += 3;
+    display.v(cursorX, cursorY, tmpMIDI2);
+    cursorX += 3;
+    [ noise channels are not applicable
+    set.text.attribute(LT_GRAY, WHITE);
+    work1 = &m149;
+    display.v(cursorX, cursorY, work1);
+    cursorX += 3;
+    display.v(cursorX, cursorY, work1);
+    [ noise channel test btns
+    display(15, 16, "\x0E");
+    display(18, 16, "\x0E");
+    
+  } else {
+    [ show FMsynth instruments
+    display.v(cursorX, cursorY, tmpFM0);
+    cursorX += 3;
+    display.v(cursorX, cursorY, tmpFM1);
+    cursorX += 3;
+    display.v(cursorX, cursorY, tmpFM2);
+    cursorX += 3;
+    display.v(cursorX, cursorY, tmpFM3);
+    cursorX += 3;
+    display.v(cursorX, cursorY, tmpFM4);
+    [ noise channel test btns
+    display(15, 16, "\x0E");
+    display(18, 16, "\x0E");
+  }
+  
+  [ volume slider
+  if (4channelsound) {
+    set.text.attribute(BLACK, LT_GRAY);
+    draw(oVolSlider);
+  } else {
+    set.text.attribute(DK_GRAY, LT_GRAY);
+    erase(oVolSlider);
+  }
+  display(22, 26, "Volume");
+  
+  set.text.attribute(0, -1);
+  
+  reset(update);
+  
+  [ cancel drop mode
+  if (dropmode == DROPUP) {
+    dropmode = NODROP;
+  }
+}
+
+[ display dropdown list
+if (dropmode == DROPDOWN) {
+  [ clear area for dropdown (can't do byvar)
+  if (currentInst == 0) {
+    clear.text.rect(4, 19, 8, 38, WHITE);
+  }
+  if (currentInst == 1) {
+    clear.text.rect(7, 19, 11, 38, WHITE);
+  }
+  if (currentInst == 2) {
+    clear.text.rect(10, 19, 14, 38, WHITE);
+  }
+  if (currentInst == 3) {
+    clear.text.rect(13, 19, 17, 38, WHITE);
+  }
+  if (currentInst == 4) {
+    clear.text.rect(16, 19, 20, 38, WHITE);
+  }
+  [ determine row offset (row value of listbox top)
+  work1 = currentInst;
+  work1 *= 3;
+  work1 += 4;
+  offsetrow = work1;
+  [ column is always 19
+  work2 = 19;
+  [ instrument index offset (index of top item in list)
+  [ (depends on mode; either FM or MIDI)
+  work3 = currentInst;
+  work3 += &tmpFM0;
+  if (useMIDI) {
+    work3 += 14;
+  }
+  work3 = *work3;
+  [ save this as the current selected instrument
+  selinst = work3;
+  work3 -= 2;
+  [ check for start/end of list
+  if ((work3 == 0 || work3 == 255)) {
+    work3 = 1;
+  }
+  if (useMIDI) {
+    if (work3 > 124) {
+      work3 = 124;
+    }
+  } else {
+    if (work3 > 132) {
+      work3 = 132;
+    }
+  }
+  offsetinst = work3;
+  
+  [ use a loop to draw the instrument text
+  cursorX = 0;
+  set.text.attribute(-1, 0);
+  :PrintInst
+    if (work3 == selinst) {
+      set.text.attribute(WHITE, BLACK);
+      listrow = cursorX;
+    } else {
+      set.text.attribute(BLACK, WHITE);
+    }
+    display.v(work1, work2, work3);
+    ++work1;
+    ++work3;
+    ++cursorX;
+  if (cursorX < 5) {
+    goto(PrintInst);
+  }
+  [ row of selected inst = offsetrow+listrow
+  selrow = offsetrow;
+  selrow += listrow;
+  
+  [position cursor to draw the box frame
+  erase(oCursorB);
+  erase(oCursorT);
+  erase(oCursorL);
+  erase(oCursorR);
+  cursorX = 75;
+  cursorY = currentInst;
+  cursorY *= 24;
+  cursorY += 64;
+  set.loop(oCursorB, LP_CF_PNL);
+  set.loop(oCursorL, LP_CF_PNL);
+  set.loop(oCursorT, LP_CF_PNL);
+  set.loop(oCursorR, LP_CF_PNL);
+  position.v(oCursorB, cursorX, cursorY);
+  --cursorY;
+  position.v(oCursorL, cursorX, cursorY);
+  cursorY -= 40;
+  position.v(oCursorT, cursorX, cursorY);
+  cursorX += 81;
+  cursorY += 40;
+  position.v(oCursorR, cursorX, cursorY);
+  
+  draw(oCursorB);
+  draw(oCursorL);
+  draw(oCursorT);
+  draw(oCursorR);
+  
+  [ add arrows
+  set.text.attribute(BLACK, LT_GRAY);
+  work1 = offsetrow;
+  work2 = 38;
+  work3 = &m137;
+  display.v(work1, work2, work3);
+  work1 += 4;
+  work3 = &m138;
+  display.v(work1, work2, work3);
+  
+  [ show scrollbar background
+  work1 = 152;
+  work2 = currentInst;
+  work2 *= 24;
+  work2 += 56;
+  erase(oScrlBkgd);
+  position.v(oScrlBkgd, work1, work2);
+  draw(oScrlBkgd);
+  
+  [ position the scrollbar box
+  work2 -= 26;
+  work3 = selinst;
+  work3 /= 3;
+  work3 *= 4;
+  work3 /= 7;
+  if (work3 > 25) {
+    work3 = 25;
+  }
+  work2 += work3;
+  erase(oScrlBox);
+  set.cel(oScrlBox, 0);
+  position.v(oScrlBox, work1, work2);
+  draw(oScrlBox);
+  
+  set.text.attribute(0, -1);
+  
+  [ begin choosing
+  dropmode = CHOOSING;
+}
+
+[ if choosing a new instrument
+if (dropmode == CHOOSING) {
+  [ check for direction arrow keypress
+  if (egoDir != STOPPED) {
+    [ cursor up
+    if (egoDir == UP) {
+      [ it index not at top
+      if (listrow > 0) {
+        --listrow;
+        --selrow;
+        --selinst;
+        set(redrawList);
+      } else {
+        if (offsetinst > 0) {
+          btnAction = SC_UP;
+        }
+      }
+    }
+    [ cursor down
+    if (egoDir == DOWN) {
+      [ if index not at bottom
+      if (listrow < 4) {
+        ++listrow;
+        ++selrow;
+        ++selinst;
+        set(redrawList);
+      } else {
+        if (useMIDI) {
+          work1 = 124;
+        } else {
+          work1 = 132;
+        }
+        if (offsetinst < work1) {
+          btnAction = SC_DOWN;
+        }
+      }
+    }
+    [ page up
+    if (egoDir == UP_RIGHT) {
+      btnAction = SC_PGUP;
+    }
+    [ page down
+    if (egoDir == DOWN_RIGHT) {
+      btnAction = SC_PGDN;
+    }
+    
+    [ always reset egodir
+    egoDir = 0;
+  }
+  
+  [ escape cancels the selection
+  if (controller(cMenu)) {
+    [ dropup to hide the list
+    dropmode = DROPUP;
+  }
+  
+  [ keyboard works regardless of mode for listboxes
+  [ return to select
+  if (have.key()) {
+    if ((lastChar == 13 || lastChar == 10)) {
+      lastChar = 0;
+      [ make the selection
+      work1 = &tmpFM0;
+      if (useMIDI) {
+        work1 += 14;
+      }
+      work1 += currentInst;
+      *work1 = selinst;
+      
+      [ dropup to hide the list
+      dropmode = DROPUP;
+    }
+  }
+  
+  [ check for right-click
+  if (controller(cRightClick)) {
+    [ dropup to hide the list
+    dropmode = DROPUP;
+  }
+  
+  [ if mouse x value is over the listbox text
+  if (mouseX > 75 && mouseX < 152) {
+    [ check for left click
+    if (controller(cLeftClick)) {
+      [ convert yvalue to index
+      work1 = mouseY;
+      work1 /= 8;
+      work1 -= offsetrow;
+      [ is it a valid offset?
+      if (work1 < 5 && work1 != listrow) {
+        [ deselect old
+        cursorY = selrow;
+        cursorX = 19;
+        set.text.attribute(-1, 0);
+        set.text.attribute(BLACK, WHITE);
+        display.v(cursorY, cursorX, selinst);
+        
+        [ select new
+        listrow = work1;
+        selrow = offsetrow;
+        selrow += listrow;
+        selinst = offsetinst;
+        selinst += listrow;
+        cursorY = selrow;
+        cursorX = 19;
+        set.text.attribute(WHITE, BLACK);
+        display.v(cursorY, cursorX, selinst);
+        set.text.attribute(0, -1);
+      }
+    }
+      
+    [ check for dbl click
+    if (controller(cLeftDblClick)) {
+      [ make the selection
+      work1 = &tmpFM0;
+      if (useMIDI) {
+        work1 += 14;
+      }
+      work1 += currentInst;
+      *work1 = selinst;
+      
+      [ dropup to hide the list
+      dropmode = DROPUP;
+    }
+  }
+  
+  [ if over the scrollbar
+  if (mouseX > 151 && mouseX < 156) {
+    [ check for click OR dblclick
+    if ((controller(cLeftClick) || controller(cLeftDblClick))) {
+      [ convert offset row to y value
+      work1 = offsetrow;
+      work1 *= 8;
+      --work1;
+      [ bottom of up arrow
+      work2 = work1;
+      work2 += 8;
+      [ if on up arrow, scroll up
+      if (mouseY > work1 && mouseY < work2) {
+        btnAction = SC_UP;
+        goto(donemouse);
+      }
+      
+      [ adjust compare values to bottom arrow
+      work1 += 33;
+      work2 += 33;
+      [ if on down arrow, scroll down
+      if (mouseY > work1 && mouseY < work2) {
+        btnAction = SC_DOWN;
+        goto(donemouse);
+      }
+      
+      [ adjust compare values to top of scroll
+      [ window and scrollbox position
+      work1 -= 26;
+      get.posn(oScrlBox, work3, work2);
+      work2 += 8;
+      [ if above scrollbox, page up
+      if (mouseY > work1 && mouseY < work2) {
+        btnAction = SC_PGUP;
+        goto(donemouse);
+      }
+      
+      [ adjust compare values to scrollbox position
+      [ and bottom of scroll window
+      work2 = work1;
+      work2 += 27;
+      get.posn(oScrlBox, work3, work1);
+      work1 += 8;
+      [ if below scrollbox, page down
+      if (mouseY > work1 && mouseY < work2) {
+        btnAction = SC_PGDN;
+      }
+      :donemouse
+    }
+  }
+  
+  [ check for scroll actions
+  if (btnAction == SC_UP) {
+    [ if not at top of list
+    if (offsetinst > 1) {
+      --offsetinst;
+      [ selection stays the same, so adjust
+      [ listrow to match
+      ++listrow;
+      ++selrow;
+      [ unless it's off screen
+      if (listrow > 4) {
+        [ reset it to bottom
+        listrow = 4;
+        --selinst;
+        --selrow;
+      }
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  if (btnAction == SC_DOWN) {
+    [ if not at bottom of list
+    if (useMIDI) {
+      work1 = 124;
+    } else {
+      work1 = 132;
+    }  
+    if (offsetinst < work1) {
+      ++offsetinst;
+      [ selection stays the same, so adjust
+      [ listrow to match
+      listrow -= 1; [ (can't use decrement, because it doesn't wrap around)
+      --selrow;
+      [ unless it's off screen
+      if (listrow == -1) {
+        [ reset it to top
+        listrow = 0;
+        ++selinst;
+        ++selrow;
+      }
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  if (btnAction == SC_PGUP) {
+    [ if not at top of list
+    if (offsetinst > 1) {
+      offsetinst -= 5;
+      if ((offsetinst == 0 || offsetinst > 250)) {
+        offsetinst = 1;
+      }
+      [ reset selection to bottom
+      listrow = 4;
+      selinst = offsetinst;
+      selinst += 4;
+      selrow = offsetrow;
+      selrow += 4;
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  if (btnAction == SC_PGDN) {
+    [ if not at bottom of list
+    if (useMIDI) {
+      work1 = 124;
+    } else {
+      work1 = 132;
+    }
+    if (offsetinst < work1) {
+      offsetinst += 5;
+      if (offsetinst > work1) {
+        offsetinst = work1;
+      }
+      [ reset selection to top
+      listrow = 0;
+      selinst = offsetinst;
+      selrow = offsetrow;
+      [ redraw listbox text
+      set(redrawList);
+    }
+  }
+  
+  [ always reset button action
+  btnAction = 0;  
+  
+}
+[ redraw text
+if (redrawList) {
+  [ use a loop to draw the instrument text
+  cursorX = 0;
+  work1 = offsetrow;
+  work2 = 19;
+  work3 = offsetinst;
+  
+  set.text.attribute(-1, 0);
+  :redrawloop
+    if (work3 == selinst) {
+      set.text.attribute(WHITE, BLACK);
+    } else {
+      set.text.attribute(BLACK, WHITE);
+    }
+    display.v(work1, work2, work3);
+    ++work1;
+    ++work3;
+    ++cursorX;
+  if (cursorX < 5) {
+    goto(redrawloop);
+  }
+  set.text.attribute(0, -1);
+  
+  [ position the scrollbar box
+  work1 = 152;
+  work2 = currentInst;
+  work2 *= 24;
+  work2 += 30; [ scroll arrow is not full eight characters tall
+  work3 = selinst;
+  work3 /= 3;
+  work3 *= 4;
+  work3 /= 7;
+  if (work3 > 25) {
+    work3 = 25;
+  }
+  work2 += work3;
+  erase(oScrlBox);
+  set.cel(oScrlBox, 0);
+  position.v(oScrlBox, work1, work2);
+  draw(oScrlBox);
+  
+  reset(redrawList);
+}
+
+[ dropup
+if (dropmode == DROPUP) {
+  erase(oCursorB);
+  erase(oCursorL);
+  erase(oCursorT);
+  erase(oCursorR);
+  [ to restore the window, move an object across it
+  work1 = 72;
+  work2 = currentInst;
+  work2 *= 24;
+  work2 += 24;
+  erase(oScrlBkgd);
+  erase(oScrlBox);
+  set.cel(oScrlBox, 1);
+  position.v(oScrlBox, work1, work2);
+  draw(oScrlBox);
+  work1 = 156;
+  work2 += 39;
+  reposition.to.v(oScrlBox, work1, work2);
+  
+  if (cursormode) {
+    [ in kb mode, restore selection by forcing update
+    cursorpos = -1;
+    btnAction = currentInst;
+    btnAction += 11;
+  }
+  
+  [ done - force an update
+  set(update);
+}
+
+[ if showing dropbox, don't process other cursor statements
+if (dropmode != NODROP) {
+  [ nothing else to do
+  return();
+}
+
+[ is cursor in text mode?
+if (cursormode) {
+  [ check for direction arrow keypress
+  if (egoDir != STOPPED) {
+    [ cursor up
+    if (egoDir == UP) {
+      if (cursorpos == CP_1CHAN) {
+        newpos = CP_MOUSE;
+      }
+      if (cursorpos > CP_1CHAN && cursorpos < CP_TESTALL) {
+        --newpos;
+      }
+      if (cursorpos == CP_TESTALL) {
+        newpos = CP_4CHMD;
+      }
+      if (cursorpos > CP_TEST0 && cursorpos < CP_INST0) {
+        --newpos;
+      }
+      if (cursorpos > CP_INST0) {
+        --newpos;
+      }
+      if (useMIDI) {
+        if (cursorpos == CP_VOLUME) {
+          newpos = CP_INST2;
+[        } else {
+[          newpos = CP_INST4;
+        }
+      }
+    }
+    
+    [ cursor right
+    if (egoDir == RIGHT) {
+      if (cursorpos == CP_MOUSE) {
+        newpos = CP_KEYB;
+      }
+      if (useMIDI) {
+        work1 = CP_4CHMD;
+      } else {
+        work1 = CP_OK;
+      }
+      if (cursorpos > CP_MOUSE && cursorpos < work1) {
+        newpos += 7;
+      }
+      if ((cursorpos == CP_OK || cursorpos == CP_CANCEL)) {
+        newpos = CP_TESTALL;
+      }
+      if (cursorpos == CP_TESTALL && !useMIDI) {
+        newpos = CP_TEST4;
+      }
+      if (cursorpos > CP_TESTALL && cursorpos < CP_INST0) {
+        newpos += 5;
+      }
+      if (cursorpos == CP_VOLUME) {
+        if (attenuation > 0) {
+          --attenuation;
+          [ move slider
+          work1 = 144;
+          work1 -= attenuation;
+          work2 = 166;
+          reposition.to.v(oVolSlider, work1, work2);
+        }
+      }
+    }
+    
+    [ cursor down
+    if (egoDir == DOWN) {
+      if (cursorpos < CP_1CHAN) {
+        newpos = CP_1CHAN;
+      }
+      if (cursorpos > CP_KEYB && cursorpos < CP_CANCEL) {
+        ++newpos;
+      }
+      if (useMIDI) {
+        work1 = CP_TEST2;
+      } else {
+        work1 = CP_TEST4;
+      }
+      if (cursorpos > CP_TESTALL && cursorpos < work1) {
+        ++newpos;
+      }
+      if (useMIDI) {
+        if (cursorpos > CP_TEST4 && cursorpos < CP_INST2) {
+          ++newpos;
+        }
+        if (cursorpos == CP_INST2) {
+          newpos = CP_VOLUME;
+        }
+      } else {
+        if (cursorpos > CP_TEST4 && cursorpos < CP_VOLUME) {
+          ++newpos;
+        }
+      }
+    }
+    
+    [ cursor left
+    if (egoDir == LEFT) {
+      if (cursorpos == CP_KEYB) {
+        newpos = CP_MOUSE;
+      }
+      if (cursorpos == CP_TESTALL) {
+        newpos = CP_CANCEL;
+      }
+      if (cursorpos == CP_TEST0) {
+        newpos = CP_KEYB;
+      }
+      if (cursorpos == CP_TEST1) {
+        newpos = CP_1CHAN;
+      }
+      if (cursorpos == CP_TEST2) {
+        newpos = CP_4CHFM;
+      }
+      if (cursorpos == CP_TEST3) {
+        newpos = CP_4CHMD;
+      }
+      if (cursorpos == CP_TEST4) {
+        newpos = CP_TESTALL;
+      }
+      if (cursorpos > CP_TEST4 && cursorpos != CP_VOLUME) {
+        newpos -= 5;
+      }
+      if (cursorpos == CP_VOLUME) {
+        if (attenuation < 63) {
+          ++attenuation;
+          [ move slider
+          work1 = 144;
+          work1 -= attenuation;
+          work2 = 166;
+          reposition.to.v(oVolSlider, work1, work2);
+        }
+      }
+    }
+    
+    [ always reset dir so another keypress can be detected
+    egoDir = 0;
+    
+    [ ignore chages that move to disabled buttons
+    if (newpos > CP_TESTALL && !4channelsound) {
+      [reset back to current
+      newpos = cursorpos;
+    }
+  }
+  
+  [ check for new cursor position
+  if (cursorpos != newpos) {
+    [ to move cursor, erase it first, otherwise, it will
+    [ clear any text that is present anywhere between the
+    [ new position and the old position
+    erase(oCursorB);
+    erase(oCursorL);
+    erase(oCursorT);
+    erase(oCursorR);
+
+    [ update the position
+    cursorpos = newpos;
+    [ depending on where cursor is, set the position and size/shape
+
+    [ input mode options
+    if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
+      [ option buttons
+      set.loop(oCursorB, LP_CF_OPT1);
+      set.loop(oCursorT, LP_CF_OPT1);
+      set.loop(oCursorL, LP_CF_OPT1);
+      set.loop(oCursorR, LP_CF_OPT1);
+      cursorY = 65;
+      if (cursorpos == 1) {
+        cursorX = 7;
+      }
+      if (cursorpos == 2) {
+        cursorX = 31;
+      }
+    }
+    
+    [ channel count options
+    if ((cursorpos == CP_1CHAN || cursorpos == CP_4CHFM || cursorpos == CP_4CHMD)) {
+      set.loop(oCursorB, LP_CF_OPT2);
+      set.loop(oCursorT, LP_CF_OPT2);
+      set.loop(oCursorL, LP_CF_OPT2);
+      set.loop(oCursorR, LP_CF_OPT2);
+      [ convert cursorpos into desired y value
+      cursorX = 7;
+      cursorY = cursorpos;
+      cursorY -= 3;
+      cursorY *= 16;
+      cursorY += 89;
+    }
+      
+    [ OK, Cancel
+    if ((cursorpos == CP_OK || cursorpos == CP_CANCEL)) {
+      set.loop(oCursorB, LP_CF_CMD1);
+      set.loop(oCursorT, LP_CF_CMD1);
+      set.loop(oCursorL, LP_CF_CMD1);
+      set.loop(oCursorR, LP_CF_CMD1);
+      
+      [ convert cursorpos into desired y value
+      cursorX = 3;
+      cursorY = cursorpos;
+      cursorY -= 6;
+      cursorY *= 16;
+      cursorY += 136;
+    }
+    
+    [ test all
+    if (cursorpos == CP_TESTALL) {
+      set.loop(oCursorB, LP_CF_CMD2);
+      set.loop(oCursorT, LP_CF_CMD2);
+      set.loop(oCursorL, LP_CF_CMD2);
+      set.loop(oCursorR, LP_CF_CMD2);
+      cursorX = 35;
+      cursorY = 144;
+    }
+    
+    [ test channel buttons
+    if (cursorpos > CP_TESTALL && cursorpos < CP_INST0) {
+      set.loop(oCursorB, LP_CF_CMD3);
+      set.loop(oCursorT, LP_CF_CMD3);
+      set.loop(oCursorL, LP_CF_CMD3);
+      set.loop(oCursorR, LP_CF_CMD3);
+      
+      [ convert cursorpos into desired y value
+      cursorX = 63;
+      cursorY = cursorpos;
+      cursorY -= 9;
+      cursorY *= 24;
+      cursorY += 48;
+    }
+          
+    [ instrument text boxes
+    if (cursorpos > CP_TEST4 && cursorpos < CP_VOLUME) {
+      set.loop(oCursorB, LP_CF_TXT);
+      set.loop(oCursorT, LP_CF_TXT);
+      set.loop(oCursorL, LP_CF_TXT);
+      set.loop(oCursorR, LP_CF_TXT);
+      
+      [ convert cursorpos into desired y value
+      cursorX = 75;
+      cursorY = cursorpos;
+      cursorY -= 14;
+      cursorY *= 24;
+      cursorY += 48;
+    }
+    
+    [ volume slider
+    if (cursorpos == CP_VOLUME) {
+     [ don't use the cursor, just change the cel
+      set.cel(oVolSlider, 1);
+      [ if something was selected
+      if (currentInst < 255) {
+        [ unselect it
+        btnAction = B_UNSEL;
+      }
+    } else {
+      [ always deselect the volume slider
+      set.cel(oVolSlider, 0);
+      
+      [ redraw the cursor
+      position.v(oCursorB, cursorX, cursorY);
+      draw(oCursorB);
+      --cursorY;
+      position.v(oCursorL, cursorX, cursorY);
+      draw(oCursorL);
+      if (cursorpos < CP_OK) {
+        cursorY -= 10;
+      } else {
+        cursorY -= 8;
+      }
+      position.v(oCursorT, cursorX, cursorY);
+      draw(oCursorT);
+      if (cursorpos < CP_1CHAN) {
+        cursorX += 17;
+        cursorY += 10;
+      } else {
+        if ((cursorpos == CP_1CHAN || cursorpos == CP_4CHFM || cursorpos == CP_4CHMD)) {
+          cursorX += 41;
+          cursorY += 10;
+        } else {
+          if ((cursorpos == CP_OK || cursorpos == CP_CANCEL)) {
+            cursorX += 25;
+          }
+          if (cursorpos == CP_TESTALL) {
+            cursorX += 17;
+          }
+          if (cursorpos > CP_TESTALL && cursorpos < CP_INST0) {
+            cursorX += 5;
+          }
+          if (cursorpos > CP_TEST4) {
+            cursorX += 77;
+          }
+          cursorY += 8;
+        }
+      }
+      position.v(oCursorR, cursorX, cursorY);
+      draw(oCursorR);
+      
+      [ if cursor moves to an instrument text box
+      [ automatically select it
+      if (cursorpos > CP_TEST4) {
+        [ select the highlighted text box
+        btnAction = cursorpos;
+        btnAction -= 2;
+      } else {
+        [ if something was selected
+        if (currentInst < 255) {
+          [ unselect it
+          btnAction = B_UNSEL;
+        }
+      }
+    }
+  }
+
+  [ check for selection (space/enter for buttons)
+  if (have.key()) {
+    [ space/enter
+    if ((lastChar == 32 || lastChar == 13 || lastChar == 10)) {
+      if (cursorpos  == CP_MOUSE) {
+        [ switch to mouse control
+        reset(cursormode);
+        enable.item(mouse);
+        erase(oMode);
+        position(oMode, 8, 65);
+        draw(oMode);
+        [ erase the cursor objects
+        erase(oCursorB);
+        erase(oCursorT);
+        erase(oCursorL);
+        erase(oCursorR);
+      }
+      if (cursorpos > CP_KEYB && cursorpos < CP_INST0) {
+        btnAction = cursorpos;
+        btnAction -= 2;
+      }
+      if (cursorpos > CP_TEST4 && cursorpos < CP_VOLUME) {
+        [ if not using midi, OR on inst 0-2
+        if ((!useMIDI || cursorpos < CP_INST3)) {
+          [ display dropdown list
+          dropmode = DROPDOWN;
+        }
+      }
+    }  
+  }
+} else {
+  [ check for mouse click
+  if (controller(cLeftClick)) {
+    [ over cursor type keyboard option [33, 56 - 37, 63]
+    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+      [ switch to keyboard cursor
+      set(cursormode);
+      disable.item(mouse);
+      erase(oMode);
+      position(oMode, 32, 65);
+      draw(oMode);
+      [ start cursor on keyboard option button
+      cursorpos = CP_KEYB;
+      newpos = CP_KEYB;
+      set.loop(oCursorB, LP_CF_OPT1);
+      position(oCursorB, 31, 65);
+      draw(oCursorB);
+      set.loop(oCursorL, LP_CF_OPT1);
+      position(oCursorL, 31, 64);
+      draw(oCursorL);
+      set.loop(oCursorT, LP_CF_OPT1);
+      position(oCursorT, 31, 54);
+      draw(oCursorT);
+      set.loop(oCursorR, LP_CF_OPT1);
+      position(oCursorR, 48, 64);
+      draw(oCursorR);
+    }
+    [ 1channel [9, 80 - 13, 87]
+    if (mouseX > 8 && mouseX < 14 && mouseY > 87 && mouseY < 96) {
+      btnAction = B_1CHAN;
+    }
+    
+    [ 4channel FMsynth [9, 96 - 13, 103]
+    if (mouseX > 8 && mouseX < 14 && mouseY > 103 && mouseY < 112) {
+      btnAction = B_4CHFM;
+    }
+    
+    [ 4channel MIDI [9, 112 - 13, 119]
+    if (mouseX > 8 && mouseX < 14 && mouseY > 119 && mouseY < 128) {
+      btnAction = B_4CHMD;
+    }
+    
+    [ over OK button [3, 127 - 32, 136]
+    if (mouseX > 2 && mouseX < 33 && mouseY > 134 && mouseY < 145) {
+      btnAction = B_OK;
+    }
+      
+    [ over Cancel button [3, 143 - 32, 152]
+    if (mouseX > 2 && mouseX < 33 && mouseY > 150 && mouseY < 161) {
+      btnAction = B_CANCEL;
+    }
+    
+    [ test all [35, 135 - 52, 144]
+    if (mouseX > 34 && mouseX < 53 && mouseY > 142 && mouseY < 153) {
+      btnAction = B_TESTALL;
+    }
+    
+    [ test 0 [63, 39 - 68, 48]
+    if (mouseX > 62 && mouseX < 69 && mouseY > 46 && mouseY < 57) {
+      btnAction = B_TEST0;
+    }
+    
+    [ test 1 [63, 63 - 68, 72]
+    if (mouseX > 62 && mouseX < 69 && mouseY > 70 && mouseY < 81) {
+      btnAction = B_TEST1;
+    }
+    
+    [ test 2 [63, 87 - 68, 96]
+    if (mouseX > 62 && mouseX < 69 && mouseY > 94 && mouseY < 105) {
+      btnAction = B_TEST2;
+    }
+    
+    [ test 3 [63, 111 - 68, 120]
+    if (mouseX > 62 && mouseX < 69 && mouseY > 118 && mouseY < 129) {
+      btnAction = B_TEST3;
+    }
+    
+    [ test 4 [63, 135 - 68, 144]
+    if (mouseX > 62 && mouseX < 69 && mouseY > 142 && mouseY < 153) {
+      btnAction = B_TEST4;
+    }
+    
+    [ instrument 0 [75, 39 - 152, 48]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 46 && mouseY < 57) {
+      btnAction = B_INST0;
+    }
+    
+    [ instrument 1 [75, 63 - 152, 72]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 70 && mouseY < 81) {
+      btnAction = B_INST1;
+   }
+    
+    [ instrument 2 [75, 87 - 152, 96]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 94 && mouseY < 105) {
+      btnAction = B_INST2;
+    }
+    
+    [ instrument 3 [75, 111 - 152, 120]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 118 && mouseY < 129) {
+      btnAction = B_INST3;
+    }
+    
+    [ instrument 4 [75, 135 - 152, 144]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 142 && mouseY < 153) {
+      btnAction = B_INST4;
+    }
+    [ over slider zone (y between 154, 167)
+    if (mouseY > 160 && mouseY < 175) {
+      get.posn(oVolSlider, cursorX, cursorY);
+      [ adjust for button width
+      cursorY = cursorX;
+      cursorY += 3;
+      [ is mouse on the slider?
+      if (mouseX >= cursorX && mouseX < cursorY) {
+        [ start slide action
+        set(sliding);
+        [ calculate offset from object position to mouse position
+        slideoffset = cursorX;
+        slideoffset -= mouseX;
+      }
+    }
+  }
+  
+  [ check for mouse up, to clear slider movement
+  if (mouseBtn != 1) {
+    [ cancel slide operation
+    reset(sliding);
+  }
+  
+  if (sliding) {
+    [ convert mousepos to a slider position
+    [ (slideX = mouseX + offset)
+    work1 = mouseX;
+    work1 += slideoffset;
+    [ limit to valid range (81-144)
+    if (work1 > 144) {
+      work1 = 144;
+    }
+    if (work1 < 81) {
+      work1 = 81;
+    }
+    [ reposition the slider
+    cursorY = 166;
+    reposition.to.v(oVolSlider, work1, cursorY);
+    [ convert position to attenuation value
+    work1 *= -1;
+    work1 += 144;
+    [ if it changed, update speed
+    if (work1 != attenuation) {
+      attenuation = work1;
+    }
+  }
+  
+  [ check for dblclick (only if in 4channel mode)
+  if (controller(cLeftDblClick) && 4channelSound) {
+    [ instrument 0 [75, 39, - 152, 48]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 46 && mouseY < 57) {
+      dropmode = DROPDOWN;
+    }
+    
+    [ instrument 1 [75, 63 - 152, 72]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 70 && mouseY < 81) {
+      dropmode = DROPDOWN;
+    }
+    
+    [ instrument 2 [75, 87 - 152, 96]
+    if (mouseX > 74 && mouseX < 153 && mouseY > 94 && mouseY < 105) {
+      dropmode = DROPDOWN;
+    }
+    
+    [ noise channels only if not in midi mode
+    if (!useMIDI) {
+      [ instrument 3 [75, 111 - 152, 120]
+      if (mouseX > 74 && mouseX < 153 && mouseY > 118 && mouseY < 129) {
+        dropmode = DROPDOWN;
+      }
+      
+      [ instrument 4 [75, 135 - 152, 144]
+      if (mouseX > 74 && mouseX < 153 && mouseY > 142 && mouseY < 153) {
+        dropmode = DROPDOWN;
+      }
+    }
+  }
+}
+
+[ check for button action
+if (btnAction > 0) {
+  [ always stop sound when a new button is pushed
+  stop.sound();
+  
+  [ 1channel
+  if (btnAction == B_1CHAN) {
+    [ if currently 4chan
+    if (4channelsound) {
+      [ switch to one channel
+      reset(4channelsound);
+      [ move the button
+      erase(oChannels);
+      position(oChannels, 8, 89);
+      draw(oChannels);
+      [ and update button colors
+      set(update);
+    }
+  }
+  
+  [ 4channel FMsynth
+  if (btnAction == B_4CHFM) {
+    [ if not 4chan FM
+    if ((!4channelsound || useMIDI)) {
+      [ switch to four channel
+      set(4channelsound);
+      [ FMsynth
+      reset(useMIDI);
+      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      [ move the button
+      erase(oChannels);
+      position(oChannels, 8, 105);
+      draw(oChannels);
+      [ and update button colors
+      set(update);
+    }
+  }
+  
+  [ 4channel MIDI
+  if (btnAction == B_4CHMD) {
+    [ if not 4chan MIDI
+    if ((!4channelsound || !useMIDI)) {
+      [ switch to four channel
+      set(4channelsound);
+      [ MIDI
+      set(useMIDI);
+      set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      [ move the button
+      erase(oChannels);
+      position(oChannels, 8, 121);
+      draw(oChannels);
+      [ and update button colors
+      set(update);
+    }
+  }
+  
+  [ ok or cancel
+  if ((btnAction == B_OK || btnAction == B_CANCEL)) {
+    [ restore ego movement parameters
+    egoX = egoPrevX;
+    egoY = egoPrevY;
+    egoDir = egoPrevDir;
+
+    if (btnAction == B_CANCEL) {
+      [ restore sound settings
+      if (old4chan) {
+        set(4channelsound);
+      } else {
+        reset(4channelsound);
+      }
+      if (oldMIDI) {
+        set(useMIDI);
+        set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      } else {
+        reset(useMIDI);
+        set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      }
+      attenuation = tmpAttn;
+    } else {
+      [ OK - keep current sound settings
+      
+      [ save new instrument values
+      print.at("Sound parameters updated.", 5, 6, 31);
+      [ update instruments
+      FMInst0 = tmpFM0;
+      --FMInst0;
+      FMInst1 = tmpFM1;
+      --FMInst1;
+      FMInst2 = tmpFM2;
+      --FMInst2;
+      FMInst3 = tmpFM3;
+      --FMInst3;
+      FMInst4 = tmpFM4;
+      --FMInst4;
+
+      [ update the FM instrument settings
+      cursorX = 0;
+      if (FMInst0 < 131) {
+        set.key(&cursorX, &FMInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      } else {
+        [ assign a custom instrument
+        work1 = FMInst0;
+        work1 += 13;
+        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+      }
+      ++cursorX;
+      if (FMInst1 < 131) {
+        set.key(&cursorX, &FMInst1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      } else {
+        [ assign a custom instrument
+        work1 = FMInst1;
+        work1 += 13;
+        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+      }
+      ++cursorX;
+      if (FMInst2 < 131) {
+        set.key(&cursorX, &FMInst2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      } else {
+        [ assign a custom instrument
+        work1 = FMInst2;
+        work1 += 13;
+        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+      }
+      ++cursorX;
+      if (FMInst3 < 131) {
+        set.key(&cursorX, &FMInst3, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      } else {
+        [ assign a custom instrument
+        work1 = FMInst3;
+        work1 += 13;
+        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+      }
+      ++cursorX;
+      if (FMInst4 < 131) {
+        set.key(&cursorX, &FMInst4, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      } else {
+        [ assign a custom instrument
+        work1 = FMInst4;
+        work1 += 13;
+        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+      }
+    }
+    
+    [ fade out 
+    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    
+    [ go back to previous room
+    new.room.v(previousRoom); 
+  }
+  
+  [ test all sound channels
+  if (btnAction == B_TESTALL) {
+    [ if sound is not already playing start a sound
+    if (!sndTest) {
+      [ set all music channel instruments (not noise)
+      cursorX = 0;
+      :setinst      
+        work1 = &tmpFM0;
+        if (useMIDI) {
+          work1 += 14;
+        }
+        work1 += cursorX;
+        work1 = *work1;
+        --work1;
+        if (work1 < 131) {
+          set.key(&cursorX, &work1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        } else {
+          [ assign a custom instrument
+          work2 = work1;
+          work2 += 13;
+          set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+        }
+      if (cursorX < 2) {
+        ++cursorX;
+        goto(SETINST);
+      }
+      
+      sound(m.Theme, sndDone);
+      [ update button text
+      set.text.attribute(-1, 0);
+      set.text.attribute(BLACK, WHITE);
+      display(18, 9, "Stop");
+      set.text.attribute(0, -1);
+      set(sndTest);
+    }
+  }
+  
+  [ if any non-textbox button OR unselecting
+  if ((btnAction < B_INST0 || btnAction == B_UNSEL)) {
+    [ deselect instrument
+    if (currentInst < 255) {
+      set.text.attribute(-1, 0);
+      set.text.attribute(BLACK, WHITE);
+      cursorY = 19;
+      cursorX = currentInst;
+      cursorX *= 3;
+      cursorX += 6;
+      [ convert selection to instrument value
+      work1 = currentInst;
+      work1 += &tmpFM0;
+      if (useMIDI) {
+        work1 += 14;
+      }
+      work1 = *work1;
+      display.v(cursorX, cursorY, work1);
+      set.text.attribute(0, -1);
+      
+      [ reset selection
+      currentInst = -1;
+    }
+    [ if forcing, 
+    if (btnAction == B_UNSEL) {
+      [ reset button value here
+      btnAction = 0;
+      return();
+    }
+  }
+  
+  [ instrument buttons only work if 4chan is active
+  if (4channelsound) {
+  
+    [ if an instrument test box
+    [ (noise channels only if not in midi mode)
+    if (btnAction > B_TESTALL && btnAction < B_INST0) {
+      if ((!useMIDI || btnAction < B_TEST3)) {
+        [ convert button to correct instrument value
+        work2 = btnAction;
+        work2 -= 7;
+        work2 += &tmpFM0;
+        if (useMIDI) {
+          work2 += 14;
+        }
+        work2 = *work2;
+        [ tmp values are 1-based; convert to 0-base
+        --work2;
+        [ use channel 0 for test
+        work1 = 0;
+        [ change instrument
+        if (work2 < 131) {
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        } else {
+          [ assign a custom instrument
+          work2 += 13;
+          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+        }
+        sound(s.InstTest, sndDone);
+      }
+    }  
+    
+    [ if an instrument text box, selection is shown by inverting colors
+    [ (noise channels only if not in midi mode)
+    if (btnAction > B_TEST4 && btnAction < B_VOLUME) {
+      if ((!useMIDI || btnAction < B_INST3)) {
+        [ deselect current instrument
+        if (currentInst < 255) {
+          set.text.attribute(-1, 0);
+          set.text.attribute(BLACK, WHITE);
+          cursorY = 19;
+          cursorX = currentInst;
+          cursorX *= 3;
+          cursorX += 6;
+          [ convert selection to instrument value
+          work1 = currentInst;
+          work1 += &tmpFM0;
+          if (useMIDI) {
+            work1 += 14;
+          }
+          work1 = *work1;
+          display.v(cursorX, cursorY, work1);
+          set.text.attribute(0, -1);
+        }
+        [ reselect new instrument
+        currentInst = btnAction;
+        currentInst -= 12;
+        
+        set.text.attribute(-1, 0);
+        set.text.attribute(WHITE, BLACK);
+        cursorY = 19;
+        cursorX = currentInst;
+        cursorX *= 3;
+        cursorX += 6;
+        [ convert selection to instrument value
+        work1 = currentInst;
+        work1 += &tmpFM0;
+        if (useMIDI) {
+          work1 += 14;
+        }
+        work1 = *work1;
+        display.v(cursorX, cursorY, work1);
+        set.text.attribute(0, -1);
+      }
+    }
+  }
+}
+
+[ if sound stopped, reset button
+if (sndDone) {
+  reset(sndDone);
+  reset(sndTest);
+  set.text.attribute(-1, 0);
+  set.text.attribute(BLACK, WHITE);
+  display(18, 9, "Test");
+  set.text.attribute(0, -1);
+}
+
+[ always reset button action
+btnAction = 0;
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "Acoust. Grand Piano"
+#message 2 "Bright Acous. Piano"
+#message 3 "Elec. Grand Piano  "
+#message 4 "Honky-tonk Piano   "
+#message 5 "Electric Piano 1   "
+#message 6 "Electric Piano 2   "
+#message 7 "Harpsichord        "
+#message 8 "Clavinet           "
+#message 9 "Celesta            "
+#message 10 "Glockenspiel       "
+#message 11 "Music Box          "
+#message 12 "Vibraphone         "
+#message 13 "Marimba            "
+#message 14 "Xylophone          "
+#message 15 "Tubular Bells      "
+#message 16 "Dulcimer           "
+#message 17 "Drawbar Organ      "
+#message 18 "Percussive Organ   "
+#message 19 "Rock Organ         "
+#message 20 "Church Organ       "
+#message 21 "Reed Organ         "
+#message 22 "Accordion          "
+#message 23 "Harmonica          "
+#message 24 "Tango Accordion    "
+#message 25 "Ac. Guitar (nylon) "
+#message 26 "Ac. Guitar (steel) "
+#message 27 "Elec. Guitar (jazz)"
+#message 28 "El. Guitar (clean) "
+#message 29 "El. Guitar (muted) "
+#message 30 "Overdriven Guitar  "
+#message 31 "Distortion Guitar  "
+#message 32 "Guitar harmonics   "
+#message 33 "Acoustic Bass      "
+#message 34 "Elec. Bass (finger)"
+#message 35 "Elec. Bass (pick)  "
+#message 36 "Fretless Bass      "
+#message 37 "Slap Bass 1        "
+#message 38 "Slap Bass 2        "
+#message 39 "Synth Bass 1       "
+#message 40 "Synth Bass 2       "
+#message 41 "Violin             "
+#message 42 "Viola              "
+#message 43 "Cello              "
+#message 44 "Contrabass         "
+#message 45 "Tremolo Strings    "
+#message 46 "Pizzicato Strings  "
+#message 47 "Orchestral Harp    "
+#message 48 "Timpani            "
+#message 49 "String Ensemble 1  "
+#message 50 "String Ensemble 2  "
+#message 51 "Synth Strings 1    "
+#message 52 "Synth Strings 2    "
+#message 53 "Choir Aahs         "
+#message 54 "Voice Oohs         "
+#message 55 "Synth Voice        "
+#message 56 "Orchestra Hit      "
+#message 57 "Trumpet            "
+#message 58 "Trombone           "
+#message 59 "Tuba               "
+#message 60 "Muted Trumpet      "
+#message 61 "French Horn        "
+#message 62 "Brass Section      "
+#message 63 "Synth Brass 1      "
+#message 64 "Synth Brass 2      "
+#message 65 "Soprano Sax        "
+#message 66 "Alto Sax           "
+#message 67 "Tenor Sax          "
+#message 68 "Baritone Sax       "
+#message 69 "Oboe               "
+#message 70 "English Horn       "
+#message 71 "Bassoon            "
+#message 72 "Clarinet           "
+#message 73 "Piccolo            "
+#message 74 "Flute              "
+#message 75 "Recorder           "
+#message 76 "Pan Flute          "
+#message 77 "Blown Bottle       "
+#message 78 "Shakuhachi         "
+#message 79 "Whistle            "
+#message 80 "Ocarina            "
+#message 81 "Lead 1 (square)    "
+#message 82 "Lead 2 (sawtooth)  "
+#message 83 "Lead 3 (calliope)  "
+#message 84 "Lead 4 (chiff)     "
+#message 85 "Lead 5 (charang)   "
+#message 86 "Lead 6 (voice)     "
+#message 87 "Lead 7 (fifths)    "
+#message 88 "Lead 8 (bass+lead) "
+#message 89 "Pad 1 (new age)    "
+#message 90 "Pad 2 (warm)       "
+#message 91 "Pad 3 (polysynth)  "
+#message 92 "Pad 4 (choir)      "
+#message 93 "Pad 5 (bowed)      "
+#message 94 "Pad 6 (metallic)   "
+#message 95 "Pad 7 (halo)       "
+#message 96 "Pad 8 (sweep)      "
+#message 97 "FX 1 (rain)        "
+#message 98 "FX 2 (soundtrack)  "
+#message 99 "FX 3 (crystal)     "
+#message 100 "FX 4 (atmosphere)  "
+#message 101 "FX 5 (brightness)  "
+#message 102 "FX 6 (goblins)     "
+#message 103 "FX 7 (echoes)      "
+#message 104 "FX 8 (sci-fi)      "
+#message 105 "Sitar              "
+#message 106 "Banjo              "
+#message 107 "Shamisen           "
+#message 108 "Koto               "
+#message 109 "Kalimba            "
+#message 110 "Bag pipe           "
+#message 111 "Fiddle             "
+#message 112 "Shanai             "
+#message 113 "Tinkle Bell        "
+#message 114 "Agogo              "
+#message 115 "Steel Drums        "
+#message 116 "Woodblock          "
+#message 117 "Taiko Drum         "
+#message 118 "Melodic Tom        "
+#message 119 "Synth Drum         "
+#message 120 "Reverse Cymbal     "
+#message 121 "Guitar Fret Noise  "
+#message 122 "Breath Noise       "
+#message 123 "Seashore           "
+#message 124 "Bird Tweet         "
+#message 125 "Telephone Ring     "
+#message 126 "Helicopter         "
+#message 127 "Applause           "
+#message 128 "Gunshot            "
+#message 129 "AGISB Default      "
+#message 130 "Sierra White Noise "
+#message 131 "Sierra Tone Noise  "
+#message 132 "Custom Inst 1      "
+#message 133 "Custom Inst 2      "
+#message 134 "Custom Inst 3      "
+#message 135 "Custom Inst 4      "
+#message 136 "Custom Inst 5      "
+#message 137 "\x1E"
+#message 138 "\x1F"
+#message 139 "%g53"
+#message 140 "%g54"
+#message 141 "%g55"
+#message 142 "%g56"
+#message 143 "%g57"
+#message 144 "0000000000000000000000"
+#message 145 "0000000000000000000000"
+#message 146 "0000000000000000000000"
+#message 147 "0000000000000000000000"
+#message 148 "0000000000000000000000"
+#message 149 "   ----            "

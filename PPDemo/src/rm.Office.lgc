@@ -1,1 +1,75 @@
-[ ********************************************************************[[ rm.Office[[ [[ ********************************************************************if (newRoom) {  [ run initialization code  call(lgc.RoomInit);    [ this is the first cycle through this room  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    [ the horizon defines the upper limit of ego's movement  set.horizon(1);    [ add additional room initialization here    [ add toolbar buttons  load.view(vw.Toolbar);  call(lgc.InitToolbar);    [ load ego view, animate and draw ego  [ this is sometimes handled in logic 0  [ instead of in each individual logic    [ add ego to the room  draw(ego);    [ display the picture on screen  show.pic();  [ fade in  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)  return();}[*****:handleInput       [ check for input from player[*****if (haveInput && !haveMatch && unknownWordNum == 0) {  [ place said tests here  if (said("look")) {    print("You see nothing of interest.");  }}[*****:noInput           [  all non-input related code goes here [*****[ add other room specific statements here[*****:exit              [  test for leaving the room[*****[ add exit checks here (or use layout editor)if (edgeEgoHit == RIGHT_EDGE) {  [ fade out, then change room  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)  new.room(rm.Terminal);  [ ##LE001##}return();[*****[ messages         [  declared messages go here[*****#message 1 "You see nothing of interest." 
+[ ********************************************************************
+[
+[ rm.Office
+[
+[ 
+[
+[ ********************************************************************
+
+if (newRoom) {
+  [ run initialization code
+  call(lgc.RoomInit);
+  
+  [ this is the first cycle through this room
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  [ the horizon defines the upper limit of ego's movement
+  set.horizon(1);
+  
+  [ add additional room initialization here
+  
+  [ add toolbar buttons
+  load.view(vw.Toolbar);
+  call(lgc.InitToolbar);
+  
+  [ load ego view, animate and draw ego
+  [ this is sometimes handled in logic 0
+  [ instead of in each individual logic
+  
+  [ add ego to the room
+  draw(ego);
+  
+  [ display the picture on screen
+  show.pic();
+  [ fade in
+  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
+  return();
+}
+
+[*****
+:handleInput       [ check for input from player
+[*****
+if (haveInput && !haveMatch && unknownWordNum == 0) {
+  [ place said tests here
+  if (said("look")) {
+    print("You see nothing of interest.");
+  }
+}
+
+[*****
+:noInput           [  all non-input related code goes here 
+[*****
+
+[ add other room specific statements here
+
+
+[*****
+:exit              [  test for leaving the room
+[*****
+
+[ add exit checks here (or use layout editor)
+
+if (edgeEgoHit == RIGHT_EDGE) {
+  [ fade out, then change room
+  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  new.room(rm.Terminal);  [ ##LE001##
+}
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "You see nothing of interest." 
