@@ -9,8 +9,8 @@
 [ ********************************************************************
 
 
-[ for all rooms except the control panels, set 
-[ screen to 80 col mode (control panels manage that separately)
+[ for all rooms except the control panels, set screen to 80 col mode 
+[ (control panels manage that separately)
 if (currentRoom < 21) {
   if (!column80) {
     [ before switching to 80 col mode, need to clear the 
@@ -30,8 +30,17 @@ if (currentRoom < 21) {
     set(column80);
   }
   
-  [ if not opening title room
-  if (currentRoom != rm.Title) {
+  
+  [ enable mouse in all regular rooms
+  enable.item(mouse);
+  
+  if (currentRoom == rm.Title) {
+    [ disable game functions; they will be re-enabled after title screen is done
+    set(disableGameFunctions);
+    
+  } else {
+    [ if not opening title room, do regular room setup
+    
     [ animate and reset the ego object
     animate.obj(ego);
     step.size(ego, egoStepSize);
@@ -56,12 +65,9 @@ if (currentRoom < 21) {
     [ enable input
     accept.input();
   
-    [ enable game functions
+    [ in all rooms except title, enable game functions
     reset(disableGameFunctions);
- 
-  }   
-    [ enable mouse
-    enable.item(mouse);
+    
     [ click2move if in walk mode
     if (cursormode == C_WALK) {
       set(click2move);
@@ -71,7 +77,7 @@ if (currentRoom < 21) {
     [ use straightline mode
     work1 = -1;
     step.size(ego, work1);
-[  }
+  }
 }
 
 [ control panels

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/23/2022 9:23:53 PM"
+   LastEdit = "8/25/2022 8:07:30 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,11 +45,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H205150FE
-   CRC32 = &H205150FE
+   CompCRC32 = &H5DF30BCF
+   CRC32 = &H5DF30BCF
    ID = lgc.Main
    IsRoom = False
-   Size = 4361
+   Size = 4341
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -61,20 +61,20 @@
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &HB5F8049C
-   CRC32 = &HB5F8049C
+   CompCRC32 = &H17E9E0E4
+   CRC32 = &H17E9E0E4
    IsRoom = False
    ID = lgc.Init
-   Size = 293
+   Size = 320
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HFDDCED58
-   CompCRC32 = &HFDDCED58
+   CRC32 = &HF8631A7A
+   CompCRC32 = &HF8631A7A
    IsRoom = False
-   Size = 208
+   Size = 212
 
 [Logic93]
    ID = lgc.GameHelp
@@ -351,8 +351,8 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H38A06877
-   CompCRC32 = &H38A06877
+   CRC32 = &HF098A406
+   CompCRC32 = &HF098A406
    IsRoom = True
    Size = 3975
 

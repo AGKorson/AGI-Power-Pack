@@ -482,7 +482,7 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     
     [ floor drain (74, 142, 81, 158)
     if (mouseX > 74 && mouseX < 81 && mouseY > 150 && mouseY < 162) {
-      if (obj.in.box(ego, 66, 142, 81, 156)) {
+      if (obj.in.box(ego, 66, 142, 89, 156)) {
         egodir = STOPPED;
         
         print("The drain is firmly attached to the floor. You can't pull it up.");

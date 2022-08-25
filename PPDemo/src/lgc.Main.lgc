@@ -126,37 +126,25 @@ if (currentRoom == 0) {
     quit(1);
   }
   
-  [ use these two lines to enable debugging; remove them
-  [ before distributing your game
-  set(debugging);       [ this line adds the debug menu and enables debugging
-                        [ when the game starts
-  set.key(0, 32, cDebug);   [ this command allows user to enter debug mode
-                            [ by pressing ALT+D
-  
+  [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
                         [ configures the screen and other startup activities
 
-  [ if restarting
+  [ ready to begin game by going to first room
   if (gameRestarted) {
-    [ for a restart, there are a few things that need to be reset
-    disable.item(cDummy);
-    set(enableMenu);
-    reset(disableGameFunctions);
-    
     [ go to first room here (skip Intro)
     new.room(rm.ParkingLot);
   } else {
-    [ if not an early version, set up the menus
-    
-    [ if room is 0, and not restarting, it means
-    [ this is very beginning; need to create the menu
+    [ !actually, if NOT restarting (meaning this is very beginning, 
+    [ need to create the menu; it can't be done in lgc.Init, it MUST be 
+    [ done from within logic 0, so do that before going to start room
     set.menu("AGI");
     set.menu.item("About      ", cAbout);
     set.menu.item("Help   <F1>", cHelp);
     set.menu("File");
     set.menu.item("Save ÄÅÇÉ<F5>", cSave);
     set.menu.item("Restore  <F7>", cRestore);
-    set.menu.item("-------------", cDummy);
+    set.menu.item("ƒƒƒƒƒƒƒƒƒƒƒƒƒ", cDummy);
     set.menu.item("Restart  <F9>", cRestart);
     set.menu.item("Quit  <Alt-Z>", cQuit);
     set.menu("Action");
@@ -164,10 +152,6 @@ if (currentRoom == 0) {
     set.menu.item("Inventory  <Tab>", cStatus);
     set.menu("Special");
     set.menu.item("Sound On/Off      <F2>", cToggleSound);
-    if (machineType == PC && monitorType < 2) {
-      [ cga display can toggle monitor
-      set.menu.item("Color/BW      <Ctrl R>", cToggleMonitor);
-    }
     set.menu.item("Clock On/Off      <F6>", cClock);
     set.menu.item("Joystick      <Ctrl J>", cInitJoy);
     set.menu.item("Pause            <Esc>", cPause);
@@ -190,14 +174,7 @@ if (currentRoom == 0) {
     submit.menu();
     [ disable the separator lines
     disable.item(cDummy);
-    [ disable game functions at start; they will be re-enabled after title screen is done
-    set(disableGameFunctions);
     
-    [ save default msgbox colors
-    msgBoxBG = WHITE;
-    msgBoxFG = BLACK;
-    msgBoxBorder = RED;
-
     [ start the game with the title screen
     new.room(rm.Title);         [ intro/opening screen
   }
@@ -207,6 +184,8 @@ if (currentRoom == 0) {
 [ EVERY CYCLE
 [ **************************************
 
+[!!! debug code to show click location and ego location
+[ used to assist in creating click statements and said statements
 if (controller(cLeftClick)) {
   get.posn(ego, work1, work2);
   display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
