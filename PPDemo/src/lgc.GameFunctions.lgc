@@ -123,32 +123,32 @@ if ((said("bad word", "rol") ||
   }
 
 
-[ look cube
-if (said("look", "cube")) 
-  {
-  if (has("strange colored cube")) 
-    {
-    show.obj(vw.Inv.TestItem);
-    }
-  else 
-    {
-    print("You don't have it.");
-    }
-  }
-  
-[ drop cube
-if (said("drop", "cube"))
-  {
-  print("The cube is too interesting; you decide to keep it.");
-  }
-  
-[ anything cube
-if ((said("anyword", "cube") || 
-    said("cube", "rol") ||
-    said("anyword", "anyword", "cube")))
-  {
-  print("There's no need to do anything with the cube.");
-  }
+[[ look cube
+[if (said("look", "cube")) 
+[  {
+[  if (has("strange colored cube")) 
+[    {
+[    show.obj(vw.Inv.TestItem);
+[    }
+[  else 
+[    {
+[    print("You don't have it.");
+[    }
+[  }
+[  
+[[ drop cube
+[if (said("drop", "cube"))
+[  {
+[  print("The cube is too interesting; you decide to keep it.");
+[  }
+[  
+[[ anything cube
+[if ((said("anyword", "cube") || 
+[    said("cube", "rol") ||
+[    said("anyword", "anyword", "cube")))
+[  {
+[  print("There's no need to do anything with the cube.");
+[  }
   
 
 [ look anything

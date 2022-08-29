@@ -216,8 +216,8 @@ if (newRoom) {
   [ to be moved into each room's logic)
 [  load.view.v(currentEgoView);
 [  set.view.v(ego, currentEgoView);
-  load.view(vw.Ego4);
-  set.view(ego, vw.Ego4);
+  load.view(vw.Ego);
+  set.view(ego, vw.Ego);
   
   [ force clock value to update, if time is visible
   clearStatusSeconds = 255; 

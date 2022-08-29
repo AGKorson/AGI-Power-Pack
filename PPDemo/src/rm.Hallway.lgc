@@ -11,6 +11,8 @@
 #define opendoor     f220
 #define closedoor    f221
 #define fDoorDone    f222
+#define clicktransom   f223
+
 
 if (newRoom)
   {
@@ -29,6 +31,7 @@ if (newRoom)
   [ add additional room initialization here
   load.view(vw.HallwayArt);
 
+  [ add the three doors that don't open
   add.to.pic(vw.HallwayArt, 1, 0, 46, 139, 0, 4);
   add.to.pic(vw.HallwayArt, 1, 0, 86, 139, 0, 4);
   add.to.pic(vw.HallwayArt, 1, 0, 126, 139, 0, 4);
@@ -83,54 +86,120 @@ if (newRoom)
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
-    print("You see nothing of interest.");
+    print("There are several doors in this hallway.");
   }
 
-  if (said("open", "door")) {
+  if ((said("open", "closet", "door") || said("open", "door"))) {
     set(opendoor);
   }
-  if (said("close", "door")) {
+  if ((said("close", "closet", "door") || said("close", "door"))) {
     set(closedoor);
   }
 }
   
-[ toolbar button checks
-if (cursormode == C_LOOK) {
-  if (controller(cLeftClick)) {
-    [ same as 'look'
-    if (mouseY > 25) {
-      print("There are several doors in this hallway.");
-      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+[ if NOT clicking on the actual toolbar, check for
+[ clicks on ingame items 13, 62, 159, 155
+if (mouseX > 12 && mouseX < 160 && mouseY > 69 && mouseY < 164 && 
+    controller(cLeftClick)) {
+  [ look
+  if (cursormode == C_LOOK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You see you.");
+      goto(doneclick);
     }
-  }
-}
-
-if (cursormode == C_TALK) {
-  if (controller(cLeftClick)) {
-    [ same as 'talk to'
-    if (mouseY > 25) {
-      print("There is no one here to talk to.");
-      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+    
+    [ vent duct - 68, 82, 78, 90
+    if (mouseX > 67 && mouseX < 79 && mouseY > 89 && mouseY < 99) {
+      print("This vent duct provides a nice stream of cool air to "
+            "help keep the building comfortable.");
+      goto(doneclick);
     }
-  }
-}
-
-if (cursormode == C_USE) {
-  if (controller(cLeftClick)) {
-    [ same as 'use item'
-    if (mouseY > 25) {
-      if (posn(oClosetDoor, ON.OBJ, 1, &mouseX, &mouseY)) {
-        if (closetopen) {
-          set(closedoor);
-        } else {
-          set(opendoor);
-        }
-      } else {
-        print("There is nothing to pick up or use here.");
-        set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+    
+    [ doors
+    if (mouseY > 114 && mouseY < 147) {
+      [ door 1 - 47, 107, 59, 138
+      if (mouseX > 46 && mouseX < 60) {
+        print("door 1");
+        goto(doneclick);
+      }
+      [ door 2 - 87, 107, 99, 138
+      if (mouseX > 86 && mouseX < 100) {
+        print("door 2");
+        goto(doneclick);
+      }
+      [ door 3 - 127, 107, 139, 138
+      if (mouseX > 126 && mouseX < 140) {
+        print("door 3");
+       goto(doneclick);
       }
     }
+    
+    [ transom windows - 47/87/127, 95, 59/99/139, 106
+    reset(clicktransom);
+    if (mouseY > 102 && mouseY < 114) {
+      if (mouseX > 46 && mouseX < 60) {
+        set(clicktransom);
+      }
+      if (mouseX > 86 && mouseX < 100) {
+        set(clicktransom);
+      }
+      if (mouseX > 126 && mouseX < 140) {
+        set(clicktransom);
+      }
+      if (clicktransom) {
+        print("transom");
+        goto(doneclick);
+      }
+    }
+    
+    [ nothing specific - check general areas
+    
+    [ walls
+    
+    [ floor
+    
+    [ ceiling
+    
+    print("There are several doors in this hallway.");
+    goto(doneclick);
   }
+  
+  [ talk
+  if (cursormode == C_TALK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You have nothing to say.");
+    } else {
+      print("There is no one here to talk to.");
+    }
+    goto(doneclick);
+  }
+  
+  [ use
+  if (cursormode == C_USE) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("Please don't touch yourself. Someone might see you.");
+      goto(doneclick);
+    }
+    
+  
+    [ closet door
+    if (posn(oClosetDoor, ON.OBJ, 1, &mouseX, &mouseY)) {
+      if (closetopen) {
+        set(closedoor);
+      } else {
+        set(opendoor);
+      }
+    } else {
+      print("There is nothing to pick up or use here.");
+      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+    }
+  }
+  
+  :doneclick
+  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
 }
 
 [*****

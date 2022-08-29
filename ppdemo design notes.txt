@@ -1,76 +1,149 @@
-six control consoles and one terminal:
+PP Demo Design notes/Walk-through
+-----------------------------
 
-1. Indexed Chromatic Association Properties Options Control Console
+X = item done
+I = item in progress
+O = item not started
+
+
+0. Intro/Opening Credits: TBD
+    O-background picture
+    O-theme music
+    O-views for rolling credits? for other intro animations?
+
+1. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss.
+
+    I-background picture (need some bushes/trees on edge to provide cover for vehicles entering/exiting)
+    I-cars (make sure enough different styles/colors)
+    I-small sized patients (several different versions) 
+    O-view of ego getting run over
+    O-car sound effects
+    O-game winning/end credits music
+    O-end credits views/pictures?
+
+
+2. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. Three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If ego approaches, receptionist will stop work and speak to ego. If ego asks to use restroom, permission is granted to go into hallway. If ego tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will call a patient to desk and tell them to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Ego should take the magazine and read it.
+
+    X-background picture
+    X-sliding glass door view
+    O-receptionist, including moving views, working views, speaking views
+    O-4-5 different patients (maybe same/similar views, but different hair styles, clothe colors, etc) including sitting/reading/waiting views, sitting/rising views, walking views
+    O-magazine view (on screen, inventory item)
+    O-close up magazine picture (including article text, maybe a inset photo)
+    O-sliding door sound effect
+    O-background music (typical 'elevator music' appropriate for a waiting area)
+
+3. Hallway: Four doors- a restroom (will never open; it's always 'occupied'), a doctor's office (never opens, doctor is always out), and an exam room (will open, but ego interrupts an exam, and the nurse will slam door shut). Repeated attempts to enter exam room will get ego thrown out of building, and game will end in a loss.
+Last door is a janitor closet. Ego can go through that door to enter the hallway.
+
+    X-background picture
+    X-closet door view
+    X-exam room door view
+    O-nurse/exam room background (behind door) view [doesn't need to be animated; maybe add to pic?]
+
+4. Closet: Full of 'janitor' stuff. When ego moves far enough into room, he trips over a broom. (If go tries to pick up broom, that also starts the tripping sequence.) Tripping results in ego causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; ego can fix it to get extra points. If broom is left on floor, ego will trip again (but not actually fall over) at random time intervals. Ego can put broom in corner to get extra points.
+
+    X-background picture
+    X-ego tripping, standing back up views
+    X-ego crouching/uncrouching views (for entering/exiting the hole)
+    X-wall-breaking view
+    X-faucet drip view
+    O-drip sound effect
+
+5. Secret Room: Connects the closet to the stairway. No other purpose/action for this room.
+ 
+    X-background picture
+
+6. Stairway: At bottom of stairs is a door to the PP Control Room. The door is locked with a keypad code needed to enter. The code can be found in the magazine article. To open the door, a close up picture/room is used to enter the code. Correct code will open door. There are lights along the stairway. One of them flickers every few seconds.
+
+    X-background picture
+    X-stairway light view
+
+6A. Closeup of keypad for entering code: The keypad is a standard 12 button keypad; 0-9, plus clear/enter buttons. 
+    O-background picture
+    O-button animations
+    O-button sound effect
+
+7. Control Room: The AGI Power Pack Control Room has a large console in the middle of room. Two exits, to right and left lead to an office, and a store room, respectively. The console consists of a central terminal (keyboard and monitor, with disk drive), and six panels:
+        -mouse cursor panel
+        -sound mode panel
+    -custom FM instrument panel
+        -custom message box color panel
+        -animation speed panel
+        -color palette panel
+        -[optional 'paint' panel; uses power pack features to simulate a typical draw/paint program]
+
+When ego enters from the stairwell, the control panel fails (maybe flash screen or something), door slams shut and won't open. Terminal is only part of panel working. It's a unix-like system (SINUX or some other acronym). Most commands don't work; there's memory corruption. Ego has to reboot/restart system to get it working correctly. Once rebooted, the six control panels and the security system (BaDASS - Building and Digital Access Security System) need passwords to be restarted. BaDASS can only be restarted when all other control panels are restarted. Each system/panel needs a password; they can be found among things in the office and store room. 
+Once all passwords are entered, and BaDASS is restarted, door will unlock; ego can leave, going back to car in parking lot to end the game. Ego needs to copy the PP source code to a floppy disk in order to get max points. 
+
+    O-background picture
+    O-panel views - one dark ('off') one bright ('on')
+    O-system failure sound effect
+
+8. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a coded password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
+
+    X-background picture
+    X-drawer/safe opening views
+    O-view of picture/photo to hide safe
+    X-view of rug being peeled back
+    O-inventory view of walkman
+
+9. Supply Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. Scratched into top of PQ podium is coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in walkman to play some background music.
+
+    X-background picture
+    X-drawer/cabinet opening views
+    O-inventory view for cassette tape
+    O-inventory view for music sheet [maybe a full picture?]
+    O-inventory view for scroll [maybe a full picture?]
+    O-80s mix tape music
+
+10: Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version is shown, with no ability to interact. Once enabled, the panels are available. Usage info is available on main console using typical 'help file' command. Changes made by ego will be applied globally for rest of game.
+
+11. Indexed Chromatic Association Properties Options Control Console
    palette control
 
-2. Electronic Synthesized Audio Data Options Control Console
+    X-background picture
+    O-grayed out background
+    X-panel views/animations
+
+12. Electronic Synthesized Audio Data Options Control Console
    sound mode/instrument selection
 
-3. Custom Acoustic Instrument Setting Options Control Console
+    X-background picture
+    O-grayed out background
+    X-panel views/animations
+
+13. Custom Acoustic Instrument Setting Options Control Console
    fm instrument editor
 
-4. Emulated Rodent Input Device Options Control Console
+    X-background picture
+    O-grayed out background
+    X-panel views/animations
+
+14. Emulated Rodent Input Device Options Control Console
    mouse settings
 
-5. Overall Frame Rate Options Control Console
+    X-background picture
+    O-grayed out background
+    X-panel views/animations
+
+15. Overall Frame Rate Options Control Console
    turbo mode/speed control
 
-6. Rectangular Alpha-Numeric Display Options Control Console
+    X-background picture
+    O-grayed out background
+    X-panel views/animations
+
+16. Rectangular Alpha-Numeric Display Options Control Console
    msgbox customizer
 
-7. Master Options Control Console
+    X-background picture
+    O-grayed out background
+    X-panel views/animations
+
+17. Master Options Control Console
    terminal
 
-
-start room: sierra ol hq bldg, parking lot. for years you wanted to visit. it's a 
-medical center now, you decide to go in to look around. 
-
-lobby: med center; if asked, receptionist tells you it's ok to look around, stay out
-of offices
-
-hallway: several doors- offices (no entry), rest room (it's occupied), broom closet
-
-broom closet: if you go far enough, you trip over a broom, and fall through the 
-backwall, opening up to a hidden staircase
-
-staircase: one level, ends in a door; looks like a cypher lock, but it's malfunctioning
-door opens to the PP control room
-
-when you go through the door, it locks behind you; you will need to restore the PP system 
-to get it open!
-
-PP control room: in main room, there is a terminal, and six panels; none are powered
-on; two small rooms adjoin; one looks like a supply/storage room. Other is a small office.
-
-one terminal, with three double paneled control stations (a desk level, and upper level)
-panels are dark until turned on with the terminal
-terminal takes test commands to control the powerpack, and to enable the control panels
-uses a dos-like syntax; missing key to turn it on
-!key is your car key!
-find the password file; it's corrupted, only powerpack password works; player has to
-find other six
-
-when powerpack enabled, turn on all advanced interface options: mouse, toolbar, 
-fade in/out; 80col, click2move
-
- 
-office: door locked until cypher lock disabled in MOCC
-rolodex has password for xxxx
-folder in desk drawer has password for xxxx
-under desk blotter is  password for ERIDOCC
-
-storeroom: door locked until cypher lock disabled in MOCC
-file cabinet- slip of paper with password
-box on shelf -
-
-
-
-
-
-find a key to turn on terminal; enter help to see that there are six panels 
-that will enable some new features
-
-use terminal to enable each panel (each has a different password)
-
-find the passwords in various places in the room suite 
+    I-background picture (need to add disk drive slot/controls, return button)
+    X-panel views/animations
 

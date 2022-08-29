@@ -21,8 +21,57 @@ if (newRoom) {
   [ the horizon defines the upper limit of ego's movement
   set.horizon(117);
   
+  [ add permanently parked cars
+  load.view(vw.ParkedCars);
+  #define tmpView     v220
+  #define tmpLoop     v221
+  #define tmpCel      v222
+  #define tmpX        v223
+  #define tmpY        v224
+  #define tmpPri      v225
+  #define tmpMgn      v226
+ 
+  [ parking spot 1
+  tmpView = vw.ParkedCars;
+  tmpLoop = 1;
+  random(0, 11, tmpCel);
+  tmpX = 106;
+  tmpY = 141;
+  tmpPri = 13;
+  tmpMgn = 4;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 2
+  tmpLoop = 0;
+  random(0, 11, tmpCel);
+  tmpX = 92;
+  tmpY = 154;
+  tmpPri = 14;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 3 ok
+  tmpLoop = 1;
+  random(0, 11, tmpCel);
+  tmpX = 51;
+  tmpY = 167;
+  tmpPri = 15;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 4 ok
+  tmpLoop = 1;
+  random(0, 11, tmpCel);
+  tmpX = 46;
+  tmpY = 155;
+  tmpPri = 14;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 5 ok
+  tmpLoop = 0;
+  random(0, 11, tmpCel);
+  tmpX = 26;
+  tmpY = 156;  
+  tmpPri = 0;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  discard.view(vw.ParkedCars);
+  
   [ load tiny ego view
-  load.view(vw.Ego1);
+  load.view(vw.EgoSmall);
   
   [ if starting or restarting 
   if ((previousRoom == rm.Title ||    [ just come from intro screen 
@@ -33,7 +82,7 @@ if (newRoom) {
     [ coming from lobby
     position(ego, 54, 121);
   }
-  set.view(ego, vw.Ego1);
+  set.view(ego, vw.EgoSmall);
   egodir = STOPPED;
   
   [ add toolbar buttons
@@ -94,6 +143,18 @@ if (controller(cLeftClick)) {
 [*****
 :noInput           [  all non-input related code goes here 
 [*****
+
+[ paeked cars in right parking lot don't quite align with priority bands
+get.posn(ego, work1, work2);
+if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
+  set.priority(ego, 13);
+} else {
+  if (work1 > 88 && work1 < 108 && work2 >154 && work2 < 157) {
+    set.priority(ego, 14);
+  } else {
+    release.priority(ego);
+  }
+}
 
 [*****
 :exit              [  test for leaving the room

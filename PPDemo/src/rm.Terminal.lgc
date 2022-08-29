@@ -39,7 +39,7 @@ if (newRoom) {
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
   
-  if (previousRoom == rm.Entrance) {
+  if (previousRoom == rm.Stairway) {
     position(ego, 74, 163);
   }
   [ add ego to the room
@@ -133,7 +133,7 @@ if (said("show", "mouse")) {
 if (said("open", "door")) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Entrance);  [ ##LE006##
+  new.room(rm.Stairway);  [ ##LE006##
 }
 
 :done

@@ -161,13 +161,14 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       print("You see you.");
       goto(doneclick);
     }
-    
+
     [ broom
     reset(clickbroom);
     if (broommoved) {
       [ broom is in corner
       if (mouseX > 40 && mouseX < 48 && mouseY > 138 && mouseY < 163) {
         print("After tripping over that stupid broom, you're glad you moved it out of the way.");
+        goto(doneclick);
       }
     } else {
       [ broom is on floor
@@ -310,14 +311,11 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     } else {
       print("There is no one here to talk to.");
     }
-    set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
     goto(doneclick);
   }
 
   [ grab/use
   if (cursormode == C_USE) {
-    [ same as 'grab/use item'
-  
     [ ego
     if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Not even in a closet.");
@@ -327,7 +325,7 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     [ get center pos of ego
     get.posn(ego, work1, work2);
     work1 += 3;
-    [ TODO: if ego isn't facing the item clicked, change loo
+    [ TODO: if ego isn't facing the item clicked, change loop
     
     [ broom
     reset(clickbroom);

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/25/2022 8:07:30 AM"
+   LastEdit = "8/28/2022 11:33:50 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,19 +45,19 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H5DF30BCF
-   CRC32 = &H5DF30BCF
+   CompCRC32 = &HC3DE8257
+   CRC32 = &HC3DE8257
    ID = lgc.Main
    IsRoom = False
    Size = 4341
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H447556D4
-   CRC32 = &H447556D4
+   CompCRC32 = &HCF3BD19F
+   CRC32 = &HCF3BD19F
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 768
+   Size = 705
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -319,10 +319,10 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H99935ECB
-   CompCRC32 = &H99935ECB
+   CRC32 = &H2F6A59F8
+   CompCRC32 = &H2F6A59F8
    IsRoom = True
-   Size = 374
+   Size = 554
 
 [Logic3]
    ID = rm.Lobby
@@ -335,40 +335,40 @@
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &H33C3F7AE
-   CompCRC32 = &H33C3F7AE
+   CRC32 = &H8B363F90
+   CompCRC32 = &H8B363F90
    IsRoom = True
-   Size = 733
+   Size = 1095
 
 [Logic8]
    ID = rm.Terminal
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H4179F90A
-   CompCRC32 = &H4179F90A
+   CRC32 = &H8E8F6010
+   CompCRC32 = &H8E8F6010
    IsRoom = True
    Size = 281
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &HF098A406
-   CompCRC32 = &HF098A406
+   CRC32 = &H17D935F4
+   CompCRC32 = &H17D935F4
    IsRoom = True
-   Size = 3975
+   Size = 3974
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
-   CRC32 = &HA5BE583A
-   CompCRC32 = &HA5BE583A
+   CRC32 = &H93C64C9A
+   CompCRC32 = &H93C64C9A
    IsRoom = True
    Size = 198
 
 [Logic7]
-   ID = rm.Entrance
+   ID = rm.Stairway
    Description = ""
-   CRC32 = &HCD2452CC
-   CompCRC32 = &HCD2452CC
+   CRC32 = &H15485071
+   CompCRC32 = &H15485071
    IsRoom = True
    Size = 312
 
@@ -413,9 +413,9 @@
    BkgdImg = ""
 
 [Picture7]
-   ID = pic.Entrance
+   ID = pic.Stairway
    Description = ""
-   Size = 164
+   Size = 1385
    BkgdImg = ""
 
 [Picture8]
@@ -487,14 +487,14 @@
 [Picture2]
    ID = pic.ParkingLot
    Description = ""
+   Size = 4850
    BkgdImg = ""
-   Size = 4773
 
 [Picture3]
    ID = pic.Lobby
    Description = ""
    BkgdImg = ""
-   Size = 1641
+   Size = 1604
 
 [Picture4]
    ID = pic.Hallway
@@ -506,19 +506,19 @@
    ID = pic.Closet
    Description = ""
    BkgdImg = ""
-   Size = 1249
+   Size = 1319
 
 [Picture9]
    ID = pic.Office
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 981
 
 [Picture10]
    ID = pic.Storeroom
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 6724
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -680,12 +680,7 @@
 [View14]
    ID = vw.ClosetArt
    Description = ""
-   Size = 1865
-
-[View15]
-   ID = vw.Assorted
-   Description = ""
-   Size = 5531
+   Size = 8477
 
 [View40]
    ID = vw.MsgBoxColors
@@ -702,28 +697,47 @@
    Description = ""
    Size = -1
 
-[View1]
-   ID = vw.Ego1
-   Description = ""
-   Size = -1
-
 [View3]
    ID = vw.Ego3
    Description = ""
    Size = -1
 
-[View4]
-   ID = vw.Ego4
-   Description = "this is Drew"
-   Size = -1
-
 [View5]
    ID = vw.HallwayArt
    Description = ""
-   Size = 1278
+   Size = 2882
 
 [View7]
    ID = vw.LobbyArt
    Description = ""
    Size = 1999
+
+[View17]
+   ID = vw.StairwayArt
+   Description = ""
+   Size = 1149
+
+[View15]
+   ID = vw.StorageRoomArt
+   Description = ""
+   Size = 3091
+
+[View16]
+   ID = vw.MovingCars
+   Description = ""
+   Size = 864
+
+[View18]
+   ID = vw.EgoSmall
+   Description = ""
+   Size = 840
+
+[View0]
+   ID = vw.Ego
+   Description = "this is Drew"
+
+[View19]
+   ID = vw.ParkedCars
+   Description = ""
+   Size = 1125
 [::END Views::]
