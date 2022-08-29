@@ -101,6 +101,63 @@ animationInterval = NORMAL_SPEED;
 [ set palette to AGI default
 palette = m3;
 
+[ select ego and parked car models
+#define tmp0    v220
+#define tmp1    v221
+#define tmp2    v222
+#define tmp3    v223
+#define tmp4    v224
+#define tmp5    v225
+#define vRnd    v232
+#define vStyle  v233
+
+  [ randomize the car body styles
+  work1 = &tmp0;
+  work2 = 0;
+  [ populate style variables with numbers 0 through 11
+  :loop1
+  *work1 = work2;
+  ++work1;
+  ++work2;
+  if (work1 < 232) {
+    goto(loop1);
+  }
+  [ now 'scramble' them a few times to mix them up
+  work1 = 0;
+  :loop2
+    [ start with first loop variable
+    vStyle = &tmp0;
+    :loop3
+      [ choose a random loop
+      random(0, 11, vRnd);
+      [ swap the style value for current variable with
+      [ the variable of the random style
+      vRnd += 220;
+      work2 = *vStyle;
+      work3 = *vRnd;
+      *vStyle = work3;
+      *vRnd = work2;
+      [ move to next style variable
+      ++vStyle;
+    if (vStyle < 232) {
+      goto(loop3);
+    }
+    ++work1;
+  [ run the scramble code three times
+  if (work1 < 3) {
+    goto(loop2);
+  }
+[ store first six styles for ego car and the five parked cars
+car0car1 = tmp0;
+car0car1 *= 16;
+car0car1 += tmp1;
+car2car3 = tmp2;
+car2car3 *= 16;
+car2car3 += tmp3;
+car4car5 = tmp4;
+car4car5 *= 16;
+car4car5 += tmp5;
+
 return();
 
 [ **************************************

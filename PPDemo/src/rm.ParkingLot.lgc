@@ -34,7 +34,8 @@ if (newRoom) {
   [ parking spot 1
   tmpView = vw.ParkedCars;
   tmpLoop = 1;
-  random(0, 11, tmpCel);
+  tmpCel = car0car1;
+  tmpCel /= 16;
   tmpX = 106;
   tmpY = 141;
   tmpPri = 13;
@@ -42,34 +43,39 @@ if (newRoom) {
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 2
   tmpLoop = 0;
-  random(0, 11, tmpCel);
+  tmpCel = car0car1;
+  block(BIT.AND, 0, &tmpCel, 15); [ bit.and(BYVAL, VAR, AMOUNT)
   tmpX = 92;
   tmpY = 154;
   tmpPri = 14;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
-  [ parking spot 3 ok
+  [ parking spot 3
   tmpLoop = 1;
-  random(0, 11, tmpCel);
+  tmpCel = car2car3;
+  tmpCel /= 16;
   tmpX = 51;
   tmpY = 167;
   tmpPri = 15;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 4 ok
   tmpLoop = 1;
-  random(0, 11, tmpCel);
+  tmpCel = car2car3;
+  block(BIT.AND, 0, &tmpCel, 15); [ bit.and(BYVAL, VAR, AMOUNT)
   tmpX = 46;
   tmpY = 155;
   tmpPri = 14;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 5 ok
   tmpLoop = 0;
-  random(0, 11, tmpCel);
+  tmpCel = car4car5;
+  tmpCel /= 16;
   tmpX = 26;
   tmpY = 156;  
   tmpPri = 0;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   discard.view(vw.ParkedCars);
-  
+block(FADE.IN, 0, 0, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+print("%v73 %v74 %v75");  
   [ load tiny ego view
   load.view(vw.EgoSmall);
   
