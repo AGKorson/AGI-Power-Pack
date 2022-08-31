@@ -9,6 +9,7 @@
 #define wall        o1
 #define broom       o2
 #define drip        o3
+#define door        o4
 
 #define fDone           f220
 #define fFalling        f221
@@ -17,7 +18,8 @@
 #define dripping        f224
 #define dripdone        f225
 #define cantrip         f226
-
+#define crouch          f227
+#define uncrouch        f228
 
 #define fallstatus      v220
 #define    NOFALL        0
@@ -52,6 +54,17 @@ if (newRoom) {
   call(lgc.InitToolbar);
   
   load.view(vw.ClosetArt);
+  [ closet door
+  animate.obj(door);
+  set.view(door, vw.ClosetArt);
+  set.loop(door, 9);
+  [ always show door closed
+  set.cel(door, 0);
+  position(door, 107, 148);
+  draw(door);
+  stop.update(door);
+  
+  [ wall animation
   animate.obj(wall);
   set.view(wall, vw.ClosetArt);
   set.loop(wall, 1);
@@ -107,16 +120,26 @@ if (newRoom) {
   
   [ add additional room initialization here
   egoDir = STOPPED;
-  if (previousRoom == rm.Hallway) {
-    position(ego, 71, 156);
-    set.loop(ego, 3);
-  }
+[  if (previousRoom == rm.Hallway) {
+    position(ego, 100, 147);
+    set.loop(ego, 1);
+[  }
   if (previousRoom == rm.SecretRoom) {
     position(ego, 72, 141);
-    set.loop(ego, 1);
-  }
-  egoDir = STOPPED;
-  
+    [ uncrouch
+    set.view(ego, vw.ClosetArt);
+    set.loop(ego, 8);
+    set.cel(ego, 0);
+    program.control();
+    prevent.input();
+    [ turn off auto-cycle to allow cycle-at-rest
+    work1 = 0;
+    [!!!!!!!!!!!!error in autocycle patch; it doesn't use
+    [ a variable like the syntax defintion says it should!!!
+    set.upper.left(&ego, 0);
+    end.of.loop(ego, uncrouch);
+    start.cycling(ego);
+  }  
   [ add ego to the room
   draw(ego);
   
@@ -130,6 +153,20 @@ if (newRoom) {
   return();
 }
 
+[ check for uncrouching
+if (uncrouch) {
+  [ restore player control
+  reset(uncrouch);
+  set.view(ego, vw.Ego);
+  set.loop(ego, 2);
+  normal.cycle(ego);
+  player.control();
+  accept.input();
+  [ restore autocycle
+  work1 = 1;
+  set.upper.left(&ego, &work1);
+}
+
 [*****
 :handleInput       [ check for input from player
 [*****
@@ -141,14 +178,14 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 }
 
 [ toolbar button checks
-[ this doesn't work; gets overridden by the Toolbar handler
-if ((mouseX < 40 || mouseX > 114 || mouseY < 69 || mouseY > 167)) {
-  reset(click2move);
-} else {
-  if (cursormode == C_WALK) {
-   set(click2move);
-  }
-}
+[[[ this doesn't work; gets overridden by the Toolbar handler
+[[if ((mouseX < 40 || mouseX > 114 || mouseY < 69 || mouseY > 167)) {
+[[  reset(click2move);
+[[} else {
+[[  if (cursormode == C_WALK) {
+[[   set(click2move);
+[[  }
+[[}
 
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items

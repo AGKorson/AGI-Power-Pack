@@ -6,7 +6,12 @@
 [
 [ ********************************************************************
 
-#define egosize     v220
+#define egoCar        o1
+
+#define openSequence v220
+
+#define fCarDone     f220
+
 
 if (newRoom) {
   [ run initialization code
@@ -21,8 +26,8 @@ if (newRoom) {
   [ the horizon defines the upper limit of ego's movement
   set.horizon(117);
   
+  load.view(vw.Cars);
   [ add permanently parked cars
-  load.view(vw.ParkedCars);
   #define tmpView     v220
   #define tmpLoop     v221
   #define tmpCel      v222
@@ -32,71 +37,84 @@ if (newRoom) {
   #define tmpMgn      v226
  
   [ parking spot 1
-  tmpView = vw.ParkedCars;
-  tmpLoop = 1;
-  tmpCel = car0car1;
-  tmpCel /= 16;
+  tmpView = vw.Cars;
+  tmpLoop = car0car1;
+  tmpLoop /= 16;
+  tmpLoop += 12;
+  tmpCel = 0;
   tmpX = 106;
   tmpY = 141;
   tmpPri = 13;
   tmpMgn = 4;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 2
-  tmpLoop = 0;
-  tmpCel = car0car1;
-  block(BIT.AND, 0, &tmpCel, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  tmpLoop = car0car1;
+  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
   tmpX = 92;
   tmpY = 154;
   tmpPri = 14;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 3
-  tmpLoop = 1;
-  tmpCel = car2car3;
-  tmpCel /= 16;
+  tmpLoop = car2car3;
+  tmpLoop /= 16;
+  tmpLoop += 12;
   tmpX = 51;
   tmpY = 167;
   tmpPri = 15;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
-  [ parking spot 4 ok
-  tmpLoop = 1;
-  tmpCel = car2car3;
-  block(BIT.AND, 0, &tmpCel, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  [ parking spot 4
+  tmpLoop = car2car3;
+  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  tmpLoop += 12;
   tmpX = 46;
   tmpY = 155;
   tmpPri = 14;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
-  [ parking spot 5 ok
-  tmpLoop = 0;
-  tmpCel = car4car5;
-  tmpCel /= 16;
+  [ parking spot 5
+  tmpLoop = car4car5;
+  tmpLoop /= 16;
   tmpX = 26;
   tmpY = 156;  
   tmpPri = 0;
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
-  discard.view(vw.ParkedCars);
-block(FADE.IN, 0, 0, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-print("%v73 %v74 %v75");  
-  [ load tiny ego view
-  load.view(vw.EgoSmall);
   
-  [ if starting or restarting 
-  if ((previousRoom == rm.Title ||    [ just come from intro screen 
-      previousRoom == 0))  {          [ or restarted game
-    [ add ego to screen at starting position
-    position(ego, 21, 159);
-  } else {
-    [ coming from lobby
-    position(ego, 54, 121);
-  }
+  [ ego's car
+  animate.obj(egoCar);
+  tmpLoop = car4car5;
+  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  set.view(egoCar, vw.Cars);
+  set.loop.v(egoCar, tmpLoop);
+    
+  [ tiny ego view
+  load.view(vw.EgoSmall);
   set.view(ego, vw.EgoSmall);
-  egodir = STOPPED;
+  
+  [ if starting (coming from intro screen)
+  if (previousRoom == rm.Title) {
+    [ begin opening sequence
+    openSequence = 1;
+  } else {
+    [ skip opening sequence
+    openSequence = 0;
+    [ car is in parking spot
+    position(egoCar, 41, 143);
+    draw(egoCar);
+    stop.update(egoCar);
+    [ if restarting 
+    if (previousRoom == 0)  {
+      [ add ego next to car
+      position(ego, 48, 144);
+    } else {
+      [ coming from lobby
+      position(ego, 54, 121);
+    }
+    egodir = STOPPED;
+    draw(ego);
+  }
   
   [ add toolbar buttons
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
-  
-  [ add ego to the room
-  draw(ego);
   
   [ display the picture on screen
   show.pic();
@@ -108,6 +126,36 @@ print("%v73 %v74 %v75");
   return();
 }
 
+if (openSequence) {
+  if (openSequence == 1) {
+    [ move car to parking spot
+    ++openSequence;
+    position(egoCar, 0, 131);
+    draw(egoCar);
+    move.obj(egoCar, 41, 143, 1, fCarDone);
+    print("At long last, Drew has finally made it to Oakhurst, "
+          "California to visit the original Sierra On Line headquarters "
+          "building.");
+    print("It has been a long drive, but Drew is super excited as he "
+          "pulls into the parking lot.");
+  }
+  
+  if (openSequence == 2 && fCarDone) {
+    [ ego gets out
+    reset(fCarDone);
+    openSequence = 0;
+    stop.update(egoCar);
+    position(ego, 48, 144);
+    draw(ego);
+    print("The building is now a medical office. There aren't too many "
+          "cars in the parking lot. So Drew decides to go inside and "
+          "take a look around.");
+    print("Who knows? Maybe he might find some original Sierra memorabilia "
+          "or other signs of long past gaming history.");  
+  }
+  [ begin game
+  return();
+}
 [*****
 :handleInput       [ check for input from player
 [*****

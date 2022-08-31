@@ -99,42 +99,37 @@ if (haveInput && !haveMatch && unknownWordNum == 0)
     }
   }
 
-[ toolbar button checks
-if (cursormode == C_LOOK) {
-  if (controller(cLeftClick)) {
-    [ same as 'look'
-    if (mouseY > 25) {
-      print("This is the lobby. There is a desk and some chairs in the waiting area.");
-    }
+[ if NOT clicking on the actual toolbar, check for
+[ clicks on ingame items
+if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 && 
+    controller(cLeftClick)) {
+  if (cursormode == C_LOOK) {
+    print("This is the lobby. There is a desk and some chairs in the waiting area.");
+    goto(doneclick);
   }
+  
+  if (cursormode == C_TALK) {
+    print("There is no one here to talk to.");
+    goto(doneclick);
+  }
+  
+  if (cursormode == C_USE) {
+    print("There is nothing to manipulate here.");
+    goto(doneclick);
+  }
+  
+  :doneclick
+  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-if (cursormode == C_TALK) {
-  if (controller(cLeftClick)) {
-    [ same as 'talk to'
-    if (mouseY > 25) {
-      print("There is no one here to talk to.");
-      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
-    }
-  }
-}
 
-if (cursormode == C_USE) {
-  if (controller(cLeftClick)) {
-    [ same as 'use item'
-    if (mouseY > 25) {
-      print("There is nothing to manipulate here.");
-      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
-    }
-  }
-}
 
 [*****
 :noInput           [  all non-input related code goes here 
 [*****
 
 [ add other room specific statements here
-if (posn(ego, 113, 156, 127, 167)) {
+if (posn(ego, 105, 156, 127, 167)) {
   if (!frontdooropen) {
     [ open it
     set(frontdooropen);

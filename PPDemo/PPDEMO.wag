@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/29/2022 7:50:57 AM"
+   LastEdit = "8/31/2022 8:20:51 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -71,8 +71,8 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HF8631A7A
-   CompCRC32 = &H0
+   CRC32 = &HF50CE726
+   CompCRC32 = &HF50CE726
    IsRoom = False
    Size = 212
 
@@ -223,8 +223,8 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H3A9C9FA1
-   CompCRC32 = &H0
+   CRC32 = &HA7863357
+   CompCRC32 = &HA7863357
    IsRoom = False
    Size = 21561
 
@@ -319,18 +319,18 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H5CA31EFF
-   CompCRC32 = &H5CA31EFF
+   CRC32 = &H5D640F74
+   CompCRC32 = &H5D640F74
    IsRoom = True
-   Size = 592
+   Size = 1120
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &HEBED826C
-   CompCRC32 = &H0
+   CRC32 = &HEDF6988F
+   CompCRC32 = &HEDF6988F
    IsRoom = True
-   Size = 540
+   Size = 525
 
 [Logic4]
    ID = rm.Hallway
@@ -351,10 +351,10 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H17D935F4
-   CompCRC32 = &H0
+   CRC32 = &HAE0CFE3E
+   CompCRC32 = &HAE0CFE3E
    IsRoom = True
-   Size = 3974
+   Size = 3994
 
 [Logic6]
    ID = rm.SecretRoom
@@ -723,9 +723,9 @@
    Size = 3091
 
 [View16]
-   ID = vw.MovingCars
+   ID = vw.Cars
    Description = ""
-   Size = 864
+   Size = 4513
 
 [View0]
    ID = vw.Ego

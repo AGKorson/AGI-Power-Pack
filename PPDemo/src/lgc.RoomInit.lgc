@@ -57,7 +57,7 @@ if (currentRoom < 21) {
     [ off when you want cycle an animation of ego when it's
     [ not moving
     work1 = 1;
-    set.upper.left(0, &work1);
+    set.upper.left(&ego, &work1);
   
     [ turn status line on during normal game play
     status.line.on();
