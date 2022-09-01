@@ -132,11 +132,13 @@ if ((have.key() || controller(cLeftClick))) {
   [ game functions are no longer disabled
   reset(disableGameFunctions);
 
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out to black
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ begin game in starting room
   new.room(rm.ParkingLot); [ ##LE001##
-[ new.room(rm.Terminal);
 }
 
 [ when first creditLine object reaches top
@@ -242,5 +244,11 @@ return();
 [ **************************************
 [ MESSAGES
 [ **************************************
-#message 1 "Intro/Opening screen"
-#message 2 gameVersionMsg
+#message 1 "%g40"
+#message 2 "%g41"
+#message 3 "%g42"
+#message 4 "%g43"
+#message 5 "%g44"
+#message 6 "%g45"
+#message 7 "Intro/Opening screen"
+#message 8 gameVersionMsg

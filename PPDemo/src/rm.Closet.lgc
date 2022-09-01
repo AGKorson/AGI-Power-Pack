@@ -20,6 +20,9 @@
 #define cantrip         f226
 #define crouch          f227
 #define uncrouch        f228
+#define opendoor        f229
+#define closedoor       f230
+#define fDoorDone       f231
 
 #define fallstatus      v220
 #define    NOFALL        0
@@ -58,8 +61,11 @@ if (newRoom) {
   animate.obj(door);
   set.view(door, vw.ClosetArt);
   set.loop(door, 9);
-  [ always show door closed
-  set.cel(door, 0);
+  if (closetopen) { 
+    set.cel(door, 3);
+  } else {
+    set.cel(door, 0);
+  }
   position(door, 107, 148);
   draw(door);
   stop.update(door);
@@ -99,7 +105,7 @@ if (newRoom) {
   draw(broom);
   stop.update(broom);
   
-  [ drip 63 129
+  [ drip
   if (!faucetfixed) {
     animate.obj(drip);
     position(drip, 63, 129);
@@ -120,10 +126,6 @@ if (newRoom) {
   
   [ add additional room initialization here
   egoDir = STOPPED;
-[  if (previousRoom == rm.Hallway) {
-    position(ego, 100, 147);
-    set.loop(ego, 1);
-[  }
   if (previousRoom == rm.SecretRoom) {
     position(ego, 72, 141);
     [ uncrouch
@@ -134,12 +136,13 @@ if (newRoom) {
     prevent.input();
     [ turn off auto-cycle to allow cycle-at-rest
     work1 = 0;
-    [!!!!!!!!!!!!error in autocycle patch; it doesn't use
-    [ a variable like the syntax defintion says it should!!!
-    set.upper.left(&ego, 0);
+    set.upper.left(&ego, &work1);
     end.of.loop(ego, uncrouch);
-    start.cycling(ego);
-  }  
+  } else {
+    [if (previousRoom == rm.Hallway) {
+    position(ego, 100, 147);
+    set.loop(ego, 1);
+  }
   [ add ego to the room
   draw(ego);
   
@@ -147,9 +150,12 @@ if (newRoom) {
   show.pic();
   [ fade in
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-  [ restore cursor
-  cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+  if (previousRoom == rm.Hallway) {
+    [ restore cursor
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  }
   return();
 }
 
@@ -165,6 +171,9 @@ if (uncrouch) {
   [ restore autocycle
   work1 = 1;
   set.upper.left(&ego, &work1);
+  [ restore cursor
+  cursoricon = cursormode;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
 }
 
 [*****
@@ -175,22 +184,13 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("look")) {
     print("This is an old janitor closet.");
   }
+  
 }
 
-[ toolbar button checks
-[[[ this doesn't work; gets overridden by the Toolbar handler
-[[if ((mouseX < 40 || mouseX > 114 || mouseY < 69 || mouseY > 167)) {
-[[  reset(click2move);
-[[} else {
-[[  if (cursormode == C_WALK) {
-[[   set(click2move);
-[[  }
-[[}
-
 [ if NOT clicking on the actual toolbar, check for
-[ clicks on ingame items
+[ clicks on ingame items (unless wait cursor is active)
 if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 && 
-    controller(cLeftClick)) {
+    cursoricon != C_WAIT && controller(cLeftClick)) {
   [ look
   if (cursormode == C_LOOK) {
     [ ego
@@ -198,7 +198,17 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       print("You see you.");
       goto(doneclick);
     }
-
+    
+    [ closet door
+    if (posn(door, ON.OBJ, 0, &mouseX, &mouseY)) {
+      if (closetopen) {
+        print("The closet door is open.");
+      } else {
+        print("The closet door is closed.");
+      }
+      goto(doneclick);
+    }
+    
     [ broom
     reset(clickbroom);
     if (broommoved) {
@@ -222,7 +232,6 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
         set(clickbroom);
       }
     }
-    
     if (clickbroom) {
       if (!wallbreak) {
         print("That broom looks like a serious tripping hazard!");
@@ -363,6 +372,16 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     get.posn(ego, work1, work2);
     work1 += 3;
     [ TODO: if ego isn't facing the item clicked, change loop
+    
+    [ closet door
+    if (posn(door, ON.OBJ, 0, &mouseX, &mouseY)) {
+      if (closetopen) {
+        set(closedoor);
+      } else {
+        set(opendoor);
+      }
+      goto(doneclick);
+    }
     
     [ broom
     reset(clickbroom);
@@ -529,12 +548,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     
     [ steam pipe (44, 77, 98, 83)
     if (mouseX > 43 && mouseX < 99 && mouseY > 84 && mouseY < 94) {
-[      if (obj.in.box(ego, 66, 142, 88, 153)) {
         egodir = STOPPED;
-        print("You can't reach the pipe. Not even if you jumped.");
-[       } else {
-[        print("You can't reach that from here.");
-[      }
+      print("You can't reach the pipe. Not even if you jumped.");
     }
   }
   
@@ -626,29 +641,79 @@ if (dripdone && !faucetfixed) {
   toggle(dripping);    
 }
 
+if (opendoor) {
+  reset(opendoor);
+  if (closetopen) {
+    print("The closet door is already open.");
+  } else {
+    if (posn(ego, 97, 142, 106, 147)) {
+      end.of.loop(door, fDoorDone);
+    } else {
+      print("You are not close enough.");
+    }
+  }
+}
+if (closedoor) {
+  reset(closedoor);
+  if (closetopen) {
+    if (posn(ego, 97, 142, 106, 156)) {
+      reverse.loop(door, fDoorDone);
+    } else {
+      print("You are not close enough.");
+    }
+  } else {
+    print("The closet door is already closed.");
+  }
+}
+
+if (fDoorDone) {
+  reset(fDoorDone);
+  if (closetopen) {
+    reset(closetopen);
+  } else {
+    set(closetopen);
+  }
+}
 [*****
 :exit              [  test for leaving the room
 [*****
-
-[ add exit checks here (or use layout editor)
-
-if (wallbreak && posn(ego, 70, 139, 80, 139)) {
+if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
+  egoDir = STOPPED;
+  set(crouch);
+  set.view(ego, vw.ClosetArt);
+  set.loop(ego, 7);
+  set.cel(ego, 0);
+  program.control();
+  prevent.input();
+  [ turn off auto-cycle to allow cycle-at-rest
+  work1 = 0;
+  set.upper.left(&ego, &work1);
+  end.of.loop(ego, fDone);
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+}
+if (crouch && fDone) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(rm.SecretRoom);  [ ##LE002##
 }
 
-
-if (posn(ego, 68, 158, 82, 158)) {
-  [ show wait cursor
-  cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Hallway);  [ ##LE001##
+if ((posn(ego, 99, 143, 100, 143) || posn(ego, 100, 144, 101, 144) ||
+     posn(ego, 100, 145, 101, 145) || posn(ego, 101, 146, 102, 146) ||
+     posn(ego, 101, 147, 102, 147))) {
+  if (closetopen) { 
+    [ show wait cursor
+    cursoricon = C_WAIT;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    [ fade out, then change room
+    block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    new.room(rm.Hallway);  [ ##LE001##
+  } else {
+    if (egoDir > 0 && egoDir < 5) {
+      egoDir = STOPPED;
+    }
+  }
 }
 return();
 

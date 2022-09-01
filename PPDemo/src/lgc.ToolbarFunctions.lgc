@@ -4,6 +4,11 @@
 
 #define toggleBtn    f240
 
+[ if wait cursor is active, do nothing
+if (cursoricon == C_WAIT) {
+  return();
+}
+
 [ if mouse is NOT over toolbar AND NOT over menu, show correct cursor
 if ((mouseX < 39 || mouseX > 120 || mouseY > 25) && mouseY > 7) {
   [ show correct cursor icon

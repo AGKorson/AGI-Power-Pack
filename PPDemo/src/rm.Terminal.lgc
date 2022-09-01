@@ -52,6 +52,10 @@ if (newRoom) {
   show.pic();
   [ fade in
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  [ restore cursor
+  cursoricon = cursormode;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  
   return();
 }
 
@@ -131,6 +135,9 @@ if (said("show", "mouse")) {
 }
 
 if (said("open", "door")) {
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(rm.Stairway);  [ ##LE006##
@@ -139,12 +146,18 @@ if (said("open", "door")) {
 :done
 
 if (edgeEgoHit == RIGHT_EDGE) {
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(rm.Storeroom);  [ ##LE004##
 }
 
 if (edgeEgoHit == LEFT_EDGE) {
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(rm.Office);  [ ##LE003##
