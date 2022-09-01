@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/31/2022 8:20:51 AM"
+   LastEdit = "8/31/2022 8:48:05 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -71,8 +71,8 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HF50CE726
-   CompCRC32 = &HF50CE726
+   CRC32 = &HF8631A7A
+   CompCRC32 = &H0
    IsRoom = False
    Size = 212
 
@@ -223,8 +223,8 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HA7863357
-   CompCRC32 = &HA7863357
+   CRC32 = &H3A9C9FA1
+   CompCRC32 = &H0
    IsRoom = False
    Size = 21561
 
@@ -351,10 +351,10 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &HAE0CFE3E
-   CompCRC32 = &HAE0CFE3E
+   CRC32 = &H17D935F4
+   CompCRC32 = &H0
    IsRoom = True
-   Size = 3994
+   Size = 3974
 
 [Logic6]
    ID = rm.SecretRoom
