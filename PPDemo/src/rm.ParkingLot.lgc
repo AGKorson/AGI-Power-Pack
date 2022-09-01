@@ -7,10 +7,15 @@
 [ ********************************************************************
 
 #define egoCar        o1
+#define patient       o2
+#define patientCar    o3
 
 #define openSequence v220
+#define patientSeq   v221
 
 #define fCarDone     f220
+#define fPatientDone f221
+#define fPatientHere f222
 
 
 if (newRoom) {
@@ -84,10 +89,30 @@ if (newRoom) {
   block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
   set.view(egoCar, vw.Cars);
   set.loop.v(egoCar, tmpLoop);
-    
+  ignore.blocks(egoCar);
+  
+  [ done with temp variables; reset module variables as needed
+  patientSeq = 0;
+  
   [ tiny ego view
   load.view(vw.EgoSmall);
   set.view(ego, vw.EgoSmall);
+  
+  [ patient car
+  animate.obj(patientCar);
+  set.view(patientCar, vw.Cars);
+  random(0, 11, work1);
+  set.loop.v(patientCar, work1);
+  [ don't draw until needed
+  
+  
+  [ tiny patient view
+  animate.obj(patient);
+  load.view(vw.SmallPeople);
+  set.view(patient, vw.SmallPeople);
+  random(0, 0, work1);
+  set.loop.v(patient, work1);
+  [ don't draw until needed
   
   [ if starting (coming from intro screen)
   if (previousRoom == rm.Title) {
@@ -99,7 +124,7 @@ if (newRoom) {
     [ car is in parking spot
     position(egoCar, 41, 143);
     draw(egoCar);
-    stop.update(egoCar);
+    stop.cycling(egoCar);
     [ if restarting 
     if (previousRoom == 0)  {
       [ add ego next to car
@@ -144,8 +169,8 @@ if (openSequence) {
     [ ego gets out
     reset(fCarDone);
     openSequence = 0;
-    stop.update(egoCar);
-    position(ego, 48, 144);
+    stop.cycling(egoCar);
+    position(ego, 50, 139);
     draw(ego);
     print("The building is now a medical office. There aren't too many "
           "cars in the parking lot. So Drew decides to go inside and "
@@ -153,7 +178,7 @@ if (openSequence) {
     print("Who knows? Maybe he might find some original Sierra memorabilia "
           "or other signs of long past gaming history.");  
   }
-  [ begin game
+
   return();
 }
 [*****
@@ -198,7 +223,7 @@ if (controller(cLeftClick)) {
 :noInput           [  all non-input related code goes here 
 [*****
 
-[ paeked cars in right parking lot don't quite align with priority bands
+[ parked cars in right parking lot don't quite align with priority bands
 get.posn(ego, work1, work2);
 if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
   set.priority(ego, 13);
@@ -209,6 +234,88 @@ if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
     release.priority(ego);
   }
 }
+
+[ check for random patient arriving or leaving
+[ TODO: add a timer
+if (patientSeq == 0) {
+  if (fPatientHere) {
+    [ time for patient to leave
+      position(patient, 55, 117);
+      get.posn(egoCar, work1, work2);
+      if (work1 == 18) {
+        [ go back to parking spot 1
+        move.obj(patient, 55, 127, 1, fPatientDone);
+      } else {
+        [ go back to parking spot 2
+        move.obj(patient, 55, 127, 1, fPatientDone);
+      }
+      draw(patient);
+      patientSeq = 4;
+  } else {
+    [ time for patient to arrive
+    position(patientCar, 0, 131);
+    random(0, 1, work1);
+    if (work1 == 0) {
+      patientSeq = 1; [ got to spot #1
+      move.obj(patientCar, 18, 143, 1, fPatientDone);
+    } else {
+    [ TODO: set up parking spot #2
+      patientSeq = 1; [ 11; go to spot #2
+      move.obj(patientCar, 18, 143, 1, fPatientDone);
+    }
+    draw(patientCar);
+  }
+}
+if (fPatientDone) {
+  if (patientSeq == 8) {
+    erase(patientCar);
+    reset(fPatientHere);
+    reset(fPatientDone);
+    patientSeq = 0;
+  }
+  if (patientSeq == 7) {
+    move.obj(patientCar, 143, 128, 2, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 7) {
+    move.obj(patientCar, 26, 132, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 6) {
+    erase(patient);
+    start.cycling(patientCar);
+    move.obj(patientCar, 0, 143, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 5) {
+    move.obj(patient, 25, 140, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 4) {
+    move.obj(patient, 38, 127, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 3) {
+    erase(patient);
+    patientSeq = 0;
+    set(fPatientHere);
+    reset(fPatientDone);
+  }
+  if (patientSeq == 2) {
+    move.obj(patient, 55, 117, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 1) {
+    stop.cycling(patientCar);
+    ignore.blocks(patientCar);
+    block(21, 141, 36, 143);
+    position(patient, 25, 140);
+    draw(patient);
+    move.obj(patient, 55, 125, 1, fPatientDone);
+    ++patientSeq;
+  }
+}
+
 
 [*****
 :exit              [  test for leaving the room

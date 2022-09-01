@@ -25,10 +25,8 @@ if (newRoom) {
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
   
-  [ load ego view, animate and draw ego
-  [ this is sometimes handled in logic 0
-  [ instead of in each individual logic
   [ add ego to the room
+  position(ego, 24, 139);
   draw(ego);
   
   
@@ -66,7 +64,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 
 [ add exit checks here (or use layout editor)
 
-if (edgeEgoHit == LEFT_EDGE) {
+if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -79,4 +77,10 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "You see nothing of interest." 
+#message 1 "%g40"
+#message 2 "%g41"
+#message 3 "%g42"
+#message 4 "%g43"
+#message 5 "%g44"
+#message 6 "%g45"
+#message 7 "You see nothing of interest." 

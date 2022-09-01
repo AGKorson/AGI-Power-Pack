@@ -23,22 +23,16 @@ if (newRoom) {
   [ default horizion is 36; adjust it as needed
   set.horizon(120);  
   
-  [ set ego parameters, if different from lgc.RoomInit
-  
-  [ AGI will automatically position ego on the opposite
-  [ edge when entering a new room, but if you want to manually
-  [ position ego, do that here, before drawing ego
-  
-[[  [ The next 6 lines need only be in the first room of the game 
-[if ((previousRoom == rm.Title ||    [ just come from intro screen 
-[    previousRoom == 0))  {          [ or restarted game 
-[  position(ego, 74, 150);
-[}
-  
   [ add toolbar buttons
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
   
+  if (previousRoom == rm.Office) {
+    position(ego, 15, 149);
+  }
+  if (previousRoom == rm.StoreRoom) {
+    position(ego, 144, 149);
+  }
   if (previousRoom == rm.Stairway) {
     position(ego, 74, 163);
   }
@@ -168,4 +162,10 @@ return();
 [ **************************************
 [ MESSAGES
 [ **************************************
-#message 1 "This is an empty room."
+#message 1 "%g40"
+#message 2 "%g41"
+#message 3 "%g42"
+#message 4 "%g43"
+#message 5 "%g44"
+#message 6 "%g45"
+#message 7 "This is an empty room."

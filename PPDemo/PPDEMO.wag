@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/1/2022 2:11:33 AM"
+   LastEdit = "9/1/2022 3:26:42 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -319,10 +319,10 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H5D640F74
-   CompCRC32 = &H5D640F74
+   CRC32 = &HD59BA076
+   CompCRC32 = &HD59BA076
    IsRoom = True
-   Size = 1120
+   Size = 1402
 
 [Logic3]
    ID = rm.Lobby
@@ -343,10 +343,10 @@
 [Logic8]
    ID = rm.Terminal
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H970892B8
-   CompCRC32 = &H970892B8
+   CRC32 = &HE607AB5
+   CompCRC32 = &HE607AB5
    IsRoom = True
-   Size = 309
+   Size = 373
 
 [Logic5]
    ID = rm.Closet
@@ -375,18 +375,18 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H82BFDC50
-   CompCRC32 = &H82BFDC50
+   CRC32 = &H52572873
+   CompCRC32 = &H52572873
    IsRoom = True
-   Size = 116
+   Size = 161
 
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H8D342D91
-   CompCRC32 = &H8D342D91
+   CRC32 = &H6C2836BF
+   CompCRC32 = &H6C2836BF
    IsRoom = True
-   Size = 116
+   Size = 161
 
 [Logic11]
    ID = lgc.InitToolbar
@@ -487,7 +487,7 @@
 [Picture2]
    ID = pic.ParkingLot
    Description = ""
-   Size = 4850
+   Size = 4859
    BkgdImg = ""
 
 [Picture3]
@@ -512,13 +512,13 @@
    ID = pic.Office
    Description = ""
    BkgdImg = ""
-   Size = 981
+   Size = 1013
 
 [Picture10]
    ID = pic.Storeroom
    Description = ""
    BkgdImg = ""
-   Size = 6724
+   Size = 6696
 [::END Pictures::]
 
 [::BEGIN Sounds::]
