@@ -3,8 +3,6 @@
 [ 
 
 [[ fade in
-[block(FADE.IN, 0, 0, 0); [ fade.in(BYVAR, DELAY, COLOR)
-[set(f10);[trace.on();
 
 animate.obj(tbPoint);
 animate.obj(tbQuit);

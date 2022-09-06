@@ -11,12 +11,15 @@ O = item not started
     O-theme music
     O-views for rolling credits? for other intro animations?
 
+    I-Toolbar and statusbar
+    O-menu - what custom menu items are needed?
+
 1. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss.
 
-    I-background picture (need some bushes/trees on edge to provide cover for vehicles entering/exiting)
-    I-cars (make sure enough different styles/colors)
+    X-background picture (need some bushes/trees on edge to provide cover for vehicles entering/exiting)
+    X-cars (make sure enough different styles/colors)
     I-small sized patients (several different versions) 
-    O-view of ego getting run over
+    X-view of ego getting run over
     O-car sound effects
     O-game winning/end credits music
     O-end credits views/pictures?
@@ -148,11 +151,11 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     X-panel views/animations
 
 
-done modify save data function to encrypt with Avis Durgan
+done: modify save data function to encrypt with Avis Durgan
 
-- add death scenes: trapped in secret room (if door left open too long); trapped in coffin if ego gets in
+- add death scenes: trapped in secret room (if door left open too long); trapped in coffin if ego gets in; electrical outlet in control room?
 
 
-- add save, restore and quit buttons
+done: add save, restore and quit buttons
 
 - modify status bar

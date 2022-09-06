@@ -10,7 +10,6 @@ if (cursoricon == C_WAIT) {
 }
 
 [ if ego is dead, force the default cursor
-[ and limit buttons to restore only
 if (deathType > 0) {
   if (cursormode != C_DEFAULT) {
     cursormode = C_DEFAULT;
@@ -90,15 +89,16 @@ if (controller(cLeftClick)) {
       }
     }
   }
+  
   [ check for mouse down/mouse up on quit/save/restore buttons
   if (!tbBtnDown) {
     [ if on button2:
-    if (posn(tbQuit, -1, 1, &mouseX, &mouseY) && !deathType) {
+    if (posn(tbQuit, -1, 1, &mouseX, &mouseY)) {
       set.loop(tbQuit, 1);
       set(tbBtnDown);
     }
     [ if on button3:
-    if (posn(tbSave, -1, 1, &mouseX, &mouseY) && !deathType) {
+    if (posn(tbSave, -1, 1, &mouseX, &mouseY)) {
       set.loop(tbSave, 1);
       set(tbBtnDown);
     }
@@ -156,7 +156,12 @@ if (mouseBtn != 1) {
       quit(0);
     }
     if (work2 == 1 && posn(tbSave, -1, 1, &mouseX, &mouseY)) {
-      save.game();
+      [ if dead, restart; if not dead, save
+      if (deathType) {
+        restart.game();
+      } else {
+        save.game();
+      }
     }
     [ if on button3:
     if (work3 == 1 && posn(tbRestore, -1, 1, &mouseX, &mouseY)) {

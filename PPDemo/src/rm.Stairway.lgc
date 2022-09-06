@@ -30,12 +30,12 @@ if (newRoom) {
   load.view(vw.StairwayArt);
   
   [ lights
-  add.to.pic(vw.StairwayArt, 0, 0, 76, 114, 4, 15);
+  add.to.pic(vw.StairwayArt, 0, 0, 76, 133, 4, 15);
   animate.obj(lightshadow);
   set.view(lightshadow, vw.StairwayArt);
   set.loop(lightshadow, 0);
   set.priority(lightshadow, 4);
-  position(lightshadow, 128, 62);
+  position(lightshadow, 128, 81);
   stop.cycling(lightshadow);
   ignore.objs(lightshadow);
   ignore.blocks(lightshadow);
@@ -45,7 +45,7 @@ if (newRoom) {
   animate.obj(door);
   set.view(door, vw.StairwayArt);
   set.loop(door, 1);
-  position(door, 32, 133);
+  position(door, 32, 152); [161-8=153
   set.priority(door, 5);
   stop.cycling(door);
   ignore.objs(door);
@@ -54,13 +54,13 @@ if (newRoom) {
   [ ego
   if (previousRoom == rm.SecretRoom) {
     egoDir = STOPPED;
-    position(ego, 153, 37);
+    position(ego, 153, 56);
     observe.blocks(ego);
     set.loop(ego, 1);
     set.cel(door, 0);
   } else {
     [ coming from control room; door is open
-    position(ego, 33, 136);
+    position(ego, 33, 156);
     ignore.blocks(ego);
     set.cel(door, 4);
     set(fDoorOpen);

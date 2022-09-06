@@ -139,6 +139,8 @@
 #define car2car3               v74
 #define car4car5               v75
 #define car6car7               v76
+#define currentHour            v77
+#define currentMinute          v78
 #define C_DEFAULT                1
 #define C_WALK                   2
 #define C_LOOK                   3

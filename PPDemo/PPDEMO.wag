@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/5/2022 11:32:20 PM"
+   LastEdit = "9/6/2022 4:31:15 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,11 +45,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &H559CBDEB
+   CompCRC32 = &H8376B9F1
+   CRC32 = &H8376B9F1
    ID = lgc.Main
    IsRoom = False
-   Size = 4341
+   Size = 4418
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -61,20 +61,20 @@
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H0
-   CRC32 = &H3FF9418A
+   CompCRC32 = &HF85B04C6
+   CRC32 = &HF85B04C6
    IsRoom = False
    ID = lgc.Init
-   Size = 419
+   Size = 446
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HF50CE726
-   CompCRC32 = &H0
+   CRC32 = &HF2296D2A
+   CompCRC32 = &HF2296D2A
    IsRoom = False
-   Size = 212
+   Size = 215
 
 [Logic93]
    ID = lgc.GameHelp
@@ -95,10 +95,10 @@
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H2B3E3B8B
-   CompCRC32 = &H0
+   CRC32 = &H4698AAB0
+   CompCRC32 = &H4698AAB0
    IsRoom = False
-   Size = 670
+   Size = 735
 
 [Logic96]
    ID = lgc.TraceInfo
@@ -223,10 +223,10 @@
 [Logic212]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HD4554BD
-   CompCRC32 = &H0
+   CRC32 = &H38FD2BB2
+   CompCRC32 = &H38FD2BB2
    IsRoom = False
-   Size = 21567
+   Size = 21651
 
 [Logic213]
    ID = lgc.mod2936
@@ -287,10 +287,10 @@
 [Logic22]
    ID = cp.Instrument
    Description = ""
-   CRC32 = &H9AE30E28
-   CompCRC32 = &H0
+   CRC32 = &HCE8DA81C
+   CompCRC32 = &HCE8DA81C
    IsRoom = True
-   Size = 12201
+   Size = 12199
 
 [Logic26]
    ID = cp.SpeedStatus
@@ -319,10 +319,10 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H543B3A66
-   CompCRC32 = &H0
+   CRC32 = &H4340EA51
+   CompCRC32 = &H4340EA51
    IsRoom = True
-   Size = 1804
+   Size = 5160
 
 [Logic3]
    ID = rm.Lobby
@@ -367,8 +367,8 @@
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &H8009495D
-   CompCRC32 = &H0
+   CRC32 = &H52B32F51
+   CompCRC32 = &H52B32F51
    IsRoom = True
    Size = 414
 
@@ -391,18 +391,26 @@
 [Logic11]
    ID = lgc.InitToolbar
    Description = ""
-   CRC32 = &HCF57CFB1
-   CompCRC32 = &HCF57CFB1
+   CRC32 = &H85E78A8F
+   CompCRC32 = &H85E78A8F
    IsRoom = False
    Size = 224
 
 [Logic12]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &HF007C5A7
-   CompCRC32 = &HF007C5A7
+   CRC32 = &H20F21346
+   CompCRC32 = &H7D3B378F
    IsRoom = False
-   Size = 498
+   Size = 503
+
+[Logic13]
+   ID = lgc.Statusbar
+   Description = "custom status bar"
+   CRC32 = &H4E2DD50E
+   CompCRC32 = &H4E2DD50E
+   IsRoom = False
+   Size = 320
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -415,7 +423,7 @@
 [Picture7]
    ID = pic.Stairway
    Description = ""
-   Size = 1069
+   Size = 1071
    BkgdImg = ""
 
 [Picture8]
@@ -487,7 +495,7 @@
 [Picture2]
    ID = pic.ParkingLot
    Description = ""
-   Size = 6318
+   Size = 6380
    BkgdImg = ""
 
 [Picture3]
@@ -670,7 +678,7 @@
 [View13]
    ID = vw.Toolbar
    Description = ""
-   Size = 2081
+   Size = 2283
 
 [View14]
    ID = vw.ClosetArt

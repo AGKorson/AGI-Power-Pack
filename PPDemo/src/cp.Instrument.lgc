@@ -1820,8 +1820,6 @@ if (btnAction > 0) {
   
   [ Done button
   if (btnAction == B_DONE) {
-    [ restore game functions
-    reset(disableGameFunctions);
     [ restore ego movement parameters
     egoX = egoPrevX;
     egoY = egoPrevY;

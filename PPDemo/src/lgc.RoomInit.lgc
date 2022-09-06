@@ -130,6 +130,9 @@ if (currentRoom > 20) {
 reset(musicDone);
 reset(soundDone);
 
+[ reset clock variables
+oldSeconds = -1;
+
 [ reset all local and dynamic variables/flags
 work1 = 255;
 Loop1:

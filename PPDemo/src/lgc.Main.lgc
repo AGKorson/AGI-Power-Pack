@@ -214,15 +214,38 @@ if (newRoom) {
   [ load and set view
   [ (for more complex games, this will probably need 
   [ to be moved into each room's logic)
-[  load.view.v(currentEgoView);
-[  set.view.v(ego, currentEgoView);
   load.view(vw.Ego);
   set.view(ego, vw.Ego);
   
   [ force clock value to update, if time is visible
-  clearStatusSeconds = 255; 
+  clearStatusSeconds = -1; 
 }
 
+[ if clock display is needed
+if (clockOn) {
+  [ check current time every second
+  if (clearStatusSeconds != elapsedSeconds) {
+    block(GET.TIME, &work1, &work2, &work3); [ get.time(vHOUR, vMINUTE, vSECOND)
+    [ update the displayed clock whenever the minute value changes
+    if (work2 != currentMinute) {
+      currentMinute = work2;
+      currentHour = work1;
+    }
+    if (!deathType) {
+      [ update game time clock every second (if not disabled)
+      set.text.attribute(-1, 0);
+      set.text.attribute(YELLOW, BROWN);
+      [ update the clock
+      display(24, 56, "Elapsed Time: %v13:%v12|2:%v11|2 ");
+      [ restore default colors
+      set.text.attribute(0, -1);
+    }
+    
+    [ update the stored seconds value
+    clearStatusSeconds = elapsedSeconds;
+  }
+}
+    
 [ check for ego death (usually happens a lot in AGI games...)
 if (deathType > 0) {
   [ if this is first cycle since ego died
@@ -266,10 +289,12 @@ if (!disableGameFunctions) {
   [ check for menu activation
   if (controller(cMenu)) {
     menu.input();
+    oldSeconds = -1;
   }
   if (controller(cLeftClick)) {
     if (mouseY < 8) {
       menu.input();
+      oldSeconds = -1;
     }
   }
   
@@ -320,7 +345,12 @@ if (!disableGameFunctions) {
   if (controller(cToggleSound)) {
     toggle(soundOn);
   }
-    
+  
+  [ toggle clock
+  if (controller(cClock)) {
+    toggle(clockOn);
+  }
+  
   [ if debug mode is requested
   if ((said("debug") || controller(cDebug))) {
     [ if not in debug mode yet
@@ -460,21 +490,6 @@ if (restoreCursor) {
   print.at("Cursor restored.", 14, 19, 17);
 }
 
-[ if clock display is needed
-if (clockOn && !disableGameFunctions) {
-  [ update the displayed clock whenever
-  [ the second value changes
-  if (clearStatusSeconds != elapsedSeconds) {
-    [ need to set correct color values
-    set.text.attribute(BLACK, WHITE);
-    [ update the clock
-    display(0, 18, " %v13:%v12|2:%v11|2 ");
-    [ restore default colors
-    set.text.attribute(WHITE, BLACK);
-    [ update the stored seconds value
-    clearStatusSeconds = elapsedSeconds;
-  }
-}
 
 [ if this is first cycle since restore game executed
 if (isset(gameRestored)) {

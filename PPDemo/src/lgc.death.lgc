@@ -16,8 +16,11 @@ if (deathType != 255) {
   [ no more player control
   program.control();
   
-  [ clear status lines
-  clear.lines(23, 24, 0);
+  [ change save button to restart
+  set.cel(tbSave, 8);
+  
+[  [ clear status lines
+[  clear.lines(23, 24, 0);
   
   [ start a timer to provide a delay after announcement
   [ before player is shown second message
@@ -39,6 +42,14 @@ if (deathType != 255) {
   [ electrocuted 
   if (deathType == 4) {
     print("Electricity is deadly? Shocking!");
+  }
+  
+  [ WINNER!
+  if (deathType == 99) {
+    [ not actually dead- game is over because ego left
+    print("Drew drives away, his visit to Sierra On-Line is over.");
+    
+    [ animate end game, then roll credits
   }
   
   [ set deathType to 255 so this logic does not

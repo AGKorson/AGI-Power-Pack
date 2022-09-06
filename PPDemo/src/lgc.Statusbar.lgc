@@ -1,0 +1,78 @@
+[ 
+[ lgc.Statusbar
+[ 
+
+[ add score, name of game, and music icons
+
+[0         1         2         3         4         5         6         7         ]
+[01234567890123456789012345678901234567890123456789012345678901234567890123456789]
+[ Score: xxx of yyy       AGI Power Pack Demo Game         hh:mm AM          sss ]
+
+[ save colors
+set.text.attribute(-1, 0);
+
+[ score
+set.text.attribute(BLUE, WHITE);
+display(0, 0, " Score: %v3 of %v7    ");
+
+[ game title
+set.text.attribute(GREEN, WHITE);
+display(0, 18, "       AGI Power Pack Demo Game");
+
+[ clock
+if (clockOn) {
+  display(0, 49, "         ");
+  set.text.attribute(DK_GRAY, WHITE);
+  [ update the clock
+  if (currentHour < 10) {
+    [ h:mm AM
+    display(0, 58, " %v77:%v78|2 AM");
+  } else {
+    if (currentHour < 12) {
+      [ hh:mm AM
+      display(0, 58, "%v77:%v78|2 AM");
+    } else {
+      currentHour -= 12;
+      if (currentHour < 22) {
+        [ h:mm PM
+        display(0, 58, " %v77:%v78|2 PM");
+      } else {
+        [ hh:mm PM
+        display(0, 58, "%v77:%v78|2 PM");
+      }
+      currentHour += 12;
+      display(0, 66, "          ");
+    }
+  }
+} else {
+  display(0, 49, "                           ");
+}
+
+[ sound status
+set.text.attribute(RED, WHITE);
+if (soundOn) {
+  display(0, 76, "\x0E\x0E\x0E ");
+} else {
+  display(0, 76, "    ");
+}
+
+[ restore default colors
+set.text.attribute(0, -1);
+
+return();
+
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 " Score: %v3 of %v7    "
+#message 2 "       AGI Power Pack Demo Game"
+#message 3 "                           "
+#message 4 "\x0E\x0E\x0E "
+#message 5 "    "
+#message 6 "         "
+#message 7 " %v77:%v78|2 AM"
+#message 8 "%v77:%v78|2 AM"
+#message 9 " %v77:%v78|2 PM"
+#message 10 "%v77:%v78|2 PM"
+#message 11 "          "
