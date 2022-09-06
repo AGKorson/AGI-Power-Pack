@@ -122,7 +122,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
     
     [ go back to terminal roonm
-    new.room(rm.Terminal); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   
   if (said("help")) {

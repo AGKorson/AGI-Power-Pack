@@ -1,1 +1,1149 @@
-[ [ lgc.TestPart3[ [ **************************************[ LOCAL DEFINES[ **************************************#define strN              s3#define strNo             s4#define strAnswer         s5#define tmpTimer1         v220#define tmpTimer2         v221#define msgTimer          v222#define stepcounter       v223#define tmpRow            v224#define tmpCol            v225#define tmpMsg            v226#define maxCPS            v227#define tmpVal            v228#define tmpSeconds        v229#define counter1          v230#define counter2          v231[ run tests 35-41if (newtest) { clear.lines(23, 24, BLACK);}[ TEST35: date/time functions++stepcounter;if (teststep == stepcounter) {  if (newtest) {    display(24, 0, "%v63: DATE/TIME TEST");    reset(newtest);    work1 = 0;    work2 = 1;    work3 = 1;    [ get date    block(GET.DATE, &work1, &work2, &work3);    [ convert month to text    work2 += 70;    tmpVal = 6;    block(SET.STRING.V, &tmpVal, &work2, 0);    [ get day of week    work2 = 0;    block(GET.DAYOFWEEK, &work2, 0, 0);    work2 += 60;    tmpVal = 5;    block(SET.STRING.V, &tmpVal, &work2, 0);    print("Today is %s5 %s6 %v48, 20%v46.");        [ time    work1 = 0;    work2 = 0;    work3 = 0;    block(GET.TIME, &work1, &work2, &work3);    if (work1 > 11) {      s5 = "PM";    } else {      s5 = "AM";    }    if (work1 == 0) {      work1 = 12;    } else {      if (work1 > 12) {        work1 -= 12;      }    }    print("The current time is\n    %v46:%v47|2:%v48|2 %s5");        [ check results    clear.lines(23, 24, BLACK);    get.string(strAnswer, "Date and time correct? ", 22, 0, 3);    goto(nexttest);  }  return();}[ TEST36: creating, reading/writing data files++stepcounter;if (teststep == stepcounter) {  if (subteststep == 0 && newtest) {    display(24, 0, "%v63: READ/WRITE DATA TEST");    reset(newtest);    print("The next test will create a data file in your game directory. "          "The file will contain a list of the first six inventory "          " items. Check that the file was created, and has correct "          "data in it.");    [ clear out strings s6-s11    work1 = &s5;    work2 = &m1;    :clearstr      block(SET.STRING.V, &work1, &work2, 0);      ++work1;    if (work1 < 12) {      goto(clearstr);    }        [ get item count    work2 = 0;    block(ITEM.COUNT, &work2, &work1, 0);    [ if greater than 7, limit it to 7 (six plus i0)    if (work1 > 7) {      work1 = 7;    }    [ copy item names into strings    work2 = 1;  [ skip i0    work3 = &s6; [ start with s6    :setstr      s2 = "%o47";      block(STR.FORMAT, &s2, &s2, 0);      block(SET.MSG, 0, &m2, &s2);      tmpVal = &m2;      block(SET.STRING.V, &work3, &tmpVal, 0);      [ restore blank line      s2 = m1;      block(SET.MSG, 0, &m2, &s2);      ++work3;      ++work2;      --work1;    if (work2 < 12 && work1 > 1) {      goto(setstr);    }    [create the file    s2 = "itemlist.dat";    work1 = &s6;    work2 = &s11;    block(NEW.FILE, &s2, &work1, &work2);    [ check for error    if (errorParameter != 0) {      print("File IO error. Aborting this test.");      ++teststep;      set(newtest);      subteststep = 0;      return();    }    [ check results    clear.lines(23, 24, BLACK);    get.string(strAnswer, "File has correct data? ", 22, 0, 3);    goto(nextsubtest);  }  if (subteststep == 1 && newtest) {    display(24, 0, "%v63: READ/WRITE DATA TEST");    print("Next test will replace the first and third strings "          "in the data file. Confirm they change to LINE1 and LINE3");    work1 = 0;    work2 = 6;    s6 = m1;    block(SAVE.STRING, &s2, &work1, &work2);    s6 = "LINE1";    block(SAVE.STRING, &s2, &work1, &work2);    [ check for error    if (errorParameter != 0) {      print("File IO error. Aborting this test.");      ++teststep;      set(newtest);      subteststep = 0;      return();    }    work1 = 2;    s6 = m1;    block(SAVE.STRING, &s2, &work1, &work2);    s6 = "LINE3";    block(SAVE.STRING, &s2, &work1, &work2);    [ check for error    if (errorParameter != 0) {      print("File IO error. Aborting this test.");      ++teststep;      set(newtest);      subteststep = 0;      return();    }    [ check results    clear.lines(23, 24, BLACK);    get.string(strAnswer, "Did lines change? ", 22, 0, 3);    goto(nextsubtest);  }  if (subteststep == 2 && newtest) {    display(24, 0, "%v63: READ/WRITE DATA TEST");    [test read function    print("Testing read function.");    work1 = 0;    work2 = 8;    s9 = "LINE1";    block(READ.STRING, &s2, &work1, &work2);    [ check for error    if (errorParameter != 0) {      print("File IO error. Aborting this test.");      ++teststep;      set(newtest);      subteststep = 0;      return();    }    if (!compare.strings(s8, s9)) {      print("Read from file failed.");      goto(fail);    }    [ try next index    work1 = 2;    s9 = "LINE3";    block(READ.STRING, &s2, &work1, &work2);    [ check for error    if (errorParameter != 0) {      print("File IO error. Aborting this test.");      ++teststep;      set(newtest);      subteststep = 0;      return();    }    if (!compare.strings(s8, s9)) {      print("Read from file failed.");      goto(fail);    }        print("Read from file check passed. The file will now be deleted.");    block(DELETE.FILE, &s2, 0, 0);    [ check for error    if (errorParameter != 0) {      print("File IO error. Aborting this test.");      ++teststep;      set(newtest);      subteststep = 0;      return();    }    [ check results    clear.lines(23, 24, BLACK);    get.string(strAnswer, "Is file gone? ", 22, 0, 3);    goto(nexttest);  }  return();}[ TEST37: polling the shift, ctrl and alt keys++stepcounter;if (teststep == stepcounter) {  if (newtest) {    display(24, 0, "%v63: SHIFT-CTRL-ALT TEST");    reset(newtest);    print("Press control, shift and alt keys in any combination. "          "You should see their status below.");  }  display(24, 0, "%v63:      -    -   ");  work1 = 0;  block(CHECK.SHIFT, &work1, 0, 0);  work2 = work1;  block(BIT.AND, 0, &work2, 1);  if (work2) {    display(24, 4, "SHIFT");  }  work2 = work1;  block(BIT.AND, 0, &work2, 2);  if (work2) {    display(24, 10, "CTRL");  }  work2 = work1;  block(BIT.AND, 0, &work2, 4);  if (work2) {    display(24, 15, "ALT");  }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {    [ check results    clear.lines(23, 24, BLACK);    get.string(strAnswer, "Is key status working? ", 22, 0, 3);    goto(nexttest);  }    return();}[ TEST38: support for words with non-alphabetic characters ++stepcounter;if (teststep == stepcounter) {  if (subteststep == 0) {    if (newtest) {      display(24, 0, "%v63: EXTENDED CHAR WORDS TEST");      reset(newtest);      print("Testing non-alphabet starting words. Enter '1 2 3' "            "in any combo on input line to test. When done, press "            "CTRL+Z or enter 'continue'.");    }    if (said("1", "2", "3")) {      print("You CAN count!");      [ set answer to 'yes'      strAnswer = "y";      goto(nextsubtest);    }    if (said("1", "3", "2")) {      print("Close, but not quite right.");    }    if (said("2", "1", "3")) {      print("Wrong starting number.");    }    if (said("2", "3", "1")) {      print("Western Michigan Area code.");    }    if (said("3", "1", "2")) {      print("Not sure you can count.");    }    if (said("3", "2", "1")) {      print("LIFTOFF!");    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Number input working? ", 22, 0, 3);      goto(nextsubtest);    }    return();  }  if (subteststep == 1) {    if (newtest) {      display(24, 0, "%v63: EXTENDED CHAR WORDS TEST");      reset(newtest);      print("Now testing extended characters. Enter '€' "            "on input line.");    }    if (said("‡")) {       print("Extended character words are working correctly.");      [ set answer to 'yes'      strAnswer = "y";      goto(nexttest);    }  }}[ TEST39: on object test command ++stepcounter;if (teststep == stepcounter) {  if (subteststep == 0) {    if (newtest) {      display(24, 0, "%v63: ON.OBJ TEST");      reset(newtest);      print("Next check is for on.obj test command. Try clicking on "            "ego's 'view box'. You don't have to be on a pixel. "            "Press CTRL+Z or enter 'continue' when done testing.");     }    if (controller(cLeftClick)) {      if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {        print("ON EGO");      }    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "ON.OBJ working? ", 22, 0, 3);      goto(nextsubtest);    }    return();  }  if (subteststep == 1) {    if (newtest) {      display(24, 0, "%v63: ON.OBJ TEST");      reset(newtest);      print("Now check for testing only on visible pixels. "            "Press CTRL+Z or enter 'continue' when done testing.");    }    if (controller(cLeftClick)) {      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {        print("ON EGO PIXEL");      }    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "ON.OBJ working? ", 22, 0, 3);      goto(nexttest);    }    return();  }}[ TEST40: restart support for power pack ++stepcounter;if (teststep == stepcounter) {  if (subteststep == 0) {    if (newtest) {      display(24, 0, "%v63: RESTART TEST");      reset(newtest);      print("Setting up to perform a restart. All these settings should be "            "reset after a restart.");      print("Switching to 80 column text mode, then 80 column graphics mode.");      [ switch to text80;      configure.screen(-1, 1, 1);      set(graphics80);      configure.screen(-1, 0, 1);      set(graphics80);      if (hasMouse) {        [ set mouse on with custom cursor;         if (IntVersion > VERSION_2272) {          enable.item(mouse);        } else {          set.key(1, 0, c251);        }        set.key(0, &m102, mouse);        print("Enabling mouse with a custom cursor.");        [ save it to compare after restarting        s6 = "y";      } else {        s6 = "n";      }      [ custom msgbox colors      block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)      print("Setting custom message box colors.");      [ point and click on, straight mode      print("Enabling click-to-move in 'straight' mode.");      set(clickmove);      work1 = -1;      step.size(ego, work1);      [ setting speed to 60 cps      print("Setting game speed to 60 cycles per second.");      work1 = 1;      cycle.time(o255, work1);      animationInterval = 1;      dblClickDelay = 12;      [ string compare to binary;      print("Setting string compare to binary mode.");      set.string(s254, m2);      [ custom status line on      set.cursor.char(" l6, v3, v27, v28, v29, f9");      status.line.off();      status.line.on();      print("Enabling custom status line.");      [ initiate a timer      print("Starting a countdown timer.");      counter1 = 0;      counter2 = 99;      block(START.TIMER, &counter1, &counter2, &f220);      [ sound to 4channel mode      load.sound(m.Theme);      if (hasMIDI) {        print("Enabling MIDI sound playback.");        set(4channelsound);        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);        sound(m.Theme, soundDone);      } else {        if (hasFM) {          print("Enabling FM Synth sound playback.");          set(4channelsound);          work1 = 0;          set.key(0, 0, c254);  [ set.key(MODE, ANY***, c254);          sound(m.Theme, soundDone);        }      }      [ use s5 to store original sound capabilities      s7 = "%v22"; [ numberOfVoices;      block(STR.FORMAT, &s7, &s7, 0); [ str.format(sINPUT, sRESULT)      reset(soundDone);      [ use string as flag to indicate restoring      s2 = "testrestore";      print("Ready to restart.");      :restart      restart.game();      [ in case user cancels      print("Please restart.");      goto(restart);    }  }  if (subteststep == 1) {    [ compare.strings should be normal;    [ msgbox colors should be normal    if (newtest) {      display(24, 0, "%v63: CHECK RESTART");      s10 = "test string";      s11 = " TEST  string ";      if (!compare.strings(s10, s11)) {        print("compare.strings setting failed to reset.");        goto(fail);      }      print("Message box colors should be reset to normal.");      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Message box reset to normal? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 2) {    display(5, 29, "TIMER: %v231 ");    [ countdown timer should STOP    if (newtest) {      display(24, 0, "%v63: CHECK RESTART");      reset(newtest);      print("Countdown timer should be stopped."            "When done testing, press CTRL+Z or enter 'continue.");    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Is timer stopped? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 3) {    if (newtest) {      display(24, 0, "%v63: CHECK RESTART");      reset(newtest);      [ should be in graphics40 mode      [ switching to text should also be in 40      print("Graphics mode should be 40 column. Testing other modes.");      text.screen();      display( 12, 7, "   40 Column text mode.\n       Press any key to continue.");      lastChar = 0;      :wait1      if (!have.key()) {        goto(wait1);      }      graphics();      print("40 Column graphics mode.\nPress ENTER to continue.");      configure.screen(-1, 0, 1);      print("80 Column graphics mode.\nPress ENTER to continue.");      configure.screen(-1, 1, 1);      display(12, 7, "   80 Column text mode.\n        Press any key to continue.");      lastChar = 0;      :wait2      if (!have.key()) {        goto(wait2);      }      [ reset to graphics 40      configure.screen(-1, 0, 0);      print("Finally, back to 40 Column graphics.");      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Text and graphics reset correctly? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 4) {    if (newtest) {      [ check that sound is available      display(24, 0, "%v63: CHECK RESTART");      reset(newtest);      load.sound(m.Theme);      [ confirm sound channel count restored correctly      block(STR2BYTE, &s7, &work1, 0); [ str2byte(sINPUT, vRESULT)      if (work1 != numberOfVoices) {        print("Sound channel count not reset correctly. %v46-%v22");        goto(fail);      }      [ set hasFM and hasMIDI      if (numberOfVoices > 1) {        if ((numberofVoices == 2 || numberOfVoices == 4)) {          set(hasFM);        }        if ((numberOfVoices == 3 || numberOfVoices == 4)) {          set(hasMIDI);        }      }      [ sound should be PC one channel      print("Testing sound playback. It should play single channel PC speaker only. ");      print("When done testing, press CTRL+Z or enter 'continue' to "            "move to next test.");      sound(m.Theme, soundDone);    }    if ((said("continue") || controller(cNext) || soundDone)) {      stop.sound();      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Sound working as expected? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 5) {    if (numberOfVoices > 1 && hasFM) {      if (newtest) {        display(24, 0, "%v63: CHECK RESTART");        reset(newtest);        print("Testing FM 4channel sound mode. Sound should be reset to "              "default instruments.");        print("When done testing, press CTRL+Z or enter 'continue' to "              "move to next test.");        set(4channelsound);        [ should be in fm mode by default        sound(m.Theme, soundDone);      }      if ((said("continue") || controller(cNext) || soundDone)) {        stop.sound();        [ check results        clear.lines(23, 24, BLACK);        get.string(strAnswer, "FM sound working as expected? ", 22, 0, 3);        goto(nextsubtest);      }    } else {      ++subteststep;    }  }  if (subteststep == 6) {      if (numberOfVoices > 1 && hasMIDI) {      if (newtest) {        display(24, 0, "%v63: CHECK RESTART");        reset(newtest);        print("Testing midi 4channel sound mode. Sound should be reset to "              "default instruments.");        print("When done testing, press CTRL+Z or enter 'continue' to "              "move to next test.");        set.key(1, 0, c254); [  set.key(MODE, ANY***, c254);        sound(m.Theme, soundDone);      }      if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {        stop.sound();        [ check results        clear.lines(23, 24, BLACK);        get.string(strAnswer, "MIDI sound working as expected? ", 22, 0, 3);        goto(nextsubtest);      }    } else {      ++subteststep;    }  }    if (subteststep == 7) {    if (newtest) {      display(24, 0, "%v63: CHECK RESTART");      reset(newtest);      [ mouse should be OFF      [ when turned on, it should be default cursor      [ point and click should be DISABLED      s5 = "y";      if (compare.strings(s5, s6)) {        if (!enableDblClick) {          print("Mouse setting not properly restored.");          goto(fail);        }        set(hasMouse);      } else {        if (enableDblClick) {          print("Mouse setting not properly restored.");          goto(fail);        }        reset(hasMouse);      }      if (hasMouse) {        print("Mouse should be OFF. Enter 'mouse on' to enable "              "it. Enter 'mouse test' to change to a different "              "cursor. Click-to-move should be disabled. "              "When done testing, press CTRL+Z or enter 'continue.");      } else {        [ move to next subtest        print("No mouse. Moving on to next subtest.");        ++subteststep;      }    }    if (hasMouse) {      if (said("mouse", "on")) {        if (IntVersion > VERSION_2272) {          enable.item(mouse);        } else {          set.key(1, 0, c251);        }      }              if (said("mouse", "test")) {        set.key(0, &m102, mouse);      }    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Did mouse work correctly? ", 22, 0, 3);      set.key(0, &m101, mouse);      goto(nextsubtest);    }  }  if (subteststep == 8) {    ++tmpTimer1;    display(4, 27, "CPS: %v220/%v227  ");    if (tmpTimer2 != elapsedSeconds) {[      if (tmpTimer1 > maxCPS) {        maxCPS = tmpTimer1;[      }      tmpTimer2 = elapsedSeconds;      tmpTimer1 = 0;    }    if (newtest) {      display(24, 0, "%v63: CHECK RESTART");      reset(newtest);      [ turbo mode should be OFF      animationInterval = 1;      print("Turbo mode should be OFF; CPS should be ~20. "            "When done testing, press CTRL+Z or enter 'continue.");    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      animationInterval = 2;      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Did turbo mode reset? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 9) {    if (newtest) {      display(24, 0, "%v63: CHECK RESTART");      reset(newtest);      [ status line should be normal; no data if set to custom      print("Status line should be normal default.");      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Is status line normal? ", 22, 0, 3);      goto(nexttest);    }  }}[ TEST41: save/restore support for power pack ++stepcounter;if (teststep == stepcounter) {  if (subteststep == 0) {    if (newtest) {      display(24, 0, "%v63: SAVE/RESTORE TEST");      reset(newtest);      print("Setting up to test save/restore. These settings "            "will be checked after restoring.");      [ settings      print("Setting 80 column text mode, then 80 column graphics mode.");      [ switch to text80;      configure.screen(-1, 1, 1);      configure.screen(-1, 0, 1);      set(graphics80);      if (hasMouse) {        [ set mouse on with custom cursor;         if (IntVersion == VERSION_2089) {          set.key(1, 0, c251);        } else {          enable.item(mouse);        }        set.key(0, &m102, mouse);        print("Enabling mouse with a custom cursor.");        [ save it to compare after restarting        s6 = "y";      } else {        s6 = "n";      }      [ custom msgbox colors      block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)      print("Setting custom message box colors.");      [ setting speed to 60 cps      print("Setting game speed to 60 cycles per second.");      work1 = 1;      cycle.time(o255, work1);      animationInterval = 1;      [ adjust ego speed to account for faster cycle time      work1 = 3;      step.time(ego, work1);      [ adjust dblclick speed for turbo      dblClickDelay = 12;      [ point and click on, straight mode      print("Enabling click-to-move in 'straight' mode. Click "            "on a distant point to start ego moving for this test, "            "then press CTRL+Z or enter 'continue.");      set(clickmove);      work1 = -1;      step.size(ego, work1);    }    if ((said("continue") || controller(cNext))) {      [ next subtest      ++subteststep;      set(newtest);    }    return();  }    if (subteststep == 1) {    if (newtest) {      [ string compare to binary;      print("Setting string compare to binary mode.");      set.string(s254, m2);      [ custom status line on      set.cursor.char(" l6, v3, v27, v28, v29, f9");      status.line.off();      status.line.on();      print("Enabling custom status line.");      [ initiate a timer      print("Starting a countdown timer.");      counter1 = 0;      counter2 = 99;      block(START.TIMER, &counter1, &counter2, &f220);      [ set up sound      load.sound(m.Theme);      if (hasMIDI) {        print("Enabling MIDI sound playback.");        set(4channelsound);        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);        [ change instruments        work1 = 0;        work2 = 20;        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);        ++work1;        ++work2;        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);        ++work1;        ++work2;        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);        sound(m.Theme, soundDone);      } else {        if (hasFM) {          print("Enabling FM Synth sound playback.");          set(4channelsound);          set.key(0, 0, c254);           work1 = 0;          work2 = 1;          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);          ++work1;          ++work2;          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);          ++work1;          ++work2;          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);          sound(m.Theme, soundDone);        }      }      [ use s5 to store original sound capabilities      s7 = "%v22"; [ numberOfVoices;      block(STR.FORMAT, &s7, &s7, 0); [ str.format(sINPUT, sRESULT)      [ force an incorrect value to confirm it gets reset properly      numberOfVoices = 0;      [ set subteststep so correct test gets run after restoring      subteststep = 3;      set(newtest);      print("Save this game in first slot.");      [ delete any preexisting save files      work1 = 1;      :nextfile        s8 = "PP%v30sg.%v46";        block(STR.FORMAT, &s8, &s8, 0); [ str.format(sINPUT, sRESULT)        block(DELETE.FILE, &s8, 0, 0);        ++work1;      if (work1 < 13) {        goto(nextfile);      }      :save      save.game();      errorParameter = 0;      [ confirm savegame exists by reading a string      [ if it wasn't saved, there will be a file error      if (errorParameter != 0) {        print("Please save this game in first slot.");        goto(save);      }            print("The game will now restart to reset everything "            "and then automatically do a restore.game "            "command. Please don't cancel the restart.");      s2 = "testsave";      :restartsave      restart.game();      goto(restartsave);    }    return();  }  if (subteststep == 2) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      reset(newtest);      print("Restore the game you just saved.");            :restore      restore.game();      goto(restore);    }    return();  }  if (subteststep == 3) {    [ compare.strings should be binary;    [ msgbox colors should be the same    if (newtest) {      reset(newtest);      display(24, 0, "%v63: CHECK SAVE/RESTORE");      s10 = "test string";      s11 = "TEST!string";      if (compare.strings(s10, s11)) {        print("Compare.strings setting failed to restore.");        goto(fail);      }      print("Message box colors should still be custom.");      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Message box colors correct? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 4) {    [ countdown timer should still be counting down    if (newtest) {      display(24, 0, "CHECK SAVE/RESTORE");      reset(newtest);      print("Countdown timer should still be counting down, and "            "CPS should still be ~60. "            "After confirming, press CTRL+Z or enter 'continue.");    }    [ run the timer    ++tmpTimer1;    if (tmpTimer2 != elapsedSeconds) {[      if (tmpTimer1 > maxCPS) {        maxCPS = tmpTimer1;[      }      tmpTimer2 = elapsedSeconds;      tmpTimer1 = 0;    }    display(5, 68, "TIMER: %v231 ");    display(6, 70, "%v220/%v227  ");    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Timer and CPS working correctly? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 5) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      reset(newtest);      [ should be in graphics80 mode      [ switching to text should also be in 40      print("Graphics mode should still be 80 column. Switching to "            "text mode, which should also still be 80.");      text.screen();      display( 12, 7, "   80 Column text mode.\n       Press any key to continue.");      lastChar = 0;      :wait3      if (!have.key()) {        goto(wait3);      }      graphics();      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Text and graphics restored correctly? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 6) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      reset(newtest);      [ sound settings are not affected by a restore (hardware       [ could be different between save environment and restore      [ environment)      [ first confirm sound channel count still the same      block(STR2BYTE, &s7, &work1, 0); [ str2byte(sINPUT, vRESULT)      if (work1 != numberOfVoices) {        print("Sound channel count not restored correctly.");        goto(fail);      }      [ hasFM and hasMIDI should be the same      if (numberOfVoices > 1) {        if ((numberofVoices == 2 || numberOfVoices == 4)) {          if (!hasFM) {            print("Sound FM setting failed.");            goto(fail);          }        }        if ((numberOfVoices == 3 || numberOfVoices == 4)) {          if (!hasMIDI) {            print("Sound MIDI setting failed.");            goto(fail);          }        }        [ confirm sound reset        print("Sound should be single channel. "            "After confirming, press CTRL+Z or enter 'continue.");        sound(m.Theme, soundDone);      } else {        print("No sound boards. Moving on to next test.");        ++subteststep;        set(newtest);      }    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {      stop.sound();      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Did sound restore as single channel? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 7) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      if (numberOfVoices > 1 && hasFM) {        reset(newtest);        print("Testing 4 FM channel sound. "              "After confirming, press CTRL+Z or enter 'continue.");        set(4channelsound);        sound(m.Theme, soundDone);      } else {        ++subteststep;      }      return();    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {      stop.sound();      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Did 4 channel FM sound play? ", 22, 0, 3);      goto(nextsubtest);    }  }  if (subteststep == 8) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      if (numberOfVoices > 1 && hasMIDI) {        reset(newtest);        print("Testing 4 MIDI channel sound. "              "After confirming, press CTRL+Z or enter 'continue.");        set(4channelsound);        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);        sound(m.Theme, soundDone);      } else {        ++subteststep;      }      return();    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {      stop.sound();      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Did 4 channel MIDI sound play? ", 22, 0, 3);      goto(nextsubtest);    }  }    if (subteststep == 9) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      reset(newtest);      [ mouse should be ON, with custom cursor and       [ point and click should be ENABLED      s5 = "y";      if (compare.strings(s5, s6)) {        if ((!enableDblClick || !hasMouse)) {          print("Mouse setting not properly restored.");          goto(fail);        }      } else {        if ((enableDblClick || hasMouse)) {          print("Mouse setting not properly restored.");          goto(fail);        }      }      if (hasMouse) {        print("Mouse should be enabled, with custom cursor. Click-"              "to-move should work in straight mode. "              "After confirming, press CTRL+Z or enter 'continue.");      } else {        [ move to next subtest        print("No mouse. Moving on to next subtest.");        ++subteststep;      }    }    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Is mouse working correctly? ", 22, 0, 3);      set.key(0, &m101, mouse);      goto(nextsubtest);    }  }  if (subteststep == 10) {    if (newtest) {      display(24, 0, "%v63: CHECK SAVE/RESTORE");      reset(newtest);      [ status line should be set to custom      print("Status line should still be custom.");      [ check results      clear.lines(23, 24, BLACK);      get.string(strAnswer, "Is status line correct? ", 22, 0, 3);      goto(nexttest);    }  }}return();:nexttestclear.lines(22, 22, BLACK);accept.input();if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {  [ if successful, move to next test  print("Moving on to next test.");  show.pic();  ++teststep;  set(newtest);  subteststep = 0;} else {  :fail  set.text.attribute(LT_RED, BLACK);  display(24, 0, "TEST %v63 FAILED                   ");  print("TEST %v63 FAILED. INVESTIGATE.");  quit(1);}return();:nextsubtestclear.lines(22, 22, BLACK);accept.input();[display(24, 0, "%s3, %s4, %s5");if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {  [ if successful, move to next test  print("Moving on to next test.");  show.pic();  ++subteststep;[print("new subteststep: %v64  %v63");  set(newtest);} else {  set.text.attribute(LT_RED, BLACK);  display(24, 0, "TEST %v63 FAILED                   ");  print("TEST %v63 FAILED. INVESTIGATE.");  quit(1);}return();[*****[ messages         [  declared messages go here[*****#message 1 "                                       "#message 2 "                                       "#message 60 "Sunday"#message 61 "Monday"#message 62 "Tuesday"#message 63 "Wednesday"#message 64 "Thursday"#message 65 "Friday"#message 66 "Saturday"#message 71 "January"#message 72 "February"#message 73 "March"#message 74 "April"#message 75 "May"#message 76 "June"#message 77 "July"#message 78 "August"#message 79 "September"#message 80 "October"#message 81 "November"#message 82 "December"[ default cursor#message  101 "0000"            "FF3FFF1FFF0FFF07FF03FF01FF007F00"            "3F001F00FF01FF00FF307FF87FF8FFFC"            "00000040006000700078007C007E007F"            "807F007C006C00460006000300030000"[ walk cursor#message  102 "0F04"             "FFF1FFE0FFE0FFE0FFE0FFF1FFE17FC0"             "3FC07FE0FFE1FFC1FF80FF087F183FBC"             "0000000E000C000E000E0004000C0016"             "801B0006000C001C0036006200430000"
+[ 
+[ lgc.TestPart3
+[ 
+
+[ **************************************
+[ LOCAL DEFINES
+[ **************************************
+#define strN              s3
+#define strNo             s4
+#define strAnswer         s5
+
+#define tmpTimer1         v220
+#define tmpTimer2         v221
+#define msgTimer          v222
+#define stepcounter       v223
+#define tmpRow            v224
+#define tmpCol            v225
+#define tmpMsg            v226
+#define maxCPS            v227
+#define tmpVal            v228
+#define tmpSeconds        v229
+#define counter1          v230
+#define counter2          v231
+
+
+[ run tests 35-41
+
+if (newtest) {
+ clear.lines(23, 24, BLACK);
+}
+
+[ TEST35: date/time functions
+++stepcounter;
+if (teststep == stepcounter) {
+  if (newtest) {
+    display(24, 0, "%v63: DATE/TIME TEST");
+    reset(newtest);
+    work1 = 0;
+    work2 = 1;
+    work3 = 1;
+    [ get date
+    block(GET.DATE, &work1, &work2, &work3);
+    [ convert month to text
+    work2 += 70;
+    tmpVal = 6;
+    block(SET.STRING.V, &tmpVal, &work2, 0);
+    [ get day of week
+    work2 = 0;
+    block(GET.DAYOFWEEK, &work2, 0, 0);
+    work2 += 60;
+    tmpVal = 5;
+    block(SET.STRING.V, &tmpVal, &work2, 0);
+    print("Today is %s5 %s6 %v48, 20%v46.");
+    
+    [ time
+    work1 = 0;
+    work2 = 0;
+    work3 = 0;
+    block(GET.TIME, &work1, &work2, &work3);
+    if (work1 > 11) {
+      s5 = "PM";
+    } else {
+      s5 = "AM";
+    }
+    if (work1 == 0) {
+      work1 = 12;
+    } else {
+      if (work1 > 12) {
+        work1 -= 12;
+      }
+    }
+    print("The current time is\n    %v46:%v47|2:%v48|2 %s5");
+    
+    [ check results
+    clear.lines(23, 24, BLACK);
+    get.string(strAnswer, "Date and time correct? ", 22, 0, 3);
+    goto(nexttest);
+  }
+  return();
+}
+
+[ TEST36: creating, reading/writing data files
+++stepcounter;
+if (teststep == stepcounter) {
+  if (subteststep == 0 && newtest) {
+    display(24, 0, "%v63: READ/WRITE DATA TEST");
+    reset(newtest);
+    print("The next test will create a data file in your game directory. "
+          "The file will contain a list of the first six inventory "
+          " items. Check that the file was created, and has correct "
+          "data in it.");
+    [ clear out strings s6-s11
+    work1 = &s5;
+    work2 = &m1;
+    :clearstr
+      block(SET.STRING.V, &work1, &work2, 0);
+      ++work1;
+    if (work1 < 12) {
+      goto(clearstr);
+    }
+    
+    [ get item count
+    work2 = 0;
+    block(ITEM.COUNT, &work2, &work1, 0);
+    [ if greater than 7, limit it to 7 (six plus i0)
+    if (work1 > 7) {
+      work1 = 7;
+    }
+    [ copy item names into strings
+    work2 = 1;  [ skip i0
+    work3 = &s6; [ start with s6
+    :setstr
+      s2 = "%o47";
+      block(STR.FORMAT, &s2, &s2, 0);
+      block(SET.MSG, 0, &m2, &s2);
+      tmpVal = &m2;
+      block(SET.STRING.V, &work3, &tmpVal, 0);
+      [ restore blank line
+      s2 = m1;
+      block(SET.MSG, 0, &m2, &s2);
+      ++work3;
+      ++work2;
+      --work1;
+    if (work2 < 12 && work1 > 1) {
+      goto(setstr);
+    }
+    [create the file
+    s2 = "itemlist.dat";
+    work1 = &s6;
+    work2 = &s11;
+    block(NEW.FILE, &s2, &work1, &work2);
+    [ check for error
+    if (errorParameter != 0) {
+      print("File IO error. Aborting this test.");
+      ++teststep;
+      set(newtest);
+      subteststep = 0;
+      return();
+    }
+    [ check results
+    clear.lines(23, 24, BLACK);
+    get.string(strAnswer, "File has correct data? ", 22, 0, 3);
+    goto(nextsubtest);
+  }
+  if (subteststep == 1 && newtest) {
+    display(24, 0, "%v63: READ/WRITE DATA TEST");
+    print("Next test will replace the first and third strings "
+          "in the data file. Confirm they change to LINE1 and LINE3");
+    work1 = 0;
+    work2 = 6;
+    s6 = m1;
+    s6 = "LINE1";
+    block(SAVE.STRING, &s2, &work1, &work2);
+    [ check for error
+    if (errorParameter != 0) {
+      print("File IO error. Aborting this test.");
+      ++teststep;
+      set(newtest);
+      subteststep = 0;
+      return();
+    }
+    work1 = 2;
+    s6 = m1;
+    s6 = "LINE3";
+    block(SAVE.STRING, &s2, &work1, &work2);
+    [ check for error
+    if (errorParameter != 0) {
+      print("File IO error. Aborting this test.");
+      ++teststep;
+      set(newtest);
+      subteststep = 0;
+      return();
+    }
+    [ check results
+    clear.lines(23, 24, BLACK);
+    get.string(strAnswer, "Did lines change? ", 22, 0, 3);
+    goto(nextsubtest);
+  }
+  if (subteststep == 2 && newtest) {
+    display(24, 0, "%v63: READ/WRITE DATA TEST");
+    [test read function
+    print("Testing read function.");
+    work1 = 0;
+    work2 = 8;
+    s9 = "LINE1";
+    block(READ.STRING, &s2, &work1, &work2);
+    [ check for error
+    if (errorParameter != 0) {
+      print("File IO error. Aborting this test.");
+      ++teststep;
+      set(newtest);
+      subteststep = 0;
+      return();
+    }
+    if (!compare.strings(s8, s9)) {
+      print("Read from file failed.");
+      goto(fail);
+    }
+    [ try next index
+    work1 = 2;
+    s9 = "LINE3";
+    block(READ.STRING, &s2, &work1, &work2);
+    [ check for error
+    if (errorParameter != 0) {
+      print("File IO error. Aborting this test.");
+      ++teststep;
+      set(newtest);
+      subteststep = 0;
+      return();
+    }
+    if (!compare.strings(s8, s9)) {
+      print("Read from file failed.");
+      goto(fail);
+    }
+    
+    print("Read from file check passed. The file will now be deleted.");
+    block(DELETE.FILE, &s2, 0, 0);
+    [ check for error
+    if (errorParameter != 0) {
+      print("File IO error. Aborting this test.");
+      ++teststep;
+      set(newtest);
+      subteststep = 0;
+      return();
+    }
+    [ check results
+    clear.lines(23, 24, BLACK);
+    get.string(strAnswer, "Is file gone? ", 22, 0, 3);
+    goto(nexttest);
+  }
+  return();
+}
+
+[ TEST37: polling the shift, ctrl and alt keys
+++stepcounter;
+if (teststep == stepcounter) {
+  if (newtest) {
+    display(24, 0, "%v63: SHIFT-CTRL-ALT TEST");
+    reset(newtest);
+    print("Press control, shift and alt keys in any combination. "
+          "You should see their status below.");
+  }
+  display(24, 0, "%v63:      -    -   ");
+  work1 = 0;
+  block(CHECK.SHIFT, &work1, 0, 0);
+  work2 = work1;
+  block(BIT.AND, 0, &work2, 1);
+  if (work2) {
+    display(24, 4, "SHIFT");
+  }
+  work2 = work1;
+  block(BIT.AND, 0, &work2, 2);
+  if (work2) {
+    display(24, 10, "CTRL");
+  }
+  work2 = work1;
+  block(BIT.AND, 0, &work2, 4);
+  if (work2) {
+    display(24, 15, "ALT");
+  }
+  
+  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+    [ check results
+    clear.lines(23, 24, BLACK);
+    get.string(strAnswer, "Is key status working? ", 22, 0, 3);
+    goto(nexttest);
+  }
+  
+  return();
+}
+
+[ TEST38: support for words with non-alphabetic characters 
+++stepcounter;
+if (teststep == stepcounter) {
+  if (subteststep == 0) {
+    if (newtest) {
+      display(24, 0, "%v63: EXTENDED CHAR WORDS TEST");
+      reset(newtest);
+      print("Testing non-alphabet starting words. Enter '1 2 3' "
+            "in any combo on input line to test. When done, press "
+            "CTRL+Z or enter 'continue'.");
+    }
+    if (said("1", "2", "3")) {
+      print("You CAN count!");
+      [ set answer to 'yes'
+      strAnswer = "y";
+      goto(nextsubtest);
+    }
+    if (said("1", "3", "2")) {
+      print("Close, but not quite right.");
+    }
+    if (said("2", "1", "3")) {
+      print("Wrong starting number.");
+    }
+    if (said("2", "3", "1")) {
+      print("Western Michigan Area code.");
+    }
+    if (said("3", "1", "2")) {
+      print("Not sure you can count.");
+    }
+    if (said("3", "2", "1")) {
+      print("LIFTOFF!");
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Number input working? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+    return();
+  }
+  if (subteststep == 1) {
+    if (newtest) {
+      display(24, 0, "%v63: EXTENDED CHAR WORDS TEST");
+      reset(newtest);
+      print("Now testing extended characters. Enter '€' "
+            "on input line.");
+    }
+    if (said("‡")) { 
+      print("Extended character words are working correctly.");
+      [ set answer to 'yes'
+      strAnswer = "y";
+      goto(nexttest);
+    }
+  }
+}
+
+[ TEST39: on object test command 
+++stepcounter;
+if (teststep == stepcounter) {
+  if (subteststep == 0) {
+    if (newtest) {
+      display(24, 0, "%v63: ON.OBJ TEST");
+      reset(newtest);
+      print("Next check is for on.obj test command. Try clicking on "
+            "ego's 'view box'. You don't have to be on a pixel. "
+            "Press CTRL+Z or enter 'continue' when done testing."); 
+    }
+    if (controller(cLeftClick)) {
+      if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+        print("ON EGO");
+      }
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "ON.OBJ working? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+    return();
+  }
+  if (subteststep == 1) {
+    if (newtest) {
+      display(24, 0, "%v63: ON.OBJ TEST");
+      reset(newtest);
+      print("Now check for testing only on visible pixels. "
+            "Press CTRL+Z or enter 'continue' when done testing.");
+    }
+    if (controller(cLeftClick)) {
+      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+        print("ON EGO PIXEL");
+      }
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "ON.OBJ working? ", 22, 0, 3);
+      goto(nexttest);
+    }
+    return();
+  }
+}
+
+[ TEST40: restart support for power pack 
+++stepcounter;
+if (teststep == stepcounter) {
+  if (subteststep == 0) {
+    if (newtest) {
+      display(24, 0, "%v63: RESTART TEST");
+      reset(newtest);
+      print("Setting up to perform a restart. All these settings should be "
+            "reset after a restart.");
+      print("Switching to 80 column text mode, then 80 column graphics mode.");
+      [ switch to text80;
+      configure.screen(-1, 1, 1);
+      set(graphics80);
+      configure.screen(-1, 0, 1);
+      set(graphics80);
+      if (hasMouse) {
+        [ set mouse on with custom cursor; 
+        if (IntVersion > VERSION_2272) {
+          enable.item(mouse);
+        } else {
+          set.key(1, 0, c251);
+        }
+        set.key(0, &m102, mouse);
+        print("Enabling mouse with a custom cursor.");
+        [ save it to compare after restarting
+        s6 = "y";
+      } else {
+        s6 = "n";
+      }
+      [ custom msgbox colors
+      block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)
+      print("Setting custom message box colors.");
+      [ point and click on, straight mode
+      print("Enabling click-to-move in 'straight' mode.");
+      set(clickmove);
+      work1 = -1;
+      step.size(ego, work1);
+      [ setting speed to 60 cps
+      print("Setting game speed to 60 cycles per second.");
+      work1 = 1;
+      cycle.time(o255, work1);
+      animationInterval = 1;
+      dblClickDelay = 12;
+      [ string compare to binary;
+      print("Setting string compare to binary mode.");
+      set.string(s254, m2);
+      [ custom status line on
+      set.cursor.char(" l6, v3, v27, v28, v29, f9");
+      status.line.off();
+      status.line.on();
+      print("Enabling custom status line.");
+      [ initiate a timer
+      print("Starting a countdown timer.");
+      counter1 = 0;
+      counter2 = 99;
+      block(START.TIMER, &counter1, &counter2, &f220);
+      [ sound to 4channel mode
+      load.sound(m.Theme);
+      if (hasMIDI) {
+        print("Enabling MIDI sound playback.");
+        set(4channelsound);
+        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);
+
+        sound(m.Theme, soundDone);
+      } else {
+        if (hasFM) {
+          print("Enabling FM Synth sound playback.");
+          set(4channelsound);
+          work1 = 0;
+          set.key(0, 0, c254);  [ set.key(MODE, ANY***, c254);
+          sound(m.Theme, soundDone);
+        }
+      }
+      [ use s5 to store original sound capabilities
+      s7 = "%v22"; [ numberOfVoices;
+      block(STR.FORMAT, &s7, &s7, 0); [ str.format(sINPUT, sRESULT)
+      reset(soundDone);
+      [ use string as flag to indicate restoring
+      s2 = "testrestore";
+      print("Ready to restart.");
+      :restart
+      restart.game();
+      [ in case user cancels
+      print("Please restart.");
+      goto(restart);
+    }
+  }
+  if (subteststep == 1) {
+    [ compare.strings should be normal;
+    [ msgbox colors should be normal
+    if (newtest) {
+      display(24, 0, "%v63: CHECK RESTART");
+      s10 = "test string";
+      s11 = " TEST  string ";
+      if (!compare.strings(s10, s11)) {
+        print("compare.strings setting failed to reset.");
+        goto(fail);
+      }
+      print("Message box colors should be reset to normal.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Message box reset to normal? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 2) {
+    display(5, 29, "TIMER: %v231 ");
+    [ countdown timer should STOP
+    if (newtest) {
+      display(24, 0, "%v63: CHECK RESTART");
+      reset(newtest);
+      print("Countdown timer should be stopped."
+            "When done testing, press CTRL+Z or enter 'continue.");
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Is timer stopped? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 3) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK RESTART");
+      reset(newtest);
+      [ should be in graphics40 mode
+      [ switching to text should also be in 40
+      print("Graphics mode should be 40 column. Testing other modes.");
+      text.screen();
+      display( 12, 7, "   40 Column text mode.\n       Press any key to continue.");
+      lastChar = 0;
+      :wait1
+      if (!have.key()) {
+        goto(wait1);
+      }
+      graphics();
+      print("40 Column graphics mode.\nPress ENTER to continue.");
+      configure.screen(-1, 0, 1);
+      print("80 Column graphics mode.\nPress ENTER to continue.");
+      configure.screen(-1, 1, 1);
+      display(12, 7, "   80 Column text mode.\n        Press any key to continue.");
+      lastChar = 0;
+      :wait2
+      if (!have.key()) {
+        goto(wait2);
+      }
+      [ reset to graphics 40
+      configure.screen(-1, 0, 0);
+      print("Finally, back to 40 Column graphics.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Text and graphics reset correctly? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 4) {
+    if (newtest) {
+      [ check that sound is available
+      display(24, 0, "%v63: CHECK RESTART");
+      reset(newtest);
+      load.sound(m.Theme);
+      [ confirm sound channel count restored correctly
+      block(STR2BYTE, &s7, &work1, 0); [ str2byte(sINPUT, vRESULT)
+      if (work1 != numberOfVoices) {
+        print("Sound channel count not reset correctly. %v46-%v22");
+        goto(fail);
+      }
+      [ set hasFM and hasMIDI
+      if (numberOfVoices > 1) {
+        if ((numberofVoices == 2 || numberOfVoices == 4)) {
+          set(hasFM);
+        }
+        if ((numberOfVoices == 3 || numberOfVoices == 4)) {
+          set(hasMIDI);
+        }
+      }
+      [ sound should be PC one channel
+      print("Testing sound playback. It should play single channel PC speaker only. ");
+      print("When done testing, press CTRL+Z or enter 'continue' to "
+            "move to next test.");
+      sound(m.Theme, soundDone);
+    }
+    if ((said("continue") || controller(cNext) || soundDone)) {
+      stop.sound();
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Sound working as expected? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 5) {
+    if (numberOfVoices > 1 && hasFM) {
+      if (newtest) {
+        display(24, 0, "%v63: CHECK RESTART");
+        reset(newtest);
+        print("Testing FM 4channel sound mode. Sound should be reset to "
+              "default instruments.");
+        print("When done testing, press CTRL+Z or enter 'continue' to "
+              "move to next test.");
+        set(4channelsound);
+        [ should be in fm mode by default
+        sound(m.Theme, soundDone);
+      }
+      if ((said("continue") || controller(cNext) || soundDone)) {
+        stop.sound();
+        [ check results
+        clear.lines(23, 24, BLACK);
+        get.string(strAnswer, "FM sound working as expected? ", 22, 0, 3);
+        goto(nextsubtest);
+      }
+    } else {
+      ++subteststep;
+    }
+  }
+  if (subteststep == 6) {  
+    if (numberOfVoices > 1 && hasMIDI) {
+      if (newtest) {
+        display(24, 0, "%v63: CHECK RESTART");
+        reset(newtest);
+        print("Testing midi 4channel sound mode. Sound should be reset to "
+              "default instruments.");
+        print("When done testing, press CTRL+Z or enter 'continue' to "
+              "move to next test.");
+        set.key(1, 0, c254); [  set.key(MODE, ANY***, c254);
+        sound(m.Theme, soundDone);
+      }
+      if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {
+        stop.sound();
+        [ check results
+        clear.lines(23, 24, BLACK);
+        get.string(strAnswer, "MIDI sound working as expected? ", 22, 0, 3);
+        goto(nextsubtest);
+      }
+    } else {
+      ++subteststep;
+    }
+  }  
+  if (subteststep == 7) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK RESTART");
+      reset(newtest);
+      [ mouse should be OFF
+      [ when turned on, it should be default cursor
+      [ point and click should be DISABLED
+      s5 = "y";
+      if (compare.strings(s5, s6)) {
+        if (!enableDblClick) {
+          print("Mouse setting not properly restored.");
+          goto(fail);
+        }
+        set(hasMouse);
+      } else {
+        if (enableDblClick) {
+          print("Mouse setting not properly restored.");
+          goto(fail);
+        }
+        reset(hasMouse);
+      }
+      if (hasMouse) {
+        print("Mouse should be OFF. Enter 'mouse on' to enable "
+              "it. Enter 'mouse test' to change to a different "
+              "cursor. Click-to-move should be disabled. "
+              "When done testing, press CTRL+Z or enter 'continue.");
+      } else {
+        [ move to next subtest
+        print("No mouse. Moving on to next subtest.");
+        ++subteststep;
+      }
+    }
+    if (hasMouse) {
+      if (said("mouse", "on")) {
+        if (IntVersion > VERSION_2272) {
+          enable.item(mouse);
+        } else {
+          set.key(1, 0, c251);
+        }
+      }
+        
+      if (said("mouse", "test")) {
+        set.key(0, &m102, mouse);
+      }
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Did mouse work correctly? ", 22, 0, 3);
+      set.key(0, &m101, mouse);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 8) {
+    ++tmpTimer1;
+    display(4, 27, "CPS: %v220/%v227  ");
+    if (tmpTimer2 != elapsedSeconds) {
+[      if (tmpTimer1 > maxCPS) {
+        maxCPS = tmpTimer1;
+[      }
+      tmpTimer2 = elapsedSeconds;
+      tmpTimer1 = 0;
+    }
+    if (newtest) {
+      display(24, 0, "%v63: CHECK RESTART");
+      reset(newtest);
+      [ turbo mode should be OFF
+      animationInterval = 1;
+      print("Turbo mode should be OFF; CPS should be ~20. "
+            "When done testing, press CTRL+Z or enter 'continue.");
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      animationInterval = 2;
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Did turbo mode reset? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 9) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK RESTART");
+      reset(newtest);
+      [ status line should be normal; no data if set to custom
+      print("Status line should be normal default.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Is status line normal? ", 22, 0, 3);
+      goto(nexttest);
+    }
+  }
+}
+
+[ TEST41: save/restore support for power pack 
+++stepcounter;
+if (teststep == stepcounter) {
+  if (subteststep == 0) {
+    if (newtest) {
+      display(24, 0, "%v63: SAVE/RESTORE TEST");
+      reset(newtest);
+      print("Setting up to test save/restore. These settings "
+            "will be checked after restoring.");
+      [ settings
+      print("Setting 80 column text mode, then 80 column graphics mode.");
+      [ switch to text80;
+      configure.screen(-1, 1, 1);
+      configure.screen(-1, 0, 1);
+      set(graphics80);
+      if (hasMouse) {
+        [ set mouse on with custom cursor; 
+        if (IntVersion == VERSION_2089) {
+          set.key(1, 0, c251);
+        } else {
+          enable.item(mouse);
+        }
+        set.key(0, &m102, mouse);
+        print("Enabling mouse with a custom cursor.");
+        [ save it to compare after restarting
+        s6 = "y";
+      } else {
+        s6 = "n";
+      }
+      [ custom msgbox colors
+      block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)
+      print("Setting custom message box colors.");
+      [ setting speed to 60 cps
+      print("Setting game speed to 60 cycles per second.");
+      work1 = 1;
+      cycle.time(o255, work1);
+      animationInterval = 1;
+      [ adjust ego speed to account for faster cycle time
+      work1 = 3;
+      step.time(ego, work1);
+      [ adjust dblclick speed for turbo
+      dblClickDelay = 12;
+      [ point and click on, straight mode
+      print("Enabling click-to-move in 'straight' mode. Click "
+            "on a distant point to start ego moving for this test, "
+            "then press CTRL+Z or enter 'continue.");
+      set(clickmove);
+      work1 = -1;
+      step.size(ego, work1);
+    }
+    if ((said("continue") || controller(cNext))) {
+      [ next subtest
+      ++subteststep;
+      set(newtest);
+    }
+    return();
+  }
+  
+  if (subteststep == 1) {
+    if (newtest) {
+      [ string compare to binary;
+      print("Setting string compare to binary mode.");
+      set.string(s254, m2);
+      [ custom status line on
+      set.cursor.char(" l6, v3, v27, v28, v29, f9");
+      status.line.off();
+      status.line.on();
+      print("Enabling custom status line.");
+      [ initiate a timer
+      print("Starting a countdown timer.");
+      counter1 = 0;
+      counter2 = 99;
+      block(START.TIMER, &counter1, &counter2, &f220);
+      [ set up sound
+      load.sound(m.Theme);
+      if (hasMIDI) {
+        print("Enabling MIDI sound playback.");
+        set(4channelsound);
+        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);
+        [ change instruments
+        work1 = 0;
+        work2 = 20;
+        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        ++work1;
+        ++work2;
+        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        ++work1;
+        ++work2;
+        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        sound(m.Theme, soundDone);
+      } else {
+        if (hasFM) {
+          print("Enabling FM Synth sound playback.");
+          set(4channelsound);
+          set.key(0, 0, c254); 
+          work1 = 0;
+          work2 = 1;
+          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+          ++work1;
+          ++work2;
+          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+          ++work1;
+          ++work2;
+          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+          sound(m.Theme, soundDone);
+        }
+      }
+      [ use s5 to store original sound capabilities
+      s7 = "%v22"; [ numberOfVoices;
+      block(STR.FORMAT, &s7, &s7, 0); [ str.format(sINPUT, sRESULT)
+      [ force an incorrect value to confirm it gets reset properly
+      numberOfVoices = 0;
+      [ set subteststep so correct test gets run after restoring
+      subteststep = 3;
+      set(newtest);
+      print("Save this game in first slot.");
+      [ delete any preexisting save files
+      work1 = 1;
+      :nextfile
+        s8 = "PP%v30sg.%v46";
+        block(STR.FORMAT, &s8, &s8, 0); [ str.format(sINPUT, sRESULT)
+        block(DELETE.FILE, &s8, 0, 0);
+        ++work1;
+      if (work1 < 13) {
+        goto(nextfile);
+      }
+      :save
+      save.game();
+      errorParameter = 0;
+      [ confirm savegame exists by reading a string
+      [ if it wasn't saved, there will be a file error
+      if (errorParameter != 0) {
+        print("Please save this game in first slot.");
+        goto(save);
+      }
+      
+      print("The game will now restart to reset everything "
+            "and then automatically do a restore.game "
+            "command. Please don't cancel the restart.");
+      s2 = "testsave";
+      :restartsave
+      restart.game();
+      goto(restartsave);
+    }
+    return();
+  }
+  if (subteststep == 2) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      reset(newtest);
+      print("Restore the game you just saved.");
+      
+      :restore
+      restore.game();
+      goto(restore);
+    }
+    return();
+  }
+  if (subteststep == 3) {
+    [ compare.strings should be binary;
+    [ msgbox colors should be the same
+    if (newtest) {
+      reset(newtest);
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      s10 = "test string";
+      s11 = "TEST!string";
+      if (compare.strings(s10, s11)) {
+        print("Compare.strings setting failed to restore.");
+        goto(fail);
+      }
+      print("Message box colors should still be custom.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Message box colors correct? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 4) {
+    [ countdown timer should still be counting down
+    if (newtest) {
+      display(24, 0, "CHECK SAVE/RESTORE");
+      reset(newtest);
+      print("Countdown timer should still be counting down, and "
+            "CPS should still be ~60. "
+            "After confirming, press CTRL+Z or enter 'continue.");
+    }
+    [ run the timer
+    ++tmpTimer1;
+    if (tmpTimer2 != elapsedSeconds) {
+[      if (tmpTimer1 > maxCPS) {
+        maxCPS = tmpTimer1;
+[      }
+      tmpTimer2 = elapsedSeconds;
+      tmpTimer1 = 0;
+    }
+    display(5, 68, "TIMER: %v231 ");
+    display(6, 70, "%v220/%v227  ");
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Timer and CPS working correctly? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 5) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      reset(newtest);
+      [ should be in graphics80 mode
+      [ switching to text should also be in 40
+      print("Graphics mode should still be 80 column. Switching to "
+            "text mode, which should also still be 80.");
+      text.screen();
+      display( 12, 7, "   80 Column text mode.\n       Press any key to continue.");
+      lastChar = 0;
+      :wait3
+      if (!have.key()) {
+        goto(wait3);
+      }
+      graphics();
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Text and graphics restored correctly? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 6) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      reset(newtest);
+      [ sound settings are not affected by a restore (hardware 
+      [ could be different between save environment and restore
+      [ environment)
+      [ first confirm sound channel count still the same
+      block(STR2BYTE, &s7, &work1, 0); [ str2byte(sINPUT, vRESULT)
+      if (work1 != numberOfVoices) {
+        print("Sound channel count not restored correctly.");
+        goto(fail);
+      }
+      [ hasFM and hasMIDI should be the same
+      if (numberOfVoices > 1) {
+        if ((numberofVoices == 2 || numberOfVoices == 4)) {
+          if (!hasFM) {
+            print("Sound FM setting failed.");
+            goto(fail);
+          }
+        }
+        if ((numberOfVoices == 3 || numberOfVoices == 4)) {
+          if (!hasMIDI) {
+            print("Sound MIDI setting failed.");
+            goto(fail);
+          }
+        }
+        [ confirm sound reset
+        print("Sound should be single channel. "
+            "After confirming, press CTRL+Z or enter 'continue.");
+        sound(m.Theme, soundDone);
+      } else {
+        print("No sound boards. Moving on to next test.");
+        ++subteststep;
+        set(newtest);
+      }
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {
+      stop.sound();
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Did sound restore as single channel? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 7) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      if (numberOfVoices > 1 && hasFM) {
+        reset(newtest);
+        print("Testing 4 FM channel sound. "
+              "After confirming, press CTRL+Z or enter 'continue.");
+        set(4channelsound);
+        sound(m.Theme, soundDone);
+      } else {
+        ++subteststep;
+      }
+      return();
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {
+      stop.sound();
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Did 4 channel FM sound play? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 8) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      if (numberOfVoices > 1 && hasMIDI) {
+        reset(newtest);
+        print("Testing 4 MIDI channel sound. "
+              "After confirming, press CTRL+Z or enter 'continue.");
+        set(4channelsound);
+        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);
+        sound(m.Theme, soundDone);
+      } else {
+        ++subteststep;
+      }
+      return();
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {
+      stop.sound();
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Did 4 channel MIDI sound play? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }  
+  if (subteststep == 9) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      reset(newtest);
+      [ mouse should be ON, with custom cursor and 
+      [ point and click should be ENABLED
+      s5 = "y";
+      if (compare.strings(s5, s6)) {
+        if ((!enableDblClick || !hasMouse)) {
+          print("Mouse setting not properly restored.");
+          goto(fail);
+        }
+      } else {
+        if ((enableDblClick || hasMouse)) {
+          print("Mouse setting not properly restored.");
+          goto(fail);
+        }
+      }
+      if (hasMouse) {
+        print("Mouse should be enabled, with custom cursor. Click-"
+              "to-move should work in straight mode. "
+              "After confirming, press CTRL+Z or enter 'continue.");
+      } else {
+        [ move to next subtest
+        print("No mouse. Moving on to next subtest.");
+        ++subteststep;
+      }
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Is mouse working correctly? ", 22, 0, 3);
+      set.key(0, &m101, mouse);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 10) {
+    if (newtest) {
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      reset(newtest);
+      [ status line should be set to custom
+      print("Status line should still be custom.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Is status line correct? ", 22, 0, 3);
+      goto(nexttest);
+    }
+  }
+}
+
+return();
+
+:nexttest
+clear.lines(22, 22, BLACK);
+accept.input();
+if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {
+  [ if successful, move to next test
+  print("Moving on to next test.");
+  show.pic();
+  ++teststep;
+  set(newtest);
+  subteststep = 0;
+} else {
+  :fail
+  set.text.attribute(LT_RED, BLACK);
+  display(24, 0, "TEST %v63 FAILED                   ");
+  print("TEST %v63 FAILED. INVESTIGATE.");
+  quit(1);
+}
+return();
+
+:nextsubtest
+clear.lines(22, 22, BLACK);
+accept.input();
+[display(24, 0, "%s3, %s4, %s5");
+if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {
+  [ if successful, move to next test
+  print("Moving on to next test.");
+  show.pic();
+  ++subteststep;
+[print("new subteststep: %v64  %v63");
+  set(newtest);
+} else {
+  set.text.attribute(LT_RED, BLACK);
+  display(24, 0, "TEST %v63 FAILED                   ");
+  print("TEST %v63 FAILED. INVESTIGATE.");
+  quit(1);
+}
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "                                       "
+#message 2 "                                       "
+
+#message 60 "Sunday"
+#message 61 "Monday"
+#message 62 "Tuesday"
+#message 63 "Wednesday"
+#message 64 "Thursday"
+#message 65 "Friday"
+#message 66 "Saturday"
+
+#message 71 "January"
+#message 72 "February"
+#message 73 "March"
+#message 74 "April"
+#message 75 "May"
+#message 76 "June"
+#message 77 "July"
+#message 78 "August"
+#message 79 "September"
+#message 80 "October"
+#message 81 "November"
+#message 82 "December"
+
+[ default cursor
+#message  101 "0000"
+            "FF3FFF1FFF0FFF07FF03FF01FF007F00"
+            "3F001F00FF01FF00FF307FF87FF8FFFC"
+            "00000040006000700078007C007E007F"
+            "807F007C006C00460006000300030000"
+[ walk cursor
+#message  102 "0F04"
+             "FFF1FFE0FFE0FFE0FFE0FFF1FFE17FC0"
+             "3FC07FE0FFE1FFC1FF80FF087F183FBC"
+             "0000000E000C000E000E0004000C0016"
+             "801B0006000C001C0036006200430000"

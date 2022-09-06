@@ -56,7 +56,7 @@ if(haveInput && !haveMatch && unknownWordNum == 0)
 if (v1 != v1)
     {    
 [ DELETED BY LAYOUT EDITOR 
-[     new.room(rm.Terminal);  
+[     new.room(rm.ControlRoom);  
     }
 return();
 

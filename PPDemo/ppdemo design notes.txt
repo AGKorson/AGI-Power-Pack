@@ -147,3 +147,12 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     I-background picture (need to add disk drive slot/controls, return button)
     X-panel views/animations
 
+
+done modify save data function to encrypt with Avis Durgan
+
+- add death scenes: trapped in secret room (if door left open too long); trapped in coffin if ego gets in
+
+
+- add save, restore and quit buttons
+
+- modify status bar

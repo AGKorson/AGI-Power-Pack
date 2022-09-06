@@ -34,7 +34,7 @@ if (newRoom)
   set.loop(backpane, 0);
   ignore.blocks(backpane);
   ignore.objs(backpane);
-  position(backpane, 113, 167);
+  position(backpane, 113, 162);
   set.priority(backpane, 4);
   
   animate.obj(frontpane);
@@ -42,7 +42,7 @@ if (newRoom)
   set.loop(frontpane, 1);
   ignore.blocks(frontpane);
   ignore.objs(frontpane);
-  position(frontpane, 113, 167);
+  position(frontpane, 113, 162);
   set.priority(frontpane, 15);
   
   [ add toolbar buttons

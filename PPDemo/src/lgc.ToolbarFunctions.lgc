@@ -9,8 +9,17 @@ if (cursoricon == C_WAIT) {
   return();
 }
 
+[ if ego is dead, force the default cursor
+[ and limit buttons to restore only
+if (deathType > 0) {
+  if (cursormode != C_DEFAULT) {
+    cursormode = C_DEFAULT;
+    set(toggleBtn);
+  }
+}
+
 [ if mouse is NOT over toolbar AND NOT over menu, show correct cursor
-if ((mouseX < 39 || mouseX > 120 || mouseY > 25) && mouseY > 7) {
+if ((mouseX < 14 || mouseX > 145 || mouseY > 25) && mouseY > 7) {
   [ show correct cursor icon
   if (cursormode != cursoricon) {
     [ change it
@@ -35,48 +44,68 @@ if ((mouseX < 39 || mouseX > 120 || mouseY > 25) && mouseY > 7) {
 
 [ check for button click
 if (controller(cLeftClick)) {
-  [ if on button1:
-  if (posn(tbPoint, -1, 1, &mouseX, &mouseY)) {
-    if (cursormode != C_DEFAULT) {
-      [ select it
-      cursormode = C_DEFAULT;
-      set(toggleBtn);
+  if (!deathType) {
+    [ if on button1:
+    if (posn(tbPoint, -1, 1, &mouseX, &mouseY)) {
+      if (cursormode != C_DEFAULT) {
+        [ select it
+        cursormode = C_DEFAULT;
+        set(toggleBtn);
+      }
     }
-  }
+    
+    [ if on button5:
+    if (posn(tbMove, -1, 1, &mouseX, &mouseY)) {
+      if (cursormode != C_WALK) {
+        [ select it
+        cursormode = C_WALK;
+        set(toggleBtn);
+      }
+    }
   
-  [ if on button2:
-  if (posn(tbMove, -1, 1, &mouseX, &mouseY)) {
-    if (cursormode != C_WALK) {
-      [ select it
-      cursormode = C_WALK;
-      set(toggleBtn);
+    [ if on button6:
+    if (posn(tbLook, -1, 1, &mouseX, &mouseY)) {
+      if (cursormode != C_LOOK) {
+        [ select it
+        cursormode = C_LOOK;
+        set(toggleBtn);
+      }
+    }
+  
+    [ if on button7:
+    if (posn(tbTalk, -1, 1, &mouseX, &mouseY)) {
+      if (cursormode != C_TALK) {
+        [ select it
+        cursormode = C_TALK;
+        set(toggleBtn);
+      }
+    }
+  
+    [ if on button8:
+    if (posn(tbUse, -1, 1, &mouseX, &mouseY)) {
+      if (cursormode != C_USE) {
+        [ select it
+        cursormode = C_USE;
+        set(toggleBtn);
+      }
     }
   }
-
-  [ if on button3:
-  if (posn(tbLook, -1, 1, &mouseX, &mouseY)) {
-    if (cursormode != C_LOOK) {
-      [ select it
-      cursormode = C_LOOK;
-      set(toggleBtn);
+  [ check for mouse down/mouse up on quit/save/restore buttons
+  if (!tbBtnDown) {
+    [ if on button2:
+    if (posn(tbQuit, -1, 1, &mouseX, &mouseY) && !deathType) {
+      set.loop(tbQuit, 1);
+      set(tbBtnDown);
     }
-  }
-
-  [ if on button4:
-  if (posn(tbTalk, -1, 1, &mouseX, &mouseY)) {
-    if (cursormode != C_TALK) {
-      [ select it
-      cursormode = C_TALK;
-      set(toggleBtn);
+    [ if on button3:
+    if (posn(tbSave, -1, 1, &mouseX, &mouseY) && !deathType) {
+      set.loop(tbSave, 1);
+      set(tbBtnDown);
     }
-  }
-
-  [ if on button5:
-  if (posn(tbUse, -1, 1, &mouseX, &mouseY)) {
-    if (cursormode != C_USE) {
-      [ select it
-      cursormode = C_USE;
-      set(toggleBtn);
+    [ if on button4:
+    if (posn(tbRestore, -1, 1, &mouseX, &mouseY)) {
+      set.loop(tbRestore, 1);
+      set(tbBtnDown);
     }
   }
 }
@@ -85,38 +114,60 @@ if (controller(cLeftClick)) {
 if (toggleBtn) {
   reset(toggleBtn);
   if (cursormode == C_DEFAULT) {
-    set.cel(tbPoint, 5);
+    set.loop(tbPoint, 1);
   } else {
-    set.cel(tbPoint, 0);
+    set.loop(tbPoint, 0);
   }
   if (cursormode == C_WALK) {
-    set.cel(tbMove, 6);
+    set.loop(tbMove, 1);
   } else {
-    set.cel(tbMove, 1);
+    set.loop(tbMove, 0);
   }
   if (cursormode == C_LOOK) {
-    set.cel(tbLook, 7);
+    set.loop(tbLook, 1);
   } else {
-    set.cel(tbLook, 2);
+    set.loop(tbLook, 0);
   }
   if (cursormode == C_TALK) {
-    set.cel(tbTalk, 8);
+    set.loop(tbTalk, 1);
   } else {
-    set.cel(tbTalk, 3);
+    set.loop(tbTalk, 0);
   }
   if (cursormode == C_USE) {
-    set.cel(tbUse, 9);
+    set.loop(tbUse, 1);
   } else {
-    set.cel(tbUse, 4);
-  }
-  
-  [ click2move if in walk mode
-  if (cursormode == C_WALK) {
-    set(click2move);
-  } else {
-    reset(click2move);
+    set.loop(tbUse, 0);
   }
 }
+
+[ check for mouse up on a button
+if (mouseBtn != 1) {
+  if (tbBtnDown) {
+    reset(tbBtnDown);
+    current.loop(tbQuit, work1);
+    current.loop(tbSave, work2);
+    current.loop(tbRestore, work3);
+    set.loop(tbQuit, 0);
+    set.loop(tbSave, 0);
+    set.loop(tbRestore, 0);
+    force.update(tbQuit);
+    [ take appropriate action
+    if (work1 == 1 && posn(tbQuit, -1, 1, &mouseX, &mouseY)) {
+      quit(0);
+    }
+    if (work2 == 1 && posn(tbSave, -1, 1, &mouseX, &mouseY)) {
+      save.game();
+    }
+    [ if on button3:
+    if (work3 == 1 && posn(tbRestore, -1, 1, &mouseX, &mouseY)) {
+      restore.game();
+    }
+    
+    [ ignore clicks for one cycle
+    set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  }
+}
+
 return();
 
 [*****

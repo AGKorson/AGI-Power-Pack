@@ -30,7 +30,7 @@
 [ *************************************************
 
 [[ if a new room was visited for first time
-[if (!egoExplored && currentRoom != rm.Terminal) {
+[if (!egoExplored && currentRoom != rm.ControlRoom) {
 [  [ if ego has been in the room long enough, award one score point for
 [  [ exploration
 [  if (elapsedSeconds != oldSeconds) {

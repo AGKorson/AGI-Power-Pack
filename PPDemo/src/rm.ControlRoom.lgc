@@ -1,10 +1,11 @@
 [ ********************************************************************
 [ 
-[ rm.Terminal
+[ rm.ControlRoom
 [ 
 [ An example room with several exits.
 [
 [ ********************************************************************
+
 
 [ **************************************
 [ FIRST CYCLE ONLY
@@ -129,12 +130,6 @@ if (said("show", "mouse")) {
 }
 
 if (said("open", "door")) {
-  [ show wait cursor
-  cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Stairway);  [ ##LE006##
 }
 
 :done
@@ -155,6 +150,15 @@ if (edgeEgoHit == LEFT_EDGE) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(rm.Office);  [ ##LE003##
+}
+
+if (edgeEgoHit == BOTTOM_EDGE) {
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ fade out, then change room
+  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  new.room(rm.Stairway); [ ##LE007##
 }
 
 return();

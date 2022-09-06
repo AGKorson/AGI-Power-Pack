@@ -8,11 +8,14 @@
 #define NORMAL_SPEED             2
 #define SLOW_SPEED               4
 #define cursor                "_"
-#define tbPoint                o11
-#define tbMove                 o12
-#define tbLook                 o13
-#define tbTalk                 o14
-#define tbUse                  o15
+#define tbPoint                 o9
+#define tbQuit                 o10
+#define tbSave                 o11
+#define tbRestore              o12
+#define tbMove                 o13
+#define tbLook                 o14
+#define tbTalk                 o15
+#define tbUse                  o16
 #define cMenu                   c0 [ key: ESC; used to display the menu
 #define cAbout                  c1 [ menu: AGI;     key: none
 #define cVersion                c2 [ menu: AGI;     key: Alt+V
@@ -56,6 +59,7 @@
 #define click2move             f17 [ when true, left click moves ego
 #define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
 #define useMIDI                f19 [ when true, four channel mode uses MIDI hardware, not FMSynth
+#define tbBtnDown              f20 [ set when mouse down occurs on toolbar button
 #define cycleEgoAtRest         f30 [ when set to TRUE, ego will cycle even when position does not change
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
 #define disableGameFunctions   f33 [ when set to TRUE

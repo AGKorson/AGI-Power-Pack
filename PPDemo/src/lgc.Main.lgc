@@ -11,7 +11,7 @@
 [
 [ reserved = reserved by the interpreter 
 [     v0 - v26
-[     f0 - f16, f20
+[     f0 - f16, tbBtnDown
 [     s0, s1
 [
 [ global = usable and accessible by all logics

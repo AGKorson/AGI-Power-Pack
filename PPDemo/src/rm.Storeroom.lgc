@@ -70,7 +70,7 @@ if (egoHitSpecial) {
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Terminal);  [ ##LE001##
+  new.room(rm.ControlRoom);  [ ##LE001##
 }
 return();
 

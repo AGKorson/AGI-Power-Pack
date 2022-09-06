@@ -6,8 +6,15 @@
 [
 [ ********************************************************************
 
-if (newRoom)
-  {
+#define lightshadow   o1
+#define door          o2
+
+#define doorSeq     v220
+
+#define fDoorDone   f220
+#define fDoorOpen   f221
+
+if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
@@ -20,28 +27,52 @@ if (newRoom)
   [ the horizon defines the upper limit of ego's movement
   set.horizon(0);
   
-  [ add additional room initialization here
+  load.view(vw.StairwayArt);
+  
+  [ lights
+  add.to.pic(vw.StairwayArt, 0, 0, 76, 114, 4, 15);
+  animate.obj(lightshadow);
+  set.view(lightshadow, vw.StairwayArt);
+  set.loop(lightshadow, 0);
+  set.priority(lightshadow, 4);
+  position(lightshadow, 128, 62);
+  stop.cycling(lightshadow);
+  ignore.objs(lightshadow);
+  ignore.blocks(lightshadow);
+  draw(lightshadow);
+  
+  [ door
+  animate.obj(door);
+  set.view(door, vw.StairwayArt);
+  set.loop(door, 1);
+  position(door, 32, 133);
+  set.priority(door, 5);
+  stop.cycling(door);
+  ignore.objs(door);
+  draw(door);
+  
+  [ ego
+  if (previousRoom == rm.SecretRoom) {
+    egoDir = STOPPED;
+    position(ego, 153, 37);
+    observe.blocks(ego);
+    set.loop(ego, 1);
+    set.cel(door, 0);
+  } else {
+    [ coming from control room; door is open
+    position(ego, 33, 136);
+    ignore.blocks(ego);
+    set.cel(door, 4);
+    set(fDoorOpen);
+  }
+  [ force priority
+  set.priority(ego, 6);
+  egoDir = STOPPED;
+  draw(ego);
   
   [ add toolbar buttons
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
-  
-  [ load ego view, animate and draw ego
-  [ this is sometimes handled in logic 0
-  [ instead of in each individual logic
-  if (previousRoom == rm.SecretRoom) {
-    egoDir = STOPPED;
-    position(ego, 153, 37);
-    set.loop(ego, 1);
-  } else {
-    [ coming from control room; door is open
-    position(ego, 59, 119);
-    ignore.blocks(ego);
-  }
-  egoDir = STOPPED;
-  
-  [ add ego to the room
-  draw(ego);
   
   [ display the picture on screen
   show.pic();
@@ -51,7 +82,7 @@ if (newRoom)
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   return();
-  }
+}
 
 [*****
 :handleInput       [ check for input from player
@@ -64,19 +95,18 @@ if (haveInput && !haveMatch && unknownWordNum == 0)
     print("You see nothing of interest.");
     }
   }
+  
   if (said("open", "door")) {
-[    if (posn(ego, 61, 111, 79, 121)) {
-      print("door is open");
-      ignore.blocks(ego);
-[    } else {
-[      print("you are not close enough.");
-[    }
+    if (posn(ego, 26, 135, 46, 138)) {
+      doorSeq = 1;
+    } else {
+      print("you are not close enough.");
+    }
   }
   
   if (said("close", "door")) {
-    if (posn(ego, 61, 111, 79, 121)) {
-      print("door is closed");
-      observe.blocks(ego);
+    if (posn(ego, 26, 135, 46, 138)) {
+      doorSeq = 2;
     } else {
       print("you are not close enough.");
     }
@@ -85,9 +115,29 @@ if (haveInput && !haveMatch && unknownWordNum == 0)
 [*****
 :noInput           [  all non-input related code goes here 
 [*****
+if (doorSeq == 1) {
+  [ open the door
+  doorSeq = 3;
+  end.of.loop(door, fDoorDone);
+}
+if (doorSeq == 2) {
+  [ close the door
+  doorSeq = 4;
+  reverse.loop(door, fDoorDone);
+  observe.blocks(ego);
+  reset(fDoorOpen);
+}
 
-[ add other room specific statements here
+if (fDoorDone) {
+  reset(fDoorDone);
+  if (doorSeq == 3) {
+    ignore.blocks(ego);
+    set(fDoorOpen);
+  }
+  doorSeq = 0;
+}
 
+  
 
 [*****
 :exit              [  test for leaving the room
@@ -110,7 +160,7 @@ if (posn(ego, 32, 130, 42, 133)) {
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Terminal);  [ ##LE002##
+  new.room(rm.ControlRoom);  [ ##LE002##
 }
 return();
 
