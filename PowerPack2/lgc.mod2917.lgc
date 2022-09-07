@@ -1933,9 +1933,9 @@ if (said(3, 150, 10403)){} [ 28A3
 [ patch restoregame to use the patch
 #message 151 "\xE9\x65\x91"
 if (said(3, 151, 9799)){} [ 2647
-[ patch restartegame to use the patch
-#message 152 "\xE8\xBD\x93"
-if (said(3, 152, 9384)){} [ 24A8
+[ patch restartgame to use the patch
+#message 152 "\x56\xE8\xBD\x93"
+if (said(4, 152, 9383)){} [ 24A7
 [ patch StateReload to use the patch
 #message 153 "\xE8\xCB\x51"
 if (said(3, 153, 26530)){} [ 67A2
@@ -3239,6 +3239,9 @@ if (said(139, 227, 53245)){} [ CFFD
 [ of reserved variable v18 (errorParameter) is set to -1 (255). v18 is set to
 [ zero if the function succeeds. This allows you to confirm file operations and 
 [ take alternate actions if results are not as expected.
+[
+[ File data is encrypted with the 'Avis Durgan' string to provide some 
+[ obfuscation of data.
 [
 [ For detailed examples of how to use these file functions, see the AGI Power
 [ Pack Demo game.

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/6/2022 4:31:15 PM"
+   LastEdit = "9/6/2022 9:40:36 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -319,10 +319,10 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H4340EA51
-   CompCRC32 = &H4340EA51
+   CRC32 = &HA70CEA6D
+   CompCRC32 = &HA70CEA6D
    IsRoom = True
-   Size = 5160
+   Size = 5352
 
 [Logic3]
    ID = rm.Lobby
@@ -399,7 +399,7 @@
 [Logic12]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &H20F21346
+   CRC32 = &HDD6F7371
    CompCRC32 = &H7D3B378F
    IsRoom = False
    Size = 503
@@ -789,4 +789,9 @@
    ID = vw.Receptionist
    Description = ""
    Size = 5665
+
+[View26]
+   ID = vw.ParkingLotArt
+   Description = ""
+   Size = 61
 [::END Views::]

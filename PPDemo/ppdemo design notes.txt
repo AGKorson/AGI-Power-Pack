@@ -153,7 +153,7 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
 
 done: modify save data function to encrypt with Avis Durgan
 
-- add death scenes: trapped in secret room (if door left open too long); trapped in coffin if ego gets in; electrical outlet in control room?
+- add death scenes: trapped in secret room (if door left open too long); trapped in coffin if ego gets in; electrical outlet in control room? touching the bat-mobile of another patient
 
 
 done: add save, restore and quit buttons

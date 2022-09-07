@@ -9,6 +9,8 @@
 #define egoCar        o1
 #define patient       o2
 #define patientCar    o3
+#define btnYes        o4
+#define btnNo         o5
 
 #define openSequence v220
 #define patientSeq   v221
@@ -119,6 +121,24 @@ if (newRoom) {
   load.view(vw.SmallPerson5);
   [ don't draw until needed
   
+  [ buttons for end game msgbox
+  load.view(vw.ParkingLotArt);
+  animate.obj(btnYes);
+  animate.obj(btnNo);
+  set.view(btnYes, vw.ParkingLotArt);
+  set.view(btnNo, vw.ParkingLotArt);
+  ignore.objs(btnYes);
+  ignore.objs(btnNo);
+  ignore.blocks(btnYes);
+  ignore.blocks(btnNo);
+  ignore.horizon(btnYes);
+  ignore.horizon(btnNo);
+  position(btnYes, 62, 97);
+  set.priority(btnYes, 15);
+  position(btnNo, 81, 97);
+  set.priority(btnNo, 15);
+  [ don't draw until needed
+  
   [ set timer to random amount
   random(140, 250, patientTimer);
 random(10, 20, patientTimer);
@@ -137,7 +157,7 @@ random(10, 20, patientTimer);
     [ if restarting 
     if (previousRoom == 0)  {
       [ add ego next to car
-      position(ego, 48, 144);
+      position(ego, 50, 139);
     } else {
       [ coming from lobby
       position(ego, 54, 121);
@@ -429,18 +449,67 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       
       [ ego car
       if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        if (posn(ego, 39, 132, 56, 142)) {
+        if (posn(ego, 39, 132, 56, 146)) {
 [ TODO: game ending sequences
-          if (!return.false()) {
-[            print("You haven't even been inside yet. Are you sure you want to leave?");
-            print("Are you sure you want to leave?");
-            get.string(s12, "", 22, 1, 5);
-            s13 = "yes";
+          set(leaveWindow);
+          print("Are you sure you want to \nleave?\n\n");
+          draw(btnYes);
+          draw(btnNo);
+          force.update(btnYes);
+          set.text.attribute(-1, 0);
+          set.text.attribute(BLACK, WHITE);
+          display(12, 33, "Yes");
+          display(12, 43, "No");
+          set.text.attribute(0, -1);
+          if (cursoricon != C_DEFAULT) {
+            [ change it
+            cursoricon = C_DEFAULT;
+            set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
+            [ disable click2move
+            reset(click2move);
           }
-          if (compare.strings(s12, s13)) {
+          
+          set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+          lastChar = 0;
+          work1 = 0;
+          :wait
+          if (!have.key() && mouseBtn != 1) {
+            goto(wait);
+          }
+          if (mouseBtn == 1) {
+            lastChar = 0;
+            if (posn(btnYes, ON.OBJ, 0, &mouseX, &mouseY)) {
+              work1 = 1;
+            } else {
+              if (posn(btnNo, ON.OBJ, 0, &mouseX, &mouseY)) {
+                work1 = 2;
+              }
+            }
+          } else {
+          display(24, 0, "key: %v19");
+            if (lastChar == 13) {
+              work1 = 1;
+            }
+            if (lastChar == 27) {
+              work1 = 2;
+            }
+          }
+          if (work1 == 0) {
+            goto(wait);
+          }
+          erase(btnYes);
+          erase(btnNo);
+          close.window();
+          if (work1 == 1) {
             print("You get in your car and drive away.");
-            print("Game over.");
             deathType = 99;
+          }
+          if (controller(cLeftClick)) {
+            print("wtf???1");
+          }
+          set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+          if (controller(cLeftClick)) {
+            print("wtf???2");
           }
         } else {
           print("You are too far away to get in your vehicle from here.");
@@ -468,7 +537,6 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
           print("It's not a good idea to touch a moving vehicle.");
         } else {
           distance(ego, patientCar, work1);
-print("distance: %v46");
           if (work1 < 14) {
             current.loop(patientCar, work1);
             if (work1 > 18) {
