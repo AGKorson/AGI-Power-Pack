@@ -23,13 +23,20 @@
 #define opendoor        f229
 #define closedoor       f230
 #define fDoorDone       f231
+#define fEgoDead        f232
 
-#define fallstatus      v220
+
+#define fallSeq      v220
 #define    NOFALL        0
 #define    STARTFALL     1
 #define    MOVE2WALL1    2
 #define    MOVE2WALL2    3
-#define    BREAKWALL     4
+#define    FALLDOWN      4
+#define    BREAKWALL     5
+#define    SITUP         6
+#define    FALLDONE      7
+#define    STANDUP       8
+
 #define movebroomstatus v221
 #define    NOMOVE        0
 #define    MOVE2CORNER   1
@@ -37,6 +44,8 @@
 #define driptimerM      v222
 #define driptimerS      v223
 #define triptimer       v224
+#define    TRIPDELAY     80
+#define tmpLoop         v225
 
 
 if (newRoom) {
@@ -57,10 +66,11 @@ if (newRoom) {
   call(lgc.InitToolbar);
   
   load.view(vw.ClosetArt);
+  load.view(vw.Tripping);
   [ closet door
   animate.obj(door);
   set.view(door, vw.ClosetArt);
-  set.loop(door, 9);
+  set.loop(door, 5);
   if (closetopen) { 
     set.cel(door, 3);
   } else {
@@ -80,27 +90,34 @@ if (newRoom) {
   if (!wallbreak) {
     set.cel(wall, 0);
   } else {
-    set.cel(wall, 12);
-    ignore.objs(wall);
+    if (trapped) {
+      set.loop(wall, 0);
+      set.cel(wall, 2);
+    } else {
+      set.cel(wall, 12);
+      ignore.objs(wall);
+    }
   }
   draw(wall);
   stop.update(wall);
   
-  [ add the broom, if not picked up yet
+  [ add the broom
   animate.obj(broom);
   set.view(broom, vw.ClosetArt);
   set.loop(broom, 0);
   ignore.objs(broom);
   ignore.blocks(broom);
-  [ if put in corner
+  [ if moved, put in corner
   if (broommoved) {
     position(broom, 44, 153);
-    set.cel(broom, 2);
+    set.cel(broom, 1);
     block(43, 148, 50, 154);
   } else {
+    [ if not moved, it's still on floor
     set.cel(broom, 0);
     set.priority(broom, 11);
     position(broom, 59, 152);
+    triptimer = TRIPDELAY;
   }
   draw(broom);
   stop.update(broom);
@@ -127,22 +144,35 @@ if (newRoom) {
   [ add additional room initialization here
   egoDir = STOPPED;
   if (previousRoom == rm.SecretRoom) {
-    position(ego, 72, 141);
-    [ uncrouch
-    set.view(ego, vw.ClosetArt);
-    set.loop(ego, 8);
-    set.cel(ego, 0);
-    program.control();
-    prevent.input();
-    [ turn off auto-cycle to allow cycle-at-rest
-    work1 = 0;
-    set.upper.left(&ego, &work1);
-    end.of.loop(ego, uncrouch);
+    if (trapped) {
+      set.view(ego, vw.ClosetArt);
+      set.loop(ego, 4);
+      set.cel(ego, 0);
+      set(fEgoDead);
+      deathType = 2;
+    } else {
+      position(ego, 72, 141);
+      [ uncrouch
+      set.view(ego, vw.ClosetArt);
+      set.loop(ego, 4);
+      set.cel(ego, 0);
+      program.control();
+      prevent.input();
+      [ turn off auto-cycle to allow cycle-at-rest
+      work1 = 0;
+      set.upper.left(&ego, &work1);
+      end.of.loop(ego, uncrouch);
+    }
   } else {
     [if (previousRoom == rm.Hallway) {
     position(ego, 100, 147);
     set.loop(ego, 1);
   }
+[  if (previousRoom == rm.Hallway) {
+[    [ restore cursor
+[    cursoricon = cursormode;
+[    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+[  }
   [ add ego to the room
   draw(ego);
   
@@ -151,11 +181,26 @@ if (newRoom) {
   [ fade in
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
-  if (previousRoom == rm.Hallway) {
-    [ restore cursor
-    cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  return();
+}
+
+[ check drip timer if faucet isn't fixed yet
+if (dripdone && !faucetfixed) {
+  if (dripping) {
+    stop.update(drip);
+    driptimerM = 0;
+    driptimerS = 3;
+    block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
+  } else {
+    set.cel(drip, 0);
+    end.of.loop(drip, dripdone);
+    start.update(drip);
   }
+  toggle(dripping);    
+}
+
+[ if dead, skip player input
+if (fEgoDead) {
   return();
 }
 
@@ -190,7 +235,61 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items (unless wait cursor is active)
 if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 && 
-    cursoricon != C_WAIT && controller(cLeftClick)) {
+    (cursoricon == C_TALK || cursoricon == C_LOOK || cursoricon == C_USE) && 
+    controller(cLeftClick)) {
+
+  [ if still sitting (after falling)
+  if (fallSeq == FALLDONE) {
+    print("You should stand up first.");
+    goto(doneclick);
+  }
+  
+  [ always stop motion
+  egoDir = STOPPED;
+  
+  [ if ego isn't facing the location clicked, change loop
+  [ current loop
+  current.loop(ego, tmpLoop);
+  [ get left/right pos of ego
+  get.posn(ego, work1, work2);
+  work3 = work1;
+  work3 += 6;
+  if (mouseX < work1) {
+    [looking left
+    if (tmpLoop != 1) {
+      set.loop(ego, 1);
+      force.update(ego);
+    }
+  } else {
+    if (mouseX > work3) {
+      [ looking right
+      if (tmpLoop != 0) {
+        set.loop(ego, 0);
+        force.update(ego);
+      }
+    } else {
+      [ looking up or down
+      work2 += 8; [ adjust for pic offset
+      work3 = work2; 
+      work3 -= 33;
+      if (mouseY < work3) {
+        [ looking up
+        if (tmpLoop != 3) {
+          set.loop(ego, 3);
+          force.update(ego);
+        }
+      } else {
+        if (mouseY > work2) {
+          [ looking down
+          if (tmpLoop != 2) {
+            set.loop(ego, 2);
+            force.update(ego);
+          }
+        }
+      }
+    }
+  }
+  
   [ look
   if (cursormode == C_LOOK) {
     [ ego
@@ -241,6 +340,12 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       goto(doneclick);
     }
     
+    [ ladder (55, 93, 76, 105)
+    if (mouseX > 54 && mouseX < 77 && mouseY > 100 && mouseY < 114) {
+      print("There is a large ladder hanging on the wall.");
+      goto(doneclick);
+    }
+    
     [ faucet (62, 117, 66, 123)
     if (mouseX > 61 && mouseX < 67 && mouseY > 124 && mouseY < 134) {
       if (faucetfixed) {
@@ -269,7 +374,7 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       set(clickmops);
     }
     if (clickmops) {
-      print("There are several mops and brooms hanging on the wall.");
+      print("There mop and bucket in the corner and several mops and brooms hanging on the wall.");
       goto(doneclick);
     }
     
@@ -368,11 +473,6 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       goto(doneclick);
     }
     
-    [ get center pos of ego
-    get.posn(ego, work1, work2);
-    work1 += 3;
-    [ TODO: if ego isn't facing the item clicked, change loop
-    
     [ closet door
     if (posn(door, ON.OBJ, 0, &mouseX, &mouseY)) {
       if (closetopen) {
@@ -416,7 +516,7 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
            obj.in.box(ego, 61, 140, 85, 147))) {
         if (!wallbreak) {
           print("As you bend over to pick up the broom, you trip and fall!");
-          fallstatus = STARTFALL;
+          fallSeq = STARTFALL;
         } else {
           print("You decide to move the broom out of the way so you won't trip on it anymore.");
           erase(broom);
@@ -426,6 +526,12 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       } else {
         print("You can't reach that from here.");
       }
+      goto(doneclick);
+    }
+    
+    [ ladder (55, 93, 76, 105)
+    if (mouseX > 54 && mouseX < 77 && mouseY > 100 && mouseY < 114) {
+      print("You have not taken ladder safety training recently, so you decide to leave it on the wall.");
       goto(doneclick);
     }
     
@@ -447,7 +553,18 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     [ sink (59, 123, 68, 134)
     if (mouseX > 58 && mouseX < 69 && mouseY > 130 && mouseY < 145) {
       if (posn(ego, 57, 140, 70, 150)) {
-        print("Might as well wash your hands");
+        if (!handsWashed) {
+          set(handsWashed);
+          if (handsDirty) {
+            print("You wash the sap from your hands. Now they aren't so sticky.");
+            currentScore += 3;
+          } else {
+            print("Might as well wash your hands");
+            currentScore += 1;
+          }
+        } else {
+          print("You already washed your hands.");
+        }
       } else {
         print("You can't reach that from here.");
       }
@@ -566,51 +683,119 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
 [ add other room specific statements here
 
 [ trip and fall into wall
-if (egoHitSpecial && !wallbreak && fallstatus == NOFALL) {
+if (egoHitSpecial && !wallbreak && fallSeq == NOFALL) {
   [ fall, and break wall
   print("Look out for that broom!");
-  fallstatus = STARTFALL;
+  fallSeq = STARTFALL;
 }
-if (fallstatus == STARTFALL) {
-  fallstatus = MOVE2WALL1;
-  set.loop(ego, 2);
+[ startfall is a separate state so that it can be reached
+[ by trying to pick up the broom, or by moving over it
+if (fallSeq == STARTFALL) {
+  fallSeq = MOVE2WALL1;
+  set.view(ego, vw.Tripping);
+  set.loop(ego, 0);
   fix.loop(ego);
-  move.obj(ego, 72, 146, 1, fDone);
+  move.obj(ego, 72, 145, 1, fDone);
   prevent.input();
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
 }
-if (fDone && fallstatus == MOVE2WALL1) {
-  fallstatus = MOVE2WALL2;
-  move.obj(ego, 72, 143, 1, fDone);
+if (fDone && fallSeq == MOVE2WALL1) {
+  fallSeq = MOVE2WALL2;
+  move.obj(ego, 72, 146, 1, fDone);
 }
-if (fDone && fallstatus ==  MOVE2WALL2) {
-  fallstatus = BREAKWALL;
+if (fDone && fallSeq == MOVE2WALL2) {
+  fallSeq = FALLDOWN;
+  [ turn off auto-cycle to allow cycle-at-rest
+  work1 = 0;
+  set.upper.left(&ego, &work1);
+  set.loop(ego, 2);
+  set.cel(ego, 0);
+  end.of.loop(ego, fDone);
+}
+if (fDone && fallSeq == FALLDOWN) {
+  fallSeq = BREAKWALL;
   start.update(wall);
   end.of.loop(wall, fDone);
-  set(wallbreak);
-  program.control();
 }
-if (fDone && fallstatus == BREAKWALL) {
+if (fDone && fallSeq == BREAKWALL) {
   reset(fDone);
-  fallstatus = NOFALL;
-  stop.update(wall);
+  fallSeq = SITUP;
   print("As you fall against the wall, it caves in, revealing a large hole.");
+  set(wallbreak);
+  stop.update(wall);
   ignore.objs(wall);
-  release.loop(ego);
+  set.loop(ego, 3);
+  set.cel(ego, 0);
+  end.of.loop(ego, fDONE);
+}
+if (fDone && fallSeq ==  SITUP) {
+  reset(fDone);
   player.control();
   accept.input();
-  triptimer = 40;
+  cursoricon = cursormode;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  fallSeq = FALLDONE;
+}
+if (egoDir != STOPPED && fallSeq == FALLDONE) {
+  [ get up first
+  egoDir = STOPPED;
+  fallSeq = STANDUP;
+  set.loop(ego, 4);
+  end.of.loop(ego, fDone);
+}
+if (fDone && fallSeq == STANDUP) {
+  reset(fDone);
+  fallSeq = NOFALL;
+  set.view(ego, vw.Ego);
+  set.loop(ego, 0);
+  start.cycling(ego);
+  release.loop(ego);
+  [ restore auto-cycle
+  work1 = 1;
+  set.upper.left(&ego, &work1);
+  triptimer = TRIPDELAY;
 }
 
 [ trip over broom even after first fall, unless it's been moved
 if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
   print("You trip over the broom again!");
   reset(cantrip);
-  triptimer = 40;
+  triptimer = TRIPDELAY;
+  triptimer = 90;
+  set.view(ego, vw.Tripping);
+  current.loop(ego, work1);
+  if (work1 > 1) {
+    work1 -= 2;
+  }
+  set.loop.v(ego, work1);
+  fix.loop(ego);
+  wander(ego);
+  prevent.input();
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  prevent.input();
 }
-if (!egoHitSpecial && triptimer > 0 && !broommoved) {
+[ check for end of stumbling sequence
+if (triptimer > TRIPDELAY) {
   --triptimer;
-  if (triptimer == 0) {
-    set(cantrip);
+  if (triptimer == TRIPDELAY) {
+    [ restore ego movement
+    set.view(ego, vw.Ego);
+    release.loop(ego);
+    egoDir = STOPPED;
+    player.control();
+    accept.input();
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  }
+} else {
+  [ not stumbling - if not on the broom, run the countdown
+  if (!egoHitSpecial && triptimer > 0 && !broommoved) {
+    --triptimer;
+    if (triptimer == 0) {
+      set(cantrip);
+    }
   }
 }
 
@@ -624,21 +809,6 @@ if (fDone && movebroomstatus == MOVE2CORNER) {
   movebroomstatus = NOMOVE;
   block(43, 148, 50, 154);
   set(broommoved);
-}
-
-[ check drip timer if faucet isn't fixed yet
-if (dripdone && !faucetfixed) {
-  if (dripping) {
-    stop.update(drip);
-    driptimerM = 0;
-    driptimerS = 3;
-    block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
-  } else {
-    set.cel(drip, 0);
-    end.of.loop(drip, dripdone);
-    start.update(drip);
-  }
-  toggle(dripping);    
 }
 
 if (opendoor) {
@@ -681,7 +851,7 @@ if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
   egoDir = STOPPED;
   set(crouch);
   set.view(ego, vw.ClosetArt);
-  set.loop(ego, 7);
+  set.loop(ego, 3);
   set.cel(ego, 0);
   program.control();
   prevent.input();

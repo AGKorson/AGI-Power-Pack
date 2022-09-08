@@ -134,9 +134,9 @@ if (newRoom) {
   ignore.blocks(btnNo);
   ignore.horizon(btnYes);
   ignore.horizon(btnNo);
-  position(btnYes, 62, 97);
+  position(btnYes, 62, 96);
   set.priority(btnYes, 15);
-  position(btnNo, 81, 97);
+  position(btnNo, 81, 96);
   set.priority(btnNo, 15);
   [ don't draw until needed
   
@@ -501,7 +501,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
               print("Your truck doesn't get the best mileage, but it's great for hauling stuff.");
             } else {
               if (work1 == 17) {
-                print("This is your red sportcar. You love to go fast!");
+                print("This is your red sportscar. You love to go fast!");
               } else {
                 print("Yeah, this is your batmobile. How cool is that?");
               }
@@ -641,7 +641,14 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       
       [ patient car
       if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        print("The car has nothing to say.");
+        [ if patient is in car
+        if ((patientSeq == 1 || patientSeq == 7 || patientSeq == 8 ||
+             patientSeq == 10 || patientSeq == 11 || patientSeq == 12 ||
+             patientSeq == 13 || patientSeq == 19 || patientSeq == 20)) {
+          print("The person in the car can't hear you.");
+        } else {
+          print("There is no one in the car to talk to.");
+        }
         goto(doneclick);
       }
 
@@ -663,7 +670,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
         set(fClickOn);
       }
       if(fClickOn) {
-        print("The car has nothing to say.");
+        print("There is no one in the car to talk to.");
         goto(doneclick);
       }
       
@@ -682,7 +689,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       [ ego car
       if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
         if (posn(ego, 39, 132, 56, 146)) {
-[ TODO: game ending sequences
+[ TODO: finalize game ending sequences
           [ display a msgbox with 'yes/no' buttons
           set(leaveWindow);
           print("Are you sure you want to \nleave?\n\n");
@@ -840,7 +847,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       if (work1 > 239) {
         [ foreground tree
         print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
-[ TODO: set flag to indicate hands dirty; can be washed in sink in closet.
+        set(handsDirty);
         goto(doneclick);
       }
       

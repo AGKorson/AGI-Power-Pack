@@ -59,7 +59,11 @@
 #define click2move             f17 [ when true, left click moves ego
 #define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
 #define useMIDI                f19 [ when true, four channel mode uses MIDI hardware, not FMSynth
-#define tbBtnDown              f20 [ set when mouse down occurs on toolbar button
+#define handsDirty             f21
+#define handsWashed            f22
+#define tbBtnDown              f23 [ set when mouse down occurs on toolbar button
+#define closettimer            f24
+#define trapped                f25
 #define cycleEgoAtRest         f30 [ when set to TRUE, ego will cycle even when position does not change
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
 #define disableGameFunctions   f33 [ when set to TRUE
@@ -141,6 +145,8 @@
 #define car6car7               v76
 #define currentHour            v77
 #define currentMinute          v78
+#define timerMin               v79
+#define timerSec               v80
 #define C_DEFAULT                1
 #define C_WALK                   2
 #define C_LOOK                   3

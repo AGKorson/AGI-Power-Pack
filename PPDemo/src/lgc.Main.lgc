@@ -16,7 +16,7 @@
 [
 [ global = usable and accessible by all logics
 [     v27 - v219
-[     f17 - f18, f21 - f219
+[     f17 - f18, handsDirty - f219
 [     s2 - s11
 [
 [ local = usable and accessible by single room
@@ -219,6 +219,37 @@ if (newRoom) {
   
   [ force clock value to update, if time is visible
   clearStatusSeconds = -1; 
+  
+  [ check for closet door being left open
+  if (closetopen && currentRoom != rm.Hallway && currentRoom != rm.Closet && currentRoom != rm.SecretRoom) {
+    [ start a fresh timer
+    timerMin = 0; [4;
+    timerSec = 20; [0;
+    block(START.TIMER, &timerMin, &timerSec, &closettimer); [ start.timer(vMINUTES, vSECONDS, fDONE)
+  } else {
+    [ stop the timer
+    block(TOGGLE.TIMER, 0, 0, 0); [ toggle.timer(STATE)
+  }
+}
+display(24, 0, "%v79|2:%v80|2");
+[ check for end of closet timer
+if (closettimer) {
+  [ the door gets closed, and if ego is beyond the secret room, he's gonna get stuck
+  reset(closettimer);
+  reset(closetopen);
+  if (currentRoom > 6) {
+    set(trapped);
+  }
+}
+
+[ if this is first cycle since restore game executed
+if (isset(gameRestored)) {
+  [ make sure input area is cleared
+  clear.lines(23, 24, 0);
+[  [ debugging off by default
+[  reset(debugging);
+  [ need to 're-disable menu separators)
+  disable.item(cDummy);
 }
 
 [ if clock display is needed
@@ -488,17 +519,6 @@ if (restoreCursor) {
   v227 = -1;
   [ provide feedback
   print.at("Cursor restored.", 14, 19, 17);
-}
-
-
-[ if this is first cycle since restore game executed
-if (isset(gameRestored)) {
-  [ make sure input area is cleared
-  clear.lines(23, 24, 0);
-  [ debugging off by default
-  reset(debugging);
-  [ need to 're-disable menu separators)
-  disable.item(cDummy);
 }
 
 [ save current ego position

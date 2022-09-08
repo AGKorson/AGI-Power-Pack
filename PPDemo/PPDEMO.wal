@@ -2,8 +2,8 @@
 21
 4|78.125|0.63|-0.92
 -2.4|-0.4999467|8.3|8.9
--290|-63|-63|-100|534|92
-205|818|97|389
+-290|-63|-63|-100|288|92
+319|1277|146|586
 R|1|True|3|True|-2.3|8|001:2:5:0:0:0
 C|1|True|4|-2.399973|-0.4999467|4.9|1.4|Layout for Power Pack Demo.&crlf&crlfStory is you are visiting Sierra HQ Bldg, and find a hidden room. You discover a terminal, with cryptic instruction. You need to unlock six control panels to unlock the long lost AGI Power Pack features.
 R|2|True|7|True|7.5|8|001:3:5:0:0:0
@@ -25,10 +25,5 @@ R|25|True|18|True|4|2.2
 R|26|True|5|True|5.5|2.2
 R|27|True|14|True|-2.2|2.2
 R|28|True|6|True|4.7|4.5
-U|3|True|001:4:1:0|002:2:3:0
-U|7|True|001:6:2:0|002:8:5:0
-U|22|True
-U|2|True|001:3:5:0
-U|25|True
-U|1|True|001:2:5:0
-U|28|True
+U|6|True|002:7:3:0|001:5:5:0
+U|5|True|002:6:5:0|001:4:5:0

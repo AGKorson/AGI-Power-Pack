@@ -25,7 +25,7 @@ if (newRoom)
   call(lgc.RoomInit);
   
   [ the horizon defines the upper limit of ego's movement
-  set.horizon(100);
+  set.horizon(94);
   
   [ add additional room initialization here
   load.view(vw.LobbyArt);

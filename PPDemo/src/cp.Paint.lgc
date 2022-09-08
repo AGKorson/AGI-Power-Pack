@@ -28,7 +28,7 @@ if(newRoom)
     [ display the picture on screen
     show.pic();
     return();
-    } [ TODO: also need to delete these test entries
+    }
 
 [*****
 :handleInput       [ check for input from player
