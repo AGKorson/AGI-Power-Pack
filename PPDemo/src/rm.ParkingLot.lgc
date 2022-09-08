@@ -12,7 +12,7 @@
 #define btnYes        o4
 #define btnNo         o5
 
-#define openSequence v220
+#define egoCarSeq    v220
 #define patientSeq   v221
 #define patientTimer v222
 #define carX         v223
@@ -25,6 +25,7 @@
 #define fEgoDead     f224
 #define fDeadDone    f225
 #define fClickOn     f226
+#define fSkip1       f227
 
 if (newRoom) {
   [ run initialization code
@@ -146,10 +147,10 @@ random(10, 20, patientTimer);
   [ if starting (coming from intro screen)
   if (previousRoom == rm.Title) {
     [ begin opening sequence
-    openSequence = 1;
+    egoCarSeq = 1;
   } else {
     [ skip opening sequence
-    openSequence = 0;
+    egoCarSeq = 0;
     [ car is in parking spot
     position(egoCar, 41, 143);
     draw(egoCar);
@@ -180,10 +181,15 @@ random(10, 20, patientTimer);
   return();
 }
 
-if (openSequence) {
-  if (openSequence == 1) {
+[*****
+:noInput           [  all non-input related code goes here 
+[*****
+
+if (egoCarSeq) {
+  [ ego arrives
+  if (egoCarSeq == 1) {
     [ move car to parking spot
-    ++openSequence;
+    ++egoCarSeq;
     position(egoCar, 0, 131);
     draw(egoCar);
     move.obj(egoCar, 40, 143, 1, fCarDone);
@@ -193,11 +199,10 @@ if (openSequence) {
     print("It has been a long drive, but Drew is super excited as he "
           "pulls into the parking lot.");
   }
-  
-  if (openSequence == 2 && fCarDone) {
+  if (egoCarSeq == 2 && fCarDone) {
     [ ego gets out
     reset(fCarDone);
-    openSequence = 0;
+    egoCarSeq = 0;
     stop.cycling(egoCar);
     position(ego, 50, 139);
     draw(ego);
@@ -205,10 +210,237 @@ if (openSequence) {
           "cars in the parking lot. So Drew decides to go inside and "
           "take a look around.");
     print("Who knows? Maybe he might find some original Sierra memorabilia "
-          "or other signs of long past gaming history.");  
+          "or other signs of long past gaming history.");
+  }
+  [ skip rest of room logic until opening sequence is finished
+  if (egoCarSeq < 3) {
+    return();
   }
   
-  return();
+  [ ego drives away
+  if (egoCarSeq == 10) {
+    [ ego drives away
+    egoCarSeq = 11;
+    start.cycling(egoCar);
+    move.obj(egoCar, 143, 126, 2, fCarDone);
+  }
+  if (egoCarSeq == 11 && fCarDone) {
+    reset(fCarDone);
+    egoCarSeq = 0;
+    erase(egoCar);
+  }  
+}
+
+[ timing bug with controllers
+if (fSkip1) {
+  reset(fSkip1);
+  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+}
+
+[ parked cars in rightside parking lot don't quite align with priority bands
+get.posn(ego, work1, work2);
+if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
+  set.priority(ego, 13);
+} else {
+  if (work1 > 88 && work1 < 108 && work2 >154 && work2 < 157) {
+    set.priority(ego, 14);
+  } else {
+    release.priority(ego);
+  }
+}
+
+[ check for random patient arriving or leaving
+if (patientTimer == 0) {
+  [ reset the timer
+  random(140, 250, patientTimer);
+random(10, 20, patientTimer);
+
+  if (fPatientHere) {
+    [ time for patient to leave
+      position(patient, 55, 117);
+      if (f2ndspot) {
+        [ go back to parking spot 2
+        move.obj(patient, 55, 127, 1, fPatientDone);
+        patientSeq = 16;
+      } else {
+        [ go back to parking spot 1
+        move.obj(patient, 55, 127, 1, fPatientDone);
+        patientSeq = 4;
+      }
+      draw(patient);
+  } else {
+    [ time for patient to arrive
+    random(0, 1, work1);
+    if (work1 == 0) {
+      reset(f2ndspot);
+      patientSeq = 1; [ got to spot #1
+      random(0, 18, work1);
+      set.loop.v(patientCar, work1);
+      position(patientCar, 0, 131);
+      move.obj(patientCar, 18, 143, 2, fPatientDone);
+    } else {
+      set(f2ndspot);
+      patientSeq = 10; [ go to spot #2
+      random(19, 37, work1);
+      set.loop.v(patientCar, work1);
+      position(patientCar, 143, 128);
+      move.obj(patientCar, 99, 128, 2, fPatientDone);
+    }
+    draw(patientCar);
+    [ choose a random patient
+    random(2, 6, work1);
+[ TODO: add more patient views
+random(2, 4, work1);
+    set.view.v(patient, work1);
+  }
+} else {
+  if (patientSeq == 0) {
+    [ countdown
+    --patientTimer;
+  }
+}
+if (fPatientDone) {
+  [ parking spot 2
+  if (patientSeq == 20) {
+    erase(patientCar);
+    reset(fPatientHere);
+    reset(fPatientDone);
+    patientSeq = 0;
+    unblock();
+  }
+  if (patientSeq == 19) {
+    move.obj(patientCar, 0, 131, 2, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 18) {
+    erase(patient);
+    start.cycling(patientCar);
+    move.obj(patientCar, 61, 131, 1, fPatientDone);
+    unblock();
+    ++patientSeq;
+  }
+  if (patientSeq == 17) {
+    move.obj(patient, 88, 142, 1, fPatientDone);
+    ++patientSeq;  
+  }
+  if (patientSeq == 16) {
+    move.obj(patient, 70, 142, 1, fPatientDone);
+    ++patientSeq;  
+  }
+  if (patientSeq == 15) {
+    erase(patient);
+    patientSeq = 0;
+    set(fPatientHere);
+    reset(fPatientDone);
+  }
+  if (patientSeq == 14) {
+    move.obj(patient, 55, 117, 1, fPatientDone);
+    ++patientSeq;  
+  }
+  if (patientSeq == 13) {
+    stop.cycling(patientCar);
+    ignore.blocks(patientCar);
+    block(78, 138, 99, 142);
+    position(patient, 88, 142);
+    draw(patient);
+    move.obj(patient, 72, 142, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 12) {
+    ++patientSeq;  
+    move.obj(patientCar, 83, 141, 1, fPatientDone);
+  }
+  if (patientSeq == 11) {
+    ++patientSeq;  
+    move.obj(patientCar, 61, 141, 1, fPatientDone);
+  }
+  if (patientSeq == 10) {
+    ++patientSeq;  
+    move.obj(patientCar, 75, 129, 2, fPatientDone);
+  }
+  
+  [ parking spot 1
+  if (patientSeq == 8) {
+    erase(patientCar);
+    reset(fPatientHere);
+    reset(fPatientDone);
+    patientSeq = 0;
+  }
+  if (patientSeq == 7) {
+    move.obj(patientCar, 143, 128, 2, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 6) {
+    erase(patient);
+    start.cycling(patientCar);
+    move.obj(patientCar, 5, 143, 1, fPatientDone);
+    unblock();
+    ++patientSeq;
+  }
+  if (patientSeq == 5) {
+    move.obj(patient, 25, 140, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 4) {
+    move.obj(patient, 38, 127, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 3) {
+    erase(patient);
+    patientSeq = 0;
+    set(fPatientHere);
+    reset(fPatientDone);
+  }
+  if (patientSeq == 2) {
+    move.obj(patient, 55, 117, 1, fPatientDone);
+    ++patientSeq;
+  }
+  if (patientSeq == 1) {
+    stop.cycling(patientCar);
+    ignore.blocks(patientCar);
+    block(14, 140, 34, 144);
+    position(patient, 25, 140);
+    draw(patient);
+    move.obj(patient, 55, 125, 1, fPatientDone);
+    ++patientSeq;
+  }
+}
+
+[ check for ego getting run over
+if (!fEgoDead) {
+  get.posn(patientCar, carX, carY);
+  work1 = carY;
+  work1 -= 2;
+  if (egoY >= work1 && egoY <= carY) {
+    work1 = egoX;
+    work1 += 3;
+    work2 = carX;
+    work2+= 15;
+    if (work1 >= carX && egoX <= work2) {
+    [ if ego is on or in front of the car, force priority
+      if (egoY == carY) {
+        get.priority(ego, work1);
+        ++work1;
+        set.priority.v(ego, work1);
+      }
+      set(fEgoDead);
+      patientSeq = 99;
+      stop.motion(patientCar);
+      stop.cycling(patientCar);
+      load.view(vw.EgoDead);
+      set.view(ego, vw.EgoDead);
+      egoDir = STOPPED;
+      program.control();
+      prevent.input();
+      [ turn off auto-cycle to allow cycle-at-rest
+      work1 = 0;
+      set.upper.left(&ego, &work1);
+      work1 = 2;
+      cycle.time(ego, work1);
+      end.of.loop(ego, fDeadDone);
+      print("Uh oh! That car just hit you!");
+    }
+  }
 }
 
 [ check for end of death cycle
@@ -220,7 +452,7 @@ if (fDeadDone) {
   accept.input();
 }
 
-[ if dead, nothing to do
+[ if dead, skip player input
 if (fEgoDead) {
   return();
 }
@@ -451,16 +683,21 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
         if (posn(ego, 39, 132, 56, 146)) {
 [ TODO: game ending sequences
+          [ display a msgbox with 'yes/no' buttons
           set(leaveWindow);
           print("Are you sure you want to \nleave?\n\n");
           draw(btnYes);
           draw(btnNo);
+          [ need to force update so the buttons get drawn right now
           force.update(btnYes);
+          [ add button text
           set.text.attribute(-1, 0);
           set.text.attribute(BLACK, WHITE);
           display(12, 33, "Yes");
           display(12, 43, "No");
           set.text.attribute(0, -1);
+          [ change to default cursor (it will change back 
+          [ after dialog box is dismissed)
           if (cursoricon != C_DEFAULT) {
             [ change it
             cursoricon = C_DEFAULT;
@@ -468,7 +705,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
             [ disable click2move
             reset(click2move);
           }
-          
+          [ clear input and controller before starting wait loop
           set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
           lastChar = 0;
           work1 = 0;
@@ -476,6 +713,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
           if (!have.key() && mouseBtn != 1) {
             goto(wait);
           }
+          [ if left button was pressed, check buttons
           if (mouseBtn == 1) {
             lastChar = 0;
             if (posn(btnYes, ON.OBJ, 0, &mouseX, &mouseY)) {
@@ -486,31 +724,36 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
               }
             }
           } else {
-          display(24, 0, "key: %v19");
-            if (lastChar == 13) {
+            [ 'ENTER', 'Y' or 'y' for YES
+            if ((lastChar == 13 || lastChar == 89 || lastChar == 121)) {
               work1 = 1;
             }
-            if (lastChar == 27) {
+            [ 'ESC', 'N' or 'n' for NO
+            if ((lastChar == 27 || lastChar == 78 || lastChar == 110)) {
               work1 = 2;
             }
           }
+          [ if wrong keypress, or click was not on button, continue waiting
           if (work1 == 0) {
             goto(wait);
           }
+          [ hide buttons, then close print window
           erase(btnYes);
           erase(btnNo);
           close.window();
+          [ if 'NO', do nothing; if 'YES', end the game
           if (work1 == 1) {
+            erase(ego);
             print("You get in your car and drive away.");
             deathType = 99;
+            egoCarSeq = 10;
+            set(fEgoDead);
           }
-          if (controller(cLeftClick)) {
-            print("wtf???1");
-          }
-          set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
-          if (controller(cLeftClick)) {
-            print("wtf???2");
-          }
+          [ there is a timing glitch in AGI (not sure if it's a DOSBox thing
+          [ or inherent to MSDOS/AGI; but on occasion, a second 'ghost click'
+          [ will set the left-click controller when the dialog is dismissed
+          [ to fix this, skip the controller on the very next cycle
+          set(fSkip1);
         } else {
           print("You are too far away to get in your vehicle from here.");
         }
@@ -628,216 +871,6 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
     
     :doneClick
     set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
-  }
-}
-
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
-[ parked cars in rightside parking lot don't quite align with priority bands
-get.posn(ego, work1, work2);
-if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
-  set.priority(ego, 13);
-} else {
-  if (work1 > 88 && work1 < 108 && work2 >154 && work2 < 157) {
-    set.priority(ego, 14);
-  } else {
-    release.priority(ego);
-  }
-}
-
-[ check for random patient arriving or leaving
-if (patientTimer == 0) {
-  [ reset the timer
-  random(140, 250, patientTimer);
-random(10, 20, patientTimer);
-
-  if (fPatientHere) {
-    [ time for patient to leave
-      position(patient, 55, 117);
-      if (f2ndspot) {
-        [ go back to parking spot 2
-        move.obj(patient, 55, 127, 1, fPatientDone);
-        patientSeq = 16;
-      } else {
-        [ go back to parking spot 1
-        move.obj(patient, 55, 127, 1, fPatientDone);
-        patientSeq = 4;
-      }
-      draw(patient);
-  } else {
-    [ time for patient to arrive
-    random(0, 1, work1);
-    if (work1 == 0) {
-      reset(f2ndspot);
-      patientSeq = 1; [ got to spot #1
-      random(0, 18, work1);
-      set.loop.v(patientCar, work1);
-      position(patientCar, 0, 131);
-      move.obj(patientCar, 18, 143, 2, fPatientDone);
-    } else {
-      set(f2ndspot);
-      patientSeq = 10; [ go to spot #2
-      random(19, 37, work1);
-      set.loop.v(patientCar, work1);
-      position(patientCar, 143, 128);
-      move.obj(patientCar, 99, 128, 2, fPatientDone);
-    }
-    draw(patientCar);
-    [ choose a random patient
-    random(2, 6, work1);
-[ TODO: add more patient views
-random(2, 4, work1);
-    set.view.v(patient, work1);
-  }
-} else {
-  if (patientSeq == 0) {
-    [ countdown
-    --patientTimer;
-  }
-}
-if (fPatientDone) {
-  [ parking spot 2
-  if (patientSeq == 20) {
-    erase(patientCar);
-    reset(fPatientHere);
-    reset(fPatientDone);
-    patientSeq = 0;
-    unblock();
-  }
-  if (patientSeq == 19) {
-    move.obj(patientCar, 0, 131, 2, fPatientDone);
-    ++patientSeq;
-  }
-  if (patientSeq == 18) {
-    erase(patient);
-    start.cycling(patientCar);
-    move.obj(patientCar, 61, 131, 1, fPatientDone);
-    unblock();
-    ++patientSeq;
-  }
-  if (patientSeq == 17) {
-    move.obj(patient, 88, 142, 1, fPatientDone);
-    ++patientSeq;  
-  }
-  if (patientSeq == 16) {
-    move.obj(patient, 70, 142, 1, fPatientDone);
-    ++patientSeq;  
-  }
-  if (patientSeq == 15) {
-    erase(patient);
-    patientSeq = 0;
-    set(fPatientHere);
-    reset(fPatientDone);
-  }
-  if (patientSeq == 14) {
-    move.obj(patient, 55, 117, 1, fPatientDone);
-    ++patientSeq;  
-  }
-  if (patientSeq == 13) {
-    stop.cycling(patientCar);
-    ignore.blocks(patientCar);
-    block(78, 138, 99, 142);
-    position(patient, 88, 142);
-    draw(patient);
-    move.obj(patient, 72, 142, 1, fPatientDone);
-    ++patientSeq;
-  }
-  if (patientSeq == 12) {
-    ++patientSeq;  
-    move.obj(patientCar, 83, 141, 1, fPatientDone);
-  }
-  if (patientSeq == 11) {
-    ++patientSeq;  
-    move.obj(patientCar, 61, 141, 1, fPatientDone);
-  }
-  if (patientSeq == 10) {
-    ++patientSeq;  
-    move.obj(patientCar, 75, 129, 2, fPatientDone);
-  }
-  
-  [ parking spot 1
-  if (patientSeq == 8) {
-    erase(patientCar);
-    reset(fPatientHere);
-    reset(fPatientDone);
-    patientSeq = 0;
-  }
-  if (patientSeq == 7) {
-    move.obj(patientCar, 143, 128, 2, fPatientDone);
-    ++patientSeq;
-  }
-  if (patientSeq == 6) {
-    erase(patient);
-    start.cycling(patientCar);
-    move.obj(patientCar, 5, 143, 1, fPatientDone);
-    unblock();
-    ++patientSeq;
-  }
-  if (patientSeq == 5) {
-    move.obj(patient, 25, 140, 1, fPatientDone);
-    ++patientSeq;
-  }
-  if (patientSeq == 4) {
-    move.obj(patient, 38, 127, 1, fPatientDone);
-    ++patientSeq;
-  }
-  if (patientSeq == 3) {
-    erase(patient);
-    patientSeq = 0;
-    set(fPatientHere);
-    reset(fPatientDone);
-  }
-  if (patientSeq == 2) {
-    move.obj(patient, 55, 117, 1, fPatientDone);
-    ++patientSeq;
-  }
-  if (patientSeq == 1) {
-    stop.cycling(patientCar);
-    ignore.blocks(patientCar);
-    block(14, 140, 34, 144);
-    position(patient, 25, 140);
-    draw(patient);
-    move.obj(patient, 55, 125, 1, fPatientDone);
-    ++patientSeq;
-  }
-}
-
-[ check for ego getting run over
-if (!fEgoDead) {
-  get.posn(patientCar, carX, carY);
-  work1 = carY;
-  work1 -= 2;
-  if (egoY >= work1 && egoY <= carY) {
-    work1 = egoX;
-    work1 += 3;
-    work2 = carX;
-    work2+= 15;
-    if (work1 >= carX && egoX <= work2) {
-    [ if ego is on or in front of the car, force priority
-      if (egoY == carY) {
-        get.priority(ego, work1);
-        ++work1;
-        set.priority.v(ego, work1);
-      }
-      set(fEgoDead);
-      patientSeq = 99;
-      stop.motion(patientCar);
-      stop.cycling(patientCar);
-      load.view(vw.EgoDead);
-      set.view(ego, vw.EgoDead);
-      egoDir = STOPPED;
-      program.control();
-      prevent.input();
-      [ turn off auto-cycle to allow cycle-at-rest
-      work1 = 0;
-      set.upper.left(&ego, &work1);
-      work1 = 2;
-      cycle.time(ego, work1);
-      end.of.loop(ego, fDeadDone);
-      print("Uh oh! That car just hit you!");
-    }
   }
 }
 

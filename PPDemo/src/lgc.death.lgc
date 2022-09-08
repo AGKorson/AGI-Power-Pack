@@ -43,6 +43,10 @@ if (deathType != 255) {
   if (deathType == 4) {
     print("Electricity is deadly? Shocking!");
   }
+  [ stunned by bat-mobile security alarm
+  if (deathType == 5) {
+    print("Lesson learned - don't mess with the Dark Knight's ride.");
+  }
   
   [ WINNER!
   if (deathType == 99) {
@@ -64,6 +68,8 @@ if (deathTimer > 0) {
   
 [ after a delay, show ending message to player
 if (deathTimer == 1) {
+
+[ TODO: need to add a flag and messages for winning vs. losing
   print("Thank you for playing this game. Better luck next time!");
 }
 
@@ -113,6 +119,9 @@ if (controller(cAbout)) {
 if (controller(cToggleSound)) {
   toggle(soundOn);
 }
+
+[ run current room logic (animations only)
+call.v(currentRoom);
 
 [ if player tries to input something
 if (haveInput && !haveMatch) {

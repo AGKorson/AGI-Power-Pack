@@ -6,6 +6,8 @@
 [
 [ ********************************************************************
 
+#define tmpvar o0
+
 if(newRoom) 
     {
     [ this is the first cycle through this room
@@ -26,7 +28,7 @@ if(newRoom)
     [ display the picture on screen
     show.pic();
     return();
-    }
+    } [ TODO: also need to delete these test entries
 
 [*****
 :handleInput       [ check for input from player
@@ -64,3 +66,4 @@ return();
 [ messages         [  declared messages go here
 [*****
 #message 1 "You see nothing of interest." 
+[ TODO:

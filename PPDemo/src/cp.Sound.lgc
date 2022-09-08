@@ -23,7 +23,7 @@
 #define oCheck         o7
 #define oTest          o8
 #define oScrlBox       o9
-#define oScrlBkgd     tbQuit
+#define oScrlBkgd     o10
 #define oVolSlider    o11
 
 [ loop values assigned to cursor objects

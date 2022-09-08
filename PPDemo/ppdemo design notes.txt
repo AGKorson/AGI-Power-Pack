@@ -16,14 +16,20 @@ O = item not started
 
 1. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss.
 
+Art/Sound:
     X-background picture (need some bushes/trees on edge to provide cover for vehicles entering/exiting)
     X-cars (make sure enough different styles/colors)
     I-small sized patients (several different versions) 
     X-view of ego getting run over
+    O-view of ego getting stunned by bat-mobile security
     O-car sound effects
     O-game winning/end credits music
     O-end credits views/pictures?
 
+Coding:
+    I-opening sequence
+    I-end game sequence
+    O-look statements
 
 2. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. Three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If ego approaches, receptionist will stop work and speak to ego. If ego asks to use restroom, permission is granted to go into hallway. If ego tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will call a patient to desk and tell them to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Ego should take the magazine and read it.
 
