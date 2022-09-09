@@ -8,9 +8,18 @@
 
 #define backpane   o1
 #define frontpane  o2
+#define oReceptionist o3
+#define oPatient1     o4
+#define oPatient2     o5
+#define oPatient3     o6
 
 #define frontdooropen  f220
 #define fDone          f221
+
+#define recSeq         v220
+#define patient1Seq    v221
+#define patient2Seq    v222
+#define patient3Seq    v223
 
 
 if (newRoom)

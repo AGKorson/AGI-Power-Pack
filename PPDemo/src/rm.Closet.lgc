@@ -99,7 +99,7 @@ if (newRoom) {
     }
   }
   draw(wall);
-  stop.update(wall);
+  stop.cycling(wall);
   
   [ add the broom
   animate.obj(broom);
@@ -117,7 +117,11 @@ if (newRoom) {
     set.cel(broom, 0);
     set.priority(broom, 11);
     position(broom, 59, 152);
-    triptimer = TRIPDELAY;
+    if (wallbreak) {
+      triptimer = TRIPDELAY;
+    } else {
+      triptimer = 0;
+    }
   }
   draw(broom);
   stop.update(broom);
@@ -168,19 +172,22 @@ if (newRoom) {
     position(ego, 100, 147);
     set.loop(ego, 1);
   }
-[  if (previousRoom == rm.Hallway) {
-[    [ restore cursor
-[    cursoricon = cursormode;
-[    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-[  }
-  [ add ego to the room
-  draw(ego);
+  [ add ego to the room, unless trapped
+  if (!trapped) {
+    draw(ego);
+  }
   
   [ display the picture on screen
   show.pic();
   [ fade in
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-
+  [ only restore cursor for Hallway entrance, or if trapped
+  [ (coming from secret room has extra standup sequence)
+  if ((previousRoom == rm.Hallway || fEgoDead)) {
+    [ restore cursor
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  }
   return();
 }
 
@@ -699,6 +706,11 @@ if (fallSeq == STARTFALL) {
   prevent.input();
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ disable click2move if in walk mode
+  if (cursormode == C_WALK) {
+    reset(click2move);
+  }
+    
 }
 if (fDone && fallSeq == MOVE2WALL1) {
   fallSeq = MOVE2WALL2;
@@ -751,12 +763,15 @@ if (fDone && fallSeq == STANDUP) {
   set.loop(ego, 0);
   start.cycling(ego);
   release.loop(ego);
+  [ reenable click2move if in walk mode
+  if (cursormode == C_WALK) {
+    set(click2move);
+  }
   [ restore auto-cycle
   work1 = 1;
   set.upper.left(&ego, &work1);
   triptimer = TRIPDELAY;
 }
-
 [ trip over broom even after first fall, unless it's been moved
 if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
   print("You trip over the broom again!");

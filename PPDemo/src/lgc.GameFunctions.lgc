@@ -53,21 +53,25 @@
 work1 = 0;
 :loop1
   get.string(tmpStr1, m1, -1, 0, 0);
-  work2 = 70;
+  work2 = 70; ['F'
+  [ pass starting pos via vRESULT
   work3 = work1;
   block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
   if (work3 == 255) {
-    [try 'f'
-    work2 = 102;
+    work2 = 102; [ 'f'
     work3 = work1;
     block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
   }
+  [ save result in work1
   work1 = work3;
+  [ if letter 'f' is found
   if (work1 < 255) {
-    [ check for match
+    [ check for match against 'fuck' by getting 
+    [ 'f' plus next three letters
     work2 = 4;
     block(STR.MID, &tmpStr1, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN);
     tmpStr2 = "fuck";
+    [ advance position so loop can look for next 'f'
     ++work1;
     if (compare.strings(tmpStr1, tmpStr2)) {
       print("Watch your language, you son of a bitch!");
@@ -84,16 +88,14 @@ work1 = 0;
 
 [ if player hasn't provided input or if match already found, no need
 [ to do said tests
-if ((!haveInput || haveMatch))
-  {
+if ((!haveInput || haveMatch)) {
   goto(done);
-  }
+}
   
 [ put all generic said tests (those that apply in all rooms) here
 
 [ if player says any dirty words
 [ realtime check for a few words
-[ TODO: need to designate global strings otherwise conflicts are gonna happen
   
 
 if ((said("bad word", "rol") || 
@@ -101,26 +103,22 @@ if ((said("bad word", "rol") ||
      said("anyword", "anyword", "bad word", "rol") || 
      said("anyword", "anyword", "anyword", "bad word", "rol") || 
      said("anyword", "anyword", "anyword", "anyword", "bad word", "rol") || 
-     said("anyword", "anyword", "anyword", "anyword", "anyword", "bad word", "rol"))) 
-  {
+     said("anyword", "anyword", "anyword", "anyword", "anyword", "bad word", "rol"))) {
   ++badWordCount;
-  if (badWordCount == 1) 
-    {
+  if (badWordCount == 1) {
     [ first warning
     print("I am going to tell on you!");
-    }
-  if (badWordCount == 2) 
-    {
+  }
+  if (badWordCount == 2) {
     [second warning
     print("Don't say anymore words like that!");
-    }
-  if (badWordCount == 3) 
-    {
+  }
+  if (badWordCount == 3) {
     [ no more warnings
     print("Don't say I didn't warn you.");
     quit(1);
-    }
   }
+}
 
 
 [[ look cube
@@ -152,23 +150,20 @@ if ((said("bad word", "rol") ||
   
 
 [ look anything
-if ((said("look", "anyword") || said("look", "anyword", "rol"))) 
-  {
+if ((said("look", "anyword") || said("look", "anyword", "rol"))) {
   print("What? Where?");
-  }
+}
 
 
 [ get anything
-if ((said("get", "anyword") || said("get", "anyword", "rol"))) 
-  {
+if ((said("get", "anyword") || said("get", "anyword", "rol"))) {
   print("You can't get that here!");
-  }
+}
 
 [ use anything
-if ((said("use", "anyword") || said("use", "anyword", "rol"))) 
-  {
+if ((said("use", "anyword") || said("use", "anyword", "rol"))) {
   print("What do you want me to do with it?");
-  }
+}
 
 :done
 return();
