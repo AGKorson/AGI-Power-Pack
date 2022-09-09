@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/8/2022 10:18:38 PM"
+   LastEdit = "9/9/2022 11:10:28 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,11 +45,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H6D5B15CE
-   CRC32 = &H6D5B15CE
+   CompCRC32 = &H58B14CA8
+   CRC32 = &H58B14CA8
    ID = lgc.Main
    IsRoom = False
-   Size = 4492
+   Size = 4497
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -319,18 +319,18 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H5CF54691
-   CompCRC32 = &H5CF54691
+   CRC32 = &HB88071D0
+   CompCRC32 = &HB88071D0
    IsRoom = True
-   Size = 5466
+   Size = 5481
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &HD38944F7
-   CompCRC32 = &H79B3B1B8
+   CRC32 = &H57A6E7EB
+   CompCRC32 = &H57A6E7EB
    IsRoom = True
-   Size = 525
+   Size = 778
 
 [Logic4]
    ID = rm.Hallway
@@ -502,7 +502,7 @@
    ID = pic.Lobby
    Description = ""
    BkgdImg = ""
-   Size = 1625
+   Size = 1658
 
 [Picture4]
    ID = pic.Hallway
@@ -778,17 +778,17 @@
 [View23]
    ID = vw.Patient1
    Description = ""
-   Size = 4524
+   Size = 3999
 
 [View24]
    ID = vw.Patient2
    Description = ""
-   Size = 7790
+   Size = 6707
 
 [View25]
    ID = vw.Receptionist
    Description = ""
-   Size = 5665
+   Size = 5028
 
 [View26]
    ID = vw.ParkingLotArt

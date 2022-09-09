@@ -48,6 +48,7 @@
 [ is probably not able to continue; make an announcement to the player
 [ and quit
 if (errorNumber > 0) {
+block(FADE.IN, 0, 0, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
   call(lgc.Error); 
 }
 
@@ -190,6 +191,8 @@ if (controller(cLeftClick)) {
   get.posn(ego, work1, work2);
   display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
 }
+[ show the open closet door timer
+display(24, 0, "%v79|2:%v80|2");
 
 [ if a new room has just been loaded
 if (newRoom) {
@@ -231,7 +234,7 @@ if (newRoom) {
     block(TOGGLE.TIMER, 0, 0, 0); [ toggle.timer(STATE)
   }
 }
-display(24, 0, "%v79|2:%v80|2");
+
 [ check for end of closet timer
 if (closettimer) {
   [ the door gets closed, and if ego is beyond the secret room, he's gonna get stuck

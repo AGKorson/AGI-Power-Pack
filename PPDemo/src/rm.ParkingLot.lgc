@@ -360,14 +360,18 @@ if (fPatientDone) {
   }
   
   [ parking spot 1
-  if (patientSeq == 8) {
+  if (patientSeq == 9) {
     erase(patientCar);
     reset(fPatientHere);
     reset(fPatientDone);
     patientSeq = 0;
   }
-  if (patientSeq == 7) {
+  if (patientSeq == 8) {
     move.obj(patientCar, 143, 128, 2, fPatientDone);
+    ++patientSeq;
+  }  
+  if (patientSeq == 7) {
+    move.obj(patientCar, 20, 128, 2, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 6) {

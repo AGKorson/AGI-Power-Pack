@@ -2,7 +2,9 @@
 [
 [ rm.Lobby
 [
-[ 
+[ receptionist is always here. start with patients 1 and 2
+[ patient 3 arrives later, then patient 1 leaves. continue cycling
+[ with 1-leave, 1-arrive, 2-leave, 2-arrive, etc. 
 [
 [ ********************************************************************
 
@@ -15,15 +17,42 @@
 
 #define frontdooropen  f220
 #define fDone          f221
+#define fAllowPast     f222
 
-#define recSeq         v220
-#define patient1Seq    v221
-#define patient2Seq    v222
-#define patient3Seq    v223
+#define receptionistSeq v220
+#define    IDLE          0
+#define    MOVECENTER    1
+#define    MOVEPHONE     2
+#define    SITDOWN       3
+#define    STANDUP       4
+#define    MOVECOMP      5
+#define    MOVEDESK      6
+#define    MOVEHALL1     7
+#define    MOVEHALL2     8
 
+#define receptionistAction v221
+#define    PHONE         1
+#define    COMPUTER      2
+#define    DESK          3
+#define    HALL          4
+#define    SITSPEAK      5
+#define    STANDSPEAK    6
+#define receptionistTimer  v222
 
-if (newRoom)
-  {
+#define patient1Seq    v223
+#define patient1Action v224
+#define patient1Timer  v225
+
+#define patient2Seq    v226
+#define patient2Action v227
+#define patient2Timer  v228
+
+#define patient3Seq    v226
+#define patient3Action v227
+#define patient3Timer  v228
+
+if (newRoom) {
+
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
@@ -36,8 +65,12 @@ if (newRoom)
   [ the horizon defines the upper limit of ego's movement
   set.horizon(94);
   
+[block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+[set(f10);trace.on();
   [ add additional room initialization here
   load.view(vw.LobbyArt);
+  
+  [ sliding glass door (two parts)
   animate.obj(backpane);
   set.view(backpane, vw.LobbyArt);
   set.loop(backpane, 0);
@@ -45,7 +78,6 @@ if (newRoom)
   ignore.objs(backpane);
   position(backpane, 113, 162);
   set.priority(backpane, 4);
-  
   animate.obj(frontpane);
   set.view(frontpane, vw.LobbyArt);
   set.loop(frontpane, 1);
@@ -54,13 +86,76 @@ if (newRoom)
   position(frontpane, 113, 162);
   set.priority(frontpane, 15);
   
+  [ receptionist
+  load.view(vw.Receptionist);
+  [ loop 0-3 movement
+  [ loop 4: sit at desk, pickup/putdown phone
+  [ loop 5: sit at desk, talking on phone
+  [ loop 6: sit at desk, speaking, looking right
+  [ loop 7: sit at desk, speaking, looking down-right
+  [ loop 8: sit at desk, speaking, looking down
+  [ loop 9: sit at desk, speaking, looking down-left
+  [ loop 10: sit at desk, speaking, looking left
+  [ loop 11: sitdown/getup at desk
+  [ loop 12: stand at desk, turn to left
+  [ loop 13: stand at desk, speaking, looking right
+  [ loop 14: stand at desk, speaking, looking down
+  [ loop 15: stand at desk, speaking, looking left
+  
+  animate.obj(oReceptionist);
+  set.view(oReceptionist, vw.Receptionist);
+  set.loop(oReceptionist, 2);
+  position(oReceptionist, 59, 112);
+  [ 59, 96 for headshot views
+  stop.cycling(oReceptionist);
+  draw(oReceptionist);
+  
+  load.view(vw.Patient1); [ sits against back wall
+  [ loop 0-3: movement
+  [ loop 4: standing, looking right, speaking
+  [ loop 5: sit down/stand up
+  [ loop 6: sitting, get out cell phone
+  [ loop 7: sitting, use cell phone
+  
+  load.view(vw.Patient2); [ sits against side wall
+  [ loop 0-3: movement
+  [ loop 4: standing, looking right, speaking
+  [ loop 5: sit down/stand up
+  [ loop 6: sitting, get out cell phone
+  [ loop 7: sitting, use cell phone A
+  [ loop 8: sitting, use cell phone B
+  [ loop 9: standing, looking right, speaking, hands on hips
+  [ loop 10: sitting, tapping toe
+  
+  [ patient 1
+  [ TODO: need more patient views, and then randomize them when drawing lobby
+  animate.obj(oPatient1);
+  set.view(oPatient1, vw.Patient1);
+  set.loop(oPatient1, 5);
+  position(oPatient1, 102, 98);
+  stop.cycling(oPatient1);
+  ignore.blocks(oPatient1);
+  draw(oPatient1);
+  
+  [ patient 2
+  animate.obj(oPatient2);
+  set.view(oPatient2, vw.Patient2);
+  set.loop(oPatient2, 5);
+  position(oPatient2, 139, 132);
+  stop.cycling(oPatient2);
+  ignore.blocks(oPatient2);
+  draw(oPatient2);
+  
+  [ patient 3
+  animate.obj(oPatient3);
+  ignore.blocks(oPatient3);
+  [ don't draw yet
+  
   [ add toolbar buttons
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
   
-  [ load ego view, animate and draw ego
-  [ this is sometimes handled in logic 0
-  [ instead of in each individual logic
+  [ ego
   if (previousRoom == rm.ParkingLot) {
     position(ego, 115, 163);
     set.loop(ego, 3);
@@ -70,7 +165,7 @@ if (newRoom)
     set.cel(frontpane, 12);
     ignore.objs(backpane);
   } else {
-    position(ego, 86, 105);
+    position(ego, 87, 96);
     reset(frontdooropen);
     set.cel(backpane, 0);
     set.cel(frontpane, 0);
@@ -94,19 +189,21 @@ if (newRoom)
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   return();
-  }
+}
 
 [*****
 :handleInput       [ check for input from player
 [*****
-if (haveInput && !haveMatch && unknownWordNum == 0)
-  {
+if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
-  if (said("look"))
-    {
+  if (said("look")) {
     print("This is the lobby. There is a desk and some chairs in the waiting area.");
-    }
   }
+  if (said("use", "bathroom")) {
+    print.at("Sure! It's through that doorway. Go left and it's the second door on the right.", 6, 6, 35);
+    set(fAllowPast);
+  }
+}
 
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items
@@ -175,15 +272,26 @@ if (fDone) {
 
 [ add exit checks here (or use layout editor)
 
-if (edgeEgoHit == TOP_EDGE)
-  {
-  [ show wait cursor
-  cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Hallway);  [ ##LE001##
+if (edgeEgoHit == TOP_EDGE) {
+  [ only if allowed past
+  if (fAllowPast) {
+    [ show wait cursor
+    cursoricon = C_WAIT;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    [ fade out, then change room
+    block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    new.room(rm.Hallway);  [ ##LE001##
+  } else {
+    print.at("Excuse me sir, only patients are allowed past the lobby.", 6, 6, 35);
+    set.loop(ego, 2);
+    work1 = 0;
+    work2 = 1;
+    reposition(ego, work1, work2);
+    egoDir = STOPPED;
+    [ cancel clicktomove action
+    set.dir(ego, egoDir);
   }
+}
 
 [if (posn(ego, 113, 167, 125, 167)) {
 if (edgeEgoHit == BOTTOM_EDGE) {
