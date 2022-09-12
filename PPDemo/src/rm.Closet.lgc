@@ -884,9 +884,9 @@ if (crouch && fDone) {
   new.room(rm.SecretRoom);  [ ##LE002##
 }
 
-if ((posn(ego, 99, 143, 100, 143) || posn(ego, 100, 144, 101, 144) ||
-     posn(ego, 100, 145, 101, 145) || posn(ego, 101, 146, 102, 146) ||
-     posn(ego, 101, 147, 102, 147))) {
+if ((posn(ego, 100, 143, 100, 143) || posn(ego, 101, 144, 101, 144) ||
+     posn(ego, 101, 145, 101, 145) || posn(ego, 102, 146, 102, 146) ||
+     posn(ego, 102, 147, 102, 147))) {
   if (closetopen) { 
     [ show wait cursor
     cursoricon = C_WAIT;

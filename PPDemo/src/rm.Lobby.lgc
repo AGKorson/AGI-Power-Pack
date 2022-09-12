@@ -8,8 +8,8 @@
 [
 [ ********************************************************************
 
-#define backpane   o1
-#define frontpane  o2
+#define backpane      o1
+#define frontpane     o2
 #define oReceptionist o3
 #define oPatient1     o4
 #define oPatient2     o5
@@ -18,38 +18,106 @@
 #define frontdooropen  f220
 #define fDone          f221
 #define fAllowPast     f222
+#define fRDone         f223
+
 
 #define receptionistSeq v220
 #define    IDLE          0
 #define    MOVECENTER    1
 #define    MOVEPHONE     2
-#define    SITDOWN       3
-#define    STANDUP       4
-#define    MOVECOMP      5
-#define    MOVEDESK      6
-#define    MOVEHALL1     7
-#define    MOVEHALL2     8
+#define    R_SITDOWN     3
+#define    GETPHONE      4
+#define    TALKPHONE     5
+#define    HANGUP        6
+#define    STANDUP       7
+#define    SITSPEAK      8
+#define    STANDSPEAK    9
+#define    MOVECOMP     10
+#define    R_MOVEDESK   11
+#define    MOVEHALL1    12
+#define    MOVEHALL2    13
+#define    MOVEHALL3    14
+#define    RTNHALL1     15
+#define    RTNHALL2     16
+#define    WAITDESK     17
+#define    WAITPHONE    18
+#define    NEWLOCATION  19
 
-#define receptionistAction v221
-#define    PHONE         1
-#define    COMPUTER      2
-#define    DESK          3
-#define    HALL          4
-#define    SITSPEAK      5
-#define    STANDSPEAK    6
+#define receptionistLoc v221
+#define    PHONE         1 [ movephone-sitdown-talkphone/sitspeak-X-standup-movecenter
+#define    COMPUTER      2 [ movecomp-type-X-movecenter
+#define    DESK          3 [ movedesk-lookaround/standspeak-X-movecenter
+#define    HALL          4 [ movehall1-movehall2-pause-X-rtnhall1-rtnhall2-movecenter
 #define receptionistTimer  v222
 
 #define patient1Seq    v223
-#define patient1Action v224
-#define patient1Timer  v225
+#define    MOVESEAT1A    1
+#define    MOVESEAT1B    2
+#define    MOVESEAT2A    3
+#define    MOVESEAT2B    4
+#define    MOVESEAT3A    5
+#define    MOVESEAT3B    6
+#define    MOVESEAT4A    7
+#define    MOVESEAT4B    8
+#define    P_SITDOWN     9
+#define    P_GETPHONE   10
+#define    USEPHONE     11
+#define    STOWPHONE    12
+#define    P_GETUP      13
+#define    P_MOVEDESK   14
+#define    MOVECOUNTER  15 
 
-#define patient2Seq    v226
-#define patient2Action v227
-#define patient2Timer  v228
+#define patient1Loc    v224
+#define    SEAT1       1 [ move1-move2-sitdown-getphone-(usephone-stowphone)
+#define    SEAT2       2
+#define    SEAT3       3
+#define    SEAT4       4
+#define    P_DESK      5
+#define    COUNTER     6
+#define    LEAVE       7
+#define    P_HALL      8
+#define patient1View   v225
+#define patient1Timer  v226
 
-#define patient3Seq    v226
-#define patient3Action v227
-#define patient3Timer  v228
+#define patient2Seq    v227
+#define patient2Action v228
+#define patient2View   v229
+#define patient2Timer  v230
+
+#define patient3Seq    v231
+#define patient3Action v232
+#define patient3View   v233
+#define patient3Timer  v234
+
+
+[[ test to determine memory use of basic game functions 
+[[ (it's about 25K out of 57K)
+[
+[if (newRoom) {
+[
+[  [ this is the first cycle through this room
+[  [ load, draw and discard the picture resource for the current room
+[  load.pic(currentRoom);
+[  draw.pic(currentRoom);
+[  discard.pic(currentRoom);
+[  
+[  [ do basic room initialization
+[  call(lgc.RoomInit);
+[  
+[  [ add toolbar buttons
+[  load.view(vw.Toolbar);
+[  call(lgc.InitToolbar);
+[  
+[  
+[  [ display the picture on screen
+[  show.pic();
+[  [ fade in
+[  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+[  [ restore cursor
+[  cursoricon = cursormode;
+[  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+[
+[return();
 
 if (newRoom) {
 
@@ -65,8 +133,6 @@ if (newRoom) {
   [ the horizon defines the upper limit of ego's movement
   set.horizon(94);
   
-[block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-[set(f10);trace.on();
   [ add additional room initialization here
   load.view(vw.LobbyArt);
   
@@ -74,20 +140,23 @@ if (newRoom) {
   animate.obj(backpane);
   set.view(backpane, vw.LobbyArt);
   set.loop(backpane, 0);
+  fix.loop(backpane);
+  stop.cycling(backpane);
   ignore.blocks(backpane);
   ignore.objs(backpane);
-  position(backpane, 113, 162);
   set.priority(backpane, 4);
   animate.obj(frontpane);
   set.view(frontpane, vw.LobbyArt);
   set.loop(frontpane, 1);
+  fix.loop(frontpane);
+  stop.cycling(frontpane);
   ignore.blocks(frontpane);
   ignore.objs(frontpane);
-  position(frontpane, 113, 162);
   set.priority(frontpane, 15);
   
   [ receptionist
-  load.view(vw.Receptionist);
+  load.view(vw.ReceptionistWalk);
+  load.view(vw.ReceptionistAct);
   [ loop 0-3 movement
   [ loop 4: sit at desk, pickup/putdown phone
   [ loop 5: sit at desk, talking on phone
@@ -103,11 +172,13 @@ if (newRoom) {
   [ loop 15: stand at desk, speaking, looking left
   
   animate.obj(oReceptionist);
-  set.view(oReceptionist, vw.Receptionist);
-  set.loop(oReceptionist, 2);
-  position(oReceptionist, 59, 112);
+  set.view(oReceptionist, vw.ReceptionistAct);
+  set.loop(oReceptionist, 1);
+  receptionistLoc = PHONE;
+  position(oReceptionist, 60, 96);
+  receptionistTimer = 20;
   [ 59, 96 for headshot views
-  stop.cycling(oReceptionist);
+  ignore.horizon(oReceptionist);
   draw(oReceptionist);
   
   load.view(vw.Patient1); [ sits against back wall
@@ -126,13 +197,20 @@ if (newRoom) {
   [ loop 8: sitting, use cell phone B
   [ loop 9: standing, looking right, speaking, hands on hips
   [ loop 10: sitting, tapping toe
-  
-  [ patient 1
+  load.view(vw.Patient3); [ sits against side wall
+  load.view(vw.Patient4); [ sits against side wall
+ 
   [ TODO: need more patient views, and then randomize them when drawing lobby
+  [ patient 1
   animate.obj(oPatient1);
-  set.view(oPatient1, vw.Patient1);
+[  random(23, 26, patient1View);
+patient1View = 23;
+  set.view.v(oPatient1, Patient1View);
   set.loop(oPatient1, 5);
-  position(oPatient1, 102, 98);
+  if (patient1View == 23) {
+    position(oPatient1, 102, 99);
+  } else {
+  }
   stop.cycling(oPatient1);
   ignore.blocks(oPatient1);
   draw(oPatient1);
@@ -141,7 +219,7 @@ if (newRoom) {
   animate.obj(oPatient2);
   set.view(oPatient2, vw.Patient2);
   set.loop(oPatient2, 5);
-  position(oPatient2, 139, 132);
+  position(oPatient2, 139, 133);
   stop.cycling(oPatient2);
   ignore.blocks(oPatient2);
   draw(oPatient2);
@@ -157,30 +235,33 @@ if (newRoom) {
   
   [ ego
   if (previousRoom == rm.ParkingLot) {
-    position(ego, 115, 163);
+    position(ego, 115, 164);
     set.loop(ego, 3);
     egodir = STOPPED;
     set(frontdooropen);
     set.cel(backpane, 12);
-    set.cel(frontpane, 12);
+    position(backpane, 124, 162);
     ignore.objs(backpane);
+    set.cel(frontpane, 12);
+    position(frontpane, 127, 160);
   } else {
-    position(ego, 87, 96);
+    position(ego, 87, 97);
     reset(frontdooropen);
     set.cel(backpane, 0);
-    set.cel(frontpane, 0);
+    position(backpane, 112, 162);
     observe.objs(backpane);
+    set.cel(frontpane, 0);
+    position(frontpane, 113, 160);
   }
   egoDir = STOPPED;
   
-  draw(backpane);
-  stop.update(backpane);
-  draw(frontpane);
-  stop.update(frontpane);
   
   [ add ego to the room
   draw(ego);
   
+  draw(backpane);
+  draw(frontpane);
+
   [ display the picture on screen
   show.pic();
   [ fade in
@@ -208,6 +289,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items
 if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 && 
+    (cursoricon == C_TALK || cursoricon == C_LOOK || cursoricon == C_USE) && 
     controller(cLeftClick)) {
   if (cursormode == C_LOOK) {
     print("This is the lobby. There is a desk and some chairs in the waiting area.");
@@ -229,36 +311,198 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
 }
 
 
-
 [*****
 :noInput           [  all non-input related code goes here 
 [*****
+display(24, 40, "timer: %v222  ");
+[ receptionist
+if (receptionistSeq == 0) {
+  [ check timer
+  --receptionistTimer;
+  if (receptionistTimer == 0) {
+    receptionistSeq = NEWLOCATION;
+  }
+} else {
+  if (fRDone) {
+    reset(fRDone);
+    if (receptionistSeq == RTNHALL1) {
+      receptionistSeq = RTNHALL2;
+      move.obj(oReceptionist, 60, 99, 1, fRDone);
+      goto(doneRSeq);
+    }
+    if ((receptionistSeq == RTNHALL2 || receptionistSeq == STANDUP)) {
+      if (receptionistSeq == STANDUP) {
+        set.view(oReceptionist, vw.ReceptionistWalk);
+        work1 = 0;
+        work2 = 11;
+        normal.cycle(oReceptionist);
+      }
+      if (receptionistLoc == COMPUTER) {
+        receptionistSeq = MOVECOMP;
+        move.obj(oReceptionist, 24, 99, 1, fRDone);
+        goto(doneRSeq);
+      }
+      if (receptionistLoc == PHONE) {
+        receptionistSeq = MOVEPHONE;
+        move.obj(oReceptionist, 58, 107, 1, fRDone);
+        goto(doneRSeq);
+      }
+      if (receptionistLoc == DESK) {
+        receptionistSeq = R_MOVEDESK;
+        move.obj(oReceptionist, 41, 113, 1, fRDone);
+        goto(doneRSeq);
+      }
+      if (receptionistLoc == HALL) {
+        receptionistSeq = MOVEHALL1;
+        move.obj(oReceptionist, 60, 99, 1, fRDone);
+        goto(doneRSeq);
+      }
+    }
+    if (receptionistSeq == MOVEHALL1) {
+      receptionistSeq = MOVEHALL2;
+      move.obj(oReceptionist, 60, 93, 1, fRDone);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == MOVEHALL2) {
+      receptionistSeq = MOVEHALL3;
+      move.obj(oReceptionist, 16, 93, 1, fRDone);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == MOVEHALL3) {
+      receptionistSeq = 0;
+      receptionistTimer = 20;
+      erase(oReceptionist);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == MOVECOMP) {
+      [ switch to computer user loop
+      set.view(oReceptionist, vw.ReceptionistAct);
+      set.loop(oReceptionist, 12);
+      receptionistSeq = 0;
+      receptionistTimer = 20;
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == R_MOVEDESK) {
+      [ TODO: need something for receptionist to do at desk
+      receptionistSeq = 0;
+      receptionistTimer = 20;
+      goto(doneRSeq);  
+    }
+    if (receptionistSeq == HANGUP) {
+      receptionistSeq = STANDUP;
+      work1 = -2;
+      work2 = 0;
+      reposition(oReceptionist, work1, work2);
+      set.loop(oReceptionist, 7);
+      set.cel(oReceptionist, 0);
+      end.of.loop(oReceptionist, fRDone);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == MOVEPHONE) {
+      receptionistSeq = R_SITDOWN;
+      set.view(oReceptionist, vw.ReceptionistAct);
+      set.loop(oReceptionist, 7);
+      set.cel(oReceptionist, 5);
+      work1 = 0;
+      work2 = -11;
+      reposition(oReceptionist, work1, work2);
+      reverse.loop(oReceptionist, fRDone);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == R_SITDOWN) {
+      receptionistSeq = TALKPHONE;
+      set.loop(oReceptionist, 0);
+      work1 = 2;
+      work2 = 0;
+      reposition(oReceptionist, work1, work2);
+      end.of.loop(oReceptionist, fRDone);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == TALKPHONE) {
+      set.loop(oReceptionist, 1);
+      normal.cycle(oReceptionist);
+      receptionistSeq = 0;
+      receptionistTimer = 20;
+    }
+  }
+}
+:doneRSeq
 
-[ add other room specific statements here
-if (posn(ego, 105, 156, 127, 167)) {
+if (receptionistSeq == NEWLOCATION) {
+  [ choose a new location
+  :newLoc
+  random(1, 4, work1);
+[work1 = receptionistLoc;
+[++work1;
+[if (work1 == 5) {work1 = 1;}
+  if (work1 == receptionistLoc) {
+    goto(newLoc);
+  }
+  if (receptionistLoc == HALL) {
+    receptionistSeq = RTNHALL1;
+    draw(oReceptionist);
+    move.obj(oReceptionist, 60, 93, 1, fRDone);
+  } else {
+    if (receptionistLoc == PHONE) {
+      receptionistSeq = HANGUP;
+      set.loop(oReceptionist, 0);
+      set.cel(oReceptionist, 6);
+      reverse.loop(oReceptionist, fRDone);
+    } else {
+      if (work1 == HALL) {
+        receptionistSeq = MOVEHALL1;
+        move.obj(oReceptionist, 60, 99, 1, fRDone);
+      } else {
+        if (work1 == COMPUTER) {
+          receptionistSeq = MOVECOMP;
+          move.obj(oReceptionist, 24, 99, 1, fRDone);
+        } else {
+          if (work1 == DESK) {
+            receptionistSeq = R_MOVEDESK;
+            move.obj(oReceptionist, 41, 113, 1, fRDone);
+          } else {
+            receptionistSeq = MOVEPHONE;
+            move.obj(oReceptionist, 58, 107, 1, fRDone);
+          }
+        }
+      }
+    }
+  }
+  if (receptionistLoc != PHONE) {
+    set.view(oReceptionist, vw.ReceptionistWalk);
+  }
+  receptionistLoc = work1;
+}
+
+[ check for door auto-open
+if (posn(ego, 105, 157, 127, 167)) {
   if (!frontdooropen) {
     [ open it
     set(frontdooropen);
-    start.update(backpane);
-    end.of.loop(backpane, fDone);
-    start.update(frontpane);
-    end.of.loop(frontpane, fDone); [ ok to re-use fDone here!
+    start.cycling(backpane);
+    normal.cycle(backpane);
+    move.obj(backpane, 124, 162, 1, fDone);
+    start.cycling(frontpane);
+    normal.cycle(frontpane);
+    move.obj(frontpane, 127, 160, 1, fDone);
   }
 } else {
   if (frontdooropen) {
     [ close it
     reset(frontdooropen);
-    start.update(backpane);
-    reverse.loop(backpane, fDone);
-    start.update(frontpane);
-    reverse.loop(frontpane, fDone);
+    start.cycling(backpane);
+    move.obj(backpane, 112, 162, 1, fDone);
+    reverse.cycle(backpane);
+    start.cycling(frontpane);
+    move.obj(frontpane, 115, 160, 1, fDone);
+    reverse.cycle(frontpane);
   }
 }
 
 if (fDone) {
   reset(fDone);
-  stop.update(backpane);
-  stop.update(frontpane);
+  stop.cycling(backpane);
+  stop.cycling(frontpane);
   if (frontdooropen) {
     ignore.objs(backpane);
   } else {
@@ -293,7 +537,6 @@ if (edgeEgoHit == TOP_EDGE) {
   }
 }
 
-[if (posn(ego, 113, 167, 125, 167)) {
 if (edgeEgoHit == BOTTOM_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
