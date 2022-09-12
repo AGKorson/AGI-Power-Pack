@@ -191,8 +191,9 @@ if (controller(cLeftClick)) {
   get.posn(ego, work1, work2);
   display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
 }
-[ show the open closet door timer
-display(24, 0, "%v79|2:%v80|2");
+[[ show the open closet door timer
+[ display(24, 0, "%v79|2:%v80|2");
+display(24, 0, "mem pages: %v8  ");
 
 [ if a new room has just been loaded
 if (newRoom) {

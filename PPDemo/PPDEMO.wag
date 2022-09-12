@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/12/2022 2:03:43 AM"
+   LastEdit = "9/12/2022 7:37:43 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,11 +45,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H58B14CA8
-   CRC32 = &H58B14CA8
+   CompCRC32 = &H53B04D2B
+   CRC32 = &H53B04D2B
    ID = lgc.Main
    IsRoom = False
-   Size = 4497
+   Size = 4500
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -327,10 +327,10 @@
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H741313A
-   CompCRC32 = &H741313A
+   CRC32 = &HD5062E89
+   CompCRC32 = &HD5062E89
    IsRoom = True
-   Size = 1374
+   Size = 1421
 
 [Logic4]
    ID = rm.Hallway
@@ -793,11 +793,12 @@
 [View30]
    ID = vw.ReceptionistAct
    Description = ""
-   Size = 3301
+   Size = 2897
 
 [View31]
    ID = vw.ParkingLotArt
    Description = ""
+   Size = -1
 
 [View32]
    ID = vw.Cassette
@@ -822,4 +823,5 @@
 [View29]
    ID = vw.ReceptionistWalk
    Description = ""
+   Size = -1
 [::END Views::]

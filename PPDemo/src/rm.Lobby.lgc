@@ -173,11 +173,10 @@ if (newRoom) {
   
   animate.obj(oReceptionist);
   set.view(oReceptionist, vw.ReceptionistAct);
-  set.loop(oReceptionist, 1);
+  set.loop(oReceptionist, 2);
   receptionistLoc = PHONE;
   position(oReceptionist, 60, 96);
   receptionistTimer = 20;
-  [ 59, 96 for headshot views
   ignore.horizon(oReceptionist);
   draw(oReceptionist);
   
@@ -377,7 +376,7 @@ if (receptionistSeq == 0) {
     if (receptionistSeq == MOVECOMP) {
       [ switch to computer user loop
       set.view(oReceptionist, vw.ReceptionistAct);
-      set.loop(oReceptionist, 12);
+      set.loop(oReceptionist, 9);
       receptionistSeq = 0;
       receptionistTimer = 20;
       goto(doneRSeq);
@@ -393,7 +392,7 @@ if (receptionistSeq == 0) {
       work1 = -2;
       work2 = 0;
       reposition(oReceptionist, work1, work2);
-      set.loop(oReceptionist, 7);
+      set.loop(oReceptionist, 0);
       set.cel(oReceptionist, 0);
       end.of.loop(oReceptionist, fRDone);
       goto(doneRSeq);
@@ -401,7 +400,7 @@ if (receptionistSeq == 0) {
     if (receptionistSeq == MOVEPHONE) {
       receptionistSeq = R_SITDOWN;
       set.view(oReceptionist, vw.ReceptionistAct);
-      set.loop(oReceptionist, 7);
+      set.loop(oReceptionist, 0);
       set.cel(oReceptionist, 5);
       work1 = 0;
       work2 = -11;
@@ -410,17 +409,22 @@ if (receptionistSeq == 0) {
       goto(doneRSeq);
     }
     if (receptionistSeq == R_SITDOWN) {
-      receptionistSeq = TALKPHONE;
-      set.loop(oReceptionist, 0);
+      receptionistSeq = GETPHONE;
+      set.loop(oReceptionist, 1);
       work1 = 2;
       work2 = 0;
       reposition(oReceptionist, work1, work2);
       end.of.loop(oReceptionist, fRDone);
       goto(doneRSeq);
     }
-    if (receptionistSeq == TALKPHONE) {
-      set.loop(oReceptionist, 1);
+    if (receptionistSeq == GETPHONE) {
+      receptionistSeq = TALKPHONE;
+      set.loop(oReceptionist, 2);
       normal.cycle(oReceptionist);
+      set(fRDone);
+      goto(doneRSeq);
+    }
+    if (receptionistSeq == TALKPHONE) {
       receptionistSeq = 0;
       receptionistTimer = 20;
     }
@@ -445,7 +449,7 @@ if (receptionistSeq == NEWLOCATION) {
   } else {
     if (receptionistLoc == PHONE) {
       receptionistSeq = HANGUP;
-      set.loop(oReceptionist, 0);
+      set.loop(oReceptionist, 1);
       set.cel(oReceptionist, 6);
       reverse.loop(oReceptionist, fRDone);
     } else {
@@ -517,8 +521,8 @@ if (fDone) {
 [ add exit checks here (or use layout editor)
 
 if (edgeEgoHit == TOP_EDGE) {
-  [ only if allowed past
-  if (fAllowPast) {
+  [ only if allowed past (or if receptionist is in hallway)
+  if ((fAllowPast || receptionistSeq == RTNHALL1 || receptionistSeq == MOVEHALL2 || receptionistSeq == MOVEHALL3)) {
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -526,7 +530,12 @@ if (edgeEgoHit == TOP_EDGE) {
     block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
     new.room(rm.Hallway);  [ ##LE001##
   } else {
-    print.at("Excuse me sir, only patients are allowed past the lobby.", 6, 6, 35);
+    work1 = LT_MAGENTA;
+    work2 = MAGENTA;
+    work3 = WHITE;
+    block(MSGBOX.COLOR.V, &work1, &work2, &work3); [ msgbox.color.v(vBORDER, vFG, vBG)
+    print.at("\"Excuse me sir, only patients are allowed past the lobby.\"", 6, 6, 35);
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
     set.loop(ego, 2);
     work1 = 0;
     work2 = 1;
