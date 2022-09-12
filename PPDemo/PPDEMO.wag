@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/12/2022 7:37:43 AM"
+   LastEdit = "9/12/2022 3:53:26 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -124,118 +124,6 @@
    Size = 1153
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
 
-[Logic201]
-   ID = lgc.mod2272
-   Description = ""
-   CRC32 = &H17C4C94A
-   CompCRC32 = &H17C4C94A
-   IsRoom = False
-   Size = 21127
-
-[Logic200]
-   ID = lgc.mod2089
-   Description = ""
-   CRC32 = &HE85B2C8D
-   CompCRC32 = &HE85B2C8D
-   IsRoom = False
-   Size = 21037
-
-[Logic202]
-   ID = lgc.mod2411
-   Description = ""
-   CRC32 = &H24B95EDA
-   CompCRC32 = &H24B95EDA
-   IsRoom = False
-   Size = 21920
-
-[Logic203]
-   ID = lgc.mod2425
-   Description = ""
-   CRC32 = &H3DAA21B0
-   CompCRC32 = &H3DAA21B0
-   IsRoom = False
-   Size = 21920
-
-[Logic204]
-   ID = lgc.mod2426
-   Description = ""
-   CRC32 = &H9B84BDF3
-   CompCRC32 = &H9B84BDF3
-   IsRoom = False
-   Size = 21920
-
-[Logic205]
-   ID = lgc.mod2435
-   Description = ""
-   CRC32 = &H589F3816
-   CompCRC32 = &H589F3816
-   IsRoom = False
-   Size = 21924
-
-[Logic206]
-   ID = lgc.mod2439
-   Description = ""
-   CRC32 = &H4F4A857
-   CompCRC32 = &H4F4A857
-   IsRoom = False
-   Size = 21924
-
-[Logic207]
-   ID = lgc.mod2440
-   Description = ""
-   CRC32 = &H1663C8B8
-   CompCRC32 = &H1663C8B8
-   IsRoom = False
-   Size = 21924
-
-[Logic208]
-   ID = lgc.mod2903
-   Description = ""
-   CRC32 = &H2C38C2B7
-   CompCRC32 = &H2C38C2B7
-   IsRoom = False
-   Size = 21567
-
-[Logic209]
-   ID = lgc.mod2911
-   Description = ""
-   CRC32 = &HB687257D
-   CompCRC32 = &HB687257D
-   IsRoom = False
-   Size = 21567
-
-[Logic210]
-   ID = lgc.mod2912
-   Description = ""
-   CRC32 = &H5A1C8250
-   CompCRC32 = &H5A1C8250
-   IsRoom = False
-   Size = 21567
-
-[Logic211]
-   ID = lgc.mod2915
-   Description = ""
-   CRC32 = &HE90448F
-   CompCRC32 = &HE90448F
-   IsRoom = False
-   Size = 21567
-
-[Logic212]
-   ID = lgc.mod2917
-   Description = ""
-   CRC32 = &H38FD2BB2
-   CompCRC32 = &H38FD2BB2
-   IsRoom = False
-   Size = 21651
-
-[Logic213]
-   ID = lgc.mod2936
-   Description = ""
-   CRC32 = &HEE92B987
-   CompCRC32 = &HEE92B987
-   IsRoom = False
-   Size = 21589
-
 [Logic15]
    ID = lgc.TerminalFunctions
    Description = ""
@@ -327,10 +215,10 @@
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &HD5062E89
-   CompCRC32 = &HD5062E89
+   CRC32 = &H2B60C034
+   CompCRC32 = &H2B60C034
    IsRoom = True
-   Size = 1421
+   Size = 1426
 
 [Logic4]
    ID = rm.Hallway
@@ -411,6 +299,104 @@
    CompCRC32 = &H4E2DD50E
    IsRoom = False
    Size = 320
+
+[Logic100]
+   ID = lgc.mod2089
+   Description = ""
+   CRC32 = &HE85B2C8D
+   CompCRC32 = &HE85B2C8D
+   IsRoom = False
+
+[Logic101]
+   ID = lgc.mod2272
+   Description = ""
+   CRC32 = &H17C4C94A
+   CompCRC32 = &H17C4C94A
+   IsRoom = False
+
+[Logic102]
+   ID = lgc.mod2411
+   Description = ""
+   CRC32 = &H24B95EDA
+   CompCRC32 = &H24B95EDA
+   IsRoom = False
+
+[Logic103]
+   ID = lgc.mod2425
+   Description = ""
+   CRC32 = &H3DAA21B0
+   CompCRC32 = &H3DAA21B0
+   IsRoom = False
+
+[Logic104]
+   ID = lgc.mod2426
+   Description = ""
+   CRC32 = &H9B84BDF3
+   CompCRC32 = &H9B84BDF3
+   IsRoom = False
+
+[Logic105]
+   ID = lgc.mod2435
+   Description = ""
+   CRC32 = &H589F3816
+   CompCRC32 = &H589F3816
+   IsRoom = False
+
+[Logic106]
+   ID = lgc.mod2439
+   Description = ""
+   CRC32 = &H4F4A857
+   CompCRC32 = &H4F4A857
+   IsRoom = False
+
+[Logic107]
+   ID = lgc.mod2440
+   Description = ""
+   CRC32 = &H1663C8B8
+   CompCRC32 = &H1663C8B8
+   IsRoom = False
+
+[Logic108]
+   ID = lgc.mod2903
+   Description = ""
+   CRC32 = &H2C38C2B7
+   CompCRC32 = &H2C38C2B7
+   IsRoom = False
+
+[Logic109]
+   ID = lgc.mod2911
+   Description = ""
+   CRC32 = &HB687257D
+   CompCRC32 = &HB687257D
+   IsRoom = False
+
+[Logic110]
+   ID = lgc.mod2912
+   Description = ""
+   CRC32 = &H5A1C8250
+   CompCRC32 = &H5A1C8250
+   IsRoom = False
+
+[Logic111]
+   ID = lgc.mod2915
+   Description = ""
+   CRC32 = &HE90448F
+   CompCRC32 = &HE90448F
+   IsRoom = False
+
+[Logic112]
+   ID = lgc.mod2917
+   Description = ""
+   CRC32 = &H38FD2BB2
+   CompCRC32 = &H38FD2BB2
+   IsRoom = False
+
+[Logic113]
+   ID = lgc.mod2936
+   Description = ""
+   CRC32 = &HEE92B987
+   CompCRC32 = &HEE92B987
+   IsRoom = False
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -431,12 +417,6 @@
    Description = ""
    Size = 1863
    BkgdImg = ""
-
-[Picture99]
-   ID = pic.TestPalette
-   Description = ""
-   BkgdImg = ""
-   Size = -1
 
 [Picture21]
    ID = pic.cp.Terminal
@@ -527,6 +507,11 @@
    Description = ""
    BkgdImg = ""
    Size = 6715
+
+[Picture30]
+   ID = pic.TestPalette
+   Description = ""
+   BkgdImg = ""
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -640,16 +625,6 @@
 [::END Sounds::]
 
 [::BEGIN Views::]
-[View218]
-   ID = vw.OpeningCredits
-   Description = "Example of startup credits that fade in and fade out. Used on the introduction page."
-   Size = 3451
-
-[View220]
-   ID = vw.Inv.TestItem
-   Description = "Inventory view of a sample item that includes a border."
-   Size = 537
-
 [View8]
    ID = vw.cp.PaletteArt
    Description = ""
@@ -778,12 +753,12 @@
 [View23]
    ID = vw.Patient1
    Description = ""
-   Size = 5139
+   Size = 3241
 
 [View24]
    ID = vw.Patient2
    Description = ""
-   Size = 6630
+   Size = 6510
 
 [View28]
    ID = vw.Nurse
@@ -824,4 +799,12 @@
    ID = vw.ReceptionistWalk
    Description = ""
    Size = -1
+
+[View50]
+   ID = vw.OpeningCredits
+   Description = "Example of startup credits that fade in and fade out. Used on the introduction page."
+
+[View49]
+   ID = vw.Inv.TestItem
+   Description = "Inventory view of a sample item that includes a border."
 [::END Views::]

@@ -3,8 +3,9 @@
 [ rm.Lobby
 [
 [ receptionist is always here. start with patients 1 and 2
-[ patient 3 arrives later, then patient 1 leaves. continue cycling
-[ with 1-leave, 1-arrive, 2-leave, 2-arrive, etc. 
+[ patient 3 arrives later. Patient 2 will then leave, patient 4
+[ (reusing object number for patient 2 will arrive. Patient 3
+[ then leaves; no more patient changes after that.
 [
 [ ********************************************************************
 
@@ -20,74 +21,70 @@
 #define fAllowPast     f222
 #define fRDone         f223
 
-
-#define receptionistSeq v220
-#define    IDLE          0
-#define    MOVECENTER    1
-#define    MOVEPHONE     2
-#define    R_SITDOWN     3
-#define    GETPHONE      4
-#define    TALKPHONE     5
-#define    HANGUP        6
-#define    STANDUP       7
-#define    SITSPEAK      8
-#define    STANDSPEAK    9
-#define    MOVECOMP     10
-#define    R_MOVEDESK   11
-#define    MOVEHALL1    12
-#define    MOVEHALL2    13
-#define    MOVEHALL3    14
-#define    RTNHALL1     15
-#define    RTNHALL2     16
-#define    WAITDESK     17
-#define    WAITPHONE    18
-#define    NEWLOCATION  19
-
-#define receptionistLoc v221
-#define    PHONE         1 [ movephone-sitdown-talkphone/sitspeak-X-standup-movecenter
-#define    COMPUTER      2 [ movecomp-type-X-movecenter
-#define    DESK          3 [ movedesk-lookaround/standspeak-X-movecenter
-#define    HALL          4 [ movehall1-movehall2-pause-X-rtnhall1-rtnhall2-movecenter
+#define receptionistLoc v220
+#define    PHONE         1
+#define    COMPUTER      2
+#define    DESK          3
+#define    HALL          4
+#define receptionistSeq v221
 #define receptionistTimer  v222
-
 #define patient1Seq    v223
-#define    MOVESEAT1A    1
-#define    MOVESEAT1B    2
-#define    MOVESEAT2A    3
-#define    MOVESEAT2B    4
-#define    MOVESEAT3A    5
-#define    MOVESEAT3B    6
-#define    MOVESEAT4A    7
-#define    MOVESEAT4B    8
-#define    P_SITDOWN     9
-#define    P_GETPHONE   10
-#define    USEPHONE     11
-#define    STOWPHONE    12
-#define    P_GETUP      13
-#define    P_MOVEDESK   14
-#define    MOVECOUNTER  15 
+#define patient1Timer  v225
+#define patient2Seq    v226
+#define patient2Timer  v228
+#define patient3Seq    v229
+#define patient3Timer  v231
 
-#define patient1Loc    v224
-#define    SEAT1       1 [ move1-move2-sitdown-getphone-(usephone-stowphone)
-#define    SEAT2       2
-#define    SEAT3       3
-#define    SEAT4       4
-#define    P_DESK      5
-#define    COUNTER     6
-#define    LEAVE       7
-#define    P_HALL      8
-#define patient1View   v225
-#define patient1Timer  v226
+[ sequence actions for receptionist
+#define    IDLE          0
+#define    MOVEPHONE     1
+#define    SITDOWN       2
+#define    GETPHONE      3
+#define    TALKPHONE     4
+#define    HANGUP        5
+#define    STANDUP       6
+#define    SITSPEAK      7
+#define    STANDSPEAK    8
+#define    MOVECOMP      9
+#define    R_MOVEDESK   10
+#define    MOVEHALL1    11
+#define    MOVEHALL2    12
+#define    MOVEHALL3    13
+#define    RTNHALL1     14
+#define    RTNHALL2     15
+#define    WAITDESK     16
+#define    WAITPHONE    17
+#define    NEWLOCATION  18
 
-#define patient2Seq    v227
-#define patient2Action v228
-#define patient2View   v229
-#define patient2Timer  v230
-
-#define patient3Seq    v231
-#define patient3Action v232
-#define patient3View   v233
-#define patient3Timer  v234
+[ sequence actions for patient 1
+[#define    STANDUP       6
+#define    MOVECOUNTER  19
+#define    TALKCOUNTER  20
+#define    MOVESEAT1    21
+[#define    SITDOWN       2
+[#define    GETPHONE      3
+#define    USEPHONE     22
+#define    STOWPHONE    23
+#define    GETBOOK      24
+#define    READBOOK     25
+#define    STOWBOOK     26
+[ sequence actions for patient 2/3
+[#define    STANDUP       6
+[#define    MOVECOUNTER  19
+[#define    TALKCOUNTER  20
+#define    MOVESEAT2    27
+#define    MOVESEAT3    28
+[#define    SITDOWN       2
+#define    TAPTOE       29
+[#define    GETPHONE      3
+[#define    USEPHONE     22
+[#define    STOWPHONE    23
+[#define    MOVEHALL1    11
+[#define    MOVEHALL2    12
+[#define    MOVEHALL3    13
+#define    MOVEHALL4    30
+[#define    RTNHALL1     14
+[#define    RTNHALL2     15
 
 
 [[ test to determine memory use of basic game functions 
@@ -157,20 +154,6 @@ if (newRoom) {
   [ receptionist
   load.view(vw.ReceptionistWalk);
   load.view(vw.ReceptionistAct);
-  [ loop 0-3 movement
-  [ loop 4: sit at desk, pickup/putdown phone
-  [ loop 5: sit at desk, talking on phone
-  [ loop 6: sit at desk, speaking, looking right
-  [ loop 7: sit at desk, speaking, looking down-right
-  [ loop 8: sit at desk, speaking, looking down
-  [ loop 9: sit at desk, speaking, looking down-left
-  [ loop 10: sit at desk, speaking, looking left
-  [ loop 11: sitdown/getup at desk
-  [ loop 12: stand at desk, turn to left
-  [ loop 13: stand at desk, speaking, looking right
-  [ loop 14: stand at desk, speaking, looking down
-  [ loop 15: stand at desk, speaking, looking left
-  
   animate.obj(oReceptionist);
   set.view(oReceptionist, vw.ReceptionistAct);
   set.loop(oReceptionist, 2);
@@ -180,36 +163,31 @@ if (newRoom) {
   ignore.horizon(oReceptionist);
   draw(oReceptionist);
   
-  load.view(vw.Patient1); [ sits against back wall
-  [ loop 0-3: movement
-  [ loop 4: standing, looking right, speaking
-  [ loop 5: sit down/stand up
-  [ loop 6: sitting, get out cell phone
-  [ loop 7: sitting, use cell phone
-  
-  load.view(vw.Patient2); [ sits against side wall
-  [ loop 0-3: movement
-  [ loop 4: standing, looking right, speaking
-  [ loop 5: sit down/stand up
-  [ loop 6: sitting, get out cell phone
-  [ loop 7: sitting, use cell phone A
-  [ loop 8: sitting, use cell phone B
-  [ loop 9: standing, looking right, speaking, hands on hips
-  [ loop 10: sitting, tapping toe
-  load.view(vw.Patient3); [ sits against side wall
+  [ patients
+  [ patient 1 is old lady; sits against back wall,
+  [ uses phone, reads book, talks to receptionist;
+  [ never leaves lobby
+  load.view(vw.Patient1); 
+  [ patient 2 sits against side wall, uses phone, 
+  [taps toe, talks to receptionist, goes to hall, leaves
+  load.view(vw.Patient2); 
+  [ patient 3 starts out off screen, arrives just before
+  [ patient 2 leaves; after arriving, sits against side
+  [ wall, uses phone, talks to receptionist, goes to
+  [ hall, leaves
+  load.view(vw.Patient3);
+  [ patient 4 starts out off screen, arrives just before
+  [ patient 3 leaves; after arriving, sits against side
+  [ wall, uses phone, talks to receptionist, goes to
+  [ hall; never leaves lobby area
   load.view(vw.Patient4); [ sits against side wall
  
-  [ TODO: need more patient views, and then randomize them when drawing lobby
-  [ patient 1
+  [ patient 1: old woman, who never leaves lobby
+  [ start in chair, idle
   animate.obj(oPatient1);
-[  random(23, 26, patient1View);
-patient1View = 23;
-  set.view.v(oPatient1, Patient1View);
+  set.view(oPatient1, vw.Patient1);
   set.loop(oPatient1, 5);
-  if (patient1View == 23) {
-    position(oPatient1, 102, 99);
-  } else {
-  }
+  position(oPatient1, 102, 99);
   stop.cycling(oPatient1);
   ignore.blocks(oPatient1);
   draw(oPatient1);
@@ -269,6 +247,13 @@ patient1View = 23;
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   return();
+}
+
+[ adjust priority around the counter corner
+if (posn(ego, 65, 113, 75, 120)) {
+  set.priority(ego, 11);
+} else {
+  release.priority(ego);
 }
 
 [*****
@@ -398,7 +383,7 @@ if (receptionistSeq == 0) {
       goto(doneRSeq);
     }
     if (receptionistSeq == MOVEPHONE) {
-      receptionistSeq = R_SITDOWN;
+      receptionistSeq = SITDOWN;
       set.view(oReceptionist, vw.ReceptionistAct);
       set.loop(oReceptionist, 0);
       set.cel(oReceptionist, 5);
@@ -408,7 +393,7 @@ if (receptionistSeq == 0) {
       reverse.loop(oReceptionist, fRDone);
       goto(doneRSeq);
     }
-    if (receptionistSeq == R_SITDOWN) {
+    if (receptionistSeq == SITDOWN) {
       receptionistSeq = GETPHONE;
       set.loop(oReceptionist, 1);
       work1 = 2;
