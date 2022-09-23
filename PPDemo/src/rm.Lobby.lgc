@@ -46,12 +46,13 @@
 #define fAskToPee      f228
 #define fOneMinute     f229
 #define fEgoWaitTalk   f230
-#define fClickOn       f231
+#define fSlipped       f231
 #define fPatient1Talking      f232
 #define fEgoTalkReceptionist  f233
 #define fEgoTalkPatient       f234
 #define checktalk      f235
 #define fPatientAtDoor f236
+#define fP24Visible    f237
 
 
 #define receptionistLoc v220
@@ -252,7 +253,7 @@ if (newRoom) {
   set(noScript);
   load.view(vw.Patient2);
   reset(noScript);
-  
+  set.view(oPatient2, vw.Patient2);
   if (patient2Loc == LOC_GONE) {
     patient2Seq = SKIP;
   } else {
@@ -265,6 +266,7 @@ if (newRoom) {
       patient2Seq = IDLE;
       patient2Timer = 30;
       draw(oPatient2);
+      set(fP24Visible);
     } else {
       position(oPatient2, 12, 92);
     }
@@ -308,6 +310,7 @@ if (newRoom) {
       patient4Seq = IDLE;
       patient4Timer = 40;
       draw(oPatient4);
+      set(fP24Visible);
     } else {
       position(oPatient4, 12, 92);
     }
@@ -351,7 +354,7 @@ if (newRoom) {
 }
 
 [ need to check for restore game so patient2/4 view can 
-[ be loaded correctly
+[ be loaded and drawn correctly
 if (gameRestored) {
   set(noScript);
   if (patient4Loc == LOC_GONE) {
@@ -360,6 +363,9 @@ if (gameRestored) {
     load.view(vw.Patient4);
   }
   reset(noScript);
+  if (fP24Visible) {
+    draw(oPatient2);
+  }
 }
 
 [ check for one min timer
@@ -489,7 +495,7 @@ if (checktalk) {
       if (fPatient1Talking) {
         print("She is busy talking to that patient. Wait until they're done.");
       } else {
-        if (egoY > 96) {
+        if (egoY < 96) {
           [ if already talking, ignore the click
           if (!fEgoTalkReceptionist) {
             block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -1071,6 +1077,7 @@ if (patient2Timer == 0) {
     set.loop(oPatient2, LP_MOVERIGHT);
     normal.cycle(oPatient2);
     draw(oPatient2);
+    set(fP24Visible);
     move.obj(oPatient2, 86, 91, 1, fP2Done);
     goto(p2SeqDone);
   }
@@ -1094,6 +1101,7 @@ if (patient2Timer == 0) {
     normal.cycle(oPatient2);
     position(oPatient2, 116, 167);
     draw(oPatient2);
+    set(fP24Visible);
     move.obj(oPatient2, 116, 142, 1, fP2Done);
     goto(p2SeqDone);
   }
@@ -1186,6 +1194,7 @@ if (fP2Done) {
   }
   if (patient2Seq == MOVEHALL3) {
     erase(oPatient2);
+    reset(fP24Visible);
     goto(p2SeqDone);
   }
   if (patient2Seq == RTNHALL1) {
@@ -1210,6 +1219,7 @@ if (fP2Done) {
   if (patient2Seq == RTNHALL4) {
     patient2Seq = IDLE;
     erase(oPatient2);
+    reset(fP24Visible);
     reset(fPatientAtDoor);
   }
 }
@@ -1412,6 +1422,7 @@ if (patient4Timer == 0) {
     patient4Seq = RTNHALL1;
     set.loop(oPatient4, LP_MOVERIGHT);
     draw(oPatient4);
+    set(fP24Visible);
     move.obj(oPatient4, 86, 91, 1, fP4Done);
     goto(p4SeqDone);
   }
@@ -1435,6 +1446,7 @@ if (patient4Timer == 0) {
     normal.cycle(oPatient4);
     position(oPatient4, 116, 167);
     draw(oPatient4);
+    set(fP24Visible);
     move.obj(oPatient4, 116, 142, 1, fP4Done);
     goto(p4SeqDone);
   }
@@ -1525,6 +1537,7 @@ if (fP4Done) {
   }
   if (patient4Seq == MOVEHALL3) {
     erase(oPatient4);
+    reset(fP24Visible);
     goto(p4SeqDone);
   }
   if (patient4Seq == RTNHALL1) {
@@ -1549,6 +1562,7 @@ if (fP4Done) {
   if (patient4Seq == RTNHALL4) {
     patient4Seq = IDLE;
     erase(oPatient4);
+    reset(fP24Visible);
     reset(fPatientAtDoor);
   }
 }
@@ -1592,6 +1606,20 @@ if (fPaneDone) {
   }
 }
 
+[ check for a slip
+if (egoHitSpecial) {
+  load.view(vw.EgoDead);
+  set.view(ego, vw.EgoDead);
+  set.loop(ego, 4);
+  set.cel(ego, 0);
+  end.of.loop(ego, fSlipped);
+  program.control();
+  stop.motion(ego);
+  prevent.input();
+}
+if (fSlipped) {
+  reset(fSlipped);
+  print("Why didn't 
 [*****
 :exit              [  test for leaving the room
 [*****

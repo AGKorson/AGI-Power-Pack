@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/22/2022 4:17:30 PM"
+   LastEdit = "9/23/2022 6:10:19 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,11 +45,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HBB46C052
-   CRC32 = &HBB46C052
+   CompCRC32 = &H9A915970
+   CRC32 = &H9A915970
    ID = lgc.Main
    IsRoom = False
-   Size = 4500
+   Size = 4522
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -215,10 +215,10 @@
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H6AB46DB9
-   CompCRC32 = &H6AB46DB9
+   CRC32 = &H64DEBEEC
+   CompCRC32 = &H6E8E4706
    IsRoom = True
-   Size = 4831
+   Size = 4862
 
 [Logic4]
    ID = rm.Hallway
@@ -287,10 +287,10 @@
 [Logic12]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &HDD6F7371
-   CompCRC32 = &HDD6F7371
+   CRC32 = &HEBEA2329
+   CompCRC32 = &HEBEA2329
    IsRoom = False
-   Size = 501
+   Size = 523
 
 [Logic13]
    ID = lgc.Statusbar
@@ -495,8 +495,12 @@
 [Picture3]
    ID = pic.Lobby
    Description = ""
-   BkgdImg = ""
-   Size = 1658
+   BkgdImg = C:\Users\Andy\OneDrive\Desktop\wetfloor.jpg
+   Size = 1774
+   BkgdShow = False
+   BkgdTrans = 186
+   BkgdPosn = 15|120|0|0
+   BkgdSize = 32|32|2786|2786
 
 [Picture4]
    ID = pic.Hallway
@@ -701,7 +705,7 @@
 [View41]
    ID = vw.EgoDead
    Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
-   Size = 583
+   Size = 1723
 
 [View2]
    ID = vw.SmallPerson1

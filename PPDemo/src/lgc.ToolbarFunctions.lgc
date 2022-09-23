@@ -160,7 +160,14 @@ if (mouseBtn != 1) {
       if (deathType) {
         restart.game();
       } else {
+        [ if in lobby, need to erase patient2 if currently visible
+        if (currentRoom == rm.Lobby && f237) {
+          erase(o5);
+        }
         save.game();
+        if (currentRoom == rm.Lobby && f237) {
+          draw(o5);
+        }
       }
     }
     [ if on button3:
