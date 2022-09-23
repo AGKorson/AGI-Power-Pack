@@ -39,9 +39,9 @@ if (deathType != 255) {
   if (deathType == 3) {
     print("Well, at least you'll save a bit on your funeral costs.");
   }
-  [ electrocuted 
+  [ escorted from the premises 
   if (deathType == 4) {
-    print("Electricity is deadly? Shocking!");
+    print("Looks like your trip to Oakhurst will include a tour of the city jail!");
   }
   [ stunned by bat-mobile security alarm
   if (deathType == 5) {

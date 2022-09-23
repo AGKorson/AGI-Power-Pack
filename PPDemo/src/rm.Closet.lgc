@@ -566,6 +566,7 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
             print("You wash the sap from your hands. Now they aren't so sticky.");
             currentScore += 3;
           } else {
+            [ TODO: need a hand washing scene
             print("Might as well wash your hands");
             currentScore += 1;
           }

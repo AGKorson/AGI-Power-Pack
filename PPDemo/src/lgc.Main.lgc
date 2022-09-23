@@ -48,7 +48,7 @@
 [ is probably not able to continue; make an announcement to the player
 [ and quit
 if (errorNumber > 0) {
-block(FADE.IN, 0, 0, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, 0, 0, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
   call(lgc.Error); 
 }
 

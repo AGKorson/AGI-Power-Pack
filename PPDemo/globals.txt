@@ -2,7 +2,7 @@
 [ global defines file for PPDEMO
 [
 #define NORMAL_STEP_SIZE         1
-#define MAX_SCORE_VALUE          3 [ assign this constant to v7 (MaxScore)
+#define MAX_SCORE_VALUE        144 [ assign this constant to v7 (MaxScore)
 #define FASTEST_SPEED            0
 #define FAST_SPEED               1
 #define NORMAL_SPEED             2
@@ -65,6 +65,7 @@
 #define closettimer            f24
 #define trapped                f25
 #define cycleEgoAtRest         f30 [ when set to TRUE, ego will cycle even when position does not change
+#define firstLobby             f31 [ to track first time ego visits the lobby
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
 #define disableGameFunctions   f33 [ when set to TRUE
 #define clockOn                f34 [ set this flag to display a real-time clock of elapsed game time on top of the status bar
@@ -82,6 +83,8 @@
 #define closetopen             f46 [ set when closet door is open
 #define broommoved             f47 [ set once broom is picked up and moved
 #define faucetfixed            f48 [ set when faucet in closet has been tightened
+#define receptionistInHall     f49 [ set when receptionist is in hallway, so she can shoo ego back to lobby
+#define firstLobbyVisit        f50
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
@@ -143,10 +146,18 @@
 #define car2car3               v74
 #define car4car5               v75
 #define car6car7               v76
-#define currentHour            v77
-#define currentMinute          v78
-#define timerMin               v79
-#define timerSec               v80
+#define currentHour            v77 [ hour value of real time
+#define currentMinute          v78 [ minute value of real time
+#define timerMin               v80
+#define timerSec               v81
+#define patientClock           v82 [ twenty minute timer cycle to track patient locations
+#define patient1Loc            v83
+#define patient2Loc            v84
+#define patient3Loc            v85
+#define patient4Loc            v86
+#define LOC_LOBBY                1
+#define LOC_EXAM                 2
+#define LOC_GONE                 3
 #define C_DEFAULT                1
 #define C_WALK                   2
 #define C_LOOK                   3

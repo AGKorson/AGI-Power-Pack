@@ -10,9 +10,13 @@
 #define door          o2
 
 #define doorSeq     v220
+#define flickerTime v221
 
 #define fDoorDone   f220
 #define fDoorOpen   f221
+#define doorUnlocked f222
+#define lightOn     f223
+
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -40,6 +44,8 @@ if (newRoom) {
   ignore.objs(lightshadow);
   ignore.blocks(lightshadow);
   draw(lightshadow);
+  set(lightOn);
+  random(20, 30, flickerTime);
   
   [ door
   animate.obj(door);
@@ -60,7 +66,7 @@ if (newRoom) {
     set.cel(door, 0);
   } else {
     [ coming from control room; door is open
-    position(ego, 33, 156);
+    position(ego, 34, 155);
     ignore.blocks(ego);
     set.cel(door, 4);
     set(fDoorOpen);
@@ -84,33 +90,164 @@ if (newRoom) {
   return();
 }
 
+[ if by door, and it's open, allow ego to cross over
+if (egoX < 44 && fDoorOpen) {
+  ignore.blocks(ego);
+} else {
+  observe.blocks(ego);
+}
+
+[ light flickers on/off randomly
+if (flickerTime > 0) {
+  --flickerTime;
+  if (flickerTime == 0) {
+    if (lightOn) {
+      erase(lightshadow);
+      random(1, 8, flickerTime);
+    } else {
+      draw(lightshadow);
+      random(12, 50, flickerTime);
+    }
+    toggle(lightOn);
+  }
+}
+
+ 
 [*****
 :handleInput       [ check for input from player
 [*****
-if (haveInput && !haveMatch && unknownWordNum == 0)
-  {
+if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
-  if (said("look"))
-    {
+  if (said("look")) {
     print("You see nothing of interest.");
-    }
   }
-  
   if (said("open", "door")) {
-    if (posn(ego, 26, 135, 46, 138)) {
-      doorSeq = 1;
+    if (posn(ego, 30, 154, 38, 156)) {
+      if (doorUnlocked) {
+        doorSeq = 1;
+      } else {
+        print("The door is locked.");
+      }
     } else {
       print("you are not close enough.");
     }
   }
   
   if (said("close", "door")) {
-    if (posn(ego, 26, 135, 46, 138)) {
+    if (posn(ego, 30, 154, 38, 156)) {
       doorSeq = 2;
     } else {
       print("you are not close enough.");
     }
   }
+}
+  
+[ if NOT clicking on the actual toolbar, check for
+[ clicks on ingame items
+if (mouseX > 22 && mouseY > 26 && controller(cLeftClick)) {
+  [ look
+  if (cursormode == C_LOOK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You see you.");
+      goto(doneclick);
+    }
+    
+    [ door
+    if (mouseX > 30 && mouseX < 44 && mouseY > 125 && mouseY < 162) {
+      print("door to control room");
+      goto(doneclick);
+    }
+    
+    [ access control pad
+    if (mouseX > 45 && mouseX < 50 && mouseY > 143 && mouseY < 151) {
+      print("access control pad");
+      goto(doneclick);
+    }
+    [ stairs/wall
+    if (mouseX > 53) {
+      work1 = 223;
+      work1 -= mouseX;
+      if (work1 >= mouseY) {
+        work2 = work1;
+        work2 -= mouseY;
+        if (work2 < 12) {
+          print("stairs");
+        } else {
+          if (work2 < 56) {
+            print("wall");
+          }
+        }
+        goto(doneclick);
+      } else {
+        [ below stairs
+        goto(doneclick);
+      }
+    }
+    [ rest of wall
+    if (mouseX > 22 && mouseX < 60 && mouseY > 107 && mouseY < 162) {
+      print("also wall");
+      goto(doneclick);
+    }
+    
+[    [ nothing specific
+[    print("black space");
+[    goto(doneclick);
+  }
+  
+  [ talk
+  if (cursormode == C_TALK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You have nothing to say.");
+    } else {
+      print("There is no one here to talk to.");
+    }
+    goto(doneclick);
+  }
+  
+  [ use
+  if (cursormode == C_USE) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("Please don't touch yourself. Someone might see you.");
+      goto(doneclick);
+    }
+    
+    [ door
+    if (mouseX > 30 && mouseX < 44 && mouseY > 125 && mouseY < 162) {
+      if (posn(ego, 30, 154, 38, 156)) {
+        if (fDoorOpen) {
+          [ close it
+          doorSeq = 2;
+        } else {
+          [ open it (if not locked)
+      
+          if (doorUnlocked) {
+            doorSeq = 1;
+          } else {
+            print("The door is locked.");
+          }
+        }
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+      
+    [ access control pad
+    if (mouseX > 45 && mouseX < 50 && mouseY > 143 && mouseY < 151) {
+      [ TODO: display access panel, and unlock door if
+      [ correct code entered
+      print("door is now unlocked");
+      set(doorUnlocked);
+      goto(doneclick);
+    }
+  }
+  
+  :doneclick
+  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+}
   
 [*****
 :noInput           [  all non-input related code goes here 
@@ -144,7 +281,7 @@ if (fDoorDone) {
 [*****
 
 [ add exit checks here (or use layout editor)
-
+[ TODO: do i need to restore priority? or does new.room do that automatically?
 if (edgeEgoHit == RIGHT_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
@@ -154,7 +291,7 @@ if (edgeEgoHit == RIGHT_EDGE) {
   new.room(rm.SecretRoom);  [ ##LE001##
 }
 
-if (posn(ego, 32, 130, 42, 133)) {
+if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);

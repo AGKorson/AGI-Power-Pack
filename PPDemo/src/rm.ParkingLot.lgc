@@ -17,15 +17,17 @@
 #define patientTimer v222
 #define carX         v223
 #define carY         v224
+#define deathSeq     v225
 
 #define fCarDone     f220
 #define fPatientDone f221
 #define fPatientHere f222
 #define f2ndspot     f223
 #define fEgoDead     f224
-#define fDeadDone    f225
+#define fRunOver     f225
 #define fClickOn     f226
 #define fSkip1       f227
+#define fElectrocuted  f228
 
 if (newRoom) {
   [ run initialization code
@@ -410,8 +412,8 @@ if (fPatientDone) {
   }
 }
 
-[ check for ego getting run over
 if (!fEgoDead) {
+  [ check for ego getting run over
   get.posn(patientCar, carX, carY);
   work1 = carY;
   work1 -= 2;
@@ -441,25 +443,75 @@ if (!fEgoDead) {
       set.upper.left(&ego, &work1);
       work1 = 2;
       cycle.time(ego, work1);
-      end.of.loop(ego, fDeadDone);
+      end.of.loop(ego, fRunOver);
       print("Uh oh! That car just hit you!");
+    }
+  }
+  [ check for batmobile electrocution
+  if (deathSeq > 0) {
+    if (deathSeq == 1) {
+      ++deathSeq;
+      current.loop(ego, work1);
+      set.view(ego, vw.ParkingLotArt);
+      if (work1 > 0 && work1 < 3) {
+        set.loop(ego, 2);
+      } else {
+       set.loop(ego, 1);
+      }
+      set.cel(ego, 0);
+      [ allow cycle at rest
+      work1 = 0;
+      set.upper.left(&ego, &work1);
+      end.of.loop(ego, fElectrocuted);
+    }
+    if (fElectrocuted) {
+      if (deathSeq < 5) {
+        ++deathSeq;
+        set.cel(ego, 0);
+        end.of.loop(ego, fElectrocuted);
+      }
+      if (deathSeq == 5) {
+        ++deathSeq;
+        current.loop(ego, work1);
+        load.view(vw.EgoDead);
+        set.view(ego, vw.EgoDead);
+        --work1;
+        set.loop.v(ego, work1);
+        set.cel(ego, 0);
+        work1 = 2;
+        cycle.time(ego, work1);
+        end.of.loop(ego, fElectrocuted);
+        set(fEgoDead);
+        print("Yikes! This batmobile has an anti-theft system!");
+      }
     }
   }
 }
 
-[ check for end of death cycle
-if (fDeadDone) {
-  reset(fDeadDone);
+[ check for end of run-over death cycle
+if (fRunOver) {
+  reset(fRunOver);
   deathType = 1;
   work1 = 1;
   cycle.time(ego, work1);
   accept.input();
+  ignore.objs(patient);
+}
+
+[ check for end of electrocution death cycle
+if (fElectrocuted && deathSeq == 6) {
+  reset(fElectrocuted);
+  ++deathSeq;
+  deathType = 5;
+  accept.input();
+  ignore.objs(patient);
 }
 
 [ if dead, skip player input
 if (fEgoDead) {
   return();
 }
+
 
 [*****
 :handleInput       [ check for input from player
@@ -808,9 +860,10 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
                   if (work1 == 17) {
                     print("This sportcar is really neat, but that's no reason to steal it.");
                   } else {
-                    print("Yikes! This batmobile has an anti-theft system!");
-  [ TODO: add death sequence for touching the batmobile
-                    deathType = 5;
+                    prevent.input();
+                    program.control();
+                    stop.motion(ego);
+                    deathSeq = 1;
                   }
                 }
               }
@@ -888,10 +941,19 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
 [*****
 :exit              [  test for leaving the room
 [*****
-
-[ add exit checks here (or use layout editor)
-
 if (egoHitSpecial) {
+
+
+[ DEBUG: set patient change over time
+get.num("start minute: ", patientClock); [ minutes of game time
+elapsedMinutes = patientClock;
+--patientClock;
+oldMinutes = patientClock;
+call(lgc.GameFunctions);
+[print("current: %v12, old: %v32, clock: %v82");
+[print("p2loc: %v84");
+
+
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);

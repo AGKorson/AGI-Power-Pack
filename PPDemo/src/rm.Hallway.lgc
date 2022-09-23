@@ -7,11 +7,23 @@
 [ ********************************************************************
 
 #define oClosetDoor    o1
+#define oExamDoor      o2
+#define oReceptionist  o3
+#define oNurse         o4
+#define oSecurity      o3 [ receptionist and security guard never on screen at same time
 
-#define opendoor     f220
-#define closedoor    f221
-#define fDoorDone    f222
-#define clicktransom   f223
+#define opendoor       f220
+#define closedoor      f221
+#define fDoorDone      f222
+#define clickOn        f223
+#define fMustGoBack    f224
+#define openExamDoor   f225
+#define fExamDoorDone  f226
+
+#define examDoorSeq    v220
+#define gExamCount     v221
+#define arrestSeq      v222
+#define arrestCounter  v223
 
 
 if (newRoom)
@@ -28,34 +40,14 @@ if (newRoom)
   [ the horizon defines the upper limit of ego's movement
   set.horizon(0);
   
-  [ add additional room initialization here
+  [ art work used in room
   load.view(vw.HallwayArt);
-
-  [ add the three doors that don't open
-  add.to.pic(vw.HallwayArt, 1, 0, 46, 139, 0, 4);
-  add.to.pic(vw.HallwayArt, 1, 0, 86, 139, 0, 4);
-  add.to.pic(vw.HallwayArt, 1, 0, 126, 139, 0, 4);
+  load.view(vw.Nurse);
+  
+  [ add the two doors that don't open
+  add.to.pic(vw.HallwayArt, 1, 0, 86, 132, 12,  4);
+  add.to.pic(vw.HallwayArt, 1, 0, 126, 132, 12, 4);
     
-  [ add toolbar buttons
-  load.view(vw.Toolbar);
-  call(lgc.InitToolbar);
-  
-  [ load ego view, animate and draw ego
-  [ this is sometimes handled in logic 0
-  [ instead of in each individual logic
-  if (previousRoom == rm.Closet) {
-    position(ego, 22, 149);
-    egodir = STOPPED;
-    set.loop(ego, 0);
-  } else {
-    position(ego, 151, 147);
-    egodir = STOPPED;
-    set.loop(ego, 1);
-  }
-  
-  [ add ego to the room
-  draw(ego);
-  
   [ closet door
   animate.obj(oClosetDoor);
   set.view(oClosetDoor, vw.HallwayArt);
@@ -67,8 +59,63 @@ if (newRoom)
   if (closetopen) {
     set.cel(oClosetDoor, 4);
   }
-  position(oClosetDoor, 18, 150);
+  position(oClosetDoor, 18, 142);
   draw(oClosetDoor);
+  
+  [ exam room door
+  animate.obj(oExamDoor);
+  set.view(oExamDoor, vw.HallwayArt);
+  set.loop(oExamDoor, 1);
+  set.cel(oExamDoor, 0);
+  stop.cycling(oExamDoor);
+  ignore.objs(oExamDoor);
+  ignore.blocks(oExamDoor);
+  set.priority(oExamDoor, 12);
+  position(oExamDoor, 47, 132);
+  draw(oExamDoor);
+  
+  [ nurse
+  animate.obj(oNurse);
+  set.view(oNurse, vw.Nurse);
+  random(0, 1, work1);
+  set.loop.v(oNurse, work1);
+  set.cel(oNurse, 8);
+  stop.cycling(oNurse);
+  ignore.objs(oNurse);
+  ignore.blocks(oNurse);
+  set.priority(oNurse, 11);
+  position(oNurse, 49, 131);
+  [don't draw yet
+  
+  [ add toolbar buttons
+  load.view(vw.Toolbar);
+  call(lgc.InitToolbar);
+
+  [ ego  
+  if (previousRoom == rm.Closet) {
+    position(ego, 22, 141);
+    egodir = STOPPED;
+    set.loop(ego, 0);
+  } else {
+    [ if ego is in hall without permission
+    if (return.false()) {
+      [ add receptionist
+      load.view(vw.ReceptionistWalk);
+      animate.obj(oReceptionist);
+      set.view(oReceptionist, vw.ReceptionistWalk);
+      set.loop(oReceptionist, 1);
+      stop.cycling(oReceptionist);
+      position(oReceptionist, 115, 143);
+      draw(oReceptionist);
+      set(fMustGoBack);
+    }
+    position(ego, 151, 139);
+    egodir = STOPPED;
+    set.loop(ego, 1);
+  }
+  
+  [ add ego to the room
+  draw(ego);
   
   [ display the picture on screen
   show.pic();
@@ -79,6 +126,84 @@ if (newRoom)
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   return();
   }
+
+[ if ego is not allowed
+if (fMustGoBack) {
+  print("Excuse me sir! Only patients are allowed past the lobby. Please go back.");
+  goto(exit);
+}
+
+[ if ego is being escorted from the premises
+if (arrestSeq > 0) {
+  if (arrestSeq == 1) {
+    [ sonny appears
+    animate.obj(oSecurity);
+    load.view(vw.Security);
+    set.view(oSecurity, vw.Security);
+    position(oSecurity, 153, 140);
+    [ set autocycle
+    work1 = 1;
+    set.upper.left(&oSecurity, &work1);
+    draw(oSecurity);
+    get.posn(ego, work1, work2);
+    work2 += 2;
+    work3 = 1;
+    move.obj.v(oSecurity, work1, work2, work3, fExamDoorDone);
+    ++arrestSeq;
+  }
+  if (arrestSeq == 2 && fExamDoorDone) {
+    [ turn to ego
+    get.posn(ego, work1, work2);
+    ++work2;
+    work3 = 1;
+    move.obj.v(oSecurity, work1, work2, work3, fExamDoorDone);
+    work1 = egoX;
+    ++arrestSeq;
+  }
+  if (arrestSeq == 3 && fExamDoorDone) {
+    [ 'handcuff' ego
+    ++arrestSeq;
+    arrestCounter = 15;
+  }
+  if (arrestSeq == 4) {
+    if (arrestCounter > 0) {
+      --arrestCounter;
+    } else {
+      ++arrestSeq;
+    }
+  }
+  if (arrestSeq == 5) {
+    [ ego starts walking
+    load.view(vw.EgoArrest);
+    set.view(ego, vw.EgoArrest);
+    get.posn(ego, work1, work2);
+    work1 += 7;
+    work3 = 1;
+    move.obj.v(ego, work1, work2, work3, fExamDoorDone);
+    set.loop(oSecurity, 0);
+    ++arrestSeq;
+  }
+  if (arrestSeq == 6 && fExamDoorDone) {
+    [ sonny escorts ego off screen
+    move.obj(ego, 159, 138, 1, fExamDoorDone);
+    move.obj(oSecurity, 159, 140, 1, fExamDoorDone);
+    ++arrestSeq;
+  }
+  if (arrestSeq == 7 && posn(ego, 63, 134, 63, 148)) {
+    [ nurse shuts door
+    reverse.loop(oExamDoor, fExamDoorDone);
+    normal.cycle(oNurse);
+    ++arrestSeq;
+  }
+  if (arrestSeq == 8 && edgeEgoHit == RIGHT_EDGE) {
+    [ done
+    erase(ego);
+    erase(oSecurity);
+    deathType = 4;
+    ++arrestSeq;
+  }
+  return();
+}
 
 [*****
 :handleInput       [ check for input from player
@@ -99,7 +224,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items 13, 62, 159, 155
-if (mouseX > 12 && mouseX < 160 && mouseY > 69 && mouseY < 164 && 
+if (mouseX > 12 && mouseX < 152 && mouseY > 69 && mouseY < 156 && 
     controller(cLeftClick)) {
   [ look
   if (cursormode == C_LOOK) {
@@ -110,58 +235,75 @@ if (mouseX > 12 && mouseX < 160 && mouseY > 69 && mouseY < 164 &&
     }
     
     [ vent duct - 68, 82, 78, 90
-    if (mouseX > 67 && mouseX < 79 && mouseY > 89 && mouseY < 99) {
+    if (mouseX > 67 && mouseX < 79 && mouseY > 82 && mouseY < 92) {
       print("This vent duct provides a nice stream of cool air to "
             "help keep the building comfortable.");
       goto(doneclick);
     }
     
     [ doors
-    if (mouseY > 114 && mouseY < 147) {
+    if (mouseX > 17 && mouseX < 25 && mouseY > 107 && mouseY < 149) {
+      print("This is a closet door. It has a sign on it that says \"Please keep this door closed.\"");
+    }
+    if (mouseY > 106 && mouseY < 139) {
       [ door 1 - 47, 107, 59, 138
       if (mouseX > 46 && mouseX < 60) {
-        print("door 1");
+        print("This door leads to one of the exam rooms.");
         goto(doneclick);
       }
       [ door 2 - 87, 107, 99, 138
       if (mouseX > 86 && mouseX < 100) {
-        print("door 2");
+        print("This is the door to the restroom.");
         goto(doneclick);
       }
       [ door 3 - 127, 107, 139, 138
       if (mouseX > 126 && mouseX < 140) {
-        print("door 3");
+        print("It looks like a typical office door.");
        goto(doneclick);
       }
     }
     
     [ transom windows - 47/87/127, 95, 59/99/139, 106
-    reset(clicktransom);
-    if (mouseY > 102 && mouseY < 114) {
+    reset(clickOn);
+    if (mouseY > 94 && mouseY < 106) {
       if (mouseX > 46 && mouseX < 60) {
-        set(clicktransom);
+        set(clickOn);
       }
       if (mouseX > 86 && mouseX < 100) {
-        set(clicktransom);
+        set(clickOn);
       }
       if (mouseX > 126 && mouseX < 140) {
-        set(clicktransom);
+        set(clickOn);
       }
-      if (clicktransom) {
-        print("transom");
+      if (clickOn) {
+        print("A transom at the top of the door allows light to filter into the hallway from the room.");
+        if (mouseX > 86 && mouseX < 100) {
+          print("And also a slightly unpleasant odor.");
+        }
         goto(doneclick);
       }
     }
     
-    [ nothing specific - check general areas
+    [ door signs
+    [62, 102, 68, 106
+    if (mouseX > 61 && mouseX < 69 && mouseY > 109 && mouseY < 115) {
+      print("The door sign says \"Exam Room 1\"");
+      goto(doneclick);
+    }
+    [102, 102, 110, 109
+    if (mouseX > 101 && mouseX < 111 && mouseY > 109 && mouseY < 118) {
+      print("The door sign indicates this is a unisex bathroom.");
+      goto(doneclick);
+    }
+    [142, 102, 148, 106
+    if (mouseX > 141 && mouseX < 149 && mouseY > 109 && mouseY < 115) {
+      print("The name plate for this office says \"Dr. Brane, MD\"");
+      goto(doneclick);
+    }
     
-    [ walls
-    
-    [ floor
-    
-    [ ceiling
-    
-    print("There are several doors in this hallway.");
+    [ nothing specific
+    print("The floors and walls of this hallway are clean and bright, as you would expect in a medical facility.");
+    print("There several doors leading to other rooms.");
     goto(doneclick);
   }
   
@@ -184,17 +326,76 @@ if (mouseX > 12 && mouseX < 160 && mouseY > 69 && mouseY < 164 &&
       goto(doneclick);
     }
     
-  
     [ closet door
     if (posn(oClosetDoor, ON.OBJ, 1, &mouseX, &mouseY)) {
-      if (closetopen) {
-        set(closedoor);
+      if (posn(ego, 12, 129, 29, 148)) {
+        if (closetopen) {
+          set(closedoor);
+        } else {
+          set(opendoor);
+        }
       } else {
-        set(opendoor);
+        print("Move closer.");
       }
-    } else {
-      print("There is nothing to pick up or use here.");
-      set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+      goto(doneclick);
+    }
+      
+    [ exam room door
+    if (posn(oExamDoor, ON.OBJ, 1, &mouseX, &mouseY)) {
+      if (posn(ego, 40, 132, 60, 138)) {
+        set(openExamDoor);
+      } else {
+        print("Move closer.");
+      }
+    }
+
+    [ other doors
+    if (mouseY > 106 && mouseY < 139) {
+      [ bathroom door
+      if (mouseX > 86 && mouseX < 100) {
+        if (posn(ego, 80, 132, 100, 138)) {
+          print("KNOCK KNOCK");
+          print("\"Occupied! I'll be out in a minute.\"");
+          print("<sniff> Hmm, something tells you it might be more than a minute...");
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
+      }
+      [ office door
+      if (mouseX > 126 && mouseX < 140) {
+        if (posn(ego, 120, 132, 140, 138)) {
+          print("KNOCK KNOCK");
+          print("No answer. And the door is locked. Dr. Brane must be at his castle today.");
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
+      }
+    }
+
+    [ transom windows - 47/87/127, 95, 59/99/139, 106
+    reset(clickOn);
+    if (mouseY > 94 && mouseY < 106) {
+      if (mouseX > 46 && mouseX < 60) {
+        set(clickOn);
+      }
+      if (mouseX > 86 && mouseX < 100) {
+        set(clickOn);
+      }
+      if (mouseX > 126 && mouseX < 140) {
+        set(clickOn);
+      }
+      if (clickOn) {
+        print("You can't reach the transoms. They are too high.");
+        goto(doneclick);
+      }
+    }
+
+    [ vent duct - 68, 82, 78, 90
+    if (mouseX > 67 && mouseX < 79 && mouseY > 82 && mouseY < 92) {
+      print("The vent duct is too high for you to reach.");
+      goto(doneclick);
     }
   }
   
@@ -206,14 +407,16 @@ if (mouseX > 12 && mouseX < 160 && mouseY > 69 && mouseY < 164 &&
 :noInput           [  all non-input related code goes here 
 [*****
 
-[ add other room specific statements here
+[**************************************************************
+[ CLOSET DOOR
+[**************************************************************
 if (opendoor) {
   reset(opendoor);
   if (closetopen) {
     print("The closet door is already open.");
   } else {
-    if (posn(ego, 12, 137, 29, 156)) {
-      end.of.loop(oClosetDoor, fDoorDone);
+    if (posn(ego, 12, 129, 29, 148)) {
+       end.of.loop(oClosetDoor, fDoorDone);
     } else {
       print("You are not close enough.");
     }
@@ -222,7 +425,7 @@ if (opendoor) {
 if (closedoor) {
   reset(closedoor);
   if (closetopen) {
-    if (posn(ego, 12, 137, 29, 156)) {
+    if (posn(ego, 12, 129, 29, 148)) {
       reverse.loop(oClosetDoor, fDoorDone);
     } else {
       print("You are not close enough.");
@@ -231,7 +434,6 @@ if (closedoor) {
     print("The closet door is already closed.");
   }
 }
-
 if (fDoorDone) {
   reset(fDoorDone);
   if (closetopen) {
@@ -241,6 +443,65 @@ if (fDoorDone) {
   }
 }
     
+[**************************************************************
+[ EXAM ROOM DOOR
+[**************************************************************
+if (openExamDoor) {
+  if (posn(ego, 46, 132, 60, 138)) {
+    reset(openExamDoor);
+    examDoorSeq = 1;
+    end.of.loop(oExamDoor, fExamDoorDone);
+    set.cel(oNurse, 8);
+    stop.cycling(oNurse);
+    draw(oNurse);
+    prevent.input();
+    program.control();
+  } else {
+    print("You are not close enough.");
+  }
+}
+if (fExamDoorDone) {
+  reset(fExamDoorDone);
+  if (examDoorSeq == 1) {
+    [ nurse turns around
+    examDoorSeq = 2;
+    reverse.loop(oNurse, fExamDoorDone);
+    goto(doneEDoorSeq);
+  }
+  if (examDoorSeq == 2) {
+    if (gExamCount < 4) {
+      examDoorSeq = 3;
+      reverse.loop(oExamDoor, fExamDoorDone);
+      normal.cycle(oNurse);
+      if (gExamCount == 0) {
+        print("I'm sorry, I'm conducting a patient exam right now, you can't come in.");
+      }
+      if (gExamCount == 1) {
+        print("Hey! Close that door, I'm in the middle of a patient exam!");
+      }
+      if (gExamCount == 2) {
+        print("I said close that door! You can't come in here!");
+      }
+      if (gExamCount == 3) {
+        print("Please stop interrupting me, or I will call security!");
+      }
+      ++gExamCount;
+    } else {
+      print("I asked you to stop interrupting!! Security!!!");
+      prevent.input();
+      program.control();
+      [TODO: need global flag to prevent mouse input; that way don't need to show wait cursor all the time
+      arrestSeq = 1;
+    }
+    goto(doneEDoorSeq);
+  }
+  if (examDoorSeq == 3) {
+    accept.input();
+    player.control();
+    erase(oNurse);
+  }
+}
+:doneEDoorSeq
 
 [*****
 :exit              [  test for leaving the room
@@ -260,7 +521,7 @@ if (egoHitSpecial) {
     }
   }
 }
-if (edgeEgoHit == RIGHT_EDGE) {
+if ((edgeEgoHit == RIGHT_EDGE || fMustGoBack)) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);

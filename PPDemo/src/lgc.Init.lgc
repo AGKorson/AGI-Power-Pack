@@ -60,7 +60,7 @@ if (gameRestarted) {
   set.cursor.char(cursor);
   
   [ enable debug mode via ALT+D keypress (remove when ready to release game)
-  set.key(0, 32, cDebug); 
+  set.key(0, 32, cDebug);
 }
 
 [ enable debugging by default (remove when ready to release game)
@@ -163,6 +163,13 @@ car2car3 += tmp3;
 car4car5 = tmp4;
 car4car5 *= 16;
 car4car5 += tmp5;
+
+[ initial patient locations
+patient1Loc = LOC_LOBBY;
+patient2Loc = LOC_GONE;
+patient3Loc = LOC_GONE;
+patient4Loc = LOC_GONE;
+set(firstLobbyVisit);
 
 return();
 

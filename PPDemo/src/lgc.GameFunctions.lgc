@@ -29,22 +29,53 @@
 [ room-specific here
 [ *************************************************
 
-[[ if a new room was visited for first time
-[if (!egoExplored && currentRoom != rm.ControlRoom) {
-[  [ if ego has been in the room long enough, award one score point for
-[  [ exploration
-[  if (elapsedSeconds != oldSeconds) {
-[    [ increment delay counter until ~2 seconds has passed
-[    entryDelay += 1;
-[    if (entryDelay == 2) {
-[      print("You have explored a new room in this world! Good job!");
-[      currentScore += 1;
-[      set(egoExplored);
-[      entryDelay = 0;
-[    }
-[  }
-[}
-  
+[ convert game time into 20 minute timer intervals
+if (elapsedMinutes != oldMinutes) {
+  oldMinutes = elapsedMinutes;
+  ++patientClock;
+  if (patientClock == 20) {
+    patientClock = 0;
+  }
+  [ update patient locations 
+  if (currentRoom != rm.Lobby) {
+    if (patientClock > 0 && patientClock < 6) {
+      patient2Loc = LOC_LOBBY;
+    } else {
+      if (patientClock > 5 && patientClock < 10) {
+        patient2Loc = LOC_EXAM;
+      } else {
+        patient2Loc = LOC_GONE;
+      }
+    }
+    if (patientClock > 4 && patientClock < 12) {
+      patient3Loc = LOC_LOBBY;
+    } else {
+      if (patientClock > 11 && patientClock < 15) {
+        patient3Loc = LOC_EXAM;
+      } else {
+        patient3Loc = LOC_GONE;
+      }
+    }
+    if (patientClock > 10 && patientClock < 16) {
+      patient4Loc = LOC_LOBBY;
+    } else {
+      if (patientClock > 15 && patientClock < 19) {
+        patient4Loc = LOC_EXAM;
+      } else {
+        patient4Loc = LOC_GONE;
+      }
+    }
+  }
+}
+
+[ check for cancel click2move
+if (controller(cRightClick)) {
+  if (click2move) {
+    egoDir = 0;
+    set.dir(ego, egoDir); 
+  }
+}
+
 [ **************************************
 [ PROCESS PLAYER INPUT
 [ **************************************
