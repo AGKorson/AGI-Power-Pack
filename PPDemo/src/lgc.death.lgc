@@ -47,6 +47,10 @@ if (deathType != 255) {
   if (deathType == 5) {
     print("Lesson learned - don't mess with the Dark Knight's ride.");
   }
+
+  if (deathType == 6) {
+    print("Looks like you broke your leg! At least you did it in a medical facility!");
+  }
   
   [ WINNER!
   if (deathType == 99) {
@@ -126,8 +130,8 @@ call.v(currentRoom);
 [ if player tries to input something
 if (haveInput && !haveMatch) {
   [ it's not allowed
-  print("You are dead! You can only restore, restart, quit the game"
-        " or view your inventory.");
+  print("Game is over for you! You can only restore, restart, "
+        "exit the game or view your inventory.");
 }
 
 return();
