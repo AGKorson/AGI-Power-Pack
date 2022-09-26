@@ -98,12 +98,12 @@ if (newRoom)
     set.loop(ego, 0);
   } else {
     [ if ego is in hall without permission
-    if (return.false()) {
+    if (receptionistInHall) {
       [ add receptionist
       load.view(vw.ReceptionistWalk);
       animate.obj(oReceptionist);
       set.view(oReceptionist, vw.ReceptionistWalk);
-      set.loop(oReceptionist, 1);
+      set.loop(oReceptionist, 0);
       stop.cycling(oReceptionist);
       position(oReceptionist, 115, 143);
       draw(oReceptionist);

@@ -944,12 +944,12 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
 if (egoHitSpecial) {
 
 
-[ DEBUG: set patient change over time
-get.num("start minute: ", patientClock); [ minutes of game time
-elapsedMinutes = patientClock;
---patientClock;
-oldMinutes = patientClock;
-call(lgc.GameFunctions);
+[[ DEBUG: set patient change over time
+[get.num("start minute: ", patientClock); [ minutes of game time
+[elapsedMinutes = patientClock;
+[--patientClock;
+[oldMinutes = patientClock;
+[call(lgc.GameFunctions);
 [print("current: %v12, old: %v32, clock: %v82");
 [print("p2loc: %v84");
 

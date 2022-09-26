@@ -34,6 +34,7 @@
 #define   LP_READBOOK  9
 #define   LP_TAPTOE    8
 
+#define oMagazine       o7
 
 #define frontdooropen  f220
 #define fAllowPast     f221
@@ -102,31 +103,32 @@
 #define   MOVEHALL2    13
 #define   MOVEHALL3    14
 #define   MOVEHALL4    15
-#define   RTNHALL1     16
-#define   RTNHALL2     17
-#define   RTNHALL3     18
-#define   RTNHALL4     19
-#define   WAITDESK     20
-#define   WAITPHONE    21
-#define   NEWLOCATION  22
-#define   ARRIVE       23
-#define   MOVECOUNTER  24
-#define   WAITCOUNTER  25
-#define   TALKCOUNTER1 26
-#define   TALKCOUNTER2 27
-#define   MOVESEAT1    28
-#define   MOVESEAT2    29
-#define   MOVESEAT3    30
-#define   USEPHONE     31
-#define   STOWPHONE    32
-#define   GETBOOK      33
-#define   READBOOK     34
-#define   STOWBOOK     35
-#define   TAPTOE       36
-#define   MOVEEXIT1    37
-#define   MOVEEXIT2    38
-#define   STOPCONV     39
-#define   EXAMREADY    40
+#define   WAITHALL     16
+#define   RTNHALL1     17
+#define   RTNHALL2     18
+#define   RTNHALL3     19
+#define   RTNHALL4     20
+#define   WAITDESK     21
+#define   WAITPHONE    22
+#define   NEWLOCATION  23
+#define   ARRIVE       24
+#define   MOVECOUNTER  25
+#define   WAITCOUNTER  26
+#define   TALKCOUNTER1 27
+#define   TALKCOUNTER2 28
+#define   MOVESEAT1    29
+#define   MOVESEAT2    30
+#define   MOVESEAT3    31
+#define   USEPHONE     32
+#define   STOWPHONE    33
+#define   GETBOOK      34
+#define   READBOOK     35
+#define   STOWBOOK     36
+#define   TAPTOE       37
+#define   MOVEEXIT1    38
+#define   MOVEEXIT2    39
+#define   STOPCONV     40
+#define   EXAMREADY    41
 
 if (newRoom) {
   [ load, draw and discard the picture resource for the current room
@@ -146,7 +148,18 @@ if (newRoom) {
   
   [ add additional room initialization here
   load.view(vw.LobbyArt);
-  
+  if (obj.in.room("magazine", currentRoom)) {
+    animate.obj(oMagazine);
+    set.view(oMagazine, vw.LobbyArt);
+    set.loop(oMagazine, 2);
+    position(oMagazine, 127, 91);
+    set.priority(oMagazine, 9);
+    ignore.blocks(oMagazine);
+    ignore.horizon(oMagazine);
+    draw(oMagazine);
+    stop.update(oMagazine);
+  } 
+    
   [ sliding glass door (two parts)
   animate.obj(backpane);
   set.view(backpane, vw.LobbyArt);
@@ -187,14 +200,13 @@ if (newRoom) {
 
   [ patient 3 starts out off screen, arrives just before
   [ patient 2 leaves; after arriving, sits against side
-  [ wall, uses phone, goes to
-  [ hall, leaves
+  [ wall, uses phone, goes to hall, leaves
   
   [ patient 4 starts out off screen, arrives just before
   [ patient 3 leaves; after arriving, sits against side
   [ wall, uses phone, talks to receptionist, goes to
   [ hall; never leaves lobby area
- 
+  
   [ patient actions are managed by timer, at designated
   [ intervals (minutes) patients take actions:
   [      P1  P2  P3  P4  
@@ -387,12 +399,11 @@ display(23, 68, "%v12|2:%v11|2 (%v82)  ");
   }
   
 } else {
-[ debug code to track timer
-if (tmpSec != elapsedSeconds) {
-tmpSec = elapsedSeconds;
-display(23, 68, "%v12|2:%v11|2 (%v82)  ");
-}
-
+  [ debug code to track timer
+  if (tmpSec != elapsedSeconds) {
+    tmpSec = elapsedSeconds;
+    display(23, 68, "%v12|2:%v11|2 (%v82)  ");
+  }
 }
 
 [ adjust priority around the counter corner
@@ -426,7 +437,8 @@ if (checktalk) {
       if (fPatient1Talking) {
         print("She is busy talking to that patient. Wait until they're done.");
       } else {
-        if (egoY < 96) {
+        get.posn(oReceptionist, work1, work2);
+        if (work2 > 96) {
           [ if already talking, ignore the click
           if (!fEgoTalkReceptionist) {
             block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -515,7 +527,7 @@ if (receptionistTimer > 0) {
     
     [ if timer is up, and receptionist is not doing anything, 
     [ go to a new location
-    if (receptionistSeq == IDLE) {
+    if ((receptionistSeq == IDLE || receptionistSeq == WAITHALL)) {
       receptionistSeq = NEWLOCATION;
     }
   }
@@ -594,7 +606,7 @@ if (receptionistTimer > 0) {
     if (receptionistSeq == MOVEHALL3) {
       [ done moving; set timer and hide receptionist until
       [ timer is up
-      receptionistSeq = IDLE;
+      receptionistSeq = WAITHALL;
       receptionistTimer = 20;
       erase(oReceptionist);
       goto(doneRSeq);
@@ -1540,10 +1552,13 @@ if (fPaneDone) {
 [ check for a slip
 if (egoHitSpecial && !fFalling) {
   set(fFalling);
-  load.view(vw.EgoDead);
-  set.view(ego, vw.EgoDead);
-  set.loop(ego, 4);
+  load.view(vw.EgoSlip);
+  set.view(ego, vw.EgoSlip);
+  set.loop(ego, 0);
   set.cel(ego, 0);
+  work1 = 5;
+  work2 = -10;
+  reposition(ego, work1, work2);
   end.of.loop(ego, fSlipped);
   [ allow cycle at rest
   work1 = 0;
@@ -1554,7 +1569,9 @@ if (egoHitSpecial && !fFalling) {
 }
 if (fSlipped) {
   reset(fSlipped);
-  print("It *was* wet! And slippery!");
+  print("Didn't you notice that wet spot???");
+  set.loop(ego, 1);
+  normal.cycle(ego);
   deathType = 6;
 }
 
@@ -1645,6 +1662,11 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       goto(doneclick);
     }
     
+    [ magazine
+    if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("It's an old computer magazine from the 1990s.");
+      goto(doneclick);
+    }
     [ other things to look at
     
     [ computer 22, 73, 32, 86
@@ -1653,13 +1675,13 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       goto(doneclick);
     }
     [ entry door 112, 150, 139, 167
-    print("x: %v46, y: %v47");
+[print("x: %v46, y: %v47");
     if (mouseX > 111 && mouseX < 140 && mouseY > 157 && mouseY < 176) {
       print("The glass entrance door opens and closes automatically.");
       goto(doneclick);
     }
-    [ floor sign 8, 117, 19, 138
-    if (mouseX > 7 && mouseX < 20 && mouseY > 124 && mouseY < 147) {
+    [ floor sign 2, 125, 8, 140
+    if (mouseX > 1 && mouseX < 9 && mouseY > 132 && mouseY < 149) {
       print("It says \"CAUTION - Wet Floor\". You should probably stay away to be safe.");
       goto(doneclick);
     }
@@ -1668,7 +1690,7 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       print("The corner table is old and worn.");
       work1 = rm.Lobby;
       if (obj.in.room("magazine", work1)) {
-        print("There is an old computer magazine on the table.");
+        print("There is a magazine on the table.");
       }
       goto(doneclick);
     }
@@ -1703,7 +1725,7 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       goto(doneclick);
     }
     [ floor y>86 and y<149
-    if (mouseX > 94 && mouseY < 157) {
+    if (mouseY > 94 && mouseY < 157) {
       print("The floor looks like it has just been cleaned. You can see a few damp spots near the left exit.");
       goto(doneclick);
     }
@@ -1724,19 +1746,62 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       print("talk patient1");
     }
     if (posn(oPatient2, ON.OBJ, 0, &mouseX, &mouseY)) {
-      print("talk patient2");
+      print("talk patient2 or 4");
     }
     if (posn(oPatient3, ON.OBJ, 0, &mouseX, &mouseY)) {
       print("talk patient3");
-    }
-    if (posn(oPatient4, ON.OBJ, 0, &mouseX, &mouseY)) {
-      print("talk patient4");
     }
     goto(doneclick);
   }
   
   if (cursormode == C_USE) {
-    print("There is nothing to manipulate here.");
+    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+      print("Please don't touch yourself in public.");
+      goto(doneclick);
+    }
+    [ receptionist
+    if (posn(oReceptionist, ON.OBJ, 0, &mouseX, &mouseY)) {
+      print("You can't reach her from here.");
+      goto(doneclick);
+    }
+    if (posn(oPatient1, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, oPatient3, work1);
+      if (work1 < 24) {
+        print("\"Get your hands off me, you pervert!\"");
+      } else {
+        print("You are not close enough.");
+      }
+      goto(doneclick);
+    }
+    if (posn(oPatient2, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, oPatient3, work1);
+      if (work1 < 24) {
+        print("Don't touch me!");
+      } else {
+        print("You are not close enough.");
+      }
+      goto(doneclick);
+    }
+    if (posn(oPatient3, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, oPatient3, work1);
+      if (work1 < 24) {
+        print("Ooh, do that again. I like that!");
+      } else {
+        print("You are not close enough.");
+      }
+    }
+    [ magazine
+    if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
+      distance(ego, oMagazine, work1);
+      print("distance: %v46");
+      if (work1 < 20) {
+        print("You decide to pick up the old magazine.");
+        get("magazine");
+        erase(oMagazine);
+      } else {
+        print("You are not close enough.");
+      }
+    }
     goto(doneclick);
   }
   
@@ -1752,7 +1817,9 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
 
 if (edgeEgoHit == TOP_EDGE) {
   [ only if allowed past (or if receptionist is in hallway)
-  if ((fAllowPast || receptionistSeq == RTNHALL1 || receptionistSeq == MOVEHALL2 || receptionistSeq == MOVEHALL3)) {
+  if ((fAllowPast || receptionistSeq == RTNHALL1 || 
+       receptionistSeq == MOVEHALL2 || receptionistSeq == MOVEHALL3 ||
+       receptionistSeq == WAITHALL)) {
     [ if not allowed yet, set flag so receptionist in hall can send ego back
     if (!fAllowPast) {
       set(receptionistInHall);
@@ -1801,4 +1868,3 @@ return();
 #message 4 "%g43"
 #message 5 "%g44"
 #message 6 "%g45"
-#message 7 "This is the lobby. There is a desk and some chairs in the waiting area."
