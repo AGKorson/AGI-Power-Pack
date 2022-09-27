@@ -447,7 +447,7 @@ if (fDoorDone) {
 [ EXAM ROOM DOOR
 [**************************************************************
 if (openExamDoor) {
-  if (posn(ego, 46, 132, 60, 138)) {
+[  if (posn(ego, 40, 132, 60, 138)) {
     reset(openExamDoor);
     examDoorSeq = 1;
     end.of.loop(oExamDoor, fExamDoorDone);
@@ -456,9 +456,9 @@ if (openExamDoor) {
     draw(oNurse);
     prevent.input();
     program.control();
-  } else {
-    print("You are not close enough.");
-  }
+[  } else {
+[    print("You are not close enough.");
+[  }
 }
 if (fExamDoorDone) {
   reset(fExamDoorDone);

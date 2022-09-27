@@ -1793,7 +1793,7 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
     [ magazine
     if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oMagazine, work1);
-      print("distance: %v46");
+[print("distance: %v46");
       if (work1 < 20) {
         print("You decide to pick up the old magazine.");
         get("magazine");

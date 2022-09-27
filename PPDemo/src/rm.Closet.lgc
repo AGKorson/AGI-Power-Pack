@@ -818,7 +818,7 @@ if (triptimer > TRIPDELAY) {
 [ move broom to corner
 if (fDone && movebroomstatus == MOVE2CORNER) {
   erase(broom);
-  set.cel(broom, 2);
+  set.cel(broom, 1);
   position(broom, 44, 153);
   draw(broom);
   stop.update(broom);

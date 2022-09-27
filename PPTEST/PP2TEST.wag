@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = DGN
    Interpreter = 2.917
-   LastEdit = "9/8/2022 4:32:36 PM"
+   LastEdit = "9/26/2022 5:02:31 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -45,11 +45,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HA8303519
-   CRC32 = &HA8303519
+   CompCRC32 = &H8078809
+   CRC32 = &H8078809
    ID = lgc.Main
    IsRoom = False
-   Size = 2522
+   Size = 2525
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
@@ -159,10 +159,10 @@
 [Logic101]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &HE85B2C8D
-   CompCRC32 = &HE85B2C8D
+   CRC32 = &H438E73A4
+   CompCRC32 = &H438E73A4
    IsRoom = False
-   Size = 20970
+   Size = 21312
 
 [Logic102]
    ID = lgc.mod2272
@@ -280,7 +280,7 @@
    ID = lgc.StatusLine
    Description = ""
    CRC32 = &H365D1F81
-   CompCRC32 = &H341395DA
+   CompCRC32 = &H365D1F81
    IsRoom = False
    Size = 200
 
