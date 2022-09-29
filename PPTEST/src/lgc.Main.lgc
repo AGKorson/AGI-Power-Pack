@@ -56,6 +56,7 @@ if (currentRoom == 0) {
 
   [ always load the powerpack FIRST
   if (!gameRestarted) {
+[pause();
     call(lgc.mod2089);
     if (IntVersion) {goto(continue);}
     call(lgc.mod2272);
@@ -92,6 +93,9 @@ if (currentRoom == 0) {
     work1 = IntVersion;
     work1 += 49;
     print.v(work1);
+  } else {
+    [ first step for restart is to retrieve interpreter version from errorinfo (v18)
+    IntVersion = errorParameter;
   }
 
   [ default ego parameters
@@ -110,15 +114,17 @@ if (currentRoom == 0) {
   [ set up trace window (remove this before releasing your game if
   [ you don't want debug features included)
   if (IntVersion > VERSION_2272) {
+print("load 220 trace");
     load.logics(lgc.TraceInfo);
     trace.info(lgc.TraceInfo, 3, 15);
   } else {
+print("load 160 trace");
     load.logics(lgc.TraceInfo160);
     trace.info(lgc.TraceInfo160, 3, 15);
   }
-  [ enable tracing as needed
-  set(enableTrace);
-  trace.on();
+[  [ enable tracing as needed
+[  set(enableTrace);
+[  trace.on();
 
 
   [ now continue with specific steps depending on whether 
@@ -126,9 +132,6 @@ if (currentRoom == 0) {
   if (gameRestarted) {
   
     [ steps needed specifically for a restart
-    [ retrieve interpreter version from errorinfo (v18)
-    IntVersion = errorParameter;
-    
     print("Restarting - Version: %v30");
     
     [ make sure the display area below the main game
@@ -159,15 +162,17 @@ if (currentRoom == 0) {
     [ check for restart and save tests
     s11 = "testrestore";
     if (compare.strings(s2, s11)) {
+      set.string(s2, "");
       set(ppTesting);
-      teststep = 40;
+      teststep = 41;
       subteststep = 1;
       set(newtest);
     }
     s11 = "testsave";
     if (compare.strings(s2, s11)) {
+      set.string(s2, "");
       set(ppTesting);
-      teststep = 41;
+      teststep = 42;
       subteststep = 2;
       set(newtest);
     }
@@ -262,6 +267,8 @@ if (newRoom) {
   [ Note: Everything other than logic 0 is discarded
   [ from memory when new.room is executed
 
+[!!!!!need to load trace logic here, not after restart!!!
+
   [ Load game specific functions logic into memory
   load.logics(lgc.GameFunctions);
 
@@ -286,20 +293,29 @@ if (newRoom) {
 [ check for menu change requests
 if (changeMenu) {
   reset(changeMenu);
-  work3 = &m14;
-  work2 = &s6;
-  s6 = m44;
-  block(SET.MSG, 1, &work3, &work2);
-  work3 = &m18;
-  s6 = m45;
-  block(SET.MSG, 1, &work3, &work2);
-  work3 = &m19;
-  s6 = m46;
-  block(SET.MSG, 1, &work3, &work2);
-  work3 = &m20;
-  s6 = m47;
-  block(SET.MSG, 1, &work3, &work2);
-  disable.item(cInitJoy);
+  if (IntVersion <= VERSION_2272) {
+    #message 70 "Logic 0 Message"
+    #message 71 "CHANGE LGC0 MSG"
+    print("Original message: \n  '%m70'");
+    s6 = m71;
+    block(SET.MSG, 0, &m70, &s6); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    print("Changed message: \n  '%m70'");
+  } else {
+    work3 = &m14;
+    work2 = &s6;
+    s6 = m44;
+    block(SET.MSG, 1, &work3, &work2);
+    work3 = &m18;
+    s6 = m45;
+    block(SET.MSG, 1, &work3, &work2);
+    work3 = &m19;
+    s6 = m46;
+    block(SET.MSG, 1, &work3, &work2);
+    work3 = &m20;
+    s6 = m47;
+    block(SET.MSG, 1, &work3, &work2);
+    disable.item(cInitJoy);
+  }
 }
 [#message 14 "Special"
 [#message 18 "Joystick      <Ctrl J>"
@@ -683,7 +699,7 @@ oldSeconds = elapsedSeconds;
 oldMinutes = elapsedMinutes;
 oldHours = elapsedHours;
 oldDays = elapsedDays;
-
+[pause();
 return();
 
 [ **************************************

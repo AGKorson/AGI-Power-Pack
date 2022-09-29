@@ -1,1 +1,316 @@
-[ ********************************************************************[ [ rm.Entrance[ [ An example room with several exits.[[ ********************************************************************[ **************************************[ LOCAL DEFINES[ **************************************#define strN              s3#define strNo             s4#define strAnswer         s5#define tmpTimer1         v220#define tmpTimer2         v221#define msgTimer          v222#define stepcounter       v223#define tmpRow            v224#define tmpCol            v225#define tmpMsg            v226[ **************************************[ FIRST CYCLE ONLY[ **************************************if (newRoom) {  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    [ do basic room initialization  call(lgc.RoomInit);    [ add room-specific initialization here    [ default horizion is 36; adjust it as needed  set.horizon(120);      [ set ego parameters, if different from lgc.RoomInit    [ AGI will automatically position ego on the opposite  [ edge when entering a new room, but if you want to manually  [ position ego, do that here, before drawing ego    [ The next 6 lines need only be in the first room of the game   if (previousRoom == 0) {    [ when starting or restarting need to position ego    position(ego, 74, 150);    [ turn status line on during normal game play    status.line.on();  }    [ add ego to the room  draw(ego);    [ display the picture on screen  show.pic();    [ used for confirming test results  strN = "n";  strNo = "no";    load.logics(lgc.TestPart1);  load.logics(lgc.TestPart2);  load.logics(lgc.TestPart3);    [load.sound(m.Theme);}[ **************************************[ EVERY CYCLE[ **************************************[ add room specific statements here[if (said("test")) {[  [ try enabling mouse[  set.key(1, 0, c251);[}[return();[ powerpack testsif (said("test")) {  reset(haveMatch);  if (teststep == 0) {    [ start with 1st test     teststep = 1;    set(ppTesting);    set(newtest);  }}if (said("jump", "test")) {  get.num("Test number: ", teststep);  if (teststep > 0 && teststep < 42) {    set(ppTesting);    set(newtest);    [ set id    if (teststep > 2) {      set.game.id("PP%v30");    }    [ check for mouse if past mouse test    if (teststep > 14) {      [ check for mouse      if (enableDblClick) {          set(hasMouse);      }    }    [ check for sound if past sound test    if (teststep >  20) {      if (numberOfVoices == 4) {        set(hasFM);        set(hasMIDI);      } else {        if (numberOfVoices == 2) {          set(hasFM);        }        if (numberOfVoices == 3) {          set(hasMIDI);        }      }    }  } else {    teststep = 0;    reset(ppTesting);    reset(newtest);  }   }if (ppTesting) {  if (newtest) {   clear.lines(23, 24, BLACK);  }    if (msgTimer > 0) {    ++msgTimer;    if (msgTimer == 10) {      display(23, 29, "          ");      msgTimer = 0;    }  }    [ if past step 10 set autocycle  if (teststep > 10) {    work1 = 1;    if (IntVersion == VERSION_2089) {      init.joy();      set.cel.v(ego, work1);    } else {      set.upper.left(&ego, &work1);    }  }    [ check for mouse clicks if past test 13  if (teststep > 13) {    if (controller(cLeftClick)) {      display(23, 29, "   L-CLICK");      msgTimer = 1;    }    if (controller(cRightClick)) {      display(23, 29, "   R-CLICK");      msgTimer = 1;      [ cancel ptc movement      egodir = 0;      set.dir(ego, egodir);    }    if (controller(cLeftDblClick)) {      display(23, 29, "L-DB-CLICK");      msgTimer = 1;    }    if (controller(cRightDblClick)) {      display(23, 29, "R-DB-CLICK");      msgTimer = 1;    }  }    [ if past mouse test (but not testing restart)  [ enable mouse for all other tests  if (teststep > 14) {    if ((teststep != 40 || subteststep != 7) && hasMouse) {      if (IntVersion > VERSION_2272) {        enable.item(mouse);      } else {        set.key(1, 0, c251);      }    }   }    [ if at or past status line test, enable changes  if (teststep > 16) {    if (said("status", "on")) {      status.line.on();    }    if (said("status", "off")) {      status.line.off();    }        if (said("status", "test")) {      set.cursor.char(" l6, v3, v27, v28, v29, f9");    }        if (said("status", "reset")) {      set.cursor.char(" ");    }  }    [ if at or past click-to-move test, enable changes  if (teststep > 17) {    if (said("clickmove", "straight")) {      stepcounter = -1;      step.size(ego, stepcounter);    }    if (said("clickmove", "normal")) {      work1 = -2;      step.size(ego, work1);    }    if (said("clickmove", "on")) {      set(clickmove);    }    if (said("clickmove", "off")) {      reset(clickmove);    }  }    [ tests 1-20 are in part 1  if (teststep < 21) {    stepcounter = 0;    call(lgc.TestPart1);  }    [ tests 21-34 are in part 2  if (teststep > 20 && teststep < 35) {    stepcounter = 20;    call(lgc.TestPart2);  }    [ tests 35-41 are in part 3  if (teststep > 34 && teststep < 42) {    stepcounter = 34;    call(lgc.TestPart3);  }    if (teststep == 42) {    ++teststep;    reset(newtest);    reset(ppTesting);    reset(disableGameFunctions);    print("All tests completed. Patch looks good.");    clear.lines(23, 24, BLACK);  }  :continue    [ clear match if 'test' is repeated  if (said("test")) {  }}[ **************************************[ CHECK FOR AN EXIT CONDITION[ **************************************if (teststep == 43) {  if (edgeEgoHit == TOP_EDGE) {    [ move to room above    new.room(rm.NorthRoom);  [ ##LE001##  }    if (edgeEgoHit == RIGHT_EDGE) {    [ move to room on the right    new.room(rm.EastRoom);  [ ##LE002##  }    if (edgeEgoHit == BOTTOM_EDGE) {    [ move to room below    new.room(rm.Outside);  [ ##LE003##  }  if (edgeEgoHit == LEFT_EDGE) {    [ move to room on the left    new.room(rm.WestRoom); [ ##LE004##  }}[ **************************************[ PROCESS PLAYER INPUT[ **************************************[ if player has provided input and match not yet found,[ do said testsif (haveInput && !haveMatch) {    [ look  if (said("look")) {    print("This is an empty room.");  }}:donereturn();[ **************************************[ MESSAGES[ **************************************
+[ ********************************************************************
+[ 
+[ rm.Entrance
+[ 
+[ An example room with several exits.
+[
+[ ********************************************************************
+
+[ **************************************
+[ LOCAL DEFINES
+[ **************************************
+#define strN              s3
+#define strNo             s4
+#define strAnswer         s5
+
+#define tmpTimer1         v220
+#define tmpTimer2         v221
+#define msgTimer          v222
+#define stepcounter       v223
+#define tmpRow            v224
+#define tmpCol            v225
+#define tmpMsg            v226
+
+[ **************************************
+[ FIRST CYCLE ONLY
+[ **************************************
+if (newRoom) {
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  [ do basic room initialization
+  call(lgc.RoomInit);
+  
+  [ add room-specific initialization here
+  
+  [ default horizion is 36; adjust it as needed
+  set.horizon(120);  
+  
+  [ set ego parameters, if different from lgc.RoomInit
+  
+  [ AGI will automatically position ego on the opposite
+  [ edge when entering a new room, but if you want to manually
+  [ position ego, do that here, before drawing ego
+  
+  [ The next 6 lines need only be in the first room of the game 
+  if (previousRoom == 0) {
+    [ when starting or restarting need to position ego
+    position(ego, 74, 150);
+    [ turn status line on during normal game play
+    status.line.on();
+  }
+  
+  [ add ego to the room
+  draw(ego);
+  
+  [ display the picture on screen
+  show.pic();
+  
+  [ used for confirming test results
+  strN = "n";
+  strNo = "no";
+  
+  load.logics(lgc.TestPart1);
+  load.logics(lgc.TestPart2);
+  load.logics(lgc.TestPart3);
+  
+  
+[load.sound(m.Theme);
+
+call(lgc.MsgMemTest);
+}
+
+[ **************************************
+[ EVERY CYCLE
+[ **************************************
+
+[ add room specific statements here
+
+[ powerpack tests
+if (said("test")) {
+  reset(haveMatch);
+  if (teststep == 0) {
+    [ start with 1st test 
+    teststep = 1;
+    set(ppTesting);
+    set(newtest);
+  } else {
+    if (teststep != 12) {
+      [ already testing
+      print("Test %v63 is in progress. Do you want to restart?");
+      get.string(s10, "Restart Tests? ", 22, 0, 5);
+      if (!compare.strings(s10, strN) && !compare.strings(s10, strNo)) {
+        teststep = 1;
+        set(ppTesting);
+        set(newtest);
+        return();
+      }
+    }
+  }
+}
+
+if (said("jump", "test")) {
+  get.num("Test number: ", teststep);
+  if (teststep > 0 && teststep < 43) {
+    set(ppTesting);
+    set(newtest);
+    [ set id
+    if (teststep > 2) {
+      set.game.id("PP%v30");
+    }
+    [ check for mouse if past mouse test
+    if (teststep > 14) {
+      [ check for mouse
+      if (enableDblClick) {
+          set(hasMouse);
+      }
+    }
+
+    [ check for sound if past sound test
+    if (teststep >  20) {
+      if (numberOfVoices == 4) {
+        set(hasFM);
+        set(hasMIDI);
+      } else {
+        if (numberOfVoices == 2) {
+          set(hasFM);
+        }
+        if (numberOfVoices == 3) {
+          set(hasMIDI);
+        }
+      }
+    }
+  } else {
+    teststep = 0;
+    reset(ppTesting);
+    reset(newtest);
+  }   
+}
+
+if (ppTesting) {
+  if (newtest) {
+   clear.lines(23, 24, BLACK);
+  }
+  
+  if (msgTimer > 0) {
+    ++msgTimer;
+    if (msgTimer == 10) {
+      display(23, 29, "          ");
+      msgTimer = 0;
+    }
+  }
+  
+  [ if past step 10 set autocycle
+  if (teststep > 10) {
+    work1 = 1;
+    if (IntVersion == VERSION_2089) {
+      init.joy();
+      set.cel.v(ego, work1);
+    } else {
+      set.upper.left(&ego, &work1);
+    }
+  }
+  
+  [ check for mouse clicks if past test 13
+  if (teststep > 13) {
+    if (controller(cLeftClick)) {
+      display(23, 29, "   L-CLICK");
+      msgTimer = 1;
+    }
+    if (controller(cRightClick)) {
+      display(23, 29, "   R-CLICK");
+      msgTimer = 1;
+      [ cancel ptc movement
+      egodir = 0;
+      set.dir(ego, egodir);
+    }
+    if (controller(cLeftDblClick)) {
+      display(23, 29, "L-DB-CLICK");
+      msgTimer = 1;
+    }
+    if (controller(cRightDblClick)) {
+      display(23, 29, "R-DB-CLICK");
+      msgTimer = 1;
+    }
+  }
+  
+  [ if past mouse test (but not testing restart)
+  [ enable mouse for all other tests
+  if (teststep > 14) {
+    if ((teststep != 41 || subteststep != 8) && hasMouse) {
+    
+      if (IntVersion > VERSION_2272) {
+        enable.item(mouse);
+      } else {
+        set.key(1, 0, c251);
+      }
+    }
+  }
+  
+  [ if at or past status line test, enable changes
+  if (teststep > 16) {
+    if (said("status", "on")) {
+      status.line.on();
+    }
+    if (said("status", "off")) {
+      status.line.off();
+    }
+    
+    if (said("status", "test")) {
+      set.cursor.char(" l6, v3, v27, v28, v29, f9");
+    }
+    
+    if (said("status", "reset")) {
+      set.cursor.char(" ");
+    }
+  }
+  
+  [ if at or past click-to-move test, enable changes
+  if (teststep > 17 && teststep != 39) {
+    if (said("clickmove", "straight")) {
+      stepcounter = -1;
+      step.size(ego, stepcounter);
+    }
+    if (said("clickmove", "normal")) {
+      work1 = -2;
+      step.size(ego, work1);
+    }
+    if (said("clickmove", "on")) {
+      set(clickmove);
+    }
+    if (said("clickmove", "off")) {
+      reset(clickmove);
+    }
+  }
+  
+  [ tests 1-20 are in part 1
+  if (teststep < 21) {
+    stepcounter = 0;
+    call(lgc.TestPart1);
+  }
+  
+  [ tests 21-34 are in part 2
+  if (teststep > 20 && teststep < 35) {
+    stepcounter = 20;
+    call(lgc.TestPart2);
+  }
+  
+  [ tests 35-42 are in part 3
+  if (teststep > 34 && teststep < 43) {
+    stepcounter = 34;
+    call(lgc.TestPart3);
+  }
+  
+  if (teststep == 43) {
+    ++teststep;
+    reset(newtest);
+    reset(ppTesting);
+    reset(disableGameFunctions);
+    print("All tests completed. Patch looks good.");
+    clear.lines(23, 24, BLACK);
+  }
+
+  :continue
+  
+  [ clear match if 'test' is repeated
+  if (said("test")) {
+  }
+}
+
+
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+
+if (teststep == 44) {
+  if (edgeEgoHit == TOP_EDGE) {
+    [ move to room above
+    new.room(rm.NorthRoom);  [ ##LE001##
+  }
+  
+  if (edgeEgoHit == RIGHT_EDGE) {
+    [ move to room on the right
+    new.room(rm.EastRoom);  [ ##LE002##
+  }
+  
+  if (edgeEgoHit == BOTTOM_EDGE) {
+    [ move to room below
+    new.room(rm.Outside);  [ ##LE003##
+  }
+  if (edgeEgoHit == LEFT_EDGE) {
+    [ move to room on the left
+    new.room(rm.WestRoom); [ ##LE004##
+  }
+}
+
+[ **************************************
+[ PROCESS PLAYER INPUT
+[ **************************************
+
+[ if player has provided input and match not yet found,
+[ do said tests
+if (haveInput && !haveMatch) {  
+  [ look
+  if (said("look")) {
+    print("This is an empty room.");
+  }
+}
+
+:done
+return();
+
+[ **************************************
+[ MESSAGES
+[ **************************************

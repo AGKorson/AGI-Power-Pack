@@ -23,7 +23,19 @@
 #define counter2          v231
 
 
-[ run tests 35-41
+[***********************************************************
+[
+[ run tests 35-42
+[
+[ TEST35: date/time functions
+[ TEST36: creating, reading/writing data files
+[ TEST37: polling the shift, ctrl and alt keys
+[ TEST38: support for words with non-alphabetic characters 
+[ TEST39: on object test command 
+[ TEST40: message text relocation
+[ TEST41: restart support for power pack 
+[ TEST42: save/restore support for power pack 
+[***********************************************************
 
 if (newtest) {
  clear.lines(23, 24, BLACK);
@@ -112,6 +124,7 @@ if (teststep == stepcounter) {
     :setstr
       s2 = "%o47";
       block(STR.FORMAT, &s2, &s2, 0);
+      [ update msg 2 then use set.string.v; could also just use str.copy!
       block(SET.MSG, 0, &m2, &s2);
       tmpVal = &m2;
       block(SET.STRING.V, &work3, &tmpVal, 0);
@@ -371,7 +384,34 @@ if (teststep == stepcounter) {
   }
 }
 
-[ TEST40: restart support for power pack 
+[ TEST40: message text relocation
+++stepcounter;
+if (teststep == stepcounter) {
+  if (newtest) {
+    display(24, 0, "%v63: RESTART TEST");
+    reset(newtest);
+    print("Message text is now stored in a separate memory segment. "
+          "Loading a logic with large amount of text should not reduce "
+          "available memory.");
+    work1 = memoryLeft;
+    print("Available memory BEFORE loading: %v8");
+    load.logics(lgc.MsgMemTest);
+    work2 = memoryLeft;
+    work1 -= work2;
+    print("Available memory AFTER loading: %v8");
+    if (work1 > 1) {
+      print("Message memory test failed.");
+      goto(fail);
+    }
+    print("Message memory test PASSED.");
+    print("Moving on to next test.");
+    ++teststep;
+    set(newtest);
+    subteststep = 0;
+  }
+}
+
+[ TEST41: restart support for power pack 
 ++stepcounter;
 if (teststep == stepcounter) {
   if (subteststep == 0) {
@@ -403,6 +443,9 @@ if (teststep == stepcounter) {
       [ custom msgbox colors
       block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)
       print("Setting custom message box colors.");
+      [ set a custom palette
+      block(SET.PALETTE, 0, &m3, 0);
+      print("Swapping BLACK and WHITE in the color palette.");
       [ point and click on, straight mode
       print("Enabling click-to-move in 'straight' mode.");
       set(clickmove);
@@ -459,6 +502,18 @@ if (teststep == stepcounter) {
     }
   }
   if (subteststep == 1) {
+    [ palette reset to default
+    if (newtest) {
+      reset(newtest);
+      display(24, 0, "%v63: CHECK RESTART");
+      print("Palette should be reset to default.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Palette colors correct? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 2) {
     [ compare.strings should be normal;
     [ msgbox colors should be normal
     if (newtest) {
@@ -476,7 +531,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 2) {
+  if (subteststep == 3) {
     display(5, 29, "TIMER: %v231 ");
     [ countdown timer should STOP
     if (newtest) {
@@ -492,7 +547,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 3) {
+  if (subteststep == 4) {
     if (newtest) {
       display(24, 0, "%v63: CHECK RESTART");
       reset(newtest);
@@ -526,7 +581,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 4) {
+  if (subteststep == 5) {
     if (newtest) {
       [ check that sound is available
       display(24, 0, "%v63: CHECK RESTART");
@@ -561,7 +616,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 5) {
+  if (subteststep == 6) {
     if (numberOfVoices > 1 && hasFM) {
       if (newtest) {
         display(24, 0, "%v63: CHECK RESTART");
@@ -585,7 +640,7 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  if (subteststep == 6) {  
+  if (subteststep == 7) {  
     if (numberOfVoices > 1 && hasMIDI) {
       if (newtest) {
         display(24, 0, "%v63: CHECK RESTART");
@@ -608,7 +663,7 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }  
-  if (subteststep == 7) {
+  if (subteststep == 8) {
     if (newtest) {
       display(24, 0, "%v63: CHECK RESTART");
       reset(newtest);
@@ -661,7 +716,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 8) {
+  if (subteststep == 9) {
     ++tmpTimer1;
     display(4, 27, "CPS: %v220/%v227  ");
     if (tmpTimer2 != elapsedSeconds) {
@@ -687,7 +742,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 9) {
+  if (subteststep == 10) {
     if (newtest) {
       display(24, 0, "%v63: CHECK RESTART");
       reset(newtest);
@@ -701,7 +756,7 @@ if (teststep == stepcounter) {
   }
 }
 
-[ TEST41: save/restore support for power pack 
+[ TEST42: save/restore support for power pack 
 ++stepcounter;
 if (teststep == stepcounter) {
   if (subteststep == 0) {
@@ -733,6 +788,9 @@ if (teststep == stepcounter) {
       [ custom msgbox colors
       block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)
       print("Setting custom message box colors.");
+      [ set a custom palette
+      block(SET.PALETTE, 0, &m3, 0);
+      print("Swapping BLACK and WHITE in the color palette.");
       [ setting speed to 60 cps
       print("Setting game speed to 60 cycles per second.");
       work1 = 1;
@@ -861,9 +919,9 @@ if (teststep == stepcounter) {
   }
   if (subteststep == 3) {
     [ compare.strings should be binary;
-    [ msgbox colors should be the same
+    [ palette should be custom
     if (newtest) {
-      reset(newtest);
+[      reset(newtest); [ skip to next test immediately
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       s10 = "test string";
       s11 = "TEST!string";
@@ -871,6 +929,29 @@ if (teststep == stepcounter) {
         print("Compare.strings setting failed to restore.");
         goto(fail);
       }
+      ++subteststep;
+    }
+  }
+  if (subteststep == 4) {
+    [ custom palette restored correctly
+    if (newtest) {
+      reset(newtest);
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
+      print("Custom palette (black/white switch) should be restored.");
+      [ check results
+      clear.lines(23, 24, BLACK);
+      get.string(strAnswer, "Palette colors correct? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+  }
+  
+  if (subteststep == 5) {
+    [ msgbox colors should be the same
+    if (newtest) {
+      reset(newtest);
+      [ restore palette
+      block(SET.PALETTE, 0, &m4, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      display(24, 0, "%v63: CHECK SAVE/RESTORE");
       print("Message box colors should still be custom.");
       [ check results
       clear.lines(23, 24, BLACK);
@@ -878,7 +959,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 4) {
+  if (subteststep == 6) {
     [ countdown timer should still be counting down
     if (newtest) {
       display(24, 0, "CHECK SAVE/RESTORE");
@@ -905,7 +986,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 5) {
+  if (subteststep == 7) {
     if (newtest) {
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       reset(newtest);
@@ -927,7 +1008,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 6) {
+  if (subteststep == 8) {
     if (newtest) {
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       reset(newtest);
@@ -972,7 +1053,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 7) {
+  if (subteststep == 9) {
     if (newtest) {
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       if (numberOfVoices > 1 && hasFM) {
@@ -994,7 +1075,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 8) {
+  if (subteststep == 10) {
     if (newtest) {
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       if (numberOfVoices > 1 && hasMIDI) {
@@ -1017,7 +1098,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }  
-  if (subteststep == 9) {
+  if (subteststep == 11) {
     if (newtest) {
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       reset(newtest);
@@ -1053,7 +1134,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 10) {
+  if (subteststep == 12) {
     if (newtest) {
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       reset(newtest);
@@ -1113,6 +1194,10 @@ return();
 [*****
 #message 1 "                                       "
 #message 2 "                                       "
+#message 3 "3F3F3F00002A002A00002A2A2A00002A002A2A15002A2A2A"
+           "15151515153F003F15153F3F3F15153F153F3F3F15000000"
+#message 4 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A"
+           "15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
 
 #message 60 "Sunday"
 #message 61 "Monday"
@@ -1142,7 +1227,7 @@ return();
             "00000040006000700078007C007E007F"
             "807F007C006C00460006000300030000"
 [ walk cursor
-#message  102 "0F04"
+#message  102 "040F"
              "FFF1FFE0FFE0FFE0FFE0FFF1FFE17FC0"
              "3FC07FE0FFE1FFC1FF80FF087F183FBC"
              "0000000E000C000E000E0004000C0016"
