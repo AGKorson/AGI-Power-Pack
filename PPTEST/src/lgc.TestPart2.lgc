@@ -679,8 +679,8 @@ if (teststep == stepcounter) {
     work1 = 1;
     #message 1 "msg"
     work2 = 4;
-    s7 = "%s6%v46%m1%o47";
-    s8 = "test1msgdagger";
+    s7 = "%s6%v46%m1%o47%l1|33";
+    s8 = "test1msgdaggerlogic1";
     block(STR.FORMAT, &s7, &s9, 0);
     if (!compare.strings(s9, s8)) {
       print("STR.FORMAT check1 failed.");
