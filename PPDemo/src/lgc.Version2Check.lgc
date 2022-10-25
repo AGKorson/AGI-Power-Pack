@@ -1,0 +1,109 @@
+[ 
+[ lgc.Version2Check
+[ 
+
+[ s29=" Durgan" means 2.089
+s1 = " Durgan";
+if (compare.strings(s1, s29)) {
+  IntVersion = VERSION_2089;
+  return();
+}
+
+[ s41="uit." means 2.272
+s1 = "uit.";
+if (compare.strings(s1, s41)) {
+  IntVersion = VERSION_2272;
+  return();
+}
+
+[ s55="ersion 2.411" means 2.411
+s1 = "ersion 2.411";
+if (compare.strings(s1, s55)) {
+  IntVersion = VERSION_2411;
+  return();
+}
+
+[ s55="ersion 2.425" means 2.425
+s1 = "ersion 2.425";
+if (compare.strings(s1, s55)) {
+  IntVersion = VERSION_2425;
+  return();
+}
+
+[ s55="ersion 2.426" means 2.426
+s1 = "ersion 2.426";
+if (compare.strings(s1, s55)) {
+  IntVersion = VERSION_2426;
+  return();
+}
+
+[ s55="ersion 2.435" means 2.435
+s1 = "ersion 2.435";
+if (compare.strings(s1, s55)) {
+  IntVersion = VERSION_2435;
+  return();
+}
+
+[ s55="ersion 2.439" means 2.439
+s1 = "ersion 2.439";
+if (compare.strings(s1, s55)) {
+  IntVersion = VERSION_2439;
+  return();
+}
+
+[ s55="ersion 2.440" means 2.440
+s1 = "ersion 2.440";
+if (compare.strings(s1, s55)) {
+  IntVersion = VERSION_2440;
+  return();
+}
+
+[ s56=".xxx" means 2.903 through 2.917
+s1 = ".903";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2903;
+  return();
+}
+
+[ s56=".xxx" means 2.903 through 2.917
+s1 = ".911";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2911;
+  return();
+}
+
+[ s56=".xxx" means 2.903 through 2.917
+s1 = ".912";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2912;
+  return();
+}
+
+[ s56=".xxx" means 2.903 through 2.917
+s1 = ".915";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2915;
+  return();
+}
+
+[ s56=".xxx" means 2.903 through 2.917
+s1 = ".917";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2917;
+  return();
+}
+
+[ s56="ersion 2.936" means 2.936
+s1 = "ersion 2.936";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_2936;
+  return();
+}
+
+[ version unknown
+IntVersion = 0;
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

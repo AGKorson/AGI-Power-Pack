@@ -711,7 +711,7 @@ if (cursormode) {
       sTemp = "%m1";
     }
     else {
-      sTemp = "%g40";
+      sTemp = "%l90|40";
       [ also remove coordinates display
       set.text.attribute(-1, 0);
       set.text.attribute(BLACK, LT_GRAY);
@@ -1270,7 +1270,7 @@ lastChar = 0;
 if (newIndex != cIndex) {
   cIndex = newIndex;
   cIndex += 40;
-  sCursor = "%g";
+  sCursor = "%l90|";
   s17 = "%v227";
   block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
   block(STR.CONCAT, &sCursor, &s17, 0); [ sINPUT, sADD)
@@ -1407,8 +1407,8 @@ return();
 #message 18 "  use  "
 #message 19 " wait  "
 #message 20 "%m1"
-#message 21 "%g40"
-#message 22 "%g"
+#message 21 "%l90|40"
+#message 22 "%l90|"
 #message 23 "%v227"
 #message 24 "%s11"
 #message 25 "GRID"

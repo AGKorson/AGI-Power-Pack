@@ -1556,8 +1556,8 @@ if (egoHitSpecial && !fFalling) {
   set.view(ego, vw.EgoSlip);
   set.loop(ego, 0);
   set.cel(ego, 0);
-  work1 = 5;
-  work2 = -10;
+  work1 = -10;
+  work2 = 5;
   reposition(ego, work1, work2);
   end.of.loop(ego, fSlipped);
   [ allow cycle at rest
@@ -1634,10 +1634,12 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
     if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
       if (elapsedMinutes < 10) {
         [ if reading a book
-        if (patient1Seq > 32 && patient1Seq < 36) {
-          print("This patient is reading a book. It's nice to know that some people can survive without constantly checking their cell phone.");
-        } else {
+        if ((patient1Seq == 3 || patient1Seq == 32 || patient1Seq == 33)) {
           print("Looks like she's checking her phone. Or maybe playing a game.");
+          goto(doneclick);
+        }
+        if (patient1Seq > 33 && patient1Seq == 37) {        
+          print("This patient is reading a book. It's nice to know that some people can survive without constantly checking their cell phone.");
         }
       } else {
         print("This old lady has been here a long time. She doesn't seem to upset about the long wait though.");
@@ -1675,7 +1677,6 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       goto(doneclick);
     }
     [ entry door 112, 150, 139, 167
-[print("x: %v46, y: %v47");
     if (mouseX > 111 && mouseX < 140 && mouseY > 157 && mouseY < 176) {
       print("The glass entrance door opens and closes automatically.");
       goto(doneclick);
@@ -1746,7 +1747,13 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
       print("talk patient1");
     }
     if (posn(oPatient2, ON.OBJ, 0, &mouseX, &mouseY)) {
-      print("talk patient2 or 4");
+      [ determine which patient
+      current.view(oPatient2, work1);
+      if (work1 == vw.Patient2) {
+        print("talk patient2");
+      } else {
+        print("talk patient4");
+      }
     }
     if (posn(oPatient3, ON.OBJ, 0, &mouseX, &mouseY)) {
       print("talk patient3");
@@ -1862,9 +1869,9 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+#message 1 "%l90|40"
+#message 2 "%l90|41"
+#message 3 "%l90|42"
+#message 4 "%l90|43"
+#message 5 "%l90|44"
+#message 6 "%l90|45"

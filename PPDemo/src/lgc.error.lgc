@@ -50,3 +50,10 @@ return();
 #message 30 "%m29loaded.%m25"
 #message 31 "%m29set.%m25"
 #message 32 "Picture not loaded.%m25"
+
+#message 33 "The AGI Power Pack Demo will only run on a PC (or in DosBOX emulating a PC). No other platforms are supported.\nAborting..."
+#message 34 "Invalid AGI version. Power Pack Demo requires a valid MSDOS interpreter running on a PC, or in DOSBox. ScummVM and NAGI are not supported.\n\nAborting..."
+#message 35 "The Power Pack does work with version 2.089 and 2.272, however this demo game does not support them. Please use a later version 2 interpreter to run this demo game."
+#message 36 "The AGI Power Pack Demo will only run in EGA mode on a PC (or in DosBOX).\n\nAborting..."
+#message 37 "The AGI Power Pack Demo will only run on a PC (or in DosBOX) with a mouse driver installed.\n\nAborting..."
+#message 38 "The AGI Power Pack Demo will only run on a PC (or in DosBOX) with an FM synthesizer card (Adlib or compatible) and a MIDI device enabled.\n\nAborting..."

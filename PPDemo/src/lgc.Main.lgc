@@ -67,63 +67,89 @@ if (currentRoom == 0) {
   if (!gameRestarted) { 
     [ confirm platform is PC
     if (machineType != PC) {
-      print("The AGI Power Pack Demo will only run on a PC (or "
-            "in DosBOX emulating a PC). No other platforms are "
-            "supported.\nAborting...");
+      load.logics(lgc.Error);
+      print("%l97|33");
       quit(1);
     }
           
     [ run the powerpack mod BEFORE DOING ANYTHING ELSE
-    call(lgc.mod2089);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2272);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2411);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2425);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2426);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2435);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2439);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2440);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2903);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2911);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2912);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2915);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2917);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2936);
+    call(lgc.Version2Check);
     if (!IntVersion) {
-      print("Invalid AGI version. Power Pack Demo requires a valid MSDOS interpreter running on "
-            "a PC, or in DOSBox. ScummVM and NAGI are not supported.\n\nAborting...");
+      load.logics(lgc.Error);
+      print("%l97|34");
       quit(1);
     }
-    print("Version: %v30");
+    if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272)) {
+      [ these versions not supported
+      load.logics(lgc.Error);
+      print("%l97|35");
+      quit(1);
+    }
+    if (IntVersion == VERSION_2411) {
+      call(lgc.mod2411);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2425) {
+      call(lgc.mod2425);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2426) {
+      call(lgc.mod2426);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2435) {
+      call(lgc.mod2435);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2439) {
+      call(lgc.mod2439);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2440) {
+      call(lgc.mod2440);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2903) {
+      call(lgc.mod2903);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2911) {
+      call(lgc.mod2911);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2912) {
+      call(lgc.mod2912);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2915) {
+      call(lgc.mod2915);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2917) {
+      call(lgc.mod2917);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2936) {
+      call(lgc.mod2936);
+      goto(continue);
+    }
+print("Version: %v30");
   }
   :continue
   [ confirm video, sound and mouse settings
   if (monitorType != EGA) {
-    print("The AGI Power Pack Demo will only run in EGA "
-          "mode on a PC (or in DosBOX).\n\nAborting...");
+    load.logics(lgc.Error);
+    print("%l97|36");
     quit(1);
   }
   if (!enableDblClick) {
-    print("The AGI Power Pack Demo will only run on a PC (or "
-          "in DosBOX) with a mouse driver installed.\n\nAborting...");
+    load.logics(lgc.Error);
+    print("%l97|37");
     quit(1);
   }
   if (numberOfVoices != 4) {
-    print("The AGI Power Pack Demo will only run on a PC (or "
-          "in DosBOX) with an FM synthesizer card (Adlib or "
-          "compatible) and a MIDI device enabled.\n\nAborting...");
+    load.logics(lgc.Error);
+    print("%l97|38");
     quit(1);
   }
   
@@ -187,7 +213,7 @@ if (currentRoom == 0) {
 
 [!!! debug code to show click location and ego location
 [ used to assist in creating click statements and said statements
-if (controller(cLeftClick)) {
+if (controller(cLeftClick)  && currentRoom != 12) {
   get.posn(ego, work1, work2);
   display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
 }
@@ -470,21 +496,10 @@ if (!disableGameFunctions) {
     [ selectedItem is set to 255 if ESC is pressed
     [ in the inventory screen
     if (selectedItem > 0 && selectedItem != 255) {
-      [ player has chosen an object (value of SelectedItem)
-      [ we now display this object
-      if (selectedItem == 1) {
-        show.obj(vw.Inv.TestItem);
-      }
-      [ If you have several objects, it is easier to give
-      [ them consecutive view numbers. Then you can do the
-      [ following (view numbers start at 220 for this
-      [ example):
-      [   v255 = selectedItem; v255 += 219;
-      [   show.obj.v(v255);
-      [ If you do this, you don't have to have separate statements for each
-      [ object.
+      selectedItem += 100;
+      show.obj.v(selectedItem);
     }
-      
+            
     [ disable selection of inventory items
     reset(enableItemSelect);
   }
@@ -659,47 +674,3 @@ return();
 #message 37 "Debug Help        "
 #message 38 gameAboutMsg
 #message 39 gameVersionMsg
-
-[ active cursors
-#message 40 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
-            "00000040006000700078007C007E007F807F007C006C00460006000300030000"
-[ walk
-#message 41 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
-            "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
-[ look
-#message 42 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
-            "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
-[ talk
-#message 43 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
-            "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
-[ use 
-#message 44 "0706FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
-            "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
-[ wait 
-#message 45 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
-            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
-[ default cursors
-#message 46 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
-            "00000040006000700078007C007E007F807F007C006C00460006000300030000"
-[ walk
-#message 47 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
-            "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
-[ look
-#message 48 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
-            "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
-[ talk
-#message 49 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
-            "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
-[ use 
-#message 50 "0707FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
-            "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
-[ wait
-#message 51 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
-            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
-            
-#message 52 "%s16"
-#message 53 "22215909FFFF030F020000"
-#message 54 "22215909FFFF030F020000"
-#message 55 "22215909FFFF030F020000"
-#message 56 "22215909FFFF030F020000"
-#message 57 "22215909FFFF030F020000"

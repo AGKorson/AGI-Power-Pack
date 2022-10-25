@@ -85,6 +85,7 @@
 #define faucetfixed            f48 [ set when faucet in closet has been tightened
 #define receptionistInHall     f49 [ set when receptionist is in hallway, so she can shoo ego back to lobby
 #define firstLobbyVisit        f50
+#define ctrlroomunlocked       f51 [ set when correct pin entered on door keypad
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
@@ -211,5 +212,7 @@
 #define CHECK.SHIFT            -43
 #define MUL                    -44
 #define DIV                    -45
+#define HIDE.OBJS              -46
+#define PAUSE.CLOCK            -47
 #define ON.OBJ                  -1
 #define FADECOUNT               25

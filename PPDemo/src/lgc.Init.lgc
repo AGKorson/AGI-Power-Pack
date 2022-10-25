@@ -104,7 +104,7 @@ palette = m3;
 [ enable custom status bar
 [ run logic 13(lgc.Statusbar)
 [ check for score (v3), max score (v7), current minute(v78) and sound status (f9)
-set.cursor.char(" l13,  v3, v7, v78, f9");
+set.cursor.char(" l29,  v3, v7, v78, f9");
 
 [ select ego and parked car models
 #define tmp0    v220

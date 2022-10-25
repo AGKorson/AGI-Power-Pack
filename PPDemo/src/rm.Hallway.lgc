@@ -201,6 +201,9 @@ if (arrestSeq > 0) {
     erase(oSecurity);
     deathType = 4;
     ++arrestSeq;
+    [ restore cursor
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   }
   return();
 }
@@ -223,7 +226,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 }
   
 [ if NOT clicking on the actual toolbar, check for
-[ clicks on ingame items 13, 62, 159, 155
+[ clicks on ingame items
 if (mouseX > 12 && mouseX < 152 && mouseY > 69 && mouseY < 156 && 
     controller(cLeftClick)) {
   [ look
@@ -244,6 +247,7 @@ if (mouseX > 12 && mouseX < 152 && mouseY > 69 && mouseY < 156 &&
     [ doors
     if (mouseX > 17 && mouseX < 25 && mouseY > 107 && mouseY < 149) {
       print("This is a closet door. It has a sign on it that says \"Please keep this door closed.\"");
+      goto(doneclick);
     }
     if (mouseY > 106 && mouseY < 139) {
       [ door 1 - 47, 107, 59, 138
@@ -490,7 +494,11 @@ if (fExamDoorDone) {
       print("I asked you to stop interrupting!! Security!!!");
       prevent.input();
       program.control();
-      [TODO: need global flag to prevent mouse input; that way don't need to show wait cursor all the time
+      [ switch to wait cursor
+      [ show wait cursor
+      cursoricon = C_WAIT;
+      set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+      set(disableGameFunctions);
       arrestSeq = 1;
     }
     goto(doneEDoorSeq);
@@ -534,10 +542,10 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+#message 1 "%l90|40"
+#message 2 "%l90|41"
+#message 3 "%l90|42"
+#message 4 "%l90|43"
+#message 5 "%l90|44"
+#message 6 "%l90|45"
 #message 7 "There are several doors in this hallway." 

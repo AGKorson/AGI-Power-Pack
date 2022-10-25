@@ -9,13 +9,13 @@
 #define lightshadow   o1
 #define door          o2
 
-#define doorSeq     v220
-#define flickerTime v221
+#define doorSeq      v220
+#define flickerTime  v221
 
-#define fDoorDone   f220
-#define fDoorOpen   f221
+#define fDoorDone    f220
+#define fDoorOpen    f221
 #define doorUnlocked f222
-#define lightOn     f223
+#define lightOn      f223
 
 
 if (newRoom) {
@@ -34,12 +34,13 @@ if (newRoom) {
   load.view(vw.StairwayArt);
   
   [ lights
-  add.to.pic(vw.StairwayArt, 0, 0, 76, 133, 4, 15);
+  add.to.pic(vw.StairwayArt, 0, 0, 128, 81, 4, 15);
   animate.obj(lightshadow);
   set.view(lightshadow, vw.StairwayArt);
   set.loop(lightshadow, 0);
+  set.cel(lightshadow, 0);
   set.priority(lightshadow, 4);
-  position(lightshadow, 128, 81);
+  position(lightshadow, 76, 133);
   stop.cycling(lightshadow);
   ignore.objs(lightshadow);
   ignore.blocks(lightshadow);
@@ -51,7 +52,7 @@ if (newRoom) {
   animate.obj(door);
   set.view(door, vw.StairwayArt);
   set.loop(door, 1);
-  position(door, 32, 152); [161-8=153
+  position(door, 32, 152);
   set.priority(door, 5);
   stop.cycling(door);
   ignore.objs(door);
@@ -64,13 +65,27 @@ if (newRoom) {
     observe.blocks(ego);
     set.loop(ego, 1);
     set.cel(door, 0);
-  } else {
+  }
+  if (previousRoom == rm.DoorKeypad) {
+    [ remain at current position, with door open/closed
+    [ depending on lock status
+    if (ctrlroomunlocked) {
+      ignore.blocks(ego);
+      set.cel(door, 4);
+      set(fDoorOpen);
+    } else {
+      observe.blocks(ego);
+      set.cel(door, 0);
+    }
+  }
+  if (previousRoom == rm.ControlRoom) {  
     [ coming from control room; door is open
     position(ego, 34, 155);
     ignore.blocks(ego);
     set.cel(door, 4);
     set(fDoorOpen);
   }
+    
   [ force priority
   set.priority(ego, 6);
   egoDir = STOPPED;
@@ -122,7 +137,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     print("You see nothing of interest.");
   }
   if (said("open", "door")) {
-    if (posn(ego, 30, 154, 38, 156)) {
+    if (posn(ego, 26, 154, 43, 156)) {
       if (doorUnlocked) {
         doorSeq = 1;
       } else {
@@ -134,7 +149,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   
   if (said("close", "door")) {
-    if (posn(ego, 30, 154, 38, 156)) {
+    if (posn(ego, 26, 154, 43, 156)) {
       doorSeq = 2;
     } else {
       print("you are not close enough.");
@@ -155,13 +170,13 @@ if (mouseX > 22 && mouseY > 26 && controller(cLeftClick)) {
     
     [ door
     if (mouseX > 30 && mouseX < 44 && mouseY > 125 && mouseY < 162) {
-      print("door to control room");
+      print("This sturdy door must be protecting something very important.");
       goto(doneclick);
     }
     
     [ access control pad
     if (mouseX > 45 && mouseX < 50 && mouseY > 143 && mouseY < 151) {
-      print("access control pad");
+      print("It's a door access keypad. With the right code, it will unlock the door.");
       goto(doneclick);
     }
     [ stairs/wall
@@ -172,10 +187,12 @@ if (mouseX > 22 && mouseY > 26 && controller(cLeftClick)) {
         work2 = work1;
         work2 -= mouseY;
         if (work2 < 12) {
-          print("stairs");
+          print("A long set of stairs leads down from the secret room to a small foyer.");
         } else {
           if (work2 < 56) {
-            print("wall");
+            print("The walls are a bit plain, and show signs of age with various cracks clearly visible.");
+            print("The stairwell is illuninated by a couple of overhead lights.");
+            print("The lower light flickers a lot, as if there is something not quite right with the electrical circuit.");
           }
         }
         goto(doneclick);
@@ -186,7 +203,9 @@ if (mouseX > 22 && mouseY > 26 && controller(cLeftClick)) {
     }
     [ rest of wall
     if (mouseX > 22 && mouseX < 60 && mouseY > 107 && mouseY < 162) {
-      print("also wall");
+            print("The walls are a bit plain, and show signs of age with various cracks clearly visible.");
+            print("The stairwell is illuninated by a couple of overhead lights.");
+            print("The lower light flickers a lot, as if there is something not quite right with the electrical circuit.");
       goto(doneclick);
     }
     
@@ -210,19 +229,18 @@ if (mouseX > 22 && mouseY > 26 && controller(cLeftClick)) {
   if (cursormode == C_USE) {
     [ ego
     if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
-      print("Please don't touch yourself. Someone might see you.");
+      print("Please don't touch yourself. Not even when you're alone.");
       goto(doneclick);
     }
     
     [ door
     if (mouseX > 30 && mouseX < 44 && mouseY > 125 && mouseY < 162) {
-      if (posn(ego, 30, 154, 38, 156)) {
+      if (posn(ego, 26, 154, 43, 156)) {
         if (fDoorOpen) {
           [ close it
           doorSeq = 2;
         } else {
           [ open it (if not locked)
-      
           if (doorUnlocked) {
             doorSeq = 1;
           } else {
@@ -234,13 +252,24 @@ if (mouseX > 22 && mouseY > 26 && controller(cLeftClick)) {
       }
       goto(doneclick);
     }
-      
+    
     [ access control pad
     if (mouseX > 45 && mouseX < 50 && mouseY > 143 && mouseY < 151) {
-      [ TODO: display access panel, and unlock door if
-      [ correct code entered
-      print("door is now unlocked");
-      set(doorUnlocked);
+      if (posn(ego, 38, 154, 51, 157)) {
+        [ if door is open
+        if (fDoorOpen) {
+          print("The door is already open.");
+        } else {
+          [ show wait cursor
+          cursoricon = C_WAIT;
+          set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+          [ fade out, then display access panel
+          block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+          new.room(rm.DoorKeypad); [ ##LE001##
+        }
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
   }
@@ -274,21 +303,19 @@ if (fDoorDone) {
   doorSeq = 0;
 }
 
-  
 
 [*****
 :exit              [  test for leaving the room
 [*****
 
 [ add exit checks here (or use layout editor)
-[ TODO: do i need to restore priority? or does new.room do that automatically?
 if (edgeEgoHit == RIGHT_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.SecretRoom);  [ ##LE001##
+  new.room(rm.SecretRoom); [ ##LE002##
 }
 
 if (egoHitSpecial) {
@@ -297,18 +324,18 @@ if (egoHitSpecial) {
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.ControlRoom);  [ ##LE002##
+  new.room(rm.ControlRoom); [ ##LE003##
 }
 return();
 
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+#message 1 "%l90|40"
+#message 2 "%l90|41"
+#message 3 "%l90|42"
+#message 4 "%l90|43"
+#message 5 "%l90|44"
+#message 6 "%l90|45"
 #message 7 "You see nothing of interest." 
  

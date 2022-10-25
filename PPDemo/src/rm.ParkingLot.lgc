@@ -177,9 +177,12 @@ random(10, 20, patientTimer);
   show.pic();
   [ fade in
   block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
-  [ restore cursor
-  cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  
+  [ if not coming from intro, restore cursor
+  if (previousRoom != rm.Title) {
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  }
   return();
 }
 
@@ -190,16 +193,29 @@ random(10, 20, patientTimer);
 if (egoCarSeq) {
   [ ego arrives
   if (egoCarSeq == 1) {
+    [ disallow menu use
+    reset(enableMenu);
+    [ game functions are disabled
+    set(disableGameFunctions);
+    [ no input allowed
+    prevent.input();
+    
     [ move car to parking spot
     ++egoCarSeq;
     position(egoCar, 0, 131);
     draw(egoCar);
     move.obj(egoCar, 40, 143, 1, fCarDone);
+    [ restore cursor for message
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
     print("At long last, Drew has finally made it to Oakhurst, "
           "California to visit the original Sierra On-Line headquarters "
           "building.");
     print("It has been a long drive, but Drew is super excited as he "
           "pulls into the parking lot.");
+    [ show wait cursor
+    cursoricon = C_WAIT;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   }
   if (egoCarSeq == 2 && fCarDone) {
     [ ego gets out
@@ -208,11 +224,20 @@ if (egoCarSeq) {
     stop.cycling(egoCar);
     position(ego, 50, 139);
     draw(ego);
+    [ restore cursor for message
+    cursoricon = cursormode;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
     print("The building is now a medical office. There aren't too many "
           "cars in the parking lot. So Drew decides to go inside and "
           "take a look around.");
     print("Who knows? Maybe he might find some original Sierra memorabilia "
           "or other signs of long past gaming history.");
+    [ allow menu use
+    set(enableMenu);
+    [ game functions are no longer disabled
+    reset(disableGameFunctions);
+    [ allow input
+    accept.input();
   }
   [ skip rest of room logic until opening sequence is finished
   if (egoCarSeq < 3) {
@@ -519,9 +544,14 @@ if (fEgoDead) {
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
+    [ let's try hiding objects!
+    block(-46, 1, 0, 0);
     print("You are in the Sierra building parking lot.");
   }
-  
+  if (said("look", "look")) {
+    [ show 'em!
+    block(-46, 0, 0, 0);
+  }
 }
 
 [ if NOT clicking on the actual toolbar, check for
@@ -969,12 +999,12 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+#message 1 "%l90|40"
+#message 2 "%l90|41"
+#message 3 "%l90|42"
+#message 4 "%l90|43"
+#message 5 "%l90|44"
+#message 6 "%l90|45"
 #message 7 "You are in the Sierra building parking lot."
 #message 8 "You see nothing of interest."
 #message 9 "There is no one here to talk to."

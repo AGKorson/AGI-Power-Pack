@@ -185,9 +185,9 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+#message 1 "%l90|40"
+#message 2 "%l90|41"
+#message 3 "%l90|42"
+#message 4 "%l90|43"
+#message 5 "%l90|44"
+#message 6 "%l90|45"

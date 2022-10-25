@@ -1,0 +1,256 @@
+[ 
+[ lgc.ReadMagazine
+[ 
+
+#define pageNum     v250
+#define pageImg     v251
+
+#define PAGES         5
+
+[ pause game clock while reading
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
+[ set colors
+set.text.attribute(-1, 0);
+set.text.attribute(BLACK, WHITE);
+
+[ start with cover, which is page 1
+pageImg = pic.MagazineCover;
+pageNum = 1;
+
+[ fade out until done loading cover
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ hide objects while showing magazine
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+load.pic(pageImg);
+draw.pic(pageImg);
+show.pic();
+discard.pic(pageImg);
+[ fade back in
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ main input loop; wait until a key is pressed
+:waitforit
+  lastChar = 0;
+if (!have.key()) {
+  goto(waitforit);
+}
+
+[ ESC or right-click to exit
+if (lastChar == 27) {
+  goto(waitforit);
+}
+
+[ left button down (can't check for controller
+[ because normal AGI cycle is skipped)
+if (mouseBtn == 1) {
+  block(GET.PIXEL, &mouseX, &mouseY, &work2); [ get.pixel(vX, vY, vRESULT)
+  work2 /= 16;
+  if (work2 == 7) {
+    [ done
+    goto(closemag);
+  }
+  if ((work2 == 6 || work2 == 5)) {
+    if (work2 == 6) {
+      [ page right
+      ++pageNum;
+      if (pageNum == PAGES) {
+        pageImg = pic.MagazineEnd;
+      } else {
+        pageImg = pic.MagazinePages;
+      }
+    } else {
+      [ page left
+      --pageNum;
+      if (pageNum == 1) {
+        pageImg = pic.MagazineCover;
+      } else {
+        pageImg = pic.MagazinePages;
+      }
+    }
+    load.pic(pageImg);
+    draw.pic(pageImg);
+    block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    show.pic();
+    if (pageNum > 1) {
+      [ add text/images for current page
+      if (pageNum == 2) {
+      [ display( 2,  9, "0123456789abcdefhgij0123456789");
+        display( 3,  9, "      Table of Contents:");
+        display( 6,  9, "  New Releases              3");
+        display( 8,  9, "  Lorem Ipsum               4");
+        display(10,  9, "  Interview with Roberta    6");
+        display(12,  9, "  Morem Ipsum               7");
+        display(14,  9, "  Rumored Update to AGI     8");
+      [ display( 2, 41, "0123456789abcdefhgij0123456789");
+        display( 3, 41, "   NEW RELEASES" );
+        display( 6, 41, "Sierra is making more games.");
+        display( 7, 41, "They are awesome. You should");
+        display( 8, 41, "buy them all. If you can't");
+        display( 9, 41, "afford them, ask your parents.");
+        display(10, 41, "They probably have a lot of");
+        display(11, 41, "money.");
+        display(13, 41, "List of games you must buy:");
+        display(14, 41, "  - KQ4");
+        display(15, 41, "  - Castle of Dr. Brain");
+        display(16, 41, "  - ALL THE GAMES WE MAKE");
+        
+        display(20, 23, "2");
+        display(20, 56, "3");
+      }
+      if (pageNum == 3) {
+      [ display( 2,  9, "0123456789abcdefhgij0123456789");
+        display( 3,  9, "   LOREM IPSUM...");
+        display( 5,  9, "Lorem ipsum dolor sit amet,");
+        display( 6,  9, "consectetur adipiscing elit,");
+        display( 7,  9, "sed do eiusmod tempor incidi-");
+        display( 8,  9, "dunt ut labore et dolore magna");
+        display( 9,  9, "aliqua. Proin sed libero enim");
+        display(10,  9, "sed faucibus turpis in eu.");
+        display(11,  9, "Aenean euismod elementum nisi");
+        display(12,  9, "quis eleifend. Enim sit amet");
+        display(13,  9, "venenatis urna cursus eget");
+        display(14,  9, "nunc scelerisque viverra. Sed");
+        display(15,  9, "viverra ipsum nunc aliquet.");
+        display(16,  9, "Aenean et tortor at risus");
+        display(17,  9, "viverra adipiscing at in");
+        display(18,  9, "tellus. Arcu cursus euismod");
+        display(19,  9, "quis viverra nibh cras");
+      [ display( 2, 41, "0123456789abcdefhgij0123456789");
+        display( 4, 41, "pulvinar. Cursus mattis moles-");
+        display( 5, 41, "tie a iaculis at. Egestas");
+        display( 6, 41, "fringilla phasellus faucibus");
+        display( 7, 41, "scelerisque eleifend donec");
+        display( 8, 41, "pretium. Ullamcorper sit amet");
+        display( 9, 41, "risus nullam eget felis. Enim");
+        display(10, 41, "lobortis scelerisque fermentum");
+        display(11, 41, "dui faucibus in ornare quam.");
+        display(12, 41, "Dolor sed viverra ipsum nunc.");
+        display(13, 41, "Cras semper auctor neque vitae");
+        display(14, 41, "tempus quam pellentesque.");
+        display(15, 41, "Rhoncus est pellentesque elit");
+        display(16, 41, "ullamcorper. Enim ut sem");
+        display(17, 41, "viverra aliquet eget sit amet");
+        display(18, 41, "tellus. Fringilla ut morbi");
+        display(19, 41, "tincidunt augue.");
+        
+        display(20, 23, "4");
+        display(20, 56, "5");
+      }
+      if (pageNum == 4) {
+      [ display( 2,  9, "0123456789abcdefhgij0123456789");
+        display( 3,  9, "   INTERVIEW WITH ROBERTA");
+        display( 5,  9, "Roberta is working on more ");
+        display( 6,  9, "games. She says they will be ");
+        display( 7,  9, "some of the best that Sierra ");
+        display( 8,  9, "has ever produced.");
+        display( 9,  9, "");
+        display(10,  9, "She said she was very busy so");
+        display(11,  9, "she had to cut the interview");
+        display(12,  9, "short so she could get back to");
+        display(13,  9, "work.");
+        display(14,  9, "");
+        display(15,  9, "That is all.");
+        display(16,  9, "");
+        display(17,  9, "");
+        display(18,  9, "");
+        display(19,  9, "");
+      [ display( 2, 41, "0123456789abcdefhgij0123456789");
+        display( 3, 41, "   MOREM IPSUM");
+        display( 5, 41, "Lorem ipsum dolor sit amet,");
+        display( 6, 41, "consectetur adipiscing elit,");
+        display( 7, 41, "sed do eiusmod tempor incidi-");
+        display( 8, 41, "dunt ut labore et dolore magna");
+        display( 9, 41, "aliqua. Venenatis lectus magna");
+        display(10, 41, "fringilla urna porttitor");
+        display(11, 41, "rhoncus dolor. Enim nulla ali-");
+        display(12, 41, "quet porttitor lacus luctus");
+        display(13, 41, "accumsan. Lorem donec massa");
+        display(14, 41, "sapien faucibus et molestie");
+        display(15, 41, "ac. Gravida quis blandit ");
+        display(16, 41, "turpis cursus in. Neque ornare");
+        display(17, 41, "aenean euismod elementum nisi");
+        display(18, 41, "quis. Quis commodo odio aenean");
+        display(19, 41, "sed adipiscing.");
+        
+        display(20, 23, "6");
+        display(20, 56, "7");
+      }
+      if (pageNum == 5) {
+      [ display( 2, 25, "0123456789abcdefhgij0123456789");
+        display( 3, 25, "      AGI UPDATE RUMORS");
+        display( 5, 25, "Now that SCI is here to stay, ");
+        display( 6, 25, "AGI is going to be officially ");
+        display( 7, 25, "retired. But rumors persist");
+        display( 8, 25, "that a major upgrade, with the");
+        display( 9, 25, "code name 'POWERPACK', had");
+        display(10, 25, "been developed. It added many");
+        display(11, 25, "new features to the engine.");
+        display(12, 25, "Although the development team");
+        display(13, 25, "spent over ---- hours on this");
+        set.text.attribute(RED, WHITE);
+        display(13, 36, "4321");
+        set.text.attribute(BLACK, WHITE);
+        display(14, 25, "upgrade, Sierra management ");
+        display(15, 25, "ultimately decided to go in a");
+        display(16, 25, "new direction with brand new");
+        display(17, 25, "game engine, which we now know");
+        display(18, 25, "as 'SCI', the Sierra Creative");
+        display(19, 25, "Interpreter.");
+        
+        display(20, 39, "8");
+      }
+    }
+    block(FADE.IN, 0, 1, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+    discard.pic(pageImg);
+  }
+}
+[ after page change, wait for next input
+goto(waitforit);
+
+:closemag
+[ fade out during the switch
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ restore the current room
+load.pic(currentRoom);
+draw.pic(currentRoom);
+discard.pic(currentRoom);
+[ restore cursor
+cursoricon = cursormode;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ redisplay objects
+block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE);
+show.pic();
+[ now fade in 
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ restore colors
+set.text.attribute(0, -1);
+[ turn scripting back on
+reset(noScript);
+[ and allow input
+accept.input();
+
+[ restart the clock
+block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%l90|40"
+#message 2 "%l90|41"
+#message 3 "%l90|42"
+#message 4 "%l90|43"
+#message 5 "%l90|44"
+#message 6 "%l90|45"

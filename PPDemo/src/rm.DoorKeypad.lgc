@@ -1,0 +1,311 @@
+[ ********************************************************************
+[
+[ rm.DoorKeypad
+[
+[ 
+[
+[ ********************************************************************
+
+#define oDigit1           o1
+#define oDigit2           o2
+#define oDigit3           o3
+#define oDigit4           o4
+#define oIndicator        o5
+
+#define pressButton     v220
+#define btnColor        v221
+#define digitcount      v222
+#define digit1          v223
+#define digit2          v224
+#define digit3          v225
+#define digit4          v226
+#define vMsg            v227
+#define indicatorTimer  v228
+
+#define unlockdoor      f220
+#define correctcode     f221
+#define pressAsterisk   f222
+#define pressPound      f223
+
+if (newRoom) {
+  [ run initialization code
+  call(lgc.RoomInit);
+
+  [ this is the first cycle through this room
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  [ the horizon defines the upper limit of ego's movement
+  set.horizon(1);
+  
+  [ digital display digits
+  load.view(vw.PINPad);
+  animate.obj(oDigit1);
+  animate.obj(oDigit2);
+  animate.obj(oDigit3);
+  animate.obj(oDigit4);
+  set.view(oDigit1, vw.PINPad);
+  set.view(oDigit2, vw.PINPad);
+  set.view(oDigit3, vw.PINPad);
+  set.view(oDigit4, vw.PINPad);
+  set.loop(oDigit1, 0);
+  set.loop(oDigit2, 0);
+  set.loop(oDigit3, 0);
+  set.loop(oDigit4, 0);
+  position(oDigit1, 91, 28);
+  position(oDigit2, 78, 28);
+  position(oDigit3, 65, 28);
+  position(oDigit4, 52, 28);
+  set.priority(oDigit1, 15);
+  set.priority(oDigit2, 15);
+  set.priority(oDigit3, 15);
+  set.priority(oDigit4, 15);
+  stop.cycling(oDigit1);
+  stop.cycling(oDigit2);
+  stop.cycling(oDigit3);
+  stop.cycling(oDigit4);
+  set.cel(oDigit1, 10);
+  set.cel(oDigit2, 10);
+  set.cel(oDigit3, 10);
+  set.cel(oDigit4, 10);
+  draw(oDigit1);
+  draw(oDigit2);
+  draw(oDigit3);
+  draw(oDigit4);
+  
+  digit1 = 10;
+  digit2 = 10;
+  digit3 = 10;
+  digit4 = 10;
+  
+  animate.obj(oIndicator);
+  set.view(oIndicator, vw.PINPad);
+  set.loop(oIndicator, 0);
+  set.cel(oIndicator, 10);
+  stop.cycling(oIndicator);
+  position(oIndicator, 106, 26);
+  set.priority(oIndicator, 15);
+  draw(oIndicator);
+  
+  [ no ego, and no input (mouse only)
+  set(disableGameFunctions);
+  prevent.input();
+  
+  [ no button pressed to start
+  pressButton = -1;
+  
+  [ use a palette with a much darker 'dark gray'
+  block(SET.PALETTE, 0, &m5, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+
+  [ display the picture on screen
+  show.pic();
+  [ use finger cursor
+  cursoricon = -1; [cursormode;
+  set.key(0, &m10, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ fade in
+  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  return();
+}
+
+[ check for indicator timer
+if (indicatorTimer) {
+  --indicatorTimer;
+  if (indicatorTimer == 0) {
+    set.cel(oIndicator, 10);
+    if (correctcode) {
+      set(unlockdoor);
+    } else {
+      [ clear all four digits
+      digitcount = 0;
+      digit1 = 10;
+      digit2 = 10;
+      digit3 = 10;
+      digit4 = 10;
+      set.cel.v(oDigit1, digit1);
+      set.cel.v(oDigit2, digit2);
+      set.cel.v(oDigit3, digit3);
+      set.cel.v(oDigit4, digit4);
+    }
+  }
+  goto(exit);
+}
+
+[ check for keypad button presses
+if (mouseBtn == 1) { 
+  if (pressButton == -1) {
+    [ TODO: need sound effects for button presses and right/wrong code
+    block(GET.PIXEL, &mouseX, &mouseY, &pressButton); [ get.pixel(vX, vY, vRESULT) 
+    [ priority value indicates button
+    pressButton /= 16;
+    if (pressButton < 15) {
+      [ highlight the pressed button
+      if (pressButton == 0) {
+        [fill 78,133
+        s12 = "F0%s13F84E85FF";
+      }
+      if (pressButton == 1) {
+        [fill 58,43
+        s12 = "F0%s13F83A2BFF";
+      }
+      if (pressButton == 2) {
+        [fill 78,43
+        s12 = "F0%s13F84E2BFF";
+      }
+      if (pressButton == 3) {
+        [fill 98,43
+        s12 = "F0%s13F8622BFF";
+      }
+      if (pressButton == 4) {
+        [fill 60,73
+        s12 = "F0%s13F83C49FF";
+      }
+      if (pressButton == 5) {
+        [fill 78,73
+        s12 = "F0%s13F84E49FF";
+      }
+      if (pressButton == 6) {
+        [fill 98,73
+        s12 = "F0%s13F86249FF";
+      }
+      if (pressButton == 7) {
+        [fill 58,103
+        s12 = "F0%s13F83A67FF";
+      }
+      if (pressButton == 8) {
+        [fill 78,103
+        s12 = "F0%s13F84E67FF";
+      }
+      if (pressButton == 9) {
+        [fill 98,103
+        s12 = "F0%s13F86267FF";
+      }
+      if (pressButton == 10) {
+        [fill 58,133
+        s12 = "F0%s13F83A85FF";
+      }
+      if (pressButton == 11) {
+        [fill 98,133
+        s12 = "F0%s13F86285FF";
+      }
+      s13 = "0F";
+      block(PIC.DRAW, 1, &s12, 0); [ pic.draw(FILLSTYLE, sCMDS)
+      
+      [ check for pound sign (enter)
+      if (pressButton == 11) {
+        set(pressPound);
+      }
+      
+      [ check for asterisk (backspace)
+      if (pressButton == 10) {
+        set(pressAsterisk);
+      }
+      
+      [ check for number
+      if (pressButton < 10) {
+        [ add number if not already at limit of four
+        if (digitcount < 4) {
+            [ advance digits
+            digit4 = digit3;
+            digit3 = digit2;
+            digit2 = digit1;
+            digit1 = pressButton;
+            ++digitcount;
+        }
+      }
+      [ update digital display
+      set.cel.v(oDigit1, digit1);
+      set.cel.v(oDigit2, digit2);
+      set.cel.v(oDigit3, digit3);
+      set.cel.v(oDigit4, digit4);
+    } else {
+      [ no button
+      pressButton = -1;
+    }
+  }
+} else {
+  if (pressButton != -1) {
+    [ unpress button
+    s13 = "08";
+    block(PIC.DRAW, 1, &s12, 0); [ pic.draw(FILLSTYLE, sCMDS)
+    pressButton = -1;
+    
+    [ respond to pound sign/asterisk clicks
+    if (pressPound) {
+      reset(pressPound);
+      [ if not four digits, auto-fail
+      if (digitcount < 4) {
+        set.cel(oIndicator, 12);
+        indicatorTimer = 15;
+      } else {
+        [ confirm code by comparing the digits
+        if (digit1 == 1 && digit2 == 2 && digit3 == 3 && digit4 == 4) {
+          set.cel(oIndicator, 11);
+          indicatorTimer = 6;
+          set(correctcode);
+        } else {
+          set.cel(oIndicator, 12);
+          indicatorTimer = 6;
+        }
+      }
+    }
+    [ asterisk
+    if (pressAsterisk) {
+      reset(pressAsterisk);
+      [ if at least one digit
+      if (digitcount > 0) {
+        [ back up the digits
+        digit1 = digit2;
+        digit2 = digit3;
+        digit3 = digit4;
+        digit4 = 10;
+        --digitcount;
+        [ update digital display
+        set.cel.v(oDigit1, digit1);
+        set.cel.v(oDigit2, digit2);
+        set.cel.v(oDigit3, digit3);
+        set.cel.v(oDigit4, digit4);
+      }
+    }
+  }
+}
+
+[*****
+:exit              [  test for leaving the room
+[*****
+
+[ when correct code is entered, unlock the door and return
+if (unlockdoor) {
+  set(ctrlroomunlocked);
+}
+  
+[ righ-click to cancel and exit
+if ((unlockdoor || controller(cRightClick))) {
+  [ reenable input
+  accept.input();
+  reset(disableGameFunctions);
+  [ show wait cursor
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ fade out to black (faster than room fade)
+  block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  [ restore palette
+  block(SET.PALETTE, 0, &m6, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  new.room.v(previousRoom);
+}
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "F0%s14F85D07F0%s15F85C08F0%s16F86408F0%s17F85D11F0%s18F85C12F0%s19F86412F0%s20F85D1BFF"
+#message 2 "F0%s14F85007F0%s15F84F08F0%s16F85708F0%s17F85011F0%s18F84F12F0%s19F85712F0%s20F8501BFF"
+#message 3 "F0%s14F84307F0%s15F84208F0%s16F84A08F0%s17F84311F0%s18F84212F0%s19F84A12F0%s20F8431BFF"
+#message 4 "F0%s14F83607F0%s15F83508F0%s16F83D08F0%s17F83611F0%s18F83512F0%s19F83D12F0%s20F8361BFF"
+#message 5 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A09090915153F153F15153F3F3F15153F153F3F3F153F3F3F"
+#message 6 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
+
+#message 10 "0400FFF3FFE1FFE1FFE1FFE149E000E000E000800000000000000100018001800380"
+           "0000000C000C000C000C000CB60DB60DB60DFE6FFE6FFE6FFC7FFC3FFC3F0000" 

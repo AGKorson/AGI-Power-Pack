@@ -1,15 +1,12 @@
 [ ********************************************************************
 [
-[ rm.Office
+[ rm.Magazine
 [
 [ 
 [
 [ ********************************************************************
 
 if (newRoom) {
-  [ run initialization code
-  call(lgc.RoomInit);
-  
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
@@ -21,22 +18,12 @@ if (newRoom) {
   
   [ add additional room initialization here
   
-  [ add toolbar buttons
-  load.view(vw.Toolbar);
-  call(lgc.InitToolbar);
-  
-  [ add ego to the room
-  position(ego, 107, 138);
-  draw(ego);
+  [ load ego view, animate and draw ego
+  [ this is sometimes handled in logic 0
+  [ instead of in each individual logic
   
   [ display the picture on screen
   show.pic();
-  [ fade in
-  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
-  [ restore cursor
-  cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  
   return();
 }
 
@@ -62,24 +49,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [*****
 
 [ add exit checks here (or use layout editor)
-
-if (egoHitSpecial) {
-  [ show wait cursor
-  cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.ControlRoom);  [ ##LE001##
-}
 return();
 
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%l90|40"
-#message 2 "%l90|41"
-#message 3 "%l90|42"
-#message 4 "%l90|43"
-#message 5 "%l90|44"
-#message 6 "%l90|45"
-#message 7 "You see nothing of interest." 
+#message 1 "You see nothing of interest." 
