@@ -65,11 +65,6 @@ if (newRoom) {
   load.logics(lgc.TestPart1);
   load.logics(lgc.TestPart2);
   load.logics(lgc.TestPart3);
-  
-  
-[load.sound(m.Theme);
-
-call(lgc.MsgMemTest);
 }
 
 [ **************************************

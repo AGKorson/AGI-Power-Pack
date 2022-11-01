@@ -1,0 +1,46 @@
+[ 
+[ lgc.Version2Check
+[ 
+
+[ s56="ss ESC to quit." means 3.002.086
+s1 = "ss ESC to quit.";
+if (compare.strings(s1, s56)) {
+  IntVersion = VERSION_3002086;
+  return();
+}
+
+[ s58="98", "2.102", "2.107" means 3.002.098 through 3.002.107
+s1 = "98";
+if (compare.strings(s1, s58)) {
+  IntVersion = VERSION_3002098;
+  return();
+}
+
+[ s58="98", "2.102", "2.107" means 3.002.098 through 3.002.107
+s1 = "2.102";
+if (compare.strings(s1, s58)) {
+  IntVersion = VERSION_3002102;
+  return();
+}
+
+[ s58="98", "2.102", "2.107" means 3.002.098 through 3.002.107
+s1 = "2.107";
+if (compare.strings(s1, s58)) {
+  IntVersion = VERSION_3002107;
+  return();
+}
+
+[ s46="2.149" means 3.002.149
+s1 = "2.149";
+if (compare.strings(s1, s46)) {
+  IntVersion = VERSION_3002149;
+  return();
+}
+
+[ version unknown
+IntVersion = 0;
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

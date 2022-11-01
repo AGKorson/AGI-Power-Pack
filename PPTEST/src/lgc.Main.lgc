@@ -31,7 +31,7 @@
 [ **************************************
 #define rndNum                     v255
 
-
+[ TODO: !!need to re-check all tests; I trashed the correct version, so now new functions may not be checked correctly
 [ **************************************
 [ ERROR CHECK
 [ **************************************
@@ -56,37 +56,77 @@ if (currentRoom == 0) {
 
   [ always load the powerpack FIRST
   if (!gameRestarted) {
-[pause();
-    call(lgc.mod2089);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2272);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2411);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2425);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2426);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2435);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2439);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2440);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2903);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2911);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2912);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2915);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2917);
-    if (IntVersion) {goto(continue);}
-    call(lgc.mod2936);
-    if (!IntVersion) {
-      print("invalid AGI version. Aborting...");
+    [ confirm platform is PC
+    if (machineType != PC) {
+      print("The AGI Power Pack Test will only run on a PC (or "
+            "in DosBOX emulating a PC). No other platforms are "
+            "supported.\nAborting...");
       quit(1);
+    }
+          
+    [ run the powerpack mod BEFORE DOING ANYTHING ELSE
+    call(lgc.Version2Check);
+    if (!IntVersion) {
+      print("Invalid AGI version. Power Pack Demo requires a valid "
+            "MSDOS interpreter running on a PC, or in DOSBox. "
+            "ScummVM and NAGI are not supported.\n\nAborting...");
+      quit(1);
+    }
+    if (IntVersion == VERSION_2089) {
+      call(lgc.mod2089);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2272) {
+      call(lgc.mod2272);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2411) {
+      call(lgc.mod2411);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2425) {
+      call(lgc.mod2425);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2426) {
+      call(lgc.mod2426);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2435) {
+      call(lgc.mod2435);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2439) {
+      call(lgc.mod2439);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2440) {
+      call(lgc.mod2440);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2903) {
+      call(lgc.mod2903);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2911) {
+      call(lgc.mod2911);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2912) {
+      call(lgc.mod2912);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2915) {
+      call(lgc.mod2915);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2917) {
+      call(lgc.mod2917);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2936) {
+      call(lgc.mod2936);
+      goto(continue);
     }
   
     :continue
