@@ -157,6 +157,7 @@
 #define car6car7               v76
 #define currentHour            v77 [ hour value of real time
 #define currentMinute          v78 [ minute value of real time
+#define rugStatus              v79
 #define timerMin               v80
 #define timerSec               v81
 #define patientClock           v82 [ twenty minute timer cycle to track patient locations

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/30/2022 3:56:27 PM"
+   LastEdit = "11/1/2022 12:22:05 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -207,7 +207,7 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &HDA1F1739
+   CRC32 = &HB9A98836
    CompCRC32 = &H0
    IsRoom = True
    Size = 2258
@@ -239,10 +239,10 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H119DFE9F
-   CompCRC32 = &H0
+   CRC32 = &HFE49B121
+   CompCRC32 = &HFE49B121
    IsRoom = True
-   Size = 177
+   Size = 777
 
 [Logic10]
    ID = rm.Storeroom
@@ -255,7 +255,7 @@
 [Logic100]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &H6D293A1A
+   CRC32 = &HBD96C3B0
    CompCRC32 = &H0
    IsRoom = False
    Size = 21706
@@ -263,7 +263,7 @@
 [Logic101]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &H4672FE06
+   CRC32 = &HB34A9C65
    CompCRC32 = &H0
    IsRoom = False
    Size = 21829
@@ -271,7 +271,7 @@
 [Logic102]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &H848883B1
+   CRC32 = &H57DB6CEE
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -279,7 +279,7 @@
 [Logic103]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H8691919E
+   CRC32 = &H55C27EC1
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -287,7 +287,7 @@
 [Logic104]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &HDB4B799F
+   CRC32 = &H81253EDC
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -295,7 +295,7 @@
 [Logic105]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &HF2AC4F3A
+   CRC32 = &HA8C20879
    CompCRC32 = &H0
    IsRoom = False
    Size = 22497
@@ -303,7 +303,7 @@
 [Logic106]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &HB6742805
+   CRC32 = &HADCE5BB3
    CompCRC32 = &H0
    IsRoom = False
    Size = 22497
@@ -311,7 +311,7 @@
 [Logic107]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &HF7FEE478
+   CRC32 = &HEC4497CE
    CompCRC32 = &H0
    IsRoom = False
    Size = 22467
@@ -319,7 +319,7 @@
 [Logic108]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HC278ADF6
+   CRC32 = &HDE31E2C7
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -327,7 +327,7 @@
 [Logic109]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &H4BDED57A
+   CRC32 = &H57979A4B
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -335,7 +335,7 @@
 [Logic110]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H2EF3867F
+   CRC32 = &HF358AEC9
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -343,7 +343,7 @@
 [Logic111]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H373760B8
+   CRC32 = &H4801BA86
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -351,15 +351,15 @@
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H3FAFE115
-   CompCRC32 = &H0
+   CRC32 = &HA301F030
+   CompCRC32 = &HA301F030
    IsRoom = False
-   Size = 22273
+   Size = 22284
 
 [Logic113]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H1DB6BC08
+   CRC32 = &H54FE9C66
    CompCRC32 = &H0
    IsRoom = False
    Size = 22132
@@ -546,7 +546,7 @@
    ID = pic.Office
    Description = ""
    BkgdImg = ""
-   Size = 1032
+   Size = 1050
 
 [Picture10]
    ID = pic.Storeroom
@@ -884,7 +884,7 @@
 [View21]
    ID = vw.OfficeArt
    Description = ""
-   Size = 3131
+   Size = 2964
 
 [View23]
    ID = vw.Patient1
