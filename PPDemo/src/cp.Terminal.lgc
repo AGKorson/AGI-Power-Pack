@@ -34,7 +34,6 @@
 [ this is the first cycle through this room
 [ load, draw and discard the picture resource for the current room
 [ do basic room initialization
-call(lgc.RoomInit);
 
 load.pic(currentRoom);
 draw.pic(currentRoom);
@@ -45,16 +44,17 @@ load.logics(lgc.TerminalFunctions);
 [ no mouse
 disable.item(mouse);
 
-[ set colors
 set.text.attribute(-1, 0);
-[ maybe use amber?
-set.text.attribute(GREEN, BLACK);
-
-[[ clear the simulated screen
-[clear.text.rect(toprow, leftcol, btmrow, rightcol, BLACK);
 
 [ display it
 show.pic();
+
+[ add return/cancel info
+set.text.attribute(WHITE, BLACK);
+display(22, 22, "Press <ESC> to return to control room");
+
+[ set terminal colors (maybe use amber?)
+set.text.attribute(GREEN, BLACK);
 block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
 [ position cursor at first line of virtual screen, at right edge
@@ -62,6 +62,9 @@ cursor_row = toprow;
 cursor_col = leftcol;
 cursor_char = 1;
 display.v(cursor_row, cursor_col, cursor_char);
+
+[ reset input line
+input = "";
 
 [ main input loop
 :getKey
@@ -96,6 +99,22 @@ if (cursor_char == 1) {
   display.v(cursor_row, cursor_col, cursor_char);
 }
 
+[ if ESC
+if (lastChar == 27) {
+  [ restore default (inputline) attritubutes
+  set.text.attribute(0, -1);
+  
+  [ fade out
+  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  
+  [ clear return instruction row
+  clear.lines(22, 22, BLACK);
+  
+  [ go back to terminal roonm
+  new.room(rm.ControlRoom); [ ##LE001##
+}
+  
+
 [ if ENTER or CTRL+ENTER
 if ((lastChar == 13 || lastChar == 10)) {
   [ advance the inputline BEFORE processing
@@ -104,27 +123,8 @@ if ((lastChar == 13 || lastChar == 10)) {
     
   [ parse the input
   parse(input);
-  
-  [ deal with input
-  if (said("quit")) {
-    [ display exit msg
-    work1 = &m60;
-    display.v(cursor_row, cursor_col, work1);
-    
-    [ short delay
-    work1 = 255;
-    cycle.time(o254, work1);
 
-    [ restore default (inputline) attritubutes
-    set.text.attribute(0, -1);
-    
-    [ now fade out again (no delay though)
-    block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-    
-    [ go back to terminal roonm
-    new.room(rm.ControlRoom); [ ##LE001##
-  }
-  
+  [ deal with input
   if (said("help")) {
     [ show some help lines
     work1 = 5;
@@ -139,18 +139,70 @@ if ((lastChar == 13 || lastChar == 10)) {
     call(lgc.TerminalFunctions);
   }
   
+  if (said("open", "door")) {
+    set(resetBaDASS);
+#message 24 "done"
+    work1 = &m24;
+    display.v(cursor_row, cursor_col, work1);
+    work1 = 1;
+    call(lgc.TerminalFunctions);
+  }
+  
+#message 20 "  terminating process..."
+#message 21 "  loading module %w2..."
+#message 22 "  initializing..."
+#message 23 "OK"
+
+  if (said("restart", "anyword")) {
+    work1 = &m20;
+    display.v(cursor_row, cursor_col, work1);
+    work1 = 3;
+    call(lgc.TerminalFunctions);
+    work1 = &m21;
+    display.v(cursor_row, cursor_col, work1);
+    work1 = 3;
+    call(lgc.TerminalFunctions);
+    work1 = &m22;
+    display.v(cursor_row, cursor_col, work1);
+    work1 = 2;
+    call(lgc.TerminalFunctions);
+    work1 = &m23;
+    work2 = cursor_col;
+    work2 += 18;
+    display.v(cursor_row, work2, work1);
+    work1 = 1;
+    call(lgc.TerminalFunctions);
+    reset(haveMatch);  
+    if (said("restart", "caisocc")) {
+      set(enableCAISOCC);
+    }
+    if (said("restart", "randocc")) {
+      set(enableRANDOCC);
+    }
+    if (said("restart", "icapocc")) {
+      set(enableICAPOCC);
+    }
+    if (said("restart", "esadocc")) {
+      set(enableESADOCC);
+    }
+    if (said("restart", "ofrocc")) {
+      set(enableOFROCC);
+    }
+    if (said("restart", "eridocc")) {
+      set(enableERIDOCC);
+    }
+  }
+    
   [ clear input
   input = "";
 
   [ if input was processed, get more input
   if (haveMatch) {
-[set(enableTrace);
-[trace.on();
     goto(getKey);
   }
   
   [ anything else is not acknowledged
-  
+display(24, 0, "%w1, %w2, %w3, %w4");  
   [ display syntax error message
   work1 = 4;
   display.v(cursor_row, cursor_col, work1);

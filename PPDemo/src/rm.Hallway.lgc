@@ -34,9 +34,6 @@ if (newRoom)
   draw.pic(currentRoom);
   discard.pic(currentRoom);
   
-  [ do basic room initialization
-  call(lgc.RoomInit);
-  
   [ the horizon defines the upper limit of ego's movement
   set.horizon(0);
   

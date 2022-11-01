@@ -6,23 +6,66 @@
 [
 [ ********************************************************************
 
+#define showMOCC         f220
+#define showCAISOCC      f221
+#define showRANDOCC      f222
+#define showICAPOCC      f223
+#define showESADOCC      f224
+#define showOFROCC       f225
+#define showERIDOCC      f226
+#define nearTerminal     f227
+
 
 [ **************************************
 [ FIRST CYCLE ONLY
 [ **************************************
 if (newRoom) {
-  [ do basic room initialization
-  call(lgc.RoomInit);
-  
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);
 
   [ add room-specific initialization here
+  load.view(vw.CtrlRoomArt);
+  if (enableCAISOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 0, 35, 78, 11, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 0, 35, 78, 11, 15);
+  }    
+  if (enableRANDOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 1, 98, 78, 10, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 1, 98, 78, 10, 15);
+  }    
+  if (enableICAPOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 2, 41, 106, 9, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 2, 41, 106, 9, 15);
+  }    
+  if (enableESADOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 3, 98, 106, 8, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 3, 98, 106, 8, 15);
+  }    
+  if (enableOFROCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 4, 35, 120, 7, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 4, 35, 120, 7, 15);
+  }    
+  if (enableERIDOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 5, 99, 120, 6, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 5, 99, 120, 6, 15);
+  }    
+  
+  [ if access system hasn't been reset, door is closed
+  if (!resetBaDASS) {
+    add.to.pic(vw.CtrlRoomArt, 4, 0, 71, 167, 15, 15);
+    block(71, 165, 90, 167);
+  }
   
   [ default horizion is 36; adjust it as needed
-  set.horizon(120);  
+  set.horizon(120);
   
   [ add toolbar buttons
   load.view(vw.Toolbar);
@@ -35,8 +78,9 @@ if (newRoom) {
     position(ego, 144, 149);
   }
   if (previousRoom == rm.Stairway) {
-    position(ego, 74, 163);
+    position(ego, 74, 161);
   }
+  egoDir = STOPPED;
   [ add ego to the room
   draw(ego);
   
@@ -51,6 +95,22 @@ if (newRoom) {
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   
+  [ if coming from stairwell, and access system not set, 
+  if (previousRoom == rm.Stairway && !resetBaDASS) {
+    shake.screen(2);
+    print("The door slams shut, and the lights in the room flicker violently.");
+    work1 = 0;
+    :flickerit
+      block(FADE.OUT, 0, 3, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.IN, 0, 3, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, 0, 2, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.IN, 0, 1, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
+      ++work1;
+    if (work1 < 3) {
+      goto(flickerit);
+    }
+    print("The old wiring and electrical control systems appear to have malfunctioned!");
+  }
   return();
 }
 
@@ -58,12 +118,233 @@ if (newRoom) {
 [ EVERY CYCLE
 [ **************************************
 
-[ add room specific statements here
-
-[ **************************************
-[ CHECK FOR AN EXIT CONDITION
-[ **************************************
-
+[ if NOT clicking on the actual toolbar, check for
+[ clicks on ingame items
+if (cursoricon != C_WAIT && controller(cLeftClick)) {
+  [ ignore toolbar
+  if (mouseX > 13 && mouseX < 146 && mouseY < 26) {
+  } else {
+    [ look
+    if (cursormode == C_LOOK) {
+      [ ego
+      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+        print("You see you.");
+        goto(doneclick);
+      }
+      
+      [ doorway to stairwell 71, 159, 90, 167
+      if (mouseX > 70 && mouseX < 91 && mouseY > 166 && mouseY < 176) {
+        [ check for door open/close
+        if (resetBaDASS) {
+          [ door is open
+          print("The door to the stairwell is open.");
+        } else {
+          print("The door to the stairwell is shut.");
+        }
+        goto(doneclick);
+      }
+      
+      [ office entrance 4, 103, 15, 148
+      if (mouseX > 3 && mouseX < 16 && mouseY > 110 && mouseY < 157) {
+        print("This doorway leads to an office.");
+        goto(doneclick);
+      }
+      [ supply room entrance 142, 103, 154, 148
+      if (mouseX > 141 && mouseX < 155 && mouseY > 110 && mouseY < 157) {
+        print("This doorway leads to a storage room.");
+        goto(doneclick);
+      }
+      
+      [ keyboard/mouse 67, 112, 96, 122
+      if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
+        print("The mouse and keyboard are for controlling the computer terminal.");
+        goto(doneclick);
+      }
+      
+      [ control panels
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT) 
+      [ priority value indicates which panel
+      work1 /= 16;
+      if (work1 == 5) {
+        [ terminal
+        print("This looks like an old style computer terminal display. A "
+              "floppy disk drive is located to the right of the display.");
+        goto(doneclick);
+      }
+      if (work1 == 6) {
+        [ ERIDOCC
+        if (showERIDOCC) {
+          print("This is the ERIDOCC module interface display.");
+        } else {
+          print("This display is showing an error message. It's real purpose "
+                "is not known.");
+        }
+        goto(doneclick);
+      }
+      if (work1 == 7) {
+        [ OFROCC
+        if (showOFROCC) {
+          print("This is the OFROCC module interface display.");
+        } else {
+          print("This display is showing an error message. It's real purpose "
+                "is not known.");
+        }
+        goto(doneclick);
+      }
+      if (work1 == 8) {
+        [ ESADOCC
+        if (showERIDOCC) {
+          print("This is the ERIDOCC module interface display.");
+        } else {
+          print("This display is showing an error message. It's real purpose "
+                "is not known.");
+        }
+        goto(doneclick);
+      }
+      if (work1 == 9) {
+        [ ICAPOCC
+        if (showICAPOCC) {
+          print("This is the ICAPOCC module interface display.");
+        } else {
+          print("This display is showing an error message. It's real purpose "
+                "is not known.");
+        }
+        goto(doneclick);
+      }
+      if (work1 == 10) {
+        [ RANDOCC
+        if (showRANDOCC) {
+          print("This is the RANDOCC module interface display.");
+        } else {
+          print("This display is showing an error message. It's real purpose "
+                "is not known.");
+        }
+        goto(doneclick);
+      }
+      if (work1 == 11) {
+        [ CAISOCC
+        if (showCAISOCC) {
+          print("This is the CAISOCC module interface display.");
+        } else {
+          print("This display is showing an error message. It's real purpose "
+                "is not known.");
+        }
+        goto(doneclick);
+      }
+  
+      [ main console 31, 46, 128, 131
+      if(mouseX > 30 && mouseX < 129 && mouseY > 53 && mouseY < 140) {
+        print("This massive computer control console takes up most of the "
+              "room. There is a central terminal station, and six auxillary "
+              "display panels.");
+        goto(doneclick);
+      }
+      [ nothing specific
+      print("The room is dominated by a large control panel in the center "
+            "of the room. There are exits leading to the left and right.");
+      goto(doneclick);
+    }
+    
+    [ talk
+    if (cursormode == C_TALK) {
+      [ ego
+      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+        print("You have nothing to say.");
+      } else {
+        print("There is no one here to talk to.");
+      }
+      goto(doneclick);
+    }
+    
+    [ use
+    if (cursormode == C_USE) {
+      [ ego
+      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+        print("Please don't touch yourself. Not even when you're alone.");
+        goto(doneclick);
+      }
+      
+      reset(nearTerminal);
+      if (obj.in.box(ego, 64, 133, 104, 138)) {
+        set(nearTerminal);
+      }
+      
+      [ keyboard/mouse 67, 112, 96, 122
+      if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
+        if (nearTerminal) {
+          set(showMOCC);
+        } else {
+          print("You need to move closer to reach the keyboard and mouse.");
+        }
+        goto(doneclick);
+      }
+      
+      [ check for control panels
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT) 
+      [ priority value indicates which panel
+      work1 /= 16;
+      if (work1 == 5) {
+        [ terminal
+        if (nearTerminal) {
+          set(showMOCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+      if (work1 == 6) {
+        [ ERIDOCC
+        if (nearTerminal) {
+          set(showERIDOCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+      if (work1 == 7) {
+        [ OFROCC
+        if (nearTerminal) {
+          set(showOFROCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+      if (work1 == 8) {
+        [ ESADOCC
+        if (nearTerminal) {
+          set(showESADOCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+      if (work1 == 9) {
+        [ ICAPOCC
+        if (nearTerminal) {
+          set(showICAPOCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+      if (work1 == 10) {
+        [ RANDOCC
+        if (nearTerminal) {
+          set(showRANDOCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+      if (work1 == 11) {
+        [ CAISOCC
+        if (nearTerminal) {
+          set(showCAISOCC);
+        } else {
+          print("Use the mouse and keyboard to interact with this system.");
+        }
+      }
+    }
+  
+    :doneclick
+    set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  }
+}
 
 [ **************************************
 [ PROCESS PLAYER INPUT
@@ -77,64 +358,121 @@ if ((!haveInput || haveMatch)) {
   
 [ look
 if (said("look")) {
-  print("This is an empty room.");
-  clear.lines(5, 6, RED);
+  print("This is the Power Pack control room.");
 }
 
-if (said("show", "paint")) {
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.Paint);  [ ##LE001##
+[if (said("show", "paint")) {
+[  [ fade out, then change room
+[  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[  new.room(cp.Paint);  [ ##LE001##
+[}
+
+if (said("show", "terminal")) {  
+  [ MOCC
+  set(showMOCC);
 }
 
 if (said("show", "instrument")) {
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.Instrument);  [ ##LE002##
+  [ CAISOCC
+  set(showCAISOCC);
 }
   
-if (said("show", "terminal")) {  
+if (said("show", "sound")) {
+  [ ESADOCC
+  set(showESADOCC);
+}
+
+if (said("show", "palette")) {
+  [ ICAPOCC
+  set(showICAPOCC);
+}
+
+if (said("show", "msgbox")) {
+  [ RANDOCC
+  set(showRANDOCC);
+}
+
+if (said("show", "speed")) {
+  [ OFROCC
+  set(showOFROCC);
+}
+
+if (said("show", "mouse")) {
+  [ ERIDOCC
+  set(showERIDOCC);
+}
+
+if (said("open", "door")) {
+  if (resetBaDASS) {
+    print("The door is already open.");
+  } else {
+    print("The electronic lock on the door has failed. You can't open "
+          "the door.");
+  }
+}
+
+if (said("close", "door")) {
+  if (resetBadASS) {
+    print("There is no need to close the door. It will close automatically "
+          "when you leave.");
+  } else {
+    print("The door is already closed.");
+  }
+}
+
+:done
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+[if (showPaint)) {
+[  [ fade out, then change room
+[  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[  new.room(cp.Paint);  [ ##LE001##
+[}
+
+if (showMOCC) {  
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.Terminal);  [ ##LE005##
 }
 
-if (said("show", "sound")) {
+if (showCAISOCC) {
+  [ fade out, then change room
+  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  new.room(cp.Instrument);  [ ##LE002##
+}
+  
+if (showESADOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.Sound);  [ ##LE008##
 }
 
-if (said("show", "palette")) {
+if (showICAPOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.Palette);  [ ##LE009##
 }
 
-if (said("show", "msgbox")) {
+if (showRANDOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.MsgBox);  [ ##LE010##
 }
 
-if (said("show", "speed")) {
+if (showOFROCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.SpeedStatus);  [ ##LE011##
 }
 
-if (said("show", "mouse")) {
+if (showERIDOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.Mouse);  [ ##LE012##
 }
 
-if (said("open", "door")) {
-}
-
-:done
-
-if (edgeEgoHit == RIGHT_EDGE) {
+if (egoHitSpecial && egoX > 100) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -143,7 +481,7 @@ if (edgeEgoHit == RIGHT_EDGE) {
   new.room(rm.Storeroom);  [ ##LE004##
 }
 
-if (edgeEgoHit == LEFT_EDGE) {
+if (egoHitSpecial && egoX < 60) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -152,6 +490,7 @@ if (edgeEgoHit == LEFT_EDGE) {
   new.room(rm.Office);  [ ##LE003##
 }
 
+[if (egoHitSpecial && egoX > 60 && egoHitSpecial && egoX > 60 && resetBaDASS) {
 if (edgeEgoHit == BOTTOM_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
@@ -172,4 +511,3 @@ return();
 #message 4 "%l90|43"
 #message 5 "%l90|44"
 #message 6 "%l90|45"
-#message 7 "This is an empty room."

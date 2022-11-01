@@ -17,6 +17,7 @@
 #define rightcol      46
 
 [ linefeed
+:linefeed
 if (work1 == 1) {
   if (cursor_row < btmrow) {
     ++cursor_row;
@@ -26,6 +27,18 @@ if (work1 == 1) {
   }
   cursor_col = leftcol;
   return();
+}
+
+[ .75 sec delay linefeed
+if ((work1 == 2 || work1 == 3)) {
+  work2 = 250;
+  cycle.time(o254, work2); [ delay(vDELAY);
+  cycle.time(o254, work2); [ delay(vDELAY);
+  cycle.time(o254, work2); [ delay(vDELAY);
+  if (work1 == 3) {
+    work1 = 1;
+    goto(linefeed);
+  }
 }
 
 return();

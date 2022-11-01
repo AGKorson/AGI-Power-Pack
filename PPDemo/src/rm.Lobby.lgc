@@ -136,8 +136,6 @@ if (newRoom) {
   draw.pic(currentRoom);
   discard.pic(currentRoom);
   
-  [ do basic room initialization
-  call(lgc.RoomInit);
   [ add toolbar buttons
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);

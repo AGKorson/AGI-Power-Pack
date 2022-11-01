@@ -6,10 +6,14 @@
 [
 [ ********************************************************************
 
+#define oSafe          o1
+#define oPicture       o2
+#define oDeskDrawer    o3
+#define oFileDrawer    o4
+#define oFolder        o5
+#define oRug           o6
+
 if (newRoom) {
-  [ run initialization code
-  call(lgc.RoomInit);
-  
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
@@ -24,6 +28,54 @@ if (newRoom) {
   [ add toolbar buttons
   load.view(vw.Toolbar);
   call(lgc.InitToolbar);
+  
+  [ load view with this room's art
+  load.view(vw.OfficeArt);
+  
+  [ printer page
+  if (has("memo")) {
+    [ memo is not on printer
+    add.to.pic(vw.OfficeArt, 5, 0, 80, 107, 4, 15);
+  }
+  
+  [ folder under rug
+  if (!has("folder")) {
+    animate.obj(oFolder);
+    set.view(oFolder, vw.OfficeArt);
+    set.loop(oFolder, 5);
+    set.cel(oFolder, 1);
+    ignore.objs(oFolder);
+    position(oFolder, 92, 149);
+    draw(oFolder);
+    stop.update(oFolder);
+  }
+  [ rug
+  animate.obj(oRug);
+  set.view(oRug, vw.OfficeArt);
+  set.loop(oRug, 0);
+  set.cel(oRug, 0);
+  stop.cycling(oRug);
+  ignore.objs(oRug);
+  position(oRug, 87, 149);
+  draw(oRug);
+  
+  [ safe
+  animate.obj(oSafe);
+  set.view(oSafe, vw.OfficeArt);
+  set.loop(oSafe, 1);
+  set.cel(oSafe, 0);
+  stop.cycling(oSafe);
+  position(oSafe, 45, 119);
+  [ draw(oSafe);
+  
+  [ picture
+  animate.obj(oPicture);
+  set.view(oPicture, vw.OfficeArt);
+  set.loop(oPicture, 4);
+  set.cel(oPicture, 0);
+  stop.cycling(oPicture);
+  position(oPicture, 46, 119);
+  draw(oPicture);
   
   [ add ego to the room
   position(ego, 107, 138);

@@ -72,7 +72,7 @@
 #define showCoords             f35 [ a debug flag, that when set, will display current room and ego's x/y location and priority value
 #define soundDone              f36 [ use this when playing sound effects if no specific action is needed after the sound ends
 #define musicDone              f37 [ use this when playing music if no specific action is needed after the music ends
-#define egoExplored            f38 [ a typical 'score' flag; after player scores point for exploring, set this flag so it only happens once
+#define resetBaDASS            f38 [ door leading back to hidden room won't open until BaDASS is reset
 #define terminalOn             f39 [ when true, terminal is active; need to disable printing, menus, help, etc to preserve the display
 #define saveCursor             f40 [ when set, the current cursor gets saved in logic 0
 #define restoreCursor          f41 [ when set, the default data for current cursor is restored
@@ -86,6 +86,14 @@
 #define receptionistInHall     f49 [ set when receptionist is in hallway, so she can shoo ego back to lobby
 #define firstLobbyVisit        f50
 #define ctrlroomunlocked       f51 [ set when correct pin entered on door keypad
+#define enableCAISOCC          f52
+#define enableRANDOCC          f53
+#define enableICAPOCC          f54
+#define enableESADOCC          f55
+#define enableOFROCC           f56
+#define enableERIDOCC          f57
+#define resetMOCC              f58
+#define lockcontrolroom        f59 [ set after player enters control room for first time
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27

@@ -3,6 +3,7 @@
 [ cp.SpeedStatus
 [
 [ Overall Frame Rate Options Control Console
+[ OFROCC
 [
 [ toggle for turbo mode; slider for game speed
 [
@@ -66,13 +67,36 @@
 #define cursormode   f222
 #define sliding      f223
 
+[if this control panel is not enabled show error screen
+if (!enableOFROCC) {
+  if (newRoom) {
+    work1 = pic.cp.Error;
+    load.pic(work1);
+    draw.pic(work1);
+    discard.pic(work1);
+    show.pic();
+    set.text.attribute(-1, 0);
+    set.text.attribute(GREEN, BLACK);
+    display(1, 1, "> subsystem error");
+    set.text.attribute(0, -1);
+    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    lastChar = 0;
+  }
+  [ any key, or any mouse-click to exit
+  if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
+    [ fade out 
+    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    new.room.v(previousRoom); [ ##LE001##
+  }
+  return();
+}
+
 [ **************************************
 [ FIRST CYCLE ONLY
 [ **************************************
 if(newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
-  call(lgc.RoomInit);
 
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);

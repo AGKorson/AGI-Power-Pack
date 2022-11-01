@@ -227,6 +227,9 @@ if (newRoom) {
   [ Note: Everything other than logic 0 is discarded
   [ from memory when new.room is executed
 
+  [ do basic room initialization
+  call(lgc.RoomInit);
+  
   if (!disableGameFunctions) { 
     [ Load game specific functions logic into memory
     load.logics(lgc.GameFunctions);

@@ -3,8 +3,8 @@
 [ cp.Sound
 [
 [ Electronic Synthesized Audio Data Options Control Console
-[ 
 [ ESADOCC
+[ 
 [ toggle between pc speaker and 4chan
 [ allow instrument selection for each channel
 [ test button - play a short song
@@ -124,14 +124,37 @@
 #define redrawList   f226
 #define sliding      f227
 
+[if this control panel is not enabled show error screen
+if (!enableESADOCC) {
+  if (newRoom) {
+    work1 = pic.cp.Error;
+    load.pic(work1);
+    draw.pic(work1);
+    discard.pic(work1);
+    show.pic();
+    set.text.attribute(-1, 0);
+    set.text.attribute(GREEN, BLACK);
+    display(1, 1, "> subsystem error");
+    set.text.attribute(0, -1);
+    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    lastChar = 0;
+  }
+  [ any key, or any mouse-click to exit
+  if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
+    [ fade out 
+    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    new.room.v(previousRoom); [ ##LE001##
+  }
+  return();
+}
+
 [ **************************************
 [ FIRST CYCLE ONLY
 [ **************************************
 if(newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
-  call(lgc.RoomInit);
-
+  
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
@@ -280,7 +303,7 @@ if(newRoom) {
   
   [ no instrument listbox is currently being edited
   currentInst = -1;
-  
+
   [ copy the custom FM instrument values from lgc.Main
   s12 = "%l90|53";
   block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)

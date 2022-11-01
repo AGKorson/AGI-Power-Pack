@@ -104,12 +104,34 @@
 #define sTemp         s12 [ uses s12, s13, s14, s15
 #define sCursor       s16 [ uses s16, s17, s18, s19
 
+[if this control panel is not enabled show error screen
+if (!enableERIDOCC) {
+  if (newRoom) {
+    work1 = pic.cp.Error;
+    load.pic(work1);
+    draw.pic(work1);
+    discard.pic(work1);
+    show.pic();
+    set.text.attribute(-1, 0);
+    set.text.attribute(GREEN, BLACK);
+    display(1, 1, "> subsystem error");
+    set.text.attribute(0, -1);
+    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    lastChar = 0;
+  }
+  [ any key, or any mouse-click to exit
+  if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
+    [ fade out 
+    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    new.room.v(previousRoom); [ ##LE001##
+  }
+  return();
+}
+
 [ **************************************
 [ FIRST CYCLE ONLY
 [ **************************************
 if (newRoom) {
-  call(lgc.RoomInit);
-  
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);

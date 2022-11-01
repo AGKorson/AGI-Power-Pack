@@ -96,7 +96,7 @@
 #define topinst      v243 [ index of instrument at top row of dropdown list
 #define listrow      v244 [ row index (0-4) of currently selected list item
                           [ (topinst + listrow = listindex)
-[ and v247 - v254
+[ v247 - v254
 [ are used as instrument data variables
 
 #define update           f220
@@ -112,7 +112,6 @@
 [ f230 - f233 used as instrument parameters
 #define old4chan         f234
 #define oldMIDI          f235
-
 
 [ instrument parameter flags and variables
 #define modTremolo       f230
@@ -149,13 +148,36 @@
 #define sTemp         s14 [ s15
 #define sTemp2        s16
 
+[if this control panel is not enabled show error screen
+if (!enableCAISOCC) {
+  if (newRoom) {
+    work1 = pic.cp.Error;
+    load.pic(work1);
+    draw.pic(work1);
+    discard.pic(work1);
+    show.pic();
+    set.text.attribute(-1, 0);
+    set.text.attribute(GREEN, BLACK);
+    display(1, 1, "> subsystem error");
+    set.text.attribute(0, -1);
+    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    lastChar = 0;
+  }
+  [ any key, or any mouse-click to exit
+  if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
+    [ fade out 
+    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    new.room.v(previousRoom); [ ##LE001##
+  }
+  return();
+}
+
 [ **************************************
 [ FIRST CYCLE ONLY
 [ **************************************
 if(newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
-  call(lgc.RoomInit);
   
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);

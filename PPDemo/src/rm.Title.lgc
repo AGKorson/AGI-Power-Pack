@@ -37,9 +37,6 @@
 [ FIRST CYCLE ONLY
 [ **************************************
 if (newRoom) {
-  [ run initialization code
-  call(lgc.RoomInit);
-  
   [ load, draw, discard the picture for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
