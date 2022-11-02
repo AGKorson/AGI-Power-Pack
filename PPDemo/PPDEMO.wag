@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/1/2022 12:22:05 PM"
+   LastEdit = "11/1/2022 7:35:52 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -351,7 +351,7 @@
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HA301F030
+   CRC32 = &HBB271A8
    CompCRC32 = &HA301F030
    IsRoom = False
    Size = 22284

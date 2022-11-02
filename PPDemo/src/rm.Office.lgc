@@ -16,6 +16,13 @@
 #define fMoveRug     f220
 #define tripped      f221
 
+[ rug status
+#define RUG_DOWN     0
+#define RUG_UP       1
+#define RUG_FLAT     2
+#define RUG_LIFTING  3
+#define RUG_LOWERING 4
+
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -59,14 +66,15 @@ if (newRoom) {
   [ rug
   animate.obj(oRug);
   set.view(oRug, vw.OfficeArt);
-  if (rugStatus == 0) { [ 0=down, 1=up, 2=flat
+  if (rugStatus == RUG_DOWN) {
     set.loop(oRug, 0);
     set.cel(oRug, 0);
   } else {
-    if (rugStatus == 1) {
+    if (rugStatus == RUG_UP) {
       set.loop(oRug, 0);
       set.cel(oRug, 5);
     } else {
+      [ RUG_FLAT
       set.loop(oRug, 5);
       set.cel(oRug, 2);
     }
@@ -164,25 +172,36 @@ if (controller(cLeftClick)) {
         [ pick it up
         get("folder");
         erase(oFolder);
+        goto(doneclick);
       }
       
       [ lift/lower carpet 89, 141, 98, 149
       if (mouseX > 88 && mouseX < 99 && mouseY > 148 && mouseY < 158) {
-        if (rugStatus == 1) { [0=down; 1=up; 2=flat; 3=raising; 4=lowering
-          [ lower the rug
-          rugStatus = 4;
-          reverse.loop(oRug, fMoveRug);
-        } else {
-          if ((rugStatus == 0 || rugStatus == 2)) {
-            [ raise it
-            rugStatus = 3;
-            set.loop(oRug, 0);
-            set.cel(oRug, 0);
-            end.of.loop(oRug, fMoveRug);
-            if (!has("folder")) {
-              draw(oFolder);
+        [ ego has to be close to the rug corner
+        if (obj.in.box(ego, 80, 138, 104, 151)) {
+          [ but not too close 83,148-101,141
+          if (obj.in.box(ego, 83, 141, 101, 148)) {
+            print("You can't move the rug corner if you're standing on it.");
+          } else {
+            if (rugStatus == RUG_UP) {
+              [ lower the rug
+              rugStatus = RUG_LOWERING;
+              reverse.loop(oRug, fMoveRug);
+            } else {
+              if ((rugStatus == RUG_DOWN || rugStatus == RUG_FLAT)) {
+                [ raise it
+                rugStatus = RUG_LIFTING;
+                set.loop(oRug, 0);
+                set.cel(oRug, 0);
+                end.of.loop(oRug, fMoveRug);
+                if (!has("folder")) {
+                  draw(oFolder);
+                }
+              }
             }
           }
+        } else {
+          print("You are not close enough to the rug corner to move it.");
         }
         goto(doneclick);
       }
@@ -196,22 +215,22 @@ if (controller(cLeftClick)) {
 [ rug movement
 if (fMoveRug) {
   reset(fMoveRug);
-  if (rugStatus == 3) {
-    rugStatus = 1;
+  if (rugStatus == RUG_LIFTING) {
+    rugStatus = RUG_UP;
   } else {
     if (has("folder")) {
-      rugStatus = 2;
+      rugStatus = RUG_FLAT;
       set.loop(oRug, 5);
       set.cel(oRug, 2);
     } else {
-      rugStatus = 0;
+      rugStatus = RUG_DOWN;
       erase(oFolder);
     }
   }
 }
 
 [ trip on rug
-if (!tripped && rugStatus == 1 && egoHitSpecial && egoY < 115) {
+if (!tripped && rugStatus == RUG_UP && egoHitSpecial && egoX < 115) {
   [trip! or block?
   print("trip!");
   set(tripped);
