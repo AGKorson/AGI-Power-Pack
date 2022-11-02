@@ -94,6 +94,7 @@
 #define enableERIDOCC          f57
 #define resetMOCC              f58
 #define lockcontrolroom        f59 [ set after player enters control room for first time
+#define findFolder             f60
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
@@ -174,6 +175,10 @@
 #define C_TALK                   4
 #define C_USE                    5
 #define C_WAIT                   6
+#define safeStatus             v87
+#define pictureStatus          v88
+#define deskDrawerStatus       v89
+#define fileDrawerStatus       v90
 #define 2E_MOUSE                -1
 #define SET.CURSOR              -1
 #define MSGBOX.COLOR.V          -1
