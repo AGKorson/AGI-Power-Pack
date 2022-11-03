@@ -59,7 +59,7 @@
 #define click2move             f17 [ when true, left click moves ego
 #define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
 #define useMIDI                f19 [ when true, four channel mode uses MIDI hardware, not FMSynth
-#define handsDirty             f21
+#define touchTrees             f21
 #define handsWashed            f22
 #define tbBtnDown              f23 [ set when mouse down occurs on toolbar button
 #define closettimer            f24
@@ -95,6 +95,12 @@
 #define resetMOCC              f58
 #define lockcontrolroom        f59 [ set after player enters control room for first time
 #define findFolder             f60
+#define touchPlunger           f61
+#define findWalkman            f62
+#define findList               f63
+#define findNotebook           f64
+#define findDisk               f65
+#define findEmptyDrawer        f66
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27

@@ -559,13 +559,25 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       if (posn(ego, 57, 140, 70, 150)) {
         if (!handsWashed) {
           set(handsWashed);
-          if (handsDirty) {
-            print("You wash the sap from your hands. Now they aren't so sticky.");
-            currentScore += 3;
+          [ TODO: need a hand washing scene
+          if (touchTrees && touchPlunger) {
+            print("Washing the sap and plunger-stink from your hands was a good "
+                  "idea. They are now clean and germ-free!");
+            currentScore += 4;
           } else {
-            [ TODO: need a hand washing scene
-            print("Might as well wash your hands");
-            currentScore += 1;
+            if (touchTrees) {
+              print("You wash the sap from your hands. Now they aren't so sticky.");
+              currentScore += 1;
+            } else {
+              if (touchPlunger) {
+                print("Touching that plunger was not a great idea. Washing your "
+                      "hands is.");
+                currentScore += 3;
+              } else {
+                print("Might as well wash your hands. Cleanliness is next to "
+                      "godliness!");
+              }
+            }
           }
         } else {
           print("You already washed your hands.");

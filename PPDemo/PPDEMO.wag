@@ -5,7 +5,11 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/2/2022 3:27:53 PM"
+<<<<<<< Updated upstream
+   LastEdit = "11/2/2022 6:01:21 PM"
+=======
+   LastEdit = "11/2/2022 5:57:17 PM"
+>>>>>>> Stashed changes
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -46,7 +50,7 @@
 [::BEGIN Logics::]
 [Logic0]
    CompCRC32 = &H0
-   CRC32 = &H9D2E4B9
+   CRC32 = &HF5388216
    ID = lgc.Main
    IsRoom = False
    Size = 2220
@@ -183,7 +187,7 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HE0D4E84A
+   CRC32 = &HB4933A96
    CompCRC32 = &H0
    IsRoom = True
    Size = 5687
@@ -215,10 +219,10 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H7ACAF9D3
+   CRC32 = &H73929103
    CompCRC32 = &H0
    IsRoom = True
-   Size = 5257
+   Size = 5523
 
 [Logic6]
    ID = rm.SecretRoom
@@ -239,10 +243,17 @@
 [Logic9]
    ID = rm.Office
    Description = ""
+<<<<<<< Updated upstream
    CRC32 = &H545EAC0E
-   CompCRC32 = &H545EAC0E
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1786
+=======
+   CRC32 = &HED7A2E88
+   CompCRC32 = &H40D7189F
+   IsRoom = True
+   Size = 925
+>>>>>>> Stashed changes
 
 [Logic10]
    ID = rm.Storeroom
@@ -352,7 +363,11 @@
    ID = lgc.mod2917
    Description = ""
    CRC32 = &HBB271A8
+<<<<<<< Updated upstream
    CompCRC32 = &H0
+=======
+   CompCRC32 = &HA301F030
+>>>>>>> Stashed changes
    IsRoom = False
    Size = 22284
 
@@ -884,7 +899,7 @@
 [View21]
    ID = vw.OfficeArt
    Description = ""
-   Size = 2964
+   Size = 3159
 
 [View23]
    ID = vw.Patient1

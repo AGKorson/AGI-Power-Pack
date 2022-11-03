@@ -931,7 +931,7 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       if (work1 > 239) {
         [ foreground tree
         print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
-        set(handsDirty);
+        set(touchTrees);
         goto(doneclick);
       }
       

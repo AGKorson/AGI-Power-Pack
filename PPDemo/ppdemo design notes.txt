@@ -9,8 +9,10 @@ General:
     TOOLBAR - done
     MENU - TBD; basic items are working, custom functions to showcase Power Pack need to be designed and added
     SCORING SUMMARY (sound effect for plus points? for minus points?):
-     -1/+1 pt:   touching trees, then washing hands in closet sink
-     -3/+3 pts:  touching plunger, then washing hands in closet sink
+        -1 pt:   touching trees
+X        +1 pt:   washing hands in closet sink
+        -3 pts:  touching plunger
+X        +3 pts:  washing hands in closet sink
         +1 pt:   experiencing death by getting run over
         +1 pt:   experiencing death by getting shocked from batmobile
         +1 pt:   experiencing death by slipping on wet floor
@@ -23,8 +25,7 @@ General:
         +2 pts:  reading magazine (finding password clue)
         +5 pts:  getting in car
        +20 pts:  ending game with source disk
-        +1 pt:   opening closet door
-        +3 pts:  closing closet door after entering closet
+        +1 pt:   1st time opening closet door
         +5 pts:  breaking hole in wall
         -1 pt:   tripping over broom (can happen multiple times)
         +2 pts:  moving broom after tripping
@@ -38,17 +39,17 @@ General:
         +5 pts:  restore FROCC
         +5 pts:  restore RANDOCC
         +6 pts:  copying PP source to floppy
-        -4 pts:  leaving disk in drive
-        +3 pts:  getting memo from printer
-        +3 pts:  getting password list from drawer
-        +2 pts:  getting walkman from drawer
+[[[        -4 pts:  leaving disk in drive
+X        +3 pts:  getting memo from printer
+X        +3 pts:  getting password list from drawer
+X        +2 pts:  getting walkman from drawer
         +2 pts:  finding safe behind picture
         +3 pts:  opening safe
         +3 pts:  getting paper with BaDASS code
-        +2 pts:  getting floppy disk
-        +3 pts:  getting notebook
-        +2 pts:  moving rug
-        +3 pts:  getting folder
+X        +2 pts:  getting floppy disk
+X        +3 pts:  getting notebook
+X        +2 pts:  moving rug
+X        +3 pts:  getting folder
         +3 pts:  finding pillow code
         +3 pts:  finding podium code
         +1 pt:   opening treasure chest
@@ -86,11 +87,11 @@ General:
     CODING: !!to save memory, view for patients 2/4 can be swapped in/out as needed; both are never needed at same time!! finalize patient arrival/departure sequences; text screen closeup of magazine; 'said' statements
 
 4A. Closeup of magazine: mostly text, will have an article talking about Sierra; with a paragraph or two on the rumored 'Power Pack'; hidden in the text will be the passcode for the control room entry door.
-    BACKGROUND: will be a text layout, with character graphics
+    BACKGROUND: done
     ANIMATION ART: n/a
     SOUND: n/a
     SCORING: n/a
-    CODING: not started; maybe TAB or arrow keys to flip through pages; no user input; ESC to exit
+    CODING: need to write articles
 
 5. Hallway: Four doors- a restroom (will never open; it's always 'occupied'), a doctor's office (never opens, doctor is always out), and an exam room (will open, but ego interrupts an exam, and the nurse will slam door shut). Repeated attempts to enter exam room will get ego thrown out of building, and game will end in a loss. Last door is a janitor closet. Ego can go through that door to enter the hallway.
 
@@ -106,6 +107,7 @@ General:
     ANIMATION ART: hand washing animation (ego walks to sink, back turned to player; should be very simple)
     SOUND: open/close door; tripping/falling/breaking wall; water drip; 
     SCORING: +3 for closing closet door; +5 for making hole in wall; -1 each time for tripping over broom after hole is made; +2 for putting broom in corner; -3 for touching plunger; +1/+3 for washing hands after touching tree/plunger; +3 pts for fixing drip
+    CODING: 'said' statements, wash hands 
 
 5. Secret Room: Connects the closet to the stairway. No other purpose/action for this room.
  
@@ -121,15 +123,15 @@ General:
     ANIMATION ART: done
     SOUND: open/close door; light flicker(?)
     SCORING: n/a
-    CODING: not started yet
+    CODING: 'said' statements
 
 6A. Closeup of keypad for entering code: The keypad is a standard 12 button keypad; 0-9, plus clear/enter buttons. Correct code will open door, scoring points. If wrong code entered too many times, lose a point, kick player back to room and make them wait a minute.
 
-    BACKGROUND: not started; closeup of a numeric keypad; digits 0-9, asterisk/pound sign; asterisk deletes character; pound sign is enter;
-    ANIMATION ART: button presses, digit displays
+    BACKGROUND: done
+    ANIMATION ART: done
     SOUND: tone/beep when buttons pressed; click when door unlocked; buzzer when wrong code entered
     SCORING: +6 points when correct code entered; -1 when wrong code is entered three times in a row
-    CODING: not started
+    CODING: add actual combo number
 
 7. Control Room: The AGI Power Pack Control Room has a large console in the middle of room. Two exits, to right and left lead to an office, and a store room, respectively. The console consists of a central terminal (keyboard and monitor, with disk drive), and six panels:
     -mouse cursor panel
@@ -144,10 +146,10 @@ When ego enters from the stairwell, the control panel fails (maybe flash screen 
 Once all passwords are entered, and BaDASS is restarted, door will unlock; ego can leave, going back to car in parking lot to end the game. Ego needs to copy the PP source code to a floppy disk in order to get max points. 
 
     BACKGROUND: done
-    ANIMATION ART: powered off versions of control panels; 
+    ANIMATION ART: done 
     SOUND: system failure sound effect;
     SCORING: +5 pts for each module successfully restored (30 pts total); +10 pts for restoring BaDASS; +6 for copying source files to floppy (-4 for forgetting to get disk)
-    CODING: not started
+    CODING: 'said' statements
 
 8. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a coded password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
 

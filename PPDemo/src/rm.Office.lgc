@@ -276,7 +276,26 @@ if (controller(cLeftClick)) {
           deskDrawerStatus != CLOSING) {
           [ is ego close enough?
         if (obj.in.box(ego, 74, 131, 101, 136)) {
+          set.loop(oDeskDrawer, 2);
+          set.cel(oDeskDrawer, 2);
           reverse.loop(oDeskDrawer, fDeskDrawer);
+          [ automatically get items
+          if (deskDrawerStatus == OPEN1) {
+            if (!has("Walkman")) {
+              get("Walkman");
+              currentScore += 2;
+              print("You decide to take the Walkman before closing "
+                    "the drawer.");
+            }
+          }
+          if (deskDrawerStatus == OPEN2) {
+            if (!has("piece of paper")) {
+              get("piece of paper");
+              currentScore += 3;
+              print("The paper may be of use so you grab it from "
+                    "the drawer.");
+            }
+          }
           deskDrawerStatus = CLOSING;
         } else {
           print("Move closer.");
@@ -317,8 +336,30 @@ if (controller(cLeftClick)) {
       [ on file drawer, and open
       if (posn(oFileDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
           fileDrawerStatus != CLOSING) {
-        reverse.loop(oFileDrawer, fFileDrawer);
-        fileDrawerStatus = CLOSING;
+        [ is ego close enough?
+        if (obj.in.box(ego, 82, 129, 105, 133)) {
+          set.loop(oFileDrawer, 3);
+          set.cel(oFileDrawer, 2);
+          reverse.loop(oFileDrawer, fFileDrawer);
+          [ automatically get items
+          if (fileDrawerStatus == OPEN2) {
+            if (!has("notebook")) {
+              get("notebook");
+              currentScore += 3;
+              print("This notebook might come in handy.");
+            }
+          }
+          if (fileDrawerStatus == OPEN3) {
+            if (!has("floppy disk")) {
+              get("floppy disk");
+              currentScore += 2;
+              print("You decide to take one of the disks.");
+            }
+          }
+          fileDrawerStatus = CLOSING;
+        } else {
+          print("Move closer.");
+        }
         goto(doneclick);
       }
       
@@ -406,7 +447,7 @@ if (fMoveRug) {
 
 [ trip on rug
 if (!tripped && rugStatus == RUG_UP && egoHitSpecial && egoX < 100) {
-  [trip! or block?
+  [ TODO: need a trip! or block?
   print("trip!");
   set(tripped);
 }
@@ -429,8 +470,27 @@ if (fDeskDrawer) {
     get.posn(oDeskDrawer, work1, work2);
     if (work2 == 126) {
       deskDrawerStatus = OPEN1;
+      if (!has("Walkman")) {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 4);
+        force.update(oDeskDrawer);
+        if (!findWalkman) {
+          set(findWalkman);
+          print("There is an old Sony Walkman cassette player in "
+                "this drawer!");
+        }
+      }
     } else {
       deskDrawerStatus = OPEN2;
+      if (!has("piece of paper")) {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 3);
+        force.update(oDeskDrawer);
+        if (!findList) {
+          set(findList);
+          print("You see a piece of paper with handwritten notes.");
+        }
+      }
     }
   }
 }
@@ -443,11 +503,33 @@ if (fFileDrawer) {
     get.posn(oFileDrawer, work1, work2);
     if (work2 == 112) {
       fileDrawerStatus = OPEN1;
+      if (!findEmptyDrawer) {
+        set(findEmptyDrawer);
+        print("This drawer is empty.");
+      }
     } else {
       if (work2 == 121) {
         fileDrawerStatus = OPEN2;
+        if (!has("notebook")) {
+          set.loop(oFileDrawer, 5);
+          set.cel(oFileDrawer, 5);
+          force.update(oFileDrawer);
+          if (!findNotebook) {
+            set(findNotebook);
+            print("A small notebook is in this drawer.");
+          }
+        }
       } else {
         fileDrawerStatus = OPEN3;
+        if (!has("floppy disk")) {
+          set.loop(oFileDrawer, 5);
+          set.cel(oFileDrawer, 6);
+          force.update(oFileDrawer);
+          if (!findDisk) {
+            set(findDisk);
+            print("There's a box of blank floppy disks here.");
+          }
+        }
       }
     }
   }

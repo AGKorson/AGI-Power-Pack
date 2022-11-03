@@ -11,12 +11,12 @@
 [
 [ reserved = reserved by the interpreter 
 [     v0 - v26
-[     f0 - f16, tbBtnDown
+[     f0 - f16, f20
 [     s0, s1
 [
 [ global = usable and accessible by all logics
 [     v27 - v219
-[     f17 - f18, handsDirty - f219
+[     f17 - f18, f21 - f219
 [     s2 - s11
 [
 [ local = usable and accessible by single room
