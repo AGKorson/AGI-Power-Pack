@@ -5,11 +5,8 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-<<<<<<< Updated upstream
-   LastEdit = "11/2/2022 6:01:21 PM"
-=======
+   LastEdit = "11/2/2022 10:59:45 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
->>>>>>> Stashed changes
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -49,8 +46,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &HF5388216
+   CompCRC32 = &H51CC4FCE
+   CRC32 = &H51CC4FCE
    ID = lgc.Main
    IsRoom = False
    Size = 2220
@@ -243,17 +240,10 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-<<<<<<< Updated upstream
-   CRC32 = &H545EAC0E
-   CompCRC32 = &H0
+   CRC32 = &HD839A253
+   CompCRC32 = &HD839A253
    IsRoom = True
-   Size = 1786
-=======
-   CRC32 = &HED7A2E88
-   CompCRC32 = &H40D7189F
-   IsRoom = True
-   Size = 925
->>>>>>> Stashed changes
+   Size = 2426
 
 [Logic10]
    ID = rm.Storeroom
@@ -363,11 +353,7 @@
    ID = lgc.mod2917
    Description = ""
    CRC32 = &HBB271A8
-<<<<<<< Updated upstream
    CompCRC32 = &H0
-=======
-   CompCRC32 = &HA301F030
->>>>>>> Stashed changes
    IsRoom = False
    Size = 22284
 
