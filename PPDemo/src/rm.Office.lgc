@@ -14,11 +14,20 @@
 #define oRug           o6
 
 #define tmpPalette     s12 [ s13, s14
+#define tmpStr         s15
 
 #define fMoveRug      f220
-#define tripped       f221
+#define fOnTripLine       f221
 #define fDeskDrawer   f222
 #define fFileDrawer   f223
+#define fPicture      f224
+#define fSafe         f225
+#define fBackup       f226
+#define fTripping     f227
+#define fWarnTrip     f228
+
+#define tripCounter   v220
+#define tmpLoop       v221
 
 [ rug status
 #define RUG_DOWN     0
@@ -51,11 +60,11 @@ if (newRoom) {
   [ to be a bit darker than rest of wall
   work1 = 66;
   block(STR.LEFT, &palette, &tmpPalette, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-  s15 = "001E1E";
-  block(STR.CONCAT, &tmpPalette, &s15, 0); [ sINPUT, sADD)
+  tmpStr = "001E1E";
+  block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ sINPUT, sADD)
   work1 = 24;
-  block(STR.RIGHT, &palette, &s15, &work1); [ strRight(sINPUT, sRESULT, vLEN)
-  block(STR.CONCAT, &tmpPalette, &s15, 0); [ sINPUT, sADD)
+  block(STR.RIGHT, &palette, &tmpStr, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ sINPUT, sADD)
   block(SET.MSG, 0, &m7, &tmpPalette); [ set.msg(BYVAR, MSGOLD, STRNEW)
   block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   
@@ -111,13 +120,21 @@ if (newRoom) {
   [ safe
   animate.obj(oSafe);
   set.view(oSafe, vw.OfficeArt);
-  set.loop(oSafe, 1);
   position(oSafe, 45, 119);
   stop.cycling(oSafe);
+  ignore.objs(oSafe);
   if (safeStatus == OPEN) {
-    set.cel(oSafe, 7);
+    if (!has("BaDASS manual")) {
+      [ TODO: stupid bug in set.loop; should I patch that too?
+      set.loop(oSafe, 5);
+      set.cel(oSafe, 7);
+    } else {
+      set.loop(oSafe, 1);
+      set.cel(oSafe, 7);
+    }
     draw(oSafe);
   } else {
+    set.loop(oSafe, 1);
     set.cel(oSafe, 0);
   }
   
@@ -408,18 +425,175 @@ if (controller(cLeftClick)) {
         goto(doneclick);
       }
       
-      [ open picture 
+      [ picture, open 60, 88, 65, 117
+      if (mouseX > 59 && mouseX < 66 && mouseY > 75 && mouseY < 126 && 
+          pictureStatus == OPEN) {
+        [ can't if safe is still open
+        if (safeStatus != CLOSED) {
+          print("The picture won't close with the safe open.");
+          goto(doneclick);
+        }
+        [ is ego close enough? 
+        if (obj.in.box(ego, 38, 130, 65, 132)) {
+          reverse.loop(oPicture, fPicture);
+          pictureStatus = CLOSING;
+          erase(oSafe);
+        } else {
+          [ if too close
+          if (obj.in.box(ego, 38, 126, 65, 129)) {
+            work1 = 130;
+            work2 = 1;
+            set.loop(ego, 3);
+            fix.loop(ego);
+            move.obj.v(ego, egoX, work1, work2, fBackup);
+            reverse.loop(oPicture, fPicture);
+            pictureStatus = CLOSING;
+            erase(oSafe);
+          } else {
+            print("Move closer.");
+          }
+        }
+        goto(doneclick);
+      }
       
-      [ closed picture 46, 88, 60, 115
+      [ picture, closed 46, 88, 60, 115
+      if (mouseX > 45 && mouseX < 61 && mouseY > 95 && mouseY < 124 && 
+          pictureStatus == CLOSED) {
+        [ is ego close enough? 38, 128, 65, 132
+        if (obj.in.box(ego, 38, 130, 65, 132)) {
+          end.of.loop(oPicture, fPicture);
+          pictureStatus = OPENING;
+        } else {
+          [ if too close
+          if (obj.in.box(ego, 38, 126, 65, 129)) {
+            work1 = 130;
+            work2 = 1;
+            set.loop(ego, 3);
+            fix.loop(ego);
+            move.obj.v(ego, egoX, work1, work2, fBackup);
+            end.of.loop(oPicture, fPicture);
+            pictureStatus = OPENING;
+          } else {
+            print("Move closer.");
+          }
+        }
+      }
       
-      [ open safe door 45, 107, 49, 119
+      [ safe only accessible if picture is open
+      if (pictureStatus == OPEN) {      
+        [ safe door, open 45, 107, 49, 119
+        if (mouseX > 44 && mouseX < 50 && mouseY > 114 && mouseY < 128 && 
+            safeStatus == OPEN) {
+          [ is ego close enough? 
+          if (obj.in.box(ego, 38, 130, 65, 132)) {
+            reverse.loop(oSafe, fSafe);
+            safeStatus = CLOSING;
+          } else {
+            [ if too close
+            if (obj.in.box(ego, 38, 126, 65, 129)) {
+              work1 = 130;
+              work2 = 1;
+              set.loop(ego, 3);
+              fix.loop(ego);
+              move.obj.v(ego, egoX, work1, work2, fBackup);
+              reverse.loop(oSafe, fSafe);
+              safeStatus = CLOSING;
+            } else {
+              print("Move closer.");
+            }
+          }
+        }
+        
+        [ safe interior, open
+        if (mouseX > 49 && mouseX < 56 && mouseY > 112 && mouseY < 120 && 
+            safeStatus == OPEN) {
+          if (!has("BaDASS manual")) {
+            get("BaDASS manual");
+            print("You take the manual out of the safe.");
+            set.loop(oSafe, 1);
+            set.cel(oSafe, 7);
+            force.update(oSafe);
+          }
+        }
+        
+        [ safe door, closed 49, 104, 56, 114
+        [ TODO: add new room to show closeup of safe
+        [ player has to enter correct combo to get it open
+        if (mouseX > 48 && mouseX < 57 && mouseY > 111 && mouseY < 121 && 
+            safeStatus == CLOSED) {
+          [ is ego close enough? 38, 128, 65, 132
+          if (obj.in.box(ego, 38, 130, 65, 132)) {
+            end.of.loop(oSafe, fSafe);
+            safeStatus = OPENING;
+          } else {
+            [ if too close
+            if (obj.in.box(ego, 38, 126, 65, 129)) {
+              work1 = 130;
+              work2 = 1;
+              set.loop(ego, 3);
+              fix.loop(ego);
+              move.obj.v(ego, egoX, work1, work2, fBackup);
+              end.of.loop(oSafe, fSafe);
+              safeStatus = OPENING;
+            } else {
+              print("Move closer.");
+            }
+          }
+        }
+      }
       
-      [ closed safe door/safe interior 49, 104, 56, 114
+      [ computer/keyboard
+      67, 93, 76, 115
+      70, 115, 79, 118
+      print("The computer is not working. It looks like the hard "
+            "drive and power supply have been removed a long time "
+            "ago.");
+      [ printer
+      78, 107, 89, 115
+      print("The printer appears to be broken.");
       
+      [ rug
+      69, 138, 98, 149 (and not red pri)
+      print("This portion of the rug is stuck to the floor.");
     }
     
     :doneclick
     set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  }
+}
+
+[ ego backing up from picture
+if (fBackup) {
+  reset(fBackup);
+  release.loop(ego);
+}
+
+[ picture movement
+if (fPicture) {
+  reset(fPicture);
+  if (pictureStatus == OPENING) {
+    pictureStatus = OPEN;
+    draw(oSafe);
+  } else {
+    pictureStatus = CLOSED;
+  }
+}
+
+[ safe door movement
+if (fSafe) {
+  reset(fSafe);
+  if (safeStatus == OPENING) {
+    safeStatus = OPEN;
+    if (!findManual && !has("BaDASS manual")) {
+      set(findManual);
+      set.loop(oSafe, 5);
+      set.cel(oSafe, 7);
+      force.update(oSafe);
+      print("There is a binder in the safe. It looks like an old "
+            "computer program manual.");
+    }
+  } else {
+    safeStatus = CLOSED;
   }
 }
 
@@ -446,17 +620,46 @@ if (fMoveRug) {
 }
 
 [ trip on rug
-if (!tripped && rugStatus == RUG_UP && egoHitSpecial && egoX < 100) {
-  [ TODO: need a trip! or block?
-  print("trip!");
-  set(tripped);
+if (!fOnTripLine && rugStatus == RUG_UP && egoHitSpecial && egoX < 100) {
+  set(fOnTripLine);
+  set(fTripping);
+  load.view(vw.Tripping);
+  current.loop(ego, work1);
+  tmpLoop = work1;
+  if (work1 > 1) {
+    work1 -=2;
+  }
+  work1 *= -1; [ because trip loops are backwards!
+  work1 += 1; [ could 'bit.not' it...
+  set.view(ego, vw.Tripping);
+  set.loop.v(ego, work1);
+  fix.loop(ego);
+  program.control();
+  tripCounter = 9;
 }
 
+[ check trip counter
+if (tripCounter) {
+  --tripCounter;
+  if (tripCounter == 0) {
+    set.view(ego, vw.Ego);
+    set.loop.v(ego, tmpLoop);
+    release.loop(ego);
+    player.control();
+    if (!fWarnTrip) {
+      set(fWarnTrip);
+      print("You fOnTripLine on the carpet! Good thing you didn't fall "
+            "and break your neck.");
+    }
+    [ TODO: update score reference
+    --currentScore;
+  }
+}
 
-[ if tripped, AND not on rug, reset tripped
-if (tripped) {
+[ if fOnTripLine set, AND not on rug, reset fOnTripLine
+if (fOnTripLine) {
   if (!egoHitSpecial) {
-    reset(tripped);
+    reset(fOnTripLine);
   }
 }
 

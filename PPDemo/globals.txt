@@ -101,6 +101,7 @@
 #define findNotebook           f64
 #define findDisk               f65
 #define findEmptyDrawer        f66
+#define findManual             f67
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/2/2022 10:59:45 PM"
+   LastEdit = "11/3/2022 3:57:20 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -46,7 +46,7 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H51CC4FCE
+   CompCRC32 = &H0
    CRC32 = &H51CC4FCE
    ID = lgc.Main
    IsRoom = False
@@ -240,10 +240,10 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HD839A253
-   CompCRC32 = &HD839A253
+   CRC32 = &H5DD83F8E
+   CompCRC32 = &H606A854F
    IsRoom = True
-   Size = 2426
+   Size = 3209
 
 [Logic10]
    ID = rm.Storeroom
@@ -547,7 +547,7 @@
    ID = pic.Office
    Description = ""
    BkgdImg = ""
-   Size = 1066
+   Size = 1092
 
 [Picture10]
    ID = pic.Storeroom
@@ -885,7 +885,7 @@
 [View21]
    ID = vw.OfficeArt
    Description = ""
-   Size = 3159
+   Size = 3268
 
 [View23]
    ID = vw.Patient1

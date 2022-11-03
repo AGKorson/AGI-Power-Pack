@@ -50,6 +50,7 @@ X        +2 pts:  getting floppy disk
 X        +3 pts:  getting notebook
 X        +2 pts:  moving rug
 X        +3 pts:  getting folder
+X        -1 pt:   each time tripping on rug
         +3 pts:  finding pillow code
         +3 pts:  finding podium code
         +1 pt:   opening treasure chest
@@ -157,7 +158,7 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     ANIMATION ART: memo on printer item view; password list item view; picture to hide safe; floppy disk item view; folder item view; notebook item view; 
     SOUND: tbd (drawer opening; safe open/close; picture swinging?) 
     SCORING: 3 pts for getting memo from printer; 3 pts for getting password list; 2 pts for getting walkman; 2 pts for finding safe; 3 pts for opening safe; 3 pts for getting BadASS code; 2 pts for getting floppy disk; 3 pts for getting notebook; 2 pts moving rug; 3 pts for getting folder with sound password
-    CODING: not started
+    CODING: need 'look' clicks, and 'said' statements
 
 9. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. Scratched into top of PQ podium is coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
 
