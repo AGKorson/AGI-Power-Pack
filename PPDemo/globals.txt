@@ -102,6 +102,7 @@
 #define findDisk               f65
 #define findEmptyDrawer        f66
 #define findManual             f67
+#define fOpenSafe              f68
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
@@ -159,6 +160,12 @@
 #define MIDIInst2              v70
 #define cursormode             v71 [ mouse cursor mode
 #define cursoricon             v72
+#define C_DEFAULT                1
+#define C_WALK                   2
+#define C_LOOK                   3
+#define C_TALK                   4
+#define C_USE                    5
+#define C_WAIT                   6
 #define car0car1               v73
 #define car2car3               v74
 #define car4car5               v75
@@ -176,12 +183,6 @@
 #define LOC_LOBBY                1
 #define LOC_EXAM                 2
 #define LOC_GONE                 3
-#define C_DEFAULT                1
-#define C_WALK                   2
-#define C_LOOK                   3
-#define C_TALK                   4
-#define C_USE                    5
-#define C_WAIT                   6
 #define safeStatus             v87
 #define pictureStatus          v88
 #define deskDrawerStatus       v89

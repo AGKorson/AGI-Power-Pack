@@ -1020,10 +1020,17 @@ if (btnAction == B_EXPORT) {
   block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
   block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)
   [ TODO: use file function to save the string
+  [ TODO: saving to file should use CR in place of chr(0) to separate strings
+  get.string(s20, "Enter export file name: ", 22, 0, 15);
+  [ clear input line
+  prevent.input();
+  accept.input();
+  [ validate it's an 8.3 DOS filename; if not, allow player to try again
+  
   [ make a log entry:
   log("%s12 cursor hex string: %s16");
   [ provide feedback
-  print.at("Cursor exported to logfile", 14, 19, 16);
+  print.at("Cursor data exported to game directory as '%s20'", 14, 19, 16);
 }
 
 if (btnAction == B_IDX_DN) {
