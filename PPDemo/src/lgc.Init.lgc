@@ -63,8 +63,9 @@ if (gameRestarted) {
   set.key(0, 32, cDebug);
 }
 
-[ enable debugging by default (remove when ready to release game)
+[ enable debugging and tracing by default (remove when ready to release game)
 set(debugging);
+set(enableTrace);
 
 [ set mouse parameters
 set(enableDblClick);

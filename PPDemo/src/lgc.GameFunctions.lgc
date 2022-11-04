@@ -29,6 +29,54 @@
 [ room-specific here
 [ *************************************************
 
+
+[ saving a cursor
+if (saveCursor) {
+  reset(saveCursor);
+  [ copy s16 into designated cursor msg value
+  [ v227 is cursor index value in cp.Mouse logic
+  work1 = v227;
+  work1 += 40;
+  work2 = 16;
+  block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
+  [ provide feedback
+  print.at("Cursor saved.", 14, 19, 15);
+
+print("%v46, %m44");
+  
+  return();
+}
+
+[ restore a cursor
+if (restoreCursor) {
+  reset(restoreCursor);
+  [ set s12 to default of designated cursor
+  work1 = &s12;
+  work2 = v227;
+  work2 += 46;
+  block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
+  [ now copy it to the current cursor msgnum
+  work2 -= 6;
+  block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  [ force update by resetting the cursor index
+  v227 = -1;
+  [ provide feedback
+  print.at("Cursor restored.", 14, 19, 17);
+  return();
+}
+
+[ check for instrument change
+if (saveCustomInst) {
+  reset(saveCustomInst);
+  work1 = 22;
+  block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+  work1 = v221; [ selinst in cp.Instrument
+  work1 += 52; [convert to msg offset
+  work2 = &s12; [ use string 12
+  block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
+  return();
+}
+
 [ convert game time into 20 minute timer intervals
 if (elapsedMinutes != oldMinutes) {
   oldMinutes = elapsedMinutes;
@@ -228,7 +276,7 @@ return();
 #message 43 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
             "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
 [ use 
-#message 44 "0706FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
+#message 44 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
             "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
 [ wait 
 #message 45 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
@@ -246,7 +294,7 @@ return();
 #message 49 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
             "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
 [ use 
-#message 50 "0707FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
+#message 50 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
             "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
 [ wait
 #message 51 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"

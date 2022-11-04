@@ -132,11 +132,14 @@ if (!enableERIDOCC) {
 [ FIRST CYCLE ONLY
 [ **************************************
 if (newRoom) {
+
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);
+  
+  load.logics(lgc.GameFunctions);
   
   [ this view has all the art for cursors and buttons
   load.view(vw.cp.MouseArt);
@@ -995,14 +998,16 @@ if (btnAction == B_PREVIEW) {
 
 if (btnAction == B_SAVE) {
   [ to modify (save) the cursor, code must be run
-  [ from its owning logic (logic 0)
+  [ from its owning logic (logic 90)
   set(saveCursor);
+  call(lgc.GameFunctions);
 }
 
 if (btnAction == B_RESTORE) {
   [ load default cursor, overwriting any changes made
   [ (also must be run from logic 0)
   set(restoreCursor);
+  call(lgc.GameFunctions);
 }
 
 if (btnAction == B_EXPORT) {
@@ -1297,7 +1302,6 @@ if (newIndex != cIndex) {
   block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
   block(STR.CONCAT, &sCursor, &s17, 0); [ sINPUT, sADD)
   block(STR.FORMAT, &sCursor, &sCursor, 0); [ str.format(sINPUT, sRESULT)
-  
   [ extract out hotspot coordinates
   work1 = 4;
   block(STR.LEFT, &sCursor, &sHotspot, &work1); [ str.left(sINPUT, sRESULT, vLEN)

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/3/2022 3:57:20 PM"
+   LastEdit = "11/4/2022 12:32:54 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -46,27 +46,27 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &H51CC4FCE
+   CompCRC32 = &HF425FE67
+   CRC32 = &HF425FE67
    ID = lgc.Main
    IsRoom = False
-   Size = 2220
+   Size = 2090
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H0
-   CRC32 = &HC8DAB37C
+   CompCRC32 = &HBEDCF04B
+   CRC32 = &HBEDCF04B
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 2673
+   Size = 2815
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H0
-   CRC32 = &H53386015
+   CompCRC32 = &HC2104357
+   CRC32 = &HC2104357
    IsRoom = False
    ID = lgc.Init
-   Size = 460
+   Size = 462
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
@@ -152,10 +152,10 @@
 [Logic22]
    ID = cp.Instrument
    Description = ""
-   CRC32 = &H58534786
-   CompCRC32 = &H0
+   CRC32 = &H737091B7
+   CompCRC32 = &H737091B7
    IsRoom = True
-   Size = 12283
+   Size = 12287
 
 [Logic26]
    ID = cp.SpeedStatus
@@ -168,10 +168,10 @@
 [Logic27]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &HCAB160DB
-   CompCRC32 = &H0
+   CRC32 = &H738B6330
+   CompCRC32 = &H738B6330
    IsRoom = True
-   Size = 3933
+   Size = 3939
 
 [Logic1]
    ID = rm.Title
@@ -240,10 +240,10 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H5DD83F8E
-   CompCRC32 = &H606A854F
+   CRC32 = &H12FEF143
+   CompCRC32 = &H12FEF143
    IsRoom = True
-   Size = 3209
+   Size = 3466
 
 [Logic10]
    ID = rm.Storeroom

@@ -520,36 +520,6 @@ if (!disableGameFunctions) {
 [ NON-CONTROLLER CHECKS
 [ *********************** 
 
-[ saving a cursor
-if (saveCursor) {
-  reset(saveCursor);
-  [ copy s16 into designated cursor msg value
-  [ v227 is cursor index value in cp.Mouse logic
-  work1 = v227;
-  work1 += 40;
-  work2 = 16;
-  block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
-  [ provide feedback
-  print.at("Cursor saved.", 14, 19, 15);
-}
-
-[ restore a cursor
-if (restoreCursor) {
-  reset(restoreCursor);
-  [ set s12 to default of designated cursor
-  work1 = &s12;
-  work2 = v227;
-  work2 += 46;
-  block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
-  [ now copy it to the current cursor msgnum
-  work2 -= 6;
-  block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  [ force update by resetting the cursor index
-  v227 = -1;
-  [ provide feedback
-  print.at("Cursor restored.", 14, 19, 17);
-}
-
 [ save current ego position
 get.posn(ego, egoX, egoY);
     
@@ -558,17 +528,6 @@ get.posn(ego, egoX, egoY);
 [ called manually by logic 0.
 call.v(currentRoom);
 
-[ check for instrument change
-if (saveCustomInst) {
-  work1 = 22;
-  block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-  work1 = v221; [ selinst in cp.Instrument
-  work1 += 52; [convert to msg offset
-  work2 = &s12; [ use string 12
-  block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
-  reset(saveCustomInst);
-}
-  
 [ if debugging is active                
 if (debugging) {
   [ call the debugging logic
@@ -632,6 +591,8 @@ oldSeconds = elapsedSeconds;
 oldMinutes = elapsedMinutes;
 oldHours = elapsedHours;
 oldDays = elapsedDays;
+
+[ TODO: cursors & instruments need to be stored in logic0
 
 return();
 

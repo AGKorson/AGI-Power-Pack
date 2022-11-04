@@ -17,7 +17,7 @@
 #define tmpStr         s15
 
 #define fMoveRug      f220
-#define fOnTripLine       f221
+#define fOnTripLine   f221
 #define fDeskDrawer   f222
 #define fFileDrawer   f223
 #define fPicture      f224
@@ -90,7 +90,7 @@ if (newRoom) {
     stop.cycling(oFolder);
     ignore.objs(oFolder);
     position(oFolder, 92, 149);
-    set.priority(oFolder, 4);
+    set.priority(oFolder, 5);
     if (rugStatus == 1) {
       draw(oFolder);
     }
@@ -114,7 +114,7 @@ if (newRoom) {
   stop.cycling(oRug);
   ignore.objs(oRug);
   position(oRug, 87, 149);
-  set.priority(oRug, 4);
+  set.priority(oRug, 5);
   draw(oRug);
   
   [ safe
@@ -154,21 +154,70 @@ if (newRoom) {
   [ desk drawer
   animate.obj(oDeskDrawer);
   set.view(oDeskDrawer, vw.OfficeArt);
-  set.loop(oDeskDrawer, 2);
   ignore.objs(oDeskDrawer);
   ignore.blocks(oDeskDrawer);
   stop.cycling(oDeskDrawer);
+  if (deskDrawerStatus != CLOSED) {
+    if (deskDrawerStatus == OPEN1) {
+      position(oDeskDrawer, 84, 126);
+      if (has("Walkman")) {
+        set.loop(oDeskDrawer, 2);
+        set.cel(oDeskDrawer, 2);
+      } else {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 4);
+      }
+    } else {
+      position(oDeskDrawer, 84, 130);
+      if (has("piece of paper")) {
+        set.loop(oDeskDrawer, 2);
+        set.cel(oDeskDrawer, 2);
+      } else {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 3);
+      }
+    }
+    draw(oDeskDrawer);
+  }
   
   [ file drawer
   animate.obj(oFileDrawer);
   set.view(oFileDrawer, vw.OfficeArt);
-  set.loop(oFileDrawer, 3);
   ignore.objs(oFileDrawer);
   stop.cycling(oFileDrawer);
+  if (fileDrawerStatus != CLOSED) {
+    if (fileDrawerStatus == OPEN1) {
+      position(oFileDrawer, 93, 112);
+      set.loop(oFileDrawer, 3);
+      set.cel(oFileDrawer, 2);
+    }
+    if (fileDrawerStatus == OPEN2) { 
+      position(oFileDrawer, 93, 121);
+      if (has("notebook")) {
+        set.loop(oFileDrawer, 3);
+        set.cel(oFileDrawer, 2);
+      } else {
+        set.loop(oFileDrawer, 5);
+        set.cel(oFileDrawer, 5);
+      }
+    }
+    if (fileDrawerStatus == OPEN3) { 
+      position(oFileDrawer, 93, 121);
+      if (has("floppy disk")) {
+        set.loop(oFileDrawer, 3);
+        set.cel(oFileDrawer, 2);
+      } else {
+        set.loop(oFileDrawer, 5);
+        set.cel(oFileDrawer, 6);
+      }
+    }
+    draw(oFileDrawer);
+  }
   
   [ add ego to the room
   position(ego, 107, 138);
   draw(ego);
+  egoDir = STOPPED;
   
   [ display the picture on screen
   show.pic();
@@ -177,7 +226,6 @@ if (newRoom) {
   [ restore cursor
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  
   return();
 }
 
@@ -191,9 +239,6 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
 }
 
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items
 if (controller(cLeftClick)) {
@@ -291,29 +336,39 @@ if (controller(cLeftClick)) {
       [ on desk drawer, and open
       if (posn(oDeskDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
           deskDrawerStatus != CLOSING) {
-          [ is ego close enough?
+        [ is ego close enough?
         if (obj.in.box(ego, 74, 131, 101, 136)) {
-          set.loop(oDeskDrawer, 2);
-          set.cel(oDeskDrawer, 2);
-          reverse.loop(oDeskDrawer, fDeskDrawer);
-          [ automatically get items
-          if (deskDrawerStatus == OPEN1) {
+          if (deskDrawerStatus == OPEN1 && mouseY < 132) {
+            [ cicking on top drawer item
             if (!has("Walkman")) {
               get("Walkman");
               currentScore += 2;
               print("You decide to take the Walkman before closing "
                     "the drawer.");
+              set.loop(oDeskDrawer, 2);
+              set.cel(oDeskDrawer, 2);
+              force.update(oDeskDrawer);      
+            }
+          } else {
+            if (deskDrawerStatus == OPEN2 && mouseY < 136) {
+              [ clicking on bottom drawer item
+              if (!has("piece of paper")) {
+                get("piece of paper");
+                currentScore += 3;
+                print("The paper may be of use so you grab it from "
+                      "the drawer.");
+                set.loop(oDeskDrawer, 2);
+                set.cel(oDeskDrawer, 2);
+                force.update(oDeskDrawer);      
+              }
+            } else {
+              [ clicking on drawer
+              set.loop(oDeskDrawer, 2);
+              set.cel(oDeskDrawer, 2);
+              reverse.loop(oDeskDrawer, fDeskDrawer);
+              deskDrawerStatus = CLOSING;
             }
           }
-          if (deskDrawerStatus == OPEN2) {
-            if (!has("piece of paper")) {
-              get("piece of paper");
-              currentScore += 3;
-              print("The paper may be of use so you grab it from "
-                    "the drawer.");
-            }
-          }
-          deskDrawerStatus = CLOSING;
         } else {
           print("Move closer.");
         }
@@ -326,6 +381,8 @@ if (controller(cLeftClick)) {
         [ is ego close enough?
         if (obj.in.box(ego, 74, 131, 101, 136)) {
           position(oDeskDrawer, 84, 126);
+          set.loop(oDeskDrawer, 2);
+          set.cel(oDeskDrawer, 0);
           draw(oDeskDrawer);
           end.of.loop(oDeskDrawer, fDeskDrawer);
           deskDrawerStatus = OPENING;
@@ -341,6 +398,8 @@ if (controller(cLeftClick)) {
         [ is ego close enough
         if (obj.in.box(ego, 74, 131, 101, 136)) {
           position(oDeskDrawer, 84, 130);
+          set.loop(oDeskDrawer, 2);
+          set.cel(oDeskDrawer, 0);
           draw(oDeskDrawer);
           end.of.loop(oDeskDrawer, fDeskDrawer);
           deskDrawerStatus = OPENING;
@@ -355,37 +414,49 @@ if (controller(cLeftClick)) {
           fileDrawerStatus != CLOSING) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
-          set.loop(oFileDrawer, 3);
-          set.cel(oFileDrawer, 2);
-          reverse.loop(oFileDrawer, fFileDrawer);
-          [ automatically get items
-          if (fileDrawerStatus == OPEN2) {
+
+          if (fileDrawerStatus == OPEN1 && mouseY < 113) {
+            goto(doneclick);
+          }
+          if (fileDrawerStatus == OPEN2 && mouseY < 122) {
             if (!has("notebook")) {
               get("notebook");
               currentScore += 3;
               print("This notebook might come in handy.");
+              set.loop(oFileDrawer, 3);
+              set.cel(oFileDrawer, 2);
+              force.update(oFileDrawer);      
             }
+            goto(doneclick);
           }
-          if (fileDrawerStatus == OPEN3) {
+          if (fileDrawerStatus == OPEN3 && mouseY < 131) {
             if (!has("floppy disk")) {
               get("floppy disk");
               currentScore += 2;
               print("You decide to take one of the disks.");
+              set.loop(oFileDrawer, 3);
+              set.cel(oFileDrawer, 2);
+              force.update(oFileDrawer);      
             }
+            goto(doneclick);
           }
+          set.loop(oFileDrawer, 3);
+          set.cel(oFileDrawer, 2);
+          reverse.loop(oFileDrawer, fFileDrawer);
           fileDrawerStatus = CLOSING;
         } else {
           print("Move closer.");
         }
         goto(doneclick);
       }
-      
       [ top file drawer, closed 92, 100, 100, 108
-      if (mouseX > 91 && mouseX < 101 && mouseY > 107 && mouseY < 115 &&
+      if (mouseX > 91 && mouseX < 101 && mouseY > 107 && mouseY < 117 &&
           fileDrawerStatus == CLOSED) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
           position(oFileDrawer, 93, 112);
+          set.loop(oFileDrawer, 3);
+          set.cel(oFileDrawer, 0);
           draw(oFileDrawer);
           end.of.loop(oFileDrawer, fFileDrawer);
           fileDrawerStatus = OPENING;
@@ -396,11 +467,13 @@ if (controller(cLeftClick)) {
       }
         
       [ middle file drawer, closed 92, 109, 100, 117
-      if (mouseX > 91 && mouseX < 101 && mouseY > 116 && mouseY < 124 &&
+      if (mouseX > 91 && mouseX < 101 && mouseY > 116 && mouseY < 126 &&
           fileDrawerStatus == CLOSED) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
           position(oFileDrawer, 93, 121);
+          set.loop(oFileDrawer, 3);
+          set.cel(oFileDrawer, 0);
           draw(oFileDrawer);
           end.of.loop(oFileDrawer, fFileDrawer);
           fileDrawerStatus = OPENING;
@@ -416,6 +489,8 @@ if (controller(cLeftClick)) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
           position(oFileDrawer, 93, 130);
+          set.loop(oFileDrawer, 3);
+          set.cel(oFileDrawer, 0);
           draw(oFileDrawer);
           end.of.loop(oFileDrawer, fFileDrawer);
           fileDrawerStatus = OPENING;
@@ -542,25 +617,29 @@ if (controller(cLeftClick)) {
         }
       }
       
-      [ computer/keyboard
-      67, 93, 76, 115
-      70, 115, 79, 118
-      print("The computer is not working. It looks like the hard "
-            "drive and power supply have been removed a long time "
-            "ago.");
-      [ printer
-      78, 107, 89, 115
-      print("The printer appears to be broken.");
-      
-      [ rug
-      69, 138, 98, 149 (and not red pri)
-      print("This portion of the rug is stuck to the floor.");
+[      [ computer/keyboard
+[      67, 93, 76, 115
+[      70, 115, 79, 118
+[      print("The computer is not working. It looks like the hard "
+[            "drive and power supply have been removed a long time "
+[            "ago.");
+[      [ printer
+[      78, 107, 89, 115
+[      print("The printer appears to be broken.");
+[      
+[      [ rug
+[      69, 138, 98, 149 (and not red pri)
+[      print("This portion of the rug is stuck to the floor.");
     }
     
     :doneclick
     set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
   }
 }
+
+[*****
+:noInput           [  all non-input related code goes here 
+[*****
 
 [ ego backing up from picture
 if (fBackup) {
@@ -744,7 +823,7 @@ if (fFileDrawer) {
 
 [ add exit checks here (or use layout editor)
 
-if (egoX > 115 && egoHitSpecial) {
+if (egoX > 100 && egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
