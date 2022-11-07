@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/4/2022 1:22:38 PM"
+   LastEdit = "11/7/2022 12:57:34 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -240,8 +240,8 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HACD6F9AE
-   CompCRC32 = &H0
+   CRC32 = &H71EBE24C
+   CompCRC32 = &H71EBE24C
    IsRoom = True
    Size = 5526
 
@@ -448,10 +448,10 @@
 [Logic13]
    ID = rm.SafeDoor
    Description = ""
-   CRC32 = &HB7135FE6
-   CompCRC32 = &H0
+   CRC32 = &HC541896E
+   CompCRC32 = &H6A430D20
    IsRoom = True
-   Size = 134
+   Size = 1573
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -571,13 +571,13 @@
 
 [Picture13]
    ID = pic.SafeDoor
-   Size = 569
+   Size = 1167
    Description = ""
-   BkgdImg = "C:\Users\d3m294\OneDrive - PNNL\Desktop\agisound\AGI-Power-Pack\PPDemo\src\safedial2.jpg"
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\safedial14.jpg"
    BkgdShow = True
-   BkgdTrans = 112
-   BkgdPosn = 0|0|11.25|274.6753
-   BkgdSize = 314|167|588.75|325.3247
+   BkgdTrans = 178
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|516|271
 
 [Picture14]
    ID = pic.MagazineCover
@@ -1038,5 +1038,10 @@
 [View33]
    ID = vw.SafeArt
    Description = ""
-   Size = 77
+   Size = 14862
+
+[View39]
+   ID = vw.EgoCoffin
+   Description = ""
+   Size = 3410
 [::END Views::]

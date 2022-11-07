@@ -6,6 +6,32 @@
 [
 [ ********************************************************************
 
+#define oNum00         o1
+#define oNum05         o2
+#define oNum10         o3
+#define oNum15         o4
+#define oNum20         o5
+#define oNum25         o6
+#define oNum30         o7
+#define oNum35         o8
+
+#define currentNum    v220
+#define comboNum1     v221
+#define comboNum2     v222
+#define comboNum3     v223
+#define spinCount     v224
+#define comboRev1     v225
+#define comboRev2     v226
+#define comboRev3     v227
+#define startNum      v228
+
+#define setNum1       f220
+#define setNum2       f221
+#define setNum3       f222
+#define spinLeft      f223
+#define spinRight     f224
+#define updateCombo   f225
+
 if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
@@ -19,13 +45,107 @@ if (newRoom) {
   [ no ego, and no input (mouse only)
   set(disableGameFunctions);
   prevent.input();
+  lastChar = 0;
   
   [ access to cursor icons
   load.logics(lgc.GameFunctions);
   
+  load.view(vw.SafeArt);
+  animate.obj(oNum00);
+  set.view(oNum00, vw.SafeArt);
+  set.loop(oNum00, 0);
+  set.cel(oNum00, 0);
+  stop.cycling(oNum00);
+  set.priority(oNum00, 8);
+  position(oNum00, 39, 36);
+  ignore.objs(oNum00);
+  draw(oNum00);
+
+  animate.obj(oNum05);
+  set.view(oNum05, vw.SafeArt);
+  set.loop(oNum05, 1);
+  set.cel(oNum05, 0);
+  stop.cycling(oNum05);
+  set.priority(oNum05, 8);
+  position(oNum05, 57, 51);
+  ignore.objs(oNum05);
+[  draw(oNum05);
+  
+  animate.obj(oNum10);
+  set.view(oNum10, vw.SafeArt);
+  set.loop(oNum10, 2);
+  set.cel(oNum10, 0);
+  stop.cycling(oNum10);
+  set.priority(oNum10, 8);
+  position(oNum10, 65, 93);
+  ignore.objs(oNum10);
+[  draw(oNum10);
+  
+  animate.obj(oNum15);
+  set.view(oNum15, vw.SafeArt);
+  set.loop(oNum15, 3);
+  set.cel(oNum15, 0);
+  stop.cycling(oNum15);
+  set.priority(oNum15, 8);
+  position(oNum15, 55, 134);
+  ignore.objs(oNum15);
+[  draw(oNum15);
+  
+  animate.obj(oNum20);
+  set.view(oNum20, vw.SafeArt);
+  set.loop(oNum20, 4);
+  set.cel(oNum20, 0);
+  stop.cycling(oNum20);
+  set.priority(oNum20, 8);
+  position(oNum20, 36, 150);
+  ignore.objs(oNum20);
+[  draw(oNum20);
+  
+  animate.obj(oNum25);
+  set.view(oNum25, vw.SafeArt);
+  set.loop(oNum25, 5);
+  set.cel(oNum25, 0);
+  stop.cycling(oNum25);
+  set.priority(oNum25, 8);
+  position(oNum25, 16, 134);
+  ignore.objs(oNum25);
+[  draw(oNum25);
+  
+  animate.obj(oNum30);
+  set.view(oNum30, vw.SafeArt);
+  set.loop(oNum30, 6);
+  set.cel(oNum30, 0);
+  stop.cycling(oNum30);
+  set.priority(oNum30, 8);
+  position(oNum30, 7, 93);
+  ignore.objs(oNum30);
+[  draw(oNum30);
+  
+  animate.obj(oNum35);
+  set.view(oNum35, vw.SafeArt);
+  set.loop(oNum35, 7);
+  set.cel(oNum35, 0);
+  stop.cycling(oNum35);
+  set.priority(oNum35, 8);
+  position(oNum35, 16, 58);
+  ignore.objs(oNum35);
+[  draw(oNum35);
+  
+  [ turn right for 1st num, left one full turn, then to 2nd
+  [ then right to 3rd num
+  currentNum = 0;
+  comboNum1 = -1;
+  comboNum2 = -1;
+  comboNum3 = -1;
+
   [ display the picture on screen
   show.pic();
   
+display(12, 60, "currentNum1: %v220 ");
+display(13, 60, "combo1: %v221/%v225  ");
+display(14, 60, "combo2: %v222/%v226  ");
+display(15, 60, "combo3: %v223/%v227  ");
+
   [ use hand cursor
   cursoricon = C_USE; [cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -34,24 +154,350 @@ if (newRoom) {
   return();
 }
 
-[*****
-:handleInput       [ check for input from player
-[*****
-
-[TODO: add all code to control combo lock
+[ check for handle click
 if (controller(cLeftClick)) {
-  set(fOpenSafe);  
+  block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+  work1 /= 16;
+  if (work1 == 7) {
+    [ check for correct combo
+    [ TODO: determine final combination
+    if (comboNum1 == 36 && comboNum2 == 24 && comboRev2 == 1 &&
+        comboNum3 == 34) {
+      print("correct!");
+      set(fOpenSafe);
+    } else {
+      print("wrong combination- try again");
+      comboNum1 = -1;
+      comboNum2 = -1;
+      comboNum3 = -1;
+      comboRev1 = 0;
+      comboRev2 = 0;
+      comboRev3 = 0;
+    }
+  }
 }
 
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
+[ check for spin actions
+if (mouseBtn == 1) {
+  block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+  work1 /= 16;
+  if (work1 == 5 && !spinLeft) {
+    set(spinLeft);
+    display(23, 0, "spin left ");
+  }
+  if (work1 == 6 && !spinRight) {
+    set(spinRight);
+    display(23, 0, "spin right");
+  }  
+} else {
+  if ((spinLeft || spinRight)) {
+    display(23, 0, "          ");
+    [ always stop spinning if mouse up
+    spinCount = 0;
+    reset(spinLeft);
+    reset(spinRight);
+  }
+}
 
-[ add other room specific statements here
+[ spinning left
+if (spinLeft) {
+  [ if setting num1, switch to num2
+  if (setNum1) {
+    reset(setNum1);
+    set(setNum2);
+    comboRev2 = 0;
+  }
+  
+  [ if counter is at zero, spin it
+  if (spinCount == 0) {
+    [ reset the counter
+    spinCount = 3;
+    [ adjust number
+    currentNum += 1;
+    if (currentNum > 39) {
+      currentNum = 0;
+    }
+    [ force refresh
+    set(updateCombo);
+    [ if past 1st num 
+    if (currentNum == comboNum1) {
+     ++comboRev2;
+    }
+    
+    [ if setting 2nd number, adjust it
+    if (setNum2) {
+      comboNum2 = currentNum;
+    } else {
+      [ all numbers are invalid
+      comboNum1 = -1;
+      comboNum2 = -1;
+      comboNum3 = -1;
+      comboRev1 = 0;
+      comboRev2 = 0;
+      comboRev3 = 0;
+    }
+  } else {
+    --spinCount;
+  }
+}
 
+[ spinning right
+if (spinRight) {
+  [ if nothing set, begin
+  if (!setNum1 && !setNum2 && !setNum3) {
+    set(setNum1);
+  }
+  [ if setting num2, move to 3
+  if (setNum2) {
+    reset(setNum2);
+    set(setNum3);
+    comboRev3 = 0;
+  }
+  
+  [ if counter is at zero, spin it
+  if (spinCount == 0) {
+    [ reset the counter
+    spinCount = 3;
+    [ adjust number
+    currentNum -= 1;
+    if (currentNum > 39) {
+      currentNum = 39;
+    }
+    [ force refresh
+    set(updateCombo);
+    
+    [ if setting 1st number, adjust it
+    if (setNum1) {
+      comboNum1 = currentNum;
+      if (currentNum == startNum) {
+        ++comboRev1;
+      }
+    }
+    [ if setting third number, adjust it
+    if (setNum3) {
+      comboNum3 = currentNum;
+      if (currentNum == comboNum2) {
+        [ too far; start over
+        reset(setNum3);
+        set(setNum1);
+        startNum = currentNum;
+        comboRev1 = 0;
+        comboNum2 = -1;
+        comboRev2 = 0;
+        comboNum3 = -1;
+        comboRev3 = 0;
+      }
+    }
+  } else {
+    --spinCount;
+  }
+}
 
-[ righ-click to cancel and exit
-if ((fOpenSafe || controller(cRightClick))) {
+[ update numbers as the dial spins
+if (updateCombo) {
+  reset(updateCombo);
+  display(12, 60, "currentNum: %v220 ");
+  display(13, 60, "combo1: %v221/%v225  ");
+  display(14, 60, "combo2: %v222/%v226  ");
+  display(15, 60, "combo3: %v223/%v227  ");
+  set.cel.v(oNum00, currentNum);
+  set.cel.v(oNum05, currentNum);
+  set.cel.v(oNum10, currentNum);
+  set.cel.v(oNum15, currentNum);
+  set.cel.v(oNum20, currentNum);
+  set.cel.v(oNum25, currentNum);
+  set.cel.v(oNum30, currentNum);
+  set.cel.v(oNum35, currentNum);
+  
+  if (currentNum < 20) {
+    if (currentNum < 10) {
+      if (currentNum == 0) {
+        reposition.to(oNum00, 39, 36);
+        reposition.to(oNum05, 57, 51);
+        reposition.to(oNum10, 65, 93);
+        reposition.to(oNum15, 55, 134);
+        reposition.to(oNum20, 36, 150);
+        reposition.to(oNum25, 16, 134);
+        reposition.to(oNum30, 7, 93);
+        reposition.to(oNum35, 16, 58);
+        goto(checkexit);
+      }
+      if (currentNum == 1) {
+        reposition.to(oNum00, 35, 38);
+        reposition.to(oNum05, 54, 46);
+        reposition.to(oNum10, 65, 84);
+        reposition.to(oNum15, 59, 127);
+        reposition.to(oNum20, 41, 150);
+        reposition.to(oNum25, 20, 139);
+        reposition.to(oNum30, 7, 102);
+        reposition.to(oNum35, 12, 69);
+        goto(checkexit);
+      }
+      if (currentNum == 2) {
+        reposition.to(oNum00, 30, 36);
+        goto(checkexit);
+      }
+      if (currentNum == 3) {
+        reposition.to(oNum00, 25, 40);
+        goto(checkexit);
+      }
+      if (currentNum == 4) {
+        reposition.to(oNum00, 21, 45);
+        goto(checkexit);
+      }
+      if (currentNum == 5) {
+        reposition.to(oNum00, 17, 51);
+        goto(checkexit);
+      }
+      if (currentNum == 6) {
+        reposition.to(oNum00, 13, 57);
+        goto(checkexit);
+      }
+      if (currentNum == 7) {
+        reposition.to(oNum00, 10, 65);
+        goto(checkexit);
+      }
+      if (currentNum == 8) {
+        reposition.to(oNum00, 8, 75);
+        goto(checkexit);
+      }
+      if (currentNum == 9) {
+        reposition.to(oNum00, 7, 80);
+        goto(checkexit);
+      }
+    } else {
+      if (currentNum == 10) {
+        reposition.to(oNum00, 7, 87);
+        goto(checkexit);
+      }
+      if (currentNum == 11) {
+        reposition.to(oNum00, 7, 95);
+        goto(checkexit);
+      }
+      if (currentNum == 12) {
+        reposition.to(oNum00, 8, 105);
+        goto(checkexit);
+      }
+      if (currentNum == 13) {
+        reposition.to(oNum00, 10, 114);
+        goto(checkexit);
+      }
+      if (currentNum == 14) {
+        reposition.to(oNum00, 13, 122);
+        goto(checkexit);
+      }
+      if (currentNum == 15) {
+        reposition.to(oNum00, 17, 130);
+        goto(checkexit);
+      }
+      if (currentNum == 16) {
+        reposition.to(oNum00, 21, 138);
+        goto(checkexit);
+      }
+      if (currentNum == 17) {
+        reposition.to(oNum00, 25, 143);
+        goto(checkexit);
+      }
+      if (currentNum == 18) {
+        reposition.to(oNum00, 30, 148);
+        goto(checkexit);
+      }
+      if (currentNum == 19) {
+        reposition.to(oNum00, 35, 150);
+        goto(checkexit);
+      }
+    }
+  } else {
+    if (currentNum < 30) {
+      if (currentNum == 20) {
+        reposition.to(oNum00, 38, 150);
+        goto(checkexit);
+      }
+      if (currentNum == 21) {
+        reposition.to(oNum00, 43, 150);
+        goto(checkexit);
+      }
+      if (currentNum == 22) {
+        reposition.to(oNum00, 46, 148);
+        goto(checkexit);
+      }
+      if (currentNum == 23) {
+        reposition.to(oNum00, 50, 143);
+        goto(checkexit);
+      }
+      if (currentNum == 24) {
+        reposition.to(oNum00, 54, 138);
+        goto(checkexit);
+      }
+      if (currentNum == 25) {
+        reposition.to(oNum00, 57, 130);
+        goto(checkexit);
+      }
+      if (currentNum == 26) {
+        reposition.to(oNum00, 60, 122);
+        goto(checkexit);
+      }
+      if (currentNum == 27) {
+        reposition.to(oNum00, 62, 114);
+        goto(checkexit);
+      }
+      if (currentNum == 28) {
+        reposition.to(oNum00, 65, 105);
+        goto(checkexit);
+      }
+      if (currentNum == 29) {
+        reposition.to(oNum00, 65, 95);
+        goto(checkexit);
+      }
+    } else {
+      if (currentNum == 30) {
+        reposition.to(oNum00, 65, 87);
+        goto(checkexit);
+      }
+      if (currentNum == 31) {
+        reposition.to(oNum00, 65, 80);
+        goto(checkexit);
+      }
+      if (currentNum == 32) {
+        reposition.to(oNum00, 65, 74);
+        goto(checkexit);
+      }
+      if (currentNum == 33) {
+        reposition.to(oNum00, 62, 65);
+        goto(checkexit);
+      }
+      if (currentNum == 34) {
+        reposition.to(oNum00, 60, 57);
+        goto(checkexit);
+      }
+      if (currentNum == 35) {
+        reposition.to(oNum00, 57, 51);
+        goto(checkexit);
+      }
+      if (currentNum == 36) {
+        reposition.to(oNum00, 54, 45);
+        goto(checkexit);
+      }
+      if (currentNum == 37) {
+        reposition.to(oNum00, 50, 40);
+        goto(checkexit);
+      }
+      if (currentNum == 38) {
+        reposition.to(oNum00, 46, 36);
+        goto(checkexit);
+      }
+      if (currentNum == 39) {
+        reposition.to(oNum00, 43, 37);
+        goto(checkexit);
+      }
+    }
+  }
+}
+
+:checkexit
+[ ESC or right-click to cancel;
+[ correct combo to open
+if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   [ reenable input
   accept.input();
   reset(disableGameFunctions);

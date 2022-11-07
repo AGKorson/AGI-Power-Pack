@@ -16,6 +16,9 @@
 #define tmpPalette     s12 [ s13, s14
 #define tmpStr         s15
 
+#define tripCounter   v220
+#define tmpLoop       v221
+
 #define fMoveRug      f220
 #define fOnTripLine   f221
 #define fDeskDrawer   f222
@@ -26,9 +29,6 @@
 #define fTripping     f227
 #define fWarnTrip     f228
 #define fTmp          f229
-
-#define tripCounter   v220
-#define tmpLoop       v221
 
 [ rug status
 #define RUG_DOWN     0
