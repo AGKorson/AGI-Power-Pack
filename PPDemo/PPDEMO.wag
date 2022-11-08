@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/8/2022 5:48:50 AM"
+   LastEdit = "11/8/2022 12:11:57 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -272,7 +272,7 @@
 [Logic102]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &H57DB6CEE
+   CRC32 = &HD885E3E
    CompCRC32 = &H57DB6CEE
    IsRoom = False
    Size = 22493
@@ -280,7 +280,7 @@
 [Logic103]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H55C27EC1
+   CRC32 = &HAABA6D59
    CompCRC32 = &H55C27EC1
    IsRoom = False
    Size = 22493
@@ -288,7 +288,7 @@
 [Logic104]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H81253EDC
+   CRC32 = &HD243BAD4
    CompCRC32 = &H81253EDC
    IsRoom = False
    Size = 22493
@@ -296,7 +296,7 @@
 [Logic105]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &HA8C20879
+   CRC32 = &H76134960
    CompCRC32 = &HA8C20879
    IsRoom = False
    Size = 22497
@@ -304,7 +304,7 @@
 [Logic106]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &HADCE5BB3
+   CRC32 = &H781DBBF8
    CompCRC32 = &HADCE5BB3
    IsRoom = False
    Size = 22497
@@ -312,7 +312,7 @@
 [Logic107]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &HEC4497CE
+   CRC32 = &HD0844226
    CompCRC32 = &HEC4497CE
    IsRoom = False
    Size = 22467
@@ -320,7 +320,7 @@
 [Logic108]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HDE31E2C7
+   CRC32 = &H5AD25859
    CompCRC32 = &HDE31E2C7
    IsRoom = False
    Size = 22118
@@ -328,7 +328,7 @@
 [Logic109]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &H57979A4B
+   CRC32 = &HCAC8A7F
    CompCRC32 = &H57979A4B
    IsRoom = False
    Size = 22118
@@ -344,7 +344,7 @@
 [Logic111]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H4801BA86
+   CRC32 = &H32946A7E
    CompCRC32 = &H4801BA86
    IsRoom = False
    Size = 22118
@@ -352,7 +352,7 @@
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HBB271A8
+   CRC32 = &H4E551623
    CompCRC32 = &HBB271A8
    IsRoom = False
    Size = 22284
@@ -360,7 +360,7 @@
 [Logic113]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H54FE9C66
+   CRC32 = &HE008D2A3
    CompCRC32 = &H54FE9C66
    IsRoom = False
    Size = 22132
@@ -448,10 +448,10 @@
 [Logic13]
    ID = rm.SafeDoor
    Description = ""
-   CRC32 = &HA08CB5CA
-   CompCRC32 = &H124F33E4
+   CRC32 = &H38230113
+   CompCRC32 = &H38230113
    IsRoom = True
-   Size = 1709
+   Size = 2017
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -573,6 +573,7 @@
    ID = pic.SafeDoor
    Size = 1176
    Description = ""
+   BkgdImg = ""
 
 [Picture14]
    ID = pic.MagazineCover
@@ -1033,7 +1034,7 @@
 [View33]
    ID = vw.SafeArt
    Description = ""
-   Size = 17596
+   Size = 20931
 
 [View39]
    ID = vw.EgoCoffin
