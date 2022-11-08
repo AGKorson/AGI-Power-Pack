@@ -69,7 +69,7 @@ if (newRoom) {
   set.priority(oNum05, 8);
   position(oNum05, 57, 51);
   ignore.objs(oNum05);
-[  draw(oNum05);
+  draw(oNum05);
   
   animate.obj(oNum10);
   set.view(oNum10, vw.SafeArt);
@@ -183,15 +183,12 @@ if (mouseBtn == 1) {
   work1 /= 16;
   if (work1 == 5 && !spinLeft) {
     set(spinLeft);
-    display(23, 0, "spin left ");
   }
   if (work1 == 6 && !spinRight) {
     set(spinRight);
-    display(23, 0, "spin right");
   }  
 } else {
   if ((spinLeft || spinRight)) {
-    display(23, 0, "          ");
     [ always stop spinning if mouse up
     spinCount = 0;
     reset(spinLeft);
@@ -206,6 +203,20 @@ if (spinLeft) {
     reset(setNum1);
     set(setNum2);
     comboRev2 = 0;
+  } else {
+    [ if setting 2, reset
+    if (setNum3) {
+      [ ?
+      reset(setNum1);
+      reset(setNum2);
+      reset(setNum3);
+      comboNum1 = -1;
+      comboNum2 = -1;
+      comboNum3 = -1;
+      comboRev1 = 0;
+      comboRev2 = 0;
+      comboRev3 = 0;
+    }
   }
   
   [ if counter is at zero, spin it
@@ -335,75 +346,93 @@ if (updateCombo) {
       }
       if (currentNum == 2) {
         reposition.to(oNum00, 30, 36);
+        reposition.to(oNum05, 51, 42);
         goto(checkexit);
       }
       if (currentNum == 3) {
         reposition.to(oNum00, 25, 40);
+        reposition.to(oNum05, 46, 39);
         goto(checkexit);
       }
       if (currentNum == 4) {
         reposition.to(oNum00, 21, 45);
+        reposition.to(oNum05, 42, 38);
         goto(checkexit);
       }
       if (currentNum == 5) {
         reposition.to(oNum00, 17, 51);
+        reposition.to(oNum05, 38, 37);
         goto(checkexit);
       }
       if (currentNum == 6) {
         reposition.to(oNum00, 13, 57);
+        reposition.to(oNum05, 34, 37);
         goto(checkexit);
       }
       if (currentNum == 7) {
         reposition.to(oNum00, 10, 65);
+        reposition.to(oNum05, 30, 39);
         goto(checkexit);
       }
       if (currentNum == 8) {
         reposition.to(oNum00, 8, 75);
+        reposition.to(oNum05, 25, 43);
         goto(checkexit);
       }
       if (currentNum == 9) {
         reposition.to(oNum00, 7, 80);
+        reposition.to(oNum05, 21, 47);
         goto(checkexit);
       }
     } else {
       if (currentNum == 10) {
         reposition.to(oNum00, 7, 87);
+        reposition.to(oNum05, 17, 53);
         goto(checkexit);
       }
       if (currentNum == 11) {
         reposition.to(oNum00, 7, 95);
+        reposition.to(oNum05, 13, 59);
         goto(checkexit);
       }
       if (currentNum == 12) {
         reposition.to(oNum00, 8, 105);
+        reposition.to(oNum05, 10, 66);
         goto(checkexit);
       }
       if (currentNum == 13) {
         reposition.to(oNum00, 10, 114);
+        reposition.to(oNum05, 8, 74);
         goto(checkexit);
       }
       if (currentNum == 14) {
         reposition.to(oNum00, 13, 122);
+        reposition.to(oNum05, 7, 81);
         goto(checkexit);
       }
       if (currentNum == 15) {
         reposition.to(oNum00, 17, 130);
+        reposition.to(oNum05, 7, 89);
         goto(checkexit);
       }
       if (currentNum == 16) {
         reposition.to(oNum00, 21, 138);
+        reposition.to(oNum05, 7, 98);
         goto(checkexit);
       }
       if (currentNum == 17) {
         reposition.to(oNum00, 25, 143);
+        reposition.to(oNum05, 8, 105);
         goto(checkexit);
       }
       if (currentNum == 18) {
         reposition.to(oNum00, 30, 148);
+        reposition.to(oNum05, 10, 114);
         goto(checkexit);
       }
       if (currentNum == 19) {
         reposition.to(oNum00, 35, 150);
+        reposition.to(oNum05, 13, 122);
         goto(checkexit);
       }
     }
@@ -411,83 +440,103 @@ if (updateCombo) {
     if (currentNum < 30) {
       if (currentNum == 20) {
         reposition.to(oNum00, 38, 150);
+        reposition.to(oNum05, 17, 130);
         goto(checkexit);
       }
       if (currentNum == 21) {
         reposition.to(oNum00, 43, 150);
+        reposition.to(oNum05, 21, 138);
         goto(checkexit);
       }
       if (currentNum == 22) {
         reposition.to(oNum00, 46, 148);
+        reposition.to(oNum05, 25, 143);
         goto(checkexit);
       }
       if (currentNum == 23) {
         reposition.to(oNum00, 50, 143);
+        reposition.to(oNum05, 29, 148);
         goto(checkexit);
       }
       if (currentNum == 24) {
         reposition.to(oNum00, 54, 138);
+        reposition.to(oNum05, 34, 150);
         goto(checkexit);
       }
       if (currentNum == 25) {
         reposition.to(oNum00, 57, 130);
+        reposition.to(oNum05, 38, 150);
         goto(checkexit);
       }
       if (currentNum == 26) {
         reposition.to(oNum00, 60, 122);
+        reposition.to(oNum05, 44, 151);
         goto(checkexit);
       }
       if (currentNum == 27) {
         reposition.to(oNum00, 62, 114);
+        reposition.to(oNum05, 46, 148);
         goto(checkexit);
       }
       if (currentNum == 28) {
         reposition.to(oNum00, 65, 105);
+        reposition.to(oNum05, 50, 143);
         goto(checkexit);
       }
       if (currentNum == 29) {
         reposition.to(oNum00, 65, 95);
+        reposition.to(oNum05, 54, 138);
         goto(checkexit);
       }
     } else {
       if (currentNum == 30) {
         reposition.to(oNum00, 65, 87);
+        reposition.to(oNum05, 57, 130);
         goto(checkexit);
       }
       if (currentNum == 31) {
         reposition.to(oNum00, 65, 80);
+        reposition.to(oNum05, 59, 122);
         goto(checkexit);
       }
       if (currentNum == 32) {
         reposition.to(oNum00, 65, 74);
+        reposition.to(oNum05, 61, 114);
         goto(checkexit);
       }
       if (currentNum == 33) {
         reposition.to(oNum00, 62, 65);
+        reposition.to(oNum05, 63, 105);
         goto(checkexit);
       }
       if (currentNum == 34) {
         reposition.to(oNum00, 60, 57);
+        reposition.to(oNum05, 64, 96);
         goto(checkexit);
       }
       if (currentNum == 35) {
         reposition.to(oNum00, 57, 51);
+        reposition.to(oNum05, 64, 86);
         goto(checkexit);
       }
       if (currentNum == 36) {
         reposition.to(oNum00, 54, 45);
+        reposition.to(oNum05, 63, 77);
         goto(checkexit);
       }
       if (currentNum == 37) {
         reposition.to(oNum00, 50, 40);
+        reposition.to(oNum05, 63, 73);
         goto(checkexit);
       }
       if (currentNum == 38) {
         reposition.to(oNum00, 46, 36);
+        reposition.to(oNum05, 61, 64);
         goto(checkexit);
       }
       if (currentNum == 39) {
         reposition.to(oNum00, 43, 37);
+        reposition.to(oNum05, 60, 58);
         goto(checkexit);
       }
     }
