@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/8/2022 12:11:57 PM"
+   LastEdit = "11/9/2022 7:20:29 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -448,7 +448,7 @@
 [Logic13]
    ID = rm.SafeDoor
    Description = ""
-   CRC32 = &H38230113
+   CRC32 = &HCC4D021
    CompCRC32 = &H38230113
    IsRoom = True
    Size = 2017
@@ -1034,7 +1034,7 @@
 [View33]
    ID = vw.SafeArt
    Description = ""
-   Size = 20931
+   Size = 22491
 
 [View39]
    ID = vw.EgoCoffin
