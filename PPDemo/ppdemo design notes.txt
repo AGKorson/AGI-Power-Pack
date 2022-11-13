@@ -1,5 +1,10 @@
 PP Demo Design notes/Walk-through
 -----------------------------
+to draw upside down, modify DrawCelOnScreen(objseg:0085)
+at 00AF: use currentY, not currentY-Height-1
+at 010E: subract 160 from bp instead of adding it
+
+
 
 X = item done
 I = item in progress

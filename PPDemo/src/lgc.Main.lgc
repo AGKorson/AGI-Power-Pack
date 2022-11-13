@@ -213,7 +213,7 @@ print("Version: %v30");
 
 [!!! debug code to show click location and ego location
 [ used to assist in creating click statements and said statements
-if (controller(cLeftClick)  && currentRoom != 12) {
+if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
   get.posn(ego, work1, work2);
   display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
 }

@@ -24,6 +24,7 @@
 #define comboRev2     v226
 #define comboRev3     v227
 #define startNum      v228
+#define tickCounter   v229
 
 #define setNum1       f220
 #define setNum2       f221
@@ -31,6 +32,10 @@
 #define spinLeft      f223
 #define spinRight     f224
 #define updateCombo   f225
+#define fOpening      f226
+
+#define strPicCmds     s12
+
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -47,8 +52,13 @@ if (newRoom) {
   prevent.input();
   lastChar = 0;
   
+  [ no statusbar
+  status.line.off();
+  
   [ access to cursor icons
   load.logics(lgc.GameFunctions);
+  
+  [ TODO: load sound effects
   
   load.view(vw.SafeArt);
   animate.obj(oNum00);
@@ -119,7 +129,7 @@ if (newRoom) {
   set.priority(oNum30, 8);
   position(oNum30, 7, 96);
   ignore.objs(oNum30);
-[  draw(oNum30);
+  draw(oNum30);
   
   animate.obj(oNum35);
   set.view(oNum35, vw.SafeArt);
@@ -129,14 +139,18 @@ if (newRoom) {
   set.priority(oNum35, 8);
   position(oNum35, 16, 61);
   ignore.objs(oNum35);
-[  draw(oNum35);
+  draw(oNum35);
   
-  [ turn right for 1st num, left one full turn, then to 2nd
-  [ then right to 3rd num
+  [ initialize the dial
   currentNum = 0;
+  tickCounter = 10;
+  work1 = 1;
+  block(SET.PALETTE, 1, &tickCounter, &work1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   comboNum1 = -1;
   comboNum2 = -1;
   comboNum3 = -1;
+  [ turn right for 1st num, left one full turn, then to 2nd
+  [ then right to 3rd num
 
   [ display the picture on screen
   show.pic();
@@ -154,6 +168,10 @@ display(15, 60, "combo3: %v223/%v227  ");
   return();
 }
 
+if (fOpening) {
+  goto(checkexit);
+}
+
 [ check for handle click
 if (controller(cLeftClick)) {
   block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
@@ -164,7 +182,56 @@ if (controller(cLeftClick)) {
     if (comboNum1 == 36 && comboNum2 == 24 && comboRev2 == 1 &&
         comboNum3 == 34) {
       print("correct!");
-      set(fOpenSafe);
+
+      [ add numbers permanently
+      comboNum1 = vw.SafeArt;
+      comboNum2 = 4;
+      comboNum3 = 4;
+      get.posn(oNum00, work1, work2);
+      work3 = 0;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum00);
+      get.posn(oNum05, work1, work2);
+      work3 = 1;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum05);
+      get.posn(oNum10, work1, work2);
+      work3 = 2;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum10);
+      get.posn(oNum15, work1, work2);
+      work3 = 3;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum15);
+      get.posn(oNum20, work1, work2);
+      work3 = 4;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum20);
+      get.posn(oNum25, work1, work2);
+      work3 = 5;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum25);
+      get.posn(oNum30, work1, work2);
+      work3 = 6;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum30);
+      get.posn(oNum35, work1, work2);
+      work3 = 7;
+      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      erase(oNum35);
+      discard.view(vw.SafeArt);
+      [ clear the pre-drawn handle
+      strPicCmds = "F007F3F45A37455B315C495D2D5E975F2B6097612A6297632A6497652A6697672C6897692F6A476B336C41FF";
+      block(PIC.DRAW, 0, &strPicCmds, 0); [ pic.draw(FILLSTYLE, sCMDS)
+      [ animate the handle
+      load.view(vw.SafeHandle);
+      set.view(oNum00, vw.SafeHandle);
+      set.loop(oNum00, 0);
+      set.cel(oNum00, 0);
+      position(oNum00, 94, 151);
+      draw(oNum00);
+      end.of.loop(oNum00, fOpenSafe);
+      set(fOpening);
     } else {
       print("wrong combination- try again");
       comboNum1 = -1;
@@ -228,6 +295,11 @@ if (spinLeft) {
     if (currentNum > 39) {
       currentNum = 0;
     }
+    [ adjust tick counter
+    ++tickCounter;
+    if (tickCounter == 15) {
+      tickCounter = 10;
+    }
     [ force refresh
     set(updateCombo);
     [ if past 1st num 
@@ -274,6 +346,11 @@ if (spinRight) {
     if (currentNum > 39) {
       currentNum = 39;
     }
+    [ adjust tick counter
+    --tickCounter;
+    if (tickCounter == 9) {
+      tickCounter = 14;
+    }
     [ force refresh
     set(updateCombo);
     
@@ -319,6 +396,8 @@ if (updateCombo) {
   set.cel.v(oNum25, currentNum);
   set.cel.v(oNum30, currentNum);
   set.cel.v(oNum35, currentNum);
+  work1 = 0;
+  block(SET.PALETTE, 1, &tickCounter, &work1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   
   if (currentNum < 20) {
     if (currentNum < 10) {
@@ -327,10 +406,10 @@ if (updateCombo) {
         reposition.to(oNum05, 57, 54);
         reposition.to(oNum10, 65, 95);
         reposition.to(oNum15, 55, 137);
-        reposition.to(oNum20, 36, 153);
+        reposition.to(oNum20, 36, 147);
         reposition.to(oNum25, 15, 134);
-        reposition.to(oNum30, 7, 96);
-        reposition.to(oNum35, 16, 61);
+        reposition.to(oNum30, 10, 96);
+        reposition.to(oNum35, 16, 58);
         goto(checkexit);
       }
       if (currentNum == 1) {
@@ -338,363 +417,438 @@ if (updateCombo) {
         reposition.to(oNum05, 54, 49);
         reposition.to(oNum10, 65, 88);
         reposition.to(oNum15, 59, 127);
-        reposition.to(oNum20, 41, 153);
+        reposition.to(oNum20, 41, 148);
         reposition.to(oNum25, 19, 141);
-        reposition.to(oNum30, 7, 105);
-        reposition.to(oNum35, 12, 72);
+        reposition.to(oNum30, 9, 104);
+        reposition.to(oNum35, 13, 65);
         goto(checkexit);
       }
       if (currentNum == 2) {
-        reposition.to(oNum00, 30, 39);
+        reposition.to(oNum00, 32, 39);
         reposition.to(oNum05, 51, 45);
         reposition.to(oNum10, 63, 81);
         reposition.to(oNum15, 61, 122);
-        reposition.to(oNum20, 44, 151);
-        reposition.to(oNum25, 24, 146);
+        reposition.to(oNum20, 44, 146);
+        reposition.to(oNum25, 24, 144);
+        reposition.to(oNum30, 10, 111);
+        reposition.to(oNum35, 12, 73);
         goto(checkexit);
       }
       if (currentNum == 3) {
-        reposition.to(oNum00, 25, 43);
+        reposition.to(oNum00, 27, 43);
         reposition.to(oNum05, 46, 42);
         reposition.to(oNum10, 62, 71);
         reposition.to(oNum15, 63, 113);
-        reposition.to(oNum20, 48, 146);
-        reposition.to(oNum25, 27, 151);
+        reposition.to(oNum20, 48, 145);
+        reposition.to(oNum25, 27, 146);
+        reposition.to(oNum30, 12, 120);
+        reposition.to(oNum35, 10, 81);
         goto(checkexit);
       }
       if (currentNum == 4) {
-        reposition.to(oNum00, 21, 48);
+        reposition.to(oNum00, 22, 48);
         reposition.to(oNum05, 42, 41);
         reposition.to(oNum10, 59, 65);
         reposition.to(oNum15, 65, 105);
-        reposition.to(oNum20, 52, 141);
-        reposition.to(oNum25, 31, 153);
+        reposition.to(oNum20, 52, 140);
+        reposition.to(oNum25, 31, 148);
+        reposition.to(oNum30, 13, 126);
+        reposition.to(oNum35, 9, 89);
         goto(checkexit);
       }
       if (currentNum == 5) {
-        reposition.to(oNum00, 17, 54);
+        reposition.to(oNum00, 19, 54);
         reposition.to(oNum05, 38, 40);
         reposition.to(oNum10, 56, 58);
         reposition.to(oNum15, 66, 95);
         reposition.to(oNum20, 56, 134);
-        reposition.to(oNum25, 34, 153);
+        reposition.to(oNum25, 34, 147);
+        reposition.to(oNum30, 16, 134);
+        reposition.to(oNum35, 10, 95);
         goto(checkexit);
       }
       if (currentNum == 6) {
-        reposition.to(oNum00, 13, 60);
+        reposition.to(oNum00, 14, 60);
         reposition.to(oNum05, 34, 40);
         reposition.to(oNum10, 54, 49);
         reposition.to(oNum15, 65, 88);
         reposition.to(oNum20, 59, 128);
-        reposition.to(oNum25, 41, 153);
+        reposition.to(oNum25, 41, 149);
+        reposition.to(oNum30, 20, 140);
+        reposition.to(oNum35, 9, 104);
         goto(checkexit);
       }
       if (currentNum == 7) {
-        reposition.to(oNum00, 10, 68);
-        reposition.to(oNum05, 30, 42);
+        reposition.to(oNum00, 13, 68);
+        reposition.to(oNum05, 31, 42);
         reposition.to(oNum10, 49, 46);
         reposition.to(oNum15, 64, 81);
         reposition.to(oNum20, 61, 120);
-        reposition.to(oNum25, 43, 151);
+        reposition.to(oNum25, 43, 147);
+        reposition.to(oNum30, 24, 145);
+        reposition.to(oNum35, 10, 111);
         goto(checkexit);
       }
       if (currentNum == 8) {
-        reposition.to(oNum00, 8, 78);
-        reposition.to(oNum05, 25, 46);
+        reposition.to(oNum00, 11, 78);
+        reposition.to(oNum05, 26, 46);
         reposition.to(oNum10, 45, 41);
         reposition.to(oNum15, 62, 72);
         reposition.to(oNum20, 63, 111);
-        reposition.to(oNum25, 47, 146);
+        reposition.to(oNum25, 47, 145);
+        reposition.to(oNum30, 28, 147);
+        reposition.to(oNum35, 12, 121);
         goto(checkexit);
       }
       if (currentNum == 9) {
-        reposition.to(oNum00, 7, 83);
-        reposition.to(oNum05, 21, 50);
+        reposition.to(oNum00, 11, 83);
+        reposition.to(oNum05, 22, 50);
         reposition.to(oNum10, 41, 40);
         reposition.to(oNum15, 59, 65);
         reposition.to(oNum20, 65, 104);
         reposition.to(oNum25, 52, 142);
+        reposition.to(oNum30, 31, 147);
+        reposition.to(oNum35, 13, 126);
         goto(checkexit);
       }
     } else {
       if (currentNum == 10) {
-        reposition.to(oNum00, 7, 90);
-        reposition.to(oNum05, 17, 56);
+        reposition.to(oNum00, 11, 90);
+        reposition.to(oNum05, 19, 56);
         reposition.to(oNum10, 37, 40);
         reposition.to(oNum15, 56, 57);
         reposition.to(oNum20, 66, 96);
         reposition.to(oNum25, 55, 135);
+        reposition.to(oNum30, 36, 147);
+        reposition.to(oNum35, 16, 136);
         goto(checkexit);
       }
       if (currentNum == 11) {
-        reposition.to(oNum00, 7, 98);
-        reposition.to(oNum05, 13, 62);
+        reposition.to(oNum00, 11, 97);
+        reposition.to(oNum05, 15, 62);
         reposition.to(oNum10, 32, 40);
         reposition.to(oNum15, 54, 52);
         reposition.to(oNum20, 66, 87);
         reposition.to(oNum25, 58, 126);
+        reposition.to(oNum30, 41, 148);
+        reposition.to(oNum35, 20, 142);
         goto(checkexit);
       }
       if (currentNum == 12) {
-        reposition.to(oNum00, 8, 108);
-        reposition.to(oNum05, 10, 69);
+        reposition.to(oNum00, 11, 104);
+        reposition.to(oNum05, 13, 69);
         reposition.to(oNum10, 29, 42);
         reposition.to(oNum15, 49, 46);
         reposition.to(oNum20, 62, 80);
         reposition.to(oNum25, 61, 120);
+        reposition.to(oNum30, 44, 146);
+        reposition.to(oNum35, 24, 145);
         goto(checkexit);
       }
       if (currentNum == 13) {
-        reposition.to(oNum00, 10, 117);
-        reposition.to(oNum05, 8, 77);
+        reposition.to(oNum00, 13, 113);
+        reposition.to(oNum05, 11, 77);
         reposition.to(oNum10, 24, 46);
         reposition.to(oNum15, 45, 43);
         reposition.to(oNum20, 60, 72);
         reposition.to(oNum25, 63, 111);
+        reposition.to(oNum30, 48, 145);
+        reposition.to(oNum35, 27, 148);
         goto(checkexit);
       }
       if (currentNum == 14) {
-        reposition.to(oNum00, 13, 125);
-        reposition.to(oNum05, 7, 84);
+        reposition.to(oNum00, 15, 121);
+        reposition.to(oNum05, 11, 84);
         reposition.to(oNum10, 20, 50);
         reposition.to(oNum15, 41, 40);
         reposition.to(oNum20, 58, 67);
         reposition.to(oNum25, 65, 104);
+        reposition.to(oNum30, 52, 140);
+        reposition.to(oNum35, 30, 148);
         goto(checkexit);
       }
       if (currentNum == 15) {
-        reposition.to(oNum00, 17, 133);
-        reposition.to(oNum05, 7, 92);
+        reposition.to(oNum00, 19, 129);
+        reposition.to(oNum05, 11, 92);
         reposition.to(oNum10, 17, 58);
         reposition.to(oNum15, 37, 39);
         reposition.to(oNum20, 55, 59);
         reposition.to(oNum25, 66, 96);
+        reposition.to(oNum30, 56, 134);
+        reposition.to(oNum35, 36, 147);
         goto(checkexit);
       }
       if (currentNum == 16) {
-        reposition.to(oNum00, 21, 141);
-        reposition.to(oNum05, 7, 101);
-        reposition.to(oNum10, 13, 64);
+        reposition.to(oNum00, 22, 135);
+        reposition.to(oNum05, 11, 101);
+        reposition.to(oNum10, 14, 64);
         reposition.to(oNum15, 32, 39);
         reposition.to(oNum20, 52, 50);
         reposition.to(oNum25, 66, 88);
+        reposition.to(oNum30, 59, 128);
+        reposition.to(oNum35, 41, 148);
         goto(checkexit);
       }
       if (currentNum == 17) {
-        reposition.to(oNum00, 25, 146);
-        reposition.to(oNum05, 8, 108);
-        reposition.to(oNum10, 10, 70);
+        reposition.to(oNum00, 27, 140);
+        reposition.to(oNum05, 12, 106);
+        reposition.to(oNum10, 12, 70);
         reposition.to(oNum15, 29, 41);
         reposition.to(oNum20, 47, 46);
-        reposition.to(oNum25, 62, 81);
+        reposition.to(oNum25, 63, 81);
+        reposition.to(oNum30, 61, 119);
+        reposition.to(oNum35, 44, 146);
         goto(checkexit);
       }
       if (currentNum == 18) {
-        reposition.to(oNum00, 30, 151);
-        reposition.to(oNum05, 10, 117);
-        reposition.to(oNum10, 8, 78);
+        reposition.to(oNum00, 32, 144);
+        reposition.to(oNum05, 14, 116);
+        reposition.to(oNum10, 10, 78);
         reposition.to(oNum15, 24, 46);
         reposition.to(oNum20, 42, 42);
         reposition.to(oNum25, 60, 71);
+        reposition.to(oNum30, 63, 111);
+        reposition.to(oNum35, 47, 146);
         goto(checkexit);
       }
       if (currentNum == 19) {
-        reposition.to(oNum00, 35, 153);
-        reposition.to(oNum05, 13, 125);
-        reposition.to(oNum10, 7, 85);
+        reposition.to(oNum00, 35, 146);
+        reposition.to(oNum05, 15, 122);
+        reposition.to(oNum10, 10, 85);
         reposition.to(oNum15, 20, 50);
         reposition.to(oNum20, 40, 40);
         reposition.to(oNum25, 58, 66);
+        reposition.to(oNum30, 65, 104);
+        reposition.to(oNum35, 52, 141);
         goto(checkexit);
       }
     }
   } else {
     if (currentNum < 30) {
       if (currentNum == 20) {
-        reposition.to(oNum00, 38, 153);
-        reposition.to(oNum05, 17, 133);
-        reposition.to(oNum10, 7, 94);
-        reposition.to(oNum15, 17, 55);
+        reposition.to(oNum00, 38, 146);
+        reposition.to(oNum05, 18, 130);
+        reposition.to(oNum10, 11, 94);
+        reposition.to(oNum15, 18, 55);
         reposition.to(oNum20, 35, 37);
         reposition.to(oNum25, 55, 58);
+        reposition.to(oNum30, 66, 96);
+        reposition.to(oNum35, 55, 135);
         goto(checkexit);
       }
       if (currentNum == 21) {
-        reposition.to(oNum00, 43, 153);
-        reposition.to(oNum05, 21, 141);
-        reposition.to(oNum10, 7, 101);
-        reposition.to(oNum15, 13, 61);
+        reposition.to(oNum00, 43, 145);
+        reposition.to(oNum05, 21, 136);
+        reposition.to(oNum10, 10, 101);
+        reposition.to(oNum15, 14, 61);
         reposition.to(oNum20, 30, 38);
         reposition.to(oNum25, 52, 51);
+        reposition.to(oNum30, 66, 87);
+        reposition.to(oNum35, 58, 126);
         goto(checkexit);
       }
       if (currentNum == 22) {
-        reposition.to(oNum00, 46, 151);
-        reposition.to(oNum05, 25, 146);
-        reposition.to(oNum10, 8, 109);
-        reposition.to(oNum15, 10, 67);
+        reposition.to(oNum00, 46, 144);
+        reposition.to(oNum05, 25, 141);
+        reposition.to(oNum10, 10, 109);
+        reposition.to(oNum15, 12, 67);
         reposition.to(oNum20, 28, 43);
         reposition.to(oNum25, 47, 46);
+        reposition.to(oNum30, 62, 80);
+        reposition.to(oNum35, 61, 120);
         goto(checkexit);
       }
       if (currentNum == 23) {
-        reposition.to(oNum00, 50, 146);
-        reposition.to(oNum05, 29, 151);
-        reposition.to(oNum10, 10, 119);
-        reposition.to(oNum15, 8, 76);
+        reposition.to(oNum00, 50, 140);
+        reposition.to(oNum05, 29, 144);
+        reposition.to(oNum10, 12, 119);
+        reposition.to(oNum15, 11, 76);
         reposition.to(oNum20, 24, 47);
         reposition.to(oNum25, 43, 42);
+        reposition.to(oNum30, 61, 72);
+        reposition.to(oNum35, 63, 111);
         goto(checkexit);
       }
       if (currentNum == 24) {
-        reposition.to(oNum00, 54, 141);
-        reposition.to(oNum05, 34, 153);
-        reposition.to(oNum10, 13, 127);
-        reposition.to(oNum15, 7, 84);
+        reposition.to(oNum00, 54, 135);
+        reposition.to(oNum05, 34, 146);
+        reposition.to(oNum10, 14, 127);
+        reposition.to(oNum15, 9, 84);
         reposition.to(oNum20, 19, 51);
         reposition.to(oNum25, 40, 38);
+        reposition.to(oNum30, 58, 65);
+        reposition.to(oNum35, 65, 103);
         goto(checkexit);
       }
       if (currentNum == 25) {
-        reposition.to(oNum00, 57, 133);
-        reposition.to(oNum05, 38, 153);
-        reposition.to(oNum10, 16, 133);
-        reposition.to(oNum15, 7, 93);
+        reposition.to(oNum00, 57, 129);
+        reposition.to(oNum05, 38, 147);
+        reposition.to(oNum10, 16, 132);
+        reposition.to(oNum15, 10, 93);
         reposition.to(oNum20, 16, 59);
         reposition.to(oNum25, 36, 39);
+        reposition.to(oNum30, 56, 59);
+        reposition.to(oNum35, 66, 96);
         goto(checkexit);
       }
       if (currentNum == 26) {
-        reposition.to(oNum00, 60, 125);
-        reposition.to(oNum05, 44, 154);
-        reposition.to(oNum10, 20, 141);
-        reposition.to(oNum15, 7, 101);
-        reposition.to(oNum20, 13, 66);
+        reposition.to(oNum00, 60, 121);
+        reposition.to(oNum05, 44, 146);
+        reposition.to(oNum10, 20, 139);
+        reposition.to(oNum15, 10, 101);
+        reposition.to(oNum20, 14, 66);
         reposition.to(oNum25, 30, 38);
+        reposition.to(oNum30, 52, 50);
+        reposition.to(oNum35, 66, 88);
         goto(checkexit);
       }
       if (currentNum == 27) {
-        reposition.to(oNum00, 62, 117);
-        reposition.to(oNum05, 46, 151);
-        reposition.to(oNum10, 24, 146);
-        reposition.to(oNum15, 8, 109);
-        reposition.to(oNum20, 10, 72);
+        reposition.to(oNum00, 62, 113);
+        reposition.to(oNum05, 46, 144);
+        reposition.to(oNum10, 24, 143);
+        reposition.to(oNum15, 10, 109);
+        reposition.to(oNum20, 12, 72);
         reposition.to(oNum25, 27, 42);
+        reposition.to(oNum30, 47, 46);
+        reposition.to(oNum35, 63, 80);
         goto(checkexit);
       }
       if (currentNum == 28) {
-        reposition.to(oNum00, 65, 108);
-        reposition.to(oNum05, 50, 146);
-        reposition.to(oNum10, 28, 151);
-        reposition.to(oNum15, 10, 118);
-        reposition.to(oNum20, 8, 82);
+        reposition.to(oNum00, 65, 104);
+        reposition.to(oNum05, 50, 141);
+        reposition.to(oNum10, 28, 147);
+        reposition.to(oNum15, 12, 118);
+        reposition.to(oNum20, 10, 82);
         reposition.to(oNum25, 24, 47);
+        reposition.to(oNum30, 42, 42);
+        reposition.to(oNum35, 62, 72);
         goto(checkexit);
       }
       if (currentNum == 29) {
-        reposition.to(oNum00, 65, 98);
-        reposition.to(oNum05, 54, 141);
-        reposition.to(oNum10, 32, 153);
+        reposition.to(oNum00, 65, 97);
+        reposition.to(oNum05, 54, 136);
+        reposition.to(oNum10, 32, 148);
         reposition.to(oNum15, 13, 125);
-        reposition.to(oNum20, 7, 88);
+        reposition.to(oNum20, 10, 88);
         reposition.to(oNum25, 19, 51);
+        reposition.to(oNum30, 40, 39);
+        reposition.to(oNum35, 58, 65);
         goto(checkexit);
       }
     } else {
       if (currentNum == 30) {
         reposition.to(oNum00, 65, 90);
-        reposition.to(oNum05, 57, 133);
-        reposition.to(oNum10, 36, 153);
-        reposition.to(oNum15, 16, 133);
-        reposition.to(oNum20, 7, 96);
+        reposition.to(oNum05, 57, 130);
+        reposition.to(oNum10, 36, 146);
+        reposition.to(oNum15, 16, 132);
+        reposition.to(oNum20, 10, 96);
         reposition.to(oNum25, 16, 59);
+        reposition.to(oNum30, 35, 37);
+        reposition.to(oNum35, 56, 57);
         goto(checkexit);
       }
       if (currentNum == 31) {
         reposition.to(oNum00, 65, 83);
-        reposition.to(oNum05, 59, 125);
-        reposition.to(oNum10, 41, 153);
-        reposition.to(oNum15, 19, 141);
-        reposition.to(oNum20, 7, 104);
-        reposition.to(oNum25, 13, 66);
+        reposition.to(oNum05, 59, 123);
+        reposition.to(oNum10, 41, 146);
+        reposition.to(oNum15, 19, 140);
+        reposition.to(oNum20, 9, 104);
+        reposition.to(oNum25, 14, 66);
+        reposition.to(oNum30, 30, 38);
+        reposition.to(oNum35, 52, 49);
         goto(checkexit);
       }
       if (currentNum == 32) {
         reposition.to(oNum00, 65, 77);
-        reposition.to(oNum05, 61, 117);
-        reposition.to(oNum10, 43, 151);
-        reposition.to(oNum15, 24, 146);
-        reposition.to(oNum20, 8, 112);
-        reposition.to(oNum25, 10, 72);
+        reposition.to(oNum05, 61, 115);
+        reposition.to(oNum10, 43, 147);
+        reposition.to(oNum15, 24, 143);
+        reposition.to(oNum20, 10, 112);
+        reposition.to(oNum25, 12, 72);
+        reposition.to(oNum30, 28, 42);
+        reposition.to(oNum35, 47, 45);
         goto(checkexit);
       }
       if (currentNum == 33) {
         reposition.to(oNum00, 62, 68);
-        reposition.to(oNum05, 63, 108);
-        reposition.to(oNum10, 48, 146);
-        reposition.to(oNum15, 27, 151);
-        reposition.to(oNum20, 10, 117);
-        reposition.to(oNum25, 8, 82);
+        reposition.to(oNum05, 63, 107);
+        reposition.to(oNum10, 48, 144);
+        reposition.to(oNum15, 27, 146);
+        reposition.to(oNum20, 12, 117);
+        reposition.to(oNum25, 10, 82);
+        reposition.to(oNum30, 24, 46);
+        reposition.to(oNum35, 43, 41);
         goto(checkexit);
       }
       if (currentNum == 34) {
         reposition.to(oNum00, 60, 60);
         reposition.to(oNum05, 64, 99);
-        reposition.to(oNum10, 52, 141);
-        reposition.to(oNum15, 31, 153);
+        reposition.to(oNum10, 52, 139);
+        reposition.to(oNum15, 31, 148);
         reposition.to(oNum20, 13, 125);
-        reposition.to(oNum25, 7, 88);
+        reposition.to(oNum25, 10, 88);
+        reposition.to(oNum30, 19, 50);
+        reposition.to(oNum35, 40, 38);
         goto(checkexit);
       }
       if (currentNum == 35) {
         reposition.to(oNum00, 57, 54);
         reposition.to(oNum05, 64, 89);
-        reposition.to(oNum10, 54, 133);
-        reposition.to(oNum15, 35, 153);
+        reposition.to(oNum10, 54, 132);
+        reposition.to(oNum15, 35, 147);
         reposition.to(oNum20, 16, 134);
-        reposition.to(oNum25, 7, 96);
+        reposition.to(oNum25, 10, 96);
+        reposition.to(oNum30, 16, 57);
+        reposition.to(oNum35, 35, 37);
         goto(checkexit);
       }
       if (currentNum == 36) {
         reposition.to(oNum00, 54, 48);
         reposition.to(oNum05, 63, 80);
         reposition.to(oNum10, 59, 125);
-        reposition.to(oNum15, 41, 153);
-        reposition.to(oNum20, 20, 141);
-        reposition.to(oNum25, 7, 104);
+        reposition.to(oNum15, 41, 147);
+        reposition.to(oNum20, 20, 140);
+        reposition.to(oNum25, 9, 104);
+        reposition.to(oNum30, 14, 64);
+        reposition.to(oNum35, 30, 38);
         goto(checkexit);
       }
       if (currentNum == 37) {
         reposition.to(oNum00, 50, 43);
         reposition.to(oNum05, 63, 76);
-        reposition.to(oNum10, 60, 117);
-        reposition.to(oNum15, 43, 151);
-        reposition.to(oNum20, 24, 146);
-        reposition.to(oNum25, 8, 112);
+        reposition.to(oNum10, 61, 117);
+        reposition.to(oNum15, 43, 147);
+        reposition.to(oNum20, 24, 145);
+        reposition.to(oNum25, 10, 112);
+        reposition.to(oNum30, 12, 71);
+        reposition.to(oNum35, 27, 41);
         goto(checkexit);
       }
       if (currentNum == 38) {
         reposition.to(oNum00, 46, 39);
         reposition.to(oNum05, 61, 67);
         reposition.to(oNum10, 63, 110);
-        reposition.to(oNum15, 48, 146);
-        reposition.to(oNum20, 28, 151);
-        reposition.to(oNum25, 10, 120);
+        reposition.to(oNum15, 48, 144);
+        reposition.to(oNum20, 28, 147);
+        reposition.to(oNum25, 13, 120);
+        reposition.to(oNum30, 10, 81);
+        reposition.to(oNum35, 24, 46);
         goto(checkexit);
       }
       if (currentNum == 39) {
         reposition.to(oNum00, 43, 40);
         reposition.to(oNum05, 60, 61);
         reposition.to(oNum10, 65, 102);
-        reposition.to(oNum15, 52, 141);
-        reposition.to(oNum20, 31, 153);
+        reposition.to(oNum15, 52, 139);
+        reposition.to(oNum20, 31, 147);
         reposition.to(oNum25, 13, 125);
-        goto(checkexit);
+        reposition.to(oNum30, 10, 88);
+        reposition.to(oNum35, 19, 50);
       }
     }
   }
 }
-[TODO: rotating doesn't honor transparency in view editor!
+
 :checkexit
 [ ESC or right-click to cancel;
 [ correct combo to open
@@ -702,12 +856,15 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   [ reenable input
   accept.input();
   reset(disableGameFunctions);
+  [ restore statusline
+  status.line.on();
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out to black (faster than room fade)
   block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-
+  [ restore default palette
+  block(SET.PALETTE, 0, &m15, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   new.room.v(previousRoom);
 }
 
@@ -723,3 +880,14 @@ return();
 #message 4 "%l90|43"
 #message 5 "%l90|44"
 #message 6 "%l90|45"
+
+[             blk   blu     grn    cyn    red     mgt    brn   ltg
+[#message ## "000000 00002A 002A00 002A2A 2A0000 2A002A 2A1500 2A2A2A"
+[            "151515 15153F 153F15 153F3F 3F1515 3F153F 3F3F15 3F3F3F"
+            
+#message 10 "0000001515152A2A2A1515152A00002A002A2A15002A2A2A15151515153F1515151515153F15153F153F3F3F153F3F3F"
+#message 11 "0000001515151515151515152A00002A002A2A15002A2A2A15151515153F1515152A2A2A3F15153F153F3F3F153F3F3F"
+#message 12 "0000001515151515151515152A00002A002A2A15002A2A2A15151515153F2A2A2A1515153F15153F153F3F3F153F3F3F"
+#message 13 "0000002A2A2A1515151515152A00002A002A2A15002A2A2A15151515153F1515151515153F15153F153F3F3F153F3F3F"
+#message 14 "0000001515151515152A2A2A2A00002A002A2A15002A2A2A15151515153F1515151515153F15153F153F3F3F153F3F3F"
+#message 15 "%s2"
