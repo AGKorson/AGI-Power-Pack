@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/12/2022 1:10:56 PM"
+   LastEdit = "11/18/2022 5:50:55 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -248,10 +248,10 @@
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H3EC5DEF4
-   CompCRC32 = &H3EC5DEF4
+   CRC32 = &HFE4FC42C
+   CompCRC32 = &H62456F74
    IsRoom = True
-   Size = 177
+   Size = 1232
 
 [Logic100]
    ID = lgc.mod2089
@@ -561,7 +561,7 @@
    ID = pic.Storeroom
    Description = ""
    BkgdImg = ""
-   Size = 6419
+   Size = 6573
 
 [Picture30]
    ID = pic.TestPalette
@@ -839,7 +839,7 @@
 [View15]
    ID = vw.StorageRoomArt
    Description = ""
-   Size = 3501
+   Size = 4058
 
 [View16]
    ID = vw.Cars
@@ -1034,7 +1034,7 @@
 [View33]
    ID = vw.SafeArt
    Description = ""
-   Size = 26144
+   Size = 26114
 
 [View39]
    ID = vw.EgoCoffin

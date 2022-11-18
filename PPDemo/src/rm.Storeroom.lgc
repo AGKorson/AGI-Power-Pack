@@ -6,6 +6,33 @@
 [
 [ ********************************************************************
 
+#define oClockHour      o1
+#define oClockMinute    o2
+#define oPendulum       o3
+#define oCoffin         o4
+#define oCabinetDoor    o4 [ reuse o4 for cabinet door
+#define oChest          o5
+#define oChestDrawer    o6
+#define oFileDrawer     o7 [ green file cabinet
+#define oDeskDrawer     o8 [ under mirror
+
+#define vCheckSecond  v220
+#define vClockHour    v221
+#define vClockMin     v222
+#define vClockSec     v223
+#define vCoffinState  v224
+#define vDoorState    v225
+
+#define    CLOSED    0
+#define    CLOSING   1
+#define    OPEN      2
+#define    OPENING   3
+
+#define fCoffin       f220
+#define fCheckClick   f221
+#define fDoor         f222
+
+
 if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
@@ -13,10 +40,102 @@ if (newRoom) {
   draw.pic(currentRoom);
   discard.pic(currentRoom);
   
-  [ the horizon defines the upper limit of ego's movement
-  set.horizon(1);
+  [ default horizon is ok
   
   [ add additional room initialization here
+  load.view(vw.StorageRoomArt);
+  
+  [ large green chair
+  add.to.pic(vw.StorageRoomArt, 0, 0, 78, 148, 13, 4);
+  
+  [ clock
+  animate.obj(oPendulum);
+  set.view(oPendulum, vw.StorageRoomArt);
+  set.loop(oPendulum, 7);
+  ignore.objs(oPendulum);
+  position(oPendulum, 39, 96);
+  ignore.objs(oPendulum);
+  set.priority(oPendulum, 11);
+  work1 = 2;
+  cycle.time(oPendulum, work1);
+  draw(oPendulum);
+  animate.obj(oClockHour);
+  set.view(oClockHour, vw.StorageRoomArt);
+  set.loop(oClockHour, 9);
+  ignore.objs(oClockHour);
+  stop.cycling(oClockHour);
+  position(oClockHour, 39, 76);
+  set.priority(oClockHour, 11);
+  animate.obj(oClockMinute);
+  set.view(oClockMinute, vw.StorageRoomArt);
+  set.loop(oClockMinute, 8);
+  ignore.objs(oClockMinute);
+  stop.cycling(oClockMinute);
+  position(oClockMinute, 39, 76);
+  set.priority(oClockMinute, 11);
+  [ get current time
+  block(GET.TIME, &vClockHour, &vClockMin, &vClockSec); [ get.time(vHOUR, vMINUTE, vSECOND)
+  if (vClockHour > 11) {
+   vClockHour -= 12;
+  }
+  set.cel.v(oClockHour, vClockHour);
+  [ round minutes to multiples of 2.5
+  work1 = vClockMin; [ 0-59
+  work1 *= 2; [ 0 - 118
+  if (vClockSec > 29) {
+    ++work1;
+  }
+  work1 /= 5;
+  set.cel.v(oClockMinute, work1);
+  draw(oClockHour);
+  draw(oClockMinute);
+  vCheckSecond = elapsedSeconds;
+  
+  [ coffin lid
+  animate.obj(oCoffin);
+  set.view(oCoffin, vw.StorageRoomArt);
+  stop.cycling(oCoffin);
+  ignore.objs(oCoffin);
+  ignore.blocks(oCoffin);
+
+  [ cabinet door (uses same object as the coffin)
+
+  [ chest
+  animate.obj(oChest);
+  set.view(oChest, vw.StorageRoomArt);
+  set.loop(oChest, 1);
+  set.cel(oChest, 0);
+  stop.cycling(oChest);
+  ignore.objs(oChest);
+  ignore.blocks(oChest);
+  position(oChest, 119, 162);
+  draw(oChest);
+
+  [ chest drawer
+  animate.obj(oChestDrawer);
+  set.view(oChestDrawer, vw.StorageRoomArt);
+  set.loop(oChestDrawer, 4);
+  set.cel(oChestDrawer, 0);
+  stop.cycling(oChestDrawer);
+  ignore.objs(oChestDrawer);
+  ignore.blocks(oChestDrawer);
+  
+  [ green file cabinet drawers
+  animate.obj(oFileDrawer); 
+  set.view(oFileDrawer, vw.StorageRoomArt);
+  set.loop(oFileDrawer, 3);
+  set.cel(oFileDrawer, 0);
+  stop.cycling(oFileDrawer);
+  ignore.objs(oFileDrawer);
+  ignore.blocks(oFileDrawer);
+  
+  [ desk drawer (under mirror)
+  animate.obj(oDeskDrawer);
+  set.view(oDeskDrawer, vw.StorageRoomArt);
+  set.loop(oDeskDrawer, 3);
+  set.cel(oDeskDrawer, 0);
+  stop.cycling(oDeskDrawer);
+  ignore.objs(oDeskDrawer);
   
   [ add toolbar buttons
   load.view(vw.Toolbar);
@@ -25,7 +144,7 @@ if (newRoom) {
   [ add ego to the room
   position(ego, 24, 139);
   draw(ego);
-  
+  egoDir = STOPPED;
   
   [ display the picture on screen
   show.pic();
@@ -52,8 +171,231 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 :noInput           [  all non-input related code goes here 
 [*****
 
-[ add other room specific statements here
+[ priority adjustments
+if ((posn(ego, 70, 152, 84, 155) || posn(ego, 50, 150, 58, 156))) {
+  set.priority(ego, 14);
+} else {
+  if (posn(ego, 71, 143, 95, 148)) {
+    set.priority(ego, 12);
+  } else {
+    release.priority(ego);
+  }
+}
+[ treasure chest- on left, use 14
+if (posn(ego, 112, 154, 123, 162)) {
+  set.priority(oChest, 14);
+} else {
+  release.priority(oChest);
+}
 
+
+[ clock - check every second
+if (vCheckSecond != elapsedSeconds) {
+  vCheckSecond = elapsedSeconds;
+  [ increment clock seconds
+  ++vClockSec;
+  if (vClockSec == 60) {
+    vClockSec = 0;
+    ++vClockMin;
+    if (vClockMin == 60) {
+      vClockMin = 0;
+      ++vClockHour;
+      if (vClockHour == 12) {
+        vClockHour = 0;
+      }
+    }
+  }
+  if ((vClockSec == 0 || vClockSec == 30)) {
+    set.cel.v(oClockHour, vClockHour);
+    [ round minutes to multiples of 2.5
+    work1 = vClockMin; [ 0-59
+    work1 *= 2; [ 0 - 118
+    if (vClockSec > 29) {
+      ++work1;
+    }
+    work1 /= 5;
+    set.cel.v(oClockMinute, work1);
+    draw(oClockHour);
+    draw(oClockMinute);
+  }
+}
+
+
+[ if NOT clicking on the actual toolbar, check for
+[ clicks on ingame items
+if (mouseY > 25 && controller(cLeftClick)) {
+  [ look
+  if (cursormode == C_LOOK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You see you.");
+      goto(doneclick);
+    }
+    
+    [anything else is the whole room
+    print("There is a ton of stuff in this room.");
+    goto(doneclick);
+  }
+  
+  [ talk
+  if (cursormode == C_TALK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You have nothing to say.");
+    } else {
+      print("There is no one here to talk to.");
+    }
+    goto(doneclick);
+  }
+  
+  [ use
+  if (cursormode == C_USE) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("Please don't touch yourself. Not even when you're alone.");
+      goto(doneclick);
+    }
+    if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
+    }
+    [ coffin (when closed)
+    if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165 && vCoffinState < 2) {
+      [ is ego on wrong side?
+      if (posn(ego, 28, 141, 54, 149)) {
+        print("The coffin opens from the other side.");
+        goto(doneclick);
+      }
+      [ is ego close enough?
+      if (posn(ego, 24, 156, 54, 161)) {
+        [ if closed
+        if (vCoffinState == CLOSED) {
+          [ animate it first
+          set.loop(oCoffin, 2);
+          set.cel(oCoffin, 0);
+          set.priority(oCoffin, 14);
+          position(oCoffin, 28, 155);
+          draw(oCoffin);
+        }
+        vCoffinState = OPENING;
+        end.of.loop(oCoffin, fCoffin);
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
+    [ coffin and lid (when open)
+    if (mouseX > 27 && mouseX < 54 && mouseY > 144 && mouseY < 155 && vCoffinState > 1) {
+      [ if open, ego must be close enough, so just close it without further checks
+      reverse.loop(oCoffin, fCoffin);
+      goto(doneclick);
+    }
+    
+    
+    [ cabinet door (when closed)
+    if (vDoorState < 2) {
+      if (mouseX > 129 && mouseX < 133 && mouseY > 126 && mouseY < 151) {
+        set(fCheckClick);
+      }
+      if (mouseX > 132 && mouseX < 137 && mouseY > 130 && mouseY < 155) {
+        set(fCheckClick);
+      }
+      if (fCheckClick) {
+        reset(fCheckClick);
+        [ is ego close enough?
+        if ((posn(ego, 120, 146, 132, 150) || posn(ego, 122, 151, 131, 156))) {
+          [ if closed
+          if (vDoorState == CLOSED) {
+            [ animate it first
+            set.loop(oCabinetDoor, 6);
+            set.cel(oCabinetDoor, 0);
+            position(oCabinetDoor, 125, 149);
+            set.priority(oCabinetDoor, 13);
+            draw(oCabinetDoor);
+          }
+          vDoorState = OPENING;
+          end.of.loop(oCabinetDoor, fDoor);
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
+      }
+    }
+
+    [ cabinet door (when opened)
+    if (vDoorState > 1) {
+      if (mouseX > 124 && mouseX < 130 && mouseY > 126 && mouseY < 145) {
+        set(fCheckClick);
+      }
+      if (mouseX > 133 && mouseX < 137 && mouseY > 134 && mouseY < 158) {
+        set(fCheckClick);
+      }
+      if (fCheckClick) {
+        reset(fCheckClick);
+        [ if open, ego must be close enough, so just close it without further checks
+        reverse.loop(oCabinetDoor, fDoor);
+        goto(doneclick);
+      }
+    }
+    
+    [ file drawer 
+    if (posn(oFileDrawer, ON.OBJ, 0, &mouseX, &mouseY)) {
+      [ (when closed)
+      [ (when closed)
+    
+  [top:    76, 100
+  [middle: 76, 109
+  [bottom: 76, 118
+    
+    [ chest drawer
+  [ pos: 109, 129
+    
+    [ desk drawer
+  [ 99, 112
+    
+    [ chest
+  }
+  
+  :doneclick
+  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+}
+
+[ check coffin cycling
+if (fCoffin) {
+  reset(fCoffin);
+  if (vCoffinState == OPENING) {
+    vCoffinState = OPEN;
+  } else {
+    vCoffinState = CLOSED;
+    erase(oCoffin);
+  }
+}
+
+[ close coffin if ego moves away
+if (vCoffinState > 1) {
+  if (!posn(ego, 24, 156, 54, 161)) {
+    vCoffinState = CLOSING;
+    reverse.loop(oCoffin, fCoffin);
+  }
+}
+
+[ check cabinet door cycling
+if (fDoor) {
+  reset(fDoor);
+  if (vDoorState == OPENING) {
+    vDoorState = OPEN;
+  } else {
+    vDoorState = CLOSED;
+    erase(oCabinetDoor);
+  }
+}
+
+[ close cabinet door if ego moves away
+if (vDoorState > 1) {
+  if (!posn(ego, 120, 146, 132, 156)) {
+    vDoorState = CLOSING;
+    reverse.loop(oCabinetDoor, fDoor);
+  }
+}
 
 [*****
 :exit              [  test for leaving the room
