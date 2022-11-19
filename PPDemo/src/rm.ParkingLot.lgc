@@ -139,9 +139,9 @@ if (newRoom) {
   set.priority(btnNo, 15);
   [ don't draw until needed
   
-  [ set timer to random amount
-  random(140, 250, patientTimer);
-[random(10, 20, patientTimer);
+  [ set initial timer to slightly faster random amount
+[  random(140, 250, patientTimer);
+random(40, 140, patientTimer);
   
   [ if starting (coming from intro screen)
   if (previousRoom == rm.Title) {
@@ -541,13 +541,9 @@ if (fEgoDead) {
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
-    [ let's try hiding objects!
-    block(-46, 1, 0, 0);
     print("You are in the Sierra building parking lot.");
   }
   if (said("look", "look")) {
-    [ show 'em!
-    block(-46, 0, 0, 0);
   }
 }
 

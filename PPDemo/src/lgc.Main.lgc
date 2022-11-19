@@ -16,7 +16,7 @@
 [
 [ global = usable and accessible by all logics
 [     v27 - v219
-[     f17 - f18, f21 - f219
+[     f17 - f18, f21 - fShowClicks
 [     s2 - s11
 [
 [ local = usable and accessible by single room
@@ -196,6 +196,8 @@ print("Version: %v30");
       set.menu.item("Obj Info   <Alt-I>", cObjInfo);
       set.menu.item("Coords     <Alt-X>", cXY);
       set.menu.item("Get All           ", cGimme);
+      set.menu.item("Log Input: Off", cLogInput);
+      set.menu.item("Display Clicks: Off", cShowClicks);
     }
     [ submit the menu (which makes it ready to use)
     submit.menu();
@@ -211,15 +213,53 @@ print("Version: %v30");
 [ EVERY CYCLE
 [ **************************************
 
-[!!! debug code to show click location and ego location
-[ used to assist in creating click statements and said statements
-if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
-  get.posn(ego, work1, work2);
-  display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
+[!!!!!! TEMPORARY DEBUG CODE !!!!!!
+if (controller(cLogInput)) {
+  [ toggle the message
+  toggle(fLogInput);
+  s23 = "Log Input: %s22";
+  if (fLogInput) {
+    s22 = "On";    
+  } else {
+    s22 = "Off";
+  }
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m32, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
 }
-[[ show the open closet door timer
-[ display(24, 0, "%v79|2:%v80|2");
-display(24, 0, "mem pages: %v8  ");
+[ show click data
+if (controller(cShowClicks)) {
+  [ toggle the message
+  toggle(fShowClicks);
+  s23 = "Display Clicks: %s22";
+  if (fShowClicks) {
+    s22 = "On";
+  } else {
+    s22 = "Off";
+  }
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m33, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+}
+
+
+if (fShowClicks) {
+  [ used to assist in creating click statements and said statements
+  if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
+    get.posn(ego, work1, work2);
+    display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
+  }
+  [[ show the open closet door timer
+  [ display(24, 0, "%v79|2:%v80|2");
+  display(24, 0, "mem pages: %v8  ");
+}
+if (fLogInput) {
+  if (haveInput) {
+    if (unknownWordNum > 0) {
+      log("unknown word: %v9");
+    } else {
+      log("");
+    }
+  }
+}
 
 [ if a new room has just been loaded
 if (newRoom) {
@@ -630,11 +670,15 @@ return();
 #message 29 "Obj Info   <Alt-I>"
 #message 30 "Coords     <Alt-X>"
 #message 31 "Get All           "
-#message 32 " %v13:%v12|2:%v11|2 "
-#message 33 "I don't understand \"%s2\""
-#message 34 "\"%s2\" is not in my vocabulary."
-#message 35 "What is \"%s2\""
-#message 36 "I don't understand your request."
-#message 37 "Debug Help        "
-#message 38 gameAboutMsg
-#message 39 gameVersionMsg
+#message 32 "Log Input: Off"
+#message 33 "Display Clicks: Off"
+#message 34 " %v13:%v12|2:%v11|2 "
+#message 35 "I don't understand \"%s2\""
+#message 36 "\"%s2\" is not in my vocabulary."
+#message 37 "What is \"%s2\""
+#message 38 "I don't understand your request."
+#message 39 "Debug Help        "
+#message 40 gameAboutMsg
+#message 41 gameVersionMsg
+#message 42 "On"
+#message 43 "Off"

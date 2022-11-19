@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/18/2022 5:50:55 AM"
+   LastEdit = "11/18/2022 10:08:13 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
@@ -46,11 +46,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H7C28D057
-   CRC32 = &H7C28D057
+   CompCRC32 = &H8F157F1D
+   CRC32 = &H8F157F1D
    ID = lgc.Main
    IsRoom = False
-   Size = 2094
+   Size = 2318
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -184,10 +184,10 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HB4933A96
-   CompCRC32 = &HB4933A96
+   CRC32 = &HDD5435BB
+   CompCRC32 = &HDD5435BB
    IsRoom = True
-   Size = 5687
+   Size = 5677
 
 [Logic3]
    ID = rm.Lobby
@@ -248,8 +248,8 @@
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &HFE4FC42C
-   CompCRC32 = &H62456F74
+   CRC32 = &H23C92381
+   CompCRC32 = &H23C92381
    IsRoom = True
    Size = 1232
 
@@ -376,8 +376,8 @@
 [Logic98]
    ID = lgc.Debug
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
-   CRC32 = &HCBCB0B7E
-   CompCRC32 = &HCBCB0B7E
+   CRC32 = &HD4DE0C64
+   CompCRC32 = &HD4DE0C64
    IsRoom = False
    Size = 1153
 
@@ -984,7 +984,7 @@
 [View102]
    ID = vw.inv.FloppyDisk
    Description = ""
-   Size = 209
+   Size = 412
 
 [View103]
    ID = vw.inv.Keyfob
@@ -994,7 +994,7 @@
 [View106]
    ID = vw.inv.Memo
    Description = ""
-   Size = 168
+   Size = 386
 
 [View107]
    ID = vw.inv.List
@@ -1009,12 +1009,12 @@
 [View109]
    ID = vw.inv.Notebook
    Description = ""
-   Size = 148
+   Size = 1200
 
 [View110]
    ID = vw.inv.Folder
    Description = ""
-   Size = 146
+   Size = 311
 
 [View111]
    ID = vw.inv.Scroll
@@ -1050,4 +1050,9 @@
    ID = vw.SafeDoor2
    Description = ""
    Size = 13596
+
+[View43]
+   ID = vw.EgoWashingHands
+   Description = ""
+   Size = 377
 [::END Views::]

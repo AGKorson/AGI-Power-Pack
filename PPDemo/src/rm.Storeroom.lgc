@@ -341,7 +341,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
     if (posn(oFileDrawer, ON.OBJ, 0, &mouseX, &mouseY)) {
       [ (when closed)
       [ (when closed)
-    
+    }
   [top:    76, 100
   [middle: 76, 109
   [bottom: 76, 118

@@ -227,7 +227,7 @@ if (showCoords)
   }
 
 [ if an unknown word was entered and input not matched yet
-if (!isset(haveMatch) && isset(haveInput) && unknownWordNum > 0) 
+if (!fLogInput && !isset(haveMatch) && isset(haveInput) && unknownWordNum > 0) 
   {
   [ adjust input/match flags to indicate nothing to parse
   set(haveMatch);

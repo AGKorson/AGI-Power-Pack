@@ -52,6 +52,8 @@
 #define cRightClick            c33
 #define cRightDblClick         c34
 #define cDummy                 c35 [ menu separator - should always be disabled
+#define cLogInput              c36
+#define cShowClicks            c37
 #define CUSTOM.INST           c252
 #define SET.INST              c253
 #define SET.SNDMODE           c254
@@ -103,6 +105,8 @@
 #define findEmptyDrawer        f66
 #define findManual             f67
 #define fOpenSafe              f68
+#define fLogInput             f218 [ logs all input to LOGFILE
+#define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define mouseX                 v27
