@@ -118,8 +118,8 @@ if (newRoom) {
   ++work1;
   work2 = 114;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-  [ and begin playing
-  sound(m.theme, musicDone);
+[[  [ and begin playing
+[[  sound(m.theme, musicDone);
 }
 
 [ check for a keypress or joystick button
@@ -228,8 +228,8 @@ if (musicDelay  > 0) {
     [ reset timer
     musicDelay = 0;
     
-    [ play it again sam
-    sound(m.theme, musicDone);
+[[    [ play it again sam
+[[    sound(m.theme, musicDone);
   }
 }
 

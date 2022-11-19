@@ -37,16 +37,6 @@
 #define RUG_LIFTING  3
 #define RUG_LOWERING 4
 
-[ picture/safe/drawer status
-#define CLOSED       0
-#define OPEN         1
-#define OPEN1        1
-#define OPEN2        2
-#define OPEN3        3
-#define CLOSING      4
-#define OPENING      5
-
-
 if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
@@ -158,8 +148,8 @@ if (newRoom) {
   ignore.objs(oDeskDrawer);
   ignore.blocks(oDeskDrawer);
   stop.cycling(oDeskDrawer);
-  if (deskDrawerStatus != CLOSED) {
-    if (deskDrawerStatus == OPEN1) {
+  if (officeDskDrStatus != CLOSED) {
+    if (officeDskDrStatus == OPEN1) {
       position(oDeskDrawer, 84, 126);
       if (has("Walkman")) {
         set.loop(oDeskDrawer, 2);
@@ -186,13 +176,13 @@ if (newRoom) {
   set.view(oFileDrawer, vw.OfficeArt);
   ignore.objs(oFileDrawer);
   stop.cycling(oFileDrawer);
-  if (fileDrawerStatus != CLOSED) {
-    if (fileDrawerStatus == OPEN1) {
+  if (officeFileDrStatus != CLOSED) {
+    if (officeFileDrStatus == OPEN1) {
       position(oFileDrawer, 93, 112);
       set.loop(oFileDrawer, 3);
       set.cel(oFileDrawer, 2);
     }
-    if (fileDrawerStatus == OPEN2) { 
+    if (officeFileDrStatus == OPEN2) { 
       position(oFileDrawer, 93, 121);
       if (has("notebook")) {
         set.loop(oFileDrawer, 3);
@@ -202,7 +192,7 @@ if (newRoom) {
         set.cel(oFileDrawer, 5);
       }
     }
-    if (fileDrawerStatus == OPEN3) { 
+    if (officeFileDrStatus == OPEN3) { 
       position(oFileDrawer, 93, 121);
       if (has("floppy disk")) {
         set.loop(oFileDrawer, 3);
@@ -306,7 +296,7 @@ if (controller(cLeftClick)) {
       
       [ desk drawer
       if (posn(oDeskDrawer, ON.OBJ, 1, &mouseX, &mouseY)) {
-        if (deskDrawerStatus == OPEN1) {
+        if (officeDskDrStatus == OPEN1) {
           if (!has("Walkman")) {
             print("There is an old Sony Walkman cassette player in "
                   "this drawer.");
@@ -314,7 +304,7 @@ if (controller(cLeftClick)) {
             print("The desk drawer is empty.");
           }
         } else {
-          if (deskDrawerStatus == OPEN2) {
+          if (officeDskDrStatus == OPEN2) {
             if (!has("piece of paper")) {
               print("There is a single piece of loose leaf paper in "
                     "this drawer.");
@@ -330,14 +320,14 @@ if (controller(cLeftClick)) {
             
       [ file drawer
       if (posn(oFileDrawer, ON.OBJ, 1, &mouseX, &mouseY)) {
-        if (fileDrawerStatus == OPEN2) {
+        if (officeFileDrStatus == OPEN2) {
           if (!has("notebook")) {
             print("There is a notebook in this file drawer.");
           } else {
             print("The file drawer is empty.");
           }
         } else {
-          if (fileDrawerStatus == OPEN3) {
+          if (officeFileDrStatus == OPEN3) {
             if (!has("floppy disk")) {
               print("There is a box of floppy disks in this file drawer.");
             } else {
@@ -483,10 +473,10 @@ if (controller(cLeftClick)) {
       
       [ on desk drawer, and open
       if (posn(oDeskDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
-          deskDrawerStatus != CLOSING) {
+          officeDskDrStatus != CLOSING) {
         [ is ego close enough?
         if (obj.in.box(ego, 74, 131, 101, 136)) {
-          if (deskDrawerStatus == OPEN1 && mouseY < 132) {
+          if (officeDskDrStatus == OPEN1 && mouseY < 132) {
             [ cicking on top drawer item
             if (!has("Walkman")) {
               get("Walkman");
@@ -498,7 +488,7 @@ if (controller(cLeftClick)) {
               force.update(oDeskDrawer);      
             }
           } else {
-            if (deskDrawerStatus == OPEN2 && mouseY < 136) {
+            if (officeDskDrStatus == OPEN2 && mouseY < 136) {
               [ clicking on bottom drawer item
               if (!has("piece of paper")) {
                 get("piece of paper");
@@ -514,7 +504,7 @@ if (controller(cLeftClick)) {
               set.loop(oDeskDrawer, 2);
               set.cel(oDeskDrawer, 2);
               reverse.loop(oDeskDrawer, fDeskDrawer);
-              deskDrawerStatus = CLOSING;
+              officeDskDrStatus = CLOSING;
             }
           }
         } else {
@@ -525,7 +515,7 @@ if (controller(cLeftClick)) {
       
       [ top desk drawer, closed
       if (mouseX > 81 && mouseX < 93 && mouseY > 127 && mouseY < 133 && 
-          deskDrawerStatus == CLOSED) {
+          officeDskDrStatus == CLOSED) {
         [ is ego close enough?
         if (obj.in.box(ego, 74, 131, 101, 136)) {
           position(oDeskDrawer, 84, 126);
@@ -533,7 +523,7 @@ if (controller(cLeftClick)) {
           set.cel(oDeskDrawer, 0);
           draw(oDeskDrawer);
           end.of.loop(oDeskDrawer, fDeskDrawer);
-          deskDrawerStatus = OPENING;
+          officeDskDrStatus = OPENING;
         } else {
           print("Move closer.");
         }
@@ -542,7 +532,7 @@ if (controller(cLeftClick)) {
       
       [ bottom desk drawer, closed
       if (mouseX > 81 && mouseX < 93 && mouseY > 132 && mouseY < 139 && 
-          deskDrawerStatus == CLOSED) {
+          officeDskDrStatus == CLOSED) {
         [ is ego close enough
         if (obj.in.box(ego, 74, 131, 101, 136)) {
           position(oDeskDrawer, 84, 130);
@@ -550,7 +540,7 @@ if (controller(cLeftClick)) {
           set.cel(oDeskDrawer, 0);
           draw(oDeskDrawer);
           end.of.loop(oDeskDrawer, fDeskDrawer);
-          deskDrawerStatus = OPENING;
+          officeDskDrStatus = OPENING;
         } else {
           print("Move closer.");
         }
@@ -559,14 +549,14 @@ if (controller(cLeftClick)) {
       
       [ on file drawer, and open
       if (posn(oFileDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
-          fileDrawerStatus != CLOSING) {
+          officeFileDrStatus != CLOSING) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
 
-          if (fileDrawerStatus == OPEN1 && mouseY < 113) {
+          if (officeFileDrStatus == OPEN1 && mouseY < 113) {
             goto(doneclick);
           }
-          if (fileDrawerStatus == OPEN2 && mouseY < 122) {
+          if (officeFileDrStatus == OPEN2 && mouseY < 122) {
             if (!has("notebook")) {
               get("notebook");
               currentScore += 3;
@@ -577,7 +567,7 @@ if (controller(cLeftClick)) {
             }
             goto(doneclick);
           }
-          if (fileDrawerStatus == OPEN3 && mouseY < 131) {
+          if (officeFileDrStatus == OPEN3 && mouseY < 131) {
             if (!has("floppy disk")) {
               get("floppy disk");
               currentScore += 2;
@@ -591,7 +581,7 @@ if (controller(cLeftClick)) {
           set.loop(oFileDrawer, 3);
           set.cel(oFileDrawer, 2);
           reverse.loop(oFileDrawer, fFileDrawer);
-          fileDrawerStatus = CLOSING;
+          officeFileDrStatus = CLOSING;
         } else {
           print("Move closer.");
         }
@@ -599,7 +589,7 @@ if (controller(cLeftClick)) {
       }
       [ top file drawer, closed
       if (mouseX > 91 && mouseX < 101 && mouseY > 107 && mouseY < 117 &&
-          fileDrawerStatus == CLOSED) {
+          officeFileDrStatus == CLOSED) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
           position(oFileDrawer, 93, 112);
@@ -607,7 +597,7 @@ if (controller(cLeftClick)) {
           set.cel(oFileDrawer, 0);
           draw(oFileDrawer);
           end.of.loop(oFileDrawer, fFileDrawer);
-          fileDrawerStatus = OPENING;
+          officeFileDrStatus = OPENING;
         } else {
           print("Move closer.");
         }
@@ -616,7 +606,7 @@ if (controller(cLeftClick)) {
         
       [ middle file drawer, closed
       if (mouseX > 91 && mouseX < 101 && mouseY > 116 && mouseY < 126 &&
-          fileDrawerStatus == CLOSED) {
+          officeFileDrStatus == CLOSED) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
           position(oFileDrawer, 93, 121);
@@ -624,7 +614,7 @@ if (controller(cLeftClick)) {
           set.cel(oFileDrawer, 0);
           draw(oFileDrawer);
           end.of.loop(oFileDrawer, fFileDrawer);
-          fileDrawerStatus = OPENING;
+          officeFileDrStatus = OPENING;
         } else {
           print("Move closer.");
         }
@@ -633,7 +623,7 @@ if (controller(cLeftClick)) {
         
       [ bottom file drawer, closed
       if (mouseX > 92 && mouseX < 101 && mouseY > 126 && mouseY < 137 &&
-          fileDrawerStatus == CLOSED) {
+          officeFileDrStatus == CLOSED) {
         [ is ego close enough?
         if (obj.in.box(ego, 82, 129, 105, 133)) {
           position(oFileDrawer, 93, 130);
@@ -641,7 +631,7 @@ if (controller(cLeftClick)) {
           set.cel(oFileDrawer, 0);
           draw(oFileDrawer);
           end.of.loop(oFileDrawer, fFileDrawer);
-          fileDrawerStatus = OPENING;
+          officeFileDrStatus = OPENING;
         } else {
           print("Move closer.");
         }
@@ -934,13 +924,13 @@ if (fOnTripLine) {
 [ drawer movement
 if (fDeskDrawer) {
   reset(fDeskDrawer);
-  if (deskDrawerStatus == CLOSING) {
+  if (officeDskDrStatus == CLOSING) {
     erase(oDeskDrawer);
-    deskDrawerStatus = CLOSED;
+    officeDskDrStatus = CLOSED;
   } else {
     get.posn(oDeskDrawer, work1, work2);
     if (work2 == 126) {
-      deskDrawerStatus = OPEN1;
+      officeDskDrStatus = OPEN1;
       if (!has("Walkman")) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 4);
@@ -952,7 +942,7 @@ if (fDeskDrawer) {
         }
       }
     } else {
-      deskDrawerStatus = OPEN2;
+      officeDskDrStatus = OPEN2;
       if (!has("piece of paper")) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 3);
@@ -967,20 +957,20 @@ if (fDeskDrawer) {
 }
 if (fFileDrawer) {
   reset(fFileDrawer);
-  if (fileDrawerStatus == CLOSING) {
+  if (officeFileDrStatus == CLOSING) {
     erase(oFileDrawer);
-    fileDrawerStatus = CLOSED;
+    officeFileDrStatus = CLOSED;
   } else {
     get.posn(oFileDrawer, work1, work2);
     if (work2 == 112) {
-      fileDrawerStatus = OPEN1;
+      officeFileDrStatus = OPEN1;
       if (!findEmptyDrawer) {
         set(findEmptyDrawer);
         print("This drawer is empty.");
       }
     } else {
       if (work2 == 121) {
-        fileDrawerStatus = OPEN2;
+        officeFileDrStatus = OPEN2;
         if (!has("notebook")) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 5);
@@ -991,7 +981,7 @@ if (fFileDrawer) {
           }
         }
       } else {
-        fileDrawerStatus = OPEN3;
+        officeFileDrStatus = OPEN3;
         if (!has("floppy disk")) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 6);
