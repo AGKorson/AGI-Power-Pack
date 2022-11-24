@@ -22,6 +22,8 @@
 #define vClockSec     v223
 #define vCoffinState  v224 [ coffin and cabinet door close automatically
 #define vDoorState    v225 [ so only local variables needed to track state
+#define vCoffinDeathSeq  v226
+#define vCoffinCount  v227
 
 #define fCoffin       f220
 #define fCheckClick   f221
@@ -30,6 +32,9 @@
 #define fDeskDrawer   f224
 #define fChestDrawer  f225
 #define fChest        f226
+#define fEgoBackup    f227
+#define fInCoffin     f228
+
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -44,7 +49,7 @@ if (newRoom) {
   load.view(vw.StorageRoomArt);
   
   [ large green chair
-  add.to.pic(vw.StorageRoomArt, 0, 0, 78, 148, 13, 4);
+  add.to.pic(vw.StorageRoomArt, 0, 0, 78, 152, 13, 4);
   
   [ clock
   animate.obj(oPendulum);
@@ -101,8 +106,16 @@ if (newRoom) {
   [ chest
   animate.obj(oChest);
   set.view(oChest, vw.StorageRoomArt);
-  set.loop(oChest, 1);
-  set.cel(oChest, 0);
+  if (has("scroll")) {
+    set.loop(oChest, 1);
+  } else {
+    set.loop(oChest, 10);
+  }
+  if (storeChestStatus == OPEN) {
+    set.cel(oChest, 3);
+  } else {
+    set.cel(oChest, 0);
+  }
   stop.cycling(oChest);
   ignore.objs(oChest);
   ignore.blocks(oChest);
@@ -113,10 +126,16 @@ if (newRoom) {
   animate.obj(oChestDrawer);
   set.view(oChestDrawer, vw.StorageRoomArt);
   set.loop(oChestDrawer, 4);
-  set.cel(oChestDrawer, 0);
   stop.cycling(oChestDrawer);
   ignore.objs(oChestDrawer);
   ignore.blocks(oChestDrawer);
+  if (storeChestDrStatus == OPEN) {
+    set.cel(oChestDrawer, 3);
+    [ add conditional line
+    s12 = "F1F201F6727C6D7C72887888FF";
+    block(PIC.DRAW, 0, &s12, 0); [ pic.draw(FILLSTYLE, sCMDS)
+    draw(oChestDrawer);
+  }
   
   [ green file cabinet drawers
   animate.obj(oFileDrawer); 
@@ -124,31 +143,27 @@ if (newRoom) {
   stop.cycling(oFileDrawer);
   ignore.objs(oFileDrawer);
   ignore.blocks(oFileDrawer);
-  if (officeFileDrStatus != CLOSED) {
-    if (officeFileDrStatus == OPEN1) {
+  set.priority(oFileDrawer, 9);
+  if (storeFileDrStatus != CLOSED) {
+    if (storeFileDrStatus == OPEN1) {
       position(oFileDrawer, 76, 100);
       set.loop(oFileDrawer, 3);
       set.cel(oFileDrawer, 2);
     }
-    if (officeFileDrStatus == OPEN2) { 
+    if (storeFileDrStatus == OPEN2) { 
       position(oFileDrawer, 76, 109);
-[[      if (has("notebook")) {
-        set.loop(oFileDrawer, 3);
-        set.cel(oFileDrawer, 2);
-[[      } else {
-[[        set.loop(oFileDrawer, 5);
-[[        set.cel(oFileDrawer, 5);
-[[      }
+      set.loop(oFileDrawer, 3);
+      set.cel(oFileDrawer, 2);
     }
-    if (officeFileDrStatus == OPEN3) { 
+    if (storeFileDrStatus == OPEN3) { 
       position(oFileDrawer, 76, 118);
-[[      if (has("floppy disk")) {
+      if (has("cassette tape")) {
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
-[[      } else {
-[[        set.loop(oFileDrawer, 5);
-[[        set.cel(oFileDrawer, 6);
-[[      }
+      } else {
+        set.loop(oFileDrawer, 11);
+        set.cel(oFileDrawer, 0);
+      }
     }
     draw(oFileDrawer);
   }
@@ -158,10 +173,10 @@ if (newRoom) {
   set.view(oDeskDrawer, vw.StorageRoomArt);
   stop.cycling(oDeskDrawer);
   ignore.objs(oDeskDrawer);
-  if (storeFileDrStatus == OPEN) {
-    position(oDeskDrawer, 76, 100);
+  position(oDeskDrawer, 100, 112);
+  if (storeDeskDrStatus == OPEN) {
     set.loop(oDeskDrawer, 5);
-    set.cel(oDeskDrawer, 2);
+    set.cel(oDeskDrawer, 4);
     draw(oDeskDrawer);
   }
   
@@ -185,13 +200,14 @@ if (newRoom) {
   return();
 }
 
+
 [*****
 :handleInput       [ check for input from player
 [*****
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
-    print("You see nothing of interest.");
+    print("You see a room full of junk.");
   }
   
   if (said("open", "coffin")) {
@@ -208,30 +224,32 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       goto(closeCoffin);
     }
   }
+  if ((said("get", "in", "coffin") || said("climb", "in", "coffin"))) {
+    [ is ego on wrong side? (lid will always be closed)
+    if (posn(ego, 28, 141, 54, 149)) {
+      print("The lid is closed.");
+      goto(doneclick);
+    }
+    [ is ego close enough?
+    if (posn(ego, 24, 156, 54, 161)) {
+     load.view(vw.EgoCoffin);
+     move.obj(ego, 37, 157, 1, fInCoffin);
+    [ disallow menu use
+    reset(enableMenu);
+    [ game functions are disabled
+    set(disableGameFunctions);
+    [ no input allowed
+     prevent.input();
+    } else {
+      print("You can't do that from here.");
+    }
+  }  
 }
 
 
 [*****
 :noInput           [  all non-input related code goes here 
 [*****
-
-[ priority adjustments
-if ((posn(ego, 70, 152, 84, 155) || posn(ego, 50, 150, 58, 156))) {
-  set.priority(ego, 14);
-} else {
-  if (posn(ego, 71, 143, 95, 148)) {
-    set.priority(ego, 12);
-  } else {
-    release.priority(ego);
-  }
-}
-[ treasure chest- on left, use 14
-if (posn(ego, 112, 154, 123, 162)) {
-  set.priority(oChest, 14);
-} else {
-  release.priority(oChest);
-}
-
 
 [ clock - check every second
 if (vCheckSecond != elapsedSeconds) {
@@ -250,6 +268,7 @@ if (vCheckSecond != elapsedSeconds) {
     }
   }
   if ((vClockSec == 0 || vClockSec == 30)) {
+[ TODO: refresh clock every 30 seconds?
     set.cel.v(oClockHour, vClockHour);
     [ round minutes to multiples of 2.5
     work1 = vClockMin; [ 0-59
@@ -264,6 +283,96 @@ if (vCheckSecond != elapsedSeconds) {
   }
 }
 
+[ coffin death check
+if (fInCoffin) {
+  reset(fInCoffin);
+  if (vCoffinDeathSeq == 6) {
+    deathType = 3;
+    ++vCoffinDeathSeq;
+  }
+
+  if (vCoffinDeathSeq == 5) {
+    print("Looks like you're going to be here awhile.");
+    vCoffinCount = 8;
+    ++vCoffinDeathSeq;
+  }
+
+  if (vCoffinDeathSeq == 4) {
+    print("And it's stuck! You can't push it open!");
+    vCoffinCount = 4;
+    ++vCoffinDeathSeq;
+  }
+  
+  if (vCoffinDeathSeq == 3) {
+    print("Uh oh! The coffin lid just slammed shut!");
+    vCoffinCount = 4;
+    ++vCoffinDeathSeq;
+  }
+  
+  if (vCoffinDeathSeq == 2) {
+    work1 = -2;
+    work2 = -1;
+    reposition(ego, work1, work2);
+    set.loop(ego, 2);
+    set.cel(ego, 0);
+    work1 = 2;
+    cycle.time(ego, work1);
+    end.of.loop(ego, fInCoffin);
+    ++vCoffinDeathSeq;
+    erase(oCoffin);
+ }
+  
+  if (vCoffinDeathSeq == 1) {
+    work1 = -6;
+    work2 = -10;
+    reposition(ego, work1, work2);
+    set.priority(ego, 15);
+    set.loop(ego, 1);
+    set.cel(ego, 0);
+    end.of.loop(ego, fInCoffin);
+    ++vCoffinDeathSeq;
+  }
+  
+  if (vCoffinDeathSeq == 0) {
+    work1 = -1;
+    work2 = 0;
+    reposition(ego, work1, work2);
+    set.view(ego, vw.EgoCoffin);
+    set.loop(ego, 0);
+    set.cel(ego, 0);
+    end.of.loop(ego, fInCoffin);
+    [ turn off auto-cycle to allow cycle-at-rest
+    work1 = 0;
+    set.upper.left(&ego, &work1);
+    ++vCoffinDeathSeq;
+  }
+}
+
+if (vCoffinCount) {
+  --vCoffinCount;
+  if (vCoffinCount == 0) {
+    set(fInCoffin);
+  }
+}
+
+if (vCoffinDeathSeq) {
+  [ nothing more to do
+  return();
+}
+
+[ priority adjustments
+[ behind green chair
+if (posn(ego, 71, 143, 95, 148)) {
+  set.priority(ego, 12);
+} else {
+  release.priority(ego);
+}
+[ treasure chest- on left, use 14
+if (posn(ego, 112, 154, 123, 162)) {
+  set.priority(oChest, 14);
+} else {
+  release.priority(oChest);
+}
 
 [ if NOT clicking on the actual toolbar, check for
 [ clicks on ingame items
@@ -276,8 +385,298 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [anything else is the whole room
-    print("There is a ton of stuff in this room.");
+    [ moose 1
+    if (mouseX > 11 && mouseX < 32 && mouseY > 37 && mouseY < 69) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if (work1 != 67) { [67=cyan vis/red pri
+        print("This is the moosehead from Leisure Suit Larry.");
+      }
+      goto(doneclick);
+    }
+    
+    [ moose 2
+    if (mouseX > 17 && mouseX < 33 && mouseY > 72 && mouseY < 88) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if (work1 != 67) { [67=cyan vis/red pri
+        print("You have seen this moosehead in King's Quest II.");
+      }
+      goto(doneclick);
+    }
+    
+    [ moose 3
+    if (mouseX > 40 && mouseX < 74 && mouseY > 42 && mouseY < 61) {
+      set(fCheckClick);
+    }
+    if (mouseX > 49 && mouseX < 66 && mouseY > 60 && mouseY < 72) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if (work1 != 67) { [67=cyan vis/red pri
+        print("This massive moosehead looks just like the one in "
+              "King's Quest III.");
+      }
+      goto(doneclick);
+    }
+        
+    [ clock
+    if (mouseX > 35 && mouseX < 48 && mouseY > 70 && mouseY < 129) {
+      print("The clock in Mixed Up Mother Goose was modeled after "
+            "this grandfather clock.");
+      block(GET.TIME, &work1, &work2, &work3); [ get.time(vHOUR, vMINUTE, vSECOND)
+      s12 = "AM";
+      if (work1 > 11) {
+        work1 -= 12;
+        s12 = "PM";
+      }
+      if (work1 == 0) {
+        work1 += 12;
+      }
+      print("The time is %v46:%v47|2:%v48|2 %s12. Isn't it odd that "
+            "this clock matches your current time?");
+      goto(doneclick);
+    }
+    [ podium
+    if (mouseX > 60 && mouseX < 72 && mouseY > 106 && mouseY < 129) {
+      print("It's the podium from the Police Quest I briefing room. "
+            "You can imagine Sierra managers standing behind it giving "
+            "briefings to project staff.");
+      if (posn(ego, 58, 112, 74, 119)) {
+        print("The podium top looks scratched and worn.");
+        [ TODO: need picture of podium top closeup
+      }
+      goto(doneclick);
+    }
+    [ desk lamp
+    if (mouseX > 68 && mouseX < 79 && mouseY > 79 && mouseY < 93) {
+      print("This old desk lamp doesn't look like anything special.");
+      goto(doneclick);
+    }
+    [ bookshelf
+    if (mouseX > 49 && mouseX < 68 && mouseY > 71 && mouseY < 120) {
+      print("The empty bookshelf is covered in dust. It probably once "
+            "held computer hardware and software manuals used by Sierra "
+            "developers.");
+      goto(doneclick);
+    }
+    [ open file cabinet drawer
+    if (posn(oFileDrawer, -1, 1, &mouseX, &mouseY)) {
+      if ((storeFileDrStatus == OPEN1 || storeFileDrStatus == OPEN2)) {
+        print("This drawer is empty.");
+        goto(doneclick);
+      } else {
+        if (storeFileDrStatus == OPEN3) {
+          if (has("cassette tape")) {
+            print("This drawer is empty.");
+          } else {
+            print("Someone left an 80s mix tape in this drawer.");
+          }
+          goto(doneclick);
+        }
+      }
+    }
+    [ file cabinets
+    if (mouseX > 68 && mouseX < 93 && mouseY > 87 && mouseY < 123) {
+      print("There are several old filing cabinets pushed against "
+            "the back wall.");
+      goto(doneclick);
+    }
+    [ overhead light
+    if (mouseX > 71 && mouseX < 81 && mouseY > 65 && mouseY < 72) {
+      print("This overhead light bathes the entire room in a warm light.");
+      goto(doneclick);
+    }
+    [ wall mirror
+    if (mouseX > 78 && mouseX < 93 && mouseY > 53 && mouseY < 84) {
+      print("It looks like the magic mirror from King's Quest II. But there's "
+            "nothing magic about this mirror. All you see is your own "
+            "reflection in the dull, dusty surface.");
+      goto(doneclick);
+    }
+    
+    [ open desk drawer
+    if (posn(oDeskDrawer, -1, 1, &mouseX, &mouseY)) {
+      if (storeDeskDrStatus == OPEN) {
+        print("This drawer is empty.");
+        goto(doneclick);
+      }
+    }
+    [ desk
+    if (mouseX > 93 && mouseX < 113 && mouseY > 104 && mouseY < 123) {
+      print("This desk is of the same style as furniture found in King's "
+            "Quest III.");
+      goto(doneclick);
+    }
+    [ birdcage
+    if (mouseX > 108 && mouseX < 116 && mouseY > 41 && mouseY < 60) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if ((work1 == 69 || work1 == 77)) { [69/77=magenta/lt magenta vis & red pri)
+        print("You recognize this as the birdcage from King's Quest II.");
+      }
+      goto(doneclick);
+    }
+    [ desk mirror
+    if (mouseX > 98 && mouseX < 108 && mouseY > 72 && mouseY < 104) {
+      print("The mirror is very dusty, but you can still see your handsome "
+            "reflection in it.");
+      goto(doneclick);
+    }
+    [ pitcher and basin
+    if (mouseX > 117 && mouseX < 128 && mouseY > 99 && mouseY < 114) {
+      print("This is an antique water pitcher and wash basin, that would "
+            "have been used in the days before indoor plumbing.");
+      goto(doneclick);
+    }
+    [ banner
+    if (mouseX > 121 && mouseX < 140 && mouseY > 54 && mouseY < 123) {
+      print("A copy of this banner can be found in King's Quest III.");
+      goto(doneclick);
+    }
+    
+    [ cabinet doors open
+    if (posn(oCabinetDoor, -1, 1, &mouseX, &mouseY)) {
+      if (vDoorState == OPEN) {
+        if (has("music sheet")) {
+          print("The cabinet is empty.");
+        } else {
+          print("A piece of sheet music is in this cabinet.");
+        }
+        goto(doneclick);
+      }
+    }
+    [ cabinet
+    if (mouseX > 128 && mouseX < 147 && mouseY > 123 && mouseY < 164) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+      if ((work1 == LT_RED || work1 == BROWN || work1 == YELLOW)) {
+        print("This cabinet is of the same style as furniture found in "
+              "King's Quest III.");
+        goto(doneclick);
+      }
+    }
+    
+    [ chest drawer open
+    if (posn(oChestDrawer, -1, 1, &mouseX, &mouseY)) {
+      if (storeChestDrStatus == OPEN) {
+        print("This drawer is empty.");
+        goto(doneclick);
+      }
+    }
+    [ bureau/chest
+    if (mouseX > 113 && mouseX < 136 && mouseY > 107 && mouseY < 148) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+      if ((work1 == LT_RED || work1 == BROWN || work1 == YELLOW)) {
+        print("This bureau is of the same style as furniture found in "
+              "King's Quest III.");
+        goto(doneclick);
+      }
+    }
+    [ wardrobe
+    if (mouseX > 95 && mouseX < 120 && mouseY > 56 && mouseY < 119) {
+      print("This wardrobe is of the same style as furniture found in "
+            "King's Quest III.");
+      goto(doneclick);
+    }
+    [ robots
+    if (mouseX > 135 && mouseX < 147 && mouseY > 140 && mouseY < 167) {
+      print("These robot models look exactly like the Space Quest I robots.");
+      goto(doneclick);
+    }
+    [ treasure chest
+    if (posn(oChest, -1, 1, &mouseX, &mouseY)) {
+      if (storeChestStatus == OPEN) {
+        if (has("scroll")) {
+          print("The treasure chest has nothing else in it.");
+        } else {
+          print("There is an old parchment scroll in the treasure chest.");
+        }
+      } else {
+        print("In King's Quest II, a treasure chest just like this one had "
+              "some awesome treasure in it. What might be in this one?");
+      }  
+      goto(doneclick); 
+    }
+    
+    [ chair
+    if (mouseX > 77 && mouseX < 96 && mouseY > 134 && mouseY < 162) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      work1 /= 16; [ get priority color only
+      if ((work1 == LT_MAGENTA || work1 == BLACK)) {
+        print("This comfy chair would be great to sit in while reading your "
+        "fairy tale stories.");
+        goto(doneclick);
+      }
+    }
+    
+    [ arcade
+    if (mouseX > 53 && mouseX < 63 && mouseY > 133 && mouseY < 158) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+      if ((work1 == BLACK || work1 == BLUE || work1 == LT_BLUE)) {
+        print("This arcade must be the model for the one in Space Quest I.");
+        goto(doneclick);
+      }
+    }
+    [ coffin
+    if (mouseX > 27 && mouseX < 53 && mouseY > 150 && mouseY < 164) {
+      set(fCheckClick);
+    }
+    if (posn(oCoffin, -1, 1, &mouseX, &mouseY)) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      if (vCoffinState == OPEN) {
+        print("The coffin is empty except for a silk pillow and a padded "
+              "lining. It actually looks quite comfortable.");
+      } else {
+        print("It's Count Dracula's coffin from King's Quest II. Hopefully "
+              "no body is in there.");
+      }
+      goto(doneclick);
+    }
+    [ coat hanger
+    if (mouseX > 14 && mouseX < 24 && mouseY > 98 && mouseY < 134) {
+      print("You've seen this bizarre looking coat hanger before, in "
+            "King's Quest II.");
+      goto(doneclick);
+    }
+    [ boxes
+    if (mouseX > 9 && mouseX < 30 && mouseY > 134 && mouseY < 167) {
+      set(fCheckClick);
+    }
+    if (mouseX > 53 && mouseX < 62 && mouseY > 158 && mouseY < 168) {
+      set(fCheckClick);
+    }
+    if (mouseX > 69 && mouseX < 81 && mouseY > 154 && mouseY < 168) {
+      set(fCheckClick);
+    }
+    if (mouseX > 90 && mouseX < 103 && mouseY > 160 && mouseY < 168) {
+      set(fCheckClick);
+    }
+    if (mouseX > 104 && mouseX < 116 && mouseY > 151 && mouseY < 169) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      print("There are unmarked boxes of all shapes and sizes all "
+            "along the near wall.");
+      goto(doneclick);
+    }
+    
+    [ anything else is the whole room
+    print("This room is full of things that look like items from "
+          "classic Sierra AGI games.");
     goto(doneclick);
   }
   
@@ -299,8 +698,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
       print("Please don't touch yourself. Not even when you're alone.");
       goto(doneclick);
     }
-    if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
-    }
+    
     [ coffin (when closed)
     if ((vCoffinState == CLOSED || vCoffinState == CLOSING)) {
       if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
@@ -355,7 +753,11 @@ if (mouseY > 25 && controller(cLeftClick)) {
           [ if closed
           if (vDoorState == CLOSED) {
             [ animate it first
-            set.loop(oCabinetDoor, 6);
+            if (has("music sheet")) {
+              set.loop(oCabinetDoor, 6);
+            } else {
+              set.loop(oCabinetDoor, 12);
+            }
             set.cel(oCabinetDoor, 0);
             position(oCabinetDoor, 125, 149);
             set.priority(oCabinetDoor, 13);
@@ -372,6 +774,16 @@ if (mouseY > 25 && controller(cLeftClick)) {
 
     [ cabinet door (when opened)
     if ((vDoorState == OPEN || vDoorState == OPENING)) {
+      [ item check
+      if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 128 && mouseY < 151) {
+        if (!has("music sheet")) {
+         get("music sheet");
+         print("You take the sheet from the cabinet.");
+         currentScore += 3;
+         set.loop(oCabinetDoor, 6);
+        }
+        goto(doneclick);
+      }
       if (mouseX > 124 && mouseX < 130 && mouseY > 126 && mouseY < 145) {
         set(fCheckClick);
       }
@@ -386,9 +798,60 @@ if (mouseY > 25 && controller(cLeftClick)) {
       }
     }
     
+    [ top file drawer, closed  76, 89, 83, 95
+    if (mouseX > 75 && mouseX < 84 && mouseY > 96 && mouseY < 104 &&
+        storeFileDrStatus == CLOSED) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 73, 117, 93, 122)) {
+        position(oFileDrawer, 76, 100);
+        set.loop(oFileDrawer, 3);
+        set.cel(oFileDrawer, 0);
+        draw(oFileDrawer);
+        end.of.loop(oFileDrawer, fFileDrawer);
+        storeFileDrStatus = OPENING;
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+      
+    [ middle file drawer, closed 76, 98, 83, 105
+    if (mouseX > 75 && mouseX < 84 && mouseY > 105 && mouseY < 114 &&
+        storeFileDrStatus == CLOSED) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 73, 117, 93, 122)) {
+        position(oFileDrawer, 76, 109);
+        set.loop(oFileDrawer, 3);
+        set.cel(oFileDrawer, 0);
+        draw(oFileDrawer);
+        end.of.loop(oFileDrawer, fFileDrawer);
+        storeFileDrStatus = OPENING;
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
+    [ bottom file drawer, closed 76, 107, 83, 114
+    if (mouseX > 75 && mouseX < 84 && mouseY > 114 && mouseY < 123 &&
+        storeFileDrStatus == CLOSED) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 73, 117, 93, 122)) {
+        position(oFileDrawer, 76, 118);
+        set.loop(oFileDrawer, 3);
+        set.cel(oFileDrawer, 0);
+        draw(oFileDrawer);
+        end.of.loop(oFileDrawer, fFileDrawer);
+        storeFileDrStatus = OPENING;
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
     [ file drawer, when drawer is open 
     if (posn(oFileDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
-        storeFileDrStatus!= CLOSING) {
+        storeFileDrStatus != CLOSING) {
       [ is ego close enough?
       if (obj.in.box(ego, 73, 117, 93, 122)) {
         [ contents check
@@ -396,17 +859,18 @@ if (mouseY > 25 && controller(cLeftClick)) {
           goto(doneclick);
         }
         if (storeFileDrStatus== OPEN2 && mouseY < 110) {
-[          if (!has("notebook")) {
-[            get("notebook");
-[            currentScore += 3;
-[            print("This notebook might come in handy.");
-[            set.loop(oFileDrawer, 3);
-[            set.cel(oFileDrawer, 2);
-[            force.update(oFileDrawer);      
-[          }
           goto(doneclick);
         }
         if (storeFileDrStatus== OPEN3 && mouseY < 119) {
+          if (!has("cassette tape")) {
+            get("cassette tape");
+            currentScore += 4;
+            print("You take the mix tape, wondering "
+                  "what might be on it.");
+            set.loop(oFileDrawer, 3);
+            set.cel(oFileDrawer, 2);
+            force.update(oFileDrawer);      
+          }
           goto(doneclick);
         }
         set.loop(oFileDrawer, 3);
@@ -419,72 +883,54 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
 
-    [ top file drawer, closed  76, 89, 83, 95
-    if (mouseX > 75 && mouseX < 84 && mouseY > 96 && mouseY < 104 &&
-        officeFileDrStatus == CLOSED) {
-      [ is ego close enough?
-      if (obj.in.box(ego, 73, 117, 93, 122)) {
-        position(oFileDrawer, 76, 100);
-        set.loop(oFileDrawer, 3);
-        set.cel(oFileDrawer, 0);
-        draw(oFileDrawer);
-        end.of.loop(oFileDrawer, fFileDrawer);
-        officeFileDrStatus = OPENING;
-      } else {
-        print("Move closer.");
+    [ chest drawer when closed 115, 110, 118, 126 and 119, 116, 122, 131
+    if (storeChestDrStatus == CLOSED) {
+      if (mouseX > 114 && mouseX < 119 && mouseY > 117 && mouseY < 135) {
+        set(fCheckClick);
       }
-      goto(doneclick);
-    }
-      
-    [ middle file drawer, closed 76, 98, 83, 105
-    if (mouseX > 75 && mouseX < 84 && mouseY > 105 && mouseY < 114 &&
-        officeFileDrStatus == CLOSED) {
-      [ is ego close enough?
-      if (obj.in.box(ego, 73, 117, 93, 122)) {
-        position(oFileDrawer, 76, 109);
-        set.loop(oFileDrawer, 3);
-        set.cel(oFileDrawer, 0);
-        draw(oFileDrawer);
-        end.of.loop(oFileDrawer, fFileDrawer);
-        officeFileDrStatus = OPENING;
-      } else {
-        print("Move closer.");
+      if (mouseX > 118 && mouseX < 123 && mouseY > 123 && mouseY < 140) {
+        set(fCheckClick);
       }
-      goto(doneclick);
-    }
-    
-    [ bottom file drawer, closed 76, 107, 83, 114
-    if (mouseX > 75 && mouseX < 84 && mouseY > 114 && mouseY < 123 &&
-        officeFileDrStatus == CLOSED) {
-      [ is ego close enough?
-      if (obj.in.box(ego, 73, 117, 93, 122)) {
-        position(oFileDrawer, 76, 118);
-        set.loop(oFileDrawer, 3);
-        set.cel(oFileDrawer, 0);
-        draw(oFileDrawer);
-        end.of.loop(oFileDrawer, fFileDrawer);
-        officeFileDrStatus = OPENING;
-      } else {
-        print("Move closer.");
+      if (fCheckClick) {
+        reset(fCheckClick);
+        [ is ego close enough?
+        if ((obj.in.box(ego, 107, 122, 117, 129) || 
+             obj.in.box(ego, 108, 130, 120, 138))) {
+          position(oChestDrawer, 109, 129);
+          set.loop(oChestDrawer, 4);
+          set.cel(oChestDrawer, 0);
+          draw(oChestDrawer);
+          end.of.loop(oChestDrawer, fChestDrawer);
+          storeChestDrStatus = OPENING;
+          [ if ego is too close, backup
+          work1 = egoY;  [108,122 - 115,136 dx/dy=7/14=1/2
+                         [101       108
+          work1 -= 122; [ adjust for ego width
+          work1 /= 2; 
+          work1 += 101; [ x = (y - y0)*dx/dy + x0
+                       
+          if (egoY >= work1) {
+            work1 -= 2;
+            work2 = 2;
+            set.loop(ego, 0);
+            fix.loop(ego);
+            move.obj.v(ego, work1, egoY, work2, fEgoBackup);
+          }
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
       }
-      goto(doneclick);
     }
     
-    [ chest drawer
+    [ chest drawer when open
     if (posn(oChestDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
         storeChestDrStatus!= CLOSING) {
       [ is ego close enough?
-      if (obj.in.box(ego, 108, 122, 122, 139)) {
+      if ((obj.in.box(ego, 101, 122, 114, 130) || 
+           obj.in.box(ego, 104, 131, 120, 138))) {
         [ contents check
         if (storeChestDrStatus== OPEN && mouseY < 119) {
-[          if (!has("notebook")) {
-[            get("notebook");
-[            currentScore += 3;
-[            print("This notebook might come in handy.");
-[            set.loop(oFileDrawer, 3);
-[            set.cel(oFileDrawer, 2);
-[            force.update(oFileDrawer);      
-[          }
           goto(doneclick);
         }
         set.loop(oChestDrawer, 4);
@@ -497,34 +943,25 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [ chest drawer when closed 115, 110, 118, 126 and 119, 116, 122, 131
-    if (storeChestDrStatus == CLOSED) {
-      if (mouseX > 114 && mouseX < 119 && mouseY > 117 && mouseY < 135) {
-        set(fCheckClick);
+    [ desk drawer when closed 100, 102, 106, 108
+    if (mouseX > 99 && mouseX < 107 && mouseY > 109 && mouseY < 117 &&
+        storeDeskDrStatus == CLOSED) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 94, 121, 112, 126)) {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 0);
+        draw(oDeskDrawer);
+        end.of.loop(oDeskDrawer, fDeskDrawer);
+        storeDeskDrStatus = OPENING;
+      } else {
+        print("Move closer.");
       }
-      if (mouseX > 118 && mouseX < 123 && mouseY > 123 && mouseY < 140) {
-        set(fCheckClick);
-      }
-      if (fCheckClick) {
-        reset(fCheckClick);
-        [ is ego close enough?
-        if (obj.in.box(ego, 94, 121, 112, 126)) {
-          position(oChestDrawer, 109, 129);
-          set.loop(oChestDrawer, 4);
-          set.cel(oChestDrawer, 0);
-          draw(oChestDrawer);
-          end.of.loop(oChestDrawer, fChestDrawer);
-          storeChestDrStatus = OPENING;
-        } else {
-          print("Move closer.");
-        }
-        goto(doneclick);
-      }
+      goto(doneclick);
     }
     
     [ desk drawer when open
     if (posn(oDeskDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
-        storeDeskDrStatus!= CLOSING) {
+        storeDeskDrStatus != CLOSING) {
       [ is ego close enough?
       if (obj.in.box(ego, 94, 121, 112, 126)) {
         [ contents check
@@ -540,67 +977,98 @@ if (mouseY > 25 && controller(cLeftClick)) {
           goto(doneclick);
         }
         set.loop(oDeskDrawer, 5);
-        set.cel(oDeskDrawer, 3);
+        set.cel(oDeskDrawer, 4);
         reverse.loop(oDeskDrawer, fDeskDrawer);
-        storeFileDrStatus= CLOSING;
+        storeDeskDrStatus= CLOSING;
       } else {
         print("Move closer.");
       }
       goto(doneclick);
     }
     
-    [ desk drawer when closed 100, 102, 106, 108
-    if (mouseX > 99 && mouseX < 107 && mouseY > 109 && mouseY < 117 &&
-        storeDeskDrStatus == CLOSED) {
+    [ chest when closed
+    if (posn(oChest, ON.OBJ, 1, &mouseX, &mouseY) && 
+       (storeChestStatus == CLOSED || storeChestStatus == CLOSING)) {
       [ is ego close enough?
-      if (obj.in.box(ego, 94, 121, 112, 126)) {
-        position(oDeskDrawer, 99, 112);
-        set.loop(oDeskDrawer, 5);
-        set.cel(oDeskDrawer, 0);
-        draw(oDeskDrawer);
-        end.of.loop(oDeskDrawer, fDeskDrawer);
-        storeDeskDrStatus = OPENING;
-      } else {
-        print("Move closer.");
-      }
-      goto(doneclick);
-    }
-    
-    [ chest  119, 163
-    if (posn(oChest, ON.OBJ, 1, &mouseX, &mouseY)) {
-      [ is ego close enough?
-      if (obj.in.box(ego, 111, 155, 131, 165)) {
-        [ contents check 121,147 128,152
-        if (storeChestStatus == OPEN && mouseX > 120 && mouseX < 129 && mouseY > 154 && mouseY < 174) {
-[          if (!has("notebook")) {
-[            get("notebook");
-[            currentScore += 3;
-[            print("This notebook might come in handy.");
-[            set.loop(oFileDrawer, 3);
-[            set.cel(oFileDrawer, 2);
-[            force.update(oFileDrawer);      
-[          }
+      if (obj.in.box(ego, 111, 147, 138, 166)) {
+        if (egoX > 125) {
+          print("The chest opens from the other side.");
           goto(doneclick);
         }
-        
-        [ open or close, depending on current state
-        set.loop(oChest, 1);
-        if ((storeChestStatus == OPEN || storeChestStatus == OPENING)) {
-          set.cel(oChest, 3);
-          reverse.loop(oChest, fChest);
-          storeChestStatus= CLOSING;
-        } else {
-          set.cel(oChest, 0);
-          end.of.loop(oChest, fChest);
-          storeChestStatus= OPENING;
-        }
+        [ open it
+        set.cel(oChest, 0);
+        end.of.loop(oChest, fChest);
+        storeChestStatus= OPENING;
       } else {
         print("Move closer.");
       }
+      goto(doneclick);
+    }
+    
+    [ chest when open
+    if (posn(oChest, ON.OBJ, 1, &mouseX, &mouseY) && 
+       (storeChestStatus == OPEN || storeChestStatus == OPENING)) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 111, 147, 138, 166)) {
+        [ contents check 121,147 128,152
+        if (storeChestStatus == OPEN && mouseX > 120 && mouseX < 129 && mouseY > 154 && mouseY < 174) {
+          if (!has("scroll")) {
+            get("scroll");
+            currentScore += 3;
+            print("You carefully lift the scroll out of the chest.");
+            set.loop(oChest, 1);
+            force.update(oFileDrawer);      
+          }
+          goto(doneclick);
+        }
+        [ close it
+        set.cel(oChest, 3);
+        reverse.loop(oChest, fChest);
+        storeChestStatus= CLOSING;
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
+    [ blocked file cabinets
+    if (mouseX > 69 && mouseX < 75 && mouseY > 93 && mouseY < 107) {
+      set(fCheckClick);
+    }
+    if (mouseX > 84 && mouseX < 93 && mouseY > 91 && mouseY < 121) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      print("You can't open the drawers in these cabinets. They are "
+            "blocked by the file cabinet in the front.");
+      goto(doneclick);
+    }
+    
+    [ boxes
+    if (mouseX > 9 && mouseX < 30 && mouseY > 134 && mouseY < 167) {
+      set(fCheckClick);
+    }
+    if (mouseX > 53 && mouseX < 62 && mouseY > 158 && mouseY < 168) {
+      set(fCheckClick);
+    }
+    if (mouseX > 69 && mouseX < 81 && mouseY > 154 && mouseY < 168) {
+      set(fCheckClick);
+    }
+    if (mouseX > 90 && mouseX < 103 && mouseY > 160 && mouseY < 168) {
+      set(fCheckClick);
+    }
+    if (mouseX > 104 && mouseX < 116 && mouseY > 151 && mouseY < 169) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      print("The boxes are all taped securely shut. You have no "
+            "way to open them.");
       goto(doneclick);
     }
   }
-  
+
   :doneclick
   set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
 }
@@ -653,33 +1121,16 @@ if (fFileDrawer) {
     get.posn(oFileDrawer, work1, work2);
     if (work2 == 100) {
       storeFileDrStatus = OPEN1;
-[      if (!findEmptyDrawer) {
-[        set(findEmptyDrawer);
-[        print("This drawer is empty.");
-[      }
     } else {
       if (work2 == 109) {
         storeFileDrStatus = OPEN2;
-[        if (!has("notebook")) {
-[          set.loop(oFileDrawer, 5);
-[          set.cel(oFileDrawer, 5);
-[          force.update(oFileDrawer);
-[          if (!findNotebook) {
-[            set(findNotebook);
-[            print("A small notebook is in this drawer.");
-[          }
-[        }
       } else {
         storeFileDrStatus = OPEN3;
-[        if (!has("floppy disk")) {
-[          set.loop(oFileDrawer, 5);
-[          set.cel(oFileDrawer, 6);
-[          force.update(oFileDrawer);
-[          if (!findDisk) {
-[            set(findDisk);
-[            print("There's a box of blank floppy disks here.");
-[          }
-[        }
+        if (!has("cassette tape")) {
+          set.loop(oFileDrawer, 11);
+          set.cel(oFileDrawer, 0);
+          force.update(oFileDrawer);
+        }
       }
     }
   }
@@ -687,21 +1138,12 @@ if (fFileDrawer) {
 
 [ desk drawer
 if (fDeskDrawer) {
-  reset(fFileDrawer);
+  reset(fDeskDrawer);
   if (storeDeskDrStatus == CLOSING) {
     erase(oDeskDrawer);
     storeDeskDrStatus = CLOSED;
   } else {
     storeDeskDrStatus = OPEN;
-[        if (!has("notebook")) {
-[          set.loop(oFileDrawer, 5);
-[          set.cel(oFileDrawer, 5);
-[          force.update(oFileDrawer);
-[          if (!findNotebook) {
-[            set(findNotebook);
-[            print("A small notebook is in this drawer.");
-[          }
-[        }
   }
 }
 
@@ -711,37 +1153,31 @@ if (fChestDrawer) {
   if (storeChestDrStatus == CLOSING) {
     erase(oChestDrawer);
     storeChestDrStatus = CLOSED;
+    [ remove conditional line
+    s12 = "F1F204F6727C6D7C72887888FF";
+    block(PIC.DRAW, 0, &s12, 0); [ pic.draw(FILLSTYLE, sCMDS)
   } else {
     storeChestDrStatus = OPEN;
-[        if (!has("notebook")) {
-[          set.loop(oFileDrawer, 5);
-[          set.cel(oFileDrawer, 5);
-[          force.update(oFileDrawer);
-[          if (!findNotebook) {
-[            set(findNotebook);
-[            print("A small notebook is in this drawer.");
-[          }
-[        }
+    [ add conditional line
+    s12 = "F1F201F6727C6D7C72887888FF";
+    block(PIC.DRAW, 0, &s12, 0); [ pic.draw(FILLSTYLE, sCMDS)
   }
 }
 
 [ chest
-if (fChestDrawer) {
-  reset(fChestDrawer);
-  if (storeChestDrStatus == CLOSING) {
-    storeChestDrStatus = CLOSED;
+if (fChest) {
+  reset(fChest);
+  if (storeChestStatus == CLOSING) {
+    storeChestStatus = CLOSED;
   } else {
-    storeChestDrStatus = OPEN;
-[        if (!has("notebook")) {
-[          set.loop(oFileDrawer, 5);
-[          set.cel(oFileDrawer, 5);
-[          force.update(oFileDrawer);
-[          if (!findNotebook) {
-[            set(findNotebook);
-[            print("A small notebook is in this drawer.");
-[          }
-[        }
+    storeChestStatus = OPEN;
   }
+}
+
+[ ego backup
+if (fEgoBackup) {
+  reset(fEgoBackup);
+  release.loop(ego);
 }
 
 [*****
@@ -750,7 +1186,7 @@ if (fChestDrawer) {
 
 [ add exit checks here (or use layout editor)
 
-if (egoHitSpecial) {
+if (egoHitSpecial && egoX < 30) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -763,10 +1199,10 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%l90|40"
-#message 2 "%l90|41"
-#message 3 "%l90|42"
-#message 4 "%l90|43"
-#message 5 "%l90|44"
-#message 6 "%l90|45"
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"
 #message 7 "You see nothing of interest." 

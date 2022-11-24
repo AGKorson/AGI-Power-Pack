@@ -180,7 +180,6 @@ random(40, 140, patientTimer);
     cursoricon = cursormode;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   }
-  return();
 }
 
 [*****

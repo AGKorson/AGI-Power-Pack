@@ -1340,7 +1340,7 @@ if (cursormode) {
     if (egoDir == UP) {
       if (cursorpos == CP_INST) {
         [ check for shift+up
-        block(CHECK.SHIFT, &tmpVal, 0, 0);
+        block(GET.SHIFTSTATE, &tmpVal, 0, 0);
         if (tmpVal == 1) {
           [ SHIFT+UP
           [ increment selected instrument, and redraw display
@@ -1399,7 +1399,7 @@ if (cursormode) {
       }
       if (cursorpos == CP_INST) {
         [ check for shift+down
-        block(CHECK.SHIFT, &tmpVal, 0, 0);
+        block(GET.SHIFTSTATE, &tmpVal, 0, 0);
         if (tmpVal == 1) {
           [ SHIFT+DOWN
           [ decrement selected instrument, and redraw display

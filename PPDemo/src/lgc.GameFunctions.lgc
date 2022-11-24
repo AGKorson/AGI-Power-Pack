@@ -158,7 +158,7 @@ work1 = 0;
       block(STR.LEFT, &tmpStr1, &tmpStr1, &work1); [ str.left(sINPUT, sRESULT, vLEN);
       tmpStr2 = "***";
       block(STR.CONCAT, &tmpStr1, &tmpStr2, 0);
-      set.string(s255, "%s20");
+      set.string(SET.INPUT, "%s20");
     } else {
       [ check rest of line
       goto(loop1);

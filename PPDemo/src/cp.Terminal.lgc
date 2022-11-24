@@ -12,18 +12,38 @@
 #define cursor_col    v241
 #define cursor_char   v242
 #define cursor_toggle v243
+#define inputmode     v244
+  #define IM_USERID    0 [ wait for userid
+  #define IM_PASSWORD  1 [ wait for pw
+  #define IM_CMDLINE   2 [ wait for commandline
+  #define IM_ARGINPUT  3 [ wait for additional args/input
+#define terminalfn    v245
+  #define LINEFEED     1
+  #define DELAY        2
+  #define DELAY_LF     3
+  #define ADDLINE      4
+  #define ADDLINE_LF   5
+#define outputvar     v246
 
 #define cursorstate   f241
+#define loggedon      f242
+#define validmodule   f243
 
-#define input   s12
-#define char    s13
+#define input          s12
+#define char           s13
+#define output         s14
+#define userid         s15
+#define validID        s16
+#define validPW        s17
 
-#define charmsg  m3
+#define charmsg         m3
+#define outputmsg       m4
+#define promptmsg       m6
 
-#define toprow         5
-#define btmrow        16
-#define leftcol       11
-#define rightcol      46
+#define TOPROW         4
+#define BTMROW        18
+#define LEFTCOL        9
+#define RIGHTCOL      48
 
 [ room variable declarations
 
@@ -31,10 +51,7 @@
 [ and responded within this logic. So no need to check for newRoom
 [ flag.
 
-[ this is the first cycle through this room
 [ load, draw and discard the picture resource for the current room
-[ do basic room initialization
-
 load.pic(currentRoom);
 draw.pic(currentRoom);
 discard.pic(currentRoom);
@@ -48,6 +65,8 @@ set.text.attribute(-1, 0);
 
 [ display it
 show.pic();
+[[display(0, 0, "012345678901234567890123456789012345678901234567890123456789");
+[[display(1, 0, "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0");
 
 [ add return/cancel info
 set.text.attribute(WHITE, BLACK);
@@ -55,18 +74,47 @@ display(22, 22, "Press <ESC> to return to control room");
 
 [ set terminal colors (maybe use amber?)
 set.text.attribute(GREEN, BLACK);
-block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
-[ position cursor at first line of virtual screen, at right edge
-cursor_row = toprow;
-cursor_col = leftcol;
+[[display(TOPROW, LEFTCOL, "X");
+[[display(TOPROW, RIGHTCOL, "X");
+[[display(BTMROW, LEFTCOL, "X");
+[[display(BTMROW, RIGHTCOL, "X");
+
+[ display welcome text
+[                0123456789012345678901234567890123456789
+display(5, 15,  "  *    *   *   ***    ****");
+display(6, 15,  " * *   ** **  *   *  *");
+display(7, 15,  "*****  * * *  *   *   ***");
+display(8, 15,  "*   *  *   *  *   *      *");
+display(9, 15,  "*   *  *   *   ***   ****");
+display(11, 11, "AGI Mainframe Operating System v1.0");
+display(12, 13, "  (c) 1986 Sierra Online, Inc.");
+display(14, 9, "(Shift-Ctrl-Enter to reboot)");
+[ position cursor after userid prompt
+display(16, 9, "userid: ");
+cursor_row = 16; 
+cursor_col = 17;
 cursor_char = 1;
 display.v(cursor_row, cursor_col, cursor_char);
 
+[ valid ID/PW
+validID = "kw001";
+validPW = "temp123!";
+
+block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[skip prompt for userid/pw
+goto(getKey);
+
+:getInput
 [ reset input line
 input = "";
+[ add prompt
+work1 = &promptmsg;
+display.v(cursor_row, cursor_col, work1);
+++cursor_col;
 
-[ main input loop
+[ main character input loop
 :getKey
 [ flush the keybuffer
 lastChar = 0;
@@ -89,10 +137,7 @@ if (!have.key()) {
   goto(getKey);
 }
 
-:havekey
-[[ DEBUG: display the key value
-[display(24, 1, "%v19   ");
-
+:haveKey
 [ make sure cursor gets hidden
 if (cursor_char == 1) {
   cursor_char = 2;
@@ -113,136 +158,240 @@ if (lastChar == 27) {
   [ go back to terminal roonm
   new.room(rm.ControlRoom); [ ##LE001##
 }
-  
+
+[ CTRL+SHIFT+ENTER for reboot
+if (lastChar == 10) {
+  block(GET.SHIFTSTATE, &work1, 0, 0); [ get.shiftstate(vSTATE)
+print("shift: %v46");  
+  if (work1 == 3) {
+    output = "yeah baby";
+    set(resetMOCC);
+    [ display output msg
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    [ TODO: add reboot code here
+    [ get more input
+    goto(getInput);
+  }
+}
 
 [ if ENTER or CTRL+ENTER
 if ((lastChar == 13 || lastChar == 10)) {
   [ advance the inputline BEFORE processing
-  work1 = 1;
+  terminalfn = LINEFEED;
   call(lgc.TerminalFunctions);
     
   [ parse the input
   parse(input);
-
-  [ deal with input
-  if (said("help")) {
-    [ show some help lines
-    work1 = 5;
-    display.v(cursor_row, cursor_col, work1);
-    [ linefeed
-    work1 = 1;
-    call(lgc.TerminalFunctions);
-    work1 = 6;
-    display.v(cursor_row, cursor_col, work1);
-    [ linefeed
-    work1 = 1;
-    call(lgc.TerminalFunctions);
-  }
-  
-  if (said("open", "door")) {
-    set(resetBaDASS);
-#message 24 "done"
-    work1 = &m24;
-    display.v(cursor_row, cursor_col, work1);
-    work1 = 1;
-    call(lgc.TerminalFunctions);
-  }
-  
-#message 20 "  terminating process..."
-#message 21 "  loading module %w2..."
-#message 22 "  initializing..."
-#message 23 "OK"
-
-  if (said("restart", "anyword")) {
-    work1 = &m20;
-    display.v(cursor_row, cursor_col, work1);
-    work1 = 3;
-    call(lgc.TerminalFunctions);
-    work1 = &m21;
-    display.v(cursor_row, cursor_col, work1);
-    work1 = 3;
-    call(lgc.TerminalFunctions);
-    work1 = &m22;
-    display.v(cursor_row, cursor_col, work1);
-    work1 = 2;
-    call(lgc.TerminalFunctions);
-    work1 = &m23;
-    work2 = cursor_col;
-    work2 += 18;
-    display.v(cursor_row, work2, work1);
-    work1 = 1;
-    call(lgc.TerminalFunctions);
-    reset(haveMatch);  
-    if (said("restart", "caisocc")) {
-      set(enableCAISOCC);
-    }
-    if (said("restart", "randocc")) {
-      set(enableRANDOCC);
-    }
-    if (said("restart", "icapocc")) {
-      set(enableICAPOCC);
-    }
-    if (said("restart", "esadocc")) {
-      set(enableESADOCC);
-    }
-    if (said("restart", "ofrocc")) {
-      set(enableOFROCC);
-    }
-    if (said("restart", "eridocc")) {
-      set(enableERIDOCC);
-    }
-  }
     
-  [ clear input
-  input = "";
-
-  [ if input was processed, get more input
-  if (haveMatch) {
+  [ take appropriate action based on command and input mode
+  if (inputmode == IM_USERID) {
+    [ userid entered; get password
+    block(STR.COPY, &input, &userid, 0); [ str.copy(sINPUT, sRESULT)
+    inputmode = IM_PASSWORD;
+    output = "password: ";
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    [ get more input (no prompt)
+    input = "";
     goto(getKey);
   }
   
-  [ anything else is not acknowledged
-display(24, 0, "%w1, %w2, %w3, %w4");  
-  [ display syntax error message
-  work1 = 4;
-  display.v(cursor_row, cursor_col, work1);
-  [ linefeed
-  work1 = 1;
-  call(lgc.TerminalFunctions);
+  if (inputmode == IM_PASSWORD) {
+    [ validate userid/password
+    [ id is not case sensitive
+    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+    if (compare.strings(userid, validID)) {
+      [ id is valid
+      set(loggedon);
+    }
+    [ password is case sensitive
+    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+    if (!compare.strings(input, validPW)) {
+      [ password is not valid
+      reset(loggedon);
+    }
+    [ if valid continue
+    if (loggedon) {
+      inputmode = IM_CMDLINE;
+      output = "logged on as kw001";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "access level: 1";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+    } else {
+      inputmode = IM_USERID;
+      output = "invalid userid and/or password";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+[      output = "%s15 : %s12";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      [ position cursor after userid prompt
+      output = "userid: ";
+      terminalfn = ADDLINE;
+      call(lgc.TerminalFunctions);
+      [ get input, no prompt
+      input = "";
+      goto(getKey);
+    }
+    [ get more input
+    goto(getInput);
+  }
   
-  [ get more input
-  goto(getKey);
+  if (inputmode == IM_CMDLINE) {
+    [ deal with input
+    if (said("help")) {
+      [ show some help lines
+      output = "available commands:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "ASSOC         CHKDSK    DATE";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "ATTRIB        CLS       DEL";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "CD/CHDIR      COPY       DIR";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    }
+  
+    if (said("reset", "BaDASS")) {
+      set(resetBaDASS);
+      output = "done";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    }
+    
+    if (said("restart", "anyword")) {
+      reset(haveMatch);
+      reset(validmodule);
+      [ check for correct system name/pw
+      if (said("restart", "caisocc")) {
+        set(enableCAISOCC);
+        set(validmodule);  
+      }
+      if (said("restart", "randocc")) {
+        set(enableRANDOCC);
+        set(validmodule);  
+      }
+      if (said("restart", "icapocc")) {
+        set(enableICAPOCC);
+        set(validmodule);  
+      }
+      if (said("restart", "esadocc")) {
+        set(enableESADOCC);
+        set(validmodule);  
+      }
+      if (said("restart", "ofrocc")) {
+        set(enableOFROCC);
+        set(validmodule);  
+      }
+      if (said("restart", "eridocc")) {
+        set(enableERIDOCC);
+        set(validmodule);  
+      }
+      if (validmodule) {
+        output = "  terminating process...";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        terminalfn = DELAY;
+        call(lgc.TerminalFunctions);
+        output = "  loading module %w2...";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        terminalfn = DELAY;
+        call(lgc.TerminalFunctions);
+        output = "  initializing...";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        terminalfn = DELAY;
+        call(lgc.TerminalFunctions);
+        output = "OK";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        reset(validmodule);
+      } else {
+        output = "syntax error - ";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        output = "unknown module: %w2";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+      }
+    }
+    
+    [ if input was not processed, display error
+    if (!haveMatch) {
+display(24, 0, "%w1, %w2, %w3, %w4");  
+      [ display syntax error message
+      output = "syntax error";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    }
+    [ get more input
+    goto(getInput);
+  }
+  
+  [ args/extra input
+  if (inputmode == IM_ARGINPUT) {
+    [ tbd
+    output = "accept input";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+      
+    [ get more input
+    goto(getInput);
+  }
 }
 
-[ backspace
+[ check for backspace
 if (lastChar == 8) {
-  if (cursor_col > leftcol) {
-    --cursor_col;
+  [ get input length
+  block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+  [ if anything on the input line, backspace is allowed
+  if (work1 > 0) {
+    [ if not at left edge
+    if (cursor_col > LEFTCOL) {
+      [ back up one space
+      --cursor_col;
+    } else {
+      [ if at left edge, go up one row to right edge
+      --cursor_row;
+      cursor_col = RIGHTCOL;
+    }
+    [ remove char from display (backspace char will erase it)
     display.v(cursor_row, cursor_col, cursor_char);
-    work1 = cursor_col;
-    work1 -= leftcol;
+    
     [ remove the last char from the input line
+    --work1;
     block(STR.LEFT, &input, &input, &work1); [ str.left(sINPUT, sRESULT, vLEN);
   }
-  goto(getKey);
+} else {
+  [ if any other char, add it to input
+  block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
+  block(STR.CONCAT, &input, &char, 0); [ sINPUT, sADD);
+  [ if in password mode, display an asterisk
+  if (inputmode == IM_PASSWORD) {
+    work1 = &m5;
+  } else {
+    work1 = &charmsg;
+  }
+  display.v(cursor_row, cursor_col, work1);
+  
+  [ advance cursor
+  ++cursor_col;
+  if (cursor_col > RIGHTCOL) {
+    [ advance the inputline
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+  }
 }
-
-[ if any other char, add it to screen
-block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
-work1 = &charmsg;
-display.v(cursor_row, cursor_col, work1);
-
-[ add it to input
-block(STR.CONCAT, &input, &char, 0); [ sINPUT, sADD);
-
-[ advance cursor
-++cursor_col;
-if (cursor_col >= rightcol) {
-  [ advance the inputline
-  work1 = 1;
-  call(lgc.TerminalFunctions);
-}
-[ then get more input
+[ then get next keypress
 goto(getKey);
 
 
@@ -260,7 +409,6 @@ return();
 #message 1 "_"
 #message 2 " "
 #message 3 "%s13"
-#message 4 "syntax error"
-#message 5 "command list:"
-#message 6 "  quit"
-#message 60 "exiting..."
+#message 4 "%s14"
+#message 5 "*"
+#message 6 ">"

@@ -827,14 +827,17 @@ if (fSafe) {
   reset(fSafe);
   if (safeStatus == OPENING) {
     safeStatus = OPEN;
-    if (!findManual && !has("BaDASS manual")) {
-      set(findManual);
+    if (!has("BaDASS manual")) {
       set.loop(oSafe, 5);
       set.cel(oSafe, 7);
       force.update(oSafe);
-      print("There is a binder in the safe. It looks like an old "
-            "computer program manual.");
+[      if (!findManual) {
+[        set(findManual);
+[        print("There is a binder in the safe. It looks like an old "
+[              "computer program manual.");
+[      }
     }
+    
   } else {
     safeStatus = CLOSED;
   }
@@ -935,11 +938,11 @@ if (fDeskDrawer) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 4);
         force.update(oDeskDrawer);
-        if (!findWalkman) {
-          set(findWalkman);
-          print("There is an old Sony Walkman cassette player in "
-                "this drawer!");
-        }
+[        if (!findWalkman) {
+[          set(findWalkman);
+[          print("There is an old Sony Walkman cassette player in "
+[                "this drawer!");
+[        }
       }
     } else {
       officeDskDrStatus = OPEN2;
@@ -947,10 +950,10 @@ if (fDeskDrawer) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 3);
         force.update(oDeskDrawer);
-        if (!findList) {
-          set(findList);
-          print("You see a piece of paper with handwritten notes.");
-        }
+[        if (!findList) {
+[          set(findList);
+[          print("You see a piece of paper with handwritten notes.");
+[        }
       }
     }
   }
@@ -964,10 +967,10 @@ if (fFileDrawer) {
     get.posn(oFileDrawer, work1, work2);
     if (work2 == 112) {
       officeFileDrStatus = OPEN1;
-      if (!findEmptyDrawer) {
-        set(findEmptyDrawer);
-        print("This drawer is empty.");
-      }
+[      if (!findEmptyDrawer) {
+[        set(findEmptyDrawer);
+[        print("This drawer is empty.");
+[      }
     } else {
       if (work2 == 121) {
         officeFileDrStatus = OPEN2;
@@ -975,10 +978,10 @@ if (fFileDrawer) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 5);
           force.update(oFileDrawer);
-          if (!findNotebook) {
-            set(findNotebook);
-            print("A small notebook is in this drawer.");
-          }
+[          if (!findNotebook) {
+[            set(findNotebook);
+[            print("A small notebook is in this drawer.");
+[          }
         }
       } else {
         officeFileDrStatus = OPEN3;
@@ -986,10 +989,10 @@ if (fFileDrawer) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 6);
           force.update(oFileDrawer);
-          if (!findDisk) {
-            set(findDisk);
-            print("There's a box of blank floppy disks here.");
-          }
+[          if (!findDisk) {
+[            set(findDisk);
+[            print("There's a box of blank floppy disks here.");
+[          }
         }
       }
     }
@@ -1018,12 +1021,12 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%l90|40"
-#message 2 "%l90|41"
-#message 3 "%l90|42"
-#message 4 "%l90|43"
-#message 5 "%l90|44"
-#message 6 "%l90|45"
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"
 #message 7 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15001E1E3F15153F153F3F3F153F3F3F"
 [#message 7 "000000 00002A 002A00 002A2A 2A0000 2A002A 2A1500 2A2A2A 
 [            151515 15153F 153F15 001E1E 3F1515 3F153F 3F3F15 3F3F3F"

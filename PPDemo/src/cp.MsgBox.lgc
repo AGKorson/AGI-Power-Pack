@@ -57,11 +57,13 @@
 #define egoPrevX     v234
 #define egoPrevY     v235
 #define egoPrevDir   v236
+#define oldFG        v237
 
 #define update       f220
 #define rightmode    f221   [ when true, rightclick sets border
                             [ when false, rightclick sets bg
 #define cursormode   f222
+#define noredraw     f223 [ fg only needs text re-displayed
 
 #define sTemp        s12  [ includes s13
 
@@ -584,8 +586,11 @@ if (btnAction == B_PAL_FG) {
   [ change FG IF it doesn't match current FG/BG
   if (tmpFG != colorindex && tmpBG != colorindex) {
     [ change FG
+    oldFG = tmpFG;
     tmpFG = colorindex;
     set(update);
+    [ redisplay text only
+    set(noredraw);
   }
 }
 if (btnAction ==  B_PAL_BG) {
@@ -625,21 +630,25 @@ btnaction = 0;
 [ if colors have changed, update the palette and sample
 if (update) {
   reset(update);
-  [ this string draws a blank msgbox with correct bkgd color and border
-  sTemp = "F0%s4F41B233480231CF81E28F0%s5F41C24337F241DFF";
-  [ convert bkgd and border colors to hex strings
-  block(BYTE2HEX, &s4, &tmpBG, 0); [ byte2Hex(sRESULT, vINPUT); 
-  block(BYTE2HEX, &s5, &tmpBorder, 0); [ byte2Hex(sRESULT, vINPUT);
-  [ now execute the picdraw function (enable paintover)
-  block(PIC.DRAW, 1, &sTemp, 0); [ pic.draw(FILLSTYLE, sCMDS);
-
-  [ the draw function clears all text from the screen
   
-  [ if picture is not visible yet, show it now 
-  if (newroom) {
-    show.pic();
+  [ if drawing entire box
+  if (!noredraw) {
+    [ this string draws a blank msgbox with correct bkgd color and border
+    sTemp = "F0%s4F41B233480231CF81E28F0%s5F41C24337F241DFF";
+    [ convert bkgd and border colors to hex strings
+    block(BYTE2HEX, &s4, &tmpBG, 0); [ byte2Hex(sRESULT, vINPUT); 
+    block(BYTE2HEX, &s5, &tmpBorder, 0); [ byte2Hex(sRESULT, vINPUT);
+    [ now execute the picdraw function (enable paintover)
+    block(PIC.DRAW, 1, &sTemp, 0); [ pic.draw(FILLSTYLE, sCMDS);
+  
+    [ the draw function clears all text from the screen
+    
+    [ if picture is not visible yet, show it now 
+    if (newroom) {
+      show.pic();
+    }
   }
-
+  
   [ push display colors
   set.text.attribute(-1, 0);
   
@@ -650,24 +659,8 @@ if (update) {
   display(6, 8, "This is a test message.");
   
   [ update palette to show current color selections
-  cInit = 1; [ BG
-  cRow = 16;
-  cCol = tmpBG;
-  cCol *= 3;
-  palBG = tmpBG;
-  if (tmpBG > 7) {
-    cRow += 3;
-    cCol -= 10;
-    palFG = BLACK;
-  } else {
-    cCol += 14;
-    palFG = WHITE;
-  }
-  [ attributes by var
-  toggle.monitor();
-  set.text.attribute(&palFG, &palBG);
-  display.v(cRow, cCol, cInit);
   
+  [ add FG text to palette
   cInit = 2; [ FG
   cRow = 16;
   cCol = tmpFG;
@@ -686,39 +679,80 @@ if (update) {
   set.text.attribute(&palFG, &palBG);
   display.v(cRow, cCol, cInit);
   
-  cInit = 3; [ Border
-  cRow = 17;
-  cCol = tmpBorder;
-  cCol *= 3;
-  palBG = tmpBorder;
-  if (tmpBorder > 7) {
-    cRow += 3;
-    cCol -= 10;
-    palFG = BLACK;
+  if (noredraw) {
+    [ erase old FG 
+    reset(noredraw);
+    cInit = 4; [ blank
+    cRow = 16;
+    cCol = oldFG;
+    cCol *= 3;
+    palBG = oldFG;
+    if (oldFG > 7) {
+      cRow += 3;
+      cCol -= 10;
+      palFG = BLACK;
+    } else {
+      cCol += 14;
+      palFG = WHITE;
+    }
+    [ attributes by var
+    toggle.monitor();
+    set.text.attribute(&palFG, &palBG);
+    display.v(cRow, cCol, cInit);
   } else {
-    cCol += 14;
-    palFG = WHITE;
-  }
-  [ attributes by var
-  toggle.monitor();
-  set.text.attribute(&palFG, &palBG);
-  display.v(cRow, cCol, cInit);
+    [ forced redraw all other text
+    cInit = 1; [ BG
+    cRow = 16;
+    cCol = tmpBG;
+    cCol *= 3;
+    palBG = tmpBG;
+    if (tmpBG > 7) {
+      cRow += 3;
+      cCol -= 10;
+      palFG = BLACK;
+    } else {
+      cCol += 14;
+      palFG = WHITE;
+    }
+    [ attributes by var
+    toggle.monitor();
+    set.text.attribute(&palFG, &palBG);
+    display.v(cRow, cCol, cInit);
   
-  [ add button text
-  set.text.attribute(BLACK, WHITE);
-  display(16, 1, "  OK  ");
-  display(18, 1, "Cancel");
-  display(20, 1, "Reset ");
-  
-  set.text.attribute(BLACK, LT_GRAY);
-  display(10, 2, "  Cursor   ");
-  display(12, 4, "Ms");
-  display(12, 10, "Kb");
-  
-  display(10, 26, "Right Click");
-  display(12, 28, "BG");
-  display(12, 34, "Bd");
+    cInit = 3; [ Border
+    cRow = 17;
+    cCol = tmpBorder;
+    cCol *= 3;
+    palBG = tmpBorder;
+    if (tmpBorder > 7) {
+      cRow += 3;
+      cCol -= 10;
+      palFG = BLACK;
+    } else {
+      cCol += 14;
+      palFG = WHITE;
+    }
+    [ attributes by var
+    toggle.monitor();
+    set.text.attribute(&palFG, &palBG);
+    display.v(cRow, cCol, cInit);
     
+    [ add button text
+    set.text.attribute(BLACK, WHITE);
+    display(16, 1, "  OK  ");
+    display(18, 1, "Cancel");
+    display(20, 1, "Reset ");
+    
+    set.text.attribute(BLACK, LT_GRAY);
+    display(10, 2, "  Cursor   ");
+    display(12, 4, "Ms");
+    display(12, 10, "Kb");
+    
+    display(10, 26, "Right Click");
+    display(12, 28, "BG");
+    display(12, 34, "Bd");
+  }
+  
   [ pop display colors
   set.text.attribute(0, -1);
   

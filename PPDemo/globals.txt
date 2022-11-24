@@ -246,10 +246,15 @@
 #define SAVE.STRING            -40
 #define READ.STRING            -41
 #define DELETE.FILE            -42
-#define CHECK.SHIFT            -43
+#define GET.SHIFTSTATE         -43
 #define MUL                    -44
 #define DIV                    -45
 #define HIDE.OBJS              -46
 #define PAUSE.CLOCK            -47
 #define ON.OBJ                  -1
+#define SET.INPUT             s255
+#define SET.CMPMODE           s254
+#define COMPARE_AGI             m0
+#define COMPARE_TEXT            m1
+#define COMPARE_BINARY          m2
 #define FADECOUNT               25
