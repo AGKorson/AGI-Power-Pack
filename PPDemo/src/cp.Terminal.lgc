@@ -23,7 +23,10 @@
   #define DELAY_LF     3
   #define ADDLINE      4
   #define ADDLINE_LF   5
+  #define CLS          6
 #define outputvar     v246
+#define tmpCounter1   v247
+#define tmpCounter2   v248
 
 #define cursorstate   f241
 #define loggedon      f242
@@ -75,11 +78,16 @@ display(22, 22, "Press <ESC> to return to control room");
 [ set terminal colors (maybe use amber?)
 set.text.attribute(GREEN, BLACK);
 
+[ valid ID/PW
+validID = "kw001";
+validPW = "Temp123!";
+
 [[display(TOPROW, LEFTCOL, "X");
 [[display(TOPROW, RIGHTCOL, "X");
 [[display(BTMROW, LEFTCOL, "X");
 [[display(BTMROW, RIGHTCOL, "X");
 
+:login
 [ display welcome text
 [                0123456789012345678901234567890123456789
 display(5, 15,  "  *    *   *   ***    ****");
@@ -96,12 +104,13 @@ cursor_row = 16;
 cursor_col = 17;
 cursor_char = 1;
 display.v(cursor_row, cursor_col, cursor_char);
+inputmode = IM_USERID;
 
-[ valid ID/PW
-validID = "kw001";
-validPW = "temp123!";
-
-block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+[ if first time drawing welcom text, need to fade in
+if (newRoom) {
+  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  reset(newRoom);
+}
 
 [skip prompt for userid/pw
 goto(getKey);
@@ -162,16 +171,79 @@ if (lastChar == 27) {
 [ CTRL+SHIFT+ENTER for reboot
 if (lastChar == 10) {
   block(GET.SHIFTSTATE, &work1, 0, 0); [ get.shiftstate(vSTATE)
-print("shift: %v46");  
-  if (work1 == 3) {
-    output = "yeah baby";
-    set(resetMOCC);
-    [ display output msg
-    terminalfn = ADDLINE_LF;
-    call(lgc.TerminalFunctions);
+  if (work1 == 3 && inputmode == IM_CMDLINE) {
     [ TODO: add reboot code here
-    [ get more input
-    goto(getInput);
+    output = "shutting down.";
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    [ pause for a bit
+    tmpCounter1 = 5;
+    output = ".";
+    :wait1
+    terminalfn = DELAY;
+    call(lgc.TerminalFunctions);
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    --tmpCounter1;
+    if (tmpCounter1 > 0) {
+      goto(wait1);
+    }
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    
+    output = "rebooting.";
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    [ pause for a bit
+    tmpCounter1 = 8;
+    output = ".";
+    :wait2
+    terminalfn = DELAY;
+    call(lgc.TerminalFunctions);
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    --tmpCounter1;
+    if (tmpCounter1 > 0) {
+      goto(wait2);
+    }
+    [ clear the screen
+    terminalfn = CLS;
+    call(lgc.TerminalFunctions);
+    
+    [ show BIOS
+    [ (draw directly; no need for functions since positions are known)
+    display(4, 10, "\x1E");
+    display(5, 9,"\x1E \x1E   AMT Mainframe BIOS v1.44b");
+
+    [ memory check
+    display(7, 12, "memory check: 0MB");
+    work1 = 1;
+    :wait3
+    display(7, 26, "%v46MB");
+    ++work1;
+    work2 = 50;
+    cycle.time(o254, work2); [ delay(vDELAY)
+    if (work1 < 129) {
+      goto(wait3);
+    }
+    display(7, 32, "- OK");
+    cursor_row = 9;
+    cursor_col = LEFTCOL;
+    
+    [ initialize/run AMOS
+    [ init floppy drives, modem (stays error; no networking)
+    [ switch to hard disk, c:, run AMOS bootstrap
+    [ make note that all subsystems are reset, need to be
+    [ reloaded/restarted
+    
+    [ MOCC is now reset, errors are gone
+    set(resetMOCC);
+    [ clear the screen
+    terminalfn = CLS;
+    call(lgc.TerminalFunctions);
+    [ need login credentials
+    inputmode = IM_USERID;
+    goto(login);
   }
 }
 
@@ -227,9 +299,6 @@ if ((lastChar == 13 || lastChar == 10)) {
       output = "invalid userid and/or password";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-[      output = "%s15 : %s12";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
       [ position cursor after userid prompt
       output = "userid: ";
       terminalfn = ADDLINE;
@@ -260,6 +329,20 @@ if ((lastChar == 13 || lastChar == 10)) {
       call(lgc.TerminalFunctions);
     }
   
+    if (said("test")) {
+      display(12, 40, "test msg - should go past 40 columns");
+    }
+    
+    if (said("logoff")) {
+      output = "wait...";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      [ clear the screen
+      clear.text.rect(TOPROW, LEFTCOL, BTMROW, RIGHTCOL, BLACK);
+      [ jump to login code
+      goto(login);
+    }
+    
     if (said("reset", "BaDASS")) {
       set(resetBaDASS);
       output = "done";

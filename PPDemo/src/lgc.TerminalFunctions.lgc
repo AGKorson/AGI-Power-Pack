@@ -84,6 +84,7 @@
   #define DELAY_LF     3
   #define ADDLINE      4
   #define ADDLINE_LF   5
+  #define CLS          6
 #define outputvar     v246
 
 #define cursorstate   f241
@@ -145,7 +146,14 @@ if ((terminalfn == ADDLINE || terminalfn == ADDLINE_LF)) {
     [ adjust cursor column
     block(STR.LEN, &output, &work1, 0); [ str.len(sINPUT, vRESULT)
     cursor_col += work1;
-  } 
+  }
+  return();
+}
+
+if (terminalfn == CLS) {
+  clear.text.rect(TOPROW, LEFTCOL, BTMROW, RIGHTCOL, BLACK);
+  cursor_col = LEFTCOL;
+  cursor_row = TOPROW;
 }
 
 return();
