@@ -31,7 +31,6 @@
 [ **************************************
 #define rndNum                     v255
 
-[ TODO: !!need to re-check all tests; I trashed the correct version, so now new functions may not be checked correctly
 [ **************************************
 [ ERROR CHECK
 [ **************************************
@@ -154,11 +153,9 @@ if (currentRoom == 0) {
   [ set up trace window (remove this before releasing your game if
   [ you don't want debug features included)
   if (IntVersion > VERSION_2272) {
-print("load 220 trace");
     load.logics(lgc.TraceInfo);
     trace.info(lgc.TraceInfo, 3, 15);
   } else {
-print("load 160 trace");
     load.logics(lgc.TraceInfo160);
     trace.info(lgc.TraceInfo160, 3, 15);
   }

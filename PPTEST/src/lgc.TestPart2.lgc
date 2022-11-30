@@ -918,25 +918,14 @@ if (teststep == stepcounter) {
       display(24, 0, "%v63: SET ITEM TEST");
       reset(newtest);
       work2 = 1;
-      print("Testing inventory item change function. Open your "
-            "inventory. You should see a %o47. When ready to "
-            "run the test, press CTRL+Z or enter 'continue'.");
-            get(i1);
-    }
-    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-      subteststep = 1;
-      set(newtest);
-    }
-  }
-  if (subteststep == 1) {
-    if (newtest) {
-      display(24, 0, "%v63: SET ITEM TEST");
-      reset(newtest);
       s6 = "Rubik's cube";
       block(SET.ITEM, 0, &i1, &s6);
-      print("You should now have a %o47. After confirming, press "
-            "CTRL+Z or enter 'continue'.");
-      return();
+      if (!has(i1)) {
+       get(i1);
+      }
+      print("Testing inventory item change function. Open your "
+            "inventory. You should now have a %o47. After confirming, "
+            "press CTRL+Z or enter 'continue'.");
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
@@ -944,7 +933,7 @@ if (teststep == stepcounter) {
       goto(nextsubtest);
     }
   }
-  if (subteststep == 2) {
+  if (subteststep == 1) {
     if (newtest) {
       reset(newtest);
       display(24, 0, "%v63: SET ITEM TEST");
@@ -1062,14 +1051,17 @@ if (teststep == stepcounter) {
   if (subteststep == 1) { 
     if (newtest) {
       display(24, 0, "%v63: PIC DRAW TEST");
-      print("Next test will blank the entire screen to blue. ");
+      print("Next test will blank the entire screen to blue and hide ego. ");
       work1 = 65;
       block(PIC.DRAW,-1, &work1, 0);
-      get.string(strAnswer, "Did screen go blue? ", 22, 0, 3);
+      block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
+      get.string(strAnswer, "Did screen go blue and is ego gone? ", 22, 0, 3);
       [ restore original picture
       load.pic(currentRoom);
       draw.pic(currentRoom);
       discard.pic(currentRoom);
+      block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
+      
       [ check results
       goto(nexttest);
     }
