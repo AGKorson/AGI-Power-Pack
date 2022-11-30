@@ -204,6 +204,9 @@
 #define OPENING                  5
 #define 2E_MOUSE                -1
 #define SET.CURSOR              -1
+#define SET.SNDMODE             -2
+#define SET.INST                -3
+#define CUSTOM.INST             -4
 #define MSGBOX.COLOR.V          -1
 #define MSGBOX.COLOR            -2
 #define CONFIGURE.MOUSE         -3

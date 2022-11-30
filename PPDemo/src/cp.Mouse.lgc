@@ -1011,6 +1011,7 @@ if (btnAction == B_RESTORE) {
 }
 
 if (btnAction == B_EXPORT) {
+  [ build cursor name label
   work1 = cIndex;
   work1 += 14;
   sTemp = "%m";
@@ -1020,17 +1021,70 @@ if (btnAction == B_EXPORT) {
   block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
   block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)
   [ TODO: use file function to save the string
-  [ TODO: saving to file should use CR in place of chr(0) to separate strings
-  get.string(s20, "Enter export file name: ", 22, 0, 15);
-  [ clear input line
-  prevent.input();
-  accept.input();
-  [ validate it's an 8.3 DOS filename; if not, allow player to try again
-  
-  [ make a log entry:
-  log("%s12 cursor hex string: %s16");
+  :getfile
+    #define sFilename   s20
+    
+    get.string(sFilename, "Enter export file name: ", 22, 0, 12);
+    [ clear input line
+    prevent.input();
+    accept.input();
+    [ validate it's an 8.3 DOS filename; if not, allow player to try again
+    block(STR.LEN, &sFilename, &work1, 0); [ str.len(sINPUT, vRESULT)
+    [ if nothing, consider it a cancel
+    if (work1 == 0) {
+      goto(donesave);
+    }
+[    if (work1 > 12) {
+[      [ invalid
+[      print.at("Invalid filename: %s20", 14, 19, 16);
+[      goto(getfile);
+[    }
+    [ check for single period
+    work2 = 46;
+    work3 = 0;
+    block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
+    if (work3 > 0) {
+      [ only one allowed
+      ++work3;
+      block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
+      if (work3 != -1) {
+        print.at("Invalid filename1: %s20", 14, 19, 16);
+        goto(getfile);
+      }
+    } else {
+      [ no period; length can't be more than 8
+      if (work1 > 8) {
+        print.at("Invalid filename2: %s20", 14, 19, 16);
+        goto(getfile);
+      }
+    }
+    [ confirm no invalid characters: 
+    
+    [ check if file already exists
+    [try to read s15 from index 0
+ [ TODO: need to modify file routines to throw error if trying to read an invalid index
+ [ i.e. if file is 40chars long, only index0 is valid   
+  [ checks complete! - createfile, with space for label as first string
+  work1 = 15;
+  work2 = 19;
+  block(NEW.FILE, &sFilename, &work1, &work2); [ new.file(sFILENAME, vSTART, vEND)
+  if (errorParameter != 0) {
+    print.at("Error- file not saved.", 14, 19, 16);
+    errorParameter =0;
+    goto(donesave);
+  } 
+  [ blank out first string (39 spaces, one null char)
+  s15 = "                                       ";
+  [ copy label
+  block(STR.COPY, &sTemp, &s15, 0); [ str.copy(sINPUT, sRESULT)
+  [ now save label at first position
+  work1 = 0;
+  work2 = &s15;
+  block(SAVE.STRING, &sFilename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
   [ provide feedback
   print.at("Cursor data exported to game directory as '%s20'", 14, 19, 16);
+  :donesave
+  prevent.input();
 }
 
 if (btnAction == B_IDX_DN) {

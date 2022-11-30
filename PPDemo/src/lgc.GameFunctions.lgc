@@ -124,6 +124,15 @@ if (controller(cRightClick)) {
   }
 }
 
+[ read memo
+if (said("read", "memo")) {
+  if (has("memo")) {
+    call(txt.Memo);
+  } else {
+    print("You don't have it.");
+  }
+}
+
 [ **************************************
 [ PROCESS PLAYER INPUT
 [ **************************************

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/23/2022 11:22:05 PM"
+   LastEdit = "11/29/2022 7:51:22 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -54,11 +54,11 @@
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H0
-   CRC32 = &H5D88F758
+   CompCRC32 = &HF346B9F0
+   CRC32 = &HF346B9F0
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1019
+   Size = 2838
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -113,7 +113,7 @@
    ID = cp.Terminal
    Description = ""
    CRC32 = &H99D33C43
-   CompCRC32 = &H99D33C43
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1481
 
@@ -121,7 +121,7 @@
    ID = cp.MsgBox
    Description = ""
    CRC32 = &H18229735
-   CompCRC32 = &H18229735
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1929
 
@@ -168,7 +168,7 @@
 [Logic27]
    ID = cp.Mouse
    Description = ""
-   CRC32 = &HFD211423
+   CRC32 = &H1DD21BD3
    CompCRC32 = &H0
    IsRoom = True
    Size = 4025
@@ -249,14 +249,14 @@
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
    CRC32 = &H5297834
-   CompCRC32 = &H5297834
+   CompCRC32 = &H0
    IsRoom = True
    Size = 7032
 
 [Logic100]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &H830CFB4D
+   CRC32 = &H9AF0320C
    CompCRC32 = &H0
    IsRoom = False
    Size = 21706
@@ -264,7 +264,7 @@
 [Logic101]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &H38B4949A
+   CRC32 = &H3C59D20F
    CompCRC32 = &H0
    IsRoom = False
    Size = 21829
@@ -272,7 +272,7 @@
 [Logic102]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &HD885E3E
+   CRC32 = &H265849DC
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -280,7 +280,7 @@
 [Logic103]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HAABA6D59
+   CRC32 = &HB95460D9
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -288,7 +288,7 @@
 [Logic104]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &HD243BAD4
+   CRC32 = &HFD313D
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -296,7 +296,7 @@
 [Logic105]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H76134960
+   CRC32 = &H96E49A80
    CompCRC32 = &H0
    IsRoom = False
    Size = 22497
@@ -304,7 +304,7 @@
 [Logic106]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H781DBBF8
+   CRC32 = &H33E72806
    CompCRC32 = &H0
    IsRoom = False
    Size = 22497
@@ -312,7 +312,7 @@
 [Logic107]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &HD0844226
+   CRC32 = &H75EC598F
    CompCRC32 = &H0
    IsRoom = False
    Size = 22467
@@ -320,7 +320,7 @@
 [Logic108]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &H5AD25859
+   CRC32 = &HB701694F
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -328,7 +328,7 @@
 [Logic109]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HCAC8A7F
+   CRC32 = &H9CE51DDE
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -336,7 +336,7 @@
 [Logic110]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &HC8F66177
+   CRC32 = &HA3FB462F
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -344,7 +344,7 @@
 [Logic111]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H32946A7E
+   CRC32 = &HFF659276
    CompCRC32 = &H0
    IsRoom = False
    Size = 22118
@@ -352,18 +352,18 @@
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H4E551623
-   CompCRC32 = &H0
+   CRC32 = &H89DBBF7D
+   CompCRC32 = &H89DBBF7D
    IsRoom = False
-   Size = 22284
+   Size = 22311
 
 [Logic113]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &HE008D2A3
-   CompCRC32 = &H0
+   CRC32 = &HB15B19A2
+   CompCRC32 = &HB15B19A2
    IsRoom = False
-   Size = 22132
+   Size = 22325
 
 [Logic97]
    ID = lgc.Error
@@ -417,7 +417,7 @@
    ID = lgc.TerminalFunctions
    Description = ""
    CRC32 = &H1BCCA772
-   CompCRC32 = &H1BCCA772
+   CompCRC32 = &H0
    IsRoom = False
    Size = 141
 
@@ -452,6 +452,14 @@
    CompCRC32 = &H0
    IsRoom = True
    Size = 3456
+
+[Logic14]
+   ID = txt.Memo
+   Description = ""
+   CRC32 = &HE623D96F
+   CompCRC32 = &HE623D96F
+   IsRoom = False
+   Size = 1817
 [::END Logics::]
 
 [::BEGIN Pictures::]
