@@ -255,7 +255,7 @@ if (teststep == stepcounter) {
   }
   display(24, 0, "%v63:      -    -   ");
   work1 = 0;
-  block(CHECK.SHIFT, &work1, 0, 0);
+  block(GET.SHIFTSTATE, &work1, 0, 0); [ get.shiftstate(vSTATE)
   work2 = work1;
   block(BIT.AND, 0, &work2, 1);
   if (work2) {

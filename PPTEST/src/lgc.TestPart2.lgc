@@ -757,9 +757,26 @@ if (teststep == stepcounter) {
       print("BYTE2CHAR check1 failed.");
       goto(fail);
     }
-    print("BYTE2CHAR check passed. Checking set.string.v");
+    print("BYTE2CHAR check passed. Checking CHAR2BYTE");
     
-    [ set.string.v block(-19, sINPUT, vMSG, ANY**)
+    [ char2byte block(-19, sINPUT, vRESULT, ANY**)
+    s6 = "ABCD";
+    work1 = -1;
+    block(CHAR2BYTE, &s6, &work1, 0);
+    if (work1 != 65) {
+      print("CHAR2BYTE check1 failed.");
+      goto(fail);
+    }
+    s6 = "";
+    work1 = -1;
+    block(CHAR2BYTE, &s6, &work1, 0);
+    if (work1 != 0) {
+      print("CHAR2BYTE check2 failed.");
+      goto(fail);
+    }
+    print("CHAR2BYTE check passed. Checking set.string.v");
+    
+    [ set.string.v block(-20, sINPUT, vMSG, ANY**)
     s6 = "";
     s7 = "test string";
     work1 = 3;
