@@ -229,6 +229,8 @@ if (lastChar == 10) {
     display(7, 32, "- OK");
     cursor_row = 9;
     cursor_col = LEFTCOL;
+    work2 = 255;
+    cycle.time(o254, work2); [ delay(vDELAY)
     
     [ initialize/run AMOS
     [ init floppy drives, modem (stays error; no networking)

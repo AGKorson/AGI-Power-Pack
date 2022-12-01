@@ -103,6 +103,9 @@
 #define sHotspot      s11 [ used to help set/display cursor hotspot
 #define sTemp         s12 [ uses s12, s13, s14, s15
 #define sCursor       s16 [ uses s16, s17, s18, s19
+#define sFilename     s20
+#define sChar         s21
+    
 
 [if this control panel is not enabled show error screen
 if (!enableERIDOCC) {
@@ -1020,10 +1023,9 @@ if (btnAction == B_EXPORT) {
   block(STR.CONCAT, &sTemp, &s13, 0); [ sINPUT, sADD)
   block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
   block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)
-  [ TODO: use file function to save the string
+  
+  [ get a filename
   :getfile
-    #define sFilename   s20
-    
     get.string(sFilename, "Enter export file name: ", 22, 0, 12);
     [ clear input line
     prevent.input();
@@ -1058,12 +1060,12 @@ if (btnAction == B_EXPORT) {
         goto(getfile);
       }
     }
-    [ confirm no invalid characters: 
+    [ confirm no invalid characters \/:*?"<>|
+    work2 = 0;
+    block(STR.COPY, &sFilename, &sChar, 0); [ str.copy(sINPUT, sRESULT)
+    [#str2byte
     
-    [ check if file already exists
-    [try to read s15 from index 0
- [ TODO: need to modify file routines to throw error if trying to read an invalid index
- [ i.e. if file is 40chars long, only index0 is valid   
+
   [ checks complete! - createfile, with space for label as first string
   work1 = 15;
   work2 = 19;

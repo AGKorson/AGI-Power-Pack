@@ -133,7 +133,6 @@ if (currentRoom == 0) {
       call(lgc.mod2936);
       goto(continue);
     }
-print("Version: %v30");
   }
   :continue
   [ confirm video, sound and mouse settings
