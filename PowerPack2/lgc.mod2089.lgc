@@ -3562,13 +3562,13 @@ if (said(64, 212, 48731)){} [ BE5B
 [ Use the format code'%l', followed by the logic number and message number
 [ separated by the pipe symbol (|). 
 [
-[ See the Power Pack Demo game for detailed examples of how to use this 
-[ feature.
-[ 
 [ The logic must be loaded. If it is not loaded, the format code gets skipped.
 [
-[  This version doesn't include the '%o' format option for messages (to 
-[  show the text of inventory items). This patch makes that code available.
+[ See the Power Pack Demo game for detailed examples of how to use this 
+[ feature.
+[
+[ AGI version 2.089 doesn't include the '%o' format option for messages (to 
+[ show the text of inventory items). This patch makes that code available.
 [
 [ PATCH CODE:
             [ MsgFromLogicPatch
@@ -3733,15 +3733,15 @@ if (said(11, 230, 29803)){} [ 746B
             "\x9D\xB3\x9D\xB3\x9D\xB3\x28\xB4\x28\xB4\x28\xB4\x28\xB4\x85\xB5"
             "\x5B\xBE\x5B\xBE\x1B\xBF\x7E\xBF"
             [ SetKeyHandler
-            "\x8B\x76\x08\x80\x7C\x02\xFA\x0F\x82\x79\x84\xAD\x8A\x1C\x32\xFF"
-            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\x28\xC0\x58\x40\x8B\xE5\x5D\x5F"
+            "\x8B\x76\x08\x80\x7C\x02\xFA\x0F\x82\x77\x84\xAD\x8A\x1C\x32\xFF"
+            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\x2A\xC0\x58\x40\x8B\xE5\x5D\x5F"
             "\x5E\xC3\x77\x8D\xF7\x95\x0A\x96\x54\x96\xA3\x8C\xA3\x8C"
 if (said(166, 231, 49042)){} [ BF92
 [ modify block command to use the patch
 #message 232 "\xE9\x15\x4F"
 if (said(3, 232, 28794)){} [ 707A
 [ modify set.key command to use the patch
-#message 233 "\xE9\x7C\x7B"
+#message 233 "\xE9\x7E\x7B"
 if (said(3, 233, 17545)){} [ 4489
 [******************************************************************************
 

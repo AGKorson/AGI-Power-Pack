@@ -312,7 +312,7 @@ if (said(97, 10, 40607)){} [ 9E9F
 
 [******************************************************************************
 [
-[ CLEAR.CONTROLLER FUNCTION AND CONTROLLER TABLE BUGFIX
+[ CLEAR.CONTROLLER FUNCTION
 [
 [ This patch creates a new function that allows you to clear a controller  
 [ immediately instead of waiting for the next interpreter cycle. In this, 
@@ -3646,10 +3646,10 @@ if (said(64, 225, 57990)){} [ E286
 [ Use the format code'%l', followed by the logic number and message number
 [ separated by the pipe symbol (|). 
 [
+[ The logic must be loaded. If it is not loaded, the format code gets skipped.
+[
 [ See the Power Pack Demo game for detailed examples of how to use this 
 [ feature.
-[ 
-[ The logic must be loaded. If it is not loaded, the format code gets skipped.
 [
 [ PATCH CODE:
             [ MsgFromLogicPatch
@@ -3783,15 +3783,15 @@ if (said(11, 232, 33314)){} [ 8222
             "\xC8\xD7\xC8\xD7\xC8\xD7\x53\xD8\x53\xD8\x53\xD8\x53\xD8\xB0\xD9"
             "\x86\xE2\x86\xE2\x01\xE3\x53\xE3"
             [ SetKeyHandler
-            "\x8B\x76\x08\x80\x7C\x02\xFC\x0F\x82\xBB\x6A\xAD\x8A\x1C\x32\xFF"
-            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\xFD\xE3\x58\x40\x8B\xE5\x5D\x5F"
+            "\x8B\x76\x08\x80\x7C\x02\xFC\x0F\x82\xB9\x6A\xAD\x8A\x1C\x32\xFF"
+            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\xFF\xE3\x58\x40\x8B\xE5\x5D\x5F"
             "\x5E\xC3\x55\xA7\x5F\xB0\x72\xB0\xBC\xB0"
 if (said(162, 233, 58215)){} [ E367
 [ modify block command to use the patch
 #message 235 "\xE9\xFD\x64"
 if (said(3, 235, 32359)){} [ 7E67
 [ modify set.key command to use the patch
-#message 236 "\xE9\x3A\x95"
+#message 236 "\xE9\x3C\x95"
 if (said(3, 236, 20128)){} [ 4EA0
 [******************************************************************************
 
