@@ -3638,10 +3638,10 @@ if (said(64, 223, 56030)){} [ DADE
 [ Use the format code'%l', followed by the logic number and message number
 [ separated by the pipe symbol (|). 
 [
+[ The logic must be loaded. If it is not loaded, the format code gets skipped.
+[
 [ See the Power Pack Demo game for detailed examples of how to use this 
 [ feature.
-[ 
-[ The logic must be loaded. If it is not loaded, the format code gets skipped.
 [
 [ PATCH CODE:
             [ MsgFromLogicPatch
@@ -3774,15 +3774,15 @@ if (said(11, 230, 32307)){} [ 7E33
             "\x20\xD0\x20\xD0\x20\xD0\xAB\xD0\xAB\xD0\xAB\xD0\xAB\xD0\x08\xD2"
             "\xDE\xDA\xDE\xDA\x59\xDB\xAB\xDB"
             [ SetKeyHandler
-            "\x8B\x76\x08\x80\x7C\x02\xFC\x0F\x82\x06\x70\xAD\x8A\x1C\x32\xFF"
-            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\x55\xDC\x58\x40\x8B\xE5\x5D\x5F"
+            "\x8B\x76\x08\x80\x7C\x02\xFC\x0F\x82\x04\x70\xAD\x8A\x1C\x32\xFF"
+            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\x57\xDC\x58\x40\x8B\xE5\x5D\x5F"
             "\x5E\xC3\xB5\xA6\xBF\xAF\xD2\xAF\x1C\xB0"
 if (said(162, 231, 56255)){} [ DBBF
 [ modify block command to use the patch
 #message 232 "\xE9\x44\x61"
 if (said(3, 232, 31352)){} [ 7A78
 [ modify set.key command to use the patch
-#message 233 "\xE9\xEF\x8F"
+#message 233 "\xE9\xF1\x8F"
 if (said(3, 233, 19523)){} [ 4C43
 [******************************************************************************
 

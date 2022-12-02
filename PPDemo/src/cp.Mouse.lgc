@@ -1024,39 +1024,40 @@ if (btnAction == B_EXPORT) {
   block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
   block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)
   
-  [ get a filename
+  [ get a filename (limit to 12 characters (8.3 format))
   :getfile
   get.string(sFilename, "Enter export file name: ", 22, 0, 12);
   [ clear input line
   prevent.input();
   accept.input();
+  
   [ validate it's an 8.3 DOS filename; if not, allow player to try again
   block(STR.LEN, &sFilename, &work1, 0); [ str.len(sINPUT, vRESULT)
   [ if nothing, consider it a cancel
   if (work1 == 0) {
     goto(donesave);
   }
-[    if (work1 > 12) {
-[      [ invalid
-[      print.at("Invalid filename: %s20", 14, 19, 16);
-[      goto(getfile);
-[    }
   [ check for single period
   work2 = 46;
   work3 = 0;
   block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
   if (work3 > 0) {
+    [ must be no further than position 8
+    if (work3 > 8) {
+      print.at("Invalid filename1: %s20", 14, 19, 16);
+      goto(getfile);
+    }
     [ only one allowed
     ++work3;
     block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
     if (work3 != -1) {
-      print.at("Invalid filename1: %s20", 14, 19, 16);
+      print.at("Invalid filename: %s20", 14, 19, 16);
       goto(getfile);
     }
   } else {
     [ no period; length can't be more than 8
     if (work1 > 8) {
-      print.at("Invalid filename2: %s20", 14, 19, 16);
+      print.at("Invalid filename: %s20", 14, 19, 16);
       goto(getfile);
     }
   }
@@ -1064,26 +1065,31 @@ if (btnAction == B_EXPORT) {
   sBadChars = "\\/:*?\"<>|";
   block(STR.COPY, &sFilename, &sTempFile, 0); [ str.copy(sINPUT, sRESULT)
   :checkname
-  block(STR.RIGHT, &sTempFile, &sTempFile, work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &sTempFile, &sTempFile, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
   [ get 1st char value
   block(CHAR2BYTE, &sTempFile, &work2, 0); [ char2byte(sCHAR, vRESULT)
   work3 = 0;
-  block(INSTR, &sTempFile, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
-  if (work3 == -1) {
-    print.at("Invalid filename2: %s20", 14, 19, 16);
+  block(INSTR, &sBadChars, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
+  if (work3 != -1) {
+    print.at("Invalid filename: %s20", 14, 19, 16);
     goto(getfile);
   }
-  --work1
-    
-    
+  --work1;
+  if (work1 > 0) {
+    goto(checkname);
+  }
+  
+  [ no check for existing file; it's not easy to do; could try reading from the file
+  [ -if it returns error might mean it's not there; but error will also happen if
+  [ the file exists but it's unable to read all 40 bytes of a string 
 
   [ checks complete! - createfile, with space for label as first string
   work1 = 15;
   work2 = 19;
   block(NEW.FILE, &sFilename, &work1, &work2); [ new.file(sFILENAME, vSTART, vEND)
   if (errorParameter != 0) {
-    print.at("Error- file not saved.", 14, 19, 16);
-    errorParameter =0;
+    print.at("Unkown error- file not saved.", 14, 19, 16);
+    errorParameter = 0;
     goto(donesave);
   } 
   [ blank out first string (39 spaces, one null char)
@@ -1095,7 +1101,7 @@ if (btnAction == B_EXPORT) {
   work2 = &s15;
   block(SAVE.STRING, &sFilename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
   [ provide feedback
-  print.at("Cursor data exported to game directory as '%s20'", 14, 19, 16);
+  print.at("Cursor data exported to game directory as '%s20'", 14, 19, 19);
   :donesave
   prevent.input();
 }

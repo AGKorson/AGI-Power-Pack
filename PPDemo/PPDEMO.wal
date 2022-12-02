@@ -27,8 +27,6 @@ R|25|True|18|True|4|2.2
 R|26|True|5|True|5.5|2.2
 R|27|True|14|True|-2.2|2.2
 R|28|True|6|True|4.7|4.5
-U|1|True|001:2:5:0
-U|2|True|001:3:5:0
 U|3|True|001:4:5:0|002:2:3:0
 U|13|True
 U|12|True
@@ -42,4 +40,6 @@ U|25|True
 U|22|True
 U|10|True|001:8:5:0
 U|21|True|001:8:5:0
+U|2|True|001:3:5:0
+U|1|True|001:2:5:0
 U|27|True
