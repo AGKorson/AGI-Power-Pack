@@ -104,8 +104,8 @@
 #define sTemp         s12 [ uses s12, s13, s14, s15
 #define sCursor       s16 [ uses s16, s17, s18, s19
 #define sFilename     s20
-#define sChar         s21
-    
+#define sBadChars     s21
+#define sTempFile     s22
 
 [if this control panel is not enabled show error screen
 if (!enableERIDOCC) {
@@ -1026,44 +1026,55 @@ if (btnAction == B_EXPORT) {
   
   [ get a filename
   :getfile
-    get.string(sFilename, "Enter export file name: ", 22, 0, 12);
-    [ clear input line
-    prevent.input();
-    accept.input();
-    [ validate it's an 8.3 DOS filename; if not, allow player to try again
-    block(STR.LEN, &sFilename, &work1, 0); [ str.len(sINPUT, vRESULT)
-    [ if nothing, consider it a cancel
-    if (work1 == 0) {
-      goto(donesave);
-    }
+  get.string(sFilename, "Enter export file name: ", 22, 0, 12);
+  [ clear input line
+  prevent.input();
+  accept.input();
+  [ validate it's an 8.3 DOS filename; if not, allow player to try again
+  block(STR.LEN, &sFilename, &work1, 0); [ str.len(sINPUT, vRESULT)
+  [ if nothing, consider it a cancel
+  if (work1 == 0) {
+    goto(donesave);
+  }
 [    if (work1 > 12) {
 [      [ invalid
 [      print.at("Invalid filename: %s20", 14, 19, 16);
 [      goto(getfile);
 [    }
-    [ check for single period
-    work2 = 46;
-    work3 = 0;
+  [ check for single period
+  work2 = 46;
+  work3 = 0;
+  block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
+  if (work3 > 0) {
+    [ only one allowed
+    ++work3;
     block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
-    if (work3 > 0) {
-      [ only one allowed
-      ++work3;
-      block(INSTR, &sFilename, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
-      if (work3 != -1) {
-        print.at("Invalid filename1: %s20", 14, 19, 16);
-        goto(getfile);
-      }
-    } else {
-      [ no period; length can't be more than 8
-      if (work1 > 8) {
-        print.at("Invalid filename2: %s20", 14, 19, 16);
-        goto(getfile);
-      }
+    if (work3 != -1) {
+      print.at("Invalid filename1: %s20", 14, 19, 16);
+      goto(getfile);
     }
-    [ confirm no invalid characters \/:*?"<>|
-    work2 = 0;
-    block(STR.COPY, &sFilename, &sChar, 0); [ str.copy(sINPUT, sRESULT)
-    [#str2byte
+  } else {
+    [ no period; length can't be more than 8
+    if (work1 > 8) {
+      print.at("Invalid filename2: %s20", 14, 19, 16);
+      goto(getfile);
+    }
+  }
+  [ confirm no invalid characters \/:*?"<>|
+  sBadChars = "\\/:*?\"<>|";
+  block(STR.COPY, &sFilename, &sTempFile, 0); [ str.copy(sINPUT, sRESULT)
+  :checkname
+  block(STR.RIGHT, &sTempFile, &sTempFile, work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  [ get 1st char value
+  block(CHAR2BYTE, &sTempFile, &work2, 0); [ char2byte(sCHAR, vRESULT)
+  work3 = 0;
+  block(INSTR, &sTempFile, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
+  if (work3 == -1) {
+    print.at("Invalid filename2: %s20", 14, 19, 16);
+    goto(getfile);
+  }
+  --work1
+    
     
 
   [ checks complete! - createfile, with space for label as first string
