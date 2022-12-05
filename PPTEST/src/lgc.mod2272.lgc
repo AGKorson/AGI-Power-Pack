@@ -2622,7 +2622,7 @@ if (said(3, 190, 2926)){} [ 0B6E
             "\x5E\x8A\xD8\x8A\x57\x09\x80\xFA\x03\x73\x3E\x80\xFA\x01\x77\x0D"
             "\x80\x3D\x20\x75\x08\x80\x3D\x01\x72\x03\x47\xEB\xF3\x57\x56\xE8"
             "\x32\x96\x83\xC4\x04\x8B\xF8\x80\xFA\x01\x74\xC1\x80\x3C\x01\x72"
-            "\xBC\x46\x80\x3C\x01\x73\xFA\x4E\x3B\xF7\x74\x06\x80\x3C\x20\x74"
+            "\xBC\x46\x80\x3C\x01\x73\xFA\x4E\x3B\xF7\x72\x05\x80\x3C\x20\x74"
             "\xF6\x46\x32\xC0\x88\x04\xE9\xE1\xFE\x57\xE8\x1E\x69\x83\xC4\x02"
             "\x68\x0F\x0B\x56\xE8\xFD\x95\x83\xC4\x04\xE9\xCD\xFE"
             [ strInstr
@@ -3580,13 +3580,13 @@ if (said(64, 216, 49157)){} [ C005
 [ Use the format code'%l', followed by the logic number and message number
 [ separated by the pipe symbol (|). 
 [
-[ See the Power Pack Demo game for detailed examples of how to use this 
-[ feature.
-[ 
 [ The logic must be loaded. If it is not loaded, the format code gets skipped.
 [
-[  This version doesn't include the '%o' format option for messages (to 
-[  show the text of inventory items). This patch makes that code available.
+[ See the Power Pack Demo game for detailed examples of how to use this 
+[ feature.
+[
+[ AGI version 2.272 doesn't include the '%o' format option for messages (to 
+[ show the text of inventory items). This patch makes that code available.
 [
 [ PATCH CODE:
             [ MsgFromLogicPatch
@@ -3742,15 +3742,15 @@ if (said(11, 232, 29834)){} [ 748A
             "\x47\xB5\x47\xB5\x47\xB5\xD2\xB5\xD2\xB5\xD2\xB5\xD2\xB5\x2F\xB7"
             "\x05\xC0\x05\xC0\xC5\xC0\x17\xC1"
             [ SetKeyHandler
-            "\x8B\x76\x08\x80\x7C\x02\xFA\x0F\x82\xD4\x82\xAD\x8A\x1C\x32\xFF"
-            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\xC1\xC1\x58\x40\x8B\xE5\x5D\x5F"
+            "\x8B\x76\x08\x80\x7C\x02\xFA\x0F\x82\xD2\x82\xAD\x8A\x1C\x32\xFF"
+            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\xC3\xC1\x58\x40\x8B\xE5\x5D\x5F"
             "\x5E\xC3\x17\x8E\x97\x96\xAA\x96\xF4\x96\x43\x8D\x43\x8D"
 if (said(166, 233, 49451)){} [ C12B
 [ modify block command to use the patch
 #message 234 "\xE9\x59\x50"
 if (said(3, 234, 28879)){} [ 70CF
 [ modify set.key command to use the patch
-#message 235 "\xE9\x21\x7D"
+#message 235 "\xE9\x23\x7D"
 if (said(3, 235, 17533)){} [ 447D
 [******************************************************************************
 
