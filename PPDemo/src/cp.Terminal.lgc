@@ -3,6 +3,7 @@
 [ cp.Terminal 
 [
 [ Master Options Control Console
+[ MOCC
 [
 [ a command driven text terminal
 [
@@ -24,20 +25,41 @@
   #define ADDLINE      4
   #define ADDLINE_LF   5
   #define CLS          6
+  #define DELAY_ADD    7
+  #define NO_ACCESS    8
+  #define SHOW_DIR     9
+  #define CHKDSK_A    10
+  #define CHKDSK_C    11
 #define outputvar     v246
 #define tmpCounter1   v247
 #define tmpCounter2   v248
-
+#define PWfunction    v249
+  #define PW_LOGON     0
+  #define PW_BADASS    1
+  #define PW_CAISOCC   2
+  #define PW_ERIDOCC   3
+  #define PW_ESADOCC   4
+  #define PW_ICAPOCC   5
+  #define PW_OFROCC    6
+  #define PW_RANDOCC   7
+#define vCurDir       v250
+  #define C_ROOT    0 [ c:\
+  #define C_USERS   1 [ c:\USERS\
+  #define C_KW001   2 [ c:\USERS\KW001
+  #define A_ROOT    3 [ a:
+  
 #define cursorstate   f241
 #define loggedon      f242
 #define validmodule   f243
+#define validPW       f244
+#define tmpFlag       f245
 
 #define input          s12
 #define char           s13
 #define output         s14
 #define userid         s15
-#define validID        s16
-#define validPW        s17
+#define sCmd           s16
+#define sTemp2         s17
 
 #define charmsg         m3
 #define outputmsg       m4
@@ -68,8 +90,6 @@ set.text.attribute(-1, 0);
 
 [ display it
 show.pic();
-[[display(0, 0, "012345678901234567890123456789012345678901234567890123456789");
-[[display(1, 0, "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0");
 
 [ add return/cancel info
 set.text.attribute(WHITE, BLACK);
@@ -78,15 +98,9 @@ display(22, 22, "Press <ESC> to return to control room");
 [ set terminal colors (maybe use amber?)
 set.text.attribute(GREEN, BLACK);
 
-[ valid ID/PW
-validID = "kw001";
-validPW = "Temp123!";
-
-[[display(TOPROW, LEFTCOL, "X");
-[[display(TOPROW, RIGHTCOL, "X");
-[[display(BTMROW, LEFTCOL, "X");
-[[display(BTMROW, RIGHTCOL, "X");
-
+[ command input is not case sensitive
+set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+#str.cmpmode(
 :login
 [ display welcome text
 [                0123456789012345678901234567890123456789
@@ -97,7 +111,7 @@ display(8, 15,  "*   *  *   *  *   *      *");
 display(9, 15,  "*   *  *   *   ***   ****");
 display(11, 11, "AGI Mainframe Operating System v1.0");
 display(12, 13, "  (c) 1986 Sierra Online, Inc.");
-display(14, 9, "(Shift-Ctrl-Enter to reboot)");
+[display(14, 9, "(Shift-Ctrl-Enter to reboot)");
 [ position cursor after userid prompt
 display(16, 9, "userid: ");
 cursor_row = 16; 
@@ -171,20 +185,51 @@ if (lastChar == 27) {
 [ CTRL+SHIFT+ENTER for reboot
 if (lastChar == 10) {
   block(GET.SHIFTSTATE, &work1, 0, 0); [ get.shiftstate(vSTATE)
-  if (work1 == 3 && inputmode == IM_CMDLINE) {
-    [ TODO: add reboot code here
-    output = "shutting down.";
+  if (work1 == 3) { [  && inputmode == IM_CMDLINE) {
+    if (inputmode != IM_CMDLINE) {
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+    }
+    [ reboot
+    :reboot
+    output = "amos stop:all -f";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    tmpCounter2 = 7;
+    :nextsys1
+      tmpCounter1 = &output;
+      block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
+      terminalfn = ADDLINE;
+      call(lgc.TerminalFunctions);
+      [ pause for a bit
+      random(3, 5, tmpCounter1);
+      output = ".";
+      :wait4
+        terminalfn = DELAY_ADD;
+        call(lgc.TerminalFunctions);
+        --tmpCounter1;
+      if (tmpCounter1 > 0) {
+        goto(wait4);
+      }
+      output = " END OK";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      ++tmpCounter2;
+    if (tmpCounter2 < 14) {
+      goto(nextsys1);
+    }
+    output = "shutting down";
     terminalfn = ADDLINE;
     call(lgc.TerminalFunctions);
     [ pause for a bit
-    tmpCounter1 = 5;
+    tmpCounter1 = 2;
     output = ".";
     :wait1
-    terminalfn = DELAY;
-    call(lgc.TerminalFunctions);
-    terminalfn = ADDLINE;
-    call(lgc.TerminalFunctions);
-    --tmpCounter1;
+      terminalfn = DELAY_ADD;
+      call(lgc.TerminalFunctions);
+      --tmpCounter1;
     if (tmpCounter1 > 0) {
       goto(wait1);
     }
@@ -195,14 +240,12 @@ if (lastChar == 10) {
     terminalfn = ADDLINE;
     call(lgc.TerminalFunctions);
     [ pause for a bit
-    tmpCounter1 = 8;
+    tmpCounter1 = 3;
     output = ".";
     :wait2
-    terminalfn = DELAY;
-    call(lgc.TerminalFunctions);
-    terminalfn = ADDLINE;
-    call(lgc.TerminalFunctions);
-    --tmpCounter1;
+      terminalfn = DELAY_ADD;
+      call(lgc.TerminalFunctions);
+      --tmpCounter1;
     if (tmpCounter1 > 0) {
       goto(wait2);
     }
@@ -229,15 +272,81 @@ if (lastChar == 10) {
     display(7, 32, "- OK");
     cursor_row = 9;
     cursor_col = LEFTCOL;
-    work2 = 255;
-    cycle.time(o254, work2); [ delay(vDELAY)
-    
-    [ initialize/run AMOS
-    [ init floppy drives, modem (stays error; no networking)
-    [ switch to hard disk, c:, run AMOS bootstrap
-    [ make note that all subsystems are reset, need to be
-    [ reloaded/restarted
-    
+    output = "load mouse.drv -h -p:200";
+    terminalfn = DELAY_ADD;
+    call(lgc.TerminalFunctions);
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    output = "amos.bat -q";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "amos init:all";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    tmpCounter2 = 7;
+    :nextsys2
+      tmpCounter1 = &output;
+      block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
+      terminalfn = ADDLINE;
+      call(lgc.TerminalFunctions);
+      [ pause for a bit
+      tmpCounter1 = 4;
+      output = ".";
+      :wait5
+        terminalfn = DELAY_ADD;
+        call(lgc.TerminalFunctions);
+        --tmpCounter1;
+      if (tmpCounter1 > 0) {
+        goto(wait5);
+      }
+      output = " INIT OK";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      ++tmpCounter2;
+    if (tmpCounter2 < 14) {
+      goto(nextsys2);
+    }
+    output = "amos load:all";
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    tmpCounter1 = 3;
+    :delay1
+      terminalfn = DELAY_LF;
+      call(lgc.TerminalFunctions);
+      -- tmpCounter1;
+    if (tmpCounter1 > 0) {
+      goto(delay1);
+    }
+    output = "ERROR: corrupt master password file";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "subsystems not loaded";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "use backup passwords to load";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "individual subsystems";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "-- pause --";
+    terminalfn = ADDLINE;
+    call(lgc.TerminalFunctions);
+    lastChar = 0;
+    :wait6
+    if (!have.key()) {
+      goto(wait6);
+    }
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    output = "amos interface:cmdline";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    terminalfn = DELAY;
+    call(lgc.TerminalFunctions);
+    terminalfn = DELAY;
+    call(lgc.TerminalFunctions);
+
     [ MOCC is now reset, errors are gone
     set(resetMOCC);
     [ clear the screen
@@ -272,154 +381,694 @@ if ((lastChar == 13 || lastChar == 10)) {
   }
   
   if (inputmode == IM_PASSWORD) {
-    [ validate userid/password
-    [ id is not case sensitive
-    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
-    if (compare.strings(userid, validID)) {
-      [ id is valid
-      set(loggedon);
+    if (PWfunction == PW_LOGON) {
+      [ validate userid/password
+      sCmd = "kw001";
+      sTemp2 = "Temp123!";
+      if (compare.strings(userid, sCmd)) {
+        [ id is valid
+        set(loggedon);
+      }
+      [ passwords are case sensitive
+      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+      if (!compare.strings(input, sTemp2)) {
+        [ password is not valid
+        reset(loggedon);
+      }
+      [ go back to case-insensitive compare
+      set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+      [ if valid continue
+      if (loggedon) {
+        inputmode = IM_CMDLINE;
+        output = "logged on as kw001";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        output = "access level: 1";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        terminalfn = LINEFEED;
+        call(lgc.TerminalFunctions);
+        inputmode = IM_CMDLINE;
+        [ get more input
+        goto(getInput);
+      } else {
+        inputmode = IM_USERID;
+        output = "invalid userid and/or password";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        [ position cursor after userid prompt
+        output = "userid: ";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        [ get input, no prompt
+        input = "";
+        goto(getKey);
+      }
     }
-    [ password is case sensitive
+    
+    [ passwords are case sensitive
     set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
-    if (!compare.strings(input, validPW)) {
-      [ password is not valid
-      reset(loggedon);
+    [ check for loading subsystem
+    reset(validPW);
+    if (PWfunction == PW_BADASS) {
+      sCmd = "badassPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(resetBaDASS);
+        set(validPW);
+      }
     }
-    [ if valid continue
-    if (loggedon) {
-      inputmode = IM_CMDLINE;
-      output = "logged on as kw001";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      output = "access level: 1";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      terminalfn = LINEFEED;
-      call(lgc.TerminalFunctions);
-    } else {
-      inputmode = IM_USERID;
-      output = "invalid userid and/or password";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      [ position cursor after userid prompt
-      output = "userid: ";
+    if (PWfunction == PW_CAISOCC) {
+      sCmd = "caisoccPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(enableCAISOCC);
+        set(validPW);
+      }
+    }
+    if (PWfunction == PW_ERIDOCC) {
+      sCmd = "eridoccPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(enableERIDOCC);
+        set(validPW);
+      }
+    }
+    if (PWfunction == PW_ESADOCC) {
+      sCmd = "esadoccPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(enableESADOCC);
+        set(validPW);
+      }
+    }
+    if (PWfunction == PW_ICAPOCC) {
+      sCmd = "icapoccPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(enableICAPOCC);
+        set(validPW);
+      }
+    }
+    if (PWfunction == PW_OFROCC) {
+      sCmd = "ofroccPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(enableOFROCC);
+        set(validPW);
+      }
+    }
+    if (PWfunction == PW_RANDOCC) {
+      sCmd = "randoccPW";
+      if (compare.strings(input, sCmd)) {
+        [ ok
+        set(enableRANDOCC);
+        set(validPW);
+      }
+    }
+    [ go back to case-insensitive compare
+    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+    if (validPW) {
+      output = "  loading module %s17...";
       terminalfn = ADDLINE;
       call(lgc.TerminalFunctions);
-      [ get input, no prompt
-      input = "";
-      goto(getKey);
+      terminalfn = DELAY;
+      call(lgc.TerminalFunctions);
+      output = " OK";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    } else {
+      [ not valid
+      output = "invalid password";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
     }
+    inputmode = IM_CMDLINE;
     [ get more input
     goto(getInput);
   }
   
   if (inputmode == IM_CMDLINE) {
-    [ deal with input
-    if (said("help")) {
-      [ show some help lines
-      output = "available commands:";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      output = "ASSOC         CHKDSK    DATE";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      output = "ATTRIB        CLS       DEL";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      output = "CD/CHDIR      COPY       DIR";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
+    [ convert input to lower case, trim it,
+    block(STR.LOWER, &input, &input, 0); [ str.upper(sINPUT, sRESULT)
+    work1 = 0;
+    block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+    [ then extract the command (first word)
+    work1 = 32;
+    work2 = 0;
+[    "chkdsk a" pos=6; len=8;8-6=2; should get " a"
+    block(INSTR, &input, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
+    if (work2 != -1) {
+      block(STR.LEFT, &input, &sCmd, &work2); [ str.left(sINPUT, sRESULT, vLEN)
+      [ remove cmd from input, and trim it
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      work1 -= work2;
+      block(STR.RIGHT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+print("param: '%s12'  count: %v46");
+      work1 = 0;
+      block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+print("trim: '%s12'");
+    } else {
+     block(STR.COPY, &input, &sCmd, 0); [ str.copy(sINPUT, sRESULT)
+     input = "";
     }
-  
-    if (said("test")) {
-      display(12, 40, "test msg - should go past 40 columns");
+    [ check ascii of first char to quick check for valid cmd
+    block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
+    if (work1 == 0) {
+      goto(getInput);
     }
-    
-    if (said("logoff")) {
-      output = "wait...";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
-      [ clear the screen
-      clear.text.rect(TOPROW, LEFTCOL, BTMROW, RIGHTCOL, BLACK);
-      [ jump to login code
-      goto(login);
+    if (work1 == 97) {
+      goto(inputA);
     }
-    
-    if (said("reset", "BaDASS")) {
-      set(resetBaDASS);
-      output = "done";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
+    if (work1 == 99) {
+      goto(inputC);
     }
-    
-    if (said("restart", "anyword")) {
-      reset(haveMatch);
-      reset(validmodule);
-      [ check for correct system name/pw
-      if (said("restart", "caisocc")) {
-        set(enableCAISOCC);
-        set(validmodule);  
-      }
-      if (said("restart", "randocc")) {
-        set(enableRANDOCC);
-        set(validmodule);  
-      }
-      if (said("restart", "icapocc")) {
-        set(enableICAPOCC);
-        set(validmodule);  
-      }
-      if (said("restart", "esadocc")) {
-        set(enableESADOCC);
-        set(validmodule);  
-      }
-      if (said("restart", "ofrocc")) {
-        set(enableOFROCC);
-        set(validmodule);  
-      }
-      if (said("restart", "eridocc")) {
-        set(enableERIDOCC);
-        set(validmodule);  
-      }
-      if (validmodule) {
-        output = "  terminating process...";
-        terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-        terminalfn = DELAY;
-        call(lgc.TerminalFunctions);
-        output = "  loading module %w2...";
-        terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-        terminalfn = DELAY;
-        call(lgc.TerminalFunctions);
-        output = "  initializing...";
-        terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-        terminalfn = DELAY;
-        call(lgc.TerminalFunctions);
-        output = "OK";
-        terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-        reset(validmodule);
-      } else {
-        output = "syntax error - ";
-        terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-        output = "unknown module: %w2";
-        terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-      }
+    if (work1 == 100) {
+      goto(inputD);
     }
-    
-    [ if input was not processed, display error
-    if (!haveMatch) {
-display(24, 0, "%w1, %w2, %w3, %w4");  
-      [ display syntax error message
-      output = "syntax error";
-      terminalfn = ADDLINE_LF;
-      call(lgc.TerminalFunctions);
+    if (work1 == 101) {
+      goto(inputE);
     }
+    if (work1 == 102) {
+      goto(inputF);
+    }
+    if (work1 == 104) {
+      goto(inputH);
+    }
+    if (work1 == 108) {
+      goto(inputL);
+    }
+    if (work1 == 109) {
+      goto(inputM);
+    }
+    if (work1 == 114) {
+      goto(inputR);
+    }
+    if (work1 == 115) {
+      goto(inputS);
+    }
+    if (work1 == 116) {
+      goto(inputT);
+    }
+    if (work1 == 118) {
+      goto(inputV);
+    }
+    [ anything else is an error
+    :syntaxerror
+    output = "syntax error";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
     [ get more input
     goto(getInput);
+    
+    :inputA
+    [ AMOS
+    if (!said("amos", "rol")) {
+      [ amos is only valid 'a' command
+      goto(syntaxerror);
+    }
+    
+    [ check for 'load:'
+    work1 = 5;
+    block(STR.LEFT, &input, &sCmd, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    sTemp2 = "load:";
+    if (compare.strings(sCmd, sTemp2)) {
+      [ strip off module
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      work1 -= 5;
+      block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+      work1 = 0;
+      block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+      reset(validmodule);
+      [ check for one of the seven subsystems
+      sTemp2 = "badass";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get BaDASS password
+        PWfunction = PW_BADASS;
+        set(validmodule);
+        goto(checkmodule);
+      }
+      sTemp2 = "caisocc";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get CAISOCC password
+        PWfunction = PW_CAISOCC;
+        set(validmodule);
+        goto(checkmodule);
+      }
+      sTemp2 = "eridocc";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get ERIDOCC password
+        PWfunction = PW_ERIDOCC;
+        set(validmodule);
+        goto(checkmodule);
+      }
+      sTemp2 = "esadocc";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get ESADOCC password
+        PWfunction = PW_ESADOCC;
+        goto(checkmodule);
+        set(validmodule);
+      }
+      sTemp2 = "icapocc";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get ICAPOCC password
+        PWfunction = PW_ICAPOCC;
+        goto(checkmodule);
+        set(validmodule);
+      }
+      sTemp2 = "ofrocc";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get OFROCC password
+        PWfunction = PW_OFROCC;
+        goto(checkmodule);
+        set(validmodule);
+      }
+      sTemp2 = "randocc";
+      if (compare.strings(sCmd, sTemp2)) {
+        [get RANDOCC password
+        PWfunction = PW_RANDOCC;
+        set(validmodule);
+      }
+      
+      :checkmodule
+      if (validmodule) {
+        inputmode = IM_PASSWORD;
+        output = "password: ";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        [ get more input (no prompt)
+        input = "";
+        goto(getKey);
+      } else {
+        [ 'all' is valid but doesn't work
+        sTemp2 = "all";
+        if (compare.strings(sCmd, sTemp2)) {
+          tmpCounter1 = 3;
+          :delay2
+            terminalfn = DELAY_LF;
+            call(lgc.TerminalFunctions);
+            -- tmpCounter1;
+          if (tmpCounter1 > 0) {
+            goto(delay2);
+          }
+          output = "ERROR: corrupt master password file";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "subsystems not loaded";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "use backup passwords to load";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "individual subsystems";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "-- pause --";
+          terminalfn = ADDLINE;
+          call(lgc.TerminalFunctions);
+          lastChar = 0;
+          :wait9
+          if (!have.key()) {
+            goto(wait9);
+          }
+          terminalfn = LINEFEED;
+          call(lgc.TerminalFunctions);
+        } else {
+        [ invalid module
+          output = "syntax error - ";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "unknown module: %s16";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+        }
+        goto(getInput);
+      }
+    }
+    sTemp2 = "stop:";
+    if (compare.strings(sCmd, sTemp2)) {
+      [ not allowed
+      terminalfn = NO_ACCESS;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+    sTemp2 = "init:";
+    if (compare.strings(sCmd, sTemp2)) {
+      [ not allowed
+      terminalfn = NO_ACCESS;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+    [ if nothing matches, it's a syntax error
+    goto(syntaxerror);
+    
+    :inputC
+    [ CLS
+    sTemp2 = "cls";
+    if (compare.strings(sCmd, sTemp2)) {
+      [ no parameters allowed
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      if (work1 == 0) {
+        terminalfn = CLS;
+        call(lgc.TerminalFunctions);
+        goto(getinput);      
+      } else {
+        goto(syntaxerror);
+      }
+    }
+    
+    [ CD/CHDIR
+    reset(tmpFlag);
+    sTemp2 = "cd";
+    if (compare.strings(sCmd, sTemp2)) { 
+      set(tmpFlag);
+    }
+    sTemp2 = "chdir";
+    if (compare.strings(sCmd, sTemp2)) { 
+      set(tmpFlag);
+    }
+    if (tmpFlag) {
+      [ check parameter
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      if (work1 == 0) {
+        [ do nothing
+        goto(getInput);
+      }
+      [ strip off trailing '\' if one is there
+      work1 = 1;
+      block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+      block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
+      if (work1 == 92) {
+        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+        --work1;
+        block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+      }
+      [ valid dir values from any dir:
+      [ c:, c:\users, c:\users\kw001
+      sTemp2 = "c:";
+      if (compare.strings(input, sTemp2)) {
+        vCurDir = C_ROOT;
+        output = "DIR --> C:\\\\";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+      sTemp2 = "c:\\users";
+      if (compare.strings(input, sTemp2)) {
+        vCurDir = C_USERS;
+        output = "DIR --> C:\\\\USERS";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+      sTemp2 = "c:\\users\\kw001";
+      if (compare.strings(input, sTemp2)) {
+        vCurDir = C_KW001;
+        output = "DIR --> C:\\\\USERS\\\\KW001";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+      
+      [ valid dir values from c:\
+      [ users, users\kw001
+      if (vCurDir == C_ROOT) {
+        sTemp2 = "users";
+        if (compare.strings(input, sTemp2)) {
+          vCurDir = C_USERS;
+          output = "DIR --> C:\\\\USERS";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        }
+        sTemp2 = "users\\kw001";
+        if (compare.strings(input, sTemp2)) {
+          vCurDir = C_KW001;
+          output = "DIR --> C:\\\\USERS\\\\KW001";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        }
+      }
+      
+      [ valid dir values from c:\users:
+      [ kw001
+      if (vCurDir == C_USERS) {
+        sTemp2 = "kw001";
+        if (compare.strings(input, sTemp2)) {
+          vCurDir = C_KW001;
+          output = "DIR --> C:\\\\USERS\\\\KW001";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        }
+      }
+      [ any other directory is not allowed
+      output = "ERROR: invalid or protected directory";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+    
+    [ CHKDSK
+    sTemp2 = "chkdsk";
+    if (compare.strings(sCmd, sTemp2)) {
+      sTemp2 = "";
+      if (compare.strings(input, sTemp2)) {
+        output = "no drive specified";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+      } else {
+        [ acceptable params a, c, a:, c:
+        reset(tmpFlag);
+        sTemp2 = "a";
+print("param: '%s12'  check: '%s17'");
+        if (compare.strings(input, sTemp2)) {
+          work1 = 0;
+          set(tmpFlag);
+        } else {
+          sTemp2 = "a:";
+          if (compare.strings(input, sTemp2)) {
+            work1 = 0;
+            set(tmpFlag);
+          } else {
+            sTemp2 = "c";
+            if (compare.strings(input, sTemp2)) {
+              work1 = 1;
+              set(tmpFlag);
+            } else {
+              sTemp2 = "c:";
+              if (compare.strings(input, sTemp2)) {
+                work1 = 1;
+                set(tmpFlag);
+              }
+            }
+          }
+        }
+        if (tmpFlag) {
+          if (work1 == 0) {
+            [ a drive
+set(floppyInserted);
+set(floppyFormatted);
+            if (floppyInserted) {
+              if (floppyFormatted) {
+                terminalfn = CHKDSK_A;
+                call(lgc.TerminalFunctions);
+              } else {
+                output = "Drive not formatted";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+              }
+            } else {
+              output = "No disk in drive";
+              terminalfn = ADDLINE_LF;
+              call(lgc.TerminalFunctions);
+            } 
+          } else {
+            [ c drive
+            terminalfn = CHKDSK_C;
+            call(lgc.TerminalFunctions);
+          }
+        } else {
+          output = "The specified drive is invalid";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+        }
+      }
+      goto(getInput);
+    }
+    
+    
+    [ COPY
+    sTemp2 = "copy";
+    
+    goto(syntaxerror);
+    
+    :inputD
+    [ DIR 
+    [ DEL/ERASE
+    goto(syntaxerror);
+    
+    :inputE
+    [ EXIT
+    sTemp2 = "exit";
+    if (compare.strings(sTemp2, sCmd)) {
+      goto(reboot);
+    }
+    goto(syntaxerror);
+    
+    :inputF
+    [ FORMAT
+    goto(syntaxerror);
+    
+    :inputH
+    [ HELP 
+    if (said("help")) {
+      [ show help lines
+      output = "valid commands:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "AMOS       Provides access to AMOS sub- ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           systems and configuration";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "CLS        Clears the screen.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "CD/CHDIR   Changes the current";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           directory.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "CHKDSK     Checks a disk and displays a";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           status report";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "DIR        Displays a list of files in ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           a directory.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "COPY       Copies files to another";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           location.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "DEL/ERASE  Deletes files.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+       output = "-- pause --";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      lastChar = 0;
+      :wait7
+      if (!have.key()) {
+        goto(wait7);
+      }
+      output = "EXIT       Quits and restarts AMOS ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "FORMAT     Formats a disk.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "HELP       Displays a list of AMOS ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           commands.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "LOGOFF     Logs a user off AMOS.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "MD/MKDIR   Creates a directory.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "RD/RMDIR   Removes a directory.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "REN/RENAME Renames a file or files.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "SUDO       Runs AMOS commands with admin";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           privileges. ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "TYPE       Displays the contents of a";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           text file.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "VER        Displays AMOS version.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+       output = "-- pause --";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      lastChar = 0;
+      :wait8
+      if (!have.key()) {
+        goto(wait8);
+      }
+      output = "VOL        Displays a disk volume label";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "           and serial number.";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    } else {
+      [ anything else is an error
+      goto(syntaxerror);
+    }
+    goto(getInput);
+    
+    :inputL
+    [ LOGOFF
+    if (said("logoff")) {
+      output = "signing off...";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = DELAY;
+      call(lgc.TerminalFunctions);
+      [ clear the screen
+      terminalfn = CLS;
+      call(lgc.TerminalFunctions);
+      [ jump to login code
+      goto(login);
+    } else {
+      goto(syntaxerror);
+    }
+    
+    :inputM
+    [ MD/MKDIR
+    goto(syntaxerror);
+    
+    :inputR
+    [ RD/RMDIR
+    [ REN/RENAME
+    goto(syntaxerror);
+    
+    :inputS
+    [ SUDO
+    goto(syntaxerror);
+    
+    :inputT
+    [ TYPE
+    goto(syntaxerror);
+    
+    :inputV
+    [ VER
+    [ VOL
+    goto(syntaxerror);
   }
   
   [ args/extra input
@@ -464,7 +1113,11 @@ if (lastChar == 8) {
   if (inputmode == IM_PASSWORD) {
     work1 = &m5;
   } else {
-    work1 = &charmsg;
+    if (lastChar == 92) {
+      work1 = &m14;
+    } else {
+      work1 = &charmsg;
+    }
   }
   display.v(cursor_row, cursor_col, work1);
   
@@ -488,12 +1141,21 @@ goto(getKey);
 [ add exit checks here (or use layout editor)
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
 #message 1 "_"
 #message 2 " "
 #message 3 "%s13"
 #message 4 "%s14"
 #message 5 "*"
 #message 6 ">"
+#message 7 "BaDASS"
+#message 8 "caisocc"
+#message 9 "eridocc"
+#message 10 "esadocc"
+#message 11 "icapocc"
+#message 12 "ofrocc"
+#message 13 "randocc"
+#message 14 "\\\\"

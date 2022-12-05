@@ -631,8 +631,6 @@ oldMinutes = elapsedMinutes;
 oldHours = elapsedHours;
 oldDays = elapsedDays;
 
-[ TODO: cursors & instruments need to be stored in logic0
-
 return();
 
 [ **************************************

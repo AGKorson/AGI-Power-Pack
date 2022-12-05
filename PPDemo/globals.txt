@@ -105,6 +105,8 @@
 #define findEmptyDrawer        f66
 #define findManual             f67
 #define fOpenSafe              f68
+#define floppyInserted         f69
+#define floppyFormatted        f70
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
@@ -202,6 +204,7 @@
 #define OPEN3                    3
 #define CLOSING                  4
 #define OPENING                  5
+#define floppyfiles            v95 [ 0=blank; 1=zip; 2=txt; 3=both
 #define 2E_MOUSE                -1
 #define MSGBOX.COLOR.V          -1
 #define MSGBOX.COLOR            -2
