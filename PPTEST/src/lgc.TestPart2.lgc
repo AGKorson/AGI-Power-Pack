@@ -302,12 +302,12 @@ if (teststep == stepcounter) {
     display(24, 0, "%v63: STRING FUNCTIONS TEST");
     reset(newtest);
     [ use binary string compare
-    set.string(s254, m2);
+    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
     print("Testing string manipulation functions. First test is "
           "extra-long string comparison check.");
     s6 = "0123456789012345678901234567890123456789abcdef";
-    s7 = "0123456789012345678901234567890123456789ghijkl";
-    if (!compare.strings(s6, s7)) {
+    s8 = "0123456789012345678901234567890123456789ghijkl";
+    if (!compare.strings(s6, s8)) {
       print("Long string match check failed.");
       goto(fail);
     }
@@ -518,16 +518,16 @@ if (teststep == stepcounter) {
     print("STR.MID check passed. Checking STR.TRIM");
     
     [strTrim:   block(-10, sSrc, sTgt, MODE); mode 0=fulltrim, 1=ltrim, 2=rtrim, 3=agiparsetrim
-    work1 = 3;
+    work1 = AGITRIM;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = "a string ABC";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check1 failed.");
       goto(fail);
     }
-    work1 = 2;
+    work1 = RTRIM;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = " a,.!string {[(ABC)]}";
@@ -536,7 +536,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check2 failed.");
       goto(fail);
     }
-    work1 = 1;
+    work1 = LTRIM;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = "a,.!string {[(ABC)]}     ";
@@ -545,7 +545,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check3 failed.");
       goto(fail);
     }
-    work1 = 0;
+    work1 = TRIM;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = "a,.!string {[(ABC)]}";
@@ -554,7 +554,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check4 failed.");
       goto(fail);
     }
-    work1 = 3;
+    work1 = AGITRIM;
     s6 = "      ";
     s7 = "x";
     s8 = "";
@@ -563,7 +563,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check5 failed.");
       goto(fail);
     }
-    work1 = 2;
+    work1 = RTRIM;
     s6 = "      ";
     s7 = "x";
     s8 = "";
@@ -572,7 +572,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check6 failed.");
       goto(fail);
     }
-    work1 = 1;
+    work1 = LTRIM;
     s6 = "      ";
     s7 = "x";
     s8 = "";
@@ -581,7 +581,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check7 failed.");
       goto(fail);
     }
-    work1 = 0;
+    work1 = TRIM;
     s6 = "      ";
     s7 = "x";
     s8 = "";
@@ -590,7 +590,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check8 failed.");
       goto(fail);
     }
-    work1 = 3;
+    work1 = AGITRIM;
     s6 = "";
     s7 = "x";
     s8 = "";
@@ -599,7 +599,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check9 failed.");
       goto(fail);
     }
-    work1 = 2;
+    work1 = RTRIM;
     s6 = "";
     s7 = "x";
     s8 = "";
@@ -608,7 +608,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check10 failed.");
       goto(fail);
     }
-    work1 = 1;
+    work1 = LTRIM;
     s6 = "";
     s7 = "x";
     s8 = "";
@@ -617,7 +617,7 @@ if (teststep == stepcounter) {
       print("STR.TRIM check11 failed.");
       goto(fail);
     }
-    work1 = 0;
+    work1 = TRIM;
     s6 = "";
     s7 = "x";
     s8 = "";
@@ -626,6 +626,44 @@ if (teststep == stepcounter) {
       print("STR.TRIM check12 failed.");
       goto(fail);
     }
+    
+    work1 = TRIM;
+    s6 = " x ";
+    s7 = "";
+    s8 = "x";
+    block(STR.TRIM, &s6, &s7, &work1);
+    if (!compare.strings(s7, s8)) {
+      print("STR.TRIM check13 failed.");
+      goto(fail);
+    }
+    work1 = LTRIM;
+    s6 = " x";
+    s7 = "";
+    s8 = "x";
+    block(STR.TRIM, &s6, &s7, &work1);
+    if (!compare.strings(s7, s8)) {
+      print("STR.TRIM check14 failed.");
+      goto(fail);
+    }
+    work1 = RTRIM;
+    s6 = " x  ";
+    s7 = "";
+    s8 = " x";
+    block(STR.TRIM, &s6, &s7, &work1);
+    if (!compare.strings(s7, s8)) {
+      print("STR.TRIM check15 failed.");
+      goto(fail);
+    }
+    work1 = AGITRIM;
+    s6 = " x";
+    s7 = "";
+    s8 = "x";
+    block(STR.TRIM, &s6, &s7, &work1);
+    if (!compare.strings(s7, s8)) {
+      print("STR.TRIM check16 failed.");
+      goto(fail);
+    }
+    
     print("STR.TRIM check passed. Checking INSTR");
     
     [sInstr:    block(-11, sSrc, vCHAR, vPOS);

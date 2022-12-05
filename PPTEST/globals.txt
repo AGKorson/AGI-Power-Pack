@@ -179,3 +179,7 @@
 #define COMPARE_AGI             m0
 #define COMPARE_TEXT            m1
 #define COMPARE_BINARY          m2
+#define TRIM                     0
+#define LTRIM                    1
+#define RTRIM                    2
+#define AGITRIM                  3
