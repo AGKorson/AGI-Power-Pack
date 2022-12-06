@@ -254,19 +254,19 @@ if (terminalfn == CHKDSK_A) {
   output = "Checking sectors: 0"; [ 720 512 B sectors
   terminalfn = ADDLINE;
   call(lgc.TerminalFunctions);
+
   --cursor_col;
   work1 = 0;
   work2 = 0;
   work3 = &m36;
   :fmta_loop
-    display.v(cursor_row, cursor_col, work3);
     ++work1;
     if (work1 == 10) {
       work1 = 0;
       ++work2;
     }
-  if (work2 < 72 && work1 != 1) {
-pause();
+    display.v(cursor_row, cursor_col, work3);
+  if (work2 < 72) {
     goto(fmta_loop);
   }
   terminalfn = LINEFEED;
@@ -306,13 +306,35 @@ if (terminalfn == CHKDSK_C) {
   output = "Volume label: AMOSDISK";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-  output = "Checking sectors: %s17"; [ 76,800 4 KB sectors
+  sTemp2 = "0";
+  output = "Checking sectors: 0"; [ 76,800 4 KB sectors
   terminalfn = ADDLINE;
   call(lgc.TerminalFunctions);
   
-  
-  
-  
+  --cursor_col;
+  work1 = 0;
+  work2 = 0;
+  tmpCounter1 = 0;
+  work3 = &m36;
+  :fmtc_loop
+    ++work1;
+    if (work1 == 10) {
+      work1 = 0;
+      ++work2;
+      if (work2 == 100) {
+        work2 = 0;
+        ++tmpCounter1;
+      }
+    }
+    if (tmpCounter1 > 0) {
+      work3 = &m37;
+    }
+    display.v(cursor_row, cursor_col, work3);
+  if ((tmpCounter1 < 76 || work2 < 80)) { [tmC=76 wk2=80
+    goto(fmtc_loop);
+  }
+  terminalfn = LINEFEED;
+  call(lgc.TerminalFunctions);
   
   output = "307,200 KB total disk space";
   terminalfn = ADDLINE_LF;
@@ -321,6 +343,8 @@ if (terminalfn == CHKDSK_C) {
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
   output = " 72,996 KB in bad sectors";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
 }
 
 return();
@@ -374,3 +398,4 @@ return();
 #message 35 "           "
 [ disk sector counter
 #message 36 "%v47%v46"
+#message 37 "%v247,%v47|2%v46"

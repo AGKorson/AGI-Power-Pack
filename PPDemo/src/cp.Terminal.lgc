@@ -100,7 +100,6 @@ set.text.attribute(GREEN, BLACK);
 
 [ command input is not case sensitive
 set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
-#str.cmpmode(
 :login
 [ display welcome text
 [                0123456789012345678901234567890123456789
@@ -516,7 +515,6 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ then extract the command (first word)
     work1 = 32;
     work2 = 0;
-[    "chkdsk a" pos=6; len=8;8-6=2; should get " a"
     block(INSTR, &input, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != -1) {
       block(STR.LEFT, &input, &sCmd, &work2); [ str.left(sINPUT, sRESULT, vLEN)
@@ -524,10 +522,8 @@ if ((lastChar == 13 || lastChar == 10)) {
       block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
       work1 -= work2;
       block(STR.RIGHT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-print("param: '%s12'  count: %v46");
       work1 = 0;
       block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
-print("trim: '%s12'");
     } else {
      block(STR.COPY, &input, &sCmd, 0); [ str.copy(sINPUT, sRESULT)
      input = "";
@@ -842,7 +838,6 @@ print("trim: '%s12'");
         [ acceptable params a, c, a:, c:
         reset(tmpFlag);
         sTemp2 = "a";
-print("param: '%s12'  check: '%s17'");
         if (compare.strings(input, sTemp2)) {
           work1 = 0;
           set(tmpFlag);

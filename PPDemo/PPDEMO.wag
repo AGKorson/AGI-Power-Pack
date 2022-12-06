@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/5/2022 9:00:15 AM"
+   LastEdit = "12/5/2022 8:12:35 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -112,10 +112,10 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H4D01398A
-   CompCRC32 = &H11CDAF65
+   CRC32 = &HC4769D30
+   CompCRC32 = &HC4769D30
    IsRoom = True
-   Size = 4915
+   Size = 4834
 
 [Logic23]
    ID = cp.MsgBox
@@ -256,7 +256,7 @@
 [Logic102]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &H671B4666
+   CRC32 = &H36EBC24F
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -264,7 +264,7 @@
 [Logic103]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HF1565E68
+   CRC32 = &HCADD7326
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -272,7 +272,7 @@
 [Logic104]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H73EA6F18
+   CRC32 = &H91814830
    CompCRC32 = &H0
    IsRoom = False
    Size = 22493
@@ -280,7 +280,7 @@
 [Logic105]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H69A8FDAC
+   CRC32 = &H8BC3DA84
    CompCRC32 = &H0
    IsRoom = False
    Size = 22497
@@ -288,7 +288,7 @@
 [Logic106]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H6E8D3441
+   CRC32 = &H8259F8B8
    CompCRC32 = &H0
    IsRoom = False
    Size = 22497
@@ -296,7 +296,7 @@
 [Logic107]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H73ED79E3
+   CRC32 = &H9F39B51A
    CompCRC32 = &H0
    IsRoom = False
    Size = 22467
@@ -304,7 +304,7 @@
 [Logic108]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &H820E8BDF
+   CRC32 = &H4F2D07D8
    CompCRC32 = &H0
    IsRoom = False
    Size = 22335
@@ -312,7 +312,7 @@
 [Logic109]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &H6923AEDF
+   CRC32 = &HA40022D8
    CompCRC32 = &H0
    IsRoom = False
    Size = 22335
@@ -320,7 +320,7 @@
 [Logic110]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &HF24A7D49
+   CRC32 = &H3F69F14E
    CompCRC32 = &H0
    IsRoom = False
    Size = 22335
@@ -328,7 +328,7 @@
 [Logic111]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H4999C328
+   CRC32 = &H6B32D1A3
    CompCRC32 = &H0
    IsRoom = False
    Size = 22335
@@ -336,15 +336,15 @@
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HB46A6B0E
-   CompCRC32 = &HB46A6B0E
+   CRC32 = &H5C85572B
+   CompCRC32 = &H5C85572B
    IsRoom = False
    Size = 22335
 
 [Logic113]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &HA62BC947
+   CRC32 = &H8480DBCC
    CompCRC32 = &H0
    IsRoom = False
    Size = 22349
@@ -400,10 +400,10 @@
 [Logic32]
    ID = lgc.TerminalFunctions
    Description = ""
-   CRC32 = &H97F468BD
-   CompCRC32 = &H97F468BD
+   CRC32 = &HEEC179A9
+   CompCRC32 = &HEEC179A9
    IsRoom = False
-   Size = 1946
+   Size = 2021
 
 [Logic11]
    ID = rm.Magazine
