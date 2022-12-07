@@ -30,6 +30,7 @@
   #define SHOW_DIR     9
   #define CHKDSK_A    10
   #define CHKDSK_C    11
+  #define FORMAT_A    12
 #define outputvar     v246
 #define tmpCounter1   v247
 #define tmpCounter2   v248
@@ -760,7 +761,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
       }
       [ valid dir values from any dir:
-      [ c:, c:\users, c:\users\kw001
+      [ c:, c:\users, c:\users\kw001, a:
       sTemp2 = "c:";
       if (compare.strings(input, sTemp2)) {
         vCurDir = C_ROOT;
@@ -785,7 +786,20 @@ if ((lastChar == 13 || lastChar == 10)) {
         call(lgc.TerminalFunctions);
         goto(getInput);
       }
-      
+      sTemp2 = "a:";
+      if (compare.strings(input, sTemp2)) {
+        if (!floppyInserted) {
+          output = "Drive not ready";
+        } else {
+          if (!floppyFormatted) {
+            output = "Disk read error";
+          } else {
+            vCurDir = A_ROOT;
+            output = "DIR --> A:\\\\";
+          }
+        }
+      }
+
       [ valid dir values from c:\
       [ users, users\kw001
       if (vCurDir == C_ROOT) {
@@ -863,8 +877,6 @@ if ((lastChar == 13 || lastChar == 10)) {
         if (tmpFlag) {
           if (work1 == 0) {
             [ a drive
-set(floppyInserted);
-set(floppyFormatted);
             if (floppyInserted) {
               if (floppyFormatted) {
                 terminalfn = CHKDSK_A;
@@ -914,6 +926,101 @@ set(floppyFormatted);
     
     :inputF
     [ FORMAT
+    sTemp2 = "format";
+    if (compare.strings(sCmd, sTemp2)) {
+      sTemp2 = "";
+      if (compare.strings(input, sTemp2)) {
+        output = "no drive specified";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+      } else {
+        [ acceptable params a, c, a:, c:
+        reset(tmpFlag);
+        sTemp2 = "a";
+        if (compare.strings(input, sTemp2)) {
+          work1 = 0;
+          set(tmpFlag);
+        } else {
+          sTemp2 = "a:";
+          if (compare.strings(input, sTemp2)) {
+            work1 = 0;
+            set(tmpFlag);
+          } else {
+            sTemp2 = "c";
+            if (compare.strings(input, sTemp2)) {
+              work1 = 1;
+              set(tmpFlag);
+            } else {
+              sTemp2 = "c:";
+              if (compare.strings(input, sTemp2)) {
+                work1 = 1;
+                set(tmpFlag);
+              }
+            }
+          }
+        }
+        if (tmpFlag) {
+          if (work1 == 0) {
+            [ a drive
+[ TODO: add code to allow inserting/removing hard disk
+set(floppyInserted);
+            if (floppyInserted) {
+              if (floppyFormatted) {
+                [ ask to overwrite
+                output = "Drive A is already formatted.";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+                output = "Re-formatting will erase entire";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+                output = "disk contents. Continue? (y/n)?";
+                terminalfn = ADDLINE;
+                call(lgc.TerminalFunctions);
+                lastChar = 0;
+                :getKeyFormat
+                if (!have.key()) {
+                  goto(getKeyFormat);
+                }
+                if ((lastChar == 78 || lastChar == 110)) {
+                  output = "n";
+                  terminalfn = ADDLINE_LF;
+                  call(lgc.TerminalFunctions);
+                  goto(getInput);
+                }
+                if ((lastChar == 89 || lastChar == 121)) {
+                  output = "y";
+                  terminalfn = ADDLINE_LF;
+                  call(lgc.TerminalFunctions);
+                } else {
+                  goto(getKeyFormat);
+                }
+              }
+              terminalfn = FORMAT_A;
+              call(lgc.TerminalFunctions);
+              goto(getInput);
+            } else {
+              output = "No disk in drive A:";
+              terminalfn = ADDLINE_LF;
+              call(lgc.TerminalFunctions);
+            } 
+            
+            terminalfn = FORMAT_A;
+            call(lgc.TerminalFunctions);
+            set(floppyFormatted);
+          } else {
+            [ c drive
+            output = "access denied";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+          }
+        } else {
+          output = "The specified drive is invalid";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+        }
+      }
+      goto(getInput);
+    }
     goto(syntaxerror);
     
     :inputH

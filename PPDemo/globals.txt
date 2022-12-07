@@ -111,6 +111,7 @@
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
+#define floppylabel             s5
 #define mouseX                 v27
 #define mouseY                 v28
 #define mouseBtn               v29

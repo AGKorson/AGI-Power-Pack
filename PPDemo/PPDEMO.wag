@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/5/2022 8:12:35 PM"
+   LastEdit = "12/7/2022 7:21:41 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -112,18 +112,18 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &HC4769D30
-   CompCRC32 = &HC4769D30
+   CRC32 = &HD581C346
+   CompCRC32 = &H5C89FB85
    IsRoom = True
-   Size = 4834
+   Size = 5242
 
 [Logic23]
    ID = cp.MsgBox
    Description = ""
-   CRC32 = &H18229735
-   CompCRC32 = &H0
+   CRC32 = &H690A43D6
+   CompCRC32 = &H690A43D6
    IsRoom = True
-   Size = 1929
+   Size = 1931
 
 [Logic24]
    ID = cp.Palette
@@ -337,7 +337,7 @@
    ID = lgc.mod2917
    Description = ""
    CRC32 = &H5C85572B
-   CompCRC32 = &H5C85572B
+   CompCRC32 = &H0
    IsRoom = False
    Size = 22335
 
@@ -400,10 +400,10 @@
 [Logic32]
    ID = lgc.TerminalFunctions
    Description = ""
-   CRC32 = &HEEC179A9
-   CompCRC32 = &HEEC179A9
+   CRC32 = &HB75BED0A
+   CompCRC32 = &HB75BED0A
    IsRoom = False
-   Size = 2021
+   Size = 2442
 
 [Logic11]
    ID = rm.Magazine
