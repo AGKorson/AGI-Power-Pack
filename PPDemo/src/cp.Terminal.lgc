@@ -918,79 +918,83 @@ if ((lastChar == 13 || lastChar == 10)) {
     
     :inputD
     [ DIR
-    [ check parameter
-    block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
-    if (work1 == 0) {
-      [ show current directory
-      vShowDir = vCurDir;
-    } else {
-      [ strip off trailing '\' if one is there
-      work1 = 1;
-      block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-      block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
-      if (work1 == 92) {
-        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
-        --work1;
-        block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-      }
-      [ valid dir values from any dir:
-      [ c:, c:\users, c:\users\kw001, a:
-      sTemp2 = "c:";
-      if (compare.strings(input, sTemp2)) {
-        vShowDir = C_ROOT;
-      }
-      sTemp2 = "c:\\users";
-      if (compare.strings(input, sTemp2)) {
-        vShowDir = C_USERS;
-      }
-      sTemp2 = "c:\\users\\kw001";
-      if (compare.strings(input, sTemp2)) {
-        vShowDir = C_KW001;
-      }
-      sTemp2 = "a:";
-      if (compare.strings(input, sTemp2)) {
-        if (!floppyInserted) {
-          output = "Drive not ready";
-          call(lgc.TerminalFunctions);
-          goto(getInput);
-        } else {
-          if (!floppyFormatted) {
-            output = "Disk read error";
-            call(lgc.TerminalFunctions);
-            goto(getInput);
-          } else {
-            vShowDir = A_ROOT;
-          }
+    sTemp2 = "dir";
+    if (compare.strings(sCmd, sTemp2)) {
+      [ check parameter
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      if (work1 == 0) {
+        [ show current directory
+        vShowDir = vCurDir;
+      } else {
+        [ strip off trailing '\' if one is there
+        work1 = 1;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
+        if (work1 == 92) {
+          block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+          --work1;
+          block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
         }
-      }
-      [ valid dir values from c:\
-      [ users, users\kw001
-      if (vCurDir == C_ROOT) {
-        sTemp2 = "users";
+        [ valid dir values from any dir:
+        [ c:, c:\users, c:\users\kw001, a:
+        sTemp2 = "c:";
+        if (compare.strings(input, sTemp2)) {
+          vShowDir = C_ROOT;
+        }
+        sTemp2 = "c:\\users";
         if (compare.strings(input, sTemp2)) {
           vShowDir = C_USERS;
         }
-        sTemp2 = "users\\kw001";
+        sTemp2 = "c:\\users\\kw001";
         if (compare.strings(input, sTemp2)) {
           vShowDir = C_KW001;
         }
-      }
-      [ valid dir values from c:\users:
-      [ kw001
-      if (vCurDir == C_USERS) {
-        sTemp2 = "kw001";
+        sTemp2 = "a:";
         if (compare.strings(input, sTemp2)) {
-          vShowDir = C_KW001;
+          if (!floppyInserted) {
+            output = "Drive not ready";
+            call(lgc.TerminalFunctions);
+            goto(getInput);
+          } else {
+            if (!floppyFormatted) {
+              output = "Disk read error";
+              call(lgc.TerminalFunctions);
+              goto(getInput);
+            } else {
+              vShowDir = A_ROOT;
+            }
+          }
         }
+        [ valid dir values from c:\
+        [ users, users\kw001
+        if (vCurDir == C_ROOT) {
+          sTemp2 = "users";
+          if (compare.strings(input, sTemp2)) {
+            vShowDir = C_USERS;
+          }
+          sTemp2 = "users\\kw001";
+          if (compare.strings(input, sTemp2)) {
+            vShowDir = C_KW001;
+          }
+        }
+        [ valid dir values from c:\users:
+        [ kw001
+        if (vCurDir == C_USERS) {
+          sTemp2 = "kw001";
+          if (compare.strings(input, sTemp2)) {
+            vShowDir = C_KW001;
+          }
+        }
+        [ any other directory is invalid
+        output = "ERROR: invalid or protected directory";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);     
       }
-      [ any other directory is invalid
-      output = "ERROR: invalid or protected directory";
-      terminalfn = ADDLINE_LF;
+      terminalfn = SHOW_DIR;
       call(lgc.TerminalFunctions);
-      goto(getInput);     
+      goto(getInput);
     }
-    terminalfn = SHOW_DIR;
-    call(lgc.TerminalFunctions);
     
     
     [ DEL/ERASE

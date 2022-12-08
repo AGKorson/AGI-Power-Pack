@@ -162,41 +162,88 @@ if (terminalfn == NO_ACCESS) {
 if (terminalfn == SHOW_DIR) {
   tmpCounter1 = &output;
   if (vShowDir == C_ROOT) {
-    tmpCounter2 = 6;
+    output = "%m6C:\\\\";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    tmpCounter2 = 11;
     :nextfile1
       block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       ++tmpCounter2;
-    if (tmpCounter2 < 21) {
+      if (tmpCounter2 == 22) {
+        output = "-- pause --";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        lastChar = 0;
+        :wait1
+        if (!have.key()) {
+          goto(wait1);
+        }
+        terminalfn = LINEFEED;
+        call(lgc.TerminalFunctions);
+      }
+    if (tmpCounter2 < 28) {
       goto(nextfile1);
     }
   }
   if (vShowDir == C_USERS) {
-    tmpCounter2 = 21;
+    output = "%m6C:\\\\USERS";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    tmpCounter2 = 28;
     :nextfile2
       block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       ++tmpCounter2;
-    if (tmpCounter2 < 33) {
+      if (tmpCounter2 == 39) {
+        output = "-- pause --";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        lastChar = 0;
+        :wait2
+        if (!have.key()) {
+          goto(wait2);
+        }
+        terminalfn = LINEFEED;
+        call(lgc.TerminalFunctions);
+      }
+    if (tmpCounter2 < 42) {
       goto(nextfile2);
     }
   }
   if (vShowDir == C_KW001) {
-    tmpCounter2 = 33;
+    output = "%m6C:\\\\USERS\\\\KW001";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    tmpCounter2 = 42;
     :nextfile3
       block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       ++tmpCounter2;
-    if (tmpCounter2 < 35) {
+    if (tmpCounter2 < 46) {
       goto(nextfile3);
     }
   }
   if (vShowDir == A_ROOT) {
-    [ TODO: depends on whether floppy is inserted, formatted, copied
-    
+    output = "%m6A:\\\\";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    terminalfn = LINEFEED;
+    call(lgc.TerminalFunctions);
+    if (floppyfiles == 0) {
+      output = "No files found";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    }
   }
 }
 
@@ -213,7 +260,7 @@ if (terminalfn == CHKDSK_A) {
   --cursor_col;
   work1 = 0;
   work2 = 0;
-  work3 = &m35;
+  work3 = &m56;
   :chka_loop
     ++work1;
     if (work1 == 10) {
@@ -270,9 +317,9 @@ if (terminalfn == CHKDSK_C) {
   work1 = 0;
   work2 = 0;
   tmpCounter1 = 0;
-  work3 = &m35;
+  work3 = &m56;
   :fmtc_loop
-    work1 += 3;
+    work1 += 6;
     if (work1 > 9) {
       work1 -= 10;
       ++work2;
@@ -282,7 +329,7 @@ if (terminalfn == CHKDSK_C) {
       }
     }
     if (tmpCounter1 > 0) {
-      work3 = &m36;
+      work3 = &m57;
     }
     display.v(cursor_row, cursor_col, work3);
   if ((tmpCounter1 < 76 || work2 < 80)) { [tmC=76 wk2=80
@@ -320,7 +367,7 @@ if (terminalfn == FORMAT_A) {
   cursor_col -= 2;
   tmpCounter1 = 0;
   tmpCounter2 = 0;
-  work3 = &m37;
+  work3 = &m58;
   :fmta_loop
     work1 = 50;
     cycle.time(o254, work1); [ delay(vDELAY)
@@ -449,48 +496,65 @@ return();
 #message 4 "%s14"
 #message 5 "*"
 
+[ directory messages
+#message 6 " Directory of "
+#message 7 "%m6C:\\\\"
+#message 8 "%m6C:\\\\USERS"
+#message 9 "%m6C:\\\\USERS\\\\KW001"
+#message 10 "%m6A:\\\\"
 [ DIR C:
-#message 6 "07/16/89 09:12AM     438  AMOS.BAT"
-#message 7 "08/06/89 09:11AM  42,445  AMOS.EXE"
-#message 8 "07/14/89 05:31PM  18,518  AMOS.SYS"
-#message 9 "11/30/85 03:42PM   6,732  MEM.SYS"
-#message 10 "03/20/88 04:23PM   3,243  MOUSE.CPL"
-#message 11 "03/18/88 02:40PM   6,781  MOUSE.DRV"
-#message 12 "04/16/88 01:37PM  <DIR>   BADASS"
-#message 13 "04/16/88 01:42PM  <DIR>   CAISOCC"
-#message 14 "04/19/88 07:19PM  <DIR>   ERIDOCC"
-#message 15 "05/09/88 08:16AM  <DIR>   ESADOCC"
-#message 16 "04/23/88 05:00PM  <DIR>   ICAPOCC"
-#message 17 "04/23/88 03:22PM  <DIR>   OFROCC"
-#message 18 "05/08/88 08:09PM  <DIR>   RANDOCC"
-#message 19 "04/16/88 01:37PM  <DIR>   SYSTEM"
-#message 20 "04/16/88 01:38PM  <DIR>   USERS"
-
+#message 11 "07/16/89 09:12AM     438  AMOS.BAT"
+#message 12 "08/06/89 09:11AM  42,445  AMOS.EXE"
+#message 13 "07/14/89 05:31PM  18,518  AMOS.SYS"
+#message 14 "11/30/85 03:42PM   6,732  MEM.SYS"
+#message 15 "03/20/88 04:23PM   3,243  MOUSE.CPL"
+#message 16 "03/18/88 02:40PM   6,781  MOUSE.DRV"
+#message 17 "04/16/88 01:37PM  <DIR>   BADASS"
+#message 18 "04/16/88 01:42PM  <DIR>   CAISOCC"
+#message 19 "04/19/88 07:19PM  <DIR>   ERIDOCC"
+#message 20 "05/09/88 08:16AM  <DIR>   ESADOCC"
+#message 21 "04/23/88 05:00PM  <DIR>   ICAPOCC"
+#message 22 "04/23/88 03:22PM  <DIR>   OFROCC"
+#message 23 "05/08/88 08:09PM  <DIR>   RANDOCC"
+#message 24 "04/16/88 01:37PM  <DIR>   SYSTEM"
+#message 25 "04/16/88 01:38PM  <DIR>   USERS"
+#message 26 "     6 File(s)    78,157 bytes"
+#message 27 "     9 Dir(s) 125,755,392 bytes free"
 [ DIR C:\USERS:
-#message 21 "04/16/88 01:47PM  <DIR>   ADMIN"
-#message 22 "04/16/88 01:47PM  <DIR>   AK083"
-#message 23 "10/22/88 09:13AM  <DIR>   AL014"
-#message 24 "10/22/88 09:14AM  <DIR>   DM073"
-#message 25 "10/22/88 09:22AM  <DIR>   JS132"
-#message 26 "04/16/88 01:49PM  <DIR>   JW005"
-#message 27 "04/16/88 01:49PM  <DIR>   KD101"
-#message 28 "10/22/88 09:13AM  <DIR>   KM066"
-#message 29 "08/11/89 09:02AM  <DIR>   KW001"
-#message 30 "10/22/88 09:13AM  <DIR>   MC048"
-#message 31 "08/11/89 09:02AM  <DIR>   RW002"
-#message 32 "10/22/88 09:15AM  <DIR>   SM037"
+#message 28 "04/16/88 01:47PM  <DIR>   ADMIN"
+#message 29 "04/16/88 01:47PM  <DIR>   AK083"
+#message 30 "10/22/88 09:13AM  <DIR>   AL014"
+#message 31 "10/22/88 09:14AM  <DIR>   DM073"
+#message 32 "10/22/88 09:22AM  <DIR>   JS132"
+#message 33 "04/16/88 01:49PM  <DIR>   JW005"
+#message 34 "04/16/88 01:49PM  <DIR>   KD101"
+#message 35 "10/22/88 09:13AM  <DIR>   KM066"
+#message 36 "08/11/89 09:02AM  <DIR>   KW001"
+#message 37 "10/22/88 09:13AM  <DIR>   MC048"
+#message 38 "08/11/89 09:02AM  <DIR>   RW002"
+#message 39 "10/22/88 09:15AM  <DIR>   SM037"
+#message 40 "     0 File(s)         0 bytes"
+#message 41 "    12 Dir(s) 125,755,392 bytes free"
 
 [ DIR C:\USERS\KW001
-#message 33 "08/24/89 07:36AM     438  PWRPACK.TXT"
-#message 34 "08/24/89 07:32AM 307,887  PWRPACK.ZIP"
+#message 42 "08/24/89 07:36AM     438  PWRPACK.TXT"
+#message 43 "08/24/89 07:32AM 307,887  PWRPACK.ZIP"
+#message 44 "     2 File(s)   308,325 bytes"
+#message 45 "     0 Dir(s) 125,755,392 bytes free"
 
-[ disk sector counter
-#message 35 "%v47%v46"
-#message 36 "%v247,%v47|2%v46"
-#message 37 "%v248%v247K"
+[ DIR A:\
+#message 46 "08/24/89 07:36AM     438  PWRPACK.TXT"
+#message 47 "08/24/89 07:32AM 307,887  PWRPACK.ZIP"
+#message 48 "     2 File(s)   308,325 bytes"
+#message 49 "     0 Dir(s)      59,753 bytes free"
+#message 50 "     1 File(s)       438 bytes"
+#message 51 "     0 Dir(s)     368,202 bytes free"
+#message 52 "     1 File(s)   307,887 bytes"
+#message 53 "     0 Dir(s)      60,753 bytes free"
+#message 54 "     0 File(s)         0 bytes"
+#message 55 "     0 Dir(s)     368,640 bytes free"
 
-#message 38 "Directory of "
-#message 39 "%m38C:\"
-#message 40 "%m38C:\USERS"
-#message 41 "%m38C:\USERS\KW001"
-#message 42 "%m38A:\"
+[ disk sector counters
+#message 56 "%v47%v46" [35
+#message 57 "%v247,%v47|2%v46" [36
+#message 58 "%v248%v247K" [37
