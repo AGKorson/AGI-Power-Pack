@@ -48,6 +48,7 @@
   #define C_USERS   1 [ c:\USERS\
   #define C_KW001   2 [ c:\USERS\KW001
   #define A_ROOT    3 [ a:
+#define vShowDir      v251
   
 #define cursorstate   f241
 #define loggedon      f242
@@ -61,6 +62,7 @@
 #define userid         s15
 #define sCmd           s16
 #define sTemp2         s17
+#define sTemp3         s18
 
 #define charmsg         m3
 #define outputmsg       m4
@@ -507,7 +509,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ get more input
     goto(getInput);
   }
-  
+[ TODO: add occasional error codes until reset
   if (inputmode == IM_CMDLINE) {
     [ convert input to lower case, trim it,
     block(STR.LOWER, &input, &input, 0); [ str.upper(sINPUT, sRESULT)
@@ -781,7 +783,7 @@ if ((lastChar == 13 || lastChar == 10)) {
       sTemp2 = "c:\\users\\kw001";
       if (compare.strings(input, sTemp2)) {
         vCurDir = C_KW001;
-        output = "DIR --> C:\\\\USERS\\\\KW001";
+        output = "DIR --> A:\\\\USERS\\\\KW001";
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
         goto(getInput);
@@ -798,6 +800,9 @@ if ((lastChar == 13 || lastChar == 10)) {
             output = "DIR --> A:\\\\";
           }
         }
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
       }
 
       [ valid dir values from c:\
@@ -849,7 +854,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
       } else {
-        [ acceptable params a, c, a:, c:
+        [ acceptable params a:, a, c:, c
         reset(tmpFlag);
         sTemp2 = "a";
         if (compare.strings(input, sTemp2)) {
@@ -882,7 +887,7 @@ if ((lastChar == 13 || lastChar == 10)) {
                 terminalfn = CHKDSK_A;
                 call(lgc.TerminalFunctions);
               } else {
-                output = "Drive not formatted";
+                output = "Disk read error";
                 terminalfn = ADDLINE_LF;
                 call(lgc.TerminalFunctions);
               }
@@ -912,7 +917,82 @@ if ((lastChar == 13 || lastChar == 10)) {
     goto(syntaxerror);
     
     :inputD
-    [ DIR 
+    [ DIR
+    [ check parameter
+    block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 == 0) {
+      [ show current directory
+      vShowDir = vCurDir;
+    } else {
+      [ strip off trailing '\' if one is there
+      work1 = 1;
+      block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+      block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
+      if (work1 == 92) {
+        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+        --work1;
+        block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+      }
+      [ valid dir values from any dir:
+      [ c:, c:\users, c:\users\kw001, a:
+      sTemp2 = "c:";
+      if (compare.strings(input, sTemp2)) {
+        vShowDir = C_ROOT;
+      }
+      sTemp2 = "c:\\users";
+      if (compare.strings(input, sTemp2)) {
+        vShowDir = C_USERS;
+      }
+      sTemp2 = "c:\\users\\kw001";
+      if (compare.strings(input, sTemp2)) {
+        vShowDir = C_KW001;
+      }
+      sTemp2 = "a:";
+      if (compare.strings(input, sTemp2)) {
+        if (!floppyInserted) {
+          output = "Drive not ready";
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        } else {
+          if (!floppyFormatted) {
+            output = "Disk read error";
+            call(lgc.TerminalFunctions);
+            goto(getInput);
+          } else {
+            vShowDir = A_ROOT;
+          }
+        }
+      }
+      [ valid dir values from c:\
+      [ users, users\kw001
+      if (vCurDir == C_ROOT) {
+        sTemp2 = "users";
+        if (compare.strings(input, sTemp2)) {
+          vShowDir = C_USERS;
+        }
+        sTemp2 = "users\\kw001";
+        if (compare.strings(input, sTemp2)) {
+          vShowDir = C_KW001;
+        }
+      }
+      [ valid dir values from c:\users:
+      [ kw001
+      if (vCurDir == C_USERS) {
+        sTemp2 = "kw001";
+        if (compare.strings(input, sTemp2)) {
+          vShowDir = C_KW001;
+        }
+      }
+      [ any other directory is invalid
+      output = "ERROR: invalid or protected directory";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      goto(getInput);     
+    }
+    terminalfn = SHOW_DIR;
+    call(lgc.TerminalFunctions);
+    
+    
     [ DEL/ERASE
     goto(syntaxerror);
     
@@ -976,8 +1056,8 @@ set(floppyInserted);
                 output = "disk contents. Continue? (y/n)?";
                 terminalfn = ADDLINE;
                 call(lgc.TerminalFunctions);
-                lastChar = 0;
                 :getKeyFormat
+                lastChar = 0;
                 if (!have.key()) {
                   goto(getKeyFormat);
                 }
@@ -997,16 +1077,13 @@ set(floppyInserted);
               }
               terminalfn = FORMAT_A;
               call(lgc.TerminalFunctions);
+              set(floppyFormatted);
               goto(getInput);
             } else {
               output = "No disk in drive A:";
               terminalfn = ADDLINE_LF;
               call(lgc.TerminalFunctions);
             } 
-            
-            terminalfn = FORMAT_A;
-            call(lgc.TerminalFunctions);
-            set(floppyFormatted);
           } else {
             [ c drive
             output = "access denied";

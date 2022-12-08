@@ -31,6 +31,7 @@
 [VER        Displays AMOS version.
 [VOL        Displays a disk volume label
 [           and serial number.
+[1234567890123456789012345678901234567890
 
 #define cursor_row    v240
 #define cursor_col    v241
@@ -71,6 +72,7 @@
   #define C_USERS   1 [ c:\USERS\
   #define C_KW001   2 [ c:\USERS\KW001
   #define A_ROOT    3 [ a:
+#define vShowDir      v251
 
 #define cursorstate   f241
 #define loggedon      f242
@@ -81,6 +83,7 @@
 #define userid         s15
 #define sCmd           s16
 #define sTemp2         s17
+#define sTemp3         s18
 
 #define charmsg         m3
 #define outputmsg       m4
@@ -158,7 +161,7 @@ if (terminalfn == NO_ACCESS) {
 
 if (terminalfn == SHOW_DIR) {
   tmpCounter1 = &output;
-  if (vCurDir == C_ROOT) {
+  if (vShowDir == C_ROOT) {
     tmpCounter2 = 6;
     :nextfile1
       block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
@@ -169,7 +172,7 @@ if (terminalfn == SHOW_DIR) {
       goto(nextfile1);
     }
   }
-  if (vCurDir == C_USERS) {
+  if (vShowDir == C_USERS) {
     tmpCounter2 = 21;
     :nextfile2
       block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
@@ -180,7 +183,7 @@ if (terminalfn == SHOW_DIR) {
       goto(nextfile2);
     }
   }
-  if (vCurDir == C_KW001) {
+  if (vShowDir == C_KW001) {
     tmpCounter2 = 33;
     :nextfile3
       block(SET.STRING.V, &tmpCounter1, &tmpCounter2, 0); [ set.string.v(vSTR, vMSG)
@@ -191,8 +194,9 @@ if (terminalfn == SHOW_DIR) {
       goto(nextfile3);
     }
   }
-  if (vCurDir == A_ROOT) {
-    [ depends on whether floppy is inserted, formatted, copied
+  if (vShowDir == A_ROOT) {
+    [ TODO: depends on whether floppy is inserted, formatted, copied
+    
   }
 }
 
@@ -200,18 +204,17 @@ if (terminalfn == CHKDSK_A) {
   output = "File system: FAT16";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-  output = "Volume label: %m35";
+  output = "Volume label: %s5";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
   output = "Checking sectors: 0"; [ 720 512 B sectors
   terminalfn = ADDLINE;
   call(lgc.TerminalFunctions);
-
   --cursor_col;
   work1 = 0;
   work2 = 0;
   work3 = &m35;
-  :fmta_loop
+  :chka_loop
     ++work1;
     if (work1 == 10) {
       work1 = 0;
@@ -219,7 +222,7 @@ if (terminalfn == CHKDSK_A) {
     }
     display.v(cursor_row, cursor_col, work3);
   if (work2 < 72) {
-    goto(fmta_loop);
+    goto(chka_loop);
   }
   terminalfn = LINEFEED;
   call(lgc.TerminalFunctions);
@@ -269,7 +272,6 @@ if (terminalfn == CHKDSK_C) {
   tmpCounter1 = 0;
   work3 = &m35;
   :fmtc_loop
-    ++work1;
     work1 += 3;
     if (work1 > 9) {
       work1 -= 10;
@@ -301,52 +303,140 @@ if (terminalfn == CHKDSK_C) {
 }
 
 if (terminalfn == FORMAT_A) {
-[ TODO: finalize formatting output
+  output = "Checking existing disk format.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  work1 = 250;
+  cycle.time(o254, work1); [ delay(vDELAY)
+  cycle.time(o254, work1); [ delay(vDELAY)
+  cycle.time(o254, work1); [ delay(vDELAY)
+  cycle.time(o254, work1); [ delay(vDELAY)
+  output = "The new file system is FAT.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "Formatting 0K";
+  terminalfn = ADDLINE;
+  call(lgc.TerminalFunctions);
+  cursor_col -= 2;
+  tmpCounter1 = 0;
+  tmpCounter2 = 0;
+  work3 = &m37;
+  :fmta_loop
+    work1 = 50;
+    cycle.time(o254, work1); [ delay(vDELAY)
+    ++tmpCounter1;
+    if (tmpCounter1 == 10) {
+      tmpCounter1 = 0;
+      ++tmpCounter2;
+    }
+    display.v(cursor_row, cursor_col, work3);
+  if (tmpCounter2 < 36) {
+    goto(fmta_loop);
+  }
+  terminalfn = LINEFEED;
+  call(lgc.TerminalFunctions);
 
-  output = " The new file system is FAT.";
+  output = "Initializing the File Allocation";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-  output = " Formatting 0K";
+  output = "Table (FAT)...";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-[ TODO: add counting loop here
+  work1 = 250;
+  cycle.time(o254, work1); [ delay(vDELAY)
+  cycle.time(o254, work1); [ delay(vDELAY)
 
-  output = " Initializing the File Allocation";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = " Table (FAT)...";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-[ slight pause here
-
-  output = " Volume label (11 characters, ENTER";
+  output = "Volume label (11 characters, ENTER";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
   output = " for none)? ";
+  terminalfn = ADDLINE;
+  call(lgc.TerminalFunctions);
+  [ get label here (limit to 11 chars, valid name chars only)
+  work2 = 0;
+  floppylabel = "";
+  sTemp2 = "\\/:*?\"<>|";
+  :getlabel
+  lastChar = 0;
+  if (!have.key()) {
+    [ delay 25 msec
+    work1 = 25;
+    cycle.time(o254, work1); 
+    [ toggle the cursor every 200 msec
+    ++cursor_toggle;
+    if (cursor_toggle > 9) {
+      cursor_toggle = 0;
+      cursor_char *= -1;
+      cursor_char += 3; [ this toggles cursor msg num between 1 and 2
+      display.v(cursor_row, cursor_col, cursor_char);
+    }
+    goto(getlabel);
+  }
+  [ make sure cursor gets hidden
+  if (cursor_char == 1) {
+    cursor_char = 2;
+    display.v(cursor_row, cursor_col, cursor_char);
+  }
+  if (lastChar != 13) {
+    if (lastChar == 8 && work2 > 0) {
+      --cursor_col;
+      [ remove char from display
+      lastChar = &m2;
+      display.v(cursor_row, cursor_col, lastChar);
+      [ remove the last char from the input line
+      --work2;
+      block(STR.LEFT, &floppylabel, &floppylabel, &work2); [ str.left(sINPUT, sRESULT, vLEN);
+    } else {
+      [ check for invalid characters
+      work3 = 0;
+      block(INSTR, &sTemp2, &lastChar, &work3); [ instr(sINPUT, vCHAR, vPOS)
+      if (work2 != 11 && work3 == -1 && lastChar > 32 && lastChar < 126) {
+        [ if any other char, add it to input
+        if (lastChar > 96 && lastChar < 123) {
+          lastChar -= 32;
+        }
+        ++work2;
+        block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
+        block(STR.CONCAT, &floppylabel, &char, 0); [ sINPUT, sADD);
+        work1 = &charmsg;
+        display.v(cursor_row, cursor_col, work1);
+        
+        [ advance cursor
+        ++cursor_col;
+      }
+    }
+    goto(getlabel);
+  }
+  terminalfn = LINEFEED;
+  call(lgc.TerminalFunctions);
+  output = "Format complete.";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-[ get label here (limit to 11 chars, valid name chars only)
-
-  output = " Format complete.";
+  output = "     360.0 KB total disk space.";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-  output = "      360.0 KB total disk space.";
+  output = "     360.0 KB are available.";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
-  output = "      360.0 KB are available.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "  512 bytes in each allocation unit.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "  720 allocation units available on";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "  disk.";
+  [ create a random serial number
+  random(16, 255, work1);
+  block(BYTE2HEX, &sTemp2, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+  random(0, 255, work1);
+  block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  sTemp3 = "-";
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  random(0, 255, work1);
+  block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  random(0, 255, work1);
+  block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  block(STR.UPPER, &sTemp2, &sTemp2, 0); [ str.upper(sINPUT, sRESULT)
+  output = "Volume Serial Number is %s17";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
 }
-
 return();
 
 
@@ -391,9 +481,16 @@ return();
 #message 32 "10/22/88 09:15AM  <DIR>   SM037"
 
 [ DIR C:\USERS\KW001
-#message 33 "08/24/89 07:37AM     438  PWRPACK.TXT"
+#message 33 "08/24/89 07:36AM     438  PWRPACK.TXT"
 #message 34 "08/24/89 07:32AM 307,887  PWRPACK.ZIP"
 
 [ disk sector counter
 #message 35 "%v47%v46"
 #message 36 "%v247,%v47|2%v46"
+#message 37 "%v248%v247K"
+
+#message 38 "Directory of "
+#message 39 "%m38C:\"
+#message 40 "%m38C:\USERS"
+#message 41 "%m38C:\USERS\KW001"
+#message 42 "%m38A:\"
