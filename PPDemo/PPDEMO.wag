@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/8/2022 1:15:49 PM"
+   LastEdit = "12/9/2022 9:25:33 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -112,16 +112,16 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H6BBDC706
-   CompCRC32 = &H6BBDC706
+   CRC32 = &HE9D7661
+   CompCRC32 = &HE9D7661
    IsRoom = True
-   Size = 5577
+   Size = 7383
 
 [Logic23]
    ID = cp.MsgBox
    Description = ""
    CRC32 = &H690A43D6
-   CompCRC32 = &H690A43D6
+   CompCRC32 = &H0
    IsRoom = True
    Size = 1931
 
@@ -208,10 +208,10 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H54E66AA5
-   CompCRC32 = &H0
+   CRC32 = &H52AF6132
+   CompCRC32 = &H4BD1F028
    IsRoom = True
-   Size = 2258
+   Size = 2945
 
 [Logic5]
    ID = rm.Closet
@@ -400,10 +400,10 @@
 [Logic32]
    ID = lgc.TerminalFunctions
    Description = ""
-   CRC32 = &HB5773FB3
-   CompCRC32 = &HB5773FB3
+   CRC32 = &H664FC6F4
+   CompCRC32 = &H0
    IsRoom = False
-   Size = 3559
+   Size = 3813
 
 [Logic11]
    ID = rm.Magazine
@@ -1047,4 +1047,9 @@
    ID = vw.EgoWashingHands
    Description = ""
    Size = 377
+
+[View44]
+   ID = vw.TerminalArt
+   Description = ""
+   Size = 115
 [::END Views::]

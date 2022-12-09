@@ -420,6 +420,34 @@ if (said("close", "door")) {
   }
 }
 
+[ insert floppy
+if ((said("insert", "disk") || said("insert", "disk", "drive"))) {
+  if (has("floppy disk")) {
+    if (obj.in.box(ego, 64, 133, 104, 138)) {
+      print("Ok.");
+      set(floppyInserted);
+      work1 = cp.Terminal;
+      put("floppy disk", work1); 
+    } else {
+      print("Move closer.");
+    }
+  } else {
+    print("What disk?");
+  }
+}
+
+[ remove/take floppy
+if ((said("remove", "disk") || said("remove", "disk", "drive") ||
+     said("get", "disk") || said("get", "disk", "drive"))) {
+  work1 = cp.Terminal;
+  if (obj.in.room("floppy disk", work1)) {
+    print("Ok.");
+    set(floppyInserted);
+    get("floppy disk");
+  } else {
+    print("What disk?");
+  }
+}
 :done
 [ **************************************
 [ CHECK FOR AN EXIT CONDITION

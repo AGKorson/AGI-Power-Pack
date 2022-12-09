@@ -55,6 +55,7 @@
   #define CHKDSK_A    10
   #define CHKDSK_C    11
   #define FORMAT_A    12
+  #define TYPE_PP     13
 #define outputvar     v246
 #define tmpCounter1   v247
 #define tmpCounter2   v248
@@ -67,6 +68,7 @@
   #define PW_ICAPOCC   5
   #define PW_OFROCC    6
   #define PW_RANDOCC   7
+  #define PW_SUDO      8
 #define vCurDir       v250
   #define C_ROOT    0 [ c:\
   #define C_USERS   1 [ c:\USERS\
@@ -148,6 +150,7 @@ if (terminalfn == CLS) {
   clear.text.rect(TOPROW, LEFTCOL, BTMROW, RIGHTCOL, BLACK);
   cursor_col = LEFTCOL;
   cursor_row = TOPROW;
+  return();
 }
 
 if (terminalfn == NO_ACCESS) {
@@ -157,6 +160,7 @@ if (terminalfn == NO_ACCESS) {
   output = "  access denied";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
+  return();
 }
 
 if (terminalfn == SHOW_DIR) {
@@ -239,12 +243,31 @@ if (terminalfn == SHOW_DIR) {
     call(lgc.TerminalFunctions);
     terminalfn = LINEFEED;
     call(lgc.TerminalFunctions);
-    if (floppyfiles == 0) {
-      output = "No files found";
+    if ((floppyfiles == 1 || floppyfiles == 3)) {
+      [ txt
+      output = m42;
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
     }
+    if ((floppyfiles == 2 || floppyfiles == 3)) {
+      [ zip
+      output = m43;
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+    }
+    work1 = floppyfiles;
+    work1 *= 2;
+    work1 += 46;
+    work2 = &output;
+    block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    ++work1;
+    block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
   }
+  return();
 }
 
 if (terminalfn == CHKDSK_A) {
@@ -260,7 +283,7 @@ if (terminalfn == CHKDSK_A) {
   --cursor_col;
   work1 = 0;
   work2 = 0;
-  work3 = &m56;
+  work3 = &m54;
   :chka_loop
     ++work1;
     if (work1 == 10) {
@@ -298,7 +321,8 @@ if (terminalfn == CHKDSK_A) {
   call(lgc.TerminalFunctions);
   output = "      0 KB in bad sectors";
   terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);    
+  call(lgc.TerminalFunctions);
+  return();
 }
 
 if (terminalfn == CHKDSK_C) {
@@ -317,7 +341,7 @@ if (terminalfn == CHKDSK_C) {
   work1 = 0;
   work2 = 0;
   tmpCounter1 = 0;
-  work3 = &m56;
+  work3 = &m54;
   :fmtc_loop
     work1 += 6;
     if (work1 > 9) {
@@ -329,7 +353,7 @@ if (terminalfn == CHKDSK_C) {
       }
     }
     if (tmpCounter1 > 0) {
-      work3 = &m57;
+      work3 = &m55;
     }
     display.v(cursor_row, cursor_col, work3);
   if ((tmpCounter1 < 76 || work2 < 80)) { [tmC=76 wk2=80
@@ -347,6 +371,7 @@ if (terminalfn == CHKDSK_C) {
   output = " 72,996 KB in bad sectors";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
+  return();
 }
 
 if (terminalfn == FORMAT_A) {
@@ -367,7 +392,7 @@ if (terminalfn == FORMAT_A) {
   cursor_col -= 2;
   tmpCounter1 = 0;
   tmpCounter2 = 0;
-  work3 = &m58;
+  work3 = &m56;
   :fmta_loop
     work1 = 50;
     cycle.time(o254, work1); [ delay(vDELAY)
@@ -483,7 +508,37 @@ if (terminalfn == FORMAT_A) {
   output = "Volume Serial Number is %s17";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
+  return();
 }
+
+if (terminalfn == TYPE_PP) {
+  work1 = &output;
+  work2 = 57;
+  :typeout1
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    ++work2;
+  if (work2 < 61) {
+    goto(typeout1);
+  }
+  terminalfn = LINEFEED;
+  call(lgc.TerminalFunctions);
+  :typeout2
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    ++work2;
+  if (work2 < 63) {
+    goto(typeout2);
+  }
+  terminalfn = LINEFEED;
+  call(lgc.TerminalFunctions);
+  block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+}
+
 return();
 
 
@@ -543,18 +598,26 @@ return();
 #message 45 "     0 Dir(s) 125,755,392 bytes free"
 
 [ DIR A:\
-#message 46 "08/24/89 07:36AM     438  PWRPACK.TXT"
-#message 47 "08/24/89 07:32AM 307,887  PWRPACK.ZIP"
-#message 48 "     2 File(s)   308,325 bytes"
-#message 49 "     0 Dir(s)      59,753 bytes free"
-#message 50 "     1 File(s)       438 bytes"
-#message 51 "     0 Dir(s)     368,202 bytes free"
-#message 52 "     1 File(s)   307,887 bytes"
-#message 53 "     0 Dir(s)      60,753 bytes free"
-#message 54 "     0 File(s)         0 bytes"
-#message 55 "     0 Dir(s)     368,640 bytes free"
+#message 46 "     0 File(s)         0 bytes"
+#message 47 "     0 Dir(s)     368,640 bytes free"
+#message 48 "     1 File(s)       438 bytes"
+#message 49 "     0 Dir(s)     368,202 bytes free"
+#message 50 "     1 File(s)   307,887 bytes"
+#message 51 "     0 Dir(s)      60,753 bytes free"
+#message 52 "     2 File(s)   308,325 bytes"
+#message 53 "     0 Dir(s)      59,753 bytes free"
 
 [ disk sector counters
-#message 56 "%v47%v46" [35
-#message 57 "%v247,%v47|2%v46" [36
-#message 58 "%v248%v247K" [37
+#message 54 "%v47%v46"
+#message 55 "%v247,%v47|2%v46"
+#message 56 "%v248%v247K"
+
+[ contents of PWRPACK.TXT
+[            0123456789012345678901234567890123456789
+#message 57 "Ken- as requested, the current version"
+#message 58 "of Power Pack source files have been"
+#message 59 "compressed into the accompanying ZIP"
+#message 60 "file."
+#message 61 "It's not encrypted, so make sure you"
+#message 62 "don't let it out of your control."
+#message 63 "--AK"

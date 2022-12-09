@@ -31,6 +31,7 @@
   #define CHKDSK_A    10
   #define CHKDSK_C    11
   #define FORMAT_A    12
+  #define TYPE_PP     13
 #define outputvar     v246
 #define tmpCounter1   v247
 #define tmpCounter2   v248
@@ -43,6 +44,7 @@
   #define PW_ICAPOCC   5
   #define PW_OFROCC    6
   #define PW_RANDOCC   7
+  #define PW_SUDO      8
 #define vCurDir       v250
   #define C_ROOT    0 [ c:\
   #define C_USERS   1 [ c:\USERS\
@@ -84,6 +86,14 @@ load.pic(currentRoom);
 draw.pic(currentRoom);
 discard.pic(currentRoom);
 
+[ if a disk is inserted, show drive lever engaged
+if (floppyInserted) {
+  load.view(vw.TerminalArt);
+  add.to.pic(vw.TerminalArt, 0, 1, 131, 95, 4, 4);
+  discard.view(vw.TerminalArt);
+}
+
+[ extra functions for managing terminal commands
 load.logics(lgc.TerminalFunctions);
 
 [ no mouse
@@ -430,6 +440,17 @@ if ((lastChar == 13 || lastChar == 10)) {
     
     [ passwords are case sensitive
     set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+    [ check for sudo
+    if (PWfunction == PW_SUDO) {
+      [ never valid
+      output = "invalid password";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      [ get more input
+      inputmode = IM_CMDLINE;
+      goto(getInput);
+    }
+    
     [ check for loading subsystem
     reset(validPW);
     if (PWfunction == PW_BADASS) {
@@ -722,31 +743,16 @@ if ((lastChar == 13 || lastChar == 10)) {
     goto(syntaxerror);
     
     :inputC
-    [ CLS
-    sTemp2 = "cls";
-    if (compare.strings(sCmd, sTemp2)) {
-      [ no parameters allowed
-      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
-      if (work1 == 0) {
-        terminalfn = CLS;
-        call(lgc.TerminalFunctions);
-        goto(getinput);      
-      } else {
-        goto(syntaxerror);
-      }
-    }
-    
     [ CD/CHDIR
     reset(tmpFlag);
     sTemp2 = "cd";
-    if (compare.strings(sCmd, sTemp2)) { 
-      set(tmpFlag);
+    if (compare.strings(sCmd, sTemp2)) {
+      [ same as chdir 
+      goto(chdir);
     }
     sTemp2 = "chdir";
-    if (compare.strings(sCmd, sTemp2)) { 
-      set(tmpFlag);
-    }
-    if (tmpFlag) {
+    if (compare.strings(sCmd, sTemp2)) {
+      :chdir
       [ check parameter
       block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
       if (work1 == 0) {
@@ -892,7 +898,7 @@ if ((lastChar == 13 || lastChar == 10)) {
                 call(lgc.TerminalFunctions);
               }
             } else {
-              output = "No disk in drive";
+              output = "Drive not ready";
               terminalfn = ADDLINE_LF;
               call(lgc.TerminalFunctions);
             } 
@@ -910,10 +916,210 @@ if ((lastChar == 13 || lastChar == 10)) {
       goto(getInput);
     }
     
+    [ CLS
+    sTemp2 = "cls";
+    if (compare.strings(sCmd, sTemp2)) {
+      [ no parameters allowed
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      if (work1 == 0) {
+        terminalfn = CLS;
+        call(lgc.TerminalFunctions);
+        goto(getinput);      
+      } else {
+        goto(syntaxerror);
+      }
+    }
     
     [ COPY
     sTemp2 = "copy";
+    if (compare.strings(sCmd, sTemp2)) {
+      work1 = 32;
+      work2 = 0;
+      block(INSTR, &input, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
+      if (work2 != -1) {
+        [ extract dest
+        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+        work1 -= work2;
+        block(STR.RIGHT, &input, &sTemp3, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        work1 = 0;
+        block(STR.TRIM, &sTemp3, &sTemp3, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        [ trim src
+        block(STR.LEFT, &input, &input, &work2); [ str.left(sINPUT, sRESULT, vLEN)
+      } else {
+        [ no destination
+        sTemp3 = "";
+      }
+      [ input = src; sTemp3 = dest
+      [ only destination is a:
+      sTemp2 = "a:";
+      if (!compare.strings(sTemp2, sTemp3)) {
+        [ dest not allowed
+        output = "invalid or restricted destination";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+
+      [ only in c:\users\kw001
+      if (vCurDir == C_KW001) {
+        [ only files pwrpack.zip and pwrpack.txt, *.*
+        reset(tmpFlag);
+        tmpCounter1 = 0;
+        sTemp2 = "pwrpack.zip";
+        if (compare.strings(sTemp2, input)) {
+          set(tmpFlag);
+          tmpCounter1 = 1;
+          goto(chksource);
+        }
+        sTemp2 = "pwrpack.txt";
+        if (compare.strings(sTemp2, input)) {
+          set(tmpFlag);
+          tmpCounter1 = 2;
+          goto(chksource);
+        }
+        sTemp2 = "*.*";
+        if (compare.strings(sTemp2, input)) {
+          set(tmpFlag);
+          tmpCounter1 = 3;
+          goto(chksource);
+        }
+        sTemp2 = "pwrpack.*";
+        if (compare.strings(sTemp2, input)) {
+          set(tmpFlag);
+          tmpCounter1 = 3;
+          goto(chksource);
+        }
+        :chksource        
+        if (tmpFlag) {
+          [ is drive ready?
+          if (!floppyInserted) {
+            output = "drive a: not ready";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            goto(getInput);
+          }
+          [ is drive formatted?
+          if (!floppyFormatted) {
+            output = "disk error in drive a:";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            goto(getInput);
+          }
+          [ ok to copy!
+          if ((tmpCounter1 == 1 || tmpCounter1 == 3)) {
+            [ if file already there,
+            if ((floppyfiles == 1 || floppyfiles == 3)) {
+              output = "PWRPACK.TXT already exists on a:";
+              terminalfn = ADDLINE_LF;
+              call(lgc.TerminalFunctions);
+              output = "overwrite? (y/n) ?";
+              terminalfn = ADDLINE;
+              call(lgc.TerminalFunctions);
+              
+              :getKeyCopy1
+              lastChar = 0;
+              if (!have.key()) {
+                goto(getKeyCopy1);
+              }
+              if ((lastChar == 78 || lastChar == 110)) {
+                output = "n";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+                goto(chkzip);
+              }
+              if ((lastChar == 89 || lastChar == 121)) {
+                output = "y";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+              } else {
+                goto(getKeyCopy1);
+              }
+             
+            }
+            output = "copying PWRPACK.TXT to a:  ";
+            terminalfn = ADDLINE;
+            call(lgc.TerminalFunctions);
+            terminalfn = DELAY;
+            call(lgc.TerminalFunctions);
+            output = "done";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            block(BIT.OR, 0, &floppyfiles, 1); [ bit.or(BYVAL, VAR, MASK)
+          }
+          
+          :chkzip
+          if ((tmpCounter1 == 2 || tmpCounter1 == 3)) {
+            [ if file already there,
+            if ((floppyfiles == 2 || floppyfiles == 3)) {
+              output = "PWRPACK.ZIP already exists on a:";
+              terminalfn = ADDLINE_LF;
+              call(lgc.TerminalFunctions);
+              output = "overwrite? (y/n) ?";
+              terminalfn = ADDLINE;
+              call(lgc.TerminalFunctions);
+              
+              :getKeyCopy2
+              lastChar = 0;
+              if (!have.key()) {
+                goto(getKeyCopy2);
+              }
+              if ((lastChar == 78 || lastChar == 110)) {
+                output = "n";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+                goto(getInput);
+              }
+              if ((lastChar == 89 || lastChar == 121)) {
+                output = "y";
+                terminalfn = ADDLINE_LF;
+                call(lgc.TerminalFunctions);
+              } else {
+                goto(getKeyCopy2);
+              }
+             
+            }
+            output = "copying PWRPACK.ZIP to a:  ";
+            terminalfn = ADDLINE;
+            call(lgc.TerminalFunctions);
+            terminalfn = DELAY;
+            call(lgc.TerminalFunctions);
+            terminalfn = DELAY;
+            call(lgc.TerminalFunctions);
+            terminalfn = DELAY;
+            call(lgc.TerminalFunctions);
+            output = "done";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            block(BIT.OR, 0, &floppyfiles, 2); [ bit.or(BYVAL, VAR, MASK)
+          }
+        } else {
+          [ not a valid source
+          output = "destination directory is same as source";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+        }
+        goto(getInput);
+      } else {
+        [ if in a:
+        if (vCurDir == A_ROOT) {
+          [ src=dest
+          output = "destination directory is same as source";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+        } else {
+          [ files in this directory are protrcted
+          output = "copying not allowed -";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "current directory is restricted";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+        }
+        goto(getInput);
+      }
+    }
     
+    [ no other 'c' commands
     goto(syntaxerror);
     
     :inputD
@@ -935,6 +1141,7 @@ if ((lastChar == 13 || lastChar == 10)) {
           --work1;
           block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
         }
+        vShowDir = -1;
         [ valid dir values from any dir:
         [ c:, c:\users, c:\users\kw001, a:
         sTemp2 = "c:";
@@ -965,9 +1172,11 @@ if ((lastChar == 13 || lastChar == 10)) {
             }
           }
         }
+        
+        
         [ valid dir values from c:\
         [ users, users\kw001
-        if (vCurDir == C_ROOT) {
+        if (vCurDir == C_ROOT && vShowDir != -1) {
           sTemp2 = "users";
           if (compare.strings(input, sTemp2)) {
             vShowDir = C_USERS;
@@ -979,33 +1188,50 @@ if ((lastChar == 13 || lastChar == 10)) {
         }
         [ valid dir values from c:\users:
         [ kw001
-        if (vCurDir == C_USERS) {
+        if (vCurDir == C_USERS && vShowDir != -1) {
           sTemp2 = "kw001";
           if (compare.strings(input, sTemp2)) {
             vShowDir = C_KW001;
           }
         }
+      }
+      if (vShowDir != -1) {
+        terminalfn = SHOW_DIR;
+      } else {
         [ any other directory is invalid
         output = "ERROR: invalid or protected directory";
         terminalfn = ADDLINE_LF;
-        call(lgc.TerminalFunctions);
-        goto(getInput);     
       }
-      terminalfn = SHOW_DIR;
       call(lgc.TerminalFunctions);
       goto(getInput);
     }
     
-    
     [ DEL/ERASE
+    sTemp2 = "del";
+    if (compare.strings(sTemp2, sCmd)) {
+      :delfile
+      [ never allowed
+      terminalfn = NO_ACCESS;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+    [ no other 'd' commands
     goto(syntaxerror);
     
     :inputE
+    [ ERASE
+    sTemp2 = "erase";
+    if (compare.strings(sTemp2, sCmd)) {
+      [ same as 'del'
+      goto(delfile);
+    }
+    
     [ EXIT
     sTemp2 = "exit";
     if (compare.strings(sTemp2, sCmd)) {
       goto(reboot);
     }
+    [ no other 'e' commands
     goto(syntaxerror);
     
     :inputF
@@ -1045,9 +1271,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         }
         if (tmpFlag) {
           if (work1 == 0) {
-            [ a drive
-[ TODO: add code to allow inserting/removing hard disk
-set(floppyInserted);
+            [ a: drive
             if (floppyInserted) {
               if (floppyFormatted) {
                 [ ask to overwrite
@@ -1084,7 +1308,7 @@ set(floppyInserted);
               set(floppyFormatted);
               goto(getInput);
             } else {
-              output = "No disk in drive A:";
+              output = "Drive not ready";
               terminalfn = ADDLINE_LF;
               call(lgc.TerminalFunctions);
             } 
@@ -1102,6 +1326,7 @@ set(floppyInserted);
       }
       goto(getInput);
     }
+    [ no other 'f' commands
     goto(syntaxerror);
     
     :inputH
@@ -1208,11 +1433,10 @@ set(floppyInserted);
       output = "           and serial number.";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-    } else {
-      [ anything else is an error
-      goto(syntaxerror);
-    }
     goto(getInput);
+    }
+    [ no other 'h' commands
+    goto(syntaxerror);
     
     :inputL
     [ LOGOFF
@@ -1227,30 +1451,211 @@ set(floppyInserted);
       call(lgc.TerminalFunctions);
       [ jump to login code
       goto(login);
-    } else {
-      goto(syntaxerror);
     }
+    [ no other 'l' commands
+    goto(syntaxerror);
     
     :inputM
     [ MD/MKDIR
+    sTemp2 = "mkdir";
+    if (compare.strings(sTemp2, sCmd)) {
+      :mkdir
+      [ never allowed
+      terminalfn = NO_ACCESS;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+    sTemp2 = "md";
+    if (compare.strings(sTemp2, sCmd)) {
+      [ same as mkdid
+      goto(mkdir);
+    }
+    [ no other 'm' commands
     goto(syntaxerror);
     
     :inputR
     [ RD/RMDIR
+    sTemp2 = "rmdir";
+    if (compare.strings(sTemp2, sCmd)) {
+      :rmdir
+      [ never allowed
+      terminalfn = NO_ACCESS;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+
+    sTemp2 = "rd";
+    if (compare.strings(sTemp2, sCmd)) {
+      [ same as rmdir
+      goto(rmdir);
+    }
+    
     [ REN/RENAME
+    sTemp2 = "rename";
+    if (compare.strings(sTemp2, sCmd)) {
+      :rename
+      [ never allowed
+      terminalfn = NO_ACCESS;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+
+    sTemp2 = "ren";
+    if (compare.strings(sTemp2, sCmd)) {
+      [ same as rename
+      goto(rename);
+    }
+    [ no other 'r' commands
     goto(syntaxerror);
     
     :inputS
     [ SUDO
+    sTemp2 = "sudo";
+    if (compare.strings(sTemp2, sCmd)) {
+      [ should always be another command
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      if (work1 == 0) {
+        output = "no command specified";
+        terminalfn = ADDLINE_LF;
+        call(lgc.Terminalfunctions);
+        goto(getInput);
+      } else {
+        [ get an admin password 
+        [ (which will never work)
+        inputmode = IM_PASSWORD;
+        PWfunction = PW_SUDO;
+        output = "admin password: ";
+        terminalfn = ADDLINE;
+        call(lgc.Terminalfunctions);
+        [ get more input (no prompt)
+        input = "";
+        goto(getKey);
+      }
+    }
+    [ no other 's' commands
     goto(syntaxerror);
     
     :inputT
     [ TYPE
+    sTemp2 = "type";
+    if (compare.strings(sTemp2, sCmd)) {
+      sTemp2 = "";
+      if (compare.strings(input, sTemp2)) {
+        output = "no file specified";
+        terminalfn = ADDLINE_LF;
+        call(lgc.Terminalfunctions);
+        goto(getInput);
+      }
+      [ only valid file is PWRPACK.TXT in
+      [ c:\users\kw001 or a:
+      sTemp2 = "pwrpack.txt";
+      if (compare.strings(input, sTemp2) && 
+         (vCurDir == C_KW001 || vCurDir == A_ROOT)) {
+        terminalfn = TYPE_PP;
+        call(lgc.Terminalfunctions);
+      } else {
+        output = "%s12 is not a text file";
+        terminalfn = ADDLINE_LF;
+        call(lgc.Terminalfunctions);
+      }
+      goto(getInput);
+    }
+    [ no other 't' commands
     goto(syntaxerror);
     
     :inputV
     [ VER
+    sTemp2 = "ver";
+    if (compare.strings(sTemp2, sCmd)) {
+      output = "AGI Mainframe Operating System v1.0";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "Build 244, 08/06/89";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      terminalfn = LINEFEED;
+      call(lgc.Terminalfunctions);
+      output = "Power Pack module versions:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "  CAISOCC    1.22a";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "  ERIDOCC    1.04";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "  ESADOCC    2.22";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "  ICAPOCC    1.10";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "  OFROCC     1.01";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      output = "  RANDOCC    2.00";
+      terminalfn = ADDLINE_LF;
+      call(lgc.Terminalfunctions);
+      goto(getInput);
+    }
+    
     [ VOL
+    sTemp2 = "vol";
+    if (compare.strings(sTemp2, sCmd)) {
+      sTemp2 = "";
+      if (compare.strings(input, sTemp2)) {
+        output = "no drive specified";
+      } else {
+        [ acceptable params a:, a, c:, c
+        reset(tmpFlag);
+        sTemp2 = "a";
+        if (compare.strings(input, sTemp2)) {
+          work1 = 0;
+          set(tmpFlag);
+        } else {
+          sTemp2 = "a:";
+          if (compare.strings(input, sTemp2)) {
+            work1 = 0;
+            set(tmpFlag);
+          } else {
+            sTemp2 = "c";
+            if (compare.strings(input, sTemp2)) {
+              work1 = 1;
+              set(tmpFlag);
+            } else {
+              sTemp2 = "c:";
+              if (compare.strings(input, sTemp2)) {
+                work1 = 1;
+                set(tmpFlag);
+              }
+            }
+          }
+        }
+        if (tmpFlag) {
+          if (work1 == 0) {
+            [ a drive
+            if (floppyInserted) {
+              if (floppyFormatted) {
+                output = "Volume in drive a is %s5";
+              } else {
+                output = "Disk read error";
+              }
+            } else {
+              output = "Drive not ready";
+            } 
+          } else {
+            [ c drive
+            output = "Volume in drive a is AMOSDISK";
+          }
+        } else {
+          output = "The specified drive is invalid";
+        }
+      }
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      goto(getInput);
+    }
+    [ no other 'v' commands
     goto(syntaxerror);
   }
   
