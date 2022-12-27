@@ -451,7 +451,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
             "briefings to project staff.");
       if (posn(ego, 58, 112, 74, 119)) {
         print("The podium top looks scratched and worn.");
-        [ TODO: need picture of podium top closeup
+        [ TODO: need picture of podium top closeup for speed control panel (OFROCC) password
       }
       goto(doneclick);
     }
@@ -643,6 +643,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
       if (vCoffinState == OPEN) {
         print("The coffin is empty except for a silk pillow and a padded "
               "lining. It actually looks quite comfortable.");
+[ TODO: picture of pillow closeup showing palette control panel (ICAPOCC) password
       } else {
         print("It's Count Dracula's coffin from King's Quest II. Hopefully "
               "no body is in there.");
@@ -783,6 +784,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (!has("music sheet")) {
           get("music sheet");
           print("You take the sheet from the cabinet.");
+[ TODO: picture of music sheet closeup for FM instrument control panel (CAISOCC) password
           work1 = 3;
           call(lgc.ScoreHandler);
           set.loop(oCabinetDoor, 6);
@@ -1024,6 +1026,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
             work1 = 3;
             call(lgc.ScoreHandler);
             print("You carefully lift the scroll out of the chest.");
+[ TODO: picture of scroll closeup showing msgbox control panel (RANDOCC) password
             set.loop(oChest, 1);
             force.update(oFileDrawer);      
           }

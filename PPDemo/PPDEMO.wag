@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/21/2022 11:24:47 AM"
+   LastEdit = "12/27/2022 3:05:14 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -46,27 +46,27 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H3588667
-   CRC32 = &H3588667
+   CompCRC32 = &H1961C186
+   CRC32 = &H1961C186
    ID = lgc.Main
    IsRoom = False
-   Size = 3967
+   Size = 4655
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H2FC1C060
-   CRC32 = &H2FC1C060
+   CompCRC32 = &H15B95190
+   CRC32 = &H15B95190
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1465
+   Size = 1497
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H8C308932
-   CRC32 = &H8C308932
+   CompCRC32 = &H9D958EA3
+   CRC32 = &H9D958EA3
    IsRoom = False
    ID = lgc.Init
-   Size = 624
+   Size = 764
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
@@ -96,10 +96,10 @@
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &HACCD280E
-   CompCRC32 = &HACCD280E
+   CRC32 = &H8092F671
+   CompCRC32 = &H8092F671
    IsRoom = False
-   Size = 1054
+   Size = 1142
 
 [Logic96]
    ID = lgc.TraceInfo
@@ -141,14 +141,6 @@
    IsRoom = True
    Size = 7503
 
-[Logic28]
-   ID = cp.Paint
-   Description = ""
-   CRC32 = &H38D8E8CB
-   CompCRC32 = &H38D8E8CB
-   IsRoom = True
-   Size = 83
-
 [Logic22]
    ID = cp.CAISOCC
    Description = ""
@@ -176,18 +168,18 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H6A53FE99
-   CompCRC32 = &H6A53FE99
+   CRC32 = &H5364DD4F
+   CompCRC32 = &H5364DD4F
    IsRoom = True
    Size = 404
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H35190009
-   CompCRC32 = &H35190009
+   CRC32 = &HC6791AC8
+   CompCRC32 = &HC6791AC8
    IsRoom = True
-   Size = 5666
+   Size = 5661
 
 [Logic3]
    ID = rm.Lobby
@@ -240,16 +232,16 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HBD6EA6D5
-   CompCRC32 = &HBD6EA6D5
+   CRC32 = &H44851F55
+   CompCRC32 = &H44851F55
    IsRoom = True
    Size = 5175
 
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H4CE894CF
-   CompCRC32 = &H4CE894CF
+   CRC32 = &H5D971A3E
+   CompCRC32 = &H5D971A3E
    IsRoom = True
    Size = 7053
 
@@ -376,10 +368,10 @@
 [Logic29]
    ID = lgc.Statusbar
    Description = "custom status bar"
-   CRC32 = &H56F5C7AD
-   CompCRC32 = &H56F5C7AD
+   CRC32 = &H324FC804
+   CompCRC32 = &H324FC804
    IsRoom = False
-   Size = 358
+   Size = 369
 
 [Logic30]
    ID = lgc.InitToolbar

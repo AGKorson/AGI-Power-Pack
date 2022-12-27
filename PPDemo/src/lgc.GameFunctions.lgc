@@ -202,32 +202,6 @@ if (controller(cAbout)) {
   print(gameAboutMsg);
 }
 
-[ speed controls
-if ((controller(cFastest) || 
-     said("fastest") || 
-     said("fastest", "speed"))) {
-  [ no delay between interpreter cycles
-  animationInterval = FASTEST_SPEED;
-}
-if ((controller(cFast) || 
-     said("fast") || 
-     said("fast", "speed"))) {
-  [ 1/20th of a second delay between interpreter cycles
-  animationInterval = FAST_SPEED;
-}
-if ((controller(cNormal) || 
-     said("normal") || 
-     said("normal", "speed"))) {
-  [ 2/20ths of a second delay between interpreter cycles
-  animationInterval = NORMAL_SPEED;
-}
-if ((controller(cSlow) || 
-     said("slow") || 
-     said("slow", "speed"))) {
-  [ 4/20ths of a second delay between interpreter cycles
-  animationInterval = SLOW_SPEED;
-}
-
 [ sound volume controls
 if (controller(cCrescendo) && attenuation > 0 && soundOn) {
   [ to increase volume, lower sound attenuation variable
@@ -240,11 +214,6 @@ if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
     [ max for single channel is 15
     attenuation = 15;
   }
-}
-
-[ toggle clock
-if (controller(cClock)) {
-  toggle(clockOn);
 }
 
 [ if debug mode is requested
@@ -287,6 +256,39 @@ if ((controller(cRestore) ||
 if ((controller(cRestart) || 
      said("restart", "game") || 
      said("restart"))) {
+  [ cache sound, clock, speed settings
+  if (soundOn) {
+    work1 = 1;
+  } else {
+    work1 = 0;
+  }
+  if (4channelsound) {
+    work2 = 1;
+  } else {
+    work2 = 0;
+  }
+  if (useMIDI) {
+    work3 = 1;
+  } else {
+    work3 = 0;
+  }
+  s23 = "%v46%v47%v48";
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  work1 = 0;
+  if (clockOn) {
+    work2 = 1;
+  } else {
+    work2 = 0;
+  }
+  if (realClock) {
+    work3 = 1;
+  } else {
+    work3 = 0;
+  }
+  s22 = "%v46%v47%v48";
+  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+  s21 = "%v10";
+  block(STR.FORMAT, &s21, &s21, 0); [ str.format(sINPUT, sRESULT)
   restart.game();
 }
 

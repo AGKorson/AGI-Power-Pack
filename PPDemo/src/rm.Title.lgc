@@ -2,8 +2,39 @@
 [
 [ rm.Title: Opening/intro
 [
-[ This is an example of an intro screen, with scrolling credits and
-[ a theme song.
+[ TODO: add title screen and opening credits
+[
+[" Adventure"
+["   Game"
+["Interpreter"
+[
+[then
+[ 
+[ "A"
+[ "G"
+[ "I"
+[
+[ then
+[
+[ "AGI"
+[
+[ then 
+[
+[ explode to white; fade in to 
+[large stylized AGI, and fade in
+[PowerPack notation
+[
+[fireworks, or color waves- some
+[kind of background animation
+[
+[then scroll credits: (copy GR script?)
+[Power Pack coding:
+[Demo Game designed/written by: me
+[Background Art: klownstein
+[Animation:  klownstein
+[additional art: me
+[Music and sound effects: me
+[Playtesters: tbd
 [
 [********************************************************************
 

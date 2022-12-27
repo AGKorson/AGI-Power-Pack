@@ -29,20 +29,26 @@ if (deathType != 255) {
   [ hit by a car
   if (deathType == 1) {
     print("Stepping in front of a moving vehicle turned out to be a bad idea.");
+    [ patients continue on their way
+    #define patientCar   o3
+    start.update(patientCar);
   }
 
   [ trapped in the secret room
   if (deathType == 2) {
     print("In secret rooms, no one can hear you scream. Looks like you'll be here awhile.");
   }
+  
   [ stuck in the coffin
   if (deathType == 3) {
     print("Look at the bright side - at least you'll save money on your funeral costs.");
   }
+  
   [ escorted from the premises 
   if (deathType == 4) {
     print("Looks like your trip to Oakhurst will include a tour of the city jail!");
   }
+  
   [ stunned by bat-mobile security alarm
   if (deathType == 5) {
     print("Lesson learned - don't mess with the Dark Knight's ride.");
@@ -72,15 +78,29 @@ if (deathTimer > 0) {
   
 [ after a delay, show ending message to player
 if (deathTimer == 1) {
-
-[ TODO: need to add a flag and messages for winning vs. losing
-  print("Thank you for playing this game. Better luck next time!");
+  if (deathType == 255) {
+    print("game is over - let's check your score...");
+    [ TODO: add end-of-game messages; allow user to come back
+    [ any time to use the control panels (another game setting
+    [ for the config file
+    print("TBD...");
+  } else {
+    print("Thank you for playing this game. Better luck next time!");
+  }
 }
 
 [ menu access is allowed, to restart or restore
 if (controller(cMenu)) {
   menu.input();
+  oldSeconds = -1;
 }
+if (controller(cLeftClick)) {
+  if (mouseY < 8) {
+    menu.input();
+    oldSeconds = -1;
+  }
+}
+
 [ limited toolbar functionality
 call(lgc.ToolbarFunctions);
 

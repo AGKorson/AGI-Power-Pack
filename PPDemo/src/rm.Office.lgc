@@ -74,7 +74,8 @@ if (newRoom) {
   
   [ folder under rug
   if (!has("folder")) {
-  [ TODO: picture/logic to show folder details
+[ TODO: picture/views/logics of folder for sound (ESADOCC) password
+[  Folder: label says 'ESADOCC'. A piece of paper is taped inside that has recovery password on it.
     animate.obj(oFolder);
     set.view(oFolder, vw.OfficeArt);
     set.loop(oFolder, 5);
@@ -117,7 +118,7 @@ if (newRoom) {
   ignore.objs(oSafe);
   if (safeStatus == OPEN) {
     if (has("BaDASS manual")) {
-    [ TODO: picture/logic to read the BaDASS manual
+    [ TODO: picture/logic to read the BaDASS manual/password
       set.loop(oSafe, 1);
       set.cel(oSafe, 7);
     } else {
@@ -187,7 +188,7 @@ if (newRoom) {
     if (officeFileDrStatus == OPEN2) { 
       position(oFileDrawer, 93, 121);
       if (has("notebook")) {
-      [ TODO: picture/views/logics to read the notebook
+[ TODO: picture/views/logics of notebook for mouse (ERIDOCC) password
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
       } else {
@@ -373,6 +374,7 @@ if (controller(cLeftClick)) {
             if (!has("folder")) {
               print("It looks like there's something under this corner "
                     "of the rug.");
+[ closeup of folder for sound control panel (ESADOCC) password
             } else {
               print("One corner is folded back.");
             }

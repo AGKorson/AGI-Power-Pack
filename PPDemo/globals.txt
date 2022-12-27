@@ -31,22 +31,24 @@
 #define cSoundFM               c12 [ menu: Sound; key: none
 #define cSoundMIDI             c13 [ menu: Sound; key: none
 #define cClock                 c14 [ menu: Special; key: F6
-#define cPause                 c15 [ menu: Special; key: none (ESC to show menu also pauses game)
-#define cNormal                c16 [ menu: Speed;   key: none
-#define cSlow                  c17 [ menu: Speed;   key: none
-#define cFast                  c18 [ menu: Speed;   key: none
-#define cFastest               c19 [ menu: Speed;   key: none
-#define cCancelLine            c20 [ menu: none;    key: Ctrl+C
-#define cEchoLine              c21 [ menu: none;    key: F3
-#define cCrescendo             c22 [ menu: none;    key: +
-#define cDecrescendo           c23 [ menu: none;    key: -
-#define cLeftClick             c24 [ mouse left button click
-#define cLeftDblClick          c25
-#define cRightClick            c26
-#define cRightDblClick         c27
-#define cDummy                 c28 [ menu separator - should always be disabled
-#define cLogInput              c29 [ temp debug item
-#define cShowClicks            c30 [ temp debug item
+#define cGameClock             c15
+#define cRealClock             c16
+#define cPause                 c17 [ menu: Special; key: none (ESC to show menu also pauses game)
+#define cNormal                c18 [ menu: Speed;   key: none
+#define cSlow                  c19 [ menu: Speed;   key: none
+#define cFast                  c20 [ menu: Speed;   key: none
+#define cFastest               c21 [ menu: Speed;   key: none
+#define cCancelLine            c22 [ menu: none;    key: Ctrl+C
+#define cEchoLine              c23 [ menu: none;    key: F3
+#define cCrescendo             c24 [ menu: none;    key: +
+#define cDecrescendo           c25 [ menu: none;    key: -
+#define cLeftClick             c26 [ mouse left button click
+#define cLeftDblClick          c27
+#define cRightClick            c28
+#define cRightDblClick         c29
+#define cDummy                 c30 [ menu separator - should always be disabled
+#define cLogInput              c31 [ temp debug item
+#define cShowClicks            c32 [ temp debug item
 #define CUSTOM.INST           c252
 #define SET.INST              c253
 #define SET.SNDMODE           c254
@@ -60,6 +62,7 @@
 #define closetTimerStart       f24
 #define trapped                f25
 #define closetTimerDone        f26
+#define realClock              f27
 #define negativeScore          f30 [ set when player score is below zero
 #define firstLobby             f31 [ to track first time ego visits the lobby
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
@@ -173,25 +176,26 @@
 #define car6car7               v76
 #define currentHour            v77 [ hour value of real time
 #define currentMinute          v78 [ minute value of real time
-#define rugStatus              v79
-#define timerMin               v80
-#define timerSec               v81
-#define patientClock           v82 [ twenty minute timer cycle to track patient locations
-#define patient1Loc            v83
-#define patient2Loc            v84
-#define patient3Loc            v85
-#define patient4Loc            v86
+#define currentSecond          v79
+#define rugStatus              v80
+#define timerMin               v81
+#define timerSec               v82
+#define patientClock           v83 [ twenty minute timer cycle to track patient locations
+#define patient1Loc            v84
+#define patient2Loc            v85
+#define patient3Loc            v86
+#define patient4Loc            v87
 #define LOC_LOBBY                1
 #define LOC_EXAM                 2
 #define LOC_GONE                 3
-#define safeStatus             v87
-#define pictureStatus          v88
-#define officeDskDrStatus      v89
-#define officeFileDrStatus     v90
-#define storeDeskDrStatus      v91
-#define storeFileDrStatus      v92
-#define storeChestDrStatus     v93
-#define storeChestStatus       v94
+#define safeStatus             v88
+#define pictureStatus          v89
+#define officeDskDrStatus      v90
+#define officeFileDrStatus     v91
+#define storeDeskDrStatus      v92
+#define storeFileDrStatus      v93
+#define storeChestDrStatus     v94
+#define storeChestStatus       v95
 #define CLOSED                   0
 #define OPEN                     1
 #define OPEN1                    1
@@ -199,7 +203,7 @@
 #define OPEN3                    3
 #define CLOSING                  4
 #define OPENING                  5
-#define floppyfiles            v95 [ 0=blank; 1=zip; 2=txt; 3=both
+#define floppyfiles            v96 [ 0=blank; 1=zip; 2=txt; 3=both
 #define 2E_MOUSE                -1
 #define MSGBOX.COLOR.V          -1
 #define MSGBOX.COLOR            -2

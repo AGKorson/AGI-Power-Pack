@@ -23,24 +23,61 @@ if (gameRestarted) {
   disable.item(cDummy);
   set(enableMenu);
   reset(disableGameFunctions);
-  
   [ when restarting, s23 is set to hold sound settings
-  block(STR2BYTE, &s23, &v255, 0); [ str2byte(sINPUT, vRESULT)
-  if (v255 > 99) {
+  block(STR2BYTE, &s23, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+  if (tmp0 > 99) {
     set(soundOn);
-    v255 -= 100;
+    tmp0 -= 100;
+    enable.item(cSoundPC);
+    enable.item(cSoundFM);
+    enable.item(cSoundMIDI);
   } else {
     reset(soundOn);
+    disable.item(cSoundPC);
+    disable.item(cSoundFM);
+    disable.item(cSoundMIDI);
   }
-  if (v255 > 9) {
+  if (tmp0 > 9) {
     set(4channelsound);
     set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    v255 -= 10;
+    tmp0 -= 10;
   }
-  if (v255) {
+  if (tmp0) {
     set(useMIDI);
     set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
   }
+  [ s22 holds clock 
+  block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+  if (tmp0 > 9) {
+    [ enable clock
+    set(clockOn);
+    tmp0 -= 10;
+    enable.item(cRealClock);
+    enable.item(cGameClock);
+  } else {
+    disable.item(cRealClock);
+    disable.item(cGameClock);
+  }
+  if (tmp0) {
+    [ enable real time
+    set(realClock);
+  }
+  if (clockOn) {
+    if (realClock) {
+      [ status bar checks realtime minutes
+      set.cursor.char(" l29, v3, v7, v78, f9");
+    } else {
+      [ status bar checks gametime seconds
+      set.cursor.char(" l29, v3, v7, v11, f9");
+    }
+  } else {
+    [ status bar doesn't check for time
+    set.cursor.char(" l29, v3, v7, f9");
+  }
+
+  [ s21 holds speed
+  block(STR2BYTE, &s21, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+  
   [ menus don't change during restart, so don't need to update them
 } else {
   [ some things only happen during initial start - skip if restarting
@@ -78,6 +115,67 @@ if (gameRestarted) {
   [ assign input prompt and cursor character
   set.string(inputPrompt, ">");
   set.cursor.char(cursor);
+  
+  [ check for configuration file
+  s23 = "ppdemo.cfg";
+  tmp0 = 0;
+  tmp1 = &s22;
+  block(READ.STRING, &s23, &tmp0, &tmp1); [ read.string(sFILENAME, vINDEX, vSTRIN)
+  [ check v18 to see if file was found
+  if (errorParameter == 0) {
+    [ file found - extract settings from the string
+    block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+    [ options are 3-digit number: ones = useMIDI
+    [                             tens = useFMSynth
+    [                             hundreds = soundOn
+    if (tmp0 > 99) {
+      set(soundOn);
+      tmp0 -= 100;
+    } else {
+      reset(soundOn);
+    }
+    if (tmp0 > 9) {
+      set(4channelsound);
+      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      tmp0 -= 10;
+    }
+    if (tmp0) {
+      set(useMIDI);
+      set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    }
+  } else {
+    [ if no file found, reset v18
+    errorParameter = 0;
+    
+    [ use MIDI, and set desired instruments
+    set(4channelsound);
+    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
+    set(useMIDI);
+    work1 = 0;
+    work2 = 56;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    ++work1;
+    work2 = 48;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    ++work1;
+    work2 = 114;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  
+  [ TODO: save custom FM instruments to config file; save speed/clock settings to file
+    [ save a default config file
+    s23 = "ppdemo.cfg";
+    s22 = "111";
+    v220 = 22;
+    block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
+  }
+  
+  [ set speed to normal (delay=2/20ths of a second)
+  animationInterval = NORMAL_SPEED;
+  
+  [ enable custom status bar (logic 13 [lgc.Statusbar])
+  [ check for score (v3), max score (v7) and sound status (f9)
+  set.cursor.char(" l29,  v3, v7, f9");
+
 }
 
 [ enable debugging and tracing by default (remove when ready to release game)
@@ -97,8 +195,6 @@ msgBoxBG = WHITE;
 msgBoxFG = BLACK;
 msgBoxBorder = RED;
 
-[ check for configuration file
-
 [ default instruments for 4-channel sound
 FMInst0 = 128;
 FMInst1 = 128;
@@ -106,58 +202,6 @@ FMInst2 = 128;
 FMInst3 = 129;
 FMInst4 = 130;
 
-[ attempt to read options file
-s23 = "ppdemo.cfg";
-tmp0 = 0;
-tmp1 = &s22;
-block(READ.STRING, &s23, &tmp0, &tmp1); [ read.string(sFILENAME, vINDEX, vSTRIN)
-[ check v18 to see if file was found
-if (errorParameter == 0) {
-  [ file found - extract settings from the string
-  block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
-  [ options are 3-digit number: ones = useMIDI
-  [                             tens = useFMSynth
-  [                             hundreds = soundOn
-  if (tmp0 > 99) {
-    set(soundOn);
-    tmp0 -= 100;
-  } else {
-    reset(soundOn);
-  }
-  if (tmp0 > 9) {
-    set(4channelsound);
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    tmp0 -= 10;
-  }
-  if (tmp0) {
-    set(useMIDI);
-    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
-  }
-} else {
-  [ if no file found, reset v18
-  errorParameter = 0;
-  
-  [ use MIDI, and set desired instruments
-  set(4channelsound);
-  set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
-  set(useMIDI);
-  work1 = 0;
-  work2 = 56;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-  ++work1;
-  work2 = 48;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-  ++work1;
-  work2 = 114;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-
-[ TODO: save custom FM instruments to config file  
-  [ save a default config file
-  s23 = "ppdemo.cfg";
-  s22 = "111";
-  v220 = 22;
-  block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
-}
 
 [ default ego parameters
 egoStepSize = 1;
@@ -167,16 +211,8 @@ egoCycleTime = 1;
 [set the max score value for the game
 maxScore = MAX_SCORE_VALUE;
 
-[ set speed to normal (delay=2/20ths of a second)
-animationInterval = NORMAL_SPEED; 
-
 [ set palette to AGI default
 palette = m3;
-
-[ enable custom status bar
-[ run logic 13(lgc.Statusbar)
-[ check for score (v3), max score (v7), current minute(v78) and sound status (f9)
-set.cursor.char(" l29,  v3, v7, v78, f9");
 
 [ select ego and parked car models
 

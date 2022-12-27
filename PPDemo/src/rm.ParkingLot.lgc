@@ -276,6 +276,7 @@ if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
 if (patientTimer == 0) {
   [ reset the timer
   random(140, 250, patientTimer);
+[ TODO: finalize random timing for parking lot patient arrivals
 random(10, 20, patientTimer);
 
   if (fPatientHere) {
@@ -449,9 +450,11 @@ if (!fEgoDead) {
         set.priority.v(ego, work1);
       }
       set(fEgoDead);
-      patientSeq = 99;
-      stop.motion(patientCar);
-      stop.cycling(patientCar);
+      [ temporarily stop driving
+      stop.update(patientCar);
+[      patientSeq = 99;
+[      stop.motion(patientCar);
+[      stop.cycling(patientCar);
       load.view(vw.EgoDead);
       set.view(ego, vw.EgoDead);
       egoDir = STOPPED;
@@ -962,18 +965,6 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
 :exit              [  test for leaving the room
 [*****
 if (egoHitSpecial) {
-
-
-[[ DEBUG: set patient change over time
-[get.num("start minute: ", patientClock); [ minutes of game time
-[elapsedMinutes = patientClock;
-[--patientClock;
-[oldMinutes = patientClock;
-[call(lgc.GameFunctions);
-[print("current: %v12, old: %v32, clock: %v82");
-[print("p2loc: %v84");
-
-
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
