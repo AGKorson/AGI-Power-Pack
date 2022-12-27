@@ -24,9 +24,9 @@
 #define closedoor       f230
 #define fDoorDone       f231
 #define fEgoDead        f232
+#define fDoneWash       f233
 
-
-#define fallSeq      v220
+#define fallSeq         v220
 #define    NOFALL        0
 #define    STARTFALL     1
 #define    MOVE2WALL1    2
@@ -36,7 +36,6 @@
 #define    SITUP         6
 #define    FALLDONE      7
 #define    STANDUP       8
-
 #define movebroomstatus v221
 #define    NOMOVE        0
 #define    MOVE2CORNER   1
@@ -46,7 +45,10 @@
 #define triptimer       v224
 #define    TRIPDELAY     80
 #define tmpLoop         v225
-
+#define washSeq         v226
+#define    MOVESINK1     1
+#define    MOVESINK2     2
+#define    WASHING       3
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -558,32 +560,20 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     if (mouseX > 58 && mouseX < 69 && mouseY > 130 && mouseY < 145) {
       if (posn(ego, 57, 140, 70, 150)) {
         if (!handsWashed) {
-          set(handsWashed);
-          [ TODO: need a hand washing scene
-          if (touchTrees && touchPlunger) {
-            print("Washing the sap and plunger-stink from your hands was a good "
-                  "idea. They are now clean and germ-free!");
-            currentScore += 4;
+          set(disableGameFunctions);
+          prevent.input();
+          if (egoY < 144) {
+            washSeq = MOVESINK1;
+            move.obj(ego, 68, 144, 1, fDoneWash);
           } else {
-            if (touchTrees) {
-              print("You wash the sap from your hands. Now they aren't so sticky.");
-              currentScore += 1;
-            } else {
-              if (touchPlunger) {
-                print("Touching that plunger was not a great idea. Washing your "
-                      "hands is.");
-                currentScore += 3;
-              } else {
-                print("Might as well wash your hands. Cleanliness is next to "
-                      "godliness!");
-              }
-            }
+            washSeq = MOVESINK2;
+            move.obj(ego, 60, 144, 1, fDoneWash);
           }
         } else {
           print("You already washed your hands.");
         }
       } else {
-        print("You can't reach that from here.");
+        print("You can't reach it from here.");
       }
       goto(doneclick);
     }
@@ -785,6 +775,8 @@ if (fDone && fallSeq == STANDUP) {
 [ trip over broom even after first fall, unless it's been moved
 if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
   print("You trip over the broom again!");
+  work1 = -1;
+  call(lgc.ScoreHandler);
   reset(cantrip);
   triptimer = TRIPDELAY;
   triptimer = 90;
@@ -869,6 +861,63 @@ if (fDoorDone) {
     set(closetopen);
   }
 }
+
+[ washing hands
+if (fDoneWash) {
+  if (washSeq == MOVESINK1) {
+    washSeq = MOVESINK2;
+    move.obj(ego, 60, 144, 1, fDoneWash);
+    return();
+  }
+  if (washSeq == MOVESINK2) {
+    set(noScript);
+    load.view(vw.EgoWashingHands);
+    set.view(ego, vw.EgoWashingHands);
+    set.loop(ego, 0);
+    set.cel(ego, 0);
+    work1 = 0;
+    set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
+    end.of.loop(ego, fDoneWash);
+    washSeq = WASHING;
+    return();
+  }
+  if (washSeq == WASHING) {
+    washSeq = 0;
+    set.view(ego, vw.Ego);
+    set.loop(ego, 3);
+    discard.view(vw.EgoWashingHands);
+    start.cycling(ego);
+    work1 = 1;
+    set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
+    reset(noScript);
+    reset(disableGameFunctions);
+    accept.input();
+    set(handsWashed);
+    if (touchTrees && touchPlunger) {
+      print("Washing the sap and plunger-stink from your hands was a good "
+            "idea. They are now clean and germ-free!");
+      work1 = 4;
+      call(lgc.ScoreHandler);
+    } else {
+      if (touchTrees) {
+        print("You wash the sap from your hands. Now they aren't so sticky.");
+        work1 = 1;
+        call(lgc.ScoreHandler);
+      } else {
+        if (touchPlunger) {
+          print("Touching that plunger was not a great idea. Washing your "
+                "hands is.");
+          work1 = 3;
+          call(lgc.ScoreHandler);
+        } else {
+          print("Might as well wash your hands. Cleanliness is next to "
+                "godliness!");
+        }
+      }
+    }
+  }
+}
+
 [*****
 :exit              [  test for leaving the room
 [*****
@@ -882,7 +931,7 @@ if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
   prevent.input();
   [ turn off auto-cycle to allow cycle-at-rest
   work1 = 0;
-  set.upper.left(&ego, &work1);
+  set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
   end.of.loop(ego, fDone);
   [ show wait cursor
   cursoricon = C_WAIT;

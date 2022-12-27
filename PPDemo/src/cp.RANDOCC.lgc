@@ -1,6 +1,6 @@
 [ ********************************************************************
 [ 
-[ cp.MsgBox
+[ cp.RANDOCC
 [
 [ Rectangular Alpha-Numeric Display Options Control Console
 [ RANDOCC
@@ -105,11 +105,11 @@ if (newRoom) {
   discard.pic(currentRoom);
   
   [ this view has all the art for cursors and buttons
-  load.view(vw.cp.MsgBoxArt);
+  load.view(vw.cp.RANDOCC);
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(optCursor);
-  set.view(optCursor, vw.cp.MsgBoxArt);
+  set.view(optCursor, vw.cp.RANDOCC);
   set.loop(optCursor, LP_OPT);
   set.cel(optCursor, 0);
   stop.cycling(optCursor);
@@ -118,7 +118,7 @@ if (newRoom) {
   
   [ option button that determines action on palette right-click
   animate.obj(optRightBtn);
-  set.view(optRightBtn, vw.cp.MsgBoxArt);
+  set.view(optRightBtn, vw.cp.RANDOCC);
   set.loop(optRightBtn, LP_OPT);
   set.cel(optRightBtn, 0);
   stop.cycling(optRightBtn);
@@ -128,7 +128,7 @@ if (newRoom) {
   [ four-part cursor; default position is the Keyboard input option
   animate.obj(oCursorB);
   ignore.objs(oCursorB);
-  set.view(oCursorB, vw.cp.MsgBoxArt);
+  set.view(oCursorB, vw.cp.RANDOCC);
   set.loop(oCursorB, LP_CF_OPT);
   set.cel(oCursorB, 0);
   stop.cycling(oCursorB);
@@ -136,7 +136,7 @@ if (newRoom) {
   
   animate.obj(oCursorT);
   ignore.objs(oCursorT);
-  set.view(oCursorT, vw.cp.MsgBoxArt);
+  set.view(oCursorT, vw.cp.RANDOCC);
   set.loop(oCursorT, LP_CF_OPT);
   set.cel(oCursorT, 0);
   stop.cycling(oCursorT);
@@ -144,7 +144,7 @@ if (newRoom) {
   
   animate.obj(oCursorL);
   ignore.objs(oCursorL);
-  set.view(oCursorL, vw.cp.MsgBoxArt);
+  set.view(oCursorL, vw.cp.RANDOCC);
   set.loop(oCursorL, LP_CF_OPT);
   set.cel(oCursorL, 1);
   stop.cycling(oCursorL);
@@ -152,7 +152,7 @@ if (newRoom) {
   
   animate.obj(oCursorR);
   ignore.objs(oCursorR);
-  set.view(oCursorR, vw.cp.MsgBoxArt);
+  set.view(oCursorR, vw.cp.RANDOCC);
   set.loop(oCursorR, LP_CF_OPT);
   set.cel(oCursorR, 1);
   stop.cycling(oCursorR);

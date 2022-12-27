@@ -1,0 +1,51 @@
+[ 
+[ lgc.ScoreHandler
+[ 
+[ currentScore has absolute value of score; negativeScore flag
+[ determines sign;
+[
+[ work1 has score adjustment, positive, or negative
+[ adjustment is never more than +/-5
+[
+[ max negative value is -250  
+[ max positive value is +250
+
+if (negativeScore) {
+  [ subtract the adjustment amount
+  currentScore -= work1;
+  [ if adustment was negative(-1 through -5)
+  if (work1 > 250) {
+    [ max is 250
+    if (currentScore > 250) {
+      currentScore = 250;
+    }
+  } else {
+    [ check for reversal to positive value
+    if ((currentScore > 251 || currentScore == 0)) {
+      reset(negativeScore);
+      currentScore *= -1;
+    }
+  }
+} else {
+  [ add the adjustment amount
+  currentScore += work1;
+  [ if adjustment was positive
+  if (work1 < 6) {
+    [ max is 250
+    if (currentScore > 250) {
+      currentScore = 250;
+    }
+  } else {
+    [ check for reversal to negative value
+    if (currentScore > 250) {
+      set(negativeScore);
+      currentScore *= -1;
+    }
+  }
+}
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

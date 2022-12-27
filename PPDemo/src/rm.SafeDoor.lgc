@@ -20,6 +20,7 @@
 #define comboNum2     v222
 #define comboNum3     v223
 #define spinCount     v224
+#define SPIN_DELAY     3
 #define comboRev1     v225
 #define comboRev2     v226
 #define comboRev3     v227
@@ -155,10 +156,10 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   
-display(12, 60, "currentNum1: %v220 ");
-display(13, 60, "combo1: %v221/%v225  ");
-display(14, 60, "combo2: %v222/%v226  ");
-display(15, 60, "combo3: %v223/%v227  ");
+[display(12, 60, "currentNum1: %v220 ");
+[display(13, 60, "combo1: %v221/%v225  ");
+[display(14, 60, "combo2: %v222/%v226  ");
+[display(15, 60, "combo3: %v223/%v227  ");
 
   [ use hand cursor
   cursoricon = C_USE; [cursormode;
@@ -178,11 +179,9 @@ if (controller(cLeftClick)) {
   work1 /= 16;
   if (work1 == 7) {
     [ check for correct combo
-    [ TODO: determine final combination
-    if (comboNum1 == 36 && comboNum2 == 24 && comboRev2 == 1 &&
-        comboNum3 == 34) {
-      print("correct!");
-
+    if (comboNum1 == 36 && comboNum2 == 8 && comboRev2 == 1 &&
+        comboNum3 == 14) {
+      print("The safe door opens!");
       [ add numbers permanently
       comboNum1 = vw.SafeArt;
       comboNum2 = 4;
@@ -233,7 +232,7 @@ if (controller(cLeftClick)) {
       end.of.loop(oNum00, fOpenSafe);
       set(fOpening);
     } else {
-      print("wrong combination- try again");
+      print("Nothing happens. That must not be the right combination.");
       comboNum1 = -1;
       comboNum2 = -1;
       comboNum3 = -1;
@@ -289,7 +288,7 @@ if (spinLeft) {
   [ if counter is at zero, spin it
   if (spinCount == 0) {
     [ reset the counter
-    spinCount = 2;
+    spinCount = SPIN_DELAY;
     [ adjust number
     currentNum += 1;
     if (currentNum > 39) {
@@ -340,7 +339,7 @@ if (spinRight) {
   [ if counter is at zero, spin it
   if (spinCount == 0) {
     [ reset the counter
-    spinCount = 3;
+    spinCount = SPIN_DELAY;
     [ adjust number
     currentNum -= 1;
     if (currentNum > 39) {
@@ -384,10 +383,10 @@ if (spinRight) {
 [ update numbers as the dial spins
 if (updateCombo) {
   reset(updateCombo);
-  display(12, 60, "currentNum: %v220 ");
-  display(13, 60, "combo1: %v221/%v225  ");
-  display(14, 60, "combo2: %v222/%v226  ");
-  display(15, 60, "combo3: %v223/%v227  ");
+[  display(12, 60, "currentNum: %v220 ");
+[  display(13, 60, "combo1: %v221/%v225  ");
+[  display(14, 60, "combo2: %v222/%v226  ");
+[  display(15, 60, "combo3: %v223/%v227  ");
   set.cel.v(oNum00, currentNum);
   set.cel.v(oNum05, currentNum);
   set.cel.v(oNum10, currentNum);

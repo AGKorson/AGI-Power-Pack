@@ -29,54 +29,6 @@
 [ room-specific here
 [ *************************************************
 
-
-[ saving a cursor
-if (saveCursor) {
-  reset(saveCursor);
-  [ copy s16 into designated cursor msg value
-  [ v227 is cursor index value in cp.Mouse logic
-  work1 = v227;
-  work1 += 40;
-  work2 = 16;
-  block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
-  [ provide feedback
-  print.at("Cursor saved.", 14, 19, 15);
-
-print("%v46, %m44");
-  
-  return();
-}
-
-[ restore a cursor
-if (restoreCursor) {
-  reset(restoreCursor);
-  [ set s12 to default of designated cursor
-  work1 = &s12;
-  work2 = v227;
-  work2 += 46;
-  block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
-  [ now copy it to the current cursor msgnum
-  work2 -= 6;
-  block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  [ force update by resetting the cursor index
-  v227 = -1;
-  [ provide feedback
-  print.at("Cursor restored.", 14, 19, 17);
-  return();
-}
-
-[ check for instrument change
-if (saveCustomInst) {
-  reset(saveCustomInst);
-  work1 = 22;
-  block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-  work1 = v221; [ selinst in cp.Instrument
-  work1 += 52; [convert to msg offset
-  work2 = &s12; [ use string 12
-  block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
-  return();
-}
-
 [ convert game time into 20 minute timer intervals
 if (elapsedMinutes != oldMinutes) {
   oldMinutes = elapsedMinutes;
@@ -124,6 +76,322 @@ if (controller(cRightClick)) {
   }
 }
 
+[ **************************************
+[ PROCESS PLAYER INPUT
+[ **************************************
+
+[ check for cussing
+work1 = 0;
+:loop1
+get.string(tmpStr1, m1, -1, 0, 0);
+work2 = 70; ['F'
+[ pass starting pos via vRESULT
+work3 = work1;
+block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
+if (work3 == 255) {
+  work2 = 102; [ 'f'
+  work3 = work1;
+  block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
+}
+[ save result in work1
+work1 = work3;
+[ if letter 'f' is found
+if (work1 < 255) {
+  [ check for match against 'fuck' by getting 
+  [ 'f' plus next three letters
+  work2 = 4;
+  block(STR.MID, &tmpStr1, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN);
+  tmpStr2 = "fuck";
+  [ advance position so loop can look for next 'f'
+  ++work1;
+  if (compare.strings(tmpStr1, tmpStr2)) {
+    print("Watch your language, you son of a bitch!");
+    get.string(tmpStr1, m1, -1, 0, 0);
+    block(STR.LEFT, &tmpStr1, &tmpStr1, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+    tmpStr2 = "***";
+    block(STR.CONCAT, &tmpStr1, &tmpStr2, 0);
+    set.string(SET.INPUT, "%s20");
+  } else {
+    [ check rest of line
+    goto(loop1);
+  }
+}
+
+[ ---------------------------------------------
+if (said("test", "sound")) {
+  load.sound(s.Tone1);
+  load.sound(s.Tone2);
+  load.sound(s.Tone3);
+  load.sound(s.Tone4);
+  load.sound(s.Tone5);
+  load.sound(s.Tone6);
+  load.sound(s.Tone7);
+  load.sound(s.Tone8);
+  load.sound(s.Tone9);
+  load.sound(s.Tone0);
+  load.sound(s.ToneStar);
+  load.sound(s.TonePound);
+  v242 = 1;
+  set(f243);
+  reset(useMIDI);
+}
+if (v242 == 1 && f243) {
+  sound(s.Tone1, f243);
+  ++v242;
+}
+if (v242 == 2 && f243) {
+  sound(s.Tone2, f243);
+  ++v242;
+}
+if (v242 == 3 && f243) {
+  sound(s.Tone3, f243);
+  ++v242;
+}
+if (v242 == 4 && f243) {
+  sound(s.Tone4, f243);
+  ++v242;
+}
+if (v242 == 5 && f243) {
+  sound(s.Tone5, f243);
+  ++v242;
+}
+if (v242 == 6 && f243) {
+  sound(s.Tone6, f243);
+  ++v242;
+}
+if (v242 == 7 && f243) {
+  sound(s.Tone7, f243);
+  ++v242;
+}
+if (v242 == 8 && f243) {
+  sound(s.Tone8, f243);
+  ++v242;
+}
+if (v242 == 9 && f243) {
+  sound(s.Tone9, f243);
+  ++v242;
+}
+if (v242 == 10 && f243) {
+  sound(s.ToneStar, f243);
+  ++v242;
+}
+if (v242 == 11 && f243) {
+  sound(s.Tone0, f243);
+  ++v242;
+}
+if (v242 == 12 && f243) {
+  sound(s.TonePound, f243);
+  ++v242;
+}
+[-----------------------------------
+
+[ check for menu activation
+if (controller(cMenu)) {
+  menu.input();
+  oldSeconds = -1;
+}
+if (controller(cLeftClick)) {
+  if (mouseY < 8) {
+    menu.input();
+    oldSeconds = -1;
+  }
+}
+
+[ now check for any controllers that may have been activated
+if (controller(cAbout)) {
+  print(gameAboutMsg);
+}
+
+[ speed controls
+if ((controller(cFastest) || 
+     said("fastest") || 
+     said("fastest", "speed"))) {
+  [ no delay between interpreter cycles
+  animationInterval = FASTEST_SPEED;
+}
+if ((controller(cFast) || 
+     said("fast") || 
+     said("fast", "speed"))) {
+  [ 1/20th of a second delay between interpreter cycles
+  animationInterval = FAST_SPEED;
+}
+if ((controller(cNormal) || 
+     said("normal") || 
+     said("normal", "speed"))) {
+  [ 2/20ths of a second delay between interpreter cycles
+  animationInterval = NORMAL_SPEED;
+}
+if ((controller(cSlow) || 
+     said("slow") || 
+     said("slow", "speed"))) {
+  [ 4/20ths of a second delay between interpreter cycles
+  animationInterval = SLOW_SPEED;
+}
+
+[ sound volume controls
+if (controller(cCrescendo) && attenuation > 0 && soundOn) {
+  [ to increase volume, lower sound attenuation variable
+  --attenuation;
+}
+if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
+  [ to decrease volume, raise sound attenuation variable
+  ++attenuation;
+  if (!4channelsound && attenuation > 15) {
+    [ max for single channel is 15
+    attenuation = 15;
+  }
+}
+
+[ toggle clock
+if (controller(cClock)) {
+  toggle(clockOn);
+}
+
+[ if debug mode is requested
+if (said("debug")) {
+  [ if not in debug mode yet
+  if (!debugging) {
+    [ activate it
+    set(debugging);
+    [ display the game-version message
+    print(gameVersionMsg); 
+    [ and interpreter version
+    version();
+    [ load debug logic into memory
+    load.logics(lgc.Debug);
+  }
+}
+
+[ save game
+if ((controller(cSave) || 
+     said("save", "game") || 
+     said("save"))) {
+  [ if in lobby, need to erase patient2 if currently visible
+  if (currentRoom == rm.Lobby && f237) {
+    erase(o5);
+  }
+  save.game();
+  if (currentRoom == rm.Lobby && f237) {
+    draw(o5);
+  }
+}
+
+[ restore game
+if ((controller(cRestore) || 
+     said("restore", "game") || 
+     said("restore"))) {
+  restore.game();
+}
+
+[ restart game
+if ((controller(cRestart) || 
+     said("restart", "game") || 
+     said("restart"))) {
+  restart.game();
+}
+
+[ ask for help
+if ((controller(cHelp) || 
+     said("help"))) {
+  call(lgc.GameHelp);
+}
+
+[ echo line draws previous input on input line
+if (controller(cEchoLine)) {
+  echo.line();
+}
+
+[ clear the input line
+if (controller(cCancelLine)) {
+  cancel.line();
+}
+
+[ pause game (showing menu is another 
+[ way to pause the game)
+if ((controller(cPause) || 
+     said("pause", "game") || 
+     said("pause"))) {
+  pause();
+}
+
+[ check player's current inventory
+if ((controller(cStatus) || 
+     said("inventory"))) {
+  [ disable selection of inventory items
+  reset(enableItemSelect);
+  status();
+}
+
+[ use or examine an item
+if (controller(cChooseItem)) {
+  [ enable section of inventory items
+  set(enableItemSelect);
+  [ show inventory screen
+  status();
+  
+  [ selectedItem is set to 255 if ESC is pressed
+  [ in the inventory screen
+  if (selectedItem > 0 && selectedItem != 255) {
+    [ use or examine selected item
+    [if (examineitem) {
+      selectedItem += 100;
+      show.obj.v(selectedItem);
+      [ some items get a second, detailed look
+      [  post-it note
+      if (selectedItem == 107) {
+        block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+        [ fade out
+        block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+        work1 = pic.ComboList;
+        set(noScript);
+        load.pic(work1);
+        draw.pic(work1);
+        discard.pic(work1);
+        reset(noScript);
+        block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
+        show.pic();
+        [ fade in
+        block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+        lastChar = 0;
+        :waitnote
+        if (!have.key()) {
+          goto(waitnote);
+        }
+        [ fade out
+        block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+        set(noScript);
+        load.pic(currentRoom);
+        draw.pic(currentRoom);
+        discard.pic(currentRoom);
+        reset(noScript);
+        block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
+        show.pic();
+        [ fade in
+        block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+      }
+    [}
+    [if (useitem) {
+    [  change cursor
+    [  enable useitem mode
+    [}
+  }
+}
+
+[ quit the game
+if ((controller(cQuit) || 
+     said("quit", "game") || 
+     said("quit"))) {
+  stop.sound();
+  quit(0);
+}
+
+[ if player hasn't provided input or if match already found, no need
+[ to do rest of said tests
+if ((!haveInput || haveMatch)) {
+  goto(done);
+}
+  
+[ put all generic said tests (those that apply in all rooms) here
 [ read memo
 if (said("read", "memo")) {
   if (has("memo")) {
@@ -132,60 +400,13 @@ if (said("read", "memo")) {
     print("You don't have it.");
   }
 }
-
-[ **************************************
-[ PROCESS PLAYER INPUT
-[ **************************************
-
-[ check for cussing
-work1 = 0;
-:loop1
-  get.string(tmpStr1, m1, -1, 0, 0);
-  work2 = 70; ['F'
-  [ pass starting pos via vRESULT
-  work3 = work1;
-  block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
-  if (work3 == 255) {
-    work2 = 102; [ 'f'
-    work3 = work1;
-    block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
-  }
-  [ save result in work1
-  work1 = work3;
-  [ if letter 'f' is found
-  if (work1 < 255) {
-    [ check for match against 'fuck' by getting 
-    [ 'f' plus next three letters
-    work2 = 4;
-    block(STR.MID, &tmpStr1, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN);
-    tmpStr2 = "fuck";
-    [ advance position so loop can look for next 'f'
-    ++work1;
-    if (compare.strings(tmpStr1, tmpStr2)) {
-      print("Watch your language, you son of a bitch!");
-      get.string(tmpStr1, m1, -1, 0, 0);
-      block(STR.LEFT, &tmpStr1, &tmpStr1, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-      tmpStr2 = "***";
-      block(STR.CONCAT, &tmpStr1, &tmpStr2, 0);
-      set.string(SET.INPUT, "%s20");
-    } else {
-      [ check rest of line
-      goto(loop1);
-    }
-  }
-
-[ if player hasn't provided input or if match already found, no need
-[ to do said tests
-if ((!haveInput || haveMatch)) {
-  goto(done);
+[ read magazine
+if (said("read", "magazine")) {
+  call(lgc.ReadMagazine);
 }
   
-[ put all generic said tests (those that apply in all rooms) here
 
 [ if player says any dirty words
-[ realtime check for a few words
-  
-
 if ((said("bad word", "rol") || 
      said("anyword", "bad word", "rol") || 
      said("anyword", "anyword", "bad word", "rol") || 
@@ -208,36 +429,6 @@ if ((said("bad word", "rol") ||
   }
 }
 
-if (said("read", "magazine")) {
-  call(lgc.ReadMagazine);
-}
-[[ look cube
-[if (said("look", "cube")) 
-[  {
-[  if (has("strange colored cube")) 
-[    {
-[    show.obj(vw.Inv.TestItem);
-[    }
-[  else 
-[    {
-[    print("You don't have it.");
-[    }
-[  }
-[  
-[[ drop cube
-[if (said("drop", "cube"))
-[  {
-[  print("The cube is too interesting; you decide to keep it.");
-[  }
-[  
-[[ anything cube
-[if ((said("anyword", "cube") || 
-[    said("cube", "rol") ||
-[    said("anyword", "anyword", "cube")))
-[  {
-[  print("There's no need to do anything with the cube.");
-[  }
-  
 
 [ look anything
 if ((said("look", "anyword") || said("look", "anyword", "rol"))) {
@@ -268,50 +459,5 @@ return();
 #message 5 "What? Where?"
 #message 6 "You can't get that here!"
 #message 7 "What do you want me to do with it?"
-#message 8 "You have explored a new room in this world! Good job!"
-#message 9 "The cube is too interesting; you decide to keep it."
-#message 10 "There's no need to do anything with the cube."
-
-[ active cursors
-#message 40 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
-            "00000040006000700078007C007E007F807F007C006C00460006000300030000"
-[ walk
-#message 41 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
-            "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
-[ look
-#message 42 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
-            "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
-[ talk
-#message 43 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
-            "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
-[ use 
-#message 44 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
-            "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
-[ wait 
-#message 45 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
-            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
-[ default cursors
-#message 46 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
-            "00000040006000700078007C007E007F807F007C006C00460006000300030000"
-[ walk
-#message 47 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
-            "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
-[ look
-#message 48 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
-            "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
-[ talk
-#message 49 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
-            "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
-[ use 
-#message 50 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
-            "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
-[ wait
-#message 51 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
-            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
-            
-#message 52 "%s16"
-#message 53 "22215909FFFF030F020000"
-#message 54 "22215909FFFF030F020000"
-#message 55 "22215909FFFF030F020000"
-#message 56 "22215909FFFF030F020000"
-#message 57 "22215909FFFF030F020000"
+#message 11 gameAboutMsg
+#message 12 gameVersionMsg

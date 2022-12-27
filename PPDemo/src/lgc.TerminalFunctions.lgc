@@ -1,37 +1,15 @@
+[ ********************************************************************
 [ 
 [ lgc.TerminalFunctions
 [ 
-
-[1234567890123456789012345678901234567890
 [ valid commands:
-[AMOS       Provides access to AMOS sub- 
-[           systems and configuration
-[CLS        Clears the screen.
-[CD/CHDIR   Changes the current
-[           directory.
-[CHKDSK     Checks a disk and displays a
-[           status report
-[DIR        Displays a list of files in 
-[           a directory.
-[COPY       Copies files to another
-[           location.
-[DEL/ERASE  Deletes files.
-[EXIT       Quits and restarts AMOS 
-[FORMAT     Formats a disk.
-[HELP       Displays a list of AMOS 
-[           commands.
-[LOGOFF     Logs a user off AMOS.
-[MD/MKDIR   Creates a directory.
-[RD/RMDIR   Removes a directory.
-[REN/RENAME Renames a file or files.
-[SUDO       Runs AMOS commands with admin
-[           privileges. 
-[TYPE       Displays the contents of a
-[           text file.
-[VER        Displays AMOS version.
-[VOL        Displays a disk volume label
-[           and serial number.
-[1234567890123456789012345678901234567890
+[ AMOS       CLS        CD         CHDIR   
+[ CHKDSK     DIR        COPY       DEL
+[ ERASE      EXIT       FORMAT     HELP
+[ LOGOFF     MD         MKDIR      RD
+[ RMDIR      REN        RENAME     SUDO
+[ TYPE       VER        VOL
+[ ********************************************************************
 
 #define cursor_row    v240
 #define cursor_col    v241
@@ -56,6 +34,7 @@
   #define CHKDSK_C    11
   #define FORMAT_A    12
   #define TYPE_PP     13
+  #define SHOW_HELP   14
 #define outputvar     v246
 #define tmpCounter1   v247
 #define tmpCounter2   v248
@@ -72,7 +51,7 @@
 #define vCurDir       v250
   #define C_ROOT    0 [ c:\
   #define C_USERS   1 [ c:\USERS\
-  #define C_KW001   2 [ c:\USERS\KW001
+  #define C_KW002   2 [ c:\USERS\KW002
   #define A_ROOT    3 [ a:
 #define vShowDir      v251
 
@@ -120,14 +99,13 @@ if ((terminalfn == DELAY || terminalfn == DELAY_LF)) {
     terminalfn = LINEFEED;
     goto(addlinefeed);
   }
+  return();
 }
 
 if ((terminalfn == ADDLINE || terminalfn == ADDLINE_LF || terminalfn == DELAY_ADD)) {
-[ TODO: need to add check for multiple line output
-[ if more than one line, or if it extends past 
-[ edge, need to break up the displayline
-[  OR - just make sure calls to DISPLAYLINE already
-[ have that figured out...
+  [ calling function needs to make sure line won't
+  [ extend past edge of display; no check is currently
+  [ made for that
   outputvar = &outputmsg;
   display.v(cursor_row, cursor_col, outputvar);
   if (terminalfn == ADDLINE_LF) {
@@ -221,8 +199,8 @@ if (terminalfn == SHOW_DIR) {
       goto(nextfile2);
     }
   }
-  if (vShowDir == C_KW001) {
-    output = "%m6C:\\\\USERS\\\\KW001";
+  if (vShowDir == C_KW002) {
+    output = "%m6C:\\\\USERS\\\\KW002";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
     terminalfn = LINEFEED;
@@ -537,8 +515,112 @@ if (terminalfn == TYPE_PP) {
   block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
+  return();
 }
 
+if (terminalfn == SHOW_HELP) {
+  [ show help lines
+  output = "valid commands:";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "AMOS       Provides access to AMOS sub- ";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           systems and configuration";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "CLS        Clears the screen.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "CD/CHDIR   Changes the current";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           directory.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "CHKDSK     Checks a disk and displays a";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           status report";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "DIR        Displays a list of files in ";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           a directory.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "COPY       Copies files to another";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           location.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "DEL/ERASE  Deletes files.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+   output = "-- pause --";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  lastChar = 0;
+  :wait3
+  if (!have.key()) {
+    goto(wait3);
+  }
+  output = "EXIT       Quits and restarts AMOS ";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "FORMAT     Formats a disk.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "HELP       Displays a list of AMOS ";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           commands.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "LOGOFF     Logs a user off AMOS.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "MD/MKDIR   Creates a directory.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "RD/RMDIR   Removes a directory.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "REN/RENAME Renames a file or files.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "SUDO       Runs AMOS commands with admin";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           privileges. ";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "TYPE       Displays the contents of a";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           text file.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "VER        Displays AMOS version.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+   output = "-- pause --";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  lastChar = 0;
+  :wait4
+  if (!have.key()) {
+    goto(wait4);
+  }
+  output = "VOL        Displays a disk volume label";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+  output = "           and serial number.";
+  terminalfn = ADDLINE_LF;
+  call(lgc.TerminalFunctions);
+}
 return();
 
 
@@ -555,7 +637,7 @@ return();
 #message 6 " Directory of "
 #message 7 "%m6C:\\\\"
 #message 8 "%m6C:\\\\USERS"
-#message 9 "%m6C:\\\\USERS\\\\KW001"
+#message 9 "%m6C:\\\\USERS\\\\KW002"
 #message 10 "%m6A:\\\\"
 [ DIR C:
 #message 11 "07/16/89 09:12AM     438  AMOS.BAT"
@@ -584,14 +666,14 @@ return();
 #message 33 "04/16/88 01:49PM  <DIR>   JW005"
 #message 34 "04/16/88 01:49PM  <DIR>   KD101"
 #message 35 "10/22/88 09:13AM  <DIR>   KM066"
-#message 36 "08/11/89 09:02AM  <DIR>   KW001"
+#message 36 "08/11/89 09:02AM  <DIR>   KW002"
 #message 37 "10/22/88 09:13AM  <DIR>   MC048"
-#message 38 "08/11/89 09:02AM  <DIR>   RW002"
+#message 38 "08/11/89 09:02AM  <DIR>   RW001"
 #message 39 "10/22/88 09:15AM  <DIR>   SM037"
 #message 40 "     0 File(s)         0 bytes"
 #message 41 "    12 Dir(s) 125,755,392 bytes free"
 
-[ DIR C:\USERS\KW001
+[ DIR C:\USERS\KW002
 #message 42 "08/24/89 07:36AM     438  PWRPACK.TXT"
 #message 43 "08/24/89 07:32AM 307,887  PWRPACK.ZIP"
 #message 44 "     2 File(s)   308,325 bytes"

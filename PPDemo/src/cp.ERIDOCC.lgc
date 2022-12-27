@@ -1,6 +1,6 @@
 [ ********************************************************************
 [
-[ cp.Mouse
+[ cp.ERIDOCC
 [
 [ Emulated Rodent Input Device Option Control Console
 [ ERIDOCC
@@ -145,11 +145,11 @@ if (newRoom) {
   load.logics(lgc.GameFunctions);
   
   [ this view has all the art for cursors and buttons
-  load.view(vw.cp.MouseArt);
+  load.view(vw.cp.ERIDOCC);
 
   [ option button that determines input mode; mouse or keyboard
   animate.obj(optCursor);
-  set.view(optCursor, vw.cp.MouseArt);
+  set.view(optCursor, vw.cp.ERIDOCC);
   set.loop(optCursor, LP_OPT);
   set.cel(optCursor, 0);
   stop.cycling(optCursor);
@@ -160,7 +160,7 @@ if (newRoom) {
   [ and option buttons
   animate.obj(oCursorB);
   ignore.objs(oCursorB);
-  set.view(oCursorB, vw.cp.MouseArt);
+  set.view(oCursorB, vw.cp.ERIDOCC);
   set.loop(oCursorB, LP_CF_OPT);
   set.cel(oCursorB, 0);
   stop.cycling(oCursorB);
@@ -169,7 +169,7 @@ if (newRoom) {
   
   animate.obj(oCursorT);
   ignore.objs(oCursorT);
-  set.view(oCursorT, vw.cp.MouseArt);
+  set.view(oCursorT, vw.cp.ERIDOCC);
   set.loop(oCursorT, LP_CF_OPT);
   set.cel(oCursorT, 0);
   stop.cycling(oCursorT);
@@ -178,7 +178,7 @@ if (newRoom) {
   
   animate.obj(oCursorL);
   ignore.objs(oCursorL);
-  set.view(oCursorL, vw.cp.MouseArt);
+  set.view(oCursorL, vw.cp.ERIDOCC);
   set.loop(oCursorL, LP_CF_OPT);
   set.cel(oCursorL, 1);
   stop.cycling(oCursorL);
@@ -187,7 +187,7 @@ if (newRoom) {
   
   animate.obj(oCursorR);
   ignore.objs(oCursorR);
-  set.view(oCursorR, vw.cp.MouseArt);
+  set.view(oCursorR, vw.cp.ERIDOCC);
   set.loop(oCursorR, LP_CF_OPT);
   set.cel(oCursorR, 1);
   stop.cycling(oCursorR);
@@ -202,7 +202,7 @@ if (newRoom) {
   animate.obj(gridCursor);
   set.priority(gridCursor, 15);
   position(gridCursor, 57, 44);
-  set.view(gridCursor, vw.cp.MouseArt);
+  set.view(gridCursor, vw.cp.ERIDOCC);
   set.loop(gridCursor, 5);
   work1 = 2;
   cycle.time(gridCursor, work1);
@@ -233,7 +233,7 @@ if (newRoom) {
   set(noScript);
   
   [ setup for add.to.pic
-  vView = vw.cp.MouseArt;
+  vView = vw.cp.ERIDOCC;
   vLoop = 6;
   vPri = 14; 
   vMgn = 4;

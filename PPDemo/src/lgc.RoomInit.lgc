@@ -84,7 +84,7 @@ if (currentRoom < 21) {
 if (currentRoom > 20) {
 
   [ if loading the terminal or instrument control panel
-  if ((currentRoom == cp.Terminal || currentRoom == cp.Instrument)) {
+  if ((currentRoom == cp.Terminal || currentRoom == cp.CAISOCC)) {
     [ use 80 col mode
     if (!column80) {
       [ before switching mode, clear the picture

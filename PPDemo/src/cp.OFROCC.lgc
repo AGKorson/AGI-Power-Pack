@@ -1,6 +1,6 @@
 [ ********************************************************************
 [
-[ cp.SpeedStatus
+[ cp.OFROCC
 [
 [ Overall Frame Rate Options Control Console
 [ OFROCC
@@ -104,11 +104,11 @@ if(newRoom) {
   discard.pic(currentRoom);
   
   [ this view has all the art for cursors and buttons
-  load.view(vw.cp.Speed);
+  load.view(vw.cp.OFROCC);
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(optCursor);
-  set.view(optCursor, vw.cp.Speed);
+  set.view(optCursor, vw.cp.OFROCC);
   set.loop(optCursor, LP_OPT);
   set.cel(optCursor, 0);
   stop.cycling(optCursor);
@@ -118,28 +118,28 @@ if(newRoom) {
   [ cursor, in four parts, default to keyboard option position
   animate.obj(oCursorB);
   ignore.objs(oCursorB);
-  set.view(oCursorB, vw.cp.Speed);
+  set.view(oCursorB, vw.cp.OFROCC);
   set.loop(oCursorB, LP_CF_OPT);
   set.cel(oCursorB, 0);
   stop.cycling(oCursorB);
   
   animate.obj(oCursorL);
   ignore.objs(oCursorL);
-  set.view(oCursorL, vw.cp.Speed);
+  set.view(oCursorL, vw.cp.OFROCC);
   set.loop(oCursorL, LP_CF_OPT);
   set.cel(oCursorL, 1);
   stop.cycling(oCursorL);
   
   animate.obj(oCursorT);
   ignore.objs(oCursorT);
-  set.view(oCursorT, vw.cp.Speed);
+  set.view(oCursorT, vw.cp.OFROCC);
   set.loop(oCursorT, LP_CF_OPT);
   set.cel(oCursorT, 0);
   stop.cycling(oCursorT);
   
   animate.obj(oCursorR);
   ignore.objs(oCursorR);
-  set.view(oCursorR, vw.cp.Speed);
+  set.view(oCursorR, vw.cp.OFROCC);
   set.loop(oCursorR, LP_CF_OPT);
   set.cel(oCursorR, 1);
   stop.cycling(oCursorR);
@@ -152,7 +152,7 @@ if(newRoom) {
   [ speed slider
   animate.obj(oSlider);
   ignore.objs(oSlider);
-  set.view(oSlider, vw.cp.Speed);
+  set.view(oSlider, vw.cp.OFROCC);
   set.loop(oSlider, LP_SLIDER);
   set.cel(oSlider, 0);
   [ position depends on turbo mode and animation interval
@@ -173,7 +173,7 @@ if(newRoom) {
   [ turbo checkbox
   animate.obj(oCheck);
   ignore.objs(oCheck);
-  set.view(oCheck, vw.cp.Speed);
+  set.view(oCheck, vw.cp.OFROCC);
   set.loop(oCheck, LP_CHECK);
   position(oCheck, 5, 88);
   [ cel depends on current turbo mode
@@ -189,7 +189,7 @@ if(newRoom) {
   
   [ test object to show speed effect
   animate.obj(oTest);
-  set.view(oTest, vw.cp.Speed);
+  set.view(oTest, vw.cp.OFROCC);
   set.loop(oTest, LP_TESTVIEW);
   work1 = 1;
   cycle.time(oTest, work1);

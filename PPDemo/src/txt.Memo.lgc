@@ -38,8 +38,8 @@ display( 6, 13,         "Subj: Password Management");
                   
 display( 8, 13,         "1. As you know, the AMOS project has been developed ");
 display( 9, 13,         "to assist the AGI Power Pack development team in ");
-display(10, 13,         "creating an enhanced AGI enginethat will improve the ");
-display(11, 13,         "graphics, sound and input capabilities of AGI. ");
+display(10, 13,         "creating an enhanced AGI engine that will improve ");
+display(11, 13,         "the graphics, sound and input capabilities of AGI. ");
 display(12, 13,         "Although the emergence of the Sierra Creative ");
 display(13, 13,         "Interpreter (SCI) has cast doubt on the ultimate ");
 display(14, 13,         "future of the Power Pack, we will continue working as ");
@@ -86,16 +86,17 @@ display( 3, 13,         "password (Temp123!). You need to logon as soon as ");
 display( 4, 13,         "possible and choose another password that meets the ");
 display( 5, 13,         "new security requirements. Passwords must now be at ");
 display( 6, 13,         "least 8 characters long, and must include at least one ");
-display( 7, 13,         "upper case, lower case number, and special character. ");
+display( 7, 13,         "upper case letter, lower case letter, number, and ");
+display( 8, 13,         "special character. ");
                   
-display( 9, 13,         "4. Please note that ALL employees, including senior ");
-display(10, 13,         "managers and company executives who have accounts, ");
-display(11, 13,         "must reset their passwords. System security depends on ");
-display(12, 13,         "all of us complying with the policies we have put in ");
-display(13, 13,         "place to protect our work.");
+display(10, 13,         "4. Please note that ALL employees, including senior ");
+display(11, 13,         "managers and company executives who have accounts, ");
+display(12, 13,         "must reset their passwords. System security depends on ");
+display(13, 13,         "all of us complying with the policies we have put in ");
+display(14, 13,         "place to protect our work.");
 
-display(15, 13,         "5. if you have any questions, please call one of the ");
-display(16, 13,         "AMOS System Administrators.");
+display(16, 13,         "5. if you have any questions, please call one of the ");
+display(17, 13,         "AMOS System Administrators.");
 
 
 [ redraw page border for scrolled portion

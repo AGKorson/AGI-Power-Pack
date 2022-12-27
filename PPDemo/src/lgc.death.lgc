@@ -109,11 +109,6 @@ if ((controller(cQuit) || said("quit"))) {
   quit(0);
 }
 
-[ togglin monitor (if in CGA mode) is allowed
-if (controller(cToggleMonitor)) {
-  toggle.monitor();
-}
-
 [ showing 'about' message is allowed
 if (controller(cAbout)) {
   print(gameAboutMsg);

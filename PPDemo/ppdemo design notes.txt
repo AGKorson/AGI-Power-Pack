@@ -90,14 +90,14 @@ X        +4 pts:  getting 80s mix tape
     ANIMATION ART: ego slipping/falling/dying; magazine on table (is a new table needed?); inventory view of magazine;
     SOUND: door open/close; background music
     SCORING: +1 for slipping on wet floor; +5 for asking to use bathroom; +3 for getting magazine; +2 for reading it;
-    CODING: !!to save memory, view for patients 2/4 can be swapped in/out as needed; both are never needed at same time!! finalize patient arrival/departure sequences; text screen closeup of magazine; 'said' statements
+    CODING: 'said' statements
 
 4A. Closeup of magazine: mostly text, will have an article talking about Sierra; with a paragraph or two on the rumored 'Power Pack'; hidden in the text will be the passcode for the control room entry door.
     BACKGROUND: done
     ANIMATION ART: n/a
     SOUND: n/a
     SCORING: n/a
-    CODING: need to write articles
+    CODING: done
 
 5. Hallway: Four doors- a restroom (will never open; it's always 'occupied'), a doctor's office (never opens, doctor is always out), and an exam room (will open, but ego interrupts an exam, and the nurse will slam door shut). Repeated attempts to enter exam room will get ego thrown out of building, and game will end in a loss. Last door is a janitor closet. Ego can go through that door to enter the hallway.
 
@@ -163,7 +163,7 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     ANIMATION ART: memo on printer item view; password list item view; picture to hide safe; floppy disk item view; folder item view; notebook item view; 
     SOUND: tbd (drawer opening; safe open/close; picture swinging?) 
     SCORING: 3 pts for getting memo from printer; 3 pts for getting password list; 2 pts for getting walkman; 2 pts for finding safe; 3 pts for getting BadASS code; 2 pts for getting floppy disk; 3 pts for getting notebook; 2 pts moving rug; 3 pts for getting folder with sound password
-    CODING: need 'look' clicks, and 'said' statements
+    CODING: 'said' statements
 
 8A. Safe door closeup: spinning combo lock dial.Enter correct combination to open.
 
@@ -171,7 +171,7 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     ANIMATION ART: dial numbers, dial center, handle 
     SOUND: 'click' for dial spin; unlock sound 
     SCORING: 3 pts for opening safe
-    CODING: need 'look' clicks, and 'said' statements
+    CODING: done
 
 9. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. Scratched into top of PQ podium is coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
 
@@ -179,7 +179,7 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     ANIMATION art: closeup of pillow; closeup of podium showing scratched password; scroll item view[maybe a full picture?]; music sheet item view[maybe a full picture?] 
     SOUND: 80s mix tape music, coffin open/close
     SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in walkman
-    CODING: need 'look' clicks and 'said' statements 
+    CODING: 'said' statements 
 
 Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version is shown, with no ability to interact. Once enabled, the panels are available. Usage info is available on main console using typical 'help file' command. Changes made by ego will be applied globally for rest of game.
 
@@ -239,8 +239,61 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
 17. Master Options Control Console
 
-    BACKGROUND: add disk slot
+    BACKGROUND: done
     ANIMATION ART: done
     SOUND: button click
     SCORING: n/a
-    CODING: add operating system code, syntax
+    CODING: done
+
+touch tone freqs:
+
+1 697  1209    160=699.125  93=1202.80
+2 697  1336                 84=1331.67
+3 697  1477                 76=1471.84
+4 770  1209    145=771.45
+5 770  1336
+6 770  1477
+7 852  1209    131=853.89
+8 852  1336
+9 852  1477
+* 941  1209    119=940.00
+0 941  1336
+# 941  1477
+
+For inventory screen,  change purpose and menu text depending on cursor. 'Look'  when eye icon selected, 'use' when hand is selected.  Disable inventory for all other icons.
+
+For BaDASS manual  reuse magazine art and show contents and Quick Start page. It will explain how to recover, and have recovery password written in it.  Going past will say 'rest is boring '.
+
+ Folder: label says 'ESADOCC'. A piece of paper is taped inside that has recovery password on it.
+
+" Adventure"
+"   Game"
+"Interpreter"
+
+then
+ 
+ "A"
+ "G"
+ "I"
+
+ then
+
+ "AGI"
+
+ then 
+
+ explode to white; fade in to 
+large stylized AGI, and fade in
+PowerPack notation
+
+fireworks, or color waves- some
+kind of background animation
+
+then scroll credits: (copy GR script?)
+Power Pack coding:
+Demo Game designed/written by: me
+Background Art: klownstein
+Animation:  klownstein
+additional art: me
+Music and sound effects: me
+Playtesters: tbd

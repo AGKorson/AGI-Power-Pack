@@ -1,6 +1,6 @@
 [ ********************************************************************
 [
-[ cp.Palette
+[ cp.ICAPOCC
 [
 [ Indexed Chromatic Association Properties Options Control Console
 [ ICAPOCC
@@ -117,11 +117,11 @@ if(newRoom)
   discard.pic(currentRoom);
   
   [ this view has all the art for cursors and buttons
-  load.view(vw.cp.PaletteArt);
+  load.view(vw.cp.ICAPOCC);
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(optCursor);
-  set.view(optCursor, vw.cp.PaletteArt);
+  set.view(optCursor, vw.cp.ICAPOCC);
   set.loop(optCursor, LP_OPT);
   set.cel(optCursor, 0);
   stop.cycling(optCursor);
@@ -131,19 +131,19 @@ if(newRoom)
   [ sliders to change RGB values
   animate.obj(oSliderRed);
   ignore.horizon(oSliderRed);
-  set.view(oSliderRed, vw.cp.PaletteArt);
+  set.view(oSliderRed, vw.cp.ICAPOCC);
   set.loop(oSliderRed, LP_SLIDER);
   set.cel(oSliderRed, 0);
   stop.cycling(oSliderRed);
   animate.obj(oSliderGreen);
   ignore.horizon(oSliderGreen);
-  set.view(oSliderGreen, vw.cp.PaletteArt);
+  set.view(oSliderGreen, vw.cp.ICAPOCC);
   set.loop(oSliderGreen, LP_SLIDER);
   set.cel(oSliderGreen, 0);
   stop.cycling(oSliderGreen);
   animate.obj(oSliderBlue);
   ignore.horizon(oSliderBlue);
-  set.view(oSliderBlue, vw.cp.PaletteArt);
+  set.view(oSliderBlue, vw.cp.ICAPOCC);
   set.loop(oSliderBlue, LP_SLIDER);
   set.cel(oSliderBlue, 0);
   stop.cycling(oSliderBlue);
@@ -152,7 +152,7 @@ if(newRoom)
   [ and option buttons
   animate.obj(oCursorB);
   ignore.objs(oCursorB);
-  set.view(oCursorB, vw.cp.PaletteArt);
+  set.view(oCursorB, vw.cp.ICAPOCC);
   set.loop(oCursorB, LP_CF_OPT);
   set.cel(oCursorB, 0);
   stop.cycling(oCursorB);
@@ -160,7 +160,7 @@ if(newRoom)
   
   animate.obj(oCursorT);
   ignore.objs(oCursorT);
-  set.view(oCursorT, vw.cp.PaletteArt);
+  set.view(oCursorT, vw.cp.ICAPOCC);
   set.loop(oCursorT, LP_CF_OPT);
   set.cel(oCursorT, 0);
   stop.cycling(oCursorT);
@@ -168,7 +168,7 @@ if(newRoom)
   
   animate.obj(oCursorL);
   ignore.objs(oCursorL);
-  set.view(oCursorL, vw.cp.PaletteArt);
+  set.view(oCursorL, vw.cp.ICAPOCC);
   set.loop(oCursorL, LP_CF_OPT);
   set.cel(oCursorL, 1);
   stop.cycling(oCursorL);
@@ -176,7 +176,7 @@ if(newRoom)
   
   animate.obj(oCursorR);
   ignore.objs(oCursorR);
-  set.view(oCursorR, vw.cp.PaletteArt);
+  set.view(oCursorR, vw.cp.ICAPOCC);
   set.loop(oCursorR, LP_CF_OPT);
   set.cel(oCursorR, 1);
   stop.cycling(oCursorR);
@@ -1029,7 +1029,7 @@ if (btnAction == B_PREV_PAL) {
   show.pic();
   [ redraw button text by recursing
   set(refresh);
-  call(cp.Palette);
+  call(cp.ICAPOCC);
   
   [ fade in from black, 2msec fade value
   block(FADE.IN, 0, 2, BLACK);

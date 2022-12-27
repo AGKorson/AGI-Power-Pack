@@ -1,6 +1,6 @@
 [ ********************************************************************
 [
-[ cp.Instrument
+[ cp.CAISOCC
 [
 [ Custom Acoustic Instrument Setting Options Control Console
 [ CAISOCC
@@ -187,13 +187,14 @@ if(newRoom) {
   lastChar = 0;
   
   [ this view has all the art for cursors and buttons
-  load.view(vw.cp.Instrument);
+  load.view(vw.cp.CAISOCC);
   
   [ game functions to access global instruments
   load.logics(lgc.GameFunctions);
   
   [ test sound 
-  load.sound(s.InstTest);
+[  load.sound(s.InstTest);
+  load.sound(s.ButtonClick);
   
   [ make sure sound mode is 4channel FMsynth
   if (4channelsound) {
@@ -216,7 +217,7 @@ if(newRoom) {
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(oMode);
-  set.view(oMode, vw.cp.Instrument);
+  set.view(oMode, vw.cp.CAISOCC);
   set.loop(oMode, LP_OPT);
   set.cel(oMode, 0);
   stop.cycling(oMode);
@@ -226,28 +227,28 @@ if(newRoom) {
   [ cursor, in four parts, default to keyboard option position
   animate.obj(oCursorB);
   ignore.objs(oCursorB);
-  set.view(oCursorB, vw.cp.Instrument);
+  set.view(oCursorB, vw.cp.CAISOCC);
   set.loop(oCursorB, LP_CF_OPT);
   set.cel(oCursorB, 0);
   stop.cycling(oCursorB);
   
   animate.obj(oCursorL);
   ignore.objs(oCursorL);
-  set.view(oCursorL, vw.cp.Instrument);
+  set.view(oCursorL, vw.cp.CAISOCC);
   set.loop(oCursorL, LP_CF_OPT);
   set.cel(oCursorL, 1);
   stop.cycling(oCursorL);
   
   animate.obj(oCursorT);
   ignore.objs(oCursorT);
-  set.view(oCursorT, vw.cp.Instrument);
+  set.view(oCursorT, vw.cp.CAISOCC);
   set.loop(oCursorT, LP_CF_OPT);
   set.cel(oCursorT, 0);
   stop.cycling(oCursorT);
   
   animate.obj(oCursorR);
   ignore.objs(oCursorR);
-  set.view(oCursorR, vw.cp.Instrument);
+  set.view(oCursorR, vw.cp.CAISOCC);
   set.loop(oCursorR, LP_CF_OPT);
   set.cel(oCursorR, 1);
   stop.cycling(oCursorR);
@@ -255,7 +256,7 @@ if(newRoom) {
   [ scrollbar background
   animate.obj(oScrlBkgd);
   ignore.objs(oScrlBkgd);
-  set.view(oScrlBkgd, vw.cp.Instrument);
+  set.view(oScrlBkgd, vw.cp.CAISOCC);
   set.loop(oScrlBkgd, LP_SCROLL);
   set.cel(oScrlBkgd, 2);
   stop.cycling(oScrlBkgd);
@@ -264,7 +265,7 @@ if(newRoom) {
   [ scrollbar box
   animate.obj(oScrlBox);
   ignore.objs(oScrlBox);
-  set.view(oScrlBox, vw.cp.Instrument);
+  set.view(oScrlBox, vw.cp.CAISOCC);
   set.loop(oScrlBox, LP_SCROLL);
   set.cel(oScrlBox, 0);
   stop.cycling(oScrlBox);
@@ -2015,7 +2016,8 @@ if (btnAction > 0) {
     work1 = 0;
     work2 = &m142;
     set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-    sound(s.InstTest, soundDone);
+[    sound(s.InstTest, soundDone);
+    sound(s.ButtonClick, soundDone);
     set(sndTest);
     [ update button test
     set.text.attribute(-1, 0);

@@ -74,6 +74,7 @@ if (newRoom) {
   
   [ folder under rug
   if (!has("folder")) {
+  [ TODO: picture/logic to show folder details
     animate.obj(oFolder);
     set.view(oFolder, vw.OfficeArt);
     set.loop(oFolder, 5);
@@ -97,7 +98,7 @@ if (newRoom) {
       set.loop(oRug, 0);
       set.cel(oRug, 5);
     } else {
-      [ RUG_FLAT
+      [ show rug flat
       set.loop(oRug, 5);
       set.cel(oRug, 2);
     }
@@ -115,12 +116,12 @@ if (newRoom) {
   stop.cycling(oSafe);
   ignore.objs(oSafe);
   if (safeStatus == OPEN) {
-    if (!has("BaDASS manual")) {
-      [ TODO: stupid bug in set.loop; should I patch that too?
-      set.loop(oSafe, 5);
+    if (has("BaDASS manual")) {
+    [ TODO: picture/logic to read the BaDASS manual
+      set.loop(oSafe, 1);
       set.cel(oSafe, 7);
     } else {
-      set.loop(oSafe, 1);
+      set.loop(oSafe, 5);
       set.cel(oSafe, 7);
     }
   } else {
@@ -152,6 +153,7 @@ if (newRoom) {
     if (officeDskDrStatus == OPEN1) {
       position(oDeskDrawer, 84, 126);
       if (has("Walkman")) {
+      [ TODO: picture/views/logics/sounds to use the walkman
         set.loop(oDeskDrawer, 2);
         set.cel(oDeskDrawer, 2);
       } else {
@@ -160,7 +162,7 @@ if (newRoom) {
       }
     } else {
       position(oDeskDrawer, 84, 130);
-      if (has("piece of paper")) {
+      if (has("post-it note")) {
         set.loop(oDeskDrawer, 2);
         set.cel(oDeskDrawer, 2);
       } else {
@@ -185,6 +187,7 @@ if (newRoom) {
     if (officeFileDrStatus == OPEN2) { 
       position(oFileDrawer, 93, 121);
       if (has("notebook")) {
+      [ TODO: picture/views/logics to read the notebook
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
       } else {
@@ -193,7 +196,7 @@ if (newRoom) {
       }
     }
     if (officeFileDrStatus == OPEN3) { 
-      position(oFileDrawer, 93, 121);
+      position(oFileDrawer, 93, 130);
       if (has("floppy disk")) {
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
@@ -215,7 +218,7 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -305,8 +308,8 @@ if (controller(cLeftClick)) {
           }
         } else {
           if (officeDskDrStatus == OPEN2) {
-            if (!has("piece of paper")) {
-              print("There is a single piece of loose leaf paper in "
+            if (!has("post-it note")) {
+              print("There is a large yellow post-it note in "
                     "this drawer.");
             } else {
               print("The desk drawer is empty.");
@@ -415,7 +418,8 @@ if (controller(cLeftClick)) {
           [ pick it up
           get("folder");
           erase(oFolder);
-          currentScore += 3;
+          work1 = 3;
+          call(lgc.ScoreHandler);
           print("You pick up the folder. It might be useful.");
         } else {
           print("Move closer.");
@@ -463,7 +467,8 @@ if (controller(cLeftClick)) {
             get("memo");
             add.to.pic(vw.OfficeArt, 5, 0, 80, 107, 4, 15);
             print("You tear the memo off the printer output spool.");
-            currentScore += 3;
+            work1 = 3;
+            call(lgc.ScoreHandler);
           } else {
             print("Move closer.");
           }
@@ -480,7 +485,8 @@ if (controller(cLeftClick)) {
             [ cicking on top drawer item
             if (!has("Walkman")) {
               get("Walkman");
-              currentScore += 2;
+              work1 = 2;
+              call(lgc.ScoreHandler);
               print("You decide to take the Walkman before closing "
                     "the drawer.");
               set.loop(oDeskDrawer, 2);
@@ -490,10 +496,11 @@ if (controller(cLeftClick)) {
           } else {
             if (officeDskDrStatus == OPEN2 && mouseY < 136) {
               [ clicking on bottom drawer item
-              if (!has("piece of paper")) {
-                get("piece of paper");
-                currentScore += 3;
-                print("The paper may be of use so you grab it from "
+              if (!has("post-it note")) {
+                get("post-it note");
+                work1 = 3;
+                call(lgc.ScoreHandler);
+                print("The post-it note may be of use so you grab it from "
                       "the drawer.");
                 set.loop(oDeskDrawer, 2);
                 set.cel(oDeskDrawer, 2);
@@ -559,7 +566,8 @@ if (controller(cLeftClick)) {
           if (officeFileDrStatus == OPEN2 && mouseY < 122) {
             if (!has("notebook")) {
               get("notebook");
-              currentScore += 3;
+              work1 = 3;
+              call(lgc.ScoreHandler);
               print("This notebook might come in handy.");
               set.loop(oFileDrawer, 3);
               set.cel(oFileDrawer, 2);
@@ -570,7 +578,8 @@ if (controller(cLeftClick)) {
           if (officeFileDrStatus == OPEN3 && mouseY < 131) {
             if (!has("floppy disk")) {
               get("floppy disk");
-              currentScore += 2;
+              work1 = 2;
+              call(lgc.ScoreHandler);
               print("You decide to take one of the disks.");
               set.loop(oFileDrawer, 3);
               set.cel(oFileDrawer, 2);
@@ -866,7 +875,8 @@ if (fMoveRug) {
     if (!findFolder && !has("folder")) {
       set(findFolder);
       print("You see a folder tucked under the corner of the rug!");
-      currentScore += 2;
+      work1 = 2;
+      call(lgc.ScoreHandler);
     }
   } else {
     if (has("folder")) {
@@ -912,8 +922,8 @@ if (tripCounter) {
       print("You tripped on the carpet! Good thing you didn't fall "
             "and break your neck.");
     }
-    [ TODO: update score reference
-    --currentScore;
+    work1 = -1;
+    call(lgc.ScoreHandler);
   }
 }
 
@@ -946,7 +956,7 @@ if (fDeskDrawer) {
       }
     } else {
       officeDskDrStatus = OPEN2;
-      if (!has("piece of paper")) {
+      if (!has("post-it note")) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 3);
         force.update(oDeskDrawer);

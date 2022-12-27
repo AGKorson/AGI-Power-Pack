@@ -268,7 +268,11 @@ if (vCheckSecond != elapsedSeconds) {
     }
   }
   if ((vClockSec == 0 || vClockSec == 30)) {
-[ TODO: refresh clock every 30 seconds?
+    [ refresh time every 30 seconds
+    block(GET.TIME, &vClockHour, &vClockMin, &vClockSec); [ get.time(vHOUR, vMINUTE, vSECOND)
+    if (vClockHour > 11) {
+     vClockHour -= 12;
+    }
     set.cel.v(oClockHour, vClockHour);
     [ round minutes to multiples of 2.5
     work1 = vClockMin; [ 0-59
@@ -777,10 +781,11 @@ if (mouseY > 25 && controller(cLeftClick)) {
       [ item check
       if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 128 && mouseY < 151) {
         if (!has("music sheet")) {
-         get("music sheet");
-         print("You take the sheet from the cabinet.");
-         currentScore += 3;
-         set.loop(oCabinetDoor, 6);
+          get("music sheet");
+          print("You take the sheet from the cabinet.");
+          work1 = 3;
+          call(lgc.ScoreHandler);
+          set.loop(oCabinetDoor, 6);
         }
         goto(doneclick);
       }
@@ -864,7 +869,8 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (storeFileDrStatus== OPEN3 && mouseY < 119) {
           if (!has("cassette tape")) {
             get("cassette tape");
-            currentScore += 4;
+            work1 = 4;
+            call(lgc.ScoreHandler);
             print("You take the mix tape, wondering "
                   "what might be on it.");
             set.loop(oFileDrawer, 3);
@@ -968,7 +974,8 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (storeFileDrStatus== OPEN && mouseY < 119) {
 [          if (!has("notebook")) {
 [            get("notebook");
-[            currentScore += 3;
+[            work1 = 3;
+[            call(lgc.ScoreHandler);
 [            print("This notebook might come in handy.");
 [            set.loop(oFileDrawer, 3);
 [            set.cel(oFileDrawer, 2);
@@ -1014,7 +1021,8 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (storeChestStatus == OPEN && mouseX > 120 && mouseX < 129 && mouseY > 154 && mouseY < 174) {
           if (!has("scroll")) {
             get("scroll");
-            currentScore += 3;
+            work1 = 3;
+            call(lgc.ScoreHandler);
             print("You carefully lift the scroll out of the chest.");
             set.loop(oChest, 1);
             force.update(oFileDrawer);      

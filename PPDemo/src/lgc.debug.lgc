@@ -15,207 +15,164 @@
 #define comment          s12 
 
 [ show/hide ego coordinates
-if ((controller(cXY) || said("coords"))) 
-  {
+if (said("coords")) {
   toggle(showCoords);
   [ if coordinate are now hidden
-  if (!showCoords) 
-    {
+  if (!showCoords) {
     [ clear the coordinate line
     clear.lines(24, 24, 0);
-    }
   }
-
-[ show ego object information
-if (controller(cShowEgo)) 
-  {
-  tmpVarB = 0;
-  obj.status.v(tmpVarB);
-  }
+}
 
 [ game version
-if ((said("game version") || controller(cVersion))) 
-  {
+if (said("game version")) {
   print(gameVersionMsg);
   version();
-  }
+}
 
 [ debug help screen
-if ((said("debug", "help") || controller(cDebugHelp))) 
-  {
+if (said("debug", "help")) {
   call(lgc.DebugHelp);
-  }
+}
 
 [ force ego to die
-if (said("die"))
-  {
+if (said("die")) {
   load.view(vw.EgoDead);
   set.view(ego, vw.EgoDead);
   program.control();
   stop.motion(ego);
-  deathType = 1;
-  }        
+  get.num("how? ",deathType);
+}        
 
 [ enable command tracing
-if (said("trace", "on")) 
-  {
+if (said("trace", "on")) {
   set(enableTrace);
-  }
+}
 
 [ show current memory status
-if ((said("show", "mem") || controller(cShowMem))) 
-  {
+if (said("show", "mem")) {
   show.mem();
-  }
+}
 
 [ teleport to another room
-if (said("tp")) 
-  {
+if (said("tp")) {
   get.num("new room: ", tmpVarB);
   [ don't allow teleporting to room 0
-  if (tmpVarB != 0) 
-    {
+  if (tmpVarB != 0) {
     [ it is up to player to make sure 
     [ new room value points to an
     [ actual room
     new.room.v(tmpVarB);
-    }
   }
+}
 
 [ move ego to new position
-if (said("pos")) 
-  {
+if (said("pos")) {
   get.num("x: ", xPos);
   get.num("y: ", yPos);
   erase(ego);
   reposition.to.v(ego, xPos, yPos);
   draw(ego);
-  }
+}
 
 [ show value of a variable
-if (said("show", "var")) 
-  {
+if (said("show", "var")) {
   get.num("var number: ", tmpVarB);
   tmpVarA = *tmpVarB;
   print("var %v255: %v254");
-  }
+}
 
 [ change a variable value
-if (said("set", "var")) 
-  {
+if (said("set", "var")) {
   get.num("var number: ", tmpVarA);
   get.num("var value: ", tmpVarB);
   *tmpVarA = tmpVarB;
-  }
+}
 
 [ show value of a flag
-if (said("show", "flag")) 
-  {
+if (said("show", "flag")) {
   get.num("flag number: ", tmpVarB);
-  if (issetv(tmpVarB)) 
-    {
+  if (issetv(tmpVarB)) {
     print("flag %v255 is set");
-    }
-  else 
-    {
+  } else {
     print("flag %v255 is not set");
-    }
   }
+}
 
 [ set a flag to TRUE
-if (said("set", "flag")) 
-  {
+if (said("set", "flag")) {
   get.num("flag number: ", tmpVarB);
   set.v(tmpVarB);
-  }
+}
 
 [ reset a flag to FALSE
-if (said("reset", "flag")) 
-  {
+if (said("reset", "flag")) {
   get.num("flag number: ", tmpVarB);
   reset.v(tmpVarB);
-  }
+}
 
 [ display status of any object
-if ((said("object") || controller(cObjInfo))) 
-  {
+if (said("object")) {
   get.num("object #: ", tmpVarB);
   obj.status.v(tmpVarB);
-  }
+}
 
 [ show the priority screen
-if ((said("show", "pri") || controller(cShowPriority))) 
-  {
+if (said("show", "pri")) {
   show.pri.screen();
-  }
+}
 
 [ move an inventory object to ego's inventory
-if (said("get", "object")) 
-  {
+if (said("get", "object")) {
   get.num("object number: ", tmpVarB);
-  if (tmpVarB > numberOfItems) 
-    {
+  if (tmpVarB > numberOfItems) {
     print("Invalid object number!");
-    }
-  else 
-    {
+  } else {
     get.v(tmpVarB);
-    }
   }
+}
 
 [ get all inventory objects
-if ((controller(cGimme) || said("gimme", "gimme"))) 
-  {
+if (said("gimme", "gimme")) {
   print("You gottum!");
   tmpVarB = 0;
-NextObj:
-  if (tmpVarB < numberOfItems) 
-    {
-    tmpVarB = tmpVarB + 1;
+  NextObj:
+  if (tmpVarB < numberOfItems) {
+    ++tmpVarB;
     get.v(tmpVarB);
     goto(NextObj);
-    }
   }
+}
 
 [ display the room where an inventory object is located
-if (said("object", "room")) 
-  {
+if (said("object", "room")) {
   get.num("Object number: ", tmpVarB);
-  if (tmpVarB > numberOfItems) 
-    {
+  if (tmpVarB > numberOfItems) {
     print("Invalid object number!");
-    }
-  else 
-    {
+  } else {
     get.room.v(tmpVarB, tmpVarA);
     [ a room value of 255 means 'in player inventory'
-    if (tmpVarA == 255) 
-      {
+    if (tmpVarA == 255) {
       print("Object %v255 is in your inventory.");
-      }
-    else 
-      {
+    } else {
       print("Object %v255 is in room %v254.");
-      }
     }
   }
+}
 
 [ set ego priority to a fixed value
-if (said("set", "pri")) 
-  {
+if (said("set", "pri")) {
   get.num("New priority: ", tmpVarB);
   set.priority.v(ego, tmpVarB);
-  }
+}
 
 [ restore auto priority assignment
-if (said("release", "pri")) 
-  {
+if (said("release", "pri")) {
   release.priority(ego);
-  }
+}
 
 [ if ego coordinates need to be shown
-if (showCoords) 
-  {
+if (showCoords) {
   [ get ego's current position and priority
   get.posn(ego, xPos, yPos);
   get.priority(ego, tmpVarA);
@@ -224,66 +181,55 @@ if (showCoords)
   display(24, 15, "Rm %v0|3 Pri %v254|2 x:%v240|3 y:%v241|3");
   [ restore colors to white on black
   set.text.attribute(WHITE, BLACK);
-  }
+}
 
 [ if an unknown word was entered and input not matched yet
-if (!fLogInput && !isset(haveMatch) && isset(haveInput) && unknownWordNum > 0) 
-  {
+if (!fLogInput && !isset(haveMatch) && 
+    isset(haveInput) && unknownWordNum > 0) {
   [ adjust input/match flags to indicate nothing to parse
   set(haveMatch);
   reset(haveInput);
   [ log the unknown word
-  if (unknownWordNum == 1) 
-    {
+  if (unknownWordNum == 1) {
     log("%m19%w1");
-    }
-  if (unknownWordNum == 2) 
-    {
-    log("%m19%w2");
-    }
-  if (unknownWordNum == 3) 
-    {
-    log("%m19%w3");
-    }
-  if (unknownWordNum == 4) 
-    {
-    log("%m19%w4");
-    }
-  if (unknownWordNum == 5) 
-    {
-    log("%m19%w5");
-    }
-  if (unknownWordNum == 6) 
-    {
-    log("%m19%w6");
-    }
-  if (unknownWordNum == 7) 
-    {
-    log("%m19%w7");
-    }
-  if (unknownWordNum == 8) 
-    {
-    log("%m19%w8");
-    }
-  if (unknownWordNum == 9) 
-    {
-    log("%m19%w9");
-    }
-  if (unknownWordNum == 10)
-    {
-    log("%m19%w10");
-    }
-  print("Logged an unknown word.");
   }
+  if (unknownWordNum == 2) {
+    log("%m19%w2");
+  }
+  if (unknownWordNum == 3) {
+    log("%m19%w3");
+  }
+  if (unknownWordNum == 4) {
+    log("%m19%w4");
+  }
+  if (unknownWordNum == 5) {
+    log("%m19%w5");
+  }
+  if (unknownWordNum == 6) {
+    log("%m19%w6");
+  }
+  if (unknownWordNum == 7) {
+    log("%m19%w7");
+  }
+  if (unknownWordNum == 8) {
+    log("%m19%w8");
+  }
+  if (unknownWordNum == 9) {
+    log("%m19%w9");
+  }
+  if (unknownWordNum == 10) {
+    log("%m19%w10");
+  }
+  print("Logged an unknown word.");
+}
 
 [ add a comment to log file
-if (said("log")) 
-  {
+if (said("log")) {
   get.string(comment, "Comment: ", 22, 0, 25);
   log("%m31%s1");
   clear.lines(22, 24, 0);
   accept.input();
-  }
+}
 
 return();
 

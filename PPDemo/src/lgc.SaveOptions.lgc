@@ -1,0 +1,38 @@
+[ ********************************************************************
+[
+[ lgc.SaveOptions
+[
+[ saves sound mode to file- PC speaker, FM Synth, or MIDI
+[
+[ ********************************************************************
+
+[ update settings
+if (soundOn) {
+  work1 = 1;
+} else {
+  work1 = 0;
+}
+if (!4channelsound) {
+  work2 = 0;
+  work3 = 0;
+} else {
+  work2 = 1;
+  if (useMIDI) {
+    work3 = 1;
+  } else {
+    work3 = 0;
+  }
+}
+[ save to file
+s23 = "ppdemo.cfg";
+s22 = "%v46%v47%v48";
+s21 = "                                       ";
+block(STR.FORMAT, &s22, &s21, 0); [ str.format(sINPUT, sRESULT)
+v220 = &s21;
+block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

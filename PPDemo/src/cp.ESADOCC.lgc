@@ -1,6 +1,6 @@
 [ ********************************************************************
 [
-[ cp.Sound
+[ cp.ESADOCC
 [
 [ Electronic Synthesized Audio Data Options Control Console
 [ ESADOCC
@@ -161,7 +161,7 @@ if(newRoom) {
   discard.pic(currentRoom);
 
   [ this view has all the art for cursors and buttons
-  load.view(vw.cp.Sound);
+  load.view(vw.cp.ESADOCC);
   
   set.horizon(0);
   
@@ -173,7 +173,7 @@ if(newRoom) {
    
   [ option button that determines input mode; mouse or keyboard
   animate.obj(oMode);
-  set.view(oMode, vw.cp.Sound);
+  set.view(oMode, vw.cp.ESADOCC);
   set.loop(oMode, 0);
   set.cel(oMode, 0);
   stop.cycling(oMode);
@@ -182,7 +182,7 @@ if(newRoom) {
   
   [ option button for channel count
   animate.obj(oChannels);
-  set.view(oChannels, vw.cp.Sound);
+  set.view(oChannels, vw.cp.ESADOCC);
   set.loop(oChannels, 0);
   set.cel(oChannels, 0);
   stop.cycling(oChannels);
@@ -200,28 +200,28 @@ if(newRoom) {
   [ cursor, in four parts, default to keyboard option position
   animate.obj(oCursorB);
   ignore.objs(oCursorB);
-  set.view(oCursorB, vw.cp.Sound);
+  set.view(oCursorB, vw.cp.ESADOCC);
   set.loop(oCursorB, LP_CF_OPT1);
   set.cel(oCursorB, 0);
   stop.cycling(oCursorB);
   
   animate.obj(oCursorL);
   ignore.objs(oCursorL);
-  set.view(oCursorL, vw.cp.Sound);
+  set.view(oCursorL, vw.cp.ESADOCC);
   set.loop(oCursorL, LP_CF_OPT1);
   set.cel(oCursorL, 1);
   stop.cycling(oCursorL);
   
   animate.obj(oCursorT);
   ignore.objs(oCursorT);
-  set.view(oCursorT, vw.cp.Sound);
+  set.view(oCursorT, vw.cp.ESADOCC);
   set.loop(oCursorT, LP_CF_OPT1);
   set.cel(oCursorT, 0);
   stop.cycling(oCursorT);
   
   animate.obj(oCursorR);
   ignore.objs(oCursorR);
-  set.view(oCursorR, vw.cp.Sound);
+  set.view(oCursorR, vw.cp.ESADOCC);
   set.loop(oCursorR, LP_CF_OPT1);
   set.cel(oCursorR, 1);
   stop.cycling(oCursorR);
@@ -234,7 +234,7 @@ if(newRoom) {
   [ scrollbar background
   animate.obj(oScrlBkgd);
   ignore.objs(oScrlBkgd);
-  set.view(oScrlBkgd, vw.cp.Sound);
+  set.view(oScrlBkgd, vw.cp.ESADOCC);
   set.loop(oScrlBkgd, LP_SCROLL);
   set.cel(oScrlBkgd, 2);
   stop.cycling(oScrlBkgd);
@@ -243,7 +243,7 @@ if(newRoom) {
   [ scrollbar box
   animate.obj(oScrlBox);
   ignore.objs(oScrlBox);
-  set.view(oScrlBox, vw.cp.Sound);
+  set.view(oScrlBox, vw.cp.ESADOCC);
   set.loop(oScrlBox, LP_SCROLL);
   set.cel(oScrlBox, 0);
   stop.cycling(oScrlBox);
@@ -252,7 +252,7 @@ if(newRoom) {
   [ volume slider button
   animate.obj(oVolSlider);
   ignore.objs(oVolSlider);
-  set.view(oVolSlider, vw.cp.Sound);
+  set.view(oVolSlider, vw.cp.ESADOCC);
   set.loop(oVolSlider, LP_SLIDER);
   set.cel(oVolSlider, 0);
   stop.cycling(oVolSlider);

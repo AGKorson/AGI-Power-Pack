@@ -133,78 +133,76 @@ if (currentRoom == 0) {
       call(lgc.mod2936);
       goto(continue);
     }
-  }
-  :continue
-  [ confirm video, sound and mouse settings
-  if (monitorType != EGA) {
-    load.logics(lgc.Error);
-    print("%l97|36");
-    quit(1);
-  }
-  if (!enableDblClick) {
-    load.logics(lgc.Error);
-    print("%l97|37");
-    quit(1);
-  }
-  if (numberOfVoices != 4) {
-    load.logics(lgc.Error);
-    print("%l97|38");
-    quit(1);
+    :continue
+    [ confirm video, sound and mouse settings
+    if (monitorType != EGA) {
+      load.logics(lgc.Error);
+      print("%l97|36");
+      quit(1);
+    }
+    if (!enableDblClick) {
+      load.logics(lgc.Error);
+      print("%l97|37");
+      quit(1);
+    }
+    if (numberOfVoices != 4) {
+      load.logics(lgc.Error);
+      print("%l97|38");
+      quit(1);
+    }
   }
   
   [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
                         [ configures the screen and other startup activities
 
-  [ ready to begin game by going to first room
-  if (gameRestarted) {
+  [ some start/restart actions have to be done within logic0
+  if (gameRestarted) {    
     [ go to first room here (skip Intro)
     new.room(rm.ParkingLot);
   } else {
-    [ !actually, if NOT restarting (meaning this is very beginning, 
-    [ need to create the menu; it can't be done in lgc.Init, it MUST be 
-    [ done from within logic 0, so do that before going to start room
-    set.menu("AGI");
-    set.menu.item("About      ", cAbout);
-    set.menu.item("Help   <F1>", cHelp);
+    [ if NOT restarting (meaning this is very beginning, need to create 
+    [ the menu; it can't be done in lgc.Init, it MUST be done from within 
+    [ logic 0, so do that before going to start room
+    set.menu("PPDemo");
+    set.menu.item("About           ", cAbout);
+    set.menu.item("Version  <Alt-V>", cVersion);
+    set.menu.item("Help        <F1>", cHelp);
     set.menu("File");
-    set.menu.item("Save ÄÅÇÉ<F5>", cSave);
+    set.menu.item("Save     <F5>", cSave);
     set.menu.item("Restore  <F7>", cRestore);
     set.menu.item("ƒƒƒƒƒƒƒƒƒƒƒƒƒ", cDummy);
     set.menu.item("Restart  <F9>", cRestart);
     set.menu.item("Quit  <Alt-Z>", cQuit);
     set.menu("Action");
-    set.menu.item("See Object  <F4>", cShowObj);
-    set.menu.item("Inventory  <Tab>", cStatus);
+     set.menu.item("Inventory      <Tab>", cStatus);
+     set.menu.item(m13, cChooseItem); [ "Examine Item    <F4>"
+    set.menu("Sound");
+    set.menu.item(m15, cToggleSound); [ "Sound: On     <F2>"
+    set.menu.item(m16, cSoundPC);     [ " PC Speaker       "
+    set.menu.item(m17, cSoundFM);     [ " FM Synth         "
+    set.menu.item(m18, cSoundMIDI);   [ " MIDI             "
     set.menu("Special");
-    set.menu.item("Sound On/Off      <F2>", cToggleSound);
-    set.menu.item("Clock On/Off      <F6>", cClock);
-    set.menu.item("Joystick      <Ctrl J>", cInitJoy);
-    set.menu.item("Pause            <Esc>", cPause);
+    set.menu.item(m20, cClock); [ "Clock: On      <F6>"
+    set.menu.item("Pause         <Esc>", cPause);
     set.menu("Speed");
-    set.menu.item("Normal ", cNormal);
-    set.menu.item("Slow   ", cSlow);
-    set.menu.item("Fast   ", cFast);
-    set.menu.item("Fastest", cFastest);
-    if (debugging) {
-      set.menu("Debug");
-      set.menu.item("Debug Help        ", cDebugHelp);
-      set.menu.item("Ego Info   <Alt-E>", cShowEgo);
-      set.menu.item("Pri Screen <Alt-P>", cShowPriority);
-      set.menu.item("Memory     <Alt-M>", cShowMem);
-      set.menu.item("Obj Info   <Alt-I>", cObjInfo);
-      set.menu.item("Coords     <Alt-X>", cXY);
-      set.menu.item("Get All           ", cGimme);
-      set.menu.item("Log Input: Off", cLogInput);
-      set.menu.item("Display Clicks: Off", cShowClicks);
-    }
+    set.menu.item(m21, cNormal); [ " Normal "
+    set.menu.item(m22, cSlow); [ " Slow   "
+    set.menu.item(m23, cFast); [ " Fast   "
+    set.menu.item(m24, cFastest); [ " Fastest"
+    
+[ temporary debug items
+set.menu("Debug");
+set.menu.item("Log Input: Off     ", cLogInput);
+set.menu.item("Display Clicks: Off", cShowClicks);
+
     [ submit the menu (which makes it ready to use)
     submit.menu();
     [ disable the separator lines
     disable.item(cDummy);
     
-    [ start the game with the title screen
-    new.room(rm.Title);         [ intro/opening screen
+    [ configure sound menus
+    goto(setsndmenu);
   }
 }
 
@@ -212,18 +210,18 @@ if (currentRoom == 0) {
 [ EVERY CYCLE
 [ **************************************
 
-[!!!!!! TEMPORARY DEBUG CODE !!!!!!
+[!!!!!! BEGIN TEMPORARY DEBUG CODE
 if (controller(cLogInput)) {
   [ toggle the message
   toggle(fLogInput);
-  s23 = "Log Input: %s22";
+  s23 = "Log Input:      %s22";
   if (fLogInput) {
-    s22 = "On";    
+    s22 = " On";    
   } else {
     s22 = "Off";
   }
   block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m32, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  block(SET.MSG, 0, &m38, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
 }
 [ show click data
 if (controller(cShowClicks)) {
@@ -231,15 +229,13 @@ if (controller(cShowClicks)) {
   toggle(fShowClicks);
   s23 = "Display Clicks: %s22";
   if (fShowClicks) {
-    s22 = "On";
+    s22 = " On";
   } else {
     s22 = "Off";
   }
   block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m33, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  block(SET.MSG, 0, &m39, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
 }
-
-
 if (fShowClicks) {
   [ used to assist in creating click statements and said statements
   if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
@@ -248,6 +244,7 @@ if (fShowClicks) {
   }
   [[ show the open closet door timer
   [ display(24, 0, "%v79|2:%v80|2");
+  [ show remaining available memory
   display(24, 0, "mem pages: %v8  ");
 }
 if (fLogInput) {
@@ -259,6 +256,16 @@ if (fLogInput) {
     }
   }
 }
+if (said("test", "get")) {
+  get.num("add to score: ", work1);
+  call(lgc.ScoreHandler);
+}
+if (said("test", "drop")) {
+  get.num("sub from score: ", work1);
+  work1 *= -1;
+  call(lgc.ScoreHandler);
+}
+[!!!!!! END TEMPORARY DEBUG CODE
 
 [ if a new room has just been loaded
 if (newRoom) {
@@ -280,7 +287,9 @@ if (newRoom) {
     [ load debug logic into memory
     load.logics(lgc.Debug);
   }
-
+  [ score handler (to allow score to go below zero)
+  load.logics(lgc.ScoreHandler);
+  
   [ always animate ego object when starting a new room
   animate.obj(ego);
   [ load and set view
@@ -293,23 +302,28 @@ if (newRoom) {
   clearStatusSeconds = -1; 
   
   [ check for closet door being left open
-  if (closetopen && currentRoom != rm.Hallway && currentRoom != rm.Closet && currentRoom != rm.SecretRoom) {
+  if (closetopen && !closetTimerStart && currentRoom != rm.Hallway && 
+      currentRoom != rm.Closet && currentRoom != rm.SecretRoom) {
     [ start a fresh timer
+    set(closetTimerStart);
     timerMin = 0; [4;
     timerSec = 20; [0;
-    block(START.TIMER, &timerMin, &timerSec, &closettimer); [ start.timer(vMINUTES, vSECONDS, fDONE)
+    block(START.TIMER, &timerMin, &timerSec, &closetTimerDone); [ start.timer(vMINUTES, vSECONDS, fDONE)
   } else {
     [ stop the timer
+    reset(closetTimerStart);
     block(TOGGLE.TIMER, 0, 0, 0); [ toggle.timer(STATE)
   }
 }
 
 [ check for end of closet timer
-if (closettimer) {
+if (closetTimerDone) {
   [ the door gets closed, and if ego is beyond the secret room, he's gonna get stuck
-  reset(closettimer);
+  reset(closetTimerStart);
+  reset(closetTimerDone);
   reset(closetopen);
   if (currentRoom > 6) {
+    print("Uh oh. Sounds like you are trapped.");
     set(trapped);
   }
 }
@@ -318,10 +332,65 @@ if (closettimer) {
 if (isset(gameRestored)) {
   [ make sure input area is cleared
   clear.lines(23, 24, 0);
-[  [ debugging off by default
-[  reset(debugging);
   [ need to 're-disable menu separators)
   disable.item(cDummy);
+  
+  [ set menus and sound settings
+  :setsndmenu
+  if (soundOn) {
+    s23 = "On ";
+    enable.item(cSoundPC);
+    enable.item(cSoundFM);
+    enable.item(cSoundMIDI);
+  } else {
+    s23 = "Off";
+    disable.item(cSoundPC);
+    disable.item(cSoundFM);
+    disable.item(cSoundMIDI);
+  }
+  s22 = "Sound: %s23  <F2>";
+  block(STR.FORMAT, &s22, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m15, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+
+  [ check the correct sound option, uncheck the rest
+  if (!4channelsound) {
+    s23 = "\x10";
+  } else {
+    s23 = " ";
+  }
+  s22 = "%s23PC Speaker     ";
+  block(STR.FORMAT, &s22, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m16, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  
+  if (4channelsound && !useMIDI) {
+    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    s23 = "\x10";
+  } else {
+    s23 = " ";
+  }
+  s22 = "%s23FM Synth       ";
+  block(STR.FORMAT, &s22, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m17, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  
+  if (4channelsound && useMIDI) {
+    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    s23 = "\x10";
+  } else {
+    s23 = " ";
+  }
+  s22 = "%s23MIDI           ";
+  block(STR.FORMAT, &s22, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m18, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  [ update the config file
+  call(lgc.SaveOptions);
+  
+  [ if starting, current room is zero
+  if (currentRoom == 0) {
+    [ start the game with the title screen
+    new.room(rm.Title);
+  }
+  
+  return();
 }
 
 [ if clock display is needed
@@ -348,28 +417,20 @@ if (clockOn) {
     clearStatusSeconds = elapsedSeconds;
   }
 }
-    
+
 [ check for ego death (usually happens a lot in AGI games...)
 if (deathType > 0) {
   [ if this is first cycle since ego died
   if (deathType != 255) {
     [ disable most menu and keyboard shortcuts
-    disable.item(cDebugHelp);
     disable.item(cSave);
     disable.item(cPause);
-    disable.item(cShowObj);
+    disable.item(cChooseItem);
     disable.item(cClock);
-    disable.item(cInitJoy);
     disable.item(cNormal);
     disable.item(cFastest);
     disable.item(cFast);
     disable.item(cSlow);
-    disable.item(cShowEgo);
-    disable.item(cShowPriority);
-    disable.item(cShowMem);
-    disable.item(cObjInfo);
-    disable.item(cXY);
-    disable.item(cGimme);
     
     [ load the death handler logic
     load.logics(lgc.Death);
@@ -389,169 +450,34 @@ if (deathType > 0) {
 
 [ if normal game functions have not been disabled
 if (!disableGameFunctions) {
-  [ check for menu activation
-  if (controller(cMenu)) {
-    menu.input();
-    oldSeconds = -1;
-  }
-  if (controller(cLeftClick)) {
-    if (mouseY < 8) {
-      menu.input();
-      oldSeconds = -1;
-    }
-  }
-  
-  [ now check for any controllers that may have been activated
-  if (controller(cAbout)) {
-    print("l90|11"); [ gameAboutMsg
-  }
-
-  if ((controller(cFastest) || 
-       said("fastest") || 
-       said("fastest", "speed"))) {
-    [ no delay between interpreter cycles
-    animationInterval = FASTEST_SPEED;
-  }
-  
-  if ((controller(cFast) || 
-       said("fast") || 
-       said("fast", "speed"))) {
-    [ 1/20th of a second delay between interpreter cycles
-    animationInterval = FAST_SPEED;
-  }
-  
-  if ((controller(cNormal) || 
-       said("normal") || 
-       said("normal", "speed"))) {
-    [ 2/20ths of a second delay between interpreter cycles
-    animationInterval = NORMAL_SPEED;
-  }
-
-  if ((controller(cSlow) || 
-       said("slow") || 
-       said("slow", "speed"))) {
-    [ 4/20ths of a second delay between interpreter cycles
-    animationInterval = SLOW_SPEED;
-  }
-  
-  [ remember that sound controls only have an effect on non-PC systems
-  if (controller(cCrescendo) && attenuation > 0) {
-    [ to increase volume, lower sound attenuation variable
-    --attenuation;
-  }
-  if (controller(cDecrescendo) && attenuation < 15) {
-    [ to decrease volume, raise sound attenuation variable
-    ++attenuation;
-  }
-  
-  [ toggle sound on/off
+  [ sound options
   if (controller(cToggleSound)) {
     toggle(soundOn);
+    goto(setsndmenu);
   }
-  
-  [ toggle clock
-  if (controller(cClock)) {
-    toggle(clockOn);
-  }
-  
-  [ if debug mode is requested
-  if ((said("debug") || controller(cDebug))) {
-    [ if not in debug mode yet
-    if (!debugging) {
-      [ activate it
-      set(debugging);
-      [ display the game-version message
-      print("l90|12"); [ gameVersionMsg
-      [ and interpreter version
-      version();
-      [ load debug logic into memory
-      load.logics(lgc.Debug);
+  if (controller(cSoundPC)) {
+    [ if not already in PC sound mode
+    if (4channelsound) {
+      reset(4channelsound);
+      reset(useMIDI);
+      goto(setsndmenu);
     }
   }
-
-  [ save game
-  if ((controller(cSave) || 
-       said("save", "game") || 
-       said("save"))) {
-    [ if in lobby, need to erase patient2 if currently visible
-    if (currentRoom == rm.Lobby && f237) {
-      erase(o5);
-    }
-    save.game();
-    if (currentRoom == rm.Lobby && f237) {
-      draw(o5);
+  if (controller(cSoundFM)) {
+    [ if not already in FM mode
+    if ((!4channelsound || useMIDI)) {
+      set(4channelsound);
+      reset(useMIDI);
+      goto(setsndmenu);
     }
   }
-
-  [ restore game
-  if ((controller(cRestore) || 
-       said("restore", "game") || 
-       said("restore"))) {
-    restore.game();
-  }
-
-  [ restart game
-  if ((controller(cRestart) || 
-       said("restart", "game") || 
-       said("restart"))) {
-    restart.game();
-  }
-
-  [ ask for help
-  if ((controller(cHelp) || 
-       said("help"))) {
-    call(lgc.GameHelp);
-  }
-
-  [ echo line draws previous input on input line
-  if (controller(cEchoLine)) {
-    echo.line();
-  }
-
-  [ clear the input line
-  if (controller(cCancelLine)) {
-    cancel.line();
-  }
-
-  [ pause game (showing menu is another 
-  [ way to pause the game)
-  if ((controller(cPause) || 
-       said("pause", "game") || 
-       said("pause"))) {
-    pause();
-  }
-
-  [ check player's current inventory
-  if ((controller(cStatus) || 
-       said("inventory"))) {
-    status();
-  }
-
-  [ examine an object in player's inventory
-  if ((controller(cShowObj) || 
-       said("look", "inventory"))) {
-    [ enable section of inventory items
-    set(enableItemSelect);
-    [ show inventory screen
-    status();
-    
-    [ selectedItem is set to 255 if ESC is pressed
-    [ in the inventory screen
-    if (selectedItem > 0 && selectedItem != 255) {
-      selectedItem += 100;
-      show.obj.v(selectedItem);
+  if (controller(cSoundMIDI)) {
+    [ if not already in MIDI mode
+    if ((!4channelsound || !useMIDI)) {
+      set(4channelsound);
+      set(useMIDI);
+      goto(setsndmenu);
     }
-            
-    [ disable selection of inventory items
-    reset(enableItemSelect);
-  }
-
-  [ quit the game
-  if ((controller(cQuit) || 
-       said("quit", "game") || 
-       said("quit"))) {
-    stop.sound();
-    quit(0);
   }
 }
   
@@ -575,11 +501,55 @@ if (debugging) {
 
 [ run game specific functions only if they are not disabled
 if (!disableGameFunctions) {
+  [ saving a cursor
+  if (saveCursor) {
+    reset(saveCursor);
+    [ copy s16 into designated cursor msg value
+    [ v227 is cursor index value in cp.ERIDOCC logic
+    work1 = v227;
+    work1 += 40;
+    work2 = 16;
+    block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
+    [ provide feedback
+    print.at("Cursor saved.", 14, 19, 15);
+    return();
+  }
+  
+  [ restore a cursor
+  if (restoreCursor) {
+    reset(restoreCursor);
+    [ set s12 to default of designated cursor
+    work1 = &s12;
+    work2 = v227;
+    work2 += 46;
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
+    [ now copy it to the current cursor msgnum
+    work2 -= 6;
+    block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    [ force update by resetting the cursor index
+    v227 = -1;
+    [ provide feedback
+    print.at("Cursor restored.", 14, 19, 17);
+    return();
+  }
+  
+  [ check for instrument change
+  if (saveCustomInst) {
+    reset(saveCustomInst);
+    work1 = 22;
+    block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+    work1 = v221; [ selinst in cp.CAISOCC
+    work1 += 52; [convert to msg offset
+    work2 = &s12; [ use string 12
+    block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
+    return();
+  }
+  
   call(lgc.GameFunctions); 
   call(lgc.ToolbarFunctions);
 }
   
-[check player input for unknown words
+[ check player input for unknown words
 if (haveInput && !haveMatch && unknownWordNum > 0) {
   reset(haveInput);
   [copy word to a string
@@ -636,45 +606,40 @@ return();
 [ **************************************
 [ MESSAGES
 [ **************************************
-#message 1 "AGI"
-#message 2 "About      "
-#message 3 "Help   <F1>"
-#message 4 "Debug Help "
-#message 5 "File"
-#message 6 "Save     <F5>"
-#message 7 "Restore  <F7>"
-#message 8 "-------------"
-#message 9 "Restart  <F9>"
-#message 10 "Quit  <Alt-Z>"
-#message 11 "Action"
-#message 12 "See Object  <F4>"
-#message 13 "Inventory  <Tab>"
-#message 14 "Special"
-#message 15 "Sound On/Off      <F2>"
-#message 16 "Color/BW      <Ctrl R>"
-#message 17 "Clock On/Off      <F6>"
-#message 18 "Joystick      <Ctrl J>"
-#message 19 "Pause            <Esc>"
-#message 20 "Speed"
-#message 21 "Normal "
-#message 22 "Slow   "
-#message 23 "Fast   "
-#message 24 "Fastest"
-#message 25 "Debug"
-#message 26 "Ego Info   <Alt-E>"
-#message 27 "Pri Screen <Alt-P>"
-#message 28 "Memory     <Alt-M>"
-#message 29 "Obj Info   <Alt-I>"
-#message 30 "Coords     <Alt-X>"
-#message 31 "Get All           "
-#message 32 "Log Input: Off"
-#message 33 "Display Clicks: Off"
-#message 34 " %v13:%v12|2:%v11|2 "
-#message 35 "I don't understand \"%s2\""
-#message 36 "\"%s2\" is not in my vocabulary."
-#message 37 "What is \"%s2\""
-#message 38 "I don't understand your request."
-#message 39 "Debug Help        "
+[#message xx "PPDemo"
+[#message xx "About          "
+[#message xx "Version <Alt-V>"
+[#message xx "Help       <F1>"
+[#message xx "File"
+[#message xx "Save     <F5>"
+[#message xx "Restore  <F7>"
+[#message xx "ƒƒƒƒƒƒƒƒƒƒƒƒƒ"
+[#message xx "Restart  <F9>"
+[#message xx "Quit  <Alt-Z>"
+[#message xx "Action"
+[ TODO: change inv screen(F4) depending on cursor
+#message 13 "Use Item        <F4>" 
+[           "Examine Item    <F4>"
+[#message xx "Inventory      <Tab>"
+[#message xx "Sound"
+#message 15 "Sound: On   <F2>"
+#message 16 " PC Speaker     "
+#message 17 " FM Synth       "
+#message 18 " MIDI           "
+[#message xx "Special"
+[ TODO: add clock menu toggle code
+#message 20 "Clock: Off     <F6>"
+[#message xx "Pause         <Esc>"
+[#message xx "Speed"
+[ TODO: add speed menu toggle code
+#message 21 " Normal "
+#message 22 " Slow   "
+#message 23 " Fast   "
+#message 24 " Fastest"
+
+[debug menu items
+#message 38 "Log Input:      Off"
+#message 39 "Display Clicks: Off"
 
  [ active cursors
 #message 40 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
@@ -719,5 +684,3 @@ return();
 #message 55 "22215909FFFF030F020000"
 #message 56 "22215909FFFF030F020000"
 #message 57 "22215909FFFF030F020000"
-#message 58 "On"
-#message 59 "Off"

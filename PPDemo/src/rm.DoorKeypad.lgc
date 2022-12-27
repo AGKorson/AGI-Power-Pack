@@ -2,7 +2,7 @@
 [
 [ rm.DoorKeypad
 [
-[ 
+[ digit1 is ones, digit2 is tens, etc 
 [
 [ ********************************************************************
 
@@ -236,8 +236,8 @@ if (mouseBtn == 1) {
         set.cel(oIndicator, 12);
         indicatorTimer = 15;
       } else {
-        [ confirm code by comparing the digits
-        if (digit1 == 1 && digit2 == 2 && digit3 == 3 && digit4 == 4) {
+        [ confirm code (8367) by comparing the digits
+        if (digit4 == 2 && digit3 == 4 && digit2 == 3 && digit1 == 7) {
           set.cel(oIndicator, 11);
           indicatorTimer = 6;
           set(correctcode);

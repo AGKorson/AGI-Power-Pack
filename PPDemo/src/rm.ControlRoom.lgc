@@ -445,7 +445,11 @@ if ((said("remove", "disk") || said("remove", "disk", "drive") ||
     set(floppyInserted);
     get("floppy disk");
   } else {
-    print("What disk?");
+    if (has("floppy disk")) {
+      print("You already have the disk.");
+    } else {
+      print("What disk?");
+    }
   }
 }
 :done
@@ -467,37 +471,37 @@ if (showMOCC) {
 if (showCAISOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.Instrument);  [ ##LE002##
+  new.room(cp.CAISOCC);  [ ##LE002##
 }
   
 if (showESADOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.Sound);  [ ##LE008##
+  new.room(cp.ESADOCC);  [ ##LE008##
 }
 
 if (showICAPOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.Palette);  [ ##LE009##
+  new.room(cp.ICAPOCC);  [ ##LE009##
 }
 
 if (showRANDOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.MsgBox);  [ ##LE010##
+  new.room(cp.RANDOCC);  [ ##LE010##
 }
 
 if (showOFROCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.SpeedStatus);  [ ##LE011##
+  new.room(cp.OFROCC);  [ ##LE011##
 }
 
 if (showERIDOCC) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.Mouse);  [ ##LE012##
+  new.room(cp.ERIDOCC);  [ ##LE012##
 }
 
 if (egoHitSpecial && egoX > 100) {

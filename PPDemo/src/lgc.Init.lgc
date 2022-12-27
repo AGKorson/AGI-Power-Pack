@@ -9,11 +9,39 @@
 [
 [ ********************************************************************
 
+#define tmp0    v220
+#define tmp1    v221
+#define tmp2    v222
+#define tmp3    v223
+#define tmp4    v224
+#define tmp5    v225
+#define vRnd    v232
+#define vStyle  v233
+
 if (gameRestarted) {
   [ for a restart, there are a few things that need to be reset
   disable.item(cDummy);
   set(enableMenu);
   reset(disableGameFunctions);
+  
+  [ when restarting, s23 is set to hold sound settings
+  block(STR2BYTE, &s23, &v255, 0); [ str2byte(sINPUT, vRESULT)
+  if (v255 > 99) {
+    set(soundOn);
+    v255 -= 100;
+  } else {
+    reset(soundOn);
+  }
+  if (v255 > 9) {
+    set(4channelsound);
+    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    v255 -= 10;
+  }
+  if (v255) {
+    set(useMIDI);
+    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  }
+  [ menus don't change during restart, so don't need to update them
 } else {
   [ some things only happen during initial start - skip if restarting
   
@@ -23,23 +51,15 @@ if (gameRestarted) {
   set.key(0, 59, cHelp);             [ F1 - Help
   set.key(0, 60, cToggleSound);      [ F2 - Sound on/off
   set.key(0, 61, cEchoLine);         [ F3 - Echo line
-  set.key(0, 62, cShowObj);          [ F4 - See object
+  set.key(0, 62, cChooseItem);          [ F4 - See object
   set.key(0, 63, cSave);             [ F5 - Save game
   set.key(0, 64, cClock);            [ F6 - Clock on/off
   set.key(0, 65, cRestore);          [ F7 - Restore game
   set.key(0, 67, cRestart);          [ F9 - Restart game
-  set.key(0, 18, cShowEgo);          [ ALT-E - Displays info about EGO
-  set.key(0, 23, cObjInfo);          [ ALT-I - Shows information about screen objects
-  set.key(0, 50, cShowMem);          [ ALT-M - Displays heapsize
-  set.key(0, 25, cShowPriority);     [ ALT-P - Displays priority screen
-  set.key(0, 47, cVersion);          [ ALT-V - Shows game version info
-  set.key(0, 45, cXY);               [ ALT-X - Show Coordinates
   set.key(0, 44, cQuit);             [ ALT-Z - quit game
   set.key(3, 0, cCancelLine);        [ CTRL-C - Clear input line
   set.key(5, 0, cEchoLine);          [ CTRL-E - Echo line
   set.key(9, 0, cStatus);            [ CTRL-I/TAB - inventory
-  set.key(10, 0, cInitJoy);          [ CTRL-J - Configure joystick
-  set.key(18, 0, cToggleMonitor);    [ CTRL-R - Switches between RGB and CGA graphics
   set.key(19, 0, cToggleSound);      [ CTRL-S - Sound on/off
   set.key(45, 0, cDecrescendo);      [ - - decrease volume
   set.key(43, 0, cCrescendo);        [ + - increase volume
@@ -58,9 +78,6 @@ if (gameRestarted) {
   [ assign input prompt and cursor character
   set.string(inputPrompt, ">");
   set.cursor.char(cursor);
-  
-  [ enable debug mode via ALT+D keypress (remove when ready to release game)
-  set.key(0, 32, cDebug);
 }
 
 [ enable debugging and tracing by default (remove when ready to release game)
@@ -80,6 +97,8 @@ msgBoxBG = WHITE;
 msgBoxFG = BLACK;
 msgBoxBorder = RED;
 
+[ check for configuration file
+
 [ default instruments for 4-channel sound
 FMInst0 = 128;
 FMInst1 = 128;
@@ -87,6 +106,58 @@ FMInst2 = 128;
 FMInst3 = 129;
 FMInst4 = 130;
 
+[ attempt to read options file
+s23 = "ppdemo.cfg";
+tmp0 = 0;
+tmp1 = &s22;
+block(READ.STRING, &s23, &tmp0, &tmp1); [ read.string(sFILENAME, vINDEX, vSTRIN)
+[ check v18 to see if file was found
+if (errorParameter == 0) {
+  [ file found - extract settings from the string
+  block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+  [ options are 3-digit number: ones = useMIDI
+  [                             tens = useFMSynth
+  [                             hundreds = soundOn
+  if (tmp0 > 99) {
+    set(soundOn);
+    tmp0 -= 100;
+  } else {
+    reset(soundOn);
+  }
+  if (tmp0 > 9) {
+    set(4channelsound);
+    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    tmp0 -= 10;
+  }
+  if (tmp0) {
+    set(useMIDI);
+    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  }
+} else {
+  [ if no file found, reset v18
+  errorParameter = 0;
+  
+  [ use MIDI, and set desired instruments
+  set(4channelsound);
+  set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
+  set(useMIDI);
+  work1 = 0;
+  work2 = 56;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  ++work1;
+  work2 = 48;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  ++work1;
+  work2 = 114;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+
+[ TODO: save custom FM instruments to config file  
+  [ save a default config file
+  s23 = "ppdemo.cfg";
+  s22 = "111";
+  v220 = 22;
+  block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
+}
 
 [ default ego parameters
 egoStepSize = 1;
@@ -108,14 +179,6 @@ palette = m3;
 set.cursor.char(" l29,  v3, v7, v78, f9");
 
 [ select ego and parked car models
-#define tmp0    v220
-#define tmp1    v221
-#define tmp2    v222
-#define tmp3    v223
-#define tmp4    v224
-#define tmp5    v225
-#define vRnd    v232
-#define vStyle  v233
 
 [ randomize the car body styles
 work1 = &tmp0;

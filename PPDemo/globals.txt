@@ -17,43 +17,36 @@
 #define tbTalk                 o15
 #define tbUse                  o16
 #define cMenu                   c0 [ key: ESC; used to display the menu
-#define cAbout                  c1 [ menu: AGI;     key: none
-#define cVersion                c2 [ menu: AGI;     key: Alt+V
-#define cHelp                   c3 [ menu: AGI;     key: F1
+#define cAbout                  c1 [ menu: PPDemo;     key: none
+#define cVersion                c2 [ menu: PPDemo;     key: Alt+V
+#define cHelp                   c3 [ menu: PPDemo;     key: F1
 #define cSave                   c4 [ menu: File;    key: F5
 #define cRestore                c5 [ menu: File;    key: F7
 #define cRestart                c6 [ menu: File;    key: F9
 #define cQuit                   c7 [ menu: File;    key: Alt+Q
-#define cShowObj                c8 [ menu: Action;  key: F4
-#define cStatus                 c9 [ menu: Action;  key: TAB/Ctrl+I
-#define cToggleSound           c10 [ menu: Special; key: F2
-#define cToggleMonitor         c11 [ menu: Special; key: Ctrl+R
-#define cClock                 c12 [ menu: Special; key: F6
-#define cInitJoy               c13 [ menu: Special; key: Ctrl+J
-#define cPause                 c14 [ menu: Special; key: none (ESC to show menu also pauses game)
-#define cNormal                c15 [ menu: Speed;   key: none
-#define cSlow                  c16 [ menu: Speed;   key: none
-#define cFast                  c17 [ menu: Speed;   key: none
-#define cFastest               c18 [ menu: Speed;   key: none
-#define cDebugHelp             c19 [ menu: Debug;   key: none
-#define cShowEgo               c20 [ menu: Debug;   key: Alt+E
-#define cShowPriority          c21 [ menu: Debug;   key: Alt+P
-#define cShowMem               c22 [ menu: Debug;   key: Alt+M
-#define cObjInfo               c23 [ menu: Debug;   key: Alt+I
-#define cXY                    c24 [ menu: Debug;   key: Alt+X
-#define cGimme                 c25 [ menu: Debug;   key: none
-#define cCancelLine            c26 [ menu: none;    key: Ctrl+C
-#define cEchoLine              c27 [ menu: none;    key: F3
-#define cDebug                 c28 [ menu: none;    key: Alt+D
-#define cCrescendo             c29 [ menu: none;    key: +
-#define cDecrescendo           c30 [ menu: none;    key: -
-#define cLeftClick             c31 [ mouse left button click
-#define cLeftDblClick          c32
-#define cRightClick            c33
-#define cRightDblClick         c34
-#define cDummy                 c35 [ menu separator - should always be disabled
-#define cLogInput              c36
-#define cShowClicks            c37
+#define cStatus                 c8 [ menu: Action;  key: TAB/Ctrl+I
+#define cChooseItem             c9 [ menu: Action;  key: F4
+#define cToggleSound           c10 [ menu: Sound; key: F2
+#define cSoundPC               c11 [ menu: Sound; key: none
+#define cSoundFM               c12 [ menu: Sound; key: none
+#define cSoundMIDI             c13 [ menu: Sound; key: none
+#define cClock                 c14 [ menu: Special; key: F6
+#define cPause                 c15 [ menu: Special; key: none (ESC to show menu also pauses game)
+#define cNormal                c16 [ menu: Speed;   key: none
+#define cSlow                  c17 [ menu: Speed;   key: none
+#define cFast                  c18 [ menu: Speed;   key: none
+#define cFastest               c19 [ menu: Speed;   key: none
+#define cCancelLine            c20 [ menu: none;    key: Ctrl+C
+#define cEchoLine              c21 [ menu: none;    key: F3
+#define cCrescendo             c22 [ menu: none;    key: +
+#define cDecrescendo           c23 [ menu: none;    key: -
+#define cLeftClick             c24 [ mouse left button click
+#define cLeftDblClick          c25
+#define cRightClick            c26
+#define cRightDblClick         c27
+#define cDummy                 c28 [ menu separator - should always be disabled
+#define cLogInput              c29 [ temp debug item
+#define cShowClicks            c30 [ temp debug item
 #define CUSTOM.INST           c252
 #define SET.INST              c253
 #define SET.SNDMODE           c254
@@ -64,9 +57,10 @@
 #define touchTrees             f21
 #define handsWashed            f22
 #define tbBtnDown              f23 [ set when mouse down occurs on toolbar button
-#define closettimer            f24
+#define closetTimerStart       f24
 #define trapped                f25
-#define cycleEgoAtRest         f30 [ when set to TRUE, ego will cycle even when position does not change
+#define closetTimerDone        f26
+#define negativeScore          f30 [ set when player score is below zero
 #define firstLobby             f31 [ to track first time ego visits the lobby
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
 #define disableGameFunctions   f33 [ when set to TRUE
@@ -95,7 +89,7 @@
 #define enableOFROCC           f56
 #define enableERIDOCC          f57
 #define resetMOCC              f58
-#define lockcontrolroom        f59 [ set after player enters control room for first time
+#define closettim              f59 [ set after player enters control room for first time
 #define findFolder             f60
 #define touchPlunger           f61
 #define findWalkman            f62
