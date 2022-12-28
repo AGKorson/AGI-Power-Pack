@@ -165,7 +165,7 @@ if (currentRoom == 0) {
       quit(1);
     }
   }
-  
+
   [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
                         [ configures the screen and other startup activities
@@ -346,7 +346,6 @@ if (closetTimerDone) {
   reset(closetTimerDone);
   reset(closetopen);
   if (currentRoom > 6) {
-    [ TODO: better msg here
     print("Uh oh. Did you forget to do something in the closet before going downstairs?");
     set(trapped);
   }
@@ -489,14 +488,13 @@ if (isset(gameRestored)) {
   block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
   block(SET.MSG, 0, &mnu_msgSpeedFastest, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
   
-  [ update the config file
-  [ TODO: other options besides sound? speed? clock?
-  call(lgc.SaveOptions);
-  
   [ if starting, current room is zero
   if (currentRoom == 0) {
     [ start the game with the title screen
     new.room(rm.Title);
+  } else {
+    [ not start; update the config file
+    call(lgc.SaveOptions);
   }
   
   return();

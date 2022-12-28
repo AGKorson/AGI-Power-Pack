@@ -123,7 +123,13 @@ if (gameRestarted) {
   block(READ.STRING, &s23, &tmp0, &tmp1); [ read.string(sFILENAME, vINDEX, vSTRIN)
   [ check v18 to see if file was found
   if (errorParameter == 0) {
-    [ file found - extract settings from the string
+    [ file found - extract settings from the string:
+    work1 = 3;
+    [s23=clock and speed
+    block(STR.RIGHT, &s22, &s23, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    [s22=sound
+    block(STR.LEFT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+[print("s22: '%s22', s23: '%s23'");
     block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
     [ options are 3-digit number: ones = useMIDI
     [                             tens = useFMSynth
@@ -143,10 +149,24 @@ if (gameRestarted) {
       set(useMIDI);
       set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
     }
+    [ clock, speed
+    block(STR2BYTE, &s23, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+    if (tmp0 > 99) {
+      set(clockOn);
+      tmp0 -= 100;
+    } else {
+      reset(clockOn);
+    }
+    if (tmp0 > 9) {
+      set(realClock);
+      tmp0 -= 10;
+    } else {
+      reset(realClock);
+    }
+    animationInterval = tmp0;
   } else {
     [ if no file found, reset v18
     errorParameter = 0;
-    
     [ use MIDI, and set desired instruments
     set(4channelsound);
     set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
@@ -161,16 +181,16 @@ if (gameRestarted) {
     work2 = 114;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
   
-  [ TODO: save custom FM instruments to config file; save speed/clock settings to file
+    [ set speed to normal (delay=2/20ths of a second)
+    animationInterval = NORMAL_SPEED;
+  
+ [ TODO: save custom FM instruments to config file; save speed/clock settings to file
     [ save a default config file
     s23 = "ppdemo.cfg";
-    s22 = "111";
+    s22 = "111002";
     v220 = 22;
     block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
   }
-  
-  [ set speed to normal (delay=2/20ths of a second)
-  animationInterval = NORMAL_SPEED;
   
   [ enable custom status bar (logic 13 [lgc.Statusbar])
   [ check for score (v3), max score (v7) and sound status (f9)
