@@ -5,10 +5,17 @@
 [ This logic is run when the player dies.
 [ The death message displayed depends on the value of deathType.
 [
+[ 0: not dead
+[ 1: run over by car
+[ 2: trapped in basement
+[
+[ 254: death sequence done
+[ 255: game over; player quit/won
+[
 [ ********************************************************************
 
 [ if message announcing death hasn't been displayed yet
-if (deathType != 255) { 
+if (deathType < 254) { 
   [ re-allow input
   accept.input();
   [ clear the input line
@@ -26,49 +33,50 @@ if (deathType != 255) {
   [ before player is shown second message
   deathTimer = 25;
 
-  [ hit by a car
-  if (deathType == 1) {
-    print("Stepping in front of a moving vehicle turned out to be a bad idea.");
-    [ patients continue on their way
-    #define patientCar   o3
-    start.update(patientCar);
-  }
-
-  [ trapped in the secret room
-  if (deathType == 2) {
-    print("In secret rooms, no one can hear you scream. Looks like you'll be here awhile.");
-  }
-  
-  [ stuck in the coffin
-  if (deathType == 3) {
-    print("Look at the bright side - at least you'll save money on your funeral costs.");
-  }
-  
-  [ escorted from the premises 
-  if (deathType == 4) {
-    print("Looks like your trip to Oakhurst will include a tour of the city jail!");
-  }
-  
-  [ stunned by bat-mobile security alarm
-  if (deathType == 5) {
-    print("Lesson learned - don't mess with the Dark Knight's ride.");
-  }
-
-  if (deathType == 6) {
-    print("Looks like you broke your leg! At least you did it in a medical facility!");
-  }
-  
   [ WINNER!
   if (deathType == 99) {
     [ not actually dead- game is over because ego left
     print("Drew drives away, his visit to Sierra On-Line is over.");
-    
-    [ animate end game, then roll credits
-  }
+    [ TODO: need game ending sequence/text
+    [ set deathType to 'win'
+    deathType = 255;
+  } else {
+    [ hit by a car
+    if (deathType == 1) {
+      print("Stepping in front of a moving vehicle turned out to be a bad idea.");
+      [ patients continue on their way
+      #define patientCar   o3
+      start.update(patientCar);
+    }
   
-  [ set deathType to 255 so this logic does not
-  [ display the death message again
-  deathType = 255;
+    [ trapped in the secret room
+    if (deathType == 2) {
+      print("In secret rooms, no one can hear you scream. Looks like you'll be here awhile.");
+    }
+    
+    [ stuck in the coffin
+    if (deathType == 3) {
+      print("Look at the bright side - at least you'll save money on your funeral costs.");
+    }
+    
+    [ escorted from the premises 
+    if (deathType == 4) {
+      print("Looks like your trip to Oakhurst will include a tour of the city jail!");
+    }
+    
+    [ stunned by bat-mobile security alarm
+    if (deathType == 5) {
+      print("Lesson learned - don't mess with the Dark Knight's ride.");
+    }
+  
+    if (deathType == 6) {
+      print("Looks like you broke your leg! At least you did it in a medical facility!");
+    }
+    
+    [ set deathType to 254 so this logic does not
+    [ display the death message again
+    deathType = 254;
+  }
 }
 
 [ decrement timer
@@ -89,18 +97,6 @@ if (deathTimer == 1) {
   }
 }
 
-[ menu access is allowed, to restart or restore
-if (controller(cMenu)) {
-  menu.input();
-  oldSeconds = -1;
-}
-if (controller(cLeftClick)) {
-  if (mouseY < 8) {
-    menu.input();
-    oldSeconds = -1;
-  }
-}
-
 [ limited toolbar functionality
 call(lgc.ToolbarFunctions);
 
@@ -116,6 +112,7 @@ if ((controller(cRestore) || said("restore", "game") || said("restore"))) {
 
 [ restarting game is allowed
 if ((controller(cRestart) || said("restart", "game") || said("restart"))) {
+  call(lgc.CacheOptions);
   restart.game();
 }
 

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.2
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/27/2022 11:14:12 PM"
+   LastEdit = "12/28/2022 3:45:37 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -46,19 +46,19 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H6B7F6550
-   CRC32 = &H6B7F6550
+   CompCRC32 = &HCEC910EF
+   CRC32 = &HCEC910EF
    ID = lgc.Main
    IsRoom = False
-   Size = 4658
+   Size = 4780
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H15B95190
-   CRC32 = &H15B95190
+   CompCRC32 = &H49ACFAD1
+   CRC32 = &H49ACFAD1
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1497
+   Size = 1348
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -72,8 +72,8 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HDE56122D
-   CompCRC32 = &HDE56122D
+   CRC32 = &H3D521652
+   CompCRC32 = &H3D521652
    IsRoom = False
    Size = 215
 
@@ -96,10 +96,10 @@
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H8092F671
-   CompCRC32 = &H8092F671
+   CRC32 = &H3803EB27
+   CompCRC32 = &H3803EB27
    IsRoom = False
-   Size = 1142
+   Size = 1122
 
 [Logic96]
    ID = lgc.TraceInfo
@@ -384,10 +384,10 @@
 [Logic31]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &H737A0B55
-   CompCRC32 = &H737A0B55
+   CRC32 = &HC592CF4D
+   CompCRC32 = &HC592CF4D
    IsRoom = False
-   Size = 541
+   Size = 537
 
 [Logic32]
    ID = lgc.TerminalFunctions
@@ -444,6 +444,14 @@
    CompCRC32 = &H3BFAA0B8
    IsRoom = False
    Size = 191
+
+[Logic16]
+   ID = lgc.CacheOptions
+   Description = ""
+   CRC32 = &HD4533963
+   CompCRC32 = &HD4533963
+   IsRoom = False
+   Size = 130
 [::END Logics::]
 
 [::BEGIN Pictures::]

@@ -220,8 +220,8 @@ set.menu.item(m39, cShowClicks); [ "Display Clicks: Off"
     [ disable the separator lines
     disable.item(cDummy);
     
-    [ configure menus
-    goto(setsndmenu);
+    [ start the game with the title screen
+    new.room(rm.Title);
   }
 }
 
@@ -339,6 +339,156 @@ print("DBG: stop door timer");
   }
 }
 
+[ check for menu activation
+if (!disableGameFunctions) {
+  [ boolean trick to use single if statement
+  if (!controller(cMenu) && (!controller(cLeftClick) || mouseY > 7)) {
+  } else {
+    menu.input();
+    oldSeconds = -1;
+    
+    [ refresh dynamic menu items
+    [ inventory menu item
+    if (deathType < 254) {
+      if (cursormode == C_USE) {
+        [ enable 'use item'
+        enable.item(cChooseItem);
+        s23 = m16;
+        block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+      } else {
+        [ enable 'look item' for all others
+        enable.item(cChooseItem);
+        s23 = m15;
+        block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+        [ disable for all others
+        disable.item(cChooseItem);
+      }
+    } else {
+      [ not enabled if dead
+      disable.item(cChooseItem);
+    }
+    
+    [ sound toggle and mode
+    if (soundOn) {
+      s23 = "On ";
+      enable.item(cSoundPC);
+      enable.item(cSoundFM);
+      enable.item(cSoundMIDI);
+    } else {
+      s23 = "Off";
+      disable.item(cSoundPC);
+      disable.item(cSoundFM);
+      disable.item(cSoundMIDI);
+    }
+    s22 = "Sound: %s23  <F2>";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSndToggle, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  
+    [ check the correct sound option, uncheck the rest
+    if (!4channelsound) {
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    }
+    s22 = "%s23PC Speaker     ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSoundPC, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    
+    if (4channelsound && !useMIDI) {
+      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    }
+    s22 = "%s23FM Synth       ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSoundFM, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    
+    if (4channelsound && useMIDI) {
+      set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    }
+    s22 = "%s23MIDI           ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSoundMIDI, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+
+    [ clock toggle and mode
+    if (clockOn) {
+      s23 = "On ";
+      enable.item(cGameClock);
+      enable.item(cRealClock);
+    } else {
+      s23 = "Off";
+      disable.item(cGameClock);
+      disable.item(cRealClock);
+    }
+    s22 = "Clock: %s23  <F6>"; 
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgClockToggle, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    if (realClock) {
+      s21 = " ";
+      s23 = "\x10";
+    } else {
+      s21 = "\x10";
+      s23 = " ";
+    }
+    s22 = "%s21Game Time      ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgGameTime, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    s22 = "%s23Real Time      ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgRealTime, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+
+    [ speed menu not available when dead
+    s23 = mnu_msgSpeed;
+    block(STR.LEN, &s23, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 == 0 && deathType != 254) {
+      s23 = m14; [ "Speed"
+      block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    }
+    if (work1 !=0 && deathType == 254) {
+      s23 = "";
+      block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    }
+    [ speed mode
+    if (animationInterval == SLOW_SPEED) {
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    } 
+    s22 = "%s23Slow   ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSpeedSlow, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    if (animationInterval == NORMAL_SPEED) {
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    } 
+    s22 = "%s23Normal ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSpeedNorm, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    if (animationInterval == FAST_SPEED) {
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    } 
+    s22 = "%s23Fast   ";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSpeedFast, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    if (animationInterval == FASTEST_SPEED) {
+      s23 = "\x10";
+    } else {
+      s23 = " ";
+    } 
+    s22 = "%s23Fastest";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, 0, &mnu_msgSpeedFastest, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  }
+
+}
+
 [ check for end of closet timer
 if (closetTimerDone) {
   [ the door gets closed, and if ego is beyond the secret room, he's gonna get stuck
@@ -357,147 +507,6 @@ if (isset(gameRestored)) {
   clear.lines(23, 24, 0);
   [ need to 're-disable menu separators)
   disable.item(cDummy);
-  
-  [ refresh dynamic menus
-  
-  [ sound toggle and mode
-  :setsndmenu
-  if (soundOn) {
-    s23 = "On ";
-    enable.item(cSoundPC);
-    enable.item(cSoundFM);
-    enable.item(cSoundMIDI);
-  } else {
-    s23 = "Off";
-    disable.item(cSoundPC);
-    disable.item(cSoundFM);
-    disable.item(cSoundMIDI);
-  }
-  s22 = "Sound: %s23  <F2>";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSndToggle, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-
-  [ check the correct sound option, uncheck the rest
-  if (!4channelsound) {
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  }
-  s22 = "%s23PC Speaker     ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSoundPC, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  
-  if (4channelsound && !useMIDI) {
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  }
-  s22 = "%s23FM Synth       ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSoundFM, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  
-  if (4channelsound && useMIDI) {
-    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  }
-  s22 = "%s23MIDI           ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSoundMIDI, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  [ if not start or restart, skip other menu settings
-  if (currentRoom > 0) {
-    [ update the config file
-    call(lgc.SaveOptions);
-    return();
-  }
-  
-  :setclockmenu
-  [ clock toggle and mode
-  if (clockOn) {
-    s23 = "On ";
-    enable.item(cGameClock);
-    enable.item(cRealClock);
-  } else {
-    s23 = "Off";
-    disable.item(cGameClock);
-    disable.item(cRealClock);
-  }
-  s22 = "Clock: %s23  <F6>"; 
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgClockToggle, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  if (realClock) {
-    s21 = " ";
-    s23 = "\x10";
-  } else {
-    s21 = "\x10";
-    s23 = " ";
-  }
-  s22 = "%s21Game Time      ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgGameTime, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s22 = "%s23Real Time      ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgRealTime, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  [ if not start or restart, skip other menu settings
-  if (currentRoom > 0) {
-    [ update the config file
-    call(lgc.SaveOptions);
-    return();
-  }
-  
-  :setspeedmenu
-  s23 = mnu_msgSpeed;
-  block(STR.LEN, &s23, &work1, 0); [ str.len(sINPUT, vRESULT)
-  if (work1 == 0) {
-    s23 = m14; [ "Speed"
-    block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  }
-  [ speed mode
-  if (animationInterval == SLOW_SPEED) {
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  } 
-  s22 = "%s23Slow   ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSpeedSlow, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  if (animationInterval == NORMAL_SPEED) {
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  } 
-  s22 = "%s23Normal ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSpeedNorm, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  if (animationInterval == FAST_SPEED) {
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  } 
-  s22 = "%s23Fast   ";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSpeedFast, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  if (animationInterval == FASTEST_SPEED) {
-    s23 = "\x10";
-  } else {
-    s23 = " ";
-  } 
-  s22 = "%s23Fastest";
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &mnu_msgSpeedFastest, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  
-  [ if starting, current room is zero
-  if (currentRoom == 0) {
-    [ start the game with the title screen
-    new.room(rm.Title);
-  } else {
-    [ not start; update the config file
-    call(lgc.SaveOptions);
-  }
-  
-  return();
 }
 
 [ if clock display is needed
@@ -517,14 +526,17 @@ if (clockOn) {
 [ sound options
 if (controller(cToggleSound)) {
   toggle(soundOn);
-  goto(setsndmenu);
+  [ update the config file
+  call(lgc.SaveOptions);
 }
 if (controller(cSoundPC)) {
   [ if not already in PC sound mode
   if (4channelsound) {
+  [ TODO: need to actually change sound settings; not just the flags
     reset(4channelsound);
     reset(useMIDI);
-    goto(setsndmenu);
+    [ update the config file
+    call(lgc.SaveOptions);
   }
 }
 if (controller(cSoundFM)) {
@@ -532,7 +544,8 @@ if (controller(cSoundFM)) {
   if ((!4channelsound || useMIDI)) {
     set(4channelsound);
     reset(useMIDI);
-    goto(setsndmenu);
+    [ update the config file
+    call(lgc.SaveOptions);
   }
 }
 if (controller(cSoundMIDI)) {
@@ -540,7 +553,8 @@ if (controller(cSoundMIDI)) {
   if ((!4channelsound || !useMIDI)) {
     set(4channelsound);
     set(useMIDI);
-    goto(setsndmenu);
+    [ update the config file
+    call(lgc.SaveOptions);
   }
 }
 
@@ -560,14 +574,16 @@ if (controller(cClock)) {
     [ status bar doesn't check for time
     set.cursor.char(" l29, v3, v7, f9");
   }
-  goto(setclockmenu);
+  [ update the config file
+  call(lgc.SaveOptions);
 }
 if (controller(cRealClock)) {
   if (!realClock) {
     set(realClock);
     [ status bar checks realtime minutes
     set.cursor.char(" l29, v3, v7, v78, f9");
-    goto(setclockmenu);
+    [ update the config file
+    call(lgc.SaveOptions);
   }
 }
 if (controller(cGameClock)) {
@@ -575,7 +591,8 @@ if (controller(cGameClock)) {
     reset(realClock);
     [ status bar checks gametime seconds
     set.cursor.char(" l29, v3, v7, v11, f9");
-    goto(setclockmenu);
+    [ update the config file
+    call(lgc.SaveOptions);
   }
 }
 
@@ -584,35 +601,47 @@ if ((controller(cSlow) ||
      said("slow") || 
      said("slow", "speed"))) {
   [ 4/20ths of a second delay between interpreter cycles
-  animationInterval = SLOW_SPEED;
-  goto(setspeedmenu);
+  if (animationInterval != SLOW_SPEED) {
+    animationInterval = SLOW_SPEED;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
 }
 if ((controller(cNormal) || 
      said("normal") || 
      said("normal", "speed"))) {
   [ 2/20ths of a second delay between interpreter cycles
-  animationInterval = NORMAL_SPEED;
-  goto(setspeedmenu);
+  if (animationInterval != NORMAL_SPEED) {
+    animationInterval = NORMAL_SPEED;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
 }
 if ((controller(cFast) || 
      said("fast") || 
      said("fast", "speed"))) {
   [ 1/20th of a second delay between interpreter cycles
-  animationInterval = FAST_SPEED;
-  goto(setspeedmenu);
+  if (animationInterval != FAST_SPEED) {
+    animationInterval = FAST_SPEED;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
 }
 if ((controller(cFastest) || 
      said("fastest") || 
      said("fastest", "speed"))) {
   [ no delay between interpreter cycles
-  animationInterval = FASTEST_SPEED;
-  goto(setspeedmenu);
+  if (animationInterval != FASTEST_SPEED) {
+    animationInterval = FASTEST_SPEED;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
 }
 
 [ check for ego death (usually happens a lot in AGI games...)
 if (deathType > 0) {
   [ if this is first cycle since ego died
-  if (deathType != 255) {
+  if (deathType < 254) {
     [ disable most menu and keyboard shortcuts
     disable.item(cSave);
     disable.item(cPause);
@@ -781,8 +810,8 @@ return();
 #message 12 " Fast   "
 #message 13 " Fastest"
 #message 14 "Speed"
-
-[ TODO: change inv screen(F4) depending on cursor
+#message 15 "Examine Item  <F4>"
+#message 16 "Use Item      <F4>"
 
 [#message xx "PPDemo"
 [#message xx "About           "

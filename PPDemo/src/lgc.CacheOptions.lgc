@@ -1,0 +1,44 @@
+[ 
+[ lgc.CacheOptions
+[ 
+[ cache sound, clock, speed settings before restarting
+[ uses s21, s22, s23
+
+if (soundOn) {
+  work1 = 1;
+} else {
+  work1 = 0;
+}
+if (4channelsound) {
+  work2 = 1;
+} else {
+  work2 = 0;
+}
+if (useMIDI) {
+  work3 = 1;
+} else {
+  work3 = 0;
+}
+s23 = "%v46%v47%v48";
+block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+work1 = 0;
+if (clockOn) {
+  work2 = 1;
+} else {
+  work2 = 0;
+}
+if (realClock) {
+  work3 = 1;
+} else {
+  work3 = 0;
+}
+s22 = "%v46%v47%v48";
+block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+s21 = "%v10";
+block(STR.FORMAT, &s21, &s21, 0); [ str.format(sINPUT, sRESULT)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

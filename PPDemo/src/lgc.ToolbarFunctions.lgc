@@ -158,6 +158,7 @@ if (mouseBtn != 1) {
     if (work2 == 1 && posn(tbSave, -1, 1, &mouseX, &mouseY)) {
       [ if dead, restart; if not dead, save
       if (deathType) {
+        call(lgc.CacheOptions);
         restart.game();
       } else {
         [ if in lobby, need to erase patient2 if currently visible

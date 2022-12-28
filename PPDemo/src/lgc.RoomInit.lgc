@@ -8,7 +8,6 @@
 [
 [ ********************************************************************
 
-
 [ for all rooms except the control panels, set screen to 80 col mode 
 [ (control panels manage that separately)
 if (currentRoom < 21) {
