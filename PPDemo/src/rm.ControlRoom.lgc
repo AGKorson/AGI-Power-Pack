@@ -98,17 +98,17 @@ if (newRoom) {
   [ if coming from stairwell, and access system not set, 
   if (previousRoom == rm.Stairway && !resetBaDASS) {
     shake.screen(2);
-    print("The door slams shut, and the lights in the room flicker violently.");
     work1 = 0;
     :flickerit
-      block(FADE.OUT, 0, 3, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-      block(FADE.IN, 0, 3, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, 0, 2, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.IN, 0, 1, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
       block(FADE.OUT, 0, 2, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
       block(FADE.IN, 0, 1, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
       ++work1;
     if (work1 < 3) {
       goto(flickerit);
     }
+    print("The door slams shut, and the lights in the room flicker violently.");
     print("The old wiring and electrical control systems appear to have malfunctioned!");
   }
   return();

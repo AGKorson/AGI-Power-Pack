@@ -14,6 +14,7 @@
 
 #define egoCarSeq    v220
 #define patientSeq   v221
+#define   IDLE         0
 #define patientTimer v222
 #define carX         v223
 #define carY         v224
@@ -100,7 +101,7 @@ if (newRoom) {
   ignore.blocks(egoCar);
   
   [ done with temp variables; reset module variables as needed
-  patientSeq = 0;
+  patientSeq = IDLE;
   
   [ tiny ego view
   load.view(vw.EgoSmall);
@@ -275,23 +276,20 @@ if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
 [ check for random patient arriving or leaving
 if (patientTimer == 0) {
   [ reset the timer
-  random(140, 250, patientTimer);
-[ TODO: finalize random timing for parking lot patient arrivals
-random(10, 20, patientTimer);
-
+  random(80, 250, patientTimer);
   if (fPatientHere) {
     [ time for patient to leave
-      position(patient, 55, 117);
-      if (f2ndspot) {
-        [ go back to parking spot 2
-        move.obj(patient, 55, 127, 1, fPatientDone);
-        patientSeq = 16;
-      } else {
-        [ go back to parking spot 1
-        move.obj(patient, 55, 127, 1, fPatientDone);
-        patientSeq = 4;
-      }
-      draw(patient);
+    position(patient, 55, 117);
+    if (f2ndspot) {
+      [ go back to parking spot 2
+      move.obj(patient, 55, 127, 1, fPatientDone);
+      patientSeq = 16;
+    } else {
+      [ go back to parking spot 1
+      move.obj(patient, 55, 127, 1, fPatientDone);
+      patientSeq = 4;
+    }
+    draw(patient);
   } else {
     [ time for patient to arrive
     random(0, 1, work1);
@@ -316,7 +314,7 @@ random(10, 20, patientTimer);
     set.view.v(patient, work1);
   }
 } else {
-  if (patientSeq == 0) {
+  if (patientSeq == IDLE) {
     [ countdown
     --patientTimer;
   }
@@ -327,7 +325,7 @@ if (fPatientDone) {
     erase(patientCar);
     reset(fPatientHere);
     reset(fPatientDone);
-    patientSeq = 0;
+    patientSeq = IDLE;
     unblock();
   }
   if (patientSeq == 19) {
@@ -351,7 +349,7 @@ if (fPatientDone) {
   }
   if (patientSeq == 15) {
     erase(patient);
-    patientSeq = 0;
+    patientSeq = IDLE;
     set(fPatientHere);
     reset(fPatientDone);
   }
@@ -386,7 +384,7 @@ if (fPatientDone) {
     erase(patientCar);
     reset(fPatientHere);
     reset(fPatientDone);
-    patientSeq = 0;
+    patientSeq = IDLE;
   }
   if (patientSeq == 8) {
     move.obj(patientCar, 143, 128, 2, fPatientDone);
@@ -413,7 +411,7 @@ if (fPatientDone) {
   }
   if (patientSeq == 3) {
     erase(patient);
-    patientSeq = 0;
+    patientSeq = IDLE;
     set(fPatientHere);
     reset(fPatientDone);
   }

@@ -296,36 +296,8 @@ if (controller(cChooseItem)) {
       show.obj.v(selectedItem);
       [ some items get a second, detailed look
       [  post-it note
-      if (selectedItem == 107) {
-        block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
-        [ fade out
-        block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-        work1 = pic.ComboList;
-        set(noScript);
-        load.pic(work1);
-        draw.pic(work1);
-        discard.pic(work1);
-        reset(noScript);
-        block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
-        show.pic();
-        [ fade in
-        block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
-        lastChar = 0;
-        :waitnote
-        if (!have.key()) {
-          goto(waitnote);
-        }
-        [ fade out
-        block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-        set(noScript);
-        load.pic(currentRoom);
-        draw.pic(currentRoom);
-        discard.pic(currentRoom);
-        reset(noScript);
-        block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
-        show.pic();
-        [ fade in
-        block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+      if ((selectedItem == 107 || selectedItem == 110 || selectedItem == 112)) {
+        call(lgc.ExamineItem);
       }
     [}
     [if (useitem) {

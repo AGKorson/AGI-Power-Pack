@@ -760,7 +760,7 @@ if (fDone && fallSeq == STANDUP) {
   reset(fDone);
   fallSeq = NOFALL;
   set.view(ego, vw.Ego);
-  set.loop(ego, 0);
+  set.loop(ego, 2);
   start.cycling(ego);
   release.loop(ego);
   [ reenable click2move if in walk mode

@@ -205,6 +205,7 @@ if (newRoom) {
 :handleInput       [ check for input from player
 [*****
 if (haveInput && !haveMatch && unknownWordNum == 0) {
+
   [ place said tests here
   if (said("look")) {
     print("You see a room full of junk.");
@@ -232,14 +233,14 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
     [ is ego close enough?
     if (posn(ego, 24, 156, 54, 161)) {
-     load.view(vw.EgoCoffin);
-     move.obj(ego, 37, 157, 1, fInCoffin);
-    [ disallow menu use
-    reset(enableMenu);
-    [ game functions are disabled
-    set(disableGameFunctions);
-    [ no input allowed
-     prevent.input();
+      load.view(vw.EgoCoffin);
+      move.obj(ego, 37, 157, 1, fInCoffin);
+      [ disallow menu use
+      reset(enableMenu);
+      [ game functions are disabled
+      set(disableGameFunctions);
+      [ no input allowed
+      prevent.input();
     } else {
       print("You can't do that from here.");
     }
@@ -378,8 +379,8 @@ if (posn(ego, 112, 154, 123, 162)) {
   release.priority(oChest);
 }
 
-[ if NOT clicking on the actual toolbar, check for
-[ clicks on ingame items
+[ if NOT clicking on the toolbar, check for
+[ clicks on in-game items
 if (mouseY > 25 && controller(cLeftClick)) {
   [ look
   if (cursormode == C_LOOK) {
@@ -451,7 +452,10 @@ if (mouseY > 25 && controller(cLeftClick)) {
             "briefings to project staff.");
       if (posn(ego, 58, 112, 74, 119)) {
         print("The podium top looks scratched and worn.");
-        [ TODO: need picture of podium top closeup for speed control panel (OFROCC) password
+        [ show the closeup if clicking on top of podium
+        if (mouseY < 109) {
+          [ TODO: need picture of podium top closeup for speed control panel (OFROCC) password
+        }
       }
       goto(doneclick);
     }
@@ -616,7 +620,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
       work1 /= 16; [ get priority color only
       if ((work1 == LT_MAGENTA || work1 == BLACK)) {
         print("This comfy chair would be great to sit in while reading your "
-        "fairy tale stories.");
+        "favorite fairy tale stories.");
         goto(doneclick);
       }
     }
@@ -784,9 +788,10 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (!has("music sheet")) {
           get("music sheet");
           print("You take the sheet from the cabinet.");
-[ TODO: picture of music sheet closeup for FM instrument control panel (CAISOCC) password
+          [ + 3 points
           work1 = 3;
           call(lgc.ScoreHandler);
+          [ remove it from screen
           set.loop(oCabinetDoor, 6);
         }
         goto(doneclick);

@@ -173,7 +173,9 @@ if (arrestSeq > 0) {
     [ ego starts walking
     load.view(vw.EgoArrest);
     set.view(ego, vw.EgoArrest);
-    get.posn(ego, work1, work2);
+[    get.posn(ego, work1, work2);
+    work1 = egoX;
+    work2 = egoY;
     work1 += 7;
     work3 = 1;
     move.obj.v(ego, work1, work2, work3, fExamDoorDone);
@@ -192,6 +194,14 @@ if (arrestSeq > 0) {
     normal.cycle(oNurse);
     ++arrestSeq;
   }
+  
+  
+[ !debug
+if ((arrestSeq == 7 || arrestSeq == 8)) {
+  display(24, 0, "ego pos: (%v38, %v39)  egoedge: %v2   ");
+}
+
+
   if (arrestSeq == 8 && edgeEgoHit == RIGHT_EDGE) {
     [ done
     erase(ego);

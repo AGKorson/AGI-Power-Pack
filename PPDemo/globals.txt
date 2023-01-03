@@ -52,6 +52,8 @@
 #define CUSTOM.INST           c252
 #define SET.INST              c253
 #define SET.SNDMODE           c254
+#define FM_MODE                  0
+#define MIDI_MODE                1
 #define mouse                 c255
 #define click2move             f17 [ when true, left click moves ego
 #define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
@@ -109,6 +111,7 @@
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define floppylabel             s5
+#define kwpassword              s6 [ password for kw002 account on MOCC
 #define mouseX                 v27
 #define mouseY                 v28
 #define mouseBtn               v29

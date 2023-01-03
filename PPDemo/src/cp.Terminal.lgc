@@ -53,6 +53,7 @@
   #define PW_OFROCC    6
   #define PW_RANDOCC   7
   #define PW_SUDO      8
+  #define PW_CHANGE    9
 #define vCurDir       v250
   #define C_ROOT    0 [ c:\
   #define C_USERS   1 [ c:\USERS\
@@ -65,6 +66,7 @@
 #define validmodule   f243
 #define validPW       f244
 #define tmpFlag       f245
+#define defaultPW     f246
 
 #define input          s12
 #define char           s13
@@ -99,6 +101,15 @@ if (floppyInserted) {
   load.view(vw.TerminalArt);
   add.to.pic(vw.TerminalArt, 0, 1, 131, 95, 4, 4);
   discard.view(vw.TerminalArt);
+}
+
+[ check password to see if it's been changed
+set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+sTemp2 = "Temp123!";
+if (compare.strings(sTemp2, kwpassword)) {
+  set(defaultPW);
+} else {
+  reset(defaultPW);
 }
 
 [ extra functions for managing terminal commands
@@ -150,8 +161,9 @@ cursor_col = 17;
 cursor_char = 1;
 display.v(cursor_row, cursor_col, cursor_char);
 inputmode = IM_USERID;
+input = "";
 
-[ if first time drawing welcom text, need to fade in
+[ if first time drawing welcome text, need to fade in
 if (newRoom) {
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
   reset(newRoom);
@@ -403,6 +415,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ userid entered; get password
     block(STR.COPY, &input, &userid, 0); [ str.copy(sINPUT, sRESULT)
     inputmode = IM_PASSWORD;
+    PWfunction = PW_LOGON;
     output = "password: ";
     terminalfn = ADDLINE;
     call(lgc.TerminalFunctions);
@@ -415,23 +428,21 @@ if ((lastChar == 13 || lastChar == 10)) {
     if (PWfunction == PW_LOGON) {
       [ validate userid/password
       sCmd = "kw002";
-      sTemp2 = "Temp123!";
       if (compare.strings(userid, sCmd)) {
         [ id is valid
         set(loggedon);
       }
       [ passwords are case sensitive
       set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
-      if (!compare.strings(input, sTemp2)) {
+      if (!compare.strings(input, kwpassword)) {
         [ password is not valid
-print("pw: '%s12'");
         reset(loggedon);
       }
       [ go back to case-insensitive compare
       set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
       [ if valid continue
       if (loggedon) {
-        inputmode = IM_CMDLINE;
+[        inputmode = IM_CMDLINE;
         output = "logged on as kw002";
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
@@ -440,10 +451,25 @@ print("pw: '%s12'");
         call(lgc.TerminalFunctions);
         terminalfn = LINEFEED;
         call(lgc.TerminalFunctions);
-        inputmode = IM_CMDLINE;
+        [ change password if first time logging on
+        if (defaultPW) {
+          output = "welcome kw002";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "password change is required:";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          output = "new password: ";
+          terminalfn = ADDLINE;
+          call(lgc.TerminalFunctions);
+          PWFunction = PW_CHANGE;
+        } else {
+          inputmode = IM_CMDLINE;
+        }
         [ get more input
         goto(getInput);
       } else {
+print("id: '%s15', pw: '%s12'");
         inputmode = IM_USERID;
         output = "invalid userid and/or password";
         terminalfn = ADDLINE_LF;
@@ -460,6 +486,99 @@ print("pw: '%s12'");
     
     [ passwords are case sensitive
     set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+    
+    [ changing password
+    if (PWfunction == PW_CHANGE) {
+      [ can't be same as default
+      if (compare.strings(input, kwpassword)) {
+        output = "invalid: password cannot match default";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        output = "new password: ";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+      [ must be 8 or more characters
+      block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+      if (work1 < 8) {
+        output = "invalid: must be 8 or more characters";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        output = "new password: ";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+      [ check character rules
+      work3 = 0;
+      block(STR.COPY, &input, &sTemp2, 0); [ str.copy(sINPUT, sRESULT)
+      :nextchar
+      block(CHAR2BYTE, &sTemp2, &work2, 0); [ char2byte(sCHAR, vRESULT)
+      [ must have at least one upper
+      if (work2 > 64 && work2 < 91) {
+        block(BIT.OR, 0, &work3, 1); [ bit.or(BYVAL, VAR, MASK)
+      } else {
+        [ must have at least one lower
+        if (work2 > 96 && work2 < 123) {
+          block(BIT.OR, 0, &work3, 2); [ bit.or(BYVAL, VAR, MASK)
+        } else {
+          [ must have at least one number
+          if (work2 > 47 && work2 < 58) {
+            block(BIT.OR, 0, &work3, 4); [ bit.or(BYVAL, VAR, MASK)
+          } else {
+            [ must have at least one special
+            block(BIT.OR, 0, &work3, 8); [ bit.or(BYVAL, VAR, MASK)
+          }
+        }
+      }
+      --work1;
+      if (work1 > 0) {
+        block(STR.RIGHT, &sTemp2, &sTemp2, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        goto(nextchar);
+      }
+      [ if all criteria met
+      if (work3 == 15) {
+        reset(defaultPW);
+        block(STR.COPY, &input, &kwpassword, 0); [ str.copy(sINPUT, sRESULT)
+        output = "password changed";
+        [ get more input
+        inputmode = IM_CMDLINE;
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      } else {
+        if (work3 < 8) {
+          [ missing special
+          output = "invalid: missing special character";
+        } else {
+          work3 -= 8;
+        }
+        if (work3 < 4) {
+          [ missing number
+          output = "invalid: missing a number";
+        } else {
+          work3 -= 4;
+        }
+        if (work3 < 2) {
+          [ missing lower
+          output = "invalid: missing lower case";
+        } else {
+          work3 -= 2;
+        }
+        if (work3 < 1) {
+          [ missing upper
+          output = "invalid: missing upper case";
+        }
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        output = "new password: ";
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+    }
+    
     [ check for sudo
     if (PWfunction == PW_SUDO) {
       [ never valid
@@ -482,7 +601,7 @@ print("pw: '%s12'");
       }
     }
     if (PWfunction == PW_CAISOCC) {
-      sCmd = "caisoccPW";
+      sCmd = "G#Am7Dsus";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableCAISOCC);
@@ -498,7 +617,7 @@ print("pw: '%s12'");
       }
     }
     if (PWfunction == PW_ESADOCC) {
-      sCmd = "esadoccPW";
+      sCmd = "Snd4chan$";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableESADOCC);
@@ -1238,7 +1357,10 @@ print("pw: '%s12'");
       [ EXIT
       sTemp2 = "exit";
       if (compare.strings(sTemp2, sCmd)) {
-        goto(reboot);
+        [ same as log off
+        terminalfn = CLS;
+        call(lgc.TerminalFunctions);
+        goto(login);
       }
       [ no other 'e' commands
       goto(syntaxerror);
@@ -1493,7 +1615,7 @@ print("pw: '%s12'");
       [ VER
       sTemp2 = "ver";
       if (compare.strings(sTemp2, sCmd)) {
-        output = "AGI Mainframe Operating System v1.0";
+        output = "AGI Mainframe Operating System v2.3";
         terminalfn = ADDLINE_LF;
         call(lgc.Terminalfunctions);
         output = "Build 244, 08/06/89";
@@ -1596,11 +1718,11 @@ print("pw: '%s12'");
   
   [ args/extra input
   if (inputmode == IM_ARGINPUT) {
-    [ tbd
+    [ currently no commands use this feature
     output = "accept input";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
-      
+    inputmode = IM_CMDLINE;
     [ get more input
     goto(getInput);
   }
@@ -1687,7 +1809,7 @@ return();
 #message 17 "*****  * * *  *   î   ***"
 #message 18 "„  *  *   *  *   *      *"
 #message 19 "*   *  *  #*   ***   **±*"
-#message 20 "AGI Mainframe Operating S?stem v1.0"
+#message 20 "AGI Mainframe Operating S?stem v2.3"
 #message 21 "  (c) 1«86 Sierra Online, Inc."
 
 #message 22 "  *    *   *   ***    ****"
@@ -1695,5 +1817,5 @@ return();
 #message 24 "*****  * * *  *   *   ***"
 #message 25 "*   *  *   *  *   *      *"
 #message 26 "*   *  *   *   ***   ****"
-#message 27 "AGI Mainframe Operating System v1.0"
+#message 27 "AGI Mainframe Operating System v2.3"
 #message 28 "  (c) 1986 Sierra Online, Inc."

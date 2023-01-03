@@ -324,14 +324,12 @@ if (newRoom) {
   if (closetopen && !closetTimerStart && currentRoom != rm.Hallway && 
       currentRoom != rm.Closet && currentRoom != rm.SecretRoom) {
     [ start a fresh timer
-print("DBG: door left open, start timer");    
     set(closetTimerStart);
     timerMin = 0; [4;
     timerSec = 20; [0;
     block(START.TIMER, &timerMin, &timerSec, &closetTimerDone); [ start.timer(vMINUTES, vSECONDS, fDONE)
   } else {
     if (closetTimerStart) {
-print("DBG: stop door timer");
       [ stop the timer
       reset(closetTimerStart);
       block(TOGGLE.TIMER, 0, 0, 0); [ toggle.timer(STATE)
@@ -356,12 +354,20 @@ if (!disableGameFunctions) {
         s23 = m16;
         block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
       } else {
-        [ enable 'look item' for all others
+        [ enable 'look item' for all other cursors
         enable.item(cChooseItem);
         s23 = m15;
         block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
-        [ disable for all others
-        disable.item(cChooseItem);
+
+[        if (cursormode == C_LOOK) {
+[          [ enable look if 'look' icon
+[          enable.item(cChooseItem);
+[          s23 = m15;
+[          block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+[        } else {
+[          [ disable for all others
+[          disable.item(cChooseItem);
+[        }
       }
     } else {
       [ not enabled if dead
@@ -532,7 +538,6 @@ if (controller(cToggleSound)) {
 if (controller(cSoundPC)) {
   [ if not already in PC sound mode
   if (4channelsound) {
-  [ TODO: need to actually change sound settings; not just the flags
     reset(4channelsound);
     reset(useMIDI);
     [ update the config file
@@ -544,6 +549,7 @@ if (controller(cSoundFM)) {
   if ((!4channelsound || useMIDI)) {
     set(4channelsound);
     reset(useMIDI);
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -553,6 +559,7 @@ if (controller(cSoundMIDI)) {
   if ((!4channelsound || !useMIDI)) {
     set(4channelsound);
     set(useMIDI);
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ update the config file
     call(lgc.SaveOptions);
   }

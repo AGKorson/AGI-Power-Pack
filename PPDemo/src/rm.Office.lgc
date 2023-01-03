@@ -74,8 +74,6 @@ if (newRoom) {
   
   [ folder under rug
   if (!has("folder")) {
-[ TODO: picture/views/logics of folder for sound (ESADOCC) password
-[  Folder: label says 'ESADOCC'. A piece of paper is taped inside that has recovery password on it.
     animate.obj(oFolder);
     set.view(oFolder, vw.OfficeArt);
     set.loop(oFolder, 5);

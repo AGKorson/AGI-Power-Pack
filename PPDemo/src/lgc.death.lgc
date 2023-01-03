@@ -56,7 +56,7 @@ if (deathType < 254) {
     
     [ stuck in the coffin
     if (deathType == 3) {
-      print("Look at the bright side - at least you'll save money on your funeral costs.");
+      print("Look on the bright side - at least you'll save money on your funeral costs.");
     }
     
     [ escorted from the premises 

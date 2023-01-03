@@ -39,12 +39,12 @@ if (gameRestarted) {
   }
   if (tmp0 > 9) {
     set(4channelsound);
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     tmp0 -= 10;
   }
   if (tmp0) {
     set(useMIDI);
-    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
   }
   [ s22 holds clock 
   block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
@@ -142,12 +142,12 @@ if (gameRestarted) {
     }
     if (tmp0 > 9) {
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       tmp0 -= 10;
     }
     if (tmp0) {
       set(useMIDI);
-      set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     }
     [ clock, speed
     block(STR2BYTE, &s23, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
@@ -222,6 +222,8 @@ FMInst2 = 128;
 FMInst3 = 129;
 FMInst4 = 130;
 
+[ default password for kw account
+kwpassword = "Temp123!";
 
 [ default ego parameters
 egoStepSize = 1;

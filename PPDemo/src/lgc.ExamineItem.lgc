@@ -1,0 +1,69 @@
+[ 
+[ lgc.ExamineItem
+[ 
+[ displays a custom close up picture for certain items
+[ selectedItem variable has index (offset by 100) of 
+[ desired item
+[
+
+[ stop the game clock while examining items
+block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+
+[ fade out current picture
+block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+[ draw the picture for selected item
+if (selectedItem == 107) {
+  work1 = pic.ComboList;
+}
+if (selectedItem == 110) {
+  work1 = pic.FolderInterior;
+}
+if (selectedItem == 112) {
+  work1 = pic.MusicSheet;
+}
+set(noScript);
+load.pic(work1);
+draw.pic(work1);
+discard.pic(work1);
+reset(noScript);
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
+show.pic();
+
+[ some items need text added
+if (selectedItem == 110) {
+  set.text.attribute(-1, 0);
+  set.text.attribute(RED, WHITE);
+  display(6, 47, "Drew, don't");
+  display(7, 47, "forget to");
+  display(8, 47, "change the");
+  display(9, 47, "reset code to");
+  display(10, 47, "Snd4chan$");
+  set.text.attribute(0, -1);
+}
+
+[ fade in
+block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+lastChar = 0;
+:waitnote
+if (!have.key()) {
+  goto(waitnote);
+}
+
+[ fade out
+block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+set(noScript);
+load.pic(currentRoom);
+draw.pic(currentRoom);
+discard.pic(currentRoom);
+reset(noScript);
+block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
+show.pic();
+[ fade in
+block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

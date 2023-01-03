@@ -17,7 +17,7 @@
 #define   LP_R_TALKPHONE 2
 #define   LP_R_SPEAK     3
 #define   LP_TYPING      4
-
+#define   LP_FLIPPING    5
 #define oPatient1        o4
 #define oPatient2        o5
 #define oPatient3        o6
@@ -32,9 +32,10 @@
 #define   LP_USEPHONE   7
 #define   LP_GETBOOK    8
 #define   LP_READBOOK   9
-#define   LP_TAPTOE    10
+#define   LP_TAPTOE     8
 
 #define oMagazine       o7
+#define oPapers         o8
 
 #define frontdooropen  f220
 #define fAllowPast     f221
@@ -55,6 +56,7 @@
 #define fPatientAtDoor f236
 #define fP24Visible    f237
 #define fFalling       f238
+#define fPagesTurned   f239
 
 
 #define receptionistLoc v220
@@ -330,7 +332,18 @@ if (newRoom) {
       position(oPatient4, 12, 92);
     }
   }
-      
+  
+  [ desk papers
+  animate.obj(oPapers);
+  set.view(oPapers, vw.LobbyArt);
+  set.loop(oPapers, 3);
+  set.cel(oPapers, 0);
+  ignore.objs(oPapers);
+  stop.cycling(oPapers);
+  position(oPapers, 37, 107);
+  set.priority(oPapers, 11);
+  draw(oPapers);
+  
   [ ego
   if (previousRoom == rm.ParkingLot) {
     position(ego, 115, 164);
@@ -436,15 +449,20 @@ if (checktalk) {
         print("She is busy talking to that patient. Wait until they're done.");
       } else {
         get.posn(oReceptionist, work1, work2);
-        if (work2 > 96) {
+        if (work2 > 95) {
           [ if already talking, ignore the click
           if (!fEgoTalkReceptionist) {
-            block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-            print.at("\"I'll be right with you.\"", 6, 6, 35);
-            block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-            set(fEgoWaitTalk);
-            if (receptionistTimer > 1) {
-              receptionistTimer = 1;
+            [ if on phone, need to wait
+            if (receptionistLoc == PHONE && receptionistSeq == IDLE) {
+              print("Wait until she's off the phone.");
+            } else {
+              block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+              print.at("\"I'll be right with you.\"", 6, 6, 35);
+              block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+              set(fEgoWaitTalk);
+              if (receptionistTimer > 1) {
+                receptionistTimer = 1;
+              }
             }
           }
         } else {
@@ -625,12 +643,57 @@ if (receptionistTimer > 0) {
     }
     [ if at the desk
     if (receptionistSeq == R_MOVEDESK) {
-      [ done moving, set timer and show 'use desk' loop
-      [ TODO: need something for receptionist to do at desk
-      receptionistSeq = IDLE;
-      random(10, 30, work1);
-      receptionistTimer = work1;
+      receptionistSeq = WAITDESK;
+      set.view(oReceptionist, vw.ReceptionistAct);
+      set.loop(oReceptionist, LP_FLIPPING);
+      work1 = 2;
+      cycle.time(oReceptionist, work1);
+      [ done moving, flip pages
+      if (fPagesTurned) {
+        [ flip them back
+        reverse.loop(oPapers, fRDone);
+        set.cel(oReceptionist, 3);
+        reverse.cycle(oReceptionist);
+      } else {
+        [ flip forward
+        end.of.loop(oPapers, fRDone);
+        set.cel(oReceptionist, 0);
+      }
       goto(doneRSeq);  
+    }
+    if (receptionistSeq == WAITDESK) {
+      [ flip three times
+      current.loop(oPapers, work1);
+      if (fPagesTurned) {
+        if (work1 == 3) {
+          [ done turning pages
+          set.view(oReceptionist, vw.ReceptionistWalk);
+          work1 = 1;
+          cycle.time(oReceptionist, work1);
+          receptionistSeq = NEWLOCATION;
+          reset(fPagesTurned);
+          normal.cycle(oReceptionist);
+        } else {
+          --work1;
+          set.loop.v(oPapers, work1);
+          set.cel(oPapers, 7);
+          reverse.loop(oPapers, fRDone);
+        }
+      } else {
+        if (work1 == 5) {
+          [ done turning pages
+          set.view(oReceptionist, vw.ReceptionistWalk);
+          work1 = 1;
+          cycle.time(oReceptionist, work1);
+          receptionistSeq = NEWLOCATION;
+          set(fPagesTurned);
+        } else {
+          ++work1;
+          set.loop.v(oPapers, work1);
+          set.cel(oPapers, 0);
+          end.of.loop(oPapers, fRDone);
+        }
+      }
     }
     [ if done hanging up phone
     if (receptionistSeq == HANGUP) {
@@ -807,8 +870,6 @@ if (receptionistSeq == NEWLOCATION) {
 [**************************************************************
 [ PATIENT 1
 [**************************************************************
-[TODO: for several actions, a cycle time of 2 might look better
-
 [ if a timer is active
 if (patient1Timer > 0) {
   [ continue the countdown
@@ -837,8 +898,8 @@ if (patient1Timer > 0) {
       if (work1 == 4) {
         [ reset the one minute flag so it doesn't trigger again
         reset(fOneMinute);
-        [ set flag so there will not be another request
-        set(fAskToPee);
+[        [ set flag so there will not be another request
+[        set(fAskToPee);
         [ patient1 stands up
         set.loop(oPatient1, LP_P_SIT);
         set.cel(oPatient1, 0);
@@ -883,6 +944,8 @@ if (patient1Timer > 0) {
     }
     [ ready to speak first line
     if (patient1Seq == TALKCOUNTER1) {
+      [ set flag so there will not be another request
+      set(fAskToPee);
       set.cel(oPatient1, 0);
       stop.cycling(oPatient1);
       block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -1876,6 +1939,10 @@ if (edgeEgoHit == TOP_EDGE) {
     } else {
       reset(receptionistInHall);
     }
+    [ if patient 1 visited restroom, reset first visit flag
+    if (fAskToPee) {
+      reset(firstLobbyVisit);
+    }
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -1900,6 +1967,10 @@ if (edgeEgoHit == TOP_EDGE) {
 }
 
 if (edgeEgoHit == BOTTOM_EDGE) {
+  [ if patient 1 visited restroom, reset first visit flag
+  if (fAskToPee) {
+    reset(firstLobbyVisit);
+  }
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);

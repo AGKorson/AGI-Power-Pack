@@ -852,11 +852,6 @@ if (updateCombo) {
 [ ESC or right-click to cancel;
 [ correct combo to open
 if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
-  [ reenable input
-  accept.input();
-  reset(disableGameFunctions);
-  [ restore statusline
-  status.line.on();
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -864,6 +859,11 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore default palette
   block(SET.PALETTE, 0, &m15, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  [ reenable input
+  accept.input();
+  reset(disableGameFunctions);
+  [ restore statusline
+  status.line.on();
   new.room.v(previousRoom);
 }
 
