@@ -262,10 +262,6 @@ touch tone freqs:
 
 For inventory screen,  change purpose and menu text depending on cursor. 'Look'  when eye icon selected, 'use' when hand is selected.  Disable inventory for all other icons.
 
-For BaDASS manual  reuse magazine art and show contents and Quick Start page. It will explain how to recover, and have recovery password written in it.  Going past will say 'rest is boring '.
-
- Folder: label says 'ESADOCC'. A piece of paper is taped inside that has recovery password on it.
-
 " Adventure"
 "   Game"
 "Interpreter"

@@ -235,6 +235,7 @@
 #define SET.ITEM               -25
 #define ITEM.COUNT             -26
 #define PIC.DRAW               -27
+#define PIC.CLEAR              -27
 #define GET.PIXEL              -28
 #define START.TIMER            -29
 #define TOGGLE.TIMER           -30

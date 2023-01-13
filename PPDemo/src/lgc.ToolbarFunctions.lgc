@@ -88,6 +88,11 @@ if (controller(cLeftClick)) {
         set(toggleBtn);
       }
     }
+    [ normally after processing a click, you should always 
+    [ clear the controller; here we don't because this is  
+    [ the last logic run in the game cycle, so controllers 
+    [ will be reset anyway (this saves us a few bytes of
+    [ memory)
   }
   
   [ check for mouse down/mouse up on quit/save/restore buttons

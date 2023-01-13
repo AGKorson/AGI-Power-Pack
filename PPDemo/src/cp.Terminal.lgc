@@ -593,7 +593,7 @@ print("id: '%s15', pw: '%s12'");
     [ check for loading subsystem
     reset(validPW);
     if (PWfunction == PW_BADASS) {
-      sCmd = "badassPW";
+      sCmd = "W7tg49@qd";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(resetBaDASS);
@@ -609,7 +609,7 @@ print("id: '%s15', pw: '%s12'");
       }
     }
     if (PWfunction == PW_ERIDOCC) {
-      sCmd = "eridoccPW";
+      sCmd = "ERID080789a";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableERIDOCC);
@@ -641,7 +641,7 @@ print("id: '%s15', pw: '%s12'");
       }
     }
     if (PWfunction == PW_RANDOCC) {
-      sCmd = "randoccPW";
+      sCmd = "GrGt5!VI";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableRANDOCC);

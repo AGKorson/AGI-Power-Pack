@@ -1,0 +1,237 @@
+[ 
+[ lgc.ReadNotebook
+[ 
+#define pageNum     v250
+#define pageImg     v251
+
+#define PAGES         5
+
+[ pause game clock while reading
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
+status.line.off();
+
+[ set colors
+set.text.attribute(-1, 0);
+set.text.attribute(BLACK, WHITE);
+
+[load.view(vw.NotebookArt);
+
+[ start with cover, which is page 1
+pageImg = pic.NotebookCover;
+pageNum = 1;
+
+[ fade out until done loading cover
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ hide objects while showing notebook
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+load.pic(pageImg);
+draw.pic(pageImg);
+show.pic();
+discard.pic(pageImg);
+set.text.attribute(BLACK, YELLOW);
+display(6, 34, "AMOS Meeting");
+display(7, 37, "Notes");
+display(8, 34, " 11/7/88 -");
+display(9, 34, " 8/15/89");
+[ fade back in
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ main input loop; wait until a key is pressed
+[ (mouse-clicks are converted to return/escape 
+[ by the have.key command)
+:waitforit
+  lastChar = 0;
+if (!have.key()) {
+  goto(waitforit);
+}
+[ ESC or right-click to exit
+if (lastChar == 27) {
+  goto(close);
+}
+
+[ left button down (can't check for controller
+[ because normal AGI cycle is skipped)
+if (mouseBtn == 1) {
+  block(GET.PIXEL, &mouseX, &mouseY, &work2); [ get.pixel(vX, vY, vRESULT)
+  work2 /= 16;
+  if (work2 == 7) {
+    [ done
+    goto(close);
+  }
+  if ((work2 == 6 || work2 == 5)) {
+    if (work2 == 6) {
+      [ page right
+      ++pageNum;
+      if (pageNum == PAGES) {
+        print.at("The last few pages are blank.", 1, 27, 35);
+        --pageNum;
+        goto(waitforit);
+      } else {
+        pageImg = pic.NotebookPages;
+      }
+    } else {
+      [ page left
+      --pageNum;
+      if (pageNum == 1) {
+        pageImg = pic.NotebookCover;
+      } else {
+        pageImg = pic.NotebookPages;
+      }
+    }
+    load.pic(pageImg);
+    draw.pic(pageImg);
+    block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    show.pic();
+    
+    [ add text/images for current page
+    if (pageNum == 1) {
+      set.text.attribute(BLACK, YELLOW);
+      display(6, 34, "AMOS Meeting");
+      display(7, 37, "Notes");
+      display(8, 34, " 11/7/88 -");
+      display(9, 34, " 8/15/89");
+    }
+    
+    if (pageNum == 2) {
+    [ display( 2,  9, "3456789012345678901234");
+      set.text.attribute(BLACK, WHITE);
+      display( 4, 13, "4/11/88");
+      display( 5, 13, "AMOS Kickoff meeting.");
+      display( 6, 13, "Goal is to create a");
+      display( 7, 13, "modified mainframe");
+      display( 8, 13, "environment to allow");
+      display( 9, 13, "rapid development of");
+      display(10, 13, "new features that");
+      display(11, 13, "should be incorporated");
+      display(12, 13, "into AGI.");
+
+      display(14, 13, "Initial development of");
+      display(15, 13, "AMOS will be led by");
+      display(16, 13, "Jeff and Chris. Held a");
+      display(17, 13, "brainstorming session");
+      display(18, 13, "on potential modules");
+      display(19, 13, "to include:");
+
+    [ display( 2,  9, "7890123456789012345678");
+      display( 4, 47, " - mouse and cursor");
+      display( 5, 47, "   support;");
+
+      display( 7, 47, " - soundboard/midi");
+      display( 8, 47, "   support;");
+
+      display(10, 47, " - 80 column text mode");
+
+      display(12, 47, " - improved text");
+      display(13, 47, "   support (extended");
+      display(14, 47, "   characters?);");
+
+      display(16, 47, " - support for the new");
+      display(17, 47, "   MSDOS code page");
+      display(18, 47, "   feature (for inter-");
+      display(19, 47, "   national character");
+      display(20, 47, "   support);");
+    }
+    
+    if (pageNum == 3) {
+    [ display( 2,  9, "3456789012345678901234");
+      set.text.attribute(BLACK, WHITE);
+      display( 4, 13, " - improved color");
+      display( 5, 13, "   options - dynamic");
+      display( 6, 13, "   palettes, screen");
+      display( 7, 13, "   fade options, more");
+      display( 8, 13, "   display/message");
+      display( 9, 13, "   box color choices;");
+
+      display(11, 13, " - reconfigure memory");
+      display(12, 13, "   model (more than");
+      display(13, 13, "   256K is becoming");
+      display(14, 13, "   standard)");
+
+    [ display( 2,  9, "7890123456789012345678");
+      display( 4, 47, "5/23/88");
+      display( 5, 47, "New or updated module");
+      display( 6, 47, "gets default password");
+      display( 7, 47, "of first four letters");
+      display( 8, 47, "of module followed by");
+      display( 9, 47, "six digit date");
+      display(10, 47, "(mmddyy), period (.)");
+      display(11, 47, "then letter of current");
+      display(12, 47, "major version (version");
+      display(13, 47, "1 = 'a', etc.)");
+      display(14, 47, "The password should");
+      display(15, 47, "automatically force");
+      display(16, 47, "an update after the");
+      display(17, 47, "initial load, but it");
+      display(18, 47, "is currently not");
+      display(19, 47, "working.");
+    }
+    
+    if (pageNum == 4) {
+    [ display( 2,  9, "3456789012345678901234");
+      set.text.attribute(BLACK, WHITE);
+      display( 4, 13, "7/31/89");
+      display( 5, 13, "The bug that is not");
+      display( 6, 13, "forcing admin reset of");
+      display( 7, 13, "default module pass-");
+      display( 8, 13, "word is still not");
+      display( 9, 13, "fixed. Admins are");
+      display(10, 13, "reminded to manually");
+      display(11, 13, "reset passwords after");
+      display(12, 13, "installing a new");
+      display(13, 13, "module version.");
+
+      display(15, 13, "8/7/89");
+      display(16, 13, "Ken requested that he");
+      display(17, 13, "and Roberta be added");
+      display(18, 13, "as AMOS users so they");
+      display(19, 13, "could evaluate");
+
+    [ display( 2,  9, "7890123456789012345678");
+      display( 4, 47, "progress before a");
+      display( 5, 47, "final decision gets");
+      display( 6, 47, "made on whether or not");
+      display( 7, 47, "to continue with AMOS");
+      display( 8, 47, "or abandon it to focus");
+      display( 9, 47, "exclusively on SCI.");
+
+      display(11, 47, "8/14/89");
+      display(12, 47, "AK reports ERIDOCC");
+      display(13, 47, "module version 1.04");
+      display(14, 47, "is ready for testing.");
+
+      display(16, 47, "8/15/89");
+      display(17, 47, "Canceled! Looks like");
+      display(18, 47, "SCI wins. :-(");
+    }
+    
+    block(FADE.IN, 0, 1, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+    discard.pic(pageImg);
+  }
+}
+[ after page change, wait for next input
+goto(waitforit);
+
+:close
+[ fade out during the switch
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"

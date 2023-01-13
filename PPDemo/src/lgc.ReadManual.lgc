@@ -1,0 +1,257 @@
+[ 
+[ lgc.ReadManual
+[ 
+
+#define pageNum     v250
+#define pageImg     v251
+
+#define PAGES         7
+
+[ pause game clock while reading
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
+status.line.off();
+
+[ set colors
+set.text.attribute(-1, 0);
+set.text.attribute(BLACK, WHITE);
+
+load.view(vw.ManualArt);
+
+[ start with cover, which is page 1
+pageImg = pic.ManualCover;
+pageNum = 1;
+
+[ fade out until done loading cover
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ hide objects while showing manual
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+load.pic(pageImg);
+draw.pic(pageImg);
+show.pic();
+discard.pic(pageImg);
+[ fade back in
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ main input loop; wait until a key is pressed
+[ mouse-clicks will set lastChar?
+:waitforit
+  lastChar = 0;
+if (!have.key()) {
+  goto(waitforit);
+}
+
+[ ESC or right-click to exit
+if (lastChar == 27) {
+  goto(closemanual);
+}
+
+[ left button down (can't check for controller
+[ because normal AGI cycle is skipped)
+if (mouseBtn == 1) {
+  block(GET.PIXEL, &mouseX, &mouseY, &work2); [ get.pixel(vX, vY, vRESULT)
+  work2 /= 16;
+  if (work2 == 7) {
+    [ done
+    goto(closemanual);
+  }
+  if ((work2 == 6 || work2 == 5)) {
+    if (work2 == 6) {
+      [ page right
+      ++pageNum;
+      if (pageNum == PAGES) {
+        print("The rest of the manual is just a bunch of boring "
+              "text. It's not worth your time to read it.");
+        --pageNum;
+        goto(waitforit);
+      } else {
+        pageImg = pic.ManualPages;
+      }
+    } else {
+      [ page left
+      --pageNum;
+      if (pageNum == 1) {
+        pageImg = pic.ManualCover;
+      } else {
+        pageImg = pic.ManualPages;
+      }
+    }
+    load.pic(pageImg);
+    draw.pic(pageImg);
+    block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    show.pic();
+    if (pageNum > 1) {
+      [ add text/images for current page
+      if (pageNum == 2) {
+        [ inside cover and title page
+        clear.text.rect(2, 9, 20, 35, LT_GRAY);
+        [               "0123456789abcdefhgij0123456");
+        set.text.attribute(BLACK, WHITE);
+        display( 4, 44, "    Sierra On-Line, Inc.");
+        display( 6, 44, "Building and Digital Access");
+        display( 7, 44, "Security System");
+        display(10, 44, "   optional module for");
+        display(12, 44, " AGI Mainframe Operating");
+        display(13, 44, "     System (AMOS)");
+        display(17, 44, "Installation and Operating");
+        display(18, 44, "       Instructions");
+        display(20, 56, "i");
+      }
+      if (pageNum == 3) {
+        [ copyright/contents
+        [               "0123456789abcdefhgij0123456");
+        set.text.attribute(BLACK, WHITE);
+        display( 6,  9, " (c) Sierra On-Line, Inc.");
+        display( 7,  9, "   All rights reserved.");
+        display(15,  9, "MSDOS is a registered trade-");
+        display(16,  9, "mark of Microsoft, Inc.");
+        [               "0123456789abcdefhgij0123456");
+        display( 3, 44, "     Table of Contents");
+        display( 5, 44, "1. Introduction           1");
+        display( 6, 44, "2. System Requirements    5");
+        display( 7, 44, "3. Software Installation 11");
+        display( 8, 44, "4. Door Hardware Interface");
+        display( 9, 44, "   Card Installation     27");
+        display(10, 44, "5. Managing Door Access  35");
+        display(11, 44, "6. Managing Computer");
+        display(12, 44, "   Access                83");
+        display(13, 44, "7. BaDASS Configuration");
+        display(14, 44, "   Options              109");
+        display(15, 44, "Appendix A: Compatible");
+        display(16, 44, "   Cypher Lock Systems  129");
+        display(17, 44, "Appendix B: Schematics  133");
+        display(18, 44, "Index                   147");
+        display(20, 23, "ii");
+        display(20, 55, "iii");
+      }
+      if (pageNum == 4) {
+        [ blank/Intro pg1
+        [               "0123456789abcdefhgij0123456");
+        set.text.attribute(BLACK, WHITE);
+        display( 3, 44, "       Chapter 1:");
+        set.text.attribute(BLUE, WHITE);
+        display( 4, 44, "      INTRODUCTION");
+        set.text.attribute(BLACK, WHITE);
+        display( 6, 44, "The Building and Digital");
+        display( 7, 44, "Access Security System is");
+        display( 8, 44, "an optional add-on module");
+        display( 9, 44, "for mainframe computer");
+        display(10, 44, "systems that provides");
+        display(11, 44, "seamless control and");
+        display(12, 44, "management of user and");
+        display(13, 44, "administrative accounts as");
+        display(14, 44, "well as full control of");
+        display(15, 44, "physical building access");
+        display(16, 44, "when connected to a");
+        display(17, 44, "compatible cypher lock");
+        display(18, 44, "door control system. A");
+        display(20, 56, "1");
+      }
+      if (pageNum == 5) {
+        [ Intro pg2/Intro pg3
+        [               "0123456789abcdefhgij0123456");
+        set.text.attribute(BLACK, WHITE);
+        display( 3,  9, "special controller card");
+        display( 4,  9, "(sold separately) can be");
+        display( 5,  9, "inserted into an available");
+        display( 6,  9, "slot in the mainframe cpu");
+        display( 7,  9, "unit that connects to the");
+        display( 8,  9, "cypher lock control panel.");
+
+        display(10,  9, "IMPORTANT: if BaDASS exper-");
+        display(11,  9, "iences a system crash");
+        display(12,  9, "(usually due to a power");
+        display(13,  9, "fluctuation), the system");
+        display(14,  9, "will perform a hard reset");
+        display(15,  9, "back to factory settings.");
+        display(16,  9, "This disables the building");
+        display(17,  9, "control subsystem.");
+        display(18,  9, "To re-enable the subsystem");
+        [               "0123456789abcdefhgij0123456");
+        display( 3, 44, "you will need to re-enter");
+        display( 4, 44, "the factory reset code");
+        display( 5, 44, "from within your mainframe");
+        display( 6, 44, "interface program. Do NOT");
+        display( 7, 44, "lose the factory reset");
+        display( 8, 44, "code, or you will not be");
+        display( 9, 44, "able to restart the  sub-");
+        display(10, 44, "system without obtaining");
+        display(11, 44, "a special override code");
+        display(12, 44, "from the technical support");
+        display(13, 44, "center (available during");
+        display(14, 44, "normal business hours at");
+        display(15, 44, "206-555-4392).");
+        display(20, 23, "2");
+        display(20, 56, "3");
+      }
+      if (pageNum == 6) {
+        [ Intro pg4/Rqmts pg1
+        [               "0123456789abcdefhgij0123456");
+        set.text.attribute(BLACK, WHITE);
+        display( 3,  9, " System Information");
+        display( 5,  9, " BaDASS Hardware Model:");
+        set.text.attribute(BLUE, WHITE);
+        display( 6,  9, " BD-101MS v1.1");
+        set.text.attribute(BLACK, WHITE);
+        display( 9,  9, " Default Interface Port:");
+        set.text.attribute(BLUE, WHITE);
+        display(10,  9, " 3392");
+        set.text.attribute(BLACK, WHITE);
+        display(13,  9, " Building Subsystem reset");
+        display(14,  9, " Code:");
+        set.text.attribute(BLUE, WHITE);
+        display(15,  9, " W7tg49@qd");
+        [               "0123456789abcdefhgij0123456");
+        set.text.attribute(BLACK, WHITE);
+        display( 3, 44, "        Chapter 2:");
+        set.text.attribute(BLUE, WHITE);
+        display( 4, 44, "    SYSTEM REQUIREMENTS");
+        set.text.attribute(BLACK, WHITE);
+        display( 6, 44, "BaDASS will run on a main-");
+        display( 7, 44, "frame system with an Oper-");
+        display( 8, 44, "ating System that is comp-");
+        display( 9, 44, "atible with one of these");
+        display(10, 44, "standards:");
+        display(11, 44, "  \x07 Unix version 1.1");
+        display(12, 44, "  \x07 Sun OS version 4.4");
+        display(13, 44, "  \x07 MSDOS Mainframe OS");
+        display(14, 44, "    version 3.4");
+        display(15, 44, "BaDASS requires 12 MB of");
+        display(16, 44, "hard disk space for the");
+        display(17, 44, "computer access subsystem");
+        display(18, 44, "and another 7 MB of disk");
+        display(19, 44, "space for the building con-");
+        display(20, 23, "4");
+        display(20, 56, "5");
+      }
+    }
+    block(FADE.IN, 0, 1, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+    discard.pic(pageImg);
+  }
+}
+[ after page change, wait for next input
+goto(waitforit);
+
+:closemanual
+[ fade out during the switch
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"

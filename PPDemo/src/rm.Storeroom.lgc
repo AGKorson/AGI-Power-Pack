@@ -48,9 +48,6 @@ if (newRoom) {
   [ add additional room initialization here
   load.view(vw.StorageRoomArt);
   
-  [ large green chair
-  add.to.pic(vw.StorageRoomArt, 0, 0, 78, 152, 13, 4);
-  
   [ clock
   animate.obj(oPendulum);
   set.view(oPendulum, vw.StorageRoomArt);
@@ -1031,7 +1028,6 @@ if (mouseY > 25 && controller(cLeftClick)) {
             work1 = 3;
             call(lgc.ScoreHandler);
             print("You carefully lift the scroll out of the chest.");
-[ TODO: picture of scroll closeup showing msgbox control panel (RANDOCC) password
             set.loop(oChest, 1);
             force.update(oFileDrawer);      
           }

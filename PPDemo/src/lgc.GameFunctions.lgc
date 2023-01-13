@@ -118,6 +118,7 @@ if (work1 < 255) {
 }
 
 [ ---------------------------------------------
+[ debug/test
 if (said("test", "sound")) {
   load.sound(s.Tone1);
   load.sound(s.Tone2);
@@ -183,6 +184,7 @@ if (v242 == 12 && f243) {
   sound(s.TonePound, f243);
   ++v242;
 }
+[ end debug/test
 [-----------------------------------
 
 [ now check for any controllers that may have been activated
@@ -295,9 +297,16 @@ if (controller(cChooseItem)) {
       selectedItem += 100;
       show.obj.v(selectedItem);
       [ some items get a second, detailed look
-      [  post-it note
-      if ((selectedItem == 107 || selectedItem == 110 || selectedItem == 112)) {
+      [  post-it note, folder, music sheet
+      if ((selectedItem == 107 || selectedItem == 110 || 
+           selectedItem == 112)) {
         call(lgc.ExamineItem);
+      }
+      [ some items get additional information'
+      if (selectedItem == 111) {
+        [ scroll
+        print("It was probably used by the original development "
+              "team when KQIII was first designed.");
       }
     [}
     [if (useitem) {
@@ -332,10 +341,42 @@ if (said("read", "memo")) {
 }
 [ read magazine
 if (said("read", "magazine")) {
-  call(lgc.ReadMagazine);
+  if (has("magazine")) {
+    call(lgc.ReadMagazine);
+    call(lgc.RedrawRoom);
+  } else {
+    print("You don't have it.");
+  }
+}
+[ read manual
+if (said("read", "manual")) {
+  if (has("BaDASS manual")) {
+    call(lgc.ReadManual);
+    call(lgc.RedrawRoom);
+  } else {
+    print("You don't have it.");
+  }
+}
+[ read scroll
+if (said("read", "scroll")) {
+  if (has("scroll")) {
+    call(lgc.ReadScroll);
+    call(lgc.RedrawRoom);
+  } else {
+    print("You don't have it.");
+  }
 }
   
-
+[ read notebook
+if (said("read", "notebook")) {
+  if (has("notebook")) {
+    call(lgc.ReadNotebook);
+    call(lgc.RedrawRoom);
+  } else {
+    print("You don't have it.");
+  }
+}
+  
 [ if player says any dirty words
 if ((said("bad word", "rol") || 
      said("anyword", "bad word", "rol") || 

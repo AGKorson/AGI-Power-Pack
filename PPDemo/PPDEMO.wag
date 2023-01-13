@@ -2,10 +2,10 @@
 # WinAGI Game Property File
 #
 [General]
-   WinAGIVersion = 2.2
+   WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "1/3/2023 4:23:43 PM"
+   LastEdit = "1/13/2023 3:47:04 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -22,20 +22,20 @@
 
 [Palette]
    Color0 = &H00000000
-   Color1 = &H00A00000
-   Color2 = &H0000A000
-   Color3 = &H00A0A000
-   Color4 = &H000000A0
-   Color5 = &H00A00080
-   Color6 = &H000050A0
-   Color7 = &H00A0A0A0
-   Color8 = &H00505050
-   Color9 = &H00FF5050
-   Color10 = &H0050FF00
-   Color11 = &H00FFFF50
-   Color12 = &H005050FF
-   Color13 = &H00FF50FF
-   Color14 = &H0050FFFF
+   Color1 = &H00AA0000
+   Color2 = &H0000AA00
+   Color3 = &H00AAAA00
+   Color4 = &H000000AA
+   Color5 = &H00AA00AA
+   Color6 = &H000055AA
+   Color7 = &H00AAAAAA
+   Color8 = &H00555555
+   Color9 = &H00FF5555
+   Color10 = &H0055FF00
+   Color11 = &H00FFFF55
+   Color12 = &H005555FF
+   Color13 = &H00FF55FF
+   Color14 = &H0055FFFF
    Color15 = &H00FFFFFF
 
 [WORDS.TOK]
@@ -46,19 +46,19 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &HA4E30B25
+   CompCRC32 = &H908A35C2
+   CRC32 = &H908A35C2
    ID = lgc.Main
    IsRoom = False
-   Size = 4724
+   Size = 4728
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H0
-   CRC32 = &H2FDA5186
+   CompCRC32 = &HE15AC07B
+   CRC32 = &H48895EDC
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1286
+   Size = 1486
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -97,7 +97,7 @@
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
    CRC32 = &H1B3D86E
-   CompCRC32 = &H1B3D86E
+   CompCRC32 = &H0
    IsRoom = False
    Size = 1122
 
@@ -112,10 +112,10 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H73847B6D
-   CompCRC32 = &H0
+   CRC32 = &H260841B
+   CompCRC32 = &H260841B
    IsRoom = True
-   Size = 7206
+   Size = 7208
 
 [Logic23]
    ID = cp.RANDOCC
@@ -128,10 +128,10 @@
 [Logic24]
    ID = cp.ICAPOCC
    Description = ""
-   CRC32 = &HD8CA4B5D
-   CompCRC32 = &H0
+   CRC32 = &HBA2CF84E
+   CompCRC32 = &HBA2CF84E
    IsRoom = True
-   Size = 3229
+   Size = 3232
 
 [Logic25]
    ID = cp.ESADOCC
@@ -176,8 +176,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H8DC89352
-   CompCRC32 = &H0
+   CRC32 = &HF983E554
+   CompCRC32 = &HF983E554
    IsRoom = True
    Size = 5657
 
@@ -193,7 +193,7 @@
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
    CRC32 = &HB2E12EC3
-   CompCRC32 = &HB2E12EC3
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3134
 
@@ -227,23 +227,23 @@
    CRC32 = &H4CDB92D9
    CompCRC32 = &H0
    IsRoom = True
-   Size = 1554
+   Size = 1548
 
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HB06E7748
-   CompCRC32 = &H0
+   CRC32 = &HB732314C
+   CompCRC32 = &HB732314C
    IsRoom = True
    Size = 5175
 
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H380C5EB9
-   CompCRC32 = &H380C5EB9
+   CRC32 = &HA869BF31
+   CompCRC32 = &H0
    IsRoom = True
-   Size = 7069
+   Size = 7061
 
 [Logic102]
    ID = lgc.mod2411
@@ -384,8 +384,8 @@
 [Logic31]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &HC592CF4D
-   CompCRC32 = &H0
+   CRC32 = &HDA172705
+   CompCRC32 = &HDA172705
    IsRoom = False
    Size = 537
 
@@ -408,10 +408,10 @@
 [Logic33]
    ID = lgc.ReadMagazine
    Description = ""
-   CRC32 = &H44BA2672
+   CRC32 = &HF80CD975
    CompCRC32 = &H0
    IsRoom = False
-   Size = 3992
+   Size = 3958
 
 [Logic13]
    ID = rm.SafeDoor
@@ -460,6 +460,38 @@
    CompCRC32 = &H0
    IsRoom = False
    Size = 208
+
+[Logic18]
+   ID = lgc.ReadManual
+   Description = ""
+   CRC32 = &H94E8A678
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 3294
+
+[Logic19]
+   ID = lgc.RedrawRoom
+   Description = ""
+   CRC32 = &HA1D5B25C
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 498
+
+[Logic20]
+   ID = lgc.ReadScroll
+   Description = ""
+   CRC32 = &HAE9C2782
+   CompCRC32 = &HAE9C2782
+   IsRoom = False
+   Size = 864
+
+[Logic28]
+   ID = lgc.ReadNotebook
+   Description = ""
+   CRC32 = &HEAED111A
+   CompCRC32 = &HEAED111A
+   IsRoom = False
+   Size = 2409
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -568,8 +600,12 @@
 [Picture10]
    ID = pic.Storeroom
    Description = ""
-   BkgdImg = ""
-   Size = 6604
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\storerrom.jpg"
+   Size = 6883
+   BkgdShow = False
+   BkgdTrans = 127
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|2560|1344
 
 [Picture30]
    ID = pic.TestPalette
@@ -645,6 +681,29 @@
    ID = pic.ManualPages
    Description = ""
    Size = 475
+   BkgdImg = ""
+
+[Picture31]
+   ID = pic.Scroll
+   Description = ""
+   Size = 2041
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\PPDemo Art\scroll.jpg"
+   BkgdShow = False
+   BkgdTrans = 127
+   BkgdPosn = 0|2|3|0
+   BkgdSize = 319|166|957|498
+
+[Picture32]
+   ID = pic.NotebookCover
+   Description = ""
+   Size = 769
+   BkgdImg = ""
+
+[Picture33]
+   ID = pic.NotebookPages
+   Description = ""
+   Size = 1079
+   BkgdImg = ""
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -1114,7 +1173,7 @@
 [View15]
    ID = vw.StorageRoomArt
    Description = ""
-   Size = 5611
+   Size = 5402
 
 [View16]
    ID = vw.Cars
@@ -1284,7 +1343,7 @@
 [View109]
    ID = vw.inv.Notebook
    Description = ""
-   Size = 1200
+   Size = 1246
 
 [View110]
    ID = vw.inv.Folder
@@ -1294,7 +1353,7 @@
 [View111]
    ID = vw.inv.Scroll
    Description = ""
-   Size = 146
+   Size = 452
 
 [View112]
    ID = vw.inv.MusicSheet
@@ -1336,4 +1395,8 @@
    Description = ""
    Size = 115
 
+[View45]
+   ID = vw.ManualArt
+   Description = ""
+   Size = 77
 [::END Views::]

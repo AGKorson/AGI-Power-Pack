@@ -14,6 +14,8 @@ block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 set(noScript);
 [ no regular input either
 prevent.input();
+status.line.off();
+
 [ set colors
 set.text.attribute(-1, 0);
 set.text.attribute(BLACK, WHITE);
@@ -40,15 +42,16 @@ discard.pic(pageImg);
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
+[ (mouse-clicks are converted to return/escape 
+[ by the have.key command)
 :waitforit
   lastChar = 0;
 if (!have.key()) {
   goto(waitforit);
 }
-
 [ ESC or right-click to exit
 if (lastChar == 27) {
-  goto(waitforit);
+  goto(closemag);
 }
 
 [ left button down (can't check for controller
@@ -242,29 +245,6 @@ goto(waitforit);
 :closemag
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-[ restore the current room
-load.pic(currentRoom);
-draw.pic(currentRoom);
-discard.pic(currentRoom);
-[ restore cursor
-cursoricon = cursormode;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-
-[ redisplay objects
-block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE);
-show.pic();
-[ now fade in 
-block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-
-[ restore colors
-set.text.attribute(0, -1);
-[ turn scripting back on
-reset(noScript);
-[ and allow input
-accept.input();
-
-[ restart the clock
-block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
 
 return();
 

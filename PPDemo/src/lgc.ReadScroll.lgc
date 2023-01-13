@@ -1,0 +1,123 @@
+[ 
+[ lgc.ReadScroll
+[ 
+
+[ pause game clock while reading
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
+status.line.off();
+
+[ set colors
+set.text.attribute(-1, 0);
+
+[ fade out until done loading cover
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ hide objects while showing manual
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+[ clear sreen before palette change
+work1 = 64;
+block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
+[ use custom palette
+block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+
+work1 = pic.Scroll;
+load.pic(work1);
+draw.pic(work1);
+show.pic();
+discard.pic(work1);
+
+[ add text after drawing the picture
+[      1         2         3        X4         5         6        
+[     901234567890123456789012345678901234567890123456789012345678
+[  5:  DRAFT            King's Quest III Spell              DRAFT                
+[  6:                  Teleportation at RANDOCC
+[  7:   I. Grind a spoon of        5. Recite the following verse:
+[  8:      salt in a mortar        
+[  9:  II. Grind the mistle-       With this kiss I thee impart,
+[ 10:      toe in the mortar       Power most dear to my heart.
+[ 11: III. Rub the stone in        Take me now from this place
+[ 12:      the mixture                 hither,
+[ 13:  IV. Kiss the stone          To another place far thither!
+[ 14:           
+[ 15:                              VI. Wave the magic wand
+[ 16:  DRAFT                                                DRAFT
+[     901234567890123456789012345678901234567890123456789012345678
+[      1         2         3        X4         5         6        
+[PW highlighted in different colors: GrGt5!VI
+
+set.text.attribute(LT_RED, LT_CYAN);
+display(5,10, "DRAFT");
+display(5,63, "DRAFT");
+display(16,10, "DRAFT");
+display(16,63, "DRAFT");
+
+set.text.attribute(BLUE, LT_CYAN);
+display(5, 27, "King's Quest III Spell");
+display(6, 26, "Teleportation at RANDOCC");
+display(7, 11, "I. Grind a spoon of");
+display(7, 38, "5. Recite the following verse:");
+display(8, 14, "salt in a mortar");
+display(9, 10, "II. Grind the mistle-");
+display(9, 38, "With this kiss I thee impart,");
+display(10, 14, "toe in the mortar");
+display(10, 38, "Power most dear to my heart.");
+display(11, 9, "II. Grind the mistle-");
+display(11, 38, "Take me now from this place");
+display(12, 14, "the mixture");
+display(12, 42, "hither,");
+display(13, 10, "IV. Kiss the stone");
+display(13, 38, "To another place far thither!");
+display(15, 38, "VI. Wave the magic wand");
+
+set.text.attribute(LT_BLUE, LT_CYAN);
+display(7, 14, "G");
+display(8, 29, "r");
+display(9, 14, "G");
+display(10, 14, "t");
+display(7, 38, "5");
+display(13, 66, "!");
+display(15, 38, "VI");
+
+[ fade back in
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ main input loop; wait until a key is pressed
+lastChar = 0;
+:waitforit
+if (!have.key()) {
+  goto(waitforit);
+}
+[ any key to exit
+
+:closemanual
+[ pop colors
+set.text.attribute(0, -1);
+[ fade out during the switch
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ clear sreen before palette change
+work1 = 64;
+block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
+[ restore palette
+block(SET.PALETTE, 0, &m8, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"
+#message 7 "000000140A001E0F002814002D16002C1B00352B1C2A2A2A15151515153F003F153F38233F15153F153F3F3F153F3F3F"
+#message 8 "%s2"

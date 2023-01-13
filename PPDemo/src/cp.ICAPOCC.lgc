@@ -63,6 +63,7 @@
 #define egoPrevY     v235
 #define egoPrevDir   v236
 #define slideoffset  v237
+#define oldSpeed     v238
 
 #define update       f220
 #define cursormode   f221
@@ -108,8 +109,7 @@ if (!enableICAPOCC) {
 [ **************************************
 [ FIRST CYCLE ONLY
 [ **************************************
-if(newRoom) 
-  {
+if(newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
@@ -286,8 +286,9 @@ if(newRoom)
   egoPrevY = egoY;
   egoPrevDir = egoDir;
   
-  [ set speed to fst for best mouse performance
-  animationInterval = 1;
+  [ set speed to fast for best mouse performance
+  oldSpeed = animationInterval;
+  animationInterval = FAST_SPEED;
 
 }
 
@@ -933,8 +934,8 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   [ change to temporary palette, load but don't display it
   block(SET.PALETTE, 0, &prevPal, 1); [ set.palette(BYVAR, PALETTE, LOADONLY);
 
-  [ TODO: restore speed
-  animationInterval = NORMAL_SPEED;
+  [ restore speed
+  animationInterval = oldSpeed;
   
   [ go back to previous room
   new.room.v(previousRoom); 
@@ -1029,6 +1030,9 @@ if (btnAction == B_PREV_PAL) {
   show.pic();
   [ redraw button text by recursing
   set(refresh);
+[ TODO: update warning and help file to indicate recursion is OK
+[ as long as programmer is careful (and remove the error setting- warning only
+[ even on HIGH setting)
   call(cp.ICAPOCC);
   
   [ fade in from black, 2msec fade value

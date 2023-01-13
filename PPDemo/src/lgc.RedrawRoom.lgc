@@ -1,0 +1,167 @@
+[ 
+[ lgc.RedrawRoom
+[ 
+[ redraws the current room after the 'reading' room
+[ for items is done; some rooms need graphic elements
+[ re-added to the picture
+
+[ restore the current room
+load.pic(currentRoom);
+draw.pic(currentRoom);
+discard.pic(currentRoom);
+
+[ room-specific adds
+if (currentRoom == rm.ParkingLot) {
+  load.view(vw.Cars);
+  [ add permanently parked cars
+  #define tmpView     v240
+  #define tmpLoop     v241
+  #define tmpCel      v242
+  #define tmpX        v243
+  #define tmpY        v244
+  #define tmpPri      v245
+  #define tmpMgn      v246
+ 
+  [ parking spot 1
+  tmpView = vw.Cars;
+  tmpLoop = car0car1;
+  tmpLoop /= 16;
+  tmpLoop += 19;
+  tmpCel = 0;
+  tmpX = 106;
+  tmpY = 141;
+  tmpPri = 13;
+  tmpMgn = 4;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 2
+  tmpLoop = car0car1;
+  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  tmpX = 92;
+  tmpY = 154;
+  tmpPri = 14;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 3
+  tmpLoop = car2car3;
+  tmpLoop /= 16;
+  tmpLoop += 19;
+  tmpX = 51;
+  tmpY = 167;
+  tmpPri = 15;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 4
+  tmpLoop = car2car3;
+  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  tmpLoop += 19;
+  tmpX = 46;
+  tmpY = 155;
+  tmpPri = 14;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  [ parking spot 5
+  tmpLoop = car4car5;
+  tmpLoop /= 16;
+  tmpX = 26;
+  tmpY = 156;  
+  tmpPri = 0;
+  add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+  goto(finish);
+}
+
+if (currentRoom == rm.Hallway) {
+  [ add the two doors that don't open
+  load.view(vw.HallwayArt);
+  add.to.pic(vw.HallwayArt, 1, 0, 86, 132, 12,  4);
+  add.to.pic(vw.HallwayArt, 1, 0, 126, 132, 12, 4);
+  goto(finish);
+}
+
+if (currentRoom == rm.Stairway) {
+  [ lights
+  load.view(vw.StairwayArt);
+  add.to.pic(vw.StairwayArt, 0, 0, 128, 81, 4, 15);
+  goto(finish);
+}
+
+if (currentRoom == rm.ControlRoom) {
+  [ add room-specific initialization here
+  load.view(vw.CtrlRoomArt);
+  if (enableCAISOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 0, 35, 78, 11, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 0, 35, 78, 11, 15);
+  }    
+  if (enableRANDOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 1, 98, 78, 10, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 1, 98, 78, 10, 15);
+  }    
+  if (enableICAPOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 2, 41, 106, 9, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 2, 41, 106, 9, 15);
+  }    
+  if (enableESADOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 3, 98, 106, 8, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 3, 98, 106, 8, 15);
+  }    
+  if (enableOFROCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 4, 35, 120, 7, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 4, 35, 120, 7, 15);
+  }    
+  if (enableERIDOCC) {
+    add.to.pic(vw.CtrlRoomArt, 0, 5, 99, 120, 6, 15);
+  } else {
+    add.to.pic(vw.CtrlRoomArt, 1, 5, 99, 120, 6, 15);
+  }    
+  
+  [ if access system hasn't been reset, door is closed
+  if (!resetBaDASS) {
+    add.to.pic(vw.CtrlRoomArt, 4, 0, 71, 167, 15, 15);
+    block(71, 165, 90, 167);
+  }
+  goto(finish);
+}
+
+if (currentRoom == rm.Office) {
+  if (has("memo")) {
+    [ memo is not on printer
+    load.view(vw.OfficeArt);
+    add.to.pic(vw.OfficeArt, 5, 0, 80, 107, 4, 15);
+  }
+}
+
+:finish
+
+[ restore cursor
+cursoricon = cursormode;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ redisplay objects
+block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE);
+show.pic();
+[ now fade in 
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ restore colors
+set.text.attribute(0, -1);
+[ turn scripting back on
+reset(noScript);
+[ and allow input
+accept.input();
+status.line.on();
+
+[ restart the clock
+block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"

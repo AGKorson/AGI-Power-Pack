@@ -116,7 +116,6 @@ if (newRoom) {
   ignore.objs(oSafe);
   if (safeStatus == OPEN) {
     if (has("BaDASS manual")) {
-    [ TODO: picture/logic to read the BaDASS manual/password
       set.loop(oSafe, 1);
       set.cel(oSafe, 7);
     } else {
@@ -186,7 +185,6 @@ if (newRoom) {
     if (officeFileDrStatus == OPEN2) { 
       position(oFileDrawer, 93, 121);
       if (has("notebook")) {
-[ TODO: picture/views/logics of notebook for mouse (ERIDOCC) password
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
       } else {
