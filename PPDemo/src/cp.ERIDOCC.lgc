@@ -87,6 +87,7 @@
 #define oldHotval    v247
 #define tmpRow       v248
 #define tmpCol       v249
+#define oldSpeed     v250
 
 #define update       f220
 #define cursormode   f221
@@ -223,8 +224,9 @@ if (newRoom) {
   egoPrevY = egoY;
   egoPrevDir = egoDir;
   
-  [ set speed to fst for best mouse performance
-  animationInterval = 1;
+  [ set speed to fast for best mouse performance
+  oldSpeed = animationInterval;
+  animationInterval = FAST_SPEED;
 
   [ need to show the pic before text can be added
   show.pic();
@@ -974,7 +976,7 @@ if (btnAction == B_EXIT) {
   egoDir = egoPrevDir;
   
   [ restore speed
-  animationInterval = NORMAL_SPEED;
+  animationInterval = oldSpeed;
   
   [ restore scripting
   reset(noScript);

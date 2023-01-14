@@ -124,12 +124,12 @@ if (gameRestarted) {
   [ check v18 to see if file was found
   if (errorParameter == 0) {
     [ file found - extract settings from the string:
-    work1 = 3;
-    [s23=clock and speed
+    work1 = 4;
+    [ s23=clock and speed
     block(STR.RIGHT, &s22, &s23, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-    [s22=sound
+    work1 = 3;
+    [ s22=sound
     block(STR.LEFT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-[print("s22: '%s22', s23: '%s23'");
     block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
     [ options are 3-digit number: ones = useMIDI
     [                             tens = useFMSynth
@@ -149,21 +149,25 @@ if (gameRestarted) {
       set(useMIDI);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     }
-    [ clock, speed
+    [ speed is last two digits
+    work1 = 2;
+    block(STR.RIGHT, &s23, &s22, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+    animationInterval = tmp0;
+    [ clock is first two digits
+    block(STR.LEFT, &s23, &s23, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
     block(STR2BYTE, &s23, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
-    if (tmp0 > 99) {
+    if (tmp0 > 9) {
       set(clockOn);
-      tmp0 -= 100;
+      tmp0 -= 10;
     } else {
       reset(clockOn);
     }
-    if (tmp0 > 9) {
+    if (tmp0 > 1) {
       set(realClock);
-      tmp0 -= 10;
     } else {
       reset(realClock);
     }
-    animationInterval = tmp0;
   } else {
     [ if no file found, reset v18
     errorParameter = 0;
@@ -172,13 +176,13 @@ if (gameRestarted) {
     set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
     set(useMIDI);
     work1 = 0;
-    work2 = 56;
+    work2 = 56; [ Trumpet
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
     ++work1;
-    work2 = 48;
+    work2 = 48; [ String Ensemble 1
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
     ++work1;
-    work2 = 114;
+    work2 = 114; [ Steel Drums
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
   
     [ set speed to normal (delay=2/20ths of a second)
@@ -187,7 +191,7 @@ if (gameRestarted) {
  [ TODO: save custom FM instruments to config file; save speed/clock settings to file
     [ save a default config file
     s23 = "ppdemo.cfg";
-    s22 = "111002";
+    s22 = "1110006";
     v220 = 22;
     block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
   }
@@ -202,9 +206,13 @@ if (gameRestarted) {
 set(debugging);
 set(enableTrace);
 
+[ set turbo mode
+work1 = 1;
+cycle.time(TOGGLE.TURBO, work1); [   toggle.turbo(vMODE);
+
 [ set mouse parameters
 set(enableDblClick);
-dblClickDelay = 3;
+dblClickDelay = 9; [ adjust by factor of 3 for turbo mode
 
 [ default cursor
 cursormode = C_DEFAULT;

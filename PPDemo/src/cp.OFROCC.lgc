@@ -627,12 +627,12 @@ if (btnAction == B_TURBO) {
   toggle(tmpTurbo);
   if (tmpTurbo) {
     work1 = 1;
-    cycle.time(o255, work1);
+    cycle.time(TOGGLE.TURBO, work1);
     set.cel(oCheck, 1);
     animationInterval *= 3;
   } else {
     work1 = 0;
-    cycle.time(o255, work1);
+    cycle.time(TOGGLE.TURBO, work1);
     set.cel(oCheck, 0);
     animationInterval /= 3;
   }
