@@ -299,7 +299,7 @@ if(newRoom) {
   work3 = &m132;
   tmpVal = &sTemp;
   :Loop1
-    sTemp = "%l90|";
+    sTemp = "%l0|";
     strByte = "%v47Custom Inst %v46       ";
     block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);

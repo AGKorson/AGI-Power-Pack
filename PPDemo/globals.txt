@@ -16,39 +16,41 @@
 #define tbLook                 o14
 #define tbTalk                 o15
 #define tbUse                  o16
-#define cMenu                   c0 [ key: ESC; used to display the menu
-#define cAbout                  c1 [ menu: PPDemo;     key: none
-#define cVersion                c2 [ menu: PPDemo;     key: Alt+V
-#define cHelp                   c3 [ menu: PPDemo;     key: F1
+#define cMenu                   c0 [ menu: n/a;     key: ESC; used to display the menu
+#define cAbout                  c1 [ menu: PPDemo;  key: none
+#define cVersion                c2 [ menu: PPDemo;  key: Alt+V
+#define cHelp                   c3 [ menu: PPDemo;  key: F1
 #define cSave                   c4 [ menu: File;    key: F5
 #define cRestore                c5 [ menu: File;    key: F7
 #define cRestart                c6 [ menu: File;    key: F9
 #define cQuit                   c7 [ menu: File;    key: Alt+Q
 #define cStatus                 c8 [ menu: Action;  key: TAB/Ctrl+I
 #define cChooseItem             c9 [ menu: Action;  key: F4
-#define cToggleSound           c10 [ menu: Sound; key: F2
-#define cSoundPC               c11 [ menu: Sound; key: none
-#define cSoundFM               c12 [ menu: Sound; key: none
-#define cSoundMIDI             c13 [ menu: Sound; key: none
-#define cClock                 c14 [ menu: Special; key: F6
-#define cGameClock             c15
-#define cRealClock             c16
-#define cPause                 c17 [ menu: Special; key: none (ESC to show menu also pauses game)
-#define cNormal                c18 [ menu: Speed;   key: none
-#define cSlow                  c19 [ menu: Speed;   key: none
-#define cFast                  c20 [ menu: Speed;   key: none
-#define cFastest               c21 [ menu: Speed;   key: none
-#define cCancelLine            c22 [ menu: none;    key: Ctrl+C
-#define cEchoLine              c23 [ menu: none;    key: F3
-#define cCrescendo             c24 [ menu: none;    key: +
-#define cDecrescendo           c25 [ menu: none;    key: -
-#define cLeftClick             c26 [ mouse left button click
-#define cLeftDblClick          c27
-#define cRightClick            c28
-#define cRightDblClick         c29
-#define cDummy                 c30 [ menu separator - should always be disabled
-#define cLogInput              c31 [ temp debug item
-#define cShowClicks            c32 [ temp debug item
+#define cToggleSound           c10 [ menu: Sound;   key: F2
+#define cDecrescendo           c11 [ menu: Sound;   key: -
+#define cCrescendo             c12 [ menu: Sound;   key: +
+#define cSoundPC               c13 [ menu: Sound;   key: none
+#define cSoundFM               c14 [ menu: Sound;   key: none
+#define cSoundMIDI             c15 [ menu: Sound;   key: none
+#define cClock                 c16 [ menu: Time;    key: F6
+#define cGameClock             c17 [ menu: Time;    key: none
+#define cRealClock             c18 [ menu: Time;    key: none
+#define cPause                 c19 [ menu: Time;    key: none (ESC to show menu also pauses game)
+#define cSlower                c20 [ menu: Speed;   key: Ctrl+LEFT
+#define cFaster                c21 [ menu: Speed;   key: Ctrl+RIGHT
+#define cNormal                c22 [ menu: Speed;   key: none
+#define cSlow                  c23 [ menu: Speed;   key: none
+#define cFast                  c24 [ menu: Speed;   key: none
+#define cFastest               c25 [ menu: Speed;   key: none
+#define cCancelLine            c26 [ menu: none;    key: Ctrl+C
+#define cEchoLine              c27 [ menu: none;    key: F3
+#define cLeftClick             c28 [ mouse left button click
+#define cLeftDblClick          c29 [ mouse left button double click
+#define cRightClick            c30 [ mouse right button click
+#define cRightDblClick         c31 [ mouse right button double click
+#define cDummy                 c32 [ menu separator - should always be disabled
+#define cLogInput              c33 [ temp debug item
+#define cShowClicks            c34 [ temp debug item
 #define CUSTOM.INST           c252
 #define SET.INST              c253
 #define SET.SNDMODE           c254

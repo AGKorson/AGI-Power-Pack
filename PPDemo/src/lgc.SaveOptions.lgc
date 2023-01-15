@@ -4,19 +4,20 @@
 [
 [ saves sound mode, clock mode and speed setting to file
 [
-[ a single string, seven characters long:
+[ a single string,  nine characters long:
 [ abcdef
-[ a: 0 = sound disabled
-[    1 = sound enabled
-[ b: 0 = PC single channel
-[    1 = 4 channel
-[ c: 0 = fm synth
-[    1 = midi
-[ d: 0 = no clock
+[ a:  0 = sound disabled
+[     1 = sound enabled
+[ b:  0 = PC single channel
+[     1 = 4 channel
+[ c:  0 = fm synth
+[     1 = midi
+[ de: attenuation (00 - 63)
+[ f: 0 = no clock
 [    1 = display clock
-[ e: 0 = game clock
+[ g: 0 = game clock
 [    1 = real time
-[ fg: animationInterval (00 - 99)
+[ hi: animationInterval (00 - 99)
 [
 [ ********************************************************************
 
@@ -53,7 +54,7 @@ if (realClock) {
 
 [ save to file
 s23 = "ppdemo.cfg";
-s22 = "%v46%v47%v48%v240%v241%v10|2";
+s22 = "%v46%v47%v48%v23|2%v240%v241%v10|2";
 s21 = "                                       ";
 
 block(STR.FORMAT, &s22, &s21, 0); [ str.format(sINPUT, sRESULT)

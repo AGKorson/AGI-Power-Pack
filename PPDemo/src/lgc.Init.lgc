@@ -65,30 +65,31 @@ if (gameRestarted) {
   if (clockOn) {
     if (realClock) {
       [ status bar checks realtime minutes
-      set.cursor.char(" l29, v3, v7, v78, f9");
+      set.cursor.char(" l29, v3, v7, v78, v23, f9");
     } else {
       [ status bar checks gametime seconds
-      set.cursor.char(" l29, v3, v7, v11, f9");
+      set.cursor.char(" l29, v3, v7, v11, v23, f9");
     }
   } else {
     [ status bar doesn't check for time
-    set.cursor.char(" l29, v3, v7, f9");
+    set.cursor.char(" l29, v3, v7, v23, f9");
   }
 
   [ s21 holds speed
   block(STR2BYTE, &s21, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
   
-  [ menus don't change during restart, so don't need to update them
+  [ s20 holds attenuation
+  block(STR2BYTE, &s20, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
 } else {
   [ some things only happen during initial start - skip if restarting
   
   trace.info(lgc.traceinfo, 3, 10);  [ sets up the command tracer; you should
                                      [ delete this before releasing your game
-                                     
+  
   set.key(0, 59, cHelp);             [ F1 - Help
   set.key(0, 60, cToggleSound);      [ F2 - Sound on/off
   set.key(0, 61, cEchoLine);         [ F3 - Echo line
-  set.key(0, 62, cChooseItem);          [ F4 - See object
+  set.key(0, 62, cChooseItem);       [ F4 - See object
   set.key(0, 63, cSave);             [ F5 - Save game
   set.key(0, 64, cClock);            [ F6 - Clock on/off
   set.key(0, 65, cRestore);          [ F7 - Restore game
@@ -101,7 +102,8 @@ if (gameRestarted) {
   set.key(45, 0, cDecrescendo);      [ - - decrease volume
   set.key(43, 0, cCrescendo);        [ + - increase volume
   set.key(27, 0, cMenu);             [ ESC - activate menu
-  
+  set.key(0, 115, cSlower);          [ CTRL+LEFT - one tick slower
+  set.key(0, 116, cFaster);          [ CTRL+RIGHT - one tick faster
   set.key(1, 1, cLeftClick);         [ mouse left button click
   set.key(1, 2, cRightClick);        [ mouse right button click
   set.key(1, 3, cLeftDblClick);      [ mouse left button dbl-click
@@ -124,13 +126,24 @@ if (gameRestarted) {
   [ check v18 to see if file was found
   if (errorParameter == 0) {
     [ file found - extract settings from the string:
-    work1 = 4;
-    [ s23=clock and speed
-    block(STR.RIGHT, &s22, &s23, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    [ nine digits -
+    [ 1-2-3 are sound settings
+    [ 4-5 are sound attenuation
+    [ 6-7 are clock settings
+    [ 8-9 are animationInterval
+    [ confirm config string is 9 digits
+    block(STR.LEN, &s22, &tmp0, 0); [ str.len(sINPUT, vRESULT)
+    if (tmp0 != 9) {
+      [ file is corrupt- load defaults
+      goto(defaultfile);
+    }
+    [ first three digits for sound
     work1 = 3;
-    [ s22=sound
-    block(STR.LEFT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-    block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+    block(STR.LEFT, &s22, &s23, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 6;
+    block(STR.RIGHT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    [ convert to number
+    block(STR2BYTE, &s23, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
     [ options are 3-digit number: ones = useMIDI
     [                             tens = useFMSynth
     [                             hundreds = soundOn
@@ -149,13 +162,19 @@ if (gameRestarted) {
       set(useMIDI);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     }
-    [ speed is last two digits
+    [ next two digits are attenuation
     work1 = 2;
-    block(STR.RIGHT, &s23, &s22, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-    block(STR2BYTE, &s22, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
-    animationInterval = tmp0;
-    [ clock is first two digits
-    block(STR.LEFT, &s23, &s23, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.LEFT, &s22, &s23, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 4;
+    block(STR.RIGHT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    [ convert to number
+    block(STR2BYTE, &s23, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
+
+    [ next two digits are clock options
+    work1 = 2;
+    block(STR.LEFT, &s22, &s23, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    block(STR.RIGHT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    [ convert to number
     block(STR2BYTE, &s23, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
     if (tmp0 > 9) {
       set(clockOn);
@@ -163,14 +182,17 @@ if (gameRestarted) {
     } else {
       reset(clockOn);
     }
-    if (tmp0 > 1) {
+    if (tmp0) {
       set(realClock);
     } else {
       reset(realClock);
     }
+    [ speed is last two digits
+    block(STR2BYTE, &s22, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
   } else {
     [ if no file found, reset v18
     errorParameter = 0;
+    :defaultfile
     [ use MIDI, and set desired instruments
     set(4channelsound);
     set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
@@ -191,15 +213,27 @@ if (gameRestarted) {
  [ TODO: save custom FM instruments to config file; save speed/clock settings to file
     [ save a default config file
     s23 = "ppdemo.cfg";
-    s22 = "1110006";
+    [ clear the string
+    s22 = "                                       ";
+    [ save defaults
+    s22 = "111000006";
     v220 = 22;
     block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
   }
   
-  [ enable custom status bar (logic 13 [lgc.Statusbar])
-  [ check for score (v3), max score (v7) and sound status (f9)
-  set.cursor.char(" l29,  v3, v7, f9");
-
+  [ enable custom status bar (lgc.Statusbar)
+  if (clockOn) {
+    if (realClock) {
+      [ status bar checks realtime minutes
+      set.cursor.char(" l29, v3, v7, v78, v23, f9");
+    } else {
+      [ status bar checks gametime seconds
+      set.cursor.char(" l29, v3, v7, v11, v23, f9");
+    }
+  } else {
+    [ status bar doesn't check for time
+    set.cursor.char(" l29, v3, v7, v23, f9");
+  }
 }
 
 [ enable debugging and tracing by default (remove when ready to release game)
