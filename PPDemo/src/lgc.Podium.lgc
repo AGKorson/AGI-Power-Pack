@@ -1,0 +1,104 @@
+[ 
+[ lgc.Podium
+[ 
+
+[ pause game clock while viewing
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
+status.line.off();
+
+[ set colors
+set.text.attribute(-1, 0);
+
+[ fade out until done loading cover
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ hide objects while showing manual
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+[ clear sreen before palette change
+work1 = 64;
+block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
+[ use custom palette
+block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+
+work1 = pic.PodiumTop;
+load.pic(work1);
+draw.pic(work1);
+show.pic();
+discard.pic(work1);
+
+[ add text after drawing the picture
+[ 4     5         6   X      
+[ 4567890123456789012345
+[      Police Quest 
+[ X     Sequel Ideas
+[ X
+[ X   Hollywood Heists
+[ XX
+[ XX   The Vengance 
+[ XX      
+[ XX   The Ofrocc
+[ XXX     Infiltration
+[ XXX  PqII:10-36
+[ XXX
+[ XXXX  LA Burning
+[ 4     5         6       X      
+[ 4567890123456789012345
+[PW highlighted in different colors: PqII:10-36
+
+set.text.attribute(BLACK, WHITE);
+display(6, 49, "Police Quest");
+display(7, 50, "Sequel Ideas");
+[
+display(9, 48, "Hollywood Heists");
+[
+display(11, 49, "The Vengance");
+[
+display(13, 49, "The Ofrocc");
+display(14, 52, "Infiltration");
+display(15, 49, "PqII:10-36");
+[
+display(17, 50, "LA Burning");
+
+[ fade back in
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ main input loop; wait until a key is pressed
+lastChar = 0;
+:waitforit
+if (!have.key()) {
+  goto(waitforit);
+}
+[ any key to exit
+
+:closemanual
+[ pop colors
+set.text.attribute(0, -1);
+[ fade out during the switch
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ clear sreen before palette change
+work1 = 64;
+block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
+[ restore palette
+block(SET.PALETTE, 0, &m8, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
+#message 1 "%l0|40"
+#message 2 "%l0|41"
+#message 3 "%l0|42"
+#message 4 "%l0|43"
+#message 5 "%l0|44"
+#message 6 "%l0|45"
+#message 7 "000000140A001E0F001E14002418002C1B00352B1C2A2A2A15151515153F003F153F38233F15153F153F3F3F153F3F3F"
+#message 8 "%s2"

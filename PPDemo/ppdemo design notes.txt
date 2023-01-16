@@ -173,10 +173,10 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
     SCORING: 3 pts for opening safe
     CODING: done
 
-9. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. Scratched into top of PQ podium is coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
+9. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. On top of PQ podium is a sheet listing possible PQ sequels, and a coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
 
     BACKGROUND: done
-    ANIMATION art: closeup of pillow; closeup of podium showing scratched password; scroll item view[maybe a full picture?]; music sheet item view[maybe a full picture?] 
+    ANIMATION art: closeup of pillow; closeup of podium showing page with password 
     SOUND: 80s mix tape music, coffin open/close
     SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in walkman
     CODING: 'said' statements 
