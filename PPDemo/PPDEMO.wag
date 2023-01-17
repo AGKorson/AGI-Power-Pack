@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "1/16/2023 12:49:40 AM"
+   LastEdit = "1/16/2023 4:20:01 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -22,17 +22,17 @@
 
 [Palette]
    Color0 = &H00000000
-   Color1 = &H00002851
-   Color2 = &H00003C79
-   Color3 = &H00005078
-   Color4 = &H00006393
-   Color5 = &H00006DB2
-   Color6 = &H0071AED7
+   Color1 = &H00AA0000
+   Color2 = &H0000AA00
+   Color3 = &H00AAAA00
+   Color4 = &H000000AA
+   Color5 = &H00AA00AA
+   Color6 = &H000055AA
    Color7 = &H00AAAAAA
    Color8 = &H00555555
    Color9 = &H00FF5555
    Color10 = &H0055FF00
-   Color11 = &H008EE3FF
+   Color11 = &H00FFFF55
    Color12 = &H005555FF
    Color13 = &H00FF55FF
    Color14 = &H0055FFFF
@@ -54,11 +54,11 @@
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H56D789F3
-   CRC32 = &H56D789F3
+   CompCRC32 = &H0
+   CRC32 = &H48895EDC
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1484
+   Size = 1470
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -240,10 +240,10 @@
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &HA869BF31
-   CompCRC32 = &H0
+   CRC32 = &HF1030ED7
+   CompCRC32 = &HF1030ED7
    IsRoom = True
-   Size = 7061
+   Size = 8289
 
 [Logic102]
    ID = lgc.mod2411
@@ -716,12 +716,12 @@
 [Picture34]
    ID = pic.PodiumTop
    Description = ""
-   Size = 609
-   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\woodgrain.jpg"
-   BkgdShow = False
+   Size = 708
+   BkgdImg = "C:\Users\d3m294\OneDrive - PNNL\Desktop\agisound\AGI-Power-Pack\PPDemo\src\podiumtop.jpg"
+   BkgdShow = True
    BkgdTrans = 127
-   BkgdPosn = 2|32|0|0
-   BkgdSize = 318|121|954|504
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|1024|536
 [::END Pictures::]
 
 [::BEGIN Sounds::]

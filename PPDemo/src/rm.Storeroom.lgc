@@ -448,10 +448,12 @@ if (mouseY > 25 && controller(cLeftClick)) {
             "You can imagine Sierra managers standing behind it giving "
             "briefings to project staff.");
       if (posn(ego, 58, 112, 74, 119)) {
-        print("The podium top looks scratched and worn.");
-        [ show the closeup if clicking on top of podium
-        if (mouseY < 109) {
-          [ TODO: need picture of podium top closeup for speed control panel (OFROCC) password
+        if (!has("PQ idea list")) {
+          print("There is a sheet of paper on top of the podium. It looks "
+          "like a list of potential expansions for Police Quest.");
+          [ show the closeup
+          call(lgc.Podium);
+          call(lgc.RedrawRoom);
         }
       }
       goto(doneclick);
@@ -705,106 +707,73 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [ coffin (when closed)
-    if ((vCoffinState == CLOSED || vCoffinState == CLOSING)) {
-      if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
-[ TODO: use labels to manage 'said' statements that duplicate clicks
-        :openCoffin
-        [ is ego on wrong side?
-        if (posn(ego, 28, 141, 54, 149)) {
-          print("The coffin opens from the other side.");
-          goto(doneclick);
-        }
-        [ is ego close enough?
-        if (posn(ego, 24, 156, 54, 161)) {
-          [ if closed
-          if (vCoffinState == CLOSED) {
-            [ draw it first
-            set.loop(oCoffin, 2);
-            set.cel(oCoffin, 0);
-            set.priority(oCoffin, 14);
-            position(oCoffin, 28, 155);
-            draw(oCoffin);
-          }
-          vCoffinState = OPENING;
-          end.of.loop(oCoffin, fCoffin);
-        } else {
-          print("Move closer.");
-        }
-        goto(doneclick);
+    [ moose 1
+    if (mouseX > 11 && mouseX < 32 && mouseY > 37 && mouseY < 69) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if (work1 != 67) { [67=cyan vis/red pri
+        print("You can't reach it from here.");
       }
-    }
-    [ coffin and lid (when open)
-    if ((vCoffinState == OPEN || vCoffinState == OPENING)) {
-      if (mouseX > 27 && mouseX < 54 && mouseY > 144 && mouseY < 155) {
-        [ if open, ego must be close enough, so just close it without further checks
-        :closeCoffin
-        reverse.loop(oCoffin, fCoffin);
-        goto(doneclick);
-      }
+      goto(doneclick);
     }
     
-    [ cabinet door (when closed)
-    if ((vDoorState == CLOSED || vDoorState == CLOSING)) {
-      if (mouseX > 129 && mouseX < 133 && mouseY > 126 && mouseY < 151) {
-        set(fCheckClick);
+    [ moose 2
+    if (mouseX > 17 && mouseX < 33 && mouseY > 72 && mouseY < 88) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if (work1 != 67) { [67=cyan vis/red pri
+        print("You can't reach it from here.");
       }
-      if (mouseX > 132 && mouseX < 137 && mouseY > 130 && mouseY < 155) {
-        set(fCheckClick);
+      goto(doneclick);
+    }
+    
+    [ moose 3
+    if (mouseX > 40 && mouseX < 74 && mouseY > 42 && mouseY < 61) {
+      set(fCheckClick);
+    }
+    if (mouseX > 49 && mouseX < 66 && mouseY > 60 && mouseY < 72) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if (work1 != 67) { [67=cyan vis/red pri
+        print("You can't reach it from here.");
       }
-      if (fCheckClick) {
-        reset(fCheckClick);
-        [ is ego close enough?
-        if ((posn(ego, 120, 146, 132, 150) || posn(ego, 122, 151, 131, 156))) {
-          [ if closed
-          if (vDoorState == CLOSED) {
-            [ animate it first
-            if (has("music sheet")) {
-              set.loop(oCabinetDoor, 6);
-            } else {
-              set.loop(oCabinetDoor, 12);
-            }
-            set.cel(oCabinetDoor, 0);
-            position(oCabinetDoor, 125, 149);
-            set.priority(oCabinetDoor, 13);
-            draw(oCabinetDoor);
-          }
-          vDoorState = OPENING;
-          end.of.loop(oCabinetDoor, fDoor);
-        } else {
-          print("Move closer.");
-        }
-        goto(doneclick);
+      goto(doneclick);
+    }
+        
+    [ clock
+    if (mouseX > 35 && mouseX < 48 && mouseY > 70 && mouseY < 129) {
+      print("nothing to do with the clock");
+     goto(doneclick);
+    }
+    
+    [ podium
+    if (mouseX > 60 && mouseX < 72 && mouseY > 106 && mouseY < 129) {
+      print("if you've seen the list, you can get it.");
+      if (posn(ego, 58, 112, 74, 119)) {
+        if (!has("PQ idea list")) {
+          print("You grab the paper.");
+          get("PQ idea list");
+          [ TODO: score the PQ idea list
+     [ TODO: need closeup of PQ paper after player takes it (score it too)
+       }
       }
+      goto(doneclick);
     }
 
-    [ cabinet door (when opened)
-    if ((vDoorState == OPEN || vDoorState == OPENING)) {
-      [ item check
-      if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 128 && mouseY < 151) {
-        if (!has("music sheet")) {
-          get("music sheet");
-          print("You take the sheet from the cabinet.");
-          [ + 3 points
-          work1 = 3;
-          call(lgc.ScoreHandler);
-          [ remove it from screen
-          set.loop(oCabinetDoor, 6);
-        }
-        goto(doneclick);
-      }
-      if (mouseX > 124 && mouseX < 130 && mouseY > 126 && mouseY < 145) {
-        set(fCheckClick);
-      }
-      if (mouseX > 133 && mouseX < 137 && mouseY > 134 && mouseY < 158) {
-        set(fCheckClick);
-      }
-      if (fCheckClick) {
-        reset(fCheckClick);
-        [ if open, ego must be close enough, so just close it without further checks
-        reverse.loop(oCabinetDoor, fDoor);
-        goto(doneclick);
-      }
+    [ desk lamp
+    if (mouseX > 68 && mouseX < 79 && mouseY > 79 && mouseY < 93) {
+      print("You don't want it.");
+      goto(doneclick);
+    }
+    
+     [ bookshelf
+    if (mouseX > 49 && mouseX < 68 && mouseY > 71 && mouseY < 120) {
+      print("You run your fingers through the dust on the shelves. nothing here...");
+      goto(doneclick);
     }
     
     [ top file drawer, closed  76, 89, 83, 95
@@ -893,6 +862,190 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
 
+    [ blocked file cabinets
+    if (mouseX > 69 && mouseX < 75 && mouseY > 93 && mouseY < 107) {
+      set(fCheckClick);
+    }
+    if (mouseX > 84 && mouseX < 93 && mouseY > 91 && mouseY < 121) {
+      set(fCheckClick);
+    }
+    if (fCheckClick) {
+      reset(fCheckClick);
+      print("You can't open the drawers in these cabinets. They are "
+            "blocked by the file cabinet in the front.");
+      goto(doneclick);
+    }
+    
+    [ overhead light
+    if (mouseX > 71 && mouseX < 81 && mouseY > 65 && mouseY < 72) {
+      print("you can't reach it.");
+      goto(doneclick);
+    }
+
+    [ wall mirror
+    if (mouseX > 78 && mouseX < 93 && mouseY > 53 && mouseY < 84) {
+      print("touching it leaves a smudgy fingerprint.");
+      goto(doneclick);
+    }
+    
+    [ desk drawer when closed 100, 102, 106, 108
+    if (mouseX > 99 && mouseX < 107 && mouseY > 109 && mouseY < 117 &&
+        storeDeskDrStatus == CLOSED) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 94, 121, 112, 126)) {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 0);
+        draw(oDeskDrawer);
+        end.of.loop(oDeskDrawer, fDeskDrawer);
+        storeDeskDrStatus = OPENING;
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
+    [ desk drawer when open
+    if (posn(oDeskDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
+        storeDeskDrStatus != CLOSING) {
+      [ is ego close enough?
+      if (obj.in.box(ego, 94, 121, 112, 126)) {
+        [ contents check
+        if (storeFileDrStatus== OPEN && mouseY < 119) {
+[          if (!has("notebook")) {
+[            get("notebook");
+[            work1 = 3;
+[            call(lgc.ScoreHandler);
+[            print("This notebook might come in handy.");
+[            set.loop(oFileDrawer, 3);
+[            set.cel(oFileDrawer, 2);
+[            force.update(oFileDrawer);      
+[          }
+          goto(doneclick);
+        }
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 4);
+        reverse.loop(oDeskDrawer, fDeskDrawer);
+        storeDeskDrStatus= CLOSING;
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
+    [ birdcage
+    if (mouseX > 108 && mouseX < 116 && mouseY > 41 && mouseY < 60) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      if ((work1 == 69 || work1 == 77)) { [69/77=magenta/lt magenta vis & red pri)
+        print("You can't reach it.");
+      }
+      goto(doneclick);
+    }
+
+    [ desk mirror
+    if (mouseX > 98 && mouseX < 108 && mouseY > 72 && mouseY < 104) {
+      print("you smudge it.");
+      goto(doneclick);
+    }
+
+    [ pitcher and basin
+    if (mouseX > 117 && mouseX < 128 && mouseY > 99 && mouseY < 114) {
+      print("it's too big to fit, even in your enormous, oversized pockets.");
+      goto(doneclick);
+    }
+
+    [ banner
+    if (mouseX > 121 && mouseX < 140 && mouseY > 54 && mouseY < 123) {
+      print("It's attached to the wall. You can't pull it down.");
+      goto(doneclick);
+    }
+    
+    [ cabinet door (when closed)
+    if ((vDoorState == CLOSED || vDoorState == CLOSING)) {
+      if (mouseX > 129 && mouseX < 133 && mouseY > 126 && mouseY < 151) {
+        set(fCheckClick);
+      }
+      if (mouseX > 132 && mouseX < 137 && mouseY > 130 && mouseY < 155) {
+        set(fCheckClick);
+      }
+      if (fCheckClick) {
+        reset(fCheckClick);
+        [ is ego close enough?
+        if ((posn(ego, 120, 146, 132, 150) || posn(ego, 122, 151, 131, 156))) {
+          [ if closed
+          if (vDoorState == CLOSED) {
+            [ animate it first
+            if (has("music sheet")) {
+              set.loop(oCabinetDoor, 6);
+            } else {
+              set.loop(oCabinetDoor, 12);
+            }
+            set.cel(oCabinetDoor, 0);
+            position(oCabinetDoor, 125, 149);
+            set.priority(oCabinetDoor, 13);
+            draw(oCabinetDoor);
+          }
+          vDoorState = OPENING;
+          end.of.loop(oCabinetDoor, fDoor);
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
+      }
+    }
+
+    [ cabinet door (when opened)
+    if ((vDoorState == OPEN || vDoorState == OPENING)) {
+      [ item check
+      if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 128 && mouseY < 151) {
+        if (!has("music sheet")) {
+          get("music sheet");
+          print("You take the sheet from the cabinet.");
+          [ + 3 points
+          work1 = 3;
+          call(lgc.ScoreHandler);
+          [ remove it from screen
+          set.loop(oCabinetDoor, 6);
+        }
+        goto(doneclick);
+      }
+      if (mouseX > 124 && mouseX < 130 && mouseY > 126 && mouseY < 145) {
+        set(fCheckClick);
+      }
+      if (mouseX > 133 && mouseX < 137 && mouseY > 134 && mouseY < 158) {
+        set(fCheckClick);
+      }
+      if (fCheckClick) {
+        reset(fCheckClick);
+        [ if open, ego must be close enough, so just close it without further checks
+        reverse.loop(oCabinetDoor, fDoor);
+        goto(doneclick);
+      }
+    }
+    
+    [ bureau/chest
+    if (mouseX > 113 && mouseX < 136 && mouseY > 107 && mouseY < 148) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+      if ((work1 == LT_RED || work1 == BROWN || work1 == YELLOW)) {
+        print("nothing in bureau/chest.");
+        goto(doneclick);
+      }
+    }
+    
+    [ wardrobe
+    if (mouseX > 95 && mouseX < 120 && mouseY > 56 && mouseY < 119) {
+      print("cant' open the wardrobe.");
+      goto(doneclick);
+    }
+
+    [ robots
+    if (mouseX > 135 && mouseX < 147 && mouseY > 140 && mouseY < 167) {
+      print("too big...");
+      goto(doneclick);
+    }
+
     [ chest drawer when closed 115, 110, 118, 126 and 119, 116, 122, 131
     if (storeChestDrStatus == CLOSED) {
       if (mouseX > 114 && mouseX < 119 && mouseY > 117 && mouseY < 135) {
@@ -953,50 +1106,28 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [ desk drawer when closed 100, 102, 106, 108
-    if (mouseX > 99 && mouseX < 107 && mouseY > 109 && mouseY < 117 &&
-        storeDeskDrStatus == CLOSED) {
-      [ is ego close enough?
-      if (obj.in.box(ego, 94, 121, 112, 126)) {
-        set.loop(oDeskDrawer, 5);
-        set.cel(oDeskDrawer, 0);
-        draw(oDeskDrawer);
-        end.of.loop(oDeskDrawer, fDeskDrawer);
-        storeDeskDrStatus = OPENING;
-      } else {
-        print("Move closer.");
+    [ chair
+    if (mouseX > 77 && mouseX < 96 && mouseY > 134 && mouseY < 162) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      work1 /= 16; [ get priority color only
+      if ((work1 == LT_MAGENTA || work1 == BLACK)) {
+        print("soft, cushiony chair.");
+        goto(doneclick);
       }
-      goto(doneclick);
     }
     
-    [ desk drawer when open
-    if (posn(oDeskDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
-        storeDeskDrStatus != CLOSING) {
-      [ is ego close enough?
-      if (obj.in.box(ego, 94, 121, 112, 126)) {
-        [ contents check
-        if (storeFileDrStatus== OPEN && mouseY < 119) {
-[          if (!has("notebook")) {
-[            get("notebook");
-[            work1 = 3;
-[            call(lgc.ScoreHandler);
-[            print("This notebook might come in handy.");
-[            set.loop(oFileDrawer, 3);
-[            set.cel(oFileDrawer, 2);
-[            force.update(oFileDrawer);      
-[          }
-          goto(doneclick);
-        }
-        set.loop(oDeskDrawer, 5);
-        set.cel(oDeskDrawer, 4);
-        reverse.loop(oDeskDrawer, fDeskDrawer);
-        storeDeskDrStatus= CLOSING;
-      } else {
-        print("Move closer.");
+    [ arcade
+    if (mouseX > 53 && mouseX < 63 && mouseY > 133 && mouseY < 158) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+      if ((work1 == BLACK || work1 == BLUE || work1 == LT_BLUE)) {
+        print("It's a prop; you can't do anything with it.");
+        goto(doneclick);
       }
-      goto(doneclick);
     }
-    
+
     [ chest when closed
     if (posn(oChest, ON.OBJ, 1, &mouseX, &mouseY) && 
        (storeChestStatus == CLOSED || storeChestStatus == CLOSING)) {
@@ -1043,17 +1174,49 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [ blocked file cabinets
-    if (mouseX > 69 && mouseX < 75 && mouseY > 93 && mouseY < 107) {
-      set(fCheckClick);
+    [ coffin (when closed)
+    if ((vCoffinState == CLOSED || vCoffinState == CLOSING)) {
+      if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
+[ TODO: use labels to manage 'said' statements that duplicate clicks
+        :openCoffin
+        [ is ego on wrong side?
+        if (posn(ego, 28, 141, 54, 149)) {
+          print("The coffin opens from the other side.");
+          goto(doneclick);
+        }
+        [ is ego close enough?
+        if (posn(ego, 24, 156, 54, 161)) {
+          [ if closed
+          if (vCoffinState == CLOSED) {
+            [ draw it first
+            set.loop(oCoffin, 2);
+            set.cel(oCoffin, 0);
+            set.priority(oCoffin, 14);
+            position(oCoffin, 28, 155);
+            draw(oCoffin);
+          }
+          vCoffinState = OPENING;
+          end.of.loop(oCoffin, fCoffin);
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
+      }
     }
-    if (mouseX > 84 && mouseX < 93 && mouseY > 91 && mouseY < 121) {
-      set(fCheckClick);
+    [ coffin and lid (when open)
+    if ((vCoffinState == OPEN || vCoffinState == OPENING)) {
+      if (mouseX > 27 && mouseX < 54 && mouseY > 144 && mouseY < 155) {
+        [ if open, ego must be close enough, so just close it without further checks
+        :closeCoffin
+        reverse.loop(oCoffin, fCoffin);
+        goto(doneclick);
+      }
     }
-    if (fCheckClick) {
-      reset(fCheckClick);
-      print("You can't open the drawers in these cabinets. They are "
-            "blocked by the file cabinet in the front.");
+    
+    [ TODO: need 'use' responses for all other stuff in the room
+    [ coat hanger
+    if (mouseX > 14 && mouseX < 24 && mouseY > 98 && mouseY < 134) {
+      print("you can't reach it.");
       goto(doneclick);
     }
     

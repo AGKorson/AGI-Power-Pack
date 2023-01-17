@@ -366,11 +366,6 @@ if (said("read", "scroll")) {
     print("You don't have it.");
   }
 }
-[  TODO: testing- move this to storeroom
-if (said("read", "podium")) {
-    call(lgc.Podium);
-    call(lgc.RedrawRoom);
-}
   
 [ read notebook
 if (said("read", "notebook")) {
