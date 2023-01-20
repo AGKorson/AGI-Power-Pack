@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "1/16/2023 4:20:01 PM"
+   LastEdit = "1/20/2023 6:00:10 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -55,10 +55,10 @@
 
 [Logic90]
    CompCRC32 = &H0
-   CRC32 = &H48895EDC
+   CRC32 = &HB57E993E
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1470
+   Size = 1484
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -112,10 +112,10 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H260841B
+   CRC32 = &H5C052FFE
    CompCRC32 = &H0
    IsRoom = True
-   Size = 7208
+   Size = 7211
 
 [Logic23]
    ID = cp.RANDOCC
@@ -176,15 +176,15 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H8DC89352
-   CompCRC32 = &H0
+   CRC32 = &HBC2B4AAB
+   CompCRC32 = &HBC2B4AAB
    IsRoom = True
-   Size = 5657
+   Size = 5662
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H6605F7CA
+   CRC32 = &H3DDC00FC
    CompCRC32 = &H0
    IsRoom = True
    Size = 7562
@@ -208,10 +208,10 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H7A1AFED2
-   CompCRC32 = &H0
+   CRC32 = &HC2FDE2A4
+   CompCRC32 = &HC2FDE2A4
    IsRoom = True
-   Size = 5678
+   Size = 5753
 
 [Logic6]
    ID = rm.SecretRoom
@@ -240,10 +240,10 @@
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &HF1030ED7
-   CompCRC32 = &HF1030ED7
+   CRC32 = &H9EBCD376
+   CompCRC32 = &H9EBCD376
    IsRoom = True
-   Size = 8289
+   Size = 9081
 
 [Logic102]
    ID = lgc.mod2411
@@ -496,10 +496,26 @@
 [Logic34]
    ID = lgc.Podium
    Description = ""
-   CRC32 = &H2C910E66
+   CRC32 = &H8C927A95
    CompCRC32 = &H0
    IsRoom = False
-   Size = 408
+   Size = 427
+
+[Logic35]
+   ID = lgc.PQList
+   Description = ""
+   CRC32 = &H10EEE49C
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 277
+
+[Logic36]
+   ID = lgc.Pillow
+   Description = ""
+   CRC32 = &H8FBEDCBE
+   CompCRC32 = &H0
+   IsRoom = False
+   Size = 118
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -608,12 +624,12 @@
 [Picture10]
    ID = pic.Storeroom
    Description = ""
-   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\storerrom.jpg"
+   BkgdImg = ""
    Size = 6883
-   BkgdShow = False
-   BkgdTrans = 127
-   BkgdPosn = 0|0|0|0
-   BkgdSize = 320|168|2560|1344
+   BkgdShow = ""
+   BkgdTrans = ""
+   BkgdPosn = ""
+   BkgdSize = ""
 
 [Picture30]
    ID = pic.TestPalette
@@ -714,14 +730,36 @@
    BkgdImg = ""
 
 [Picture34]
-   ID = pic.PodiumTop
+   ID = pic.PodiumTopPaper
    Description = ""
-   Size = 708
-   BkgdImg = "C:\Users\d3m294\OneDrive - PNNL\Desktop\agisound\AGI-Power-Pack\PPDemo\src\podiumtop.jpg"
-   BkgdShow = True
+   Size = 728
+   BkgdImg = ""
+
+[Picture35]
+   ID = pic.PodiumTopClear
+   Description = ""
+   Size = 745
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\woodgrain.jpg"
+   BkgdShow = False
+   BkgdTrans = 204
+   BkgdPosn = 0|33|3|0
+   BkgdSize = 319|120|957|504
+
+[Picture36]
+   ID = pic.PQList
+   Description = ""
+   Size = 136
+   BkgdImg = ""
+
+[Picture37]
+   ID = pic.Pillow
+   Description = ""
+   Size = 4378
+   BkgdImg = "C:\Users\Andy\OneDrive\AGI Stuff\AGI-Power-Pack\PPDemo\src\pillow.jpg"
+   BkgdShow = False
    BkgdTrans = 127
    BkgdPosn = 0|0|0|0
-   BkgdSize = 320|168|1024|536
+   BkgdSize = 320|168|1600|840
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -1349,7 +1387,7 @@
    Size = 386
 
 [View107]
-   ID = vw.inv.List
+   ID = vw.inv.Postit
    Description = ""
    Size = 466
 

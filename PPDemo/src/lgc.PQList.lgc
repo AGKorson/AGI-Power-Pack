@@ -1,5 +1,5 @@
 [ 
-[ lgc.Podium
+[ lgc.PQList
 [ 
 
 [ pause game clock while viewing
@@ -22,17 +22,8 @@ set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
 
 [ hide objects while showing manual
 block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
-[ clear sreen before palette change
-work1 = 64;
-block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
-[ use custom palette
-block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
 
-if (has("PQ idea list")) {
-  work1 = pic.PodiumTopClear;
-} else {
-  work1 = pic.PodiumTopPaper;
-}
+work1 = pic.PQList;
 load.pic(work1);
 draw.pic(work1);
 show.pic();
@@ -57,21 +48,19 @@ discard.pic(work1);
 [ 4567890123456789012345
 [PW: PqII:10-36
 
-if (!has("PQ idea list")) {
-  set.text.attribute(BLACK, WHITE);
-  display(6, 49, "Police Quest");
-  display(7, 50, "Sequel Ideas");
-  [
-  display(9, 48, "Hollywood Heists");
-  [
-  display(11, 49, "The Vengance");
-  [
-  display(13, 49, "The Ofrocc");
-  display(14, 52, "Infiltration");
-  display(15, 50, "PqII:10-36");
-  [
-  display(17, 50, "LA Burning");
-}
+set.text.attribute(BLACK, WHITE);
+display(5, 33, "Police Quest");
+display(6, 34, "Sequel Ideas");
+[
+display(8, 32, "Hollywood Heists");
+[
+display(10, 33, "The Vengance");
+[
+display(12, 33, "The Ofrocc");
+display(13, 36, "Infiltration");
+display(14, 34, "PqII:10-36");
+[
+display(16, 34, "LA Burning");
 
 [ fade back in
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
@@ -84,16 +73,10 @@ if (!have.key()) {
 }
 [ any key to exit
 
-:closemanual
 [ pop colors
 set.text.attribute(0, -1);
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-[ clear sreen before palette change
-work1 = 64;
-block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
-[ restore palette
-block(SET.PALETTE, 0, &m8, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
 
 return();
 
@@ -106,5 +89,3 @@ return();
 #message 4 "%l0|43"
 #message 5 "%l0|44"
 #message 6 "%l0|45"
-#message 7 "000000140A001E0F001E14002418002C1B00352B1C2A2A2A15151515153F003F153F38233F15153F153F3F3F153F3F3F"
-#message 8 "%s2"

@@ -401,8 +401,8 @@ if (firstLobbyVisit) {
   if (tmpSec != elapsedSeconds) {
     tmpSec = elapsedSeconds;
     ++secondCtr;
-[ debug code to track timer
-display(23, 68, "%v12|2:%v11|2 (%v82)  ");
+[[ debug code to track timer
+[display(23, 68, "%v12|2:%v11|2 (%v82)  ");
     if (secondCtr == 45) {
 [    if (secondCtr == 10) {
       set(fOneMinute);

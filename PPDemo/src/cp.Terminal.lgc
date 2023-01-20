@@ -609,7 +609,7 @@ print("id: '%s15', pw: '%s12'");
       }
     }
     if (PWfunction == PW_ERIDOCC) {
-      sCmd = "ERID080789a";
+      sCmd = "ERID081489.a";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableERIDOCC);
@@ -625,7 +625,7 @@ print("id: '%s15', pw: '%s12'");
       }
     }
     if (PWfunction == PW_ICAPOCC) {
-      sCmd = "icapoccPW";
+      sCmd = "Drac@1897";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableICAPOCC);
@@ -633,7 +633,7 @@ print("id: '%s15', pw: '%s12'");
       }
     }
     if (PWfunction == PW_OFROCC) {
-      sCmd = "ofroccPW";
+      sCmd = "PqII:10-36";
       if (compare.strings(input, sCmd)) {
         [ ok
         set(enableOFROCC);

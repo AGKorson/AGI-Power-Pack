@@ -294,19 +294,25 @@ if (controller(cChooseItem)) {
   if (selectedItem > 0 && selectedItem != 255) {
     [ use or examine selected item
     [if (examineitem) {
-      selectedItem += 100;
-      show.obj.v(selectedItem);
-      [ some items get a second, detailed look
-      [  post-it note, folder, music sheet
-      if ((selectedItem == 107 || selectedItem == 110 || 
-           selectedItem == 112)) {
-        call(lgc.ExamineItem);
-      }
-      [ some items get additional information'
-      if (selectedItem == 111) {
-        [ scroll
-        print("It was probably used by the original development "
-              "team when KQIII was first designed.");
+      [ PQ list doesn't use a view
+      if (selectedItem == 13) {
+        call(lgc.PQList);
+        call(lgc.RedrawRoom);
+      } else {
+        selectedItem += 100;
+        show.obj.v(selectedItem);
+        [ some items get a second, detailed look
+        [  post-it note, folder, music sheet
+        if ((selectedItem == 107 || selectedItem == 110 || 
+             selectedItem == 112)) {
+          call(lgc.ExamineItem);
+        }
+        [ some items get additional information'
+        if (selectedItem == 111) {
+          [ scroll
+          print("It was probably used by the original development "
+                "team when KQIII was first designed.");
+        }
       }
     [}
     [if (useitem) {

@@ -926,6 +926,9 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
         [ foreground tree
         print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
         set(touchTrees);
+        [ lose 1 point
+        work1 = -1;
+        call(lgc.ScoreHandler);
         goto(doneclick);
       }
       

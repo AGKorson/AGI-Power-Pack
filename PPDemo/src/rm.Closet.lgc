@@ -319,7 +319,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     if (broommoved) {
       [ broom is in corner
       if (mouseX > 40 && mouseX < 48 && mouseY > 138 && mouseY < 163) {
-        print("After tripping over that stupid broom, you're glad you moved it out of the way.");
+        print("After tripping over that stupid broom, you're glad you "
+              "moved it out of the way.");
         goto(doneclick);
       }
     } else {
@@ -380,7 +381,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
       set(clickmops);
     }
     if (clickmops) {
-      print("There mop and bucket in the corner and several mops and brooms hanging on the wall.");
+      print("There mop and bucket in the corner and several mops and "
+            "brooms hanging on the wall.");
       goto(doneclick);
     }
     
@@ -524,7 +526,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
           print("As you bend over to pick up the broom, you trip and fall!");
           fallSeq = STARTFALL;
         } else {
-          print("You decide to move the broom out of the way so you won't trip on it anymore.");
+          print("You decide to move the broom out of the way so you won't "
+                "trip on it anymore.");
           erase(broom);
           move.obj(ego, 50, 153, 1, fDone);
           movebroomstatus = MOVE2CORNER;
@@ -537,7 +540,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     
     [ ladder (55, 93, 76, 105)
     if (mouseX > 54 && mouseX < 77 && mouseY > 100 && mouseY < 114) {
-      print("You have not taken ladder safety training recently, so you decide to leave it on the wall.");
+      print("You have not taken ladder safety training recently, so you "
+            "decide to leave it on the wall.");
       goto(doneclick);
     }
     
@@ -602,7 +606,11 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
     [ plunger (80, 129, 84, 141)
     if (mouseX > 79 && mouseX < 85 && mouseY > 136 && mouseY < 151) {
       if (obj.in.box(ego, 72, 138, 92, 147)) {
-        print("You decide to leave the plunger alone. It smells bad.");
+        print("Maybe touching a dirty smelly plunger wasn't such a good idea.");
+        [ lose 2 points
+        work1 = -2;
+        call(lgc.ScoreHandler);
+        
       } else {
         print("You can't reach that from here.");
       }
@@ -748,6 +756,8 @@ if (fDone && fallSeq ==  SITUP) {
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   fallSeq = FALLDONE;
+  work1 = 5;
+  call(lgc.ScoreHandler);
 }
 if (egoDir != STOPPED && fallSeq == FALLDONE) {
   [ get up first

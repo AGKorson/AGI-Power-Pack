@@ -208,6 +208,17 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     print("You see a room full of junk.");
   }
   
+  if ((said("look", "pillow") || said("look", "in", "coffin"))) {
+    [ only if coffin is open
+    if (vCoffinState == OPEN) {
+      print("You lean over the coffin to get a closer look at the pillow.");
+      call(lgc.Pillow);
+      call(lgc.RedrawRoom);
+    } else {
+      print("There's no pillow here.");
+    }
+  }
+  
   if (said("open", "coffin")) {
     if ((vCoffinState == OPEN || vCoffinState == OPENING)) {
       print("It's already open.");
@@ -451,10 +462,10 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (!has("PQ idea list")) {
           print("There is a sheet of paper on top of the podium. It looks "
           "like a list of potential expansions for Police Quest.");
-          [ show the closeup
-          call(lgc.Podium);
-          call(lgc.RedrawRoom);
         }
+        [ show the closeup
+        call(lgc.Podium);
+        call(lgc.RedrawRoom);
       }
       goto(doneclick);
     }
@@ -707,27 +718,27 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [ moose 1
+    [ moose 1 - always out of reach
     if (mouseX > 11 && mouseX < 32 && mouseY > 37 && mouseY < 69) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
-        print("You can't reach it from here.");
+        print("The moose head is too high for you to reach it.");
       }
       goto(doneclick);
     }
     
-    [ moose 2
+    [ moose 2 - always out of reach
     if (mouseX > 17 && mouseX < 33 && mouseY > 72 && mouseY < 88) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
-        print("You can't reach it from here.");
+        print("The moose head is too high for you to reach it.");
       }
       goto(doneclick);
     }
     
-    [ moose 3
+    [ moose 3 - always out of reach
     if (mouseX > 40 && mouseX < 74 && mouseY > 42 && mouseY < 61) {
       set(fCheckClick);
     }
@@ -739,40 +750,61 @@ if (mouseY > 25 && controller(cLeftClick)) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
-        print("You can't reach it from here.");
+        print("The moose head is too high for you to reach it.");
       }
       goto(doneclick);
     }
         
     [ clock
     if (mouseX > 35 && mouseX < 48 && mouseY > 70 && mouseY < 129) {
-      print("nothing to do with the clock");
+      if (posn(ego, 32, 109, 52, 127)) {
+        print("The glass door on the clock is locked. You can't open it.");
+      } else {
+        print("Move closer.");
+      }
      goto(doneclick);
     }
     
     [ podium
     if (mouseX > 60 && mouseX < 72 && mouseY > 106 && mouseY < 129) {
-      print("if you've seen the list, you can get it.");
       if (posn(ego, 58, 112, 74, 119)) {
+        [ behind of podium
         if (!has("PQ idea list")) {
-          print("You grab the paper.");
+          print("You grab the paper from the top of the podium.");
           get("PQ idea list");
           [ TODO: score the PQ idea list
-     [ TODO: need closeup of PQ paper after player takes it (score it too)
-       }
+        } else {
+          print("There is nothing else to take from the podium.");
+        }
+      } else {
+        if (posn(ego, 52, 117, 75, 125)) {
+          [ in front of podium
+          print("There is nothing you can do with front of the podium.");
+        } else {
+          print("Move closer.");
+        }
       }
       goto(doneclick);
     }
 
     [ desk lamp
     if (mouseX > 68 && mouseX < 79 && mouseY > 79 && mouseY < 93) {
-      print("You don't want it.");
+      if (posn(ego, 62, 102, 80, 114)) {
+        print("You have no use for the lamp.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
     
-     [ bookshelf
+    [ bookshelf
     if (mouseX > 49 && mouseX < 68 && mouseY > 71 && mouseY < 120) {
-      print("You run your fingers through the dust on the shelves. nothing here...");
+      if (posn(ego, 44, 106, 70, 116)) {
+        print("You run your fingers through the dust on the shelves. "
+              "There is nothing of interest here.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
     
@@ -871,20 +903,24 @@ if (mouseY > 25 && controller(cLeftClick)) {
     }
     if (fCheckClick) {
       reset(fCheckClick);
-      print("You can't open the drawers in these cabinets. They are "
-            "blocked by the file cabinet in the front.");
+      if (posn(ego, 77, 110, 96, 119)) {
+        print("You can't open the drawers in these cabinets. They are "
+              "blocked by the file cabinet in the front.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
     
-    [ overhead light
+    [ overhead light - always out of reach
     if (mouseX > 71 && mouseX < 81 && mouseY > 65 && mouseY < 72) {
-      print("you can't reach it.");
+      print("The light is way beyond your reach.");
       goto(doneclick);
     }
 
-    [ wall mirror
+    [ wall mirror - always beyond reach
     if (mouseX > 78 && mouseX < 93 && mouseY > 53 && mouseY < 84) {
-      print("touching it leaves a smudgy fingerprint.");
+      print("The wall mirror is too high to reach.");
       goto(doneclick);
     }
     
@@ -911,15 +947,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
       if (obj.in.box(ego, 94, 121, 112, 126)) {
         [ contents check
         if (storeFileDrStatus== OPEN && mouseY < 119) {
-[          if (!has("notebook")) {
-[            get("notebook");
-[            work1 = 3;
-[            call(lgc.ScoreHandler);
-[            print("This notebook might come in handy.");
-[            set.loop(oFileDrawer, 3);
-[            set.cel(oFileDrawer, 2);
-[            force.update(oFileDrawer);      
-[          }
+          [ nothing in this drawer
           goto(doneclick);
         }
         set.loop(oDeskDrawer, 5);
@@ -932,31 +960,44 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
-    [ birdcage
+    [ birdcage - always out of reach
     if (mouseX > 108 && mouseX < 116 && mouseY > 41 && mouseY < 60) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if ((work1 == 69 || work1 == 77)) { [69/77=magenta/lt magenta vis & red pri)
-        print("You can't reach it.");
+        print("The bird cage is too high to reach.");
       }
       goto(doneclick);
     }
 
     [ desk mirror
     if (mouseX > 98 && mouseX < 108 && mouseY > 72 && mouseY < 104) {
-      print("you smudge it.");
+      if (posn(ego, 93, 114, 113, 124)) {
+        print("After touching the mirror, all you did was leave behind "
+              "some smudged fingerprints.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
 
     [ pitcher and basin
     if (mouseX > 117 && mouseX < 128 && mouseY > 99 && mouseY < 114) {
-      print("it's too big to fit, even in your enormous, oversized pockets.");
+      if (posn(ego, 103, 115, 119, 126)) {
+        print("You have no need for the pitcher and basin.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
 
-    [ banner
+    [ banner - always out of reach
     if (mouseX > 121 && mouseX < 140 && mouseY > 54 && mouseY < 123) {
-      print("It's attached to the wall. You can't pull it down.");
+      if (posn(ego, 108, 120, 136, 141)) {
+        print("The banner is just out of reach.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
     
@@ -1023,29 +1064,6 @@ if (mouseY > 25 && controller(cLeftClick)) {
       }
     }
     
-    [ bureau/chest
-    if (mouseX > 113 && mouseX < 136 && mouseY > 107 && mouseY < 148) {
-      [ check pixel color
-      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
-      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
-      if ((work1 == LT_RED || work1 == BROWN || work1 == YELLOW)) {
-        print("nothing in bureau/chest.");
-        goto(doneclick);
-      }
-    }
-    
-    [ wardrobe
-    if (mouseX > 95 && mouseX < 120 && mouseY > 56 && mouseY < 119) {
-      print("cant' open the wardrobe.");
-      goto(doneclick);
-    }
-
-    [ robots
-    if (mouseX > 135 && mouseX < 147 && mouseY > 140 && mouseY < 167) {
-      print("too big...");
-      goto(doneclick);
-    }
-
     [ chest drawer when closed 115, 110, 118, 126 and 119, 116, 122, 131
     if (storeChestDrStatus == CLOSED) {
       if (mouseX > 114 && mouseX < 119 && mouseY > 117 && mouseY < 135) {
@@ -1106,13 +1124,49 @@ if (mouseY > 25 && controller(cLeftClick)) {
       goto(doneclick);
     }
     
+    [ bureau
+    if (mouseX > 113 && mouseX < 136 && mouseY > 107 && mouseY < 148) {
+      [ check pixel color
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+      if ((work1 == LT_RED || work1 == BROWN || work1 == YELLOW)) {
+        if (posn(ego, 103, 115, 119, 126)) {
+          print("There is nothing else of interest in the bureau.");
+        } else {
+          print("Move closer.");
+        }
+        goto(doneclick);
+      }
+    }
+    
+    [ wardrobe - always out of reach 96, 49, 119, 100
+    if (mouseX > 95 && mouseX < 120 && mouseY > 56 && mouseY < 109) {
+      print("The wardrobe is blocked by the desk. You can't reach it.");
+      goto(doneclick);
+    }
+
+    [ robots
+    if (mouseX > 135 && mouseX < 147 && mouseY > 140 && mouseY < 167) {
+      if (posn(ego, 127, 150, 141, 167)) {
+        print("These robots are far too large to carry, even with your "
+              "enormously oversized pockets.");
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+
     [ chair
     if (mouseX > 77 && mouseX < 96 && mouseY > 134 && mouseY < 162) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       work1 /= 16; [ get priority color only
       if ((work1 == LT_MAGENTA || work1 == BLACK)) {
-        print("soft, cushiony chair.");
+        if (posn(ego, 71, 142, 100, 156)) {
+          print("You gently caress the soft, cushiony chair.");
+        } else {
+          print("Move closer.");
+        }
         goto(doneclick);
       }
     }
@@ -1123,7 +1177,12 @@ if (mouseY > 25 && controller(cLeftClick)) {
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
       if ((work1 == BLACK || work1 == BLUE || work1 == LT_BLUE)) {
-        print("It's a prop; you can't do anything with it.");
+        if (posn(ego, 56, 140, 66, 156)) {
+          print("It's not plugged in. There's nothing you can do with "
+                "the arcade.");
+        } else {
+          print("Move closer.");
+        }
         goto(doneclick);
       }
     }
@@ -1213,10 +1272,13 @@ if (mouseY > 25 && controller(cLeftClick)) {
       }
     }
     
-    [ TODO: need 'use' responses for all other stuff in the room
     [ coat hanger
     if (mouseX > 14 && mouseX < 24 && mouseY > 98 && mouseY < 134) {
-      print("you can't reach it.");
+      if (posn(ego, 19, 135, 28, 147)) {
+        print("The coat rack is just outside of your reach.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
     
@@ -1238,8 +1300,12 @@ if (mouseY > 25 && controller(cLeftClick)) {
     }
     if (fCheckClick) {
       reset(fCheckClick);
-      print("The boxes are all taped securely shut. You have no "
-            "way to open them.");
+      if (posn(ego, 10, 154, 119, 167)) {
+        print("The boxes are all taped securely shut. You have no "
+              "way to open them.");
+      } else {
+        print("Move closer.");
+      }
       goto(doneclick);
     }
   }
