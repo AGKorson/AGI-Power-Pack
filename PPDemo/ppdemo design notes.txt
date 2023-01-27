@@ -12,11 +12,12 @@ O = item not started
 
 General: 
     TOOLBAR - done
-    MENU - TBD; basic items are working, custom functions to showcase Power Pack need to be designed and added
+    MENU - done
+    STATUSBAR - allow click to set volume
     SCORING SUMMARY (sound effect for plus points? for minus points?):
-        -1 pt:   touching trees
+X        -1 pt:   touching trees
 X        +1 pt:   washing hands in closet sink
-        -3 pts:  touching plunger
+X        -2 pts:  touching plunger
 X        +3 pts:  washing hands in closet sink
         +1 pt:   experiencing death by getting run over
         +1 pt:   experiencing death by getting shocked from batmobile
@@ -24,14 +25,14 @@ X        +3 pts:  washing hands in closet sink
         +1 pt:   experiencing 'death' by getting arrested for interrupting exam
         +1 pt:   experiencing death by getting trapped in the secret rooms
         +1 pt:   experiencing death by getting into Dracula's coffin
-        ** pts for locking car? maybe car gets stolen if not locked? (if batmobile, maybe it shocks anyone trying to steal it?)
-        +5 pts:  asking to use the bathroom to gain access to hallway
+        ** pts for locking car? maybe car gets stolen if not locked?
+        +3 pts:  asking to use the bathroom to gain access to hallway
         +3 pts:  getting magazine from lobby table
         +2 pts:  reading magazine (finding password clue)
         +5 pts:  getting in car
-       +20 pts:  ending game with source disk
+        +5 pts:  ending game with source disk
         +1 pt:   1st time opening closet door
-        +5 pts:  breaking hole in wall
+X        +5 pts:  breaking hole in wall
         -1 pt:   tripping over broom (can happen multiple times)
         +2 pts:  moving broom after tripping
         +3 pts:  fixing faucet drip
@@ -44,7 +45,8 @@ X        +3 pts:  washing hands in closet sink
         +5 pts:  restore FROCC
         +5 pts:  restore RANDOCC
         +6 pts:  copying PP source to floppy
-[[[        -4 pts:  leaving disk in drive
+        -4 pts:  putting disk in drive
+        +4 pts:  taking disk out of drive
 X        +3 pts:  getting memo from printer
 X        +3 pts:  getting password list from drawer
 X        +2 pts:  getting walkman from drawer
@@ -293,3 +295,4 @@ Animation:  klownstein
 additional art: me
 Music and sound effects: me
 Playtesters: tbd
+

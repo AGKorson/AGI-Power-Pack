@@ -195,14 +195,23 @@ if (controller(cAbout)) {
 [ sound volume controls
 if (controller(cCrescendo) && attenuation > 0 && soundOn) {
   [ to increase volume, lower sound attenuation variable
-  --attenuation;
+  if (attenuation > 0) {
+    --attenuation;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
 }
 if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
   [ to decrease volume, raise sound attenuation variable
-  ++attenuation;
-  if (!4channelsound && attenuation > 15) {
-    [ max for single channel is 15
-    attenuation = 15;
+  if (4channelsound) {
+    work1 = 63;
+  } else {
+    work1 = 15;
+  }
+  if (attenuation < work1) {
+    ++attenuation;
+    [ update the config file
+    call(lgc.SaveOptions);
   }
 }
 

@@ -355,6 +355,40 @@ if (!disableGameFunctions) {
   [ boolean trick to use single if statement
   if (!controller(cMenu) && (!controller(cLeftClick) || mouseY > 7)) {
   } else {
+    [ check for click on sound bar
+    if (mouseX > 137) {
+      [ adjust sound based on clicked position
+      work1 = mouseX;
+      work1 -= 138;
+      if (work1 >= 18) {
+        [ set to max vol
+        set(soundOn);
+        attenuation = 0;
+      } else {
+        if (work1 < 2) {
+          reset(soundOn);
+        } else {
+          set(soundOn);
+          [     1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 
+          [ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+          [ |   1   2   3   4   5   6   7   8   |
+          [63 <64 <56 <48 <40 <32 <24 <16  <8   0
+          [    60  52  44  36  28  20  12   4                               
+          [15 <16 <14 <12 <10  <8  <6  <4  <2   0
+          [    15  13  11   9   7   5   3   1   
+          [ calculate new sound level
+          work1 /= 2;
+          work1 *= -8;
+          work1 += 68;
+          if (!4channelSound) {
+            work1 /= 4;
+          }
+          attenuation = work1;
+        }
+      }
+      return();
+    }
+    [ if not on sound bar, show menu
     menu.input();
     oldSeconds = -1;
     [ reset click event

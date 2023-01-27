@@ -657,7 +657,7 @@ if (mouseY > 25 && controller(cLeftClick)) {
       if (vCoffinState == OPEN) {
         print("The coffin is empty except for a silk pillow and a padded "
               "lining. It actually looks quite comfortable.");
-[ TODO: picture of pillow closeup showing palette control panel (ICAPOCC) password
+
       } else {
         print("It's Count Dracula's coffin from King's Quest II. Hopefully "
               "no body is in there.");

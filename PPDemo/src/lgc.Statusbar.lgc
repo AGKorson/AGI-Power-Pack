@@ -74,8 +74,8 @@ if (clockOn) {
 #define tmpAdjust       v18
 
 [ sound status
-set.text.attribute(RED, WHITE);
 if (soundOn) {
+  set.text.attribute(RED, WHITE);
   if (4channelSound) {
     tmpCompare = 8;
     tmpAdjust = 8;
@@ -117,16 +117,17 @@ if (soundOn) {
         }
       }
     }
-  }
-  display(0, 69, "%s23");
-  
+  }  
   [ !!! don't forget to clear the error parameters!!!
   tmpCompare = 0;
   tmpAdjust = 0;
 } else {
-  [display(0, 76, "    ");
-  clear.text.rect(0, 69, 0, 79, WHITE);
+  set.text.attribute(LT_GRAY, WHITE);
+  s23 = "突様様様裕 ";
+[  [display(0, 76, "    ");
+[  clear.text.rect(0, 69, 0, 79, WHITE);
 }
+display(0, 69, "%s23");
 
 [ restore default colors
 set.text.attribute(0, -1);
