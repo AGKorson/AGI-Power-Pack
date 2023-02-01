@@ -194,6 +194,8 @@ if (newRoom) {
 if (dripdone && !faucetfixed) {
   if (dripping) {
     stop.update(drip);
+    [ ok to use timer here; the closet door timer is never
+    [ active in this room
     driptimerM = 0;
     driptimerS = 3;
     block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
@@ -553,6 +555,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
         }else {
           print("After tightening the faucet handle, the drip stops.");
           set(faucetfixed);
+          work1 = 3;
+          call(lgc.ScoreHandler);
         }
       } else {
         print("You can't reach that from here.");
@@ -610,7 +614,8 @@ if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 &&
         [ lose 2 points
         work1 = -2;
         call(lgc.ScoreHandler);
-        
+        set(touchPlunger);
+        reset(handsWashed);
       } else {
         print("You can't reach that from here.");
       }
@@ -836,6 +841,8 @@ if (fDone && movebroomstatus == MOVE2CORNER) {
   movebroomstatus = NOMOVE;
   block(43, 148, 50, 154);
   set(broommoved);
+  work1 = 2;
+  call(lgc.ScoreHandler);
 }
 
 if (opendoor) {
@@ -906,25 +913,30 @@ if (fDoneWash) {
     if (touchTrees && touchPlunger) {
       print("Washing the sap and plunger-stink from your hands was a good "
             "idea. They are now clean and germ-free!");
-      work1 = 4;
-      call(lgc.ScoreHandler);
+      work1 = 3;
     } else {
       if (touchTrees) {
         print("You wash the sap from your hands. Now they aren't so sticky.");
         work1 = 1;
-        call(lgc.ScoreHandler);
       } else {
         if (touchPlunger) {
           print("Touching that plunger was not a great idea. Washing your "
                 "hands is.");
-          work1 = 3;
-          call(lgc.ScoreHandler);
+          work1 = 2;
         } else {
           print("Might as well wash your hands. Cleanliness is next to "
                 "godliness!");
+          work1 = 0;
         }
       }
     }
+    if (!firstWash) {
+      set(firstWash);
+      ++work1;
+    }
+    call(lgc.ScoreHandler);
+    reset(touchTrees);
+    reset(touchPlunger);
   }
 }
 

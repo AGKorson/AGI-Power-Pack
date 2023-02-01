@@ -273,7 +273,7 @@ if (mouseBtn == 1) {
 [*****
 
 [ when correct code is entered, unlock the door and return
-if (unlockdoor) {
+if (unlockdoor && !ctrlroomunlocked) {
   set(ctrlroomunlocked);
 }
   

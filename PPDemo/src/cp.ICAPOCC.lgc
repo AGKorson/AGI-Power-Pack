@@ -1030,9 +1030,6 @@ if (btnAction == B_PREV_PAL) {
   show.pic();
   [ redraw button text by recursing
   set(refresh);
-[ TODO: update warning and help file to indicate recursion is OK
-[ as long as programmer is careful (and remove the error setting- warning only
-[ even on HIGH setting)
   call(cp.ICAPOCC);
   
   [ fade in from black, 2msec fade value

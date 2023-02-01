@@ -366,7 +366,9 @@ if (mouseX > 12 && mouseX < 152 && mouseY > 69 && mouseY < 156 &&
       if (mouseX > 86 && mouseX < 100) {
         if (posn(ego, 80, 132, 100, 138)) {
           print("KNOCK KNOCK");
-          print("\"Occupied! I'll be out in a minute.\"");
+          block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+          print.at("\"Occupied! I'll be out in a minute.\"",11, 46, 35);
+          block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
           print("<sniff> Hmm, something tells you it might be more than a minute...");
         } else {
           print("Move closer.");
@@ -428,6 +430,7 @@ if (opendoor) {
   } else {
     if (posn(ego, 12, 129, 29, 148)) {
        end.of.loop(oClosetDoor, fDoorDone);
+       
     } else {
       print("You are not close enough.");
     }
@@ -438,6 +441,11 @@ if (closedoor) {
   if (closetopen) {
     if (posn(ego, 12, 129, 29, 148)) {
       reverse.loop(oClosetDoor, fDoorDone);
+      if (!scoreClosetDoor) {
+        set(scoreClosetDoor);
+        work1 = 1;
+        call(lgc.ScoreHandler);
+      }
     } else {
       print("You are not close enough.");
     }

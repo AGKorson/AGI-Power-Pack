@@ -1693,6 +1693,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
     if (said("use", "bathroom")) {
       print.at("\"Sure! It's through that doorway. Go left and it's the second door on the right.\"", 6, 6, 35);
+      work1 = 3;
+      call(lgc.ScoreHandler);
       set(fAllowPast);
       goto(resetmsg);
     } 
@@ -1911,6 +1913,8 @@ if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 &&
         print("You decide to pick up the old magazine.");
         get("magazine");
         erase(oMagazine);
+        work1 = 3;
+        call(lgc.ScoreHandler);
       } else {
         print("You are not close enough.");
       }

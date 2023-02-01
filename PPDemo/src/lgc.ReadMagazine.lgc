@@ -243,6 +243,12 @@ if (mouseBtn == 1) {
 goto(waitforit);
 
 :closemag
+[ score
+if (!readMagazine) {
+  set(readMagazine);
+  work1 = 2;
+  call(lgc.ScoreHandler);
+}
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 

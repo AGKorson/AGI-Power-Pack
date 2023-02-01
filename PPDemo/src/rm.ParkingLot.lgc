@@ -450,9 +450,6 @@ if (!fEgoDead) {
       set(fEgoDead);
       [ temporarily stop driving
       stop.update(patientCar);
-[      patientSeq = 99;
-[      stop.motion(patientCar);
-[      stop.cycling(patientCar);
       load.view(vw.EgoDead);
       set.view(ego, vw.EgoDead);
       egoDir = STOPPED;
@@ -540,8 +537,6 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
     print("You are in the Sierra building parking lot.");
-  }
-  if (said("look", "look")) {
   }
 }
 
@@ -762,6 +757,8 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
         print("Please don't touch yourself in public. There may be children watching.");
         goto(doneclick);
       }
+
+[ TODO: lock/unlock ego's car; allow for car to be stolen
       
       [ ego car
       if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
@@ -832,6 +829,8 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
             deathType = 99;
             egoCarSeq = 10;
             set(fEgoDead);
+            work1 = 5;
+            call(lgc.ScoreHandler);
           }
           [ there is a timing glitch in AGI (not sure if it's a DOSBox thing
           [ or inherent to MSDOS/AGI; but on occasion, a second 'ghost click'
@@ -925,10 +924,13 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       if (work1 > 239) {
         [ foreground tree
         print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
-        set(touchTrees);
-        [ lose 1 point
-        work1 = -1;
-        call(lgc.ScoreHandler);
+        reset(handsWashed);
+        if (!touchTrees) {
+          set(touchTrees);
+          [ lose 1 point
+          work1 = -1;
+          call(lgc.ScoreHandler);
+        }
         goto(doneclick);
       }
       

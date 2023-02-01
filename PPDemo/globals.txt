@@ -96,7 +96,7 @@
 #define enableOFROCC           f56
 #define enableERIDOCC          f57
 #define resetMOCC              f58
-#define closettim              f59 [ set after player enters control room for first time
+#define scoreClosetDoor        f59
 #define findFolder             f60
 #define touchPlunger           f61
 #define findWalkman            f62
@@ -108,6 +108,8 @@
 #define fOpenSafe              f68
 #define floppyInserted         f69
 #define floppyFormatted        f70
+#define readMagazine           f71
+#define firstWash              f72
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
