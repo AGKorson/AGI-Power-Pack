@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/1/2023 5:57:32 AM"
+   LastEdit = "2/3/2023 4:41:18 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -170,10 +170,10 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H5364DD4F
-   CompCRC32 = &H0
+   CRC32 = &H5700ADC
+   CompCRC32 = &H5700ADC
    IsRoom = True
-   Size = 404
+   Size = 329
 
 [Logic2]
    ID = rm.ParkingLot
@@ -592,7 +592,7 @@
    ID = pic.Introduction
    Description = "A simple introductory screen picture. Add scrolling credits for a nice effect."
    BkgdImg = ""
-   Size = -1
+   Size = 6
 
 [Picture2]
    ID = pic.ParkingLot
