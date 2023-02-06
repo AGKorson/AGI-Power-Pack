@@ -4,36 +4,37 @@
 [
 [ TODO: add title screen and opening credits
 [
+[AGI Guy Designs presents...
+[
+[A WinAGI creation...
+[
 [" Adventure"
 ["   Game"
 ["Interpreter"
-[
-[then
 [ 
 [ "A"
 [ "G"
 [ "I"
 [
-[ then
-[
 [ "AGI"
-[
-[ then 
 [
 [ explode to white; fade in to 
 [large stylized AGI, and fade in
 [PowerPack notation
 [
+["Sierra Quest: AGI Power Pack Demo"
+[
 [fireworks, or color waves- some
 [kind of background animation
 [
-[then scroll credits: (copy GR script?)
-[Power Pack coding:
+[scroll credits: (copy GR script?)
+[Power Pack coding: me
 [Demo Game designed/written by: me
 [Background Art: klownstein
 [Animation:  klownstein
 [additional art: me
 [Music and sound effects: me
+[Original Adventure Game Development System: Sierra On-Line, Inc.
 [Playtesters: tbd
 [
 [********************************************************************
@@ -61,13 +62,14 @@ program.control();
 [ since this is the first room in the game, there is no
 [ previous room that faded out; so we force a fade.out
 [ (with zero delay) so this room can then be faded back in
+[configure.screen(-1, 0, 0); 
+[reset(column80);
 block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 [ show the picture on screen
 [show.pic(); 
   
   [ starting palette is everything black;
 [  block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
-  
   [ display game title above scroll window
   [ you can use a view for this instead of text, if desired
   set.text.attribute(1, 0);
@@ -92,12 +94,18 @@ block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 [  display(11, 35, "Adventure");
 [  display(12, 38, "Game");
 [  display(13, 34, "Interpreter");
+
+  display(5, 15, "AGI GUY");
+
+  [ fade in
+  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
   
   [ load the theme song
   load.sound(m.theme);
 [[  [ and begin playing
 [[  sound(m.theme, musicDone);
 
+:getkey
 
 [ check for a keypress or joystick button
 if ((have.key() || controller(cLeftClick))) {
@@ -139,6 +147,7 @@ if (musicDelay  > 0) {
 [[    sound(m.theme, musicDone);
   }
 }
+goto(getkey);
 
 return();
 
