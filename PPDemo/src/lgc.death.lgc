@@ -8,9 +8,16 @@
 [ 0: not dead
 [ 1: run over by car
 [ 2: trapped in basement
+[ 3: stuck in coffin
+[ 4: arrested for harassing nurse
+[ 5: stunned by batmobile theft deterrent system
+[ 6: slipped on wet spot in lobby
+[ 7: car stolen
+
+[ 99: player drove off
 [
-[ 254: death sequence done
-[ 255: game over; player quit/won
+[ 254: death sequence complete
+[ 255: winning sequence complete
 [
 [ ********************************************************************
 
@@ -37,7 +44,6 @@ if (deathType < 254) {
   if (deathType == 99) {
     [ not actually dead- game is over because ego left
     print("Drew drives away, his visit to Sierra On-Line is over.");
-    [ TODO: need game ending sequence/text
     [ set deathType to 'win'
     deathType = 255;
   } else {
@@ -68,9 +74,15 @@ if (deathType < 254) {
     if (deathType == 5) {
       print("Lesson learned - don't mess with the Dark Knight's ride.");
     }
-  
+    
+    [ slip on wet floor
     if (deathType == 6) {
       print("Looks like you broke your leg! At least you did it in a medical facility!");
+    }
+    
+    [ car stolen (left unlocked)
+    if (deathType == 7) {
+      print("Your car has been stolen! You should have locked your door. Now you'll need to thumb a ride back home. ");
     }
     
     [ set deathType to 254 so this logic does not
@@ -87,11 +99,56 @@ if (deathTimer > 0) {
 [ after a delay, show ending message to player
 if (deathTimer == 1) {
   if (deathType == 255) {
-    print("game is over - let's check your score...");
+    [ if player has floppy with source code, it's a win
+    if (has("floppy disk") && (floppyfiles == 2 || floppyfiles == 3)) {
+      print("Your vist to Oakhurst was a big success! You managed "
+            "to find a copy of the source files for the AGI Power "
+            "Pack.");
+      print("You also found several really cool souvenirs from "
+            "the glory days of AGI that you'll treasure forever.");
+      if (currentScore == maxScore) {
+        print("CONGRATULATIONS! You managed to get a perfect score!");
+      } else {
+        [ check for module resets
+        work1 = 0;
+        if (enableCAISOCC) {
+          ++work1;
+        }
+        if (enableRANDOCC) {
+          ++work1;
+        }
+        if (enableICAPOCC) {
+          ++work1;
+        }
+        if (enableESADOCC) {
+          ++work1;
+        }
+        if (enableOFROCC) {
+          ++work1;
+        }
+        if (enableERIDOCC) {
+          ++work1;
+        }
+        if (work1 < 6) {
+          print("Although you enabled %v46 of the six power pack control "
+                "panels, you'll never know how the ones you missed were "
+                "used by Sierra in developing the Power Pack.");
+        } else {
+          print("Perhaps you can visit again and try to score more points.");
+        }
+      }
+    } else {
+      [ losing msg depends on score
+      if (currentScore > 100) {
+        print("Not bad, but you could do better.");
+      } else {
+        print("Wow, that's a crappy score!");
+      }
+    }
+    
     [ TODO: add end-of-game messages; allow user to come back
     [ any time to use the control panels (another game setting
     [ for the config file
-    print("TBD...");
   } else {
     print("Thank you for playing this game. Better luck next time!");
   }

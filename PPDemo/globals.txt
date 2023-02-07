@@ -110,6 +110,7 @@
 #define floppyFormatted        f70
 #define readMagazine           f71
 #define firstWash              f72
+#define carLocked              f73
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string

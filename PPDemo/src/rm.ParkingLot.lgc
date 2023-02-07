@@ -151,10 +151,22 @@ random(40, 140, patientTimer);
   } else {
     [ skip opening sequence
     egoCarSeq = 0;
-    [ car is in parking spot
-    position(egoCar, 41, 143);
-    draw(egoCar);
-    stop.cycling(egoCar);
+    [ if car wasn't locked, there's a chance it gets stolen
+    if (previousRoom !=0 && !carLocked) {
+      random(1, 10, work1);
+      if (work1 == 10) {
+        [ it's gone!
+        set(fEgoDead);
+        deathType = 7;
+      }
+    }
+    if (!fEgoDead) {
+      [ car is in parking spot
+      position(egoCar, 41, 143);
+      draw(egoCar);
+      stop.cycling(egoCar);
+    }
+    
     [ if restarting 
     if (previousRoom == 0)  {
       [ add ego next to car
@@ -526,6 +538,11 @@ if (fElectrocuted && deathSeq == 6) {
 
 [ if dead, skip player input
 if (fEgoDead) {
+  [ check for stolen car
+  if (deathType == 7) {
+    print("Hey! Where is your car???");
+  ignore.objs(patient);
+  }
   return();
 }
 
@@ -537,6 +554,25 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
     print("You are in the Sierra building parking lot.");
+  }
+  if (said("lock", "car")) {
+    [ if already locked
+    if (carLocked) {
+      print("It's already locked.");
+    } else {
+      print("Thinking it's best not to take any chances, "
+            "you hit the lock button on your keyfob to "
+            "prevent it from being stolen.");
+      set(carLocked);
+    }
+  }
+  if (said("unlock", "car")) {
+    if (carLocked) {
+      print("Using your keyfob, you unlock your car door.");
+      reset(carLocked);
+    } else {
+      print("It's already unlocked.");
+    }
   }
 }
 
@@ -763,7 +799,10 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
       [ ego car
       if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
         if (posn(ego, 39, 132, 56, 146)) {
-[ TODO: finalize game ending sequences
+          if (carLocked) {
+            print("The door is locked.");
+            return();
+          }
           [ display a msgbox with 'yes/no' buttons
           set(leaveWindow);
           print("Are you sure you want to \nleave?\n\n");

@@ -10,6 +10,12 @@
 [ max negative value is -250  
 [ max positive value is +250
 
+[ ignore if game is over
+if (deathType == 255) {
+  return();
+}
+
+[ check for negative score adjustment
 if (negativeScore) {
   [ subtract the adjustment amount
   currentScore -= work1;
