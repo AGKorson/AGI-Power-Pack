@@ -21,6 +21,7 @@
 #define digit4          v226
 #define vMsg            v227
 #define indicatorTimer  v228
+#define tryCount        v229
 
 #define unlockdoor      f220
 #define correctcode     f221
@@ -124,6 +125,13 @@ if (indicatorTimer) {
       set.cel.v(oDigit2, digit2);
       set.cel.v(oDigit3, digit3);
       set.cel.v(oDigit4, digit4);
+      ++tryCount;
+      if (tryCount == 3) {
+        work1 = -1;
+        call(lgc.ScoreHandler);
+        print("Trying to guess the code isn't working.");
+        tryCount = 0;
+      }
     }
   }
   goto(exit);
@@ -236,7 +244,7 @@ if (mouseBtn == 1) {
         set.cel(oIndicator, 12);
         indicatorTimer = 15;
       } else {
-        [ confirm code (8367) by comparing the digits
+        [ confirm code (2437) by comparing the digits
         if (digit4 == 2 && digit3 == 4 && digit2 == 3 && digit1 == 7) {
           set.cel(oIndicator, 11);
           indicatorTimer = 6;
@@ -275,10 +283,21 @@ if (mouseBtn == 1) {
 [ when correct code is entered, unlock the door and return
 if (unlockdoor && !ctrlroomunlocked) {
   set(ctrlroomunlocked);
+  work1 = 5;
+  call(lgc.ScoreHandler);
+  work1 = 1;
+  call(lgc.ScoreHandler);
 }
-  
-[ righ-click to cancel and exit
+
+[ right-click to cancel and exit
 if ((unlockdoor || controller(cRightClick))) {
+ [ use work2 to indicate if door is open or closed
+ [ because it doesn't get used during new.room calls
+  if (unlockdoor) {
+    work2 = 1;
+  } else {
+    work2 = 0;
+  }
   [ reenable input
   accept.input();
   reset(disableGameFunctions);

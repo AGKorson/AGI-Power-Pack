@@ -361,47 +361,6 @@ if (said("look")) {
   print("This is the Power Pack control room.");
 }
 
-[if (said("show", "paint")) {
-[  [ fade out, then change room
-[  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-[  new.room(cp.Paint);  [ ##LE001##
-[}
-
-if (said("show", "terminal")) {  
-  [ MOCC
-  set(showMOCC);
-}
-
-if (said("show", "instrument")) {
-  [ CAISOCC
-  set(showCAISOCC);
-}
-  
-if (said("show", "sound")) {
-  [ ESADOCC
-  set(showESADOCC);
-}
-
-if (said("show", "palette")) {
-  [ ICAPOCC
-  set(showICAPOCC);
-}
-
-if (said("show", "msgbox")) {
-  [ RANDOCC
-  set(showRANDOCC);
-}
-
-if (said("show", "speed")) {
-  [ OFROCC
-  set(showOFROCC);
-}
-
-if (said("show", "mouse")) {
-  [ ERIDOCC
-  set(showERIDOCC);
-}
-
 if (said("open", "door")) {
   if (resetBaDASS) {
     print("The door is already open.");
@@ -427,7 +386,9 @@ if ((said("insert", "disk") || said("insert", "disk", "drive"))) {
       print("Ok.");
       set(floppyInserted);
       work1 = cp.Terminal;
-      put("floppy disk", work1); 
+      put("floppy disk", work1);
+      work1 = -4;
+      call(lgc.ScoreHandler);
     } else {
       print("Move closer.");
     }
@@ -444,6 +405,8 @@ if ((said("remove", "disk") || said("remove", "disk", "drive") ||
     print("Ok.");
     set(floppyInserted);
     get("floppy disk");
+    work1 = 4;
+    call(lgc.ScoreHandler);
   } else {
     if (has("floppy disk")) {
       print("You already have the disk.");

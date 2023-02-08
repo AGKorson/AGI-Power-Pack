@@ -120,7 +120,7 @@ disable.item(mouse);
 
 set.text.attribute(-1, 0);
 
-[ display it
+[ display picture
 show.pic();
 
 [ add return/cancel info
@@ -391,6 +391,10 @@ if (lastChar == 10) {
     call(lgc.TerminalFunctions);
 
     [ MOCC is now reset, errors are gone
+    if (!resetMOCC) {
+      work1 = 2;
+      call(lgc.ScoreHandler);
+    }
     set(resetMOCC);
     [ clear the screen
     terminalfn = CLS;
@@ -442,7 +446,6 @@ if ((lastChar == 13 || lastChar == 10)) {
       set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
       [ if valid continue
       if (loggedon) {
-[        inputmode = IM_CMDLINE;
         output = "logged on as kw002";
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
@@ -469,7 +472,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         [ get more input
         goto(getInput);
       } else {
-print("id: '%s15', pw: '%s12'");
+[print("id: '%s15', pw: '%s12'");
         inputmode = IM_USERID;
         output = "invalid userid and/or password";
         terminalfn = ADDLINE_LF;
@@ -596,6 +599,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "W7tg49@qd";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!resetBaDASS) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(resetBaDASS);
         set(validPW);
       }
@@ -604,6 +611,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "G#Am7Dsus";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!enableCAISOCC) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(enableCAISOCC);
         set(validPW);
       }
@@ -612,6 +623,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "ERID081489.a";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!enableERIDOCC) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(enableERIDOCC);
         set(validPW);
       }
@@ -620,6 +635,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "Snd4chan$";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!enableESADOCC) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(enableESADOCC);
         set(validPW);
       }
@@ -628,6 +647,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "Drac@1897";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!enableICAPOCC) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(enableICAPOCC);
         set(validPW);
       }
@@ -636,6 +659,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "PqII:10-36";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!enableOFROCC) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(enableOFROCC);
         set(validPW);
       }
@@ -644,6 +671,10 @@ print("id: '%s15', pw: '%s12'");
       sCmd = "GrGt5!VI";
       if (compare.strings(input, sCmd)) {
         [ ok
+        if (!enableRANDOCC) {
+          work1 = 5;
+          call(lgc.ScoreHandler);
+        }
         set(enableRANDOCC);
         set(validPW);
       }
@@ -731,10 +762,81 @@ print("id: '%s15', pw: '%s12'");
       if (!resetMOCC) {
         goto (memerr);
       }
+      [ allowable subcmds:
+      [ init:
+      [ load:
+      [ stop:
+      [ interface:
       
-      [ check for 'load:'
+      [ get subcmd
       work1 = 5;
       block(STR.LEFT, &input, &sCmd, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+      sTemp2 = "init:";
+      if (compare.strings(sCmd, sTemp2)) {
+        [ strip off module
+        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+        work1 -= 5;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        work1 = 0;
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        reset(validmodule);
+        sTemp2 = "badass";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule1);
+        }
+        sTemp2 = "caisocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule1);
+        }
+        sTemp2 = "eridocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule1);
+        }
+        sTemp2 = "esadocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule1);
+        }
+        sTemp2 = "icapocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule1);
+        }
+        sTemp2 = "ofrocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule1);
+        }
+        sTemp2 = "randocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+        }
+        :checkmodule1
+        if (validmodule) {
+          [ already inited
+          output = "module already initialized";
+        } else {
+          [ 'all' is valid
+          sTemp2 = "all";
+          if (compare.strings(sCmd, sTemp2)) {
+            output = "all modules are already initialized";
+          } else {
+            [ invalid module
+            output = "syntax error - ";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            output = "unknown module: %s16";
+          }
+        }
+        terminalfn = ADDLINE;
+        call(lgc.TerminalFunctions);
+        [ get more input 
+        goto(getInput);
+      }
+      
       sTemp2 = "load:";
       if (compare.strings(sCmd, sTemp2)) {
         [ strip off module
@@ -750,42 +852,42 @@ print("id: '%s15', pw: '%s12'");
           [get BaDASS password
           PWfunction = PW_BADASS;
           set(validmodule);
-          goto(checkmodule);
+          goto(checkmodule2);
         }
         sTemp2 = "caisocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get CAISOCC password
           PWfunction = PW_CAISOCC;
           set(validmodule);
-          goto(checkmodule);
+          goto(checkmodule2);
         }
         sTemp2 = "eridocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get ERIDOCC password
           PWfunction = PW_ERIDOCC;
           set(validmodule);
-          goto(checkmodule);
+          goto(checkmodule2);
         }
         sTemp2 = "esadocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get ESADOCC password
           PWfunction = PW_ESADOCC;
           set(validmodule);
-          goto(checkmodule);
+          goto(checkmodule2);
         }
         sTemp2 = "icapocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get ICAPOCC password
           PWfunction = PW_ICAPOCC;
           set(validmodule);
-          goto(checkmodule);
+          goto(checkmodule2);
         }
         sTemp2 = "ofrocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get OFROCC password
           PWfunction = PW_OFROCC;
           set(validmodule);
-          goto(checkmodule);
+          goto(checkmodule2);
         }
         sTemp2 = "randocc";
         if (compare.strings(sCmd, sTemp2)) {
@@ -794,7 +896,7 @@ print("id: '%s15', pw: '%s12'");
           set(validmodule);
         }
         
-        :checkmodule
+        :checkmodule2
         if (validmodule) {
           inputmode = IM_PASSWORD;
           output = "password: ";
@@ -838,7 +940,7 @@ print("id: '%s15', pw: '%s12'");
             terminalfn = LINEFEED;
             call(lgc.TerminalFunctions);
           } else {
-          [ invalid module
+            [ invalid module
             output = "syntax error - ";
             terminalfn = ADDLINE_LF;
             call(lgc.TerminalFunctions);
@@ -849,20 +951,92 @@ print("id: '%s15', pw: '%s12'");
           goto(getInput);
         }
       }
+      
       sTemp2 = "stop:";
       if (compare.strings(sCmd, sTemp2)) {
-        [ not allowed
-        terminalfn = NO_ACCESS;
-        call(lgc.TerminalFunctions);
+        [ strip off module
+        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+        work1 -= 5;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        work1 = 0;
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        reset(validmodule);
+        sTemp2 = "badass";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule3);
+        }
+        sTemp2 = "caisocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule3);
+        }
+        sTemp2 = "eridocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule3);
+        }
+        sTemp2 = "esadocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule3);
+        }
+        sTemp2 = "icapocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule3);
+        }
+        sTemp2 = "ofrocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+          goto(checkmodule3);
+        }
+        sTemp2 = "randocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          set(validmodule);
+        }
+        :checkmodule3
+        if (validmodule) {
+          [ not allowed
+          terminalfn = NO_ACCESS;
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        } else {
+          [ 'all' is valid
+          sTemp2 = "all";
+          if (compare.strings(sCmd, sTemp2)) {
+            [ not allowed
+            terminalfn = NO_ACCESS;
+            call(lgc.TerminalFunctions);
+          } else {
+            [ invalid module
+            output = "syntax error - ";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            output = "unknown module: %s16";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+          }
+        }
+        [ get more input 
         goto(getInput);
       }
-      sTemp2 = "init:";
+      
+      [ interface (longer than 4 chars!)
+      sTemp2 = "inter";
       if (compare.strings(sCmd, sTemp2)) {
-        [ not allowed
-        terminalfn = NO_ACCESS;
-        call(lgc.TerminalFunctions);
-        goto(getInput);
+        work1 = 10;
+        block(STR.LEFT, &input, &sCmd, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+        sTemp2 = "interface:";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ not allowed
+          output = "error - interface already set";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        }
       }
+      
       [ if nothing matches, it's a syntax error
       goto(syntaxerror);
     }
@@ -915,7 +1089,7 @@ print("id: '%s15', pw: '%s12'");
         sTemp2 = "c:\\users\\kw002";
         if (compare.strings(input, sTemp2)) {
           vCurDir = C_KW002;
-          output = "DIR --> A:\\\\USERS\\\\KW002";
+          output = "DIR --> C:\\\\USERS\\\\KW002";
           terminalfn = ADDLINE_LF;
           call(lgc.TerminalFunctions);
           goto(getInput);
@@ -1161,6 +1335,9 @@ print("id: '%s15', pw: '%s12'");
                   goto(getKeyCopy1);
                 }
                
+              } else {
+                work1 = 1;
+                call(lgc.ScoreHandler);
               }
               output = "copying PWRPACK.TXT to a: .";
               terminalfn = DELAY_ADD;
@@ -1201,6 +1378,9 @@ print("id: '%s15', pw: '%s12'");
                   goto(getKeyCopy2);
                 }
                
+              } else {
+                work1 = 5;
+                call(lgc.ScoreHandler);
               }
               output = "copying PWRPACK.ZIP to a: .";
               terminalfn = DELAY_ADD;
@@ -1357,10 +1537,10 @@ print("id: '%s15', pw: '%s12'");
       [ EXIT
       sTemp2 = "exit";
       if (compare.strings(sTemp2, sCmd)) {
-        [ same as log off
+        [ same as reboot
         terminalfn = CLS;
         call(lgc.TerminalFunctions);
-        goto(login);
+        goto(reboot);
       }
       [ no other 'e' commands
       goto(syntaxerror);
@@ -1371,6 +1551,7 @@ print("id: '%s15', pw: '%s12'");
       [ FORMAT
       sTemp2 = "format";
       if (compare.strings(sCmd, sTemp2)) {
+        [ check for argument ('a', 'c', etc)
         sTemp2 = "";
         if (compare.strings(input, sTemp2)) {
           output = "no drive specified";
@@ -1432,6 +1613,17 @@ print("id: '%s15', pw: '%s12'");
                     output = "y";
                     terminalfn = ADDLINE_LF;
                     call(lgc.TerminalFunctions);
+                    if (floppyfiles > 0) {
+                      if ((floppyfiles == 1 || floppyfiles == 3)) {
+                        work1 = -1;
+                        call(lgc.ScoreHandler);
+                      }
+                      if ((floppyfiles == 2 || floppyfiles == 3)) {
+                        work1 = -5;
+                        call(lgc.ScoreHandler);
+                      }
+                      floppyfiles = 0;
+                    }
                   } else {
                     goto(getKeyFormat);
                   }
@@ -1466,7 +1658,9 @@ print("id: '%s15', pw: '%s12'");
     [ commands that start with 'h'
     if (work1 == 104) {
       [ HELP 
-      if (said("help")) {
+      sTemp2 = "help";
+      if (compare.strings(sCmd, sTemp2)) {
+[      if (said("help")) {
         terminalfn = SHOW_HELP;
         call(lgc.TerminalFunctions);
         goto(getInput);

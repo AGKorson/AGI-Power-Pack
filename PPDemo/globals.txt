@@ -88,7 +88,7 @@
 #define faucetfixed            f48 [ set when faucet in closet has been tightened
 #define receptionistInHall     f49 [ set when receptionist is in hallway, so she can shoo ego back to lobby
 #define firstLobbyVisit        f50
-#define ctrlroomunlocked       f51 [ set when correct pin entered on door keypad
+#define ctrlroomunlocked       f51 [ set when correct pin entered on door keypad for first time
 #define enableCAISOCC          f52
 #define enableRANDOCC          f53
 #define enableICAPOCC          f54

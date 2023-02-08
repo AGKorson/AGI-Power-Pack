@@ -27,47 +27,50 @@ X       +1 pt:   washing hands in closet sink first time
 [       +1 pt:   experiencing 'death' by getting arrested for interrupting exam
 [       +1 pt:   experiencing death by getting trapped in the secret rooms
 [       +1 pt:   experiencing death by getting into Dracula's coffin
-        +2 pts:  for locking car
-        -2 pts   unlocking car (gain it back when getting in car)
+X       +2 pts:  for locking car
+X       -2 pts   unlocking car (gain it back when getting in car)
 X       +3 pts:  asking to use the bathroom to gain access to hallway
 X       +3 pts:  getting magazine from lobby table
 X       +2 pts:  reading magazine (finding password clue)
 X       +5 pts:  getting in car
-        +5 pts:  ending game with source disk
+X       +5 pts:  ending game with source disk
 X       +1 pt:   1st time opening closet door
 X       +5 pts:  breaking hole in wall
 X       -1 pt:   tripping over broom (can happen multiple times)
 X       +2 pts:  moving broom after tripping
 X       +3 pts:  fixing faucet drip
-        +6 pts:  entering correct door code for control room door
-        -1 pt:   entering wrong code three times in a row
-        +5 pts:  restore CAPOCC
-        +5 pts:  restore ESADOCC
-        +5 pts:  restore CAISOCC
-        +5 pts:  restore RIDOCC
-        +5 pts:  restore FROCC
-        +5 pts:  restore RANDOCC
-        +6 pts:  copying PP source to floppy
-        -4 pts:  putting disk in drive
-        +4 pts:  taking disk out of drive
+X       +6 pts:  entering correct door code for control room door
+X       -1 pt:   entering wrong code three times in a row
+X       +2 pts:  reset MOCC
+X       +5 pts:  restore BaDASS
+X       +5 pts:  restore CAPOCC
+X       +5 pts:  restore ESADOCC
+X       +5 pts:  restore CAISOCC
+X       +5 pts:  restore RIDOCC
+X       +5 pts:  restore FROCC
+X       +5 pts:  restore RANDOCC
+X       -4 pts:  putting disk in drive
+X       +4 pts:  taking disk out of drive
+X       +5 pts:  copying PP source to floppy
+X       +1 pt:   copying memo to floppy
 X       +3 pts:  getting memo from printer
 X       +3 pts:  getting password list from drawer
 X       +2 pts:  getting walkman from drawer
-        +2 pts:  finding safe behind picture
-        +3 pts:  opening safe
-        +3 pts:  getting paper with BaDASS code
+       +2 pts:  finding safe behind picture
+       +3 pts:  opening safe
+       +3 pts:  getting paper with BaDASS code
 X       +2 pts:  getting floppy disk
 X       +3 pts:  getting notebook
 X       +2 pts:  moving rug
 X       +3 pts:  getting folder
 X       -1 pt:   each time tripping on rug
-        +3 pts:  finding pillow code
-        +3 pts:  finding podium code
-        +1 pt:   opening treasure chest
+       +3 pts:  finding pillow code
+       +3 pts:  finding podium code
+       +1 pt:   opening treasure chest
 X       +3 pts:  getting scroll from chest
 X       +3 pts:  getting music sheet
 X       +4 pts:  getting 80s mix tape
-        +4 pts:  playing mix tape in walkman
+       +4 pts:  playing mix tape in walkman
 
 
 1. Intro/Opening Credits: TBD
@@ -266,6 +269,9 @@ touch tone freqs:
 # 941  1477
 
 For inventory screen,  change purpose and menu text depending on cursor. 'Look'  when eye icon selected, 'use' when hand is selected.  Disable inventory for all other icons.
+
+an LEG production
+created in WinAGI 
 
 " Adventure"
 "   Game"

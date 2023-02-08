@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/3/2023 4:41:18 PM"
+   LastEdit = "2/8/2023 6:03:27 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -114,10 +114,10 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H5C052FFE
+   CRC32 = &H53A88007
    CompCRC32 = &H0
    IsRoom = True
-   Size = 7211
+   Size = 7816
 
 [Logic23]
    ID = cp.RANDOCC
@@ -170,18 +170,18 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H5700ADC
-   CompCRC32 = &H5700ADC
+   CRC32 = &H383E8826
+   CompCRC32 = &H0
    IsRoom = True
    Size = 329
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HFBB83AD2
-   CompCRC32 = &HFBB83AD2
+   CRC32 = &H3504576
+   CompCRC32 = &H12E9E919
    IsRoom = True
-   Size = 5666
+   Size = 6068
 
 [Logic3]
    ID = rm.Lobby
@@ -202,16 +202,16 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H89CEE5B8
+   CRC32 = &H9164F755
    CompCRC32 = &H0
    IsRoom = True
-   Size = 2987
+   Size = 2913
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
    CRC32 = &H7FCE7850
-   CompCRC32 = &H7FCE7850
+   CompCRC32 = &H0
    IsRoom = True
    Size = 5781
 
@@ -226,7 +226,7 @@
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &H4CDB92D9
+   CRC32 = &H88F6CE00
    CompCRC32 = &H0
    IsRoom = True
    Size = 1548
@@ -394,18 +394,18 @@
 [Logic32]
    ID = lgc.TerminalFunctions
    Description = ""
-   CRC32 = &H9D0BED96
+   CRC32 = &H61C1580E
    CompCRC32 = &H0
    IsRoom = False
-   Size = 5012
+   Size = 9443
 
 [Logic12]
    ID = rm.DoorKeypad
    Description = ""
-   CRC32 = &HF1F05749
+   CRC32 = &H75DBA92A
    CompCRC32 = &H0
    IsRoom = True
-   Size = 1211
+   Size = 1300
 
 [Logic33]
    ID = lgc.ReadMagazine
@@ -1458,4 +1458,9 @@
    ID = vw.ManualArt
    Description = ""
    Size = 77
+
+[View46]
+   ID = vw.Logos
+   Description = ""
+   Size = 4879
 [::END Views::]

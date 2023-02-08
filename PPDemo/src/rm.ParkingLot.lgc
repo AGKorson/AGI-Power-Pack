@@ -141,8 +141,7 @@ if (newRoom) {
   [ don't draw until needed
   
   [ set initial timer to slightly faster random amount
-[  random(140, 250, patientTimer);
-random(40, 140, patientTimer);
+  random(40, 140, patientTimer);
   
   [ if starting (coming from intro screen)
   if (previousRoom == rm.Title) {
@@ -564,15 +563,22 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
             "you hit the lock button on your keyfob to "
             "prevent it from being stolen.");
       set(carLocked);
+      work1 = 2;
+      call(lgc.ScoreHandler);
     }
   }
   if (said("unlock", "car")) {
     if (carLocked) {
       print("Using your keyfob, you unlock your car door.");
       reset(carLocked);
+      work1 = -2;
+      call(lgc.ScoreHandler);
     } else {
       print("It's already unlocked.");
     }
+  }
+  if (said("get in", "car")) {
+    goto(entercar);
   }
 }
 
@@ -794,10 +800,9 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
         goto(doneclick);
       }
 
-[ TODO: lock/unlock ego's car; allow for car to be stolen
-      
       [ ego car
       if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+        :entercar
         if (posn(ego, 39, 132, 56, 146)) {
           if (carLocked) {
             print("The door is locked.");
@@ -868,12 +873,18 @@ if (cursoricon != C_WAIT && controller(cLeftClick)) {
             deathType = 99;
             egoCarSeq = 10;
             set(fEgoDead);
+            [ 5 pts for leaving
             work1 = 5;
             call(lgc.ScoreHandler);
+            if (floppyfiles > 1) {
+              [ 5 more pts for leaving with source code
+              work1 = 5;
+              call(lgc.ScoreHandler);
+            }
           }
           [ there is a timing glitch in AGI (not sure if it's a DOSBox thing
           [ or inherent to MSDOS/AGI; but on occasion, a second 'ghost click'
-          [ will set the left-click controller when the dialog is dismissed
+          [ will set the left-click controller when the dialog is dismissed)
           [ to fix this, skip the controller on the very next cycle
           set(fSkip1);
         } else {

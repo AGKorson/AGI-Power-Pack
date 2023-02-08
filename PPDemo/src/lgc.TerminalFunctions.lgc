@@ -57,6 +57,7 @@
 
 #define cursorstate   f241
 #define loggedon      f242
+#define tmpFlag       f245
 
 #define input          s12
 #define char           s13
@@ -519,107 +520,612 @@ if (terminalfn == TYPE_PP) {
 }
 
 if (terminalfn == SHOW_HELP) {
-  [ show help lines
-  output = "valid commands:";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "AMOS       Provides access to AMOS sub- ";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           systems and configuration";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "CLS        Clears the screen.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "CD/CHDIR   Changes the current";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           directory.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "CHKDSK     Checks a disk and displays a";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           status report";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "DIR        Displays a list of files in ";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           a directory.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "COPY       Copies files to another";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           location.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "DEL/ERASE  Deletes files.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-   output = "-- pause --";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  lastChar = 0;
-  :wait3
-  if (!have.key()) {
-    goto(wait3);
+  [ check for optional arg value
+  sTemp2 = "";
+  if (compare.strings(input, sTemp2)) {
+    [ no argument - show list of commands
+    :showhelp
+    output = "valid commands:";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "AMOS       Provides access to AMOS sub- ";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           systems and configuration";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "CLS        Clears the screen.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "CD/CHDIR   Changes the current";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           directory.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "CHKDSK     Checks a disk and displays a";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           status report";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "DIR        Displays a list of files in ";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           a directory.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "COPY       Copies files to another";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           location.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "DEL/ERASE  Deletes files.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "-- pause --";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    lastChar = 0;
+    :wait3
+    if (!have.key()) {
+      goto(wait3);
+    }
+    output = "EXIT       Quits and restarts AMOS ";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "FORMAT     Formats a disk.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "HELP       Displays a list of AMOS ";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           commands.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "LOGOFF     Logs a user off AMOS.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "MD/MKDIR   Creates a directory.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "RD/RMDIR   Removes a directory.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "REN/RENAME Renames a file or files.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "SUDO       Runs AMOS commands with admin";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           privileges. ";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "TYPE       Displays the contents of a";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           text file.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "VER        Displays AMOS version.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+     output = "-- pause --";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    lastChar = 0;
+    :wait4
+    if (!have.key()) {
+      goto(wait4);
+    }
+    output = "VOL        Displays a disk volume label";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           and serial number.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+  } else {
+    reset(tmpFlag);
+    [ check for valid command
+    sTemp2 = "AMOS";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  AMOS [subcmd]:[option]";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "valid AMOS subcommands:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  stop: stops an running AMOS subsystem";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        use a valid subsystem or 'all'";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        as the option parameter";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  init: initialize an AMOS subsystem so";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        it can be loaded into memory";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        use a valid subsystem or 'all'";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        as the option parameter";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  load: loads an initialized AMOS sub-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        system; use a valid subsystem ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "-- pause --";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      lastChar = 0;
+      :wait5
+      if (!have.key()) {
+        goto(wait5);
+      }
+      output = "        or 'all' as the option ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        parameter";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  interface: sets the interface mode ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        for AMOS; 'cmdline' or 'gui'; ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        call only one time after AMOS";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        is started";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "CLS";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  CLS";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "clears the entire screen and moves the";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "cursor to the top line of the display";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "this command does not use parameters";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "CD";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    sTemp2 = "CHDIR";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    if (tmpFlag) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  CD newdir|drive:newdir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  CHDIR newdir|drive:newdir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "changes the current directory to a new";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "directory; if no drive letter is used, ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "newdir must exist on the current drive";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "CHKDSK";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  CHKDSK drive";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "runs basic diagnostics on the designated";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "drive; pass drive as a single letter";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "COPY";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  COPY srcfile destdir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "copies srcfile in the current directory";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "to destdir with the same name; use '*'";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "as a wildcard to copy multiple files;";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "e.g. '*.*' to copy all files, 'file.*'";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "to copy files of any type named 'file'";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "DEL";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    sTemp2 = "ERASE";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    if (tmpFlag) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  DEL afile";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  ERASE afile";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "deletes afile from the current dir-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "ectory; use '*' as a wild card to";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "delete multiple files; e.g. '*.*' to";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "delete all files, 'file.*' to delete";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "files of any type named 'file'";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "DIR";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  DIR";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "displays a list of directories and";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "files in the current drive/directory;";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "this command does not use parameters";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "EXIT";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  EXIT";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "log off the current user and exit the";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "current AMOS session; another session";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "will automatically restart; this";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "command does not use parameters;";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "pressing CTRL+SHIFT+ENTER is a short-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "cut to the EXIT command";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "FORMAT";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  FORMAT drive";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "formats a drive so it can be accessed";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "by the operating system; formatting";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "erases all existing files, so it re-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "quires full administrator privileges";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "HELP";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  HELP [command]";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "displays a list of valid AMOS comands;";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "if a command is passed, usage details";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "for that command are displayed";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "LOGOFF";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  LOGOFF";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "logs the current user out of AMOS so";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "another user can log in; this command";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "does not use parameters";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "MD";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    sTemp2 = "MKDIR";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    if (tmpFlag) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  MD newdir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  MAKEDIR newdir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "creates a new subdirectory in the ";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "current directory; requires adminis-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "trator access";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "RD";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    sTemp2 = "RMDIR";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    if (tmpFlag) {
+      return();
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  RD olddir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  RMDIR olddir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "deletes subdirectory olddir from the";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "current directory; all files in olddir";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "are also deleted; requires adminis-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "trator access";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "REN";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    sTemp2 = "RENAME";
+    if (compare.strings(input, sTemp2)) {
+      set(tmpFlag);
+    }
+    if (tmpFlag) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  REN oldname newname";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  RENAME oldname newname";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "renames existing file to newname;";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "requires administrator access";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "SUDO";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  SUDO cmd [params]";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "runs a command using elevated priv-";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "ileges; a valid administrator must be";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "entered";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "TYPE";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  TYPE textfile";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "displays the contents of a text file;";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "if textfile is not a text file, an";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "error message is displayed";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "VER";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  VER";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "displays detailed version information";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "about the AMOS environment; this";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "command does not use parameters";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
+    sTemp2 = "VOL";
+    if (compare.strings(input, sTemp2)) {
+      output = "syntax:";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "  VOL drive";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      terminalfn = LINEFEED;
+      call(lgc.TerminalFunctions);
+      output = "displays the volume property of a";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "drive";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      return();
+    }
   }
-  output = "EXIT       Quits and restarts AMOS ";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "FORMAT     Formats a disk.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "HELP       Displays a list of AMOS ";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           commands.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "LOGOFF     Logs a user off AMOS.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "MD/MKDIR   Creates a directory.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "RD/RMDIR   Removes a directory.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "REN/RENAME Renames a file or files.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "SUDO       Runs AMOS commands with admin";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           privileges. ";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "TYPE       Displays the contents of a";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           text file.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "VER        Displays AMOS version.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-   output = "-- pause --";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  lastChar = 0;
-  :wait4
-  if (!have.key()) {
-    goto(wait4);
-  }
-  output = "VOL        Displays a disk volume label";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
-  output = "           and serial number.";
-  terminalfn = ADDLINE_LF;
-  call(lgc.TerminalFunctions);
 }
 return();
 
