@@ -21,12 +21,6 @@ X       -2 pts:  touching plunger
 X       +1 pt:   washing hands after touching tree
 X       +2 pts:  washing hands after touching plunger
 X       +1 pt:   washing hands in closet sink first time
-[       +1 pt:   experiencing death by getting run over
-[       +1 pt:   experiencing death by getting shocked from batmobile
-[       +1 pt:   experiencing death by slipping on wet floor
-[       +1 pt:   experiencing 'death' by getting arrested for interrupting exam
-[       +1 pt:   experiencing death by getting trapped in the secret rooms
-[       +1 pt:   experiencing death by getting into Dracula's coffin
 X       +2 pts:  for locking car
 X       -2 pts   unlocking car (gain it back when getting in car)
 X       +3 pts:  asking to use the bathroom to gain access to hallway
@@ -56,21 +50,21 @@ X       +1 pt:   copying memo to floppy
 X       +3 pts:  getting memo from printer
 X       +3 pts:  getting password list from drawer
 X       +2 pts:  getting walkman from drawer
-       +2 pts:  finding safe behind picture
-       +3 pts:  opening safe
-       +3 pts:  getting paper with BaDASS code
+X       +2 pts:  finding safe behind picture
+X       +3 pts:  opening safe
+X       +3 pts:  getting paper with BaDASS code
 X       +2 pts:  getting floppy disk
 X       +3 pts:  getting notebook
 X       +2 pts:  moving rug
 X       +3 pts:  getting folder
 X       -1 pt:   each time tripping on rug
-       +3 pts:  finding pillow code
-       +3 pts:  finding podium code
-       +1 pt:   opening treasure chest
+X       +3 pts:  finding pillow code
+X       +3 pts:  finding podium code
+X       +1 pt:   opening treasure chest
 X       +3 pts:  getting scroll from chest
 X       +3 pts:  getting music sheet
 X       +4 pts:  getting 80s mix tape
-       +4 pts:  playing mix tape in walkman
+        +4 pts:  playing mix tape in walkman
 
 
 1. Intro/Opening Credits: TBD

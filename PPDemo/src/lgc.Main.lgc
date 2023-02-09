@@ -186,7 +186,6 @@ if (currentRoom == 0) {
   if (work1 < 58) {
     goto(setinst);
   }
-print(m53);
   
   [ some start/restart actions have to be done within logic0
   if (gameRestarted) {
@@ -396,6 +395,8 @@ if (!disableGameFunctions) {
           }
           attenuation = work1;
         }
+      [ update the config file
+      call(lgc.SaveOptions);
       }
       return();
     }
@@ -554,7 +555,7 @@ if (!disableGameFunctions) {
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
     block(SET.MSG, 0, &mnu_msgSpeedSlow, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
     [ normal (6) is 5 - 8
-    if (animationInterval == NORMAL_SPEED) {
+    if (animationInterval > 4 && animationInterval < 9) {
       s23 = "\x10";
     } else {
       s23 = " ";
@@ -563,7 +564,7 @@ if (!disableGameFunctions) {
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
     block(SET.MSG, 0, &mnu_msgSpeedNorm, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
     [ fast (3) is 1 - 4 
-    if (animationInterval == FAST_SPEED) {
+    if (animationInterval > 0 && animationInterval < 5) {
       s23 = "\x10";
     } else {
       s23 = " ";
@@ -628,6 +629,8 @@ if (controller(cSoundPC)) {
   if (4channelsound) {
     reset(4channelsound);
     reset(useMIDI);
+    [ convert attenuation
+    attenuation /= 4;
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -635,6 +638,20 @@ if (controller(cSoundPC)) {
 if (controller(cSoundFM)) {
   [ if not already in FM mode
   if ((!4channelsound || useMIDI)) {
+    if (!4channelsound) {
+      work1 = attenuation;
+      work1 *= 4;
+      if (attenuation > 15) {
+        ++work1;
+      }
+      if (attenuation > 31) {
+        ++work1;
+      }
+      if (attenuation > 47) {
+        ++work1;
+      }
+      attenuation = work1;
+    }
     set(4channelsound);
     reset(useMIDI);
     set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -645,6 +662,20 @@ if (controller(cSoundFM)) {
 if (controller(cSoundMIDI)) {
   [ if not already in MIDI mode
   if ((!4channelsound || !useMIDI)) {
+    if (!4channelsound) {
+      work1 = attenuation;
+      work1 *= 4;
+      if (attenuation > 15) {
+        ++work1;
+      }
+      if (attenuation > 31) {
+        ++work1;
+      }
+      if (attenuation > 47) {
+        ++work1;
+      }
+      attenuation = work1;
+    }
     set(4channelsound);
     set(useMIDI);
     set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -732,6 +763,20 @@ if ((controller(cFastest) ||
   [ no delay between interpreter cycles
   if (animationInterval != FASTEST_SPEED) {
     animationInterval = FASTEST_SPEED;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
+}
+if (controller(cSlower)) {
+  if (animationInterval < SLOW_SPEED) {
+    ++animationInterval;
+    [ update the config file
+    call(lgc.SaveOptions);
+  }
+}
+if (controller(cFaster)) {
+  if (animationInterval > FASTEST_SPEED) {
+    --animationInterval;
     [ update the config file
     call(lgc.SaveOptions);
   }

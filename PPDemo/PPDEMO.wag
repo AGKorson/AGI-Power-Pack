@@ -48,11 +48,11 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H7DD6065C
-   CRC32 = &H93C1815B
+   CompCRC32 = &HB706749
+   CRC32 = &HB706749
    ID = lgc.Main
    IsRoom = False
-   Size = 5014
+   Size = 5141
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
@@ -442,10 +442,10 @@
 [Logic15]
    ID = lgc.SaveOptions
    Description = ""
-   CRC32 = &HE4960F04
-   CompCRC32 = &HE4960F04
+   CRC32 = &H48FAF37A
+   CompCRC32 = &H48FAF37A
    IsRoom = False
-   Size = 269
+   Size = 267
 
 [Logic16]
    ID = lgc.CacheOptions
