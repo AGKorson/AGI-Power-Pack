@@ -772,7 +772,8 @@ if (mouseY > 25 && controller(cLeftClick)) {
         if (!has("PQ idea list")) {
           print("You grab the paper from the top of the podium.");
           get("PQ idea list");
-          [ TODO: score the PQ idea list
+          work1 = 3;
+          call(lgc.ScoreHandler);
         } else {
           print("There is nothing else to take from the podium.");
         }
@@ -1200,6 +1201,11 @@ if (mouseY > 25 && controller(cLeftClick)) {
         set.cel(oChest, 0);
         end.of.loop(oChest, fChest);
         storeChestStatus= OPENING;
+        if (!scoreChest) {
+          set(scoreChest);
+          work1 = 1;
+          call(lgc.ScoreHandler);
+        }
       } else {
         print("Move closer.");
       }

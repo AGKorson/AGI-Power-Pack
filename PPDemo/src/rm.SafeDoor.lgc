@@ -231,6 +231,11 @@ if (controller(cLeftClick)) {
       draw(oNum00);
       end.of.loop(oNum00, fOpenSafe);
       set(fOpening);
+      if (!scoreSafe) {
+        set(scoreSafe);
+        work1 = 3;
+        call(lgc.ScoreHandler);
+      }
     } else {
       print("Nothing happens. That must not be the right combination.");
       comboNum1 = -1;

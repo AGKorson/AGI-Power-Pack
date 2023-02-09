@@ -2,7 +2,7 @@
 [ global defines file for PPDEMO
 [
 #define NORMAL_STEP_SIZE         1
-#define MAX_SCORE_VALUE        144 [ assign this constant to v7 (MaxScore)
+#define MAX_SCORE_VALUE        126 [ assign this constant to v7 (MaxScore)
 #define FASTEST_SPEED            0
 #define FAST_SPEED               3 [ turbo is 3x standard
 #define NORMAL_SPEED             6
@@ -111,6 +111,10 @@
 #define readMagazine           f71
 #define firstWash              f72
 #define carLocked              f73
+#define scorePicture           f74
+#define scoreSafe              f75
+#define scorePillow            f76
+#define scoreChest             f77
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string

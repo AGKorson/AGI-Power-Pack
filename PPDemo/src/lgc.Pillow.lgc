@@ -35,7 +35,13 @@ lastChar = 0;
 if (!have.key()) {
   goto(waitforit);
 }
-[ any key to exit
+[ any key will exit
+
+if (!scorePillow) {
+  set(scorePillow);
+  work1 = 3;
+  call(lgc.ScoreHandler);
+}
 
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)

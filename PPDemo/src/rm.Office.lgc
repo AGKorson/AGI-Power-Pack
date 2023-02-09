@@ -734,6 +734,8 @@ if (controller(cLeftClick)) {
             set.loop(oSafe, 1);
             set.cel(oSafe, 7);
             force.update(oSafe);
+            work1 = 3;
+            call(lgc.ScoreHandler);
           }
           goto(doneclick);
         }
@@ -823,6 +825,11 @@ if (fPicture) {
   reset(fPicture);
   if (pictureStatus == OPENING) {
     pictureStatus = OPEN;
+    if (!scorePicture) {
+      set(scorePicture);
+      work1 = 2;
+      call(lgc.ScoreHandler);
+    }
     draw(oSafe);
   } else {
     pictureStatus = CLOSED;
@@ -838,13 +845,7 @@ if (fSafe) {
       set.loop(oSafe, 5);
       set.cel(oSafe, 7);
       force.update(oSafe);
-[      if (!findManual) {
-[        set(findManual);
-[        print("There is a binder in the safe. It looks like an old "
-[              "computer program manual.");
-[      }
     }
-    
   } else {
     safeStatus = CLOSED;
   }
@@ -946,11 +947,6 @@ if (fDeskDrawer) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 4);
         force.update(oDeskDrawer);
-[        if (!findWalkman) {
-[          set(findWalkman);
-[          print("There is an old Sony Walkman cassette player in "
-[                "this drawer!");
-[        }
       }
     } else {
       officeDskDrStatus = OPEN2;
@@ -958,10 +954,6 @@ if (fDeskDrawer) {
         set.loop(oDeskDrawer, 5);
         set.cel(oDeskDrawer, 3);
         force.update(oDeskDrawer);
-[        if (!findList) {
-[          set(findList);
-[          print("You see a piece of paper with handwritten notes.");
-[        }
       }
     }
   }
@@ -975,10 +967,6 @@ if (fFileDrawer) {
     get.posn(oFileDrawer, work1, work2);
     if (work2 == 112) {
       officeFileDrStatus = OPEN1;
-[      if (!findEmptyDrawer) {
-[        set(findEmptyDrawer);
-[        print("This drawer is empty.");
-[      }
     } else {
       if (work2 == 121) {
         officeFileDrStatus = OPEN2;
@@ -986,10 +974,6 @@ if (fFileDrawer) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 5);
           force.update(oFileDrawer);
-[          if (!findNotebook) {
-[            set(findNotebook);
-[            print("A small notebook is in this drawer.");
-[          }
         }
       } else {
         officeFileDrStatus = OPEN3;
@@ -997,10 +981,6 @@ if (fFileDrawer) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 6);
           force.update(oFileDrawer);
-[          if (!findDisk) {
-[            set(findDisk);
-[            print("There's a box of blank floppy disks here.");
-[          }
         }
       }
     }
