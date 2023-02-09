@@ -305,19 +305,19 @@ if(newRoom) {
   currentInst = -1;
 
   [ copy the custom FM instrument values from lgc.Main
-  s12 = "%l0|53";
+  s12 = "%g53";
   block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
   block(SET.MSG, 0, &m144, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%l0|54";
+  s12 = "%g54";
   block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
   block(SET.MSG, 0, &m145, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%l0|55";
+  s12 = "%g55";
   block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
   block(SET.MSG, 0, &m146, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%l0|56";
+  s12 = "%g56";
   block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
   block(SET.MSG, 0, &m147, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%l0|57";
+  s12 = "%g57";
   block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
   block(SET.MSG, 0, &m148, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
   
@@ -1898,11 +1898,11 @@ return();
 #message 136 "Custom Inst 5      "
 #message 137 "\x1E"
 #message 138 "\x1F"
-#message 139 "%l0|53"
-#message 140 "%l0|54"
-#message 141 "%l0|55"
-#message 142 "%l0|56"
-#message 143 "%l0|57"
+#message 139 "%g53"
+#message 140 "%g54"
+#message 141 "%g55"
+#message 142 "%g56"
+#message 143 "%g57"
 #message 144 "0000000000000000000000"
 #message 145 "0000000000000000000000"
 #message 146 "0000000000000000000000"

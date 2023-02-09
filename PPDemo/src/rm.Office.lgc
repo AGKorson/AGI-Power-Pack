@@ -1009,12 +1009,12 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%l0|40"
-#message 2 "%l0|41"
-#message 3 "%l0|42"
-#message 4 "%l0|43"
-#message 5 "%l0|44"
-#message 6 "%l0|45"
+#message 1 "%g40"
+#message 2 "%g41"
+#message 3 "%g42"
+#message 4 "%g43"
+#message 5 "%g44"
+#message 6 "%g45"
 #message 7 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15001E1E3F15153F153F3F3F153F3F3F"
 [#message 7 "000000 00002A 002A00 002A2A 2A0000 2A002A 2A1500 2A2A2A 
 [            151515 15153F 153F15 001E1E 3F1515 3F153F 3F3F15 3F3F3F"

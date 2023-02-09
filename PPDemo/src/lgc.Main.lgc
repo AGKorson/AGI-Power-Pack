@@ -176,7 +176,18 @@ if (currentRoom == 0) {
   [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
                         [ configures the screen and other startup activities
-
+  [ copy custom instruments
+  work1 = &m53;
+  work2 = &s18;
+  :setinst
+  block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  ++work1;
+  ++work2;
+  if (work1 < 58) {
+    goto(setinst);
+  }
+print(m53);
+  
   [ some start/restart actions have to be done within logic0
   if (gameRestarted) {
     s23 = m14; [ "Speed"
@@ -819,6 +830,8 @@ if (!disableGameFunctions) {
     work1 += 52; [convert to msg offset
     work2 = &s12; [ use string 12
     block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
+    [ update config file
+    call(lgc.SaveOptions);
     return();
   }
   

@@ -316,12 +316,12 @@ return();
 [*****
 [ messages         [  declared messages go here
 [*****
-#message 1 "%l0|40"
-#message 2 "%l0|41"
-#message 3 "%l0|42"
-#message 4 "%l0|43"
-#message 5 "%l0|44"
-#message 6 "%l0|45"
+#message 1 "%g40"
+#message 2 "%g41"
+#message 3 "%g42"
+#message 4 "%g43"
+#message 5 "%g44"
+#message 6 "%g45"
 
 #message 8 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A09090915153F153F15153F3F3F15153F153F3F3F153F3F3F"
 #message 9 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"

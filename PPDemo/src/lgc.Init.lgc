@@ -210,7 +210,6 @@ if (gameRestarted) {
     [ set speed to normal (delay=2/20ths of a second)
     animationInterval = NORMAL_SPEED;
   
- [ TODO: save custom FM instruments to config file; save speed/clock settings to file
     [ save a default config file
     s23 = "ppdemo.cfg";
     [ clear the string
@@ -219,6 +218,25 @@ if (gameRestarted) {
     s22 = "111000006";
     v220 = 22;
     block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
+    [ add default custom FM instruments
+    work1 = 1;
+    s22 = m4;
+    work2 = &m4;
+    :nextinst1
+    block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+    ++work1;
+    if (work1 < 6) {
+      goto(nextinst1);
+    }
+    [ save defaults in s18-s22
+    work1 = 18;
+    work2 = 4;
+    :nextinst2
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
+    ++work1;
+    if (work1 < 23) {
+      goto(nextinst2);
+    }
   }
   
   [ enable custom status bar (lgc.Statusbar)
@@ -343,3 +361,4 @@ return();
 #message 1 ">"
 #message 2 cursor
 #message 3 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
+#message 4 "22215909FFFF030F020000"

@@ -299,7 +299,7 @@ if(newRoom) {
   work3 = &m132;
   tmpVal = &sTemp;
   :Loop1
-    sTemp = "%l0|";
+    sTemp = "%g";
     strByte = "%v47Custom Inst %v46       ";
     block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
@@ -1993,9 +1993,8 @@ if (btnAction > 0) {
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
     block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
     
-    [ tell logic90 to apply it
+    [ tell lgc.Main to apply it
     set(saveCustomInst);
-    call(lgc.GameFunctions);
     print.at("Custom Instrument %v221 updated", 3, 3, 70);
     
     [ reset dirty flag

@@ -3,7 +3,8 @@
 [ lgc.SaveOptions
 [
 [ saves sound mode, clock mode and speed setting to file
-[
+[ custom instruments as well
+
 [ a single string,  nine characters long:
 [ abcdef
 [ a:  0 = sound disabled
@@ -56,13 +57,29 @@ if (realClock) {
 s23 = "ppdemo.cfg";
 s22 = "%v46%v47%v48%v23|2%v240%v241%v10|2";
 s21 = "                                       ";
-
 block(STR.FORMAT, &s22, &s21, 0); [ str.format(sINPUT, sRESULT)
 tmp0 = &s21;
 block(NEW.FILE, &s23, &v240, &v240); [ new.file(sFILENAME, vSTART, vEND)
+
+work1 = 1;
+work2 = &s22;
+print(m1);
+:setinst
+block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
+block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+++work1;
+if (work1 < 6) {
+  goto(setinst);
+}
 
 return();
 
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
+#message 1 "%g53"
+#message 2 "%g54"
+#message 3 "%g55"
+#message 4 "%g56"
+#message 5 "%g57"
