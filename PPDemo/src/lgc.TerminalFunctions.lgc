@@ -518,6 +518,7 @@ if (terminalfn == TYPE_PP) {
   call(lgc.TerminalFunctions);
   return();
 }
+pause(); [TODO: !!!!not using text compare? why not?
 
 if (terminalfn == SHOW_HELP) {
   [ check for optional arg value

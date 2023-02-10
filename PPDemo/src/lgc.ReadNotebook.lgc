@@ -40,7 +40,7 @@ discard.pic(pageImg);
 set.text.attribute(BLACK, YELLOW);
 display(6, 34, "AMOS Meeting");
 display(7, 37, "Notes");
-display(8, 34, " 11/7/88 -");
+display(8, 34, " 4/11/88 -");
 display(9, 34, " 8/15/89");
 [ fade back in
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
