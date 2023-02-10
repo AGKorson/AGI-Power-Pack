@@ -37,12 +37,18 @@ X       +6 pts:  entering correct door code for control room door
 X       -1 pt:   entering wrong code three times in a row
 X       +2 pts:  reset MOCC
 X       +5 pts:  restore BaDASS
-X       +5 pts:  restore CAPOCC
+X       +5 pts:  restore ICAPOCC
 X       +5 pts:  restore ESADOCC
 X       +5 pts:  restore CAISOCC
-X       +5 pts:  restore RIDOCC
-X       +5 pts:  restore FROCC
+X       +5 pts:  restore ERIDOCC
+X       +5 pts:  restore EFROCC
 X       +5 pts:  restore RANDOCC
+X       +2 pts:  use ICAPOCC
+X       +2 pts:  use ESADOCC
+X       +2 pts:  use CAISOCC
+X       +2 pts:  use ERIDOCC
+X       +2 pts:  use EFROCC
+X       +2 pts:  use RANDOCC
 X       -4 pts:  putting disk in drive
 X       +4 pts:  taking disk out of drive
 X       +5 pts:  copying PP source to floppy

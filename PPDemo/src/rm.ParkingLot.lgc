@@ -216,11 +216,11 @@ if (egoCarSeq) {
     [ restore cursor for message
     cursoricon = cursormode;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-    print("At long last, Drew has finally made it to Oakhurst, "
+    print("At long last, you finally made it to Oakhurst, "
           "California to visit the original Sierra On-Line headquarters "
           "building.");
-    print("It has been a long drive, but Drew is super excited as he "
-          "pulls into the parking lot.");
+    print("It has been a long drive, but you are super excited as you "
+          "pull into the parking lot.");
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -236,9 +236,9 @@ if (egoCarSeq) {
     cursoricon = cursormode;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
     print("The building is now a medical office. There aren't too many "
-          "cars in the parking lot. So Drew decides to go inside and "
+          "cars in the parking lot. So you decide to go inside and "
           "take a look around.");
-    print("Who knows? Maybe he might find some original Sierra memorabilia "
+    print("Who knows? Maybe you might find some original Sierra memorabilia "
           "or other signs of long past gaming history.");
     [ allow menu use
     set(enableMenu);

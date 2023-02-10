@@ -46,27 +46,36 @@
 [ **************************************
 [ LOCAL DEFINES
 [ **************************************
-#define musicDelay                 v226
+
+#define oLogo1              o1
+#define oLogo2              o2
+#define oLogo3              o3
+
+#define musicDelay        v226
 
 [ This room does not run the main agi loop; all input is handled
 [ and responded within this logic. So no need to check for newRoom
 [ flag.
 
-[ clear screen? not needed on startup
+if (newRoom) {
+  [ this is the first cycle through this room
+  [ load, draw and discard the picture resource for the current room
+  
+  [ clear screen? not needed on startup
 
-[ disable player control
-program.control();
-
-[ no ego used in this room
-
-[ since this is the first room in the game, there is no
-[ previous room that faded out; so we force a fade.out
-[ (with zero delay) so this room can then be faded back in
-[configure.screen(-1, 0, 0); 
-[reset(column80);
-block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-[ show the picture on screen
-[show.pic(); 
+  [ disable player control
+  program.control();
+  
+  [ no ego used in this room
+  
+  [ since this is the first room in the game, there is no
+  [ previous room that faded out; so we force a fade.out
+  [ (with zero delay) so this room can then be faded back in
+  [configure.screen(-1, 0, 0); 
+  [reset(column80);
+  block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  [ show the picture on screen
+  [show.pic(); 
   
   [ starting palette is everything black;
 [  block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
@@ -104,11 +113,12 @@ block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   load.sound(m.theme);
 [[  [ and begin playing
 [[  sound(m.theme, musicDone);
+}
 
 :getkey
 
 [ check for a keypress or joystick button
-if ((have.key() || controller(cLeftClick))) {
+if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -147,7 +157,7 @@ if (musicDelay  > 0) {
 [[    sound(m.theme, musicDone);
   }
 }
-goto(getkey);
+[[goto(getkey);
 
 return();
 

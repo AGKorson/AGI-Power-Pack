@@ -2,7 +2,7 @@
 [ global defines file for PPDEMO
 [
 #define NORMAL_STEP_SIZE         1
-#define MAX_SCORE_VALUE        126 [ assign this constant to v7 (MaxScore)
+#define MAX_SCORE_VALUE        138 [ assign this constant to v7 (MaxScore)
 #define FASTEST_SPEED            0
 #define FAST_SPEED               3 [ turbo is 3x standard
 #define NORMAL_SPEED             6
@@ -216,6 +216,7 @@
 #define CLOSING                  4
 #define OPENING                  5
 #define floppyfiles            v96 [ 0=blank; 1=zip; 2=txt; 3=both
+#define cpusage                v97 [ bitfield indicates which control panels have been used by player
 #define 2E_MOUSE                -1
 #define MSGBOX.COLOR.V          -1
 #define MSGBOX.COLOR            -2

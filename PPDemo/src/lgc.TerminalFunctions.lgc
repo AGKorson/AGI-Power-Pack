@@ -518,7 +518,6 @@ if (terminalfn == TYPE_PP) {
   call(lgc.TerminalFunctions);
   return();
 }
-pause(); [TODO: !!!!not using text compare? why not?
 
 if (terminalfn == SHOW_HELP) {
   [ check for optional arg value
@@ -1037,10 +1036,10 @@ if (terminalfn == SHOW_HELP) {
       call(lgc.TerminalFunctions);
       terminalfn = LINEFEED;
       call(lgc.TerminalFunctions);
-      output = "renames existing file to newname;";
+      output = "renames existing file from oldname to ";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-      output = "requires administrator access";
+      output = "newname; requires administrator access";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       return();
@@ -1126,6 +1125,10 @@ if (terminalfn == SHOW_HELP) {
       call(lgc.TerminalFunctions);
       return();
     }
+    [ no match
+    output = "syntax error - invalid command";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
   }
 }
 return();

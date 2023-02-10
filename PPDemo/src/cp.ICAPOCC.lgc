@@ -112,6 +112,16 @@ if (!enableICAPOCC) {
 if(newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
+
+  [ if first time, score it
+  work1 = cpusage;
+  block(BIT.AND, 0, &work1, 4); [ bit.and(BYVAL, VAR, MASK)
+  if (work1 == 4) {
+    work1 = 2;
+    call(lgc.ScoreHandler);
+    block(BIT.OR, 0, &cpusage, 4); [ bit.or(BYVAL, VAR, MASK)
+  }
+  
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);

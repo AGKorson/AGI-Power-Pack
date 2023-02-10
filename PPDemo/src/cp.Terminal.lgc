@@ -545,11 +545,10 @@ if ((lastChar == 13 || lastChar == 10)) {
         reset(defaultPW);
         block(STR.COPY, &input, &kwpassword, 0); [ str.copy(sINPUT, sRESULT)
         output = "password changed";
-        [ get more input
-        inputmode = IM_CMDLINE;
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
-        goto(getInput);
+        [ go back to normal command input
+        goto(getCmdInput);
       } else {
         if (work3 < 8) {
           [ missing special
@@ -588,9 +587,8 @@ if ((lastChar == 13 || lastChar == 10)) {
       output = "invalid password";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-      [ get more input
-      inputmode = IM_CMDLINE;
-      goto(getInput);
+      [ go back to normal command input
+      goto(getCmdInput);
     }
     
     [ check for loading subsystem
@@ -679,8 +677,6 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    [ go back to case-insensitive compare
-    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
     if (validPW) {
       output = "  loading module %s17...";
       terminalfn = ADDLINE;
@@ -696,6 +692,10 @@ if ((lastChar == 13 || lastChar == 10)) {
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
     }
+    
+    [ command input is case-insensitive
+    :getCmdInput
+    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
     inputmode = IM_CMDLINE;
     [ get more input
     goto(getInput);
@@ -1224,7 +1224,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         if (work1 == 0) {
           terminalfn = CLS;
           call(lgc.TerminalFunctions);
-          goto(getinput);      
+          goto(getInput);      
         } else {
           goto(syntaxerror);
         }
