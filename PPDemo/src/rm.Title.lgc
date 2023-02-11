@@ -47,11 +47,22 @@
 [ LOCAL DEFINES
 [ **************************************
 
-#define oLogo1              o1
-#define oLogo2              o2
-#define oLogo3              o3
+#define oLogo1             o1
+#define oDrew              o2
+#define oCat               o3
+
+#define tmpSpeed          v220
+#define titleSeq          v221
+  #define TS_SALUTE_UP     0
+  #define TS_SALUTE_WAIT   1
+  #define TS_SALUTE_DOWN   2
+  #define TS_FADE1         3
+  #define TS_DONE          4
+#define titleTimer        v222
 
 #define musicDelay        v226
+
+#define fLogoDone         f220
 
 [ This room does not run the main agi loop; all input is handled
 [ and responded within this logic. So no need to check for newRoom
@@ -61,50 +72,77 @@ if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   
-  [ clear screen? not needed on startup
-
-  [ disable player control
-  program.control();
-  
-  [ no ego used in this room
-  
   [ since this is the first room in the game, there is no
   [ previous room that faded out; so we force a fade.out
   [ (with zero delay) so this room can then be faded back in
   [configure.screen(-1, 0, 0); 
   [reset(column80);
   block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  
+[  load.pic(currentRoom);
+[  draw.pic(currentRoom);
+[  discard.pic(currentRoom);
+  
+
+  [ disable player control
+  program.control();
+  
+  [ no ego used in this room
+  
+  [ save speed value, to restore it later
+  tmpSpeed = animationInterval;
+  animationInterval = 6;
+  
+  [ logo objects
+  load.view(vw.Logos);
+  
+  [ background
+  animate.obj(oLogo1);
+  set.view(oLogo1, vw.Logos);
+  set.loop(oLogo1, 0);
+  set.cel(oLogo1, 0);
+  ignore.objs(oLogo1);
+  stop.cycling(oLogo1);
+  set.priority(oLogo1, 4);
+  position(oLogo1, 67, 97);
+  draw(oLogo1);
+  
+  [ Drew
+  animate.obj(oDrew);
+  set.view(oDrew, vw.Logos);
+  set.loop(oDrew, 1);
+  set.cel(oDrew, 0);
+  ignore.objs(oDrew);
+  end.of.loop(oDrew, fLogoDone);
+  set.priority(oDrew, 5);
+  position(oDrew, 73, 77);
+  work1 = 1;
+  cycle.time(oDrew, work1);
+  draw(oDrew);
+  
+  [ cat
+  animate.obj(oCat);
+  set.view(oCat, vw.Logos);
+  set.loop(oCat, 2);
+  set.cel(oCat, 0);
+  ignore.objs(oCat);
+  normal.cycle(oCat);
+  set.priority(oCat, 5);
+  position(oCat, 80, 77);
+  work1 = 2;
+  cycle.time(oCat, work1);
+  draw(oCat);
+  
   [ show the picture on screen
-  [show.pic(); 
+  show.pic(); 
   
   [ starting palette is everything black;
 [  block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
-  [ display game title above scroll window
-  [ you can use a view for this instead of text, if desired
-  set.text.attribute(1, 0);
-  display(11, 35, "A");
-  set.text.attribute(2, 0);
-  display(11, 36, "d");
-  set.text.attribute(3, 0);
-  display(11, 37, "v");
-  set.text.attribute(4, 0);
-  display(11, 38, "e");
-  set.text.attribute(5, 0);
-  display(11, 39, "n");
-  set.text.attribute(6, 0);
-  display(11, 40, "t");
-  set.text.attribute(7, 0);
-  display(11, 41, "u");
-  set.text.attribute(8, 0);
-  display(11, 42, "r");
-  set.text.attribute(9, 0);
-  display(11, 43, "e");
+
   
 [  display(11, 35, "Adventure");
 [  display(12, 38, "Game");
 [  display(13, 34, "Interpreter");
-
-  display(5, 15, "AGI GUY");
 
   [ fade in
   block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
@@ -114,6 +152,59 @@ if (newRoom) {
 [[  [ and begin playing
 [[  sound(m.theme, musicDone);
 }
+
+if (titleTimer > 0) {
+  --titleTimer;
+  if (titleTimer == 0) {
+    if (titleSeq == TS_SALUTE_WAIT) {
+      ++titleSeq;
+      reverse.loop(oDrew, fLogoDone);
+    }
+    if (titleSeq == TS_FADE1) {
+      ++titleSeq;
+      display(14, 16, "AGI GUY Studios presents...");
+    }
+  }
+}
+
+if (fLogoDone) {
+  reset(fLogoDone);
+  if (titleSeq == TS_SALUTE_UP) {
+    ++titleSeq;
+    titleTimer = 5;
+  }
+  if (titleSeq == TS_SALUTE_DOWN) {
+    ++titleSeq;
+    titleTimer = 5;
+  }
+}
+
+
+[  [ display game title above scroll window
+[  [ you can use a view for this instead of text, if desired
+[  set.text.attribute(1, 0);
+[  display(11, 35, "A");
+[  set.text.attribute(2, 0);
+[  display(11, 36, "d");
+[  set.text.attribute(3, 0);
+[  display(11, 37, "v");
+[  set.text.attribute(4, 0);
+[  display(11, 38, "e");
+[  set.text.attribute(5, 0);
+[  display(11, 39, "n");
+[  set.text.attribute(6, 0);
+[  display(11, 40, "t");
+[  set.text.attribute(7, 0);
+[  display(11, 41, "u");
+[  set.text.attribute(8, 0);
+[  display(11, 42, "r");
+[  set.text.attribute(9, 0);
+[  display(11, 43, "e");
+[
+
+
+
+
 
 :getkey
 

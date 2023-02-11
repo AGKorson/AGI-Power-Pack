@@ -8,9 +8,9 @@
 [
 [ ********************************************************************
 
-[ for all rooms except the control panels, set screen to 80 col mode 
+[ for all rooms except the control panels and start, set screen to 80 col mode 
 [ (control panels manage that separately)
-if (currentRoom < 21) {
+if (currentRoom < 21 && currentRoom != 1) {
   if (!column80) {
     [ before switching to 80 col mode, need to clear the 
     [ existing picture (or it will display again after the switch, which 

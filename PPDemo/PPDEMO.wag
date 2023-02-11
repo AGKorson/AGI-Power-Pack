@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/9/2023 10:50:20 PM"
+   LastEdit = "2/10/2023 3:19:08 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -74,10 +74,10 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H3D521652
-   CompCRC32 = &H0
+   CRC32 = &HA075F957
+   CompCRC32 = &HA075F957
    IsRoom = False
-   Size = 215
+   Size = 219
 
 [Logic93]
    ID = lgc.GameHelp
@@ -170,10 +170,10 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &HA6F3D7D2
-   CompCRC32 = &HA6F3D7D2
+   CRC32 = &HF9FFE9F4
+   CompCRC32 = &HE80AEC3
    IsRoom = True
-   Size = 344
+   Size = 412
 
 [Logic2]
    ID = rm.ParkingLot
@@ -592,7 +592,7 @@
    ID = pic.Introduction
    Description = "A simple introductory screen picture. Add scrolling credits for a nice effect."
    BkgdImg = ""
-   Size = 6
+   Size = 22
 
 [Picture2]
    ID = pic.ParkingLot
@@ -1462,5 +1462,5 @@
 [View46]
    ID = vw.Logos
    Description = ""
-   Size = 4879
+   Size = 3889
 [::END Views::]
