@@ -92,10 +92,9 @@ block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTRO
 
 [ blank the output string again
 s22 = "                                       ";
-work2 = &s22;
-
 [ start with first instrument
 work1 = 2;
+work2 = &s22;
 :setinst
   [ set string 22 to point to global instrument setting
   block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
@@ -114,8 +113,8 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
-#message 1 "%g53"
-#message 2 "%g54"
-#message 3 "%g55"
-#message 4 "%g56"
-#message 5 "%g57"
+#message 2 "%g53"
+#message 3 "%g54"
+#message 4 "%g55"
+#message 5 "%g56"
+#message 6 "%g57"
