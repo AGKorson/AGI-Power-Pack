@@ -21,7 +21,7 @@ prevent.input();
 [work1 = 65;
 [block(PIC.DRAW, -1, &work1, 0); [ clear.screen(FILLSTYLE, sCMDS)
 
-[ text, 80col
+[ switch to text screen, 80col
 configure.screen(-1, 1, 1);
 
 [ save colors, set to black on white
@@ -95,7 +95,7 @@ display(12, 13,         "must reset their passwords. System security depends on 
 display(13, 13,         "all of us complying with the policies we have put in ");
 display(14, 13,         "place to protect our work.");
 
-display(16, 13,         "5. if you have any questions, please call one of the ");
+display(16, 13,         "5. If you have any questions, please call one of the ");
 display(17, 13,         "AMOS System Administrators.");
 
 
