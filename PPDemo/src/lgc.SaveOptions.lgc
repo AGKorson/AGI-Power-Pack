@@ -2,28 +2,36 @@
 [
 [ lgc.SaveOptions
 [
-[ saves sound mode, clock mode and speed setting to file
-[ custom instruments as well
+[ saves sound mode, clock mode, speed and custom instrument
+[ values to the ppdemo.cfg settings file
 
-[ a single string,  nine characters long:
-[ abcdef
-[ a:  0 = sound disabled
-[     1 = sound enabled
-[ b:  0 = PC single channel
+[ first string is sound/clock/speed:
+[   nine characters long:
+[   abcdefghi
+[   a:  0 = sound disabled
+[       1 = sound enabled
+[   b:  0 = PC single channel
 [     1 = 4 channel
-[ c:  0 = fm synth
-[     1 = midi
-[ de: attenuation (00 - 63)
-[ f: 0 = no clock
+[   c:  0 = fm synth
+[       1 = midi
+[   de: attenuation (00 - 63)
+[   f: 0 = no clock
 [    1 = display clock
-[ g: 0 = game clock
-[    1 = real time
-[ hi: animationInterval (00 - 99)
+[   g: 0 = game clock
+[      1 = real time
+[   hi: animationInterval (00 - 99)
+[
+[ second string is instrument index values:
+[  FM instrument settings (five sets of three-digts)
+[  MIDI instruments (three sets of three-digits)
+[
+[ strings three-seven are the custom FM instrument strings
 [
 [ ********************************************************************
 
 #define tmp0    v240
 #define tmp1    v241
+#define tmp2    v242
 
 [ update settings
 if (soundOn) {
@@ -53,22 +61,51 @@ if (realClock) {
   tmp1 = 0;
 }
 
-[ save to file
+[ blank the output string
+s22 = "                                       ";
+[ create sound/clock/speed output (in s23)
+s23 = "%v46%v47%v48%v23|2%v240%v241%v10|2";
+[ format it and copy to output string
+block(STR.FORMAT, &s23, &s22, 0); [ str.format(sINPUT, sRESULT)
+[ set filename
 s23 = "ppdemo.cfg";
-s22 = "%v46%v47%v48%v23|2%v240%v241%v10|2";
-s21 = "                                       ";
-block(STR.FORMAT, &s22, &s21, 0); [ str.format(sINPUT, sRESULT)
-tmp0 = &s21;
-block(NEW.FILE, &s23, &v240, &v240); [ new.file(sFILENAME, vSTART, vEND)
+[ save output string to file
+work1 = &s22;
+block(NEW.FILE, &s23, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
 
+[ blank the output string again
+s22 = "                                       ";
+[ format the FM values
+s23 = "%v63|3%v64|3%v65|3%v66|3%v67|3";
+block(STR.FORMAT, &s23, &s22, 0); [ str.format(sINPUT, sRESULT)
+[ format the MIDI values
+s23 = "%v68|3%v69|3%v70|3";
+block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+[ add MIDI to FM values
+block(STR.CONCAT, &s22, &s23, 0); [ sINPUT, sADD)
+[ set filename
+s23 = "ppdemo.cfg";
+[ save output string to file
 work1 = 1;
 work2 = &s22;
-:setinst
-block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
-block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
 block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
-++work1;
-if (work1 < 6) {
+
+[ blank the output string again
+s22 = "                                       ";
+work2 = &s22;
+
+[ start with first instrument
+work1 = 2;
+:setinst
+  [ set string 22 to point to global instrument setting
+  block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
+  [ format it
+  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+  [ now save it to config file
+  block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+  ++work1;
+[ copy five instrument settings
+if (work1 < 7) {
   goto(setinst);
 }
 

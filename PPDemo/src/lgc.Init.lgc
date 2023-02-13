@@ -80,6 +80,17 @@ if (gameRestarted) {
   
   [ s20 holds attenuation
   block(STR2BYTE, &s20, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
+  
+  [ s12 - s19 hold instrument indices
+  block(STR2BYTE, &s12, &FMInst0, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s13, &FMInst1, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s14, &FMInst2, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s15, &FMInst3, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s16, &FMInst4, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s17, &MIDIInst0, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s18, &MIDIInst1, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s19, &MIDIInst2, 0); [ str2byte(sINPUT, vRESULT)
+
 } else {
   [ some things only happen during initial start - skip if restarting
   
@@ -125,7 +136,7 @@ if (gameRestarted) {
   block(READ.STRING, &s23, &tmp0, &tmp1); [ read.string(sFILENAME, vINDEX, vSTRIN)
   [ check v18 to see if file was found
   if (errorParameter == 0) {
-    [ file found - extract settings from the string:
+    [ file found - string1 == sound/clock/speed
     [ nine digits -
     [ 1-2-3 are sound settings
     [ 4-5 are sound attenuation
@@ -155,12 +166,13 @@ if (gameRestarted) {
     }
     if (tmp0 > 9) {
       set(4channelsound);
-      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       tmp0 -= 10;
-    }
-    if (tmp0) {
-      set(useMIDI);
-      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      if (tmp0) {
+        set(useMIDI);
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      } else {
+        set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      }
     }
     [ next two digits are attenuation
     work1 = 2;
@@ -189,6 +201,71 @@ if (gameRestarted) {
     }
     [ speed is last two digits
     block(STR2BYTE, &s22, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+    
+    [ second string is instrument indices
+    tmp0 = 1;
+    tmp1 = &s22;
+    s23 = "ppdemo.cfg";
+    block(READ.STRING, &s23, &tmp0, &tmp1); [ read.string(sFILENAME, vINDEX, vSTRIN)
+    [ get three digits at a time for the eight indices
+    work1 = &FMInst0;
+    :nextinst4
+      work3 = 3;
+      block(STR.LEFT, &s22, &s23, &work3); [ str.left(sINPUT, sRESULT, vLEN)
+      [ convert to byte value
+      block(STR2BYTE, &s23, &work2, 0); [ str2byte(sINPUT, vRESULT)
+      [ save to correct instrument variable
+      *work1 = work2;
+      [ remove this value
+      block(STR.LEN, &s22, &work2, 0); [ str.len(sINPUT, vRESULT)
+      work2 -= 3;
+      block(STR.RIGHT, &s22, &s22, &work2); [ str.left(sINPUT, sRESULT, vLEN)
+      ++work1;
+    if (work1 < 71) {
+      goto(nextinst4);
+    }
+
+    [ get custom instrument values
+    tmp0 = 1;
+    tmp1 = &s17;
+    s23 = "ppdemo.cfg";
+    [ put values in s18-s22 so they can be copied to logic0 messages
+    work1 = 1;
+    work2 = 18;
+    :nextinst3
+      block(READ.STRING, &s23, &work1, &work2); [ read.string(sFILENAME, vINDEX, vSTRIN)
+      ++work1;
+      ++work2;
+    if (work1 < 6) {
+      goto(nextinst3);
+    }
+    [ confirm instrument strings are valid (correct number of characters)
+    block(STR.LEN, &s18, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      s18 = m4;
+    }
+    block(STR.LEN, &s19, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      s19 = m4;
+    }
+    block(STR.LEN, &s20, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      s20 = m4;
+    }
+    block(STR.LEN, &s21, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      s21 = m4;
+    }
+    block(STR.LEN, &s22, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      s22 = m4;
+    }
+    
   } else {
     [ if no file found, reset v18
     errorParameter = 0;
@@ -214,21 +291,27 @@ if (gameRestarted) {
     s23 = "ppdemo.cfg";
     [ clear the string
     s22 = "                                       ";
-    [ save defaults
+    [ save default sound/clock/speed settings
     s22 = "111000006";
-    v220 = 22;
-    block(NEW.FILE, &s23, &v220, &v220); [ new.file(sFILENAME, vSTART, vEND)
-    [ add default custom FM instruments
+    work1 = &s22;
+    block(NEW.FILE, &s23, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
+    [ save default instrument indices
+    s22 = "128128128129130000000000";
     work1 = 1;
+    work2 = &s22;
+    block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+
+    [ save default custom FM instruments
+    work1 = 2;
     s22 = m4;
-    work2 = &m4;
+    work2 = &s22;
     :nextinst1
     block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
     ++work1;
-    if (work1 < 6) {
+    if (work1 < 7) {
       goto(nextinst1);
     }
-    [ save defaults in s18-s22
+    [ save defaults in s18-s22 so they can be copied to logic0 messages
     work1 = 18;
     work2 = 4;
     :nextinst2

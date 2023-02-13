@@ -189,6 +189,7 @@ if (currentRoom == 0) {
   
   [ some start/restart actions have to be done within logic0
   if (gameRestarted) {
+    [ make sure speed menu is enabled
     s23 = m14; [ "Speed"
     block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
     [ go to first room here (skip Intro)

@@ -1,8 +1,8 @@
 [ 
 [ lgc.CacheOptions
 [ 
-[ cache sound, clock, speed settings before restarting
-[ uses s21, s22, s23
+[ cache sound, clock, speed, instrument settings before restarting
+[ uses s12 - s23
 
 [ sound settings
 if (soundOn) {
@@ -45,6 +45,24 @@ block(STR.FORMAT, &s21, &s21, 0); [ str.format(sINPUT, sRESULT)
 [ attenuation
 s20 = "%v23";
 block(STR.FORMAT, &s20, &s20, 0); [ str.format(sINPUT, sRESULT)
+
+[ instrument indices
+s12 = "%v63";
+block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+s13 = "%v64";
+block(STR.FORMAT, &s13, &s13, 0); [ str.format(sINPUT, sRESULT)
+s14 = "%v65";
+block(STR.FORMAT, &s14, &s14, 0); [ str.format(sINPUT, sRESULT)
+s15 = "%v66";
+block(STR.FORMAT, &s15, &s15, 0); [ str.format(sINPUT, sRESULT)
+s16 = "%v67";
+block(STR.FORMAT, &s16, &s16, 0); [ str.format(sINPUT, sRESULT)
+s17 = "%v68";
+block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
+s18 = "%v69";
+block(STR.FORMAT, &s18, &s18, 0); [ str.format(sINPUT, sRESULT)
+s19 = "%v70";
+block(STR.FORMAT, &s19, &s19, 0); [ str.format(sINPUT, sRESULT)
 
 return();
 
