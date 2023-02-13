@@ -7,10 +7,13 @@
 [
 
 [ stop the game clock while examining items
-block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 
 [ fade out current picture
 block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+[ hide status bar
+status.line.off();
 
 [ draw the picture for selected item
 if (selectedItem == 107) {
@@ -59,6 +62,11 @@ discard.pic(currentRoom);
 reset(noScript);
 block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
 show.pic();
+[ restore status bar
+status.line.on();
+[ restart the game clock while examining items
+block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+
 [ fade in
 block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
 
