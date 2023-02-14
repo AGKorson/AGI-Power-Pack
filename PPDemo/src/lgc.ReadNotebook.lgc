@@ -19,8 +19,6 @@ status.line.off();
 set.text.attribute(-1, 0);
 set.text.attribute(BLACK, WHITE);
 
-[load.view(vw.NotebookArt);
-
 [ start with cover, which is page 1
 pageImg = pic.NotebookCover;
 pageNum = 1;

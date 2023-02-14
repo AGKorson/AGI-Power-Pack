@@ -4,6 +4,9 @@
 [ redraws the current room after the 'reading' room
 [ for items is done; some rooms need graphic elements
 [ re-added to the picture
+[
+[ Views don't need to be loaded, since they are already
+[ loaded by the room that called this function
 
 [ restore the current room
 load.pic(currentRoom);
@@ -12,7 +15,6 @@ discard.pic(currentRoom);
 
 [ room-specific adds
 if (currentRoom == rm.ParkingLot) {
-  load.view(vw.Cars);
   [ add permanently parked cars
   #define tmpView     v240
   #define tmpLoop     v241
@@ -68,7 +70,6 @@ if (currentRoom == rm.ParkingLot) {
 
 if (currentRoom == rm.Hallway) {
   [ add the two doors that don't open
-  load.view(vw.HallwayArt);
   add.to.pic(vw.HallwayArt, 1, 0, 86, 132, 12,  4);
   add.to.pic(vw.HallwayArt, 1, 0, 126, 132, 12, 4);
   goto(finish);
@@ -76,14 +77,12 @@ if (currentRoom == rm.Hallway) {
 
 if (currentRoom == rm.Stairway) {
   [ lights
-  load.view(vw.StairwayArt);
   add.to.pic(vw.StairwayArt, 0, 0, 128, 81, 4, 15);
   goto(finish);
 }
 
 if (currentRoom == rm.ControlRoom) {
   [ add room-specific initialization here
-  load.view(vw.CtrlRoomArt);
   if (enableCAISOCC) {
     add.to.pic(vw.CtrlRoomArt, 0, 0, 35, 78, 11, 15);
   } else {
@@ -126,7 +125,6 @@ if (currentRoom == rm.ControlRoom) {
 if (currentRoom == rm.Office) {
   if (has("memo")) {
     [ memo is not on printer
-    load.view(vw.OfficeArt);
     add.to.pic(vw.OfficeArt, 5, 0, 80, 107, 4, 15);
   }
 }
