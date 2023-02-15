@@ -32,51 +32,51 @@ if (currentRoom < 21 && currentRoom != 1) {
   
   [ enable mouse in all regular rooms
   enable.item(mouse);
+
+  [ if not opening title room, do regular room setup
   
-  if (currentRoom == rm.Title) {
-    [ disable game functions; they will be re-enabled after title screen is done
-    set(disableGameFunctions);
-    
+  [ animate and reset the ego object
+  animate.obj(ego);
+  step.size(ego, egoStepSize);
+  step.time(ego, egoStepTime);
+  cycle.time(ego, egoCycleTime);
+  observe.blocks(ego);
+  observe.objs(ego);
+  observe.horizon(ego);
+  
+  [ save current ego position
+  get.posn(ego, egoX, egoY);
+  
+  [ by default, set ego to autocycle; remember to turn it 
+  [ off when you want cycle an animation of ego when it's
+  [ not moving
+  work1 = 1;
+  set.upper.left(&ego, &work1);
+
+  [ turn status line on during normal game play
+  status.line.on();
+  
+  [ enable input
+  accept.input();
+
+  [ in all rooms except title, enable game functions
+  reset(disableGameFunctions);
+  
+  [ click2move if in walk mode
+  if (cursormode == C_WALK) {
+    set(click2move);
   } else {
-    [ if not opening title room, do regular room setup
-    
-    [ animate and reset the ego object
-    animate.obj(ego);
-    step.size(ego, egoStepSize);
-    step.time(ego, egoStepTime);
-    cycle.time(ego, egoCycleTime);
-    observe.blocks(ego);
-    observe.objs(ego);
-    observe.horizon(ego);
-    
-    [ save current ego position
-    get.posn(ego, egoX, egoY);
-    
-    [ by default, set ego to autocycle; remember to turn it 
-    [ off when you want cycle an animation of ego when it's
-    [ not moving
-    work1 = 1;
-    set.upper.left(&ego, &work1);
-  
-    [ turn status line on during normal game play
-    status.line.on();
-    
-    [ enable input
-    accept.input();
-  
-    [ in all rooms except title, enable game functions
-    reset(disableGameFunctions);
-    
-    [ click2move if in walk mode
-    if (cursormode == C_WALK) {
-      set(click2move);
-    } else {
-      reset(click2move);
-    }
-    [ use straightline mode
-    work1 = -1;
-    step.size(ego, work1);
+    reset(click2move);
   }
+  [ use straightline mode
+  work1 = -1;
+  step.size(ego, work1);
+
+}
+
+if (currentRoom == rm.Title) {
+  [ disable game functions; they will be re-enabled after title screen is done
+  set(disableGameFunctions);
 }
 
 [ control panels

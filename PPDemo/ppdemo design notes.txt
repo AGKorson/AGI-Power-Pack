@@ -270,25 +270,6 @@ touch tone freqs:
 
 For inventory screen,  change purpose and menu text depending on cursor. 'Look'  when eye icon selected, 'use' when hand is selected.  Disable inventory for all other icons.
 
-an LEG production
-created in WinAGI 
-
-" Adventure"
-"   Game"
-"Interpreter"
-
-then
- 
- "A"
- "G"
- "I"
-
- then
-
- "AGI"
-
- then 
-
  explode to white; fade in to 
 large stylized AGI, and fade in
 PowerPack notation
@@ -296,12 +277,33 @@ PowerPack notation
 fireworks, or color waves- some
 kind of background animation
 
-then scroll credits: (copy GR script?)
-Power Pack coding:
-Demo Game designed/written by: me
-Background Art: klownstein
-Animation:  klownstein
-additional art: me
-Music and sound effects: me
+then scroll credits:
+
+     Power Pack 
+    programmed by
+    Andrew Korson
+
+       Demo Game
+written and programmed by
+     Andrew Korson
+
+background art by
+  klownstein
+
+animation art by
+  klownstein
+
+additional art by
+  Andrew Korson
+
+music and sound effects by
+   Andrew Korson
+
 Playtesters: tbd
 
+  0: 52, 162
+  1: 32, 162
+  2: 46, 167
+  3: 48, 164
+  4: 46, 164
+  5: 34, 164

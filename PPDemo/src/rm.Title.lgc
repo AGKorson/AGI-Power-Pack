@@ -4,69 +4,73 @@
 [
 [ TODO: add title screen and opening credits
 [
-[AGI Guy Designs presents...
-[
-[A WinAGI creation...
-[
-[" Adventure"
-["   Game"
-["Interpreter"
-[ 
-[ "A"
-[ "G"
-[ "I"
-[
-[ "AGI"
-[
-[ explode to white; fade in to 
-[large stylized AGI, and fade in
-[PowerPack notation
-[
-["Sierra Quest: AGI Power Pack Demo"
-[
-[fireworks, or color waves- some
-[kind of background animation
-[
-[scroll credits: (copy GR script?)
-[Power Pack coding: me
-[Demo Game designed/written by: me
-[Background Art: klownstein
-[Animation:  klownstein
-[additional art: me
-[Music and sound effects: me
-[Original Adventure Game Development System: Sierra On-Line, Inc.
-[Playtesters: tbd
-[
 [********************************************************************
-
-[ !!! need to replace this with a more jazzy title screen that
-[ shows off some of the features; 80 col text, custom/changing palette
-[ likely to have biggest effects
 
 [ **************************************
 [ LOCAL DEFINES
 [ **************************************
 
 #define oLogo1             o1
-#define oDrew              o2
+#define oLogo2             o2
+#define oDrew              o2 [ re-use o2
 #define oCat               o3
+
+#define sText             s12
+#define sChar             s13
+#define sColor1           s14
+#define sColor2           s15
+#define sColor3           s16
+#define sColor4           s17
+#define sColor5           s18
+#define sColor6           s19
+#define sColor7           s20
+#define sColor8           s21
+#define sColor9           s22
+#define sColor10          s23
 
 #define tmpSpeed          v220
 #define titleSeq          v221
-  #define TS_SALUTE_UP     0
-  #define TS_SALUTE_WAIT   1
-  #define TS_SALUTE_DOWN   2
-  #define TS_FADE1         3
-  #define TS_DONE          4
+  #define TS_FADEIN_AG     0
+  #define TS_SALUTE        1
+  #define TS_SALUTE_UP     2
+  #define TS_SALUTE_WAIT   3
+  #define TS_SALUTE_DOWN   4
+  #define TS_PAUSE1        5
+  #define TS_FADEOUT_AG    6
+  #define TS_FADEIN_WIN    7
+  #define TS_PAUSE2        8
+  #define TS_FADEOUT_WIN   9
+  #define TS_ANIMATE_AGI  10
+  #define TS_MOVE_AGI     11
+  #define TS_EXPLODE1     12
+  #define TS_EXPLODE2     13
+  #define TS_EXPLODE3     14
+  #define TS_EXPLODE4     15
+  #define TS_EXPLODE5     16
+  #define TS_FADEWHITE    17
+  #define TS_PPACK        18
+  #define TS_FADEOUT_PP   19
+  #define TS_FADEIN_SQ    20
+  #define TS_START_CREDITS 21
+  #define TS_SCROLLCREDS  22
 #define titleTimer        v222
-
+#define letterindex       v223
+#define delaycounter      v224
+#define wordcount         v225
 #define musicDelay        v226
+#define creditline1        v227
+  #define CR_PPDESIGN    0
+  #define CR_DEMODESIGN  1
+  #define CR_BKGD_ART    2
+  #define CR_ANIMATION   3
+  #define CR_ADDL_ART    4
+  #define CR_MUSIC       5
+#define creditstep1        v228
+#define creditline2        v229
+#define creditstep2        v230
 
 #define fLogoDone         f220
-
-[ This room does not run the main agi loop; all input is handled
-[ and responded within this logic. So no need to check for newRoom
-[ flag.
+#define fShowLogo2        f221
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -75,8 +79,6 @@ if (newRoom) {
   [ since this is the first room in the game, there is no
   [ previous room that faded out; so we force a fade.out
   [ (with zero delay) so this room can then be faded back in
-  [configure.screen(-1, 0, 0); 
-  [reset(column80);
   block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   
 [  load.pic(currentRoom);
@@ -91,7 +93,7 @@ if (newRoom) {
   
   [ save speed value, to restore it later
   tmpSpeed = animationInterval;
-  animationInterval = 6;
+  animationInterval = 1;
   
   [ logo objects
   load.view(vw.Logos);
@@ -105,7 +107,6 @@ if (newRoom) {
   stop.cycling(oLogo1);
   set.priority(oLogo1, 4);
   position(oLogo1, 67, 97);
-  draw(oLogo1);
   
   [ Drew
   animate.obj(oDrew);
@@ -113,12 +114,11 @@ if (newRoom) {
   set.loop(oDrew, 1);
   set.cel(oDrew, 0);
   ignore.objs(oDrew);
-  end.of.loop(oDrew, fLogoDone);
+  stop.cycling(oDrew);
   set.priority(oDrew, 5);
   position(oDrew, 73, 77);
-  work1 = 1;
+  work1 = 6;
   cycle.time(oDrew, work1);
-  draw(oDrew);
   
   [ cat
   animate.obj(oCat);
@@ -129,23 +129,19 @@ if (newRoom) {
   normal.cycle(oCat);
   set.priority(oCat, 5);
   position(oCat, 80, 77);
-  work1 = 2;
+  work1 = 12;
   cycle.time(oCat, work1);
-  draw(oCat);
   
   [ show the picture on screen
   show.pic(); 
+  sText = "AGI GUY Studios presents...";
+  draw(oLogo1);
+  draw(oDrew);
+  draw(oCat);
   
-  [ starting palette is everything black;
-[  block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
-
-  
-[  display(11, 35, "Adventure");
-[  display(12, 38, "Game");
-[  display(13, 34, "Interpreter");
-
+  [ begin by displaying text and fading in
   [ fade in
-  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, 0, 20, 0); [ fade.in(BYVAR, DELAY, COLOR)
   
   [ load the theme song
   load.sound(m.theme);
@@ -153,61 +149,618 @@ if (newRoom) {
 [[  sound(m.theme, musicDone);
 }
 
+[ one-time events
+if (titleSeq == TS_SCROLLCREDS) {
+  [ credit events are based on which line, its position and state/step
+  get.posn(oLogo1, work1, work2);
+  if (creditstep1 == 0) {
+    if (creditline1 == CR_PPDESIGN) {
+      if (work2 == 142) {
+        [ show next line
+        creditstep1 = 1;
+        set.cel(oLogo1, 1);
+        work1 = 0;
+        work2 = 22; [ 23; [ adjust by one to smooth out movmement
+        reposition(oLogo1, work1, work2);
+      }
+    }
+    if (creditline1 == CR_BKGD_ART) {
+      if (work2 == 147) {
+        [ show next line
+        creditstep1 = 1;
+        set.cel(oLogo1, 1);
+        work1 = 0;
+        work2 = 12; [ 13; [ adjust by one to smooth out movmement
+        reposition(oLogo1, work1, work2);
+      }
+    }
+    if (creditline1 == CR_ADDL_ART) {
+      if (work2 == 144) {
+        [ show next line
+        creditstep1 = 1;
+        set.cel(oLogo1, 1);
+        work1 = 0;
+        work2 = 14; [ 15; [ adjust by one to smooth out movmement
+        reposition(oLogo1, work1, work2);
+      }
+    }
+  }
+  if (creditstep1 == 1) {
+    if (creditline1 == CR_PPDESIGN) {
+      if (work2 == 147) {
+        [ show next line
+        creditstep1 = 2;
+        set.cel(oLogo1, 2);
+        work1 = 0;
+        work2 = 12; [ 13;  [ adjust by one to smooth out movement
+        reposition(oLogo1, work1, work2);
+      }
+    }
+    if (creditline1 == CR_BKGD_ART) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep1 = 2;
+        set.cel(oLogo1, 2);
+      }
+    }
+    if (creditline1 == CR_ADDL_ART) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep1 = 2;
+        set.cel(oLogo1, 2);
+      }
+    }
+  }
+  if (creditstep1 == 2) {
+    if (creditline1 == CR_PPDESIGN) {
+      if (work2 == 48) {
+        [ remove top line
+        creditstep1 = 3;
+        set.cel(oLogo1, 3);
+      }
+      
+      if (work2 == 108) {
+        [ if not showing yet, start logo2
+        if (!fShowLogo2) {
+          set(fShowLogo2);
+          set.view(oLogo2, vw.Credits);
+          set.loop(oLogo2, CR_DEMODESIGN);
+          set.cel(oLogo2, 0);
+          position(oLogo2, 32, 162);
+          ignore.horizon(oLogo2);
+          stop.cycling(oLogo2);
+          draw(oLogo2);
+          work1 = 6;
+          step.time(oLogo2, work1);
+          work1 = UP;
+          set.dir(oLogo2, work1);
+          creditline2 = CR_DEMODESIGN;
+          creditstep2 = 0;
+        }
+      }
+    }
+    if (creditline1 == CR_BKGD_ART) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        creditline1 = CR_ADDL_ART;
+        creditstep1 = 0;
+        set.loop(oLogo1, CR_ADDL_ART);
+        set.cel(oLogo1, 0);
+        reposition.to(oLogo1, 46, 164);
+        goto(getkey);
+      }
+    }
+    if (creditline1 == CR_ADDL_ART) {
+      if (work2 == 12) {
+        [ restart with first credit line, at bottom
+        creditline1 = CR_PPDESIGN;
+        creditstep1 = 0;
+        set.loop(oLogo1, CR_PPDESIGN);
+        set.cel(oLogo1, 0);
+        reposition.to(oLogo1, 52, 162);
+      }
+    }
+  }
+  if (creditstep1 == 3) {
+    if (creditline1 == CR_PPDESIGN) {
+      if (work2 == 30) {
+        [ remove middle line
+        creditstep1 = 4;
+        set.cel(oLogo1, 4);
+      }
+    }
+  }
+  if (creditstep1 == 4) {
+    if (creditline1 == CR_PPDESIGN) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        creditline1 = CR_BKGD_ART;
+        creditstep1 = 0;
+        set.loop(oLogo1, CR_BKGD_ART);
+        set.cel(oLogo1, 0);
+        reposition.to(oLogo1, 46, 167);
+      }
+    }
+  }
+  
+  [ logo2
+  get.posn(oLogo2, work1, work2);
+  if (creditstep2 == 0) {
+    if (creditline2 == CR_DEMODESIGN) {
+      if (work2 == 142) {
+        [ show next line
+        creditstep2 = 1;
+        set.cel(oLogo2, 1);
+        work1 = 0;
+        work2 = 21; [ 22; [ adjust by one to smooth out movmement
+        reposition(oLogo2, work1, work2);
+      }
+    }
+    if (creditline2 == CR_ANIMATION) {
+      if (work2 == 144) {
+        [ show next line
+        creditstep2 = 1;
+        set.cel(oLogo2, 1);
+        work1 = 0;
+        work2 = 13; [ 16; [ adjust by one to smooth out movmement
+        reposition(oLogo2, work1, work2);
+      }
+    }
+    if (creditline2 == CR_MUSIC) {
+      if (work2 == 144) {
+        [ show next line
+        creditstep2 = 1;
+        set.cel(oLogo2, 1);
+        work1 = 0;
+        work2 = 14; [ 15; [ adjust by one to smooth out movmement
+        reposition(oLogo2, work1, work2);
+      }
+    }
+  }
+  if (creditstep2 == 1) {
+    if (creditline2 == CR_DEMODESIGN) {
+      if (work2 == 146) {
+        [ show next line
+        creditstep2 = 2;
+        set.cel(oLogo2, 2);
+        work1 = 0;
+        work2 = 13; [ 14;  [ adjust by one to smooth out movement
+        reposition(oLogo2, work1, work2);
+      }
+    }
+    if (creditline2 == CR_ANIMATION) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep2 = 2;
+        set.cel(oLogo2, 2);
+      }
+    }
+    if (creditline2 == CR_MUSIC) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep2 = 2;
+        set.cel(oLogo2, 2);
+      }
+    }
+  }
+  if (creditstep2 == 2) {
+    if (creditline2 == CR_DEMODESIGN) {
+      if (work2 == 48) {
+        [ remove top line
+        creditstep2 = 3;
+        set.cel(oLogo2, 3);
+      }
+    }
+    if (creditline2 == CR_ANIMATION) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        creditline2 = CR_MUSIC;
+        creditstep2 = 0;
+        set.loop(oLogo2, CR_MUSIC);
+        set.cel(oLogo2, 0);
+        reposition.to(oLogo2, 34, 162);
+        goto(getkey);
+      }
+    }
+    if (creditline2 == CR_MUSIC) {
+      if (work2 == 12) {
+        [ restart with first credit line, at bottom
+        set.loop(oLogo2, CR_DEMODESIGN);
+        set.cel(oLogo2, 0);
+        reposition.to(oLogo2, 32, 162);
+        creditline2 = CR_DEMODESIGN;
+        creditstep2 = 0;
+      }
+    }
+  }
+  if (creditstep2 == 3) {
+    if (creditline2 == CR_DEMODESIGN) {
+      if (work2 == 30) {
+        [ remove middle line
+        creditstep2 = 4;
+        set.cel(oLogo2, 4);
+      }
+    }
+  }
+  if (creditstep2 == 4) {
+    if (creditline2 == CR_DEMODESIGN) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        creditline2 = CR_ANIMATION;
+        creditstep2 = 0;
+        set.loop(oLogo2, CR_ANIMATION);
+        set.cel(oLogo2, 0);
+        reposition.to(oLogo2, 48, 164);
+      }
+    }
+  }
+  goto(getkey);
+}
+
+if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
+  [ display letters, one at a time
+  [ and fade them in at same time??
+  ++delaycounter;
+  if (delaycounter == 1) {
+    delaycounter = 0;
+    work1 = 16;
+    work2 = letterindex;
+    work2 += 6;
+    work3 = 1;
+    block(STR.LEFT, &sText, &sChar, &work3); [ str.left(sINPUT, sRESULT, vLEN)
+    work3 = &m2;
+    display.v(work1, work2, work3);
+    ++letterindex;
+    work3 = 27;
+    work3 -= letterindex;
+    if (letterindex == 27) {
+      titleTimer = 10;
+    } else {
+      [ strip off each letter as it gets added
+      block(STR.RIGHT, &sText, &sText, &work3); [ strRight(sINPUT, sRESULT, vCOUNT)
+    }
+  }
+}
+if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
+  [ display letters, one at a time
+  [ and fade them in at same time
+  ++delaycounter;
+  if (delaycounter == 1) {
+    delaycounter = 0;
+    work1 = 16;
+    work2 = letterindex;
+    work2 += 11;
+    work3 = 1;
+    block(STR.LEFT, &sText, &sChar, &work3); [ str.left(sINPUT, sRESULT, vLEN)
+    work3 = &m2;
+    display.v(work1, work2, work3);
+    ++letterindex;
+    work3 = 20;
+    work3 -= letterindex;
+    if (letterindex == 20) {
+      titleTimer = 10;
+    } else {
+      block(STR.RIGHT, &sText, &sText, &work3); [ strRight(sINPUT, sRESULT, vCOUNT)
+    }
+  }
+}
+if (titleSeq == TS_ANIMATE_AGI) {
+  ++delaycounter;
+  if (delaycounter == 1) {
+    delaycounter = 0;
+    --letterindex;
+    [color1
+    if (letterindex < 64) {
+      block(BYTE2HEX, &sChar, &letterindex, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor1, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor1, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor1, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color2
+    if (letterindex > 3 && letterindex < 68) {
+      work1 = letterindex;
+      work1 -= 4;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor2, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor2, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor2, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color3
+    if (letterindex > 7 && letterindex < 72) {
+      work1 = letterindex;
+      work1 -= 8;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor3, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor3, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor3, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color4
+    if (letterindex > 11 && letterindex < 76) {
+      work1 = letterindex;
+      work1 -= 12;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor4, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor4, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor4, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color5
+    if (letterindex > 15 && letterindex < 80) {
+      work1 = letterindex;
+      work1 -= 16;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor5, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor5, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor5, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color6
+    if (letterindex > 19 && letterindex < 84) {
+      work1 = letterindex;
+      work1 -= 20;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor6, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor6, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor6, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color7
+    if (letterindex > 23 && letterindex < 88) {
+      work1 = letterindex;
+      work1 -= 24;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor7, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor7, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor7, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color8
+    if (letterindex > 27 && letterindex < 92) {
+      work1 = letterindex;
+      work1 -= 28;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor8, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor8, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor8, &sChar, 0); [ sINPUT, sADD)
+    }
+    [color9
+    if (letterindex > 31 && letterindex < 96) {
+      work1 = letterindex;
+      work1 -= 32;
+      block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(STR.COPY, &sChar, &sColor9, 0); [ str.copy(sINPUT, sRESULT)
+      block(STR.CONCAT, &sColor9, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor9, &sChar, 0); [ sINPUT, sADD)
+    }
+    block(SET.PALETTE, 0, &m3, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+    
+    if (letterindex == 0) {
+      clear.text.rect(11, 16, 11, 23, BLACK);
+      clear.text.rect(12, 19, 12, 21, BLACK);
+      clear.text.rect(13, 15, 13, 24, BLACK);
+      block(SET.PALETTE, 0, &m1, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      set.text.attribute(WHITE, BLACK);
+      ++titleSeq;
+      delaycounter = 0;
+    }
+  }
+}
+
+if (titleSeq == TS_MOVE_AGI && titleTimer == 0) {
+  ++delaycounter;
+  if (delaycounter == 4) {
+    delaycounter = 0;
+    if (letterindex == 7) {
+      titleTimer = 1;
+    } else {
+      if (letterindex == 0) {
+        display(13, 14, " I");
+      }
+      if (letterindex == 1) {
+        display(11, 15, " A");
+        display(13, 15, " I");
+      }
+      if (letterindex == 2) {
+        display(11, 16, " A");
+        display(13, 16, " I");
+      }
+      if (letterindex == 3) {
+        display(11, 17, " A");
+        display(13, 17, " I");
+      }
+      if (letterindex == 4) {
+        display(11, 18, " A");
+        display(12, 18, " G");
+        display(13, 18, " I");
+      }
+      if (letterindex == 5) {
+        display(11, 18, " A");
+        display(12, 18, " G");
+        display(13, 18, " I");
+      }
+      if (letterindex == 6) {
+        clear.text.rect(11, 19, 11, 19, BLACK);
+        clear.text.rect(13, 19, 13, 19, BLACK);
+        display(12, 18, "AGI");
+      }
+      ++letterindex;
+    }
+  }
+}
+
+[ timer events
 if (titleTimer > 0) {
   --titleTimer;
   if (titleTimer == 0) {
+    ++titleSeq;
+    if (titleSeq == TS_SALUTE) {
+      end.of.loop(oDrew, fLogoDone);
+    }
     if (titleSeq == TS_SALUTE_WAIT) {
-      ++titleSeq;
       reverse.loop(oDrew, fLogoDone);
     }
-    if (titleSeq == TS_FADE1) {
+    if (titleSeq == TS_PAUSE1) {
+      titleTimer = 5;
+      return();
+    }
+    if (titleSeq == TS_FADEOUT_AG) {
+      [ fadeout
+      block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      [ change to WinAGI logo
+      erase(oLogo1);
+      erase(oDrew);
+      erase(oCat);
+      set.loop(oLogo1, 3);
+      set.cel(oLogo1, 0);
+      position(oLogo1, 63, 104);
+      draw(oLogo1);
+      clear.lines(16, 16, BLACK);
+      [ fade in
+      block(FADE.IN, 0, 40, 0); [ fade.in(BYVAR, DELAY, COLOR)
+      sText = "A WinAGI creation...";
+      letterindex = 0;
       ++titleSeq;
-      display(14, 16, "AGI GUY Studios presents...");
+      goto(getkey);
+    }
+    if (titleSeq == TS_PAUSE2) {
+      titleTimer = 45;
+      goto(getkey);
+    }
+    if (titleSeq == TS_FADEOUT_WIN) {
+      [ fadeout
+      block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      erase(oLogo1);
+      clear.lines(16, 16, BLACK);
+      set.text.attribute(WHITE, BLACK);
+      display(11, 15, "A");
+      display(12, 18, "G");
+      display(13, 14, "I");
+      
+      set.text.attribute(1, 0);
+      display(13, 15, "n");
+      set.text.attribute(2, 0);
+      display(11, 16, "d");
+      display(13, 16, "t");
+      set.text.attribute(3, 0);
+      display(11, 17, "v");
+      display(13, 17, "e");
+      set.text.attribute(4, 0);
+      display(11, 18, "e");
+      display(13, 18, "r");
+      set.text.attribute(5, 0);
+      display(11, 19, "n");
+      display(12, 19, "a");
+      display(13, 19, "p");
+      set.text.attribute(6, 0);
+      display(11, 20, "t");
+      display(11, 21, "u");
+      display(12, 20, "m");
+      display(12, 21, "e");
+      display(13, 20, "r");
+      display(13, 21, "e");
+      set.text.attribute(7, 0);
+      display(11, 22, "r");
+      display(13, 22, "t");
+      set.text.attribute(8, 0);
+      display(11, 23, "e");
+      display(13, 23, "e");
+      set.text.attribute(9, 0);
+      display(13, 24, "r");
+      [ set palette
+      sColor1 = "3f3f3f";
+      sColor2 = "3f3f3f";
+      sColor3 = "3f3f3f";
+      sColor4 = "3f3f3f";
+      sColor5 = "3f3f3f";
+      sColor6 = "3f3f3f";
+      sColor7 = "3f3f3f";
+      sColor8 = "3f3f3f";
+      sColor9 = "3f3f3f";
+      sColor10 = "3f3f3f";
+      block(SET.PALETTE, 0, &m3, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      [ fade in (no delay)
+      block(FADE.IN, 0, 0, 0); [ fade.in(BYVAR, DELAY, COLOR)
+      [ begin fade in process
+      letterindex = 97;
+      ++titleSeq;
+      delaycounter = 0;
+      return();
+    }
+    if (titleSeq >= TS_EXPLODE1 && titleSeq <= TS_EXPLODE5) {
+    [ TODO: do all at once, to speed things up
+      work1 = titleSeq;
+      work1 += 26;
+      :drawpic
+        load.pic(work1);
+        draw.pic(work1);
+        discard.pic(work1);
+        show.pic();
+        ++work1; 
+      if (work1 <= pic.Explode5) {
+        goto(drawpic);
+      }
+      titleSeq = TS_EXPLODE5;
+      titleTimer = 1;
+    }
+    if (titleSeq == TS_FADEWHITE) {
+      [ fade out white
+      block(FADE.OUT, 0, 1, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
+      ++titleSeq;
+      titleTimer = 1;
+    }
+    if (titleSeq == TS_PPACK) {
+      load.pic(currentRoom);
+      draw.pic(currentRoom);
+      discard.pic(currentRoom);
+      show.pic();
+      [fade in
+      block(FADE.IN, 0, 10, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
+      titleTimer = 45;
+    }
+    if (titleSeq == TS_FADEOUT_PP) {
+      block(FADE.OUT, 0, 8, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      work1 = pic.Credits;
+      load.pic(work1);
+      draw.pic(work1);
+      discard.pic(work1);
+      show.pic();
+      titleTimer = 1;
+    }
+    if (titleSeq == TS_FADEIN_SQ) {
+      [ fade in
+      block(FADE.IN, 0, 20, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+      titleTimer = 45;
+    }
+    if (titleSeq == TS_START_CREDITS) {
+      [ start cycling credits
+      discard.view(vw.Logos);
+      load.view(vw.Credits);
+      set.view(oLogo1, vw.Credits);
+      set.loop(oLogo1, 0);
+      set.cel(oLogo1, 0);
+      position(oLogo1, 52, 162);
+      ignore.horizon(oLogo1);
+      draw(oLogo1);
+      work1 = 6;
+      step.time(oLogo1, work1);
+      work1 = UP;
+      set.dir(oLogo1, work1);
+      creditline1 = CR_PPDESIGN;
+      creditstep1 = 0;
+      ++titleSeq;
     }
   }
 }
 
+[ cycling events
 if (fLogoDone) {
   reset(fLogoDone);
+  ++titleSeq;
   if (titleSeq == TS_SALUTE_UP) {
-    ++titleSeq;
-    titleTimer = 5;
+    titleTimer = 30;
   }
   if (titleSeq == TS_SALUTE_DOWN) {
-    ++titleSeq;
-    titleTimer = 5;
+    titleTimer = 30;
   }
 }
 
-
-[  [ display game title above scroll window
-[  [ you can use a view for this instead of text, if desired
-[  set.text.attribute(1, 0);
-[  display(11, 35, "A");
-[  set.text.attribute(2, 0);
-[  display(11, 36, "d");
-[  set.text.attribute(3, 0);
-[  display(11, 37, "v");
-[  set.text.attribute(4, 0);
-[  display(11, 38, "e");
-[  set.text.attribute(5, 0);
-[  display(11, 39, "n");
-[  set.text.attribute(6, 0);
-[  display(11, 40, "t");
-[  set.text.attribute(7, 0);
-[  display(11, 41, "u");
-[  set.text.attribute(8, 0);
-[  display(11, 42, "r");
-[  set.text.attribute(9, 0);
-[  display(11, 43, "e");
-[
-
-
-
-
-
 :getkey
-
 [ check for a keypress or joystick button
 if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
   [ show wait cursor
@@ -216,9 +769,10 @@ if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
   [ fade out to black
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore palette
-  block(SET.PALETTE, 0, &m8, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  block(SET.PALETTE, 0, &m1, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   [ enable game functions for rest of game
   reset(disableGameFunctions);
+  animationInterval = tmpSpeed;
   [ begin game in starting room
   new.room(rm.ParkingLot); [ ##LE001##
 }
@@ -255,11 +809,73 @@ return();
 [ **************************************
 [ MESSAGES
 [ **************************************
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-#message 7 "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-#message 8 "%s2"
+#message 1 "%s2" ["\x00\x00\x00\x00\x00\x2A\x00\x2A\x00\x00\x2A\x2A\x2A\x00\x00\x2A\x00\x2A\x2A\x15\x00\x2A\x2A\x2A\x15\x15\x15\x15\x15\x3F\x00\x3F\x15\x15\x3F\x3F\x3F\x15\x15\x3F\x15\x3F\x3F\x3F\x15\x3F\x3F\x3F"
+#message 2 "%s13"
+#message 3 "000000%s14%s15%s16%s17%s18%s19%s20%s21%s22%%003F15153F3F3F15153F153F3F3F153F3F3F"
+
+
+[[palettes: "| 0=BLACK   | 1=BLUE    | 2=GREEN   | 3=CYAN    | 4=RED     | 5=MAGENTA | 6=BROWN   | 7=LT_GRAY | 8=DK_GRAY | 9=LT_BLUE | 10=LT_GRN | 11=LT_CYN | 12=LT_RED | 13=LT_MGT | 14=YELLOW | 15=WHITE |
+[#message 1 "\x00\x00\x00\x00\x00\x2A\x00\x2A\x00\x00\x2A\x2A\x2A\x00\x00\x2A\x00\x2A\x2A\x15\x00\x2A\x2A\x2A\x15\x15\x15\x15\x15\x3F\x00\x3F\x15\x15\x3F\x3F\x3F\x15\x15\x3F\x15\x3F\x3F\x3F\x15\x3F\x3F\x3F"
+[#message 2 "\x00\x00\x00\x00\x00\x29\x00\x29\x00\x00\x29\x29\x29\x00\x00\x29\x00\x29\x29\x14\x00\x29\x29\x29\x14\x14\x14\x14\x14\x3E\x00\x3E\x14\x14\x3E\x3E\x3E\x14\x14\x3E\x14\x3E\x3E\x3E\x14\x3E\x3E\x3E"
+[#message 3 "\x00\x00\x00\x00\x00\x28\x00\x28\x00\x00\x28\x28\x28\x00\x00\x28\x00\x28\x28\x14\x00\x28\x28\x28\x14\x14\x14\x14\x14\x3D\x00\x3D\x14\x14\x3D\x3D\x3D\x14\x14\x3D\x14\x3D\x3D\x3D\x14\x3D\x3D\x3D"
+[#message 4 "\x00\x00\x00\x00\x00\x28\x00\x28\x00\x00\x28\x28\x28\x00\x00\x28\x00\x28\x28\x14\x00\x28\x28\x28\x14\x14\x14\x14\x14\x3C\x00\x3C\x14\x14\x3C\x3C\x3C\x14\x14\x3C\x14\x3C\x3C\x3C\x14\x3C\x3C\x3C"
+[#message 5 "\x00\x00\x00\x00\x00\x27\x00\x27\x00\x00\x27\x27\x27\x00\x00\x27\x00\x27\x27\x13\x00\x27\x27\x27\x13\x13\x13\x13\x13\x3B\x00\x3B\x13\x13\x3B\x3B\x3B\x13\x13\x3B\x13\x3B\x3B\x3B\x13\x3B\x3B\x3B"
+[#message 6 "\x00\x00\x00\x00\x00\x26\x00\x26\x00\x00\x26\x26\x26\x00\x00\x26\x00\x26\x26\x13\x00\x26\x26\x26\x13\x13\x13\x13\x13\x3A\x00\x3A\x13\x13\x3A\x3A\x3A\x13\x13\x3A\x13\x3A\x3A\x3A\x13\x3A\x3A\x3A"
+[#message 7 "\x00\x00\x00\x00\x00\x26\x00\x26\x00\x00\x26\x26\x26\x00\x00\x26\x00\x26\x26\x13\x00\x26\x26\x26\x13\x13\x13\x13\x13\x39\x00\x39\x13\x13\x39\x39\x39\x13\x13\x39\x13\x39\x39\x39\x13\x39\x39\x39"
+[#message 8 "\x00\x00\x00\x00\x00\x25\x00\x25\x00\x00\x25\x25\x25\x00\x00\x25\x00\x25\x25\x12\x00\x25\x25\x25\x12\x12\x12\x12\x12\x38\x00\x38\x12\x12\x38\x38\x38\x12\x12\x38\x12\x38\x38\x38\x12\x38\x38\x38"
+[#message 9 "\x00\x00\x00\x00\x00\x24\x00\x24\x00\x00\x24\x24\x24\x00\x00\x24\x00\x24\x24\x12\x00\x24\x24\x24\x12\x12\x12\x12\x12\x37\x00\x37\x12\x12\x37\x37\x37\x12\x12\x37\x12\x37\x37\x37\x12\x37\x37\x37"
+[#message 10 "\x00\x00\x00\x00\x00\x24\x00\x24\x00\x00\x24\x24\x24\x00\x00\x24\x00\x24\x24\x12\x00\x24\x24\x24\x12\x12\x12\x12\x12\x36\x00\x36\x12\x12\x36\x36\x36\x12\x12\x36\x12\x36\x36\x36\x12\x36\x36\x36"
+[#message 11 "\x00\x00\x00\x00\x00\x23\x00\x23\x00\x00\x23\x23\x23\x00\x00\x23\x00\x23\x23\x11\x00\x23\x23\x23\x11\x11\x11\x11\x11\x35\x00\x35\x11\x11\x35\x35\x35\x11\x11\x35\x11\x35\x35\x35\x11\x35\x35\x35"
+[#message 12 "\x00\x00\x00\x00\x00\x22\x00\x22\x00\x00\x22\x22\x22\x00\x00\x22\x00\x22\x22\x11\x00\x22\x22\x22\x11\x11\x11\x11\x11\x34\x00\x34\x11\x11\x34\x34\x34\x11\x11\x34\x11\x34\x34\x34\x11\x34\x34\x34"
+[#message 13 "\x00\x00\x00\x00\x00\x22\x00\x22\x00\x00\x22\x22\x22\x00\x00\x22\x00\x22\x22\x11\x00\x22\x22\x22\x11\x11\x11\x11\x11\x33\x00\x33\x11\x11\x33\x33\x33\x11\x11\x33\x11\x33\x33\x33\x11\x33\x33\x33"
+[#message 14 "\x00\x00\x00\x00\x00\x21\x00\x21\x00\x00\x21\x21\x21\x00\x00\x21\x00\x21\x21\x10\x00\x21\x21\x21\x10\x10\x10\x10\x10\x32\x00\x32\x10\x10\x32\x32\x32\x10\x10\x32\x10\x32\x32\x32\x10\x32\x32\x32"
+[#message 15 "\x00\x00\x00\x00\x00\x20\x00\x20\x00\x00\x20\x20\x20\x00\x00\x20\x00\x20\x20\x10\x00\x20\x20\x20\x10\x10\x10\x10\x10\x31\x00\x31\x10\x10\x31\x31\x31\x10\x10\x31\x10\x31\x31\x31\x10\x31\x31\x31"
+[#message 16 "\x00\x00\x00\x00\x00\x20\x00\x20\x00\x00\x20\x20\x20\x00\x00\x20\x00\x20\x20\x10\x00\x20\x20\x20\x10\x10\x10\x10\x10\x30\x00\x30\x10\x10\x30\x30\x30\x10\x10\x30\x10\x30\x30\x30\x10\x30\x30\x30"
+[#message 17 "\x00\x00\x00\x00\x00\x1F\x00\x1F\x00\x00\x1F\x1F\x1F\x00\x00\x1F\x00\x1F\x1F\x0F\x00\x1F\x1F\x1F\x0F\x0F\x0F\x0F\x0F\x2F\x00\x2F\x0F\x0F\x2F\x2F\x2F\x0F\x0F\x2F\x0F\x2F\x2F\x2F\x0F\x2F\x2F\x2F"
+[#message 18 "\x00\x00\x00\x00\x00\x1E\x00\x1E\x00\x00\x1E\x1E\x1E\x00\x00\x1E\x00\x1E\x1E\x0F\x00\x1E\x1E\x1E\x0F\x0F\x0F\x0F\x0F\x2E\x00\x2E\x0F\x0F\x2E\x2E\x2E\x0F\x0F\x2E\x0F\x2E\x2E\x2E\x0F\x2E\x2E\x2E"
+[#message 19 "\x00\x00\x00\x00\x00\x1E\x00\x1E\x00\x00\x1E\x1E\x1E\x00\x00\x1E\x00\x1E\x1E\x0F\x00\x1E\x1E\x1E\x0F\x0F\x0F\x0F\x0F\x2D\x00\x2D\x0F\x0F\x2D\x2D\x2D\x0F\x0F\x2D\x0F\x2D\x2D\x2D\x0F\x2D\x2D\x2D"
+[#message 20 "\x00\x00\x00\x00\x00\x1D\x00\x1D\x00\x00\x1D\x1D\x1D\x00\x00\x1D\x00\x1D\x1D\x0E\x00\x1D\x1D\x1D\x0E\x0E\x0E\x0E\x0E\x2C\x00\x2C\x0E\x0E\x2C\x2C\x2C\x0E\x0E\x2C\x0E\x2C\x2C\x2C\x0E\x2C\x2C\x2C"
+[#message 21 "\x00\x00\x00\x00\x00\x1C\x00\x1C\x00\x00\x1C\x1C\x1C\x00\x00\x1C\x00\x1C\x1C\x0E\x00\x1C\x1C\x1C\x0E\x0E\x0E\x0E\x0E\x2B\x00\x2B\x0E\x0E\x2B\x2B\x2B\x0E\x0E\x2B\x0E\x2B\x2B\x2B\x0E\x2B\x2B\x2B"
+[#message 22 "\x00\x00\x00\x00\x00\x1C\x00\x1C\x00\x00\x1C\x1C\x1C\x00\x00\x1C\x00\x1C\x1C\x0E\x00\x1C\x1C\x1C\x0E\x0E\x0E\x0E\x0E\x2A\x00\x2A\x0E\x0E\x2A\x2A\x2A\x0E\x0E\x2A\x0E\x2A\x2A\x2A\x0E\x2A\x2A\x2A"
+[#message 23 "\x00\x00\x00\x00\x00\x1B\x00\x1B\x00\x00\x1B\x1B\x1B\x00\x00\x1B\x00\x1B\x1B\x0D\x00\x1B\x1B\x1B\x0D\x0D\x0D\x0D\x0D\x29\x00\x29\x0D\x0D\x29\x29\x29\x0D\x0D\x29\x0D\x29\x29\x29\x0D\x29\x29\x29"
+[#message 24 "\x00\x00\x00\x00\x00\x1A\x00\x1A\x00\x00\x1A\x1A\x1A\x00\x00\x1A\x00\x1A\x1A\x0D\x00\x1A\x1A\x1A\x0D\x0D\x0D\x0D\x0D\x28\x00\x28\x0D\x0D\x28\x28\x28\x0D\x0D\x28\x0D\x28\x28\x28\x0D\x28\x28\x28"
+[#message 25 "\x00\x00\x00\x00\x00\x1A\x00\x1A\x00\x00\x1A\x1A\x1A\x00\x00\x1A\x00\x1A\x1A\x0D\x00\x1A\x1A\x1A\x0D\x0D\x0D\x0D\x0D\x27\x00\x27\x0D\x0D\x27\x27\x27\x0D\x0D\x27\x0D\x27\x27\x27\x0D\x27\x27\x27"
+[#message 26 "\x00\x00\x00\x00\x00\x19\x00\x19\x00\x00\x19\x19\x19\x00\x00\x19\x00\x19\x19\x0C\x00\x19\x19\x19\x0C\x0C\x0C\x0C\x0C\x26\x00\x26\x0C\x0C\x26\x26\x26\x0C\x0C\x26\x0C\x26\x26\x26\x0C\x26\x26\x26"
+[#message 27 "\x00\x00\x00\x00\x00\x18\x00\x18\x00\x00\x18\x18\x18\x00\x00\x18\x00\x18\x18\x0C\x00\x18\x18\x18\x0C\x0C\x0C\x0C\x0C\x25\x00\x25\x0C\x0C\x25\x25\x25\x0C\x0C\x25\x0C\x25\x25\x25\x0C\x25\x25\x25"
+[#message 28 "\x00\x00\x00\x00\x00\x18\x00\x18\x00\x00\x18\x18\x18\x00\x00\x18\x00\x18\x18\x0C\x00\x18\x18\x18\x0C\x0C\x0C\x0C\x0C\x24\x00\x24\x0C\x0C\x24\x24\x24\x0C\x0C\x24\x0C\x24\x24\x24\x0C\x24\x24\x24"
+[#message 29 "\x00\x00\x00\x00\x00\x17\x00\x17\x00\x00\x17\x17\x17\x00\x00\x17\x00\x17\x17\x0B\x00\x17\x17\x17\x0B\x0B\x0B\x0B\x0B\x23\x00\x23\x0B\x0B\x23\x23\x23\x0B\x0B\x23\x0B\x23\x23\x23\x0B\x23\x23\x23"
+[#message 30 "\x00\x00\x00\x00\x00\x16\x00\x16\x00\x00\x16\x16\x16\x00\x00\x16\x00\x16\x16\x0B\x00\x16\x16\x16\x0B\x0B\x0B\x0B\x0B\x22\x00\x22\x0B\x0B\x22\x22\x22\x0B\x0B\x22\x0B\x22\x22\x22\x0B\x22\x22\x22"
+[#message 31 "\x00\x00\x00\x00\x00\x16\x00\x16\x00\x00\x16\x16\x16\x00\x00\x16\x00\x16\x16\x0B\x00\x16\x16\x16\x0B\x0B\x0B\x0B\x0B\x21\x00\x21\x0B\x0B\x21\x21\x21\x0B\x0B\x21\x0B\x21\x21\x21\x0B\x21\x21\x21"
+[#message 32 "\x00\x00\x00\x00\x00\x15\x00\x15\x00\x00\x15\x15\x15\x00\x00\x15\x00\x15\x15\x0A\x00\x15\x15\x15\x0A\x0A\x0A\x0A\x0A\x20\x00\x20\x0A\x0A\x20\x20\x20\x0A\x0A\x20\x0A\x20\x20\x20\x0A\x20\x20\x20"
+[#message 33 "\x00\x00\x00\x00\x00\x14\x00\x14\x00\x00\x14\x14\x14\x00\x00\x14\x00\x14\x14\x0A\x00\x14\x14\x14\x0A\x0A\x0A\x0A\x0A\x1F\x00\x1F\x0A\x0A\x1F\x1F\x1F\x0A\x0A\x1F\x0A\x1F\x1F\x1F\x0A\x1F\x1F\x1F"
+[#message 34 "\x00\x00\x00\x00\x00\x14\x00\x14\x00\x00\x14\x14\x14\x00\x00\x14\x00\x14\x14\x0A\x00\x14\x14\x14\x0A\x0A\x0A\x0A\x0A\x1E\x00\x1E\x0A\x0A\x1E\x1E\x1E\x0A\x0A\x1E\x0A\x1E\x1E\x1E\x0A\x1E\x1E\x1E"
+[#message 35 "\x00\x00\x00\x00\x00\x13\x00\x13\x00\x00\x13\x13\x13\x00\x00\x13\x00\x13\x13\x09\x00\x13\x13\x13\x09\x09\x09\x09\x09\x1D\x00\x1D\x09\x09\x1D\x1D\x1D\x09\x09\x1D\x09\x1D\x1D\x1D\x09\x1D\x1D\x1D"
+[#message 36 "\x00\x00\x00\x00\x00\x12\x00\x12\x00\x00\x12\x12\x12\x00\x00\x12\x00\x12\x12\x09\x00\x12\x12\x12\x09\x09\x09\x09\x09\x1C\x00\x1C\x09\x09\x1C\x1C\x1C\x09\x09\x1C\x09\x1C\x1C\x1C\x09\x1C\x1C\x1C"
+[#message 37 "\x00\x00\x00\x00\x00\x12\x00\x12\x00\x00\x12\x12\x12\x00\x00\x12\x00\x12\x12\x09\x00\x12\x12\x12\x09\x09\x09\x09\x09\x1B\x00\x1B\x09\x09\x1B\x1B\x1B\x09\x09\x1B\x09\x1B\x1B\x1B\x09\x1B\x1B\x1B"
+[#message 38 "\x00\x00\x00\x00\x00\x11\x00\x11\x00\x00\x11\x11\x11\x00\x00\x11\x00\x11\x11\x08\x00\x11\x11\x11\x08\x08\x08\x08\x08\x1A\x00\x1A\x08\x08\x1A\x1A\x1A\x08\x08\x1A\x08\x1A\x1A\x1A\x08\x1A\x1A\x1A"
+[#message 39 "\x00\x00\x00\x00\x00\x10\x00\x10\x00\x00\x10\x10\x10\x00\x00\x10\x00\x10\x10\x08\x00\x10\x10\x10\x08\x08\x08\x08\x08\x19\x00\x19\x08\x08\x19\x19\x19\x08\x08\x19\x08\x19\x19\x19\x08\x19\x19\x19"
+[#message 40 "\x00\x00\x00\x00\x00\x10\x00\x10\x00\x00\x10\x10\x10\x00\x00\x10\x00\x10\x10\x08\x00\x10\x10\x10\x08\x08\x08\x08\x08\x18\x00\x18\x08\x08\x18\x18\x18\x08\x08\x18\x08\x18\x18\x18\x08\x18\x18\x18"
+[#message 41 "\x00\x00\x00\x00\x00\x0F\x00\x0F\x00\x00\x0F\x0F\x0F\x00\x00\x0F\x00\x0F\x0F\x07\x00\x0F\x0F\x0F\x07\x07\x07\x07\x07\x17\x00\x17\x07\x07\x17\x17\x17\x07\x07\x17\x07\x17\x17\x17\x07\x17\x17\x17"
+[#message 42 "\x00\x00\x00\x00\x00\x0E\x00\x0E\x00\x00\x0E\x0E\x0E\x00\x00\x0E\x00\x0E\x0E\x07\x00\x0E\x0E\x0E\x07\x07\x07\x07\x07\x16\x00\x16\x07\x07\x16\x16\x16\x07\x07\x16\x07\x16\x16\x16\x07\x16\x16\x16"
+[#message 43 "\x00\x00\x00\x00\x00\x0E\x00\x0E\x00\x00\x0E\x0E\x0E\x00\x00\x0E\x00\x0E\x0E\x07\x00\x0E\x0E\x0E\x07\x07\x07\x07\x07\x15\x00\x15\x07\x07\x15\x15\x15\x07\x07\x15\x07\x15\x15\x15\x07\x15\x15\x15"
+[#message 44 "\x00\x00\x00\x00\x00\x0D\x00\x0D\x00\x00\x0D\x0D\x0D\x00\x00\x0D\x00\x0D\x0D\x06\x00\x0D\x0D\x0D\x06\x06\x06\x06\x06\x14\x00\x14\x06\x06\x14\x14\x14\x06\x06\x14\x06\x14\x14\x14\x06\x14\x14\x14"
+[#message 45 "\x00\x00\x00\x00\x00\x0C\x00\x0C\x00\x00\x0C\x0C\x0C\x00\x00\x0C\x00\x0C\x0C\x06\x00\x0C\x0C\x0C\x06\x06\x06\x06\x06\x13\x00\x13\x06\x06\x13\x13\x13\x06\x06\x13\x06\x13\x13\x13\x06\x13\x13\x13"
+[#message 46 "\x00\x00\x00\x00\x00\x0C\x00\x0C\x00\x00\x0C\x0C\x0C\x00\x00\x0C\x00\x0C\x0C\x06\x00\x0C\x0C\x0C\x06\x06\x06\x06\x06\x12\x00\x12\x06\x06\x12\x12\x12\x06\x06\x12\x06\x12\x12\x12\x06\x12\x12\x12"
+[#message 47 "\x00\x00\x00\x00\x00\x0B\x00\x0B\x00\x00\x0B\x0B\x0B\x00\x00\x0B\x00\x0B\x0B\x05\x00\x0B\x0B\x0B\x05\x05\x05\x05\x05\x11\x00\x11\x05\x05\x11\x11\x11\x05\x05\x11\x05\x11\x11\x11\x05\x11\x11\x11"
+[#message 48 "\x00\x00\x00\x00\x00\x0A\x00\x0A\x00\x00\x0A\x0A\x0A\x00\x00\x0A\x00\x0A\x0A\x05\x00\x0A\x0A\x0A\x05\x05\x05\x05\x05\x10\x00\x10\x05\x05\x10\x10\x10\x05\x05\x10\x05\x10\x10\x10\x05\x10\x10\x10"
+[#message 49 "\x00\x00\x00\x00\x00\x0A\x00\x0A\x00\x00\x0A\x0A\x0A\x00\x00\x0A\x00\x0A\x0A\x05\x00\x0A\x0A\x0A\x05\x05\x05\x05\x05\x0F\x00\x0F\x05\x05\x0F\x0F\x0F\x05\x05\x0F\x05\x0F\x0F\x0F\x05\x0F\x0F\x0F"
+[#message 50 "\x00\x00\x00\x00\x00\x09\x00\x09\x00\x00\x09\x09\x09\x00\x00\x09\x00\x09\x09\x04\x00\x09\x09\x09\x04\x04\x04\x04\x04\x0E\x00\x0E\x04\x04\x0E\x0E\x0E\x04\x04\x0E\x04\x0E\x0E\x0E\x04\x0E\x0E\x0E"
+[#message 51 "\x00\x00\x00\x00\x00\x08\x00\x08\x00\x00\x08\x08\x08\x00\x00\x08\x00\x08\x08\x04\x00\x08\x08\x08\x04\x04\x04\x04\x04\x0D\x00\x0D\x04\x04\x0D\x0D\x0D\x04\x04\x0D\x04\x0D\x0D\x0D\x04\x0D\x0D\x0D"
+[#message 52 "\x00\x00\x00\x00\x00\x08\x00\x08\x00\x00\x08\x08\x08\x00\x00\x08\x00\x08\x08\x04\x00\x08\x08\x08\x04\x04\x04\x04\x04\x0C\x00\x0C\x04\x04\x0C\x0C\x0C\x04\x04\x0C\x04\x0C\x0C\x0C\x04\x0C\x0C\x0C"
+[#message 53 "\x00\x00\x00\x00\x00\x07\x00\x07\x00\x00\x07\x07\x07\x00\x00\x07\x00\x07\x07\x03\x00\x07\x07\x07\x03\x03\x03\x03\x03\x0B\x00\x0B\x03\x03\x0B\x0B\x0B\x03\x03\x0B\x03\x0B\x0B\x0B\x03\x0B\x0B\x0B"
+[#message 54 "\x00\x00\x00\x00\x00\x06\x00\x06\x00\x00\x06\x06\x06\x00\x00\x06\x00\x06\x06\x03\x00\x06\x06\x06\x03\x03\x03\x03\x03\x0A\x00\x0A\x03\x03\x0A\x0A\x0A\x03\x03\x0A\x03\x0A\x0A\x0A\x03\x0A\x0A\x0A"
+[#message 55 "\x00\x00\x00\x00\x00\x06\x00\x06\x00\x00\x06\x06\x06\x00\x00\x06\x00\x06\x06\x03\x00\x06\x06\x06\x03\x03\x03\x03\x03\x09\x00\x09\x03\x03\x09\x09\x09\x03\x03\x09\x03\x09\x09\x09\x03\x09\x09\x09"
+[#message 56 "\x00\x00\x00\x00\x00\x05\x00\x05\x00\x00\x05\x05\x05\x00\x00\x05\x00\x05\x05\x02\x00\x05\x05\x05\x02\x02\x02\x02\x02\x08\x00\x08\x02\x02\x08\x08\x08\x02\x02\x08\x02\x08\x08\x08\x02\x08\x08\x08"
+[#message 57 "\x00\x00\x00\x00\x00\x04\x00\x04\x00\x00\x04\x04\x04\x00\x00\x04\x00\x04\x04\x02\x00\x04\x04\x04\x02\x02\x02\x02\x02\x07\x00\x07\x02\x02\x07\x07\x07\x02\x02\x07\x02\x07\x07\x07\x02\x07\x07\x07"
+[#message 58 "\x00\x00\x00\x00\x00\x04\x00\x04\x00\x00\x04\x04\x04\x00\x00\x04\x00\x04\x04\x02\x00\x04\x04\x04\x02\x02\x02\x02\x02\x06\x00\x06\x02\x02\x06\x06\x06\x02\x02\x06\x02\x06\x06\x06\x02\x06\x06\x06"
+[#message 59 "\x00\x00\x00\x00\x00\x03\x00\x03\x00\x00\x03\x03\x03\x00\x00\x03\x00\x03\x03\x01\x00\x03\x03\x03\x01\x01\x01\x01\x01\x05\x00\x05\x01\x01\x05\x05\x05\x01\x01\x05\x01\x05\x05\x05\x01\x05\x05\x05"
+[#message 60 "\x00\x00\x00\x00\x00\x02\x00\x02\x00\x00\x02\x02\x02\x00\x00\x02\x00\x02\x02\x01\x00\x02\x02\x02\x01\x01\x01\x01\x01\x04\x00\x04\x01\x01\x04\x04\x04\x01\x01\x04\x01\x04\x04\x04\x01\x04\x04\x04"
+[#message 61 "\x00\x00\x00\x00\x00\x02\x00\x02\x00\x00\x02\x02\x02\x00\x00\x02\x00\x02\x02\x01\x00\x02\x02\x02\x01\x01\x01\x01\x01\x03\x00\x03\x01\x01\x03\x03\x03\x01\x01\x03\x01\x03\x03\x03\x01\x03\x03\x03"
+[#message 62 "\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x01\x01\x01\x00\x00\x01\x00\x01\x01\x00\x00\x01\x01\x01\x00\x00\x00\x00\x00\x02\x00\x02\x00\x00\x02\x02\x02\x00\x00\x02\x00\x02\x02\x02\x00\x02\x02\x02"
+[#message 63 "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x01\x01\x01\x00\x00\x01\x00\x01\x01\x01\x00\x01\x01\x01"
+[#message 64 "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"

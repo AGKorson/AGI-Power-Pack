@@ -319,7 +319,7 @@ if (newRoom) {
   [ do basic room initialization
   call(lgc.RoomInit);
   
-  if (!disableGameFunctions) { 
+  if (!disableGameFunctions) {
     [ Load game specific functions logic into memory
     load.logics(lgc.GameFunctions);
     [ also toolbar functions
