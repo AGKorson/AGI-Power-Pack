@@ -55,7 +55,6 @@ if (controller(cLeftClick)) {
   if (!deathType) {
     [ if on button1:
     if (mouseX > 14 && mouseX < 31 && mouseY > 8 && mouseY < 25) {
-    print("default");
       if (cursormode != C_DEFAULT) {
         [ select it
         cursormode = C_DEFAULT;

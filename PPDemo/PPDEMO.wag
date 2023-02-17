@@ -386,10 +386,10 @@
 [Logic31]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &H5F7B0511
-   CompCRC32 = &H5F7B0511
+   CRC32 = &H2EA8397D
+   CompCRC32 = &H2EA8397D
    IsRoom = False
-   Size = 759
+   Size = 747
 
 [Logic32]
    ID = lgc.TerminalFunctions
