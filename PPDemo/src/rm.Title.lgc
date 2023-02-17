@@ -683,7 +683,6 @@ if (titleTimer > 0) {
       return();
     }
     if (titleSeq >= TS_EXPLODE1 && titleSeq <= TS_EXPLODE5) {
-    [ TODO: do all at once, to speed things up
       work1 = titleSeq;
       work1 += 26;
       :drawpic

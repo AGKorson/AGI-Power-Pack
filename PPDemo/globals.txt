@@ -177,8 +177,8 @@
 #define C_USE                    5
 #define C_WAIT                   6
 #define C_DISK                   7
-#define C_FOB                    8
-#define C_TAPE                   9
+#define C_TAPE                   8
+#define C_FOB                    9
 #define car0car1               v73
 #define car2car3               v74
 #define car4car5               v75

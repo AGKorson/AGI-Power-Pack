@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/17/2023 12:54:10 AM"
+   LastEdit = "2/17/2023 1:55:19 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -48,7 +48,7 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
+   CompCRC32 = &H12FD2B07
    CRC32 = &H12FD2B07
    ID = lgc.Main
    IsRoom = False
@@ -56,11 +56,11 @@
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H0
-   CRC32 = &HE80AFE71
+   CompCRC32 = &H60920299
+   CRC32 = &H60920299
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1526
+   Size = 1504
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -170,8 +170,8 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H65B3B8A6
-   CompCRC32 = &H0
+   CRC32 = &HFBC4E2CC
+   CompCRC32 = &HFBC4E2CC
    IsRoom = True
    Size = 2328
 
@@ -179,23 +179,23 @@
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
    CRC32 = &H645D88D7
-   CompCRC32 = &H0
+   CompCRC32 = &H645D88D7
    IsRoom = True
    Size = 6134
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H7A296E46
-   CompCRC32 = &H0
+   CRC32 = &H242EF138
+   CompCRC32 = &H242EF138
    IsRoom = True
-   Size = 7639
+   Size = 7561
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
    CRC32 = &H1A81B6E4
-   CompCRC32 = &H0
+   CompCRC32 = &H1A81B6E4
    IsRoom = True
    Size = 3247
 
@@ -379,17 +379,17 @@
    ID = lgc.InitToolbar
    Description = ""
    CRC32 = &H566BD4A4
-   CompCRC32 = &H566BD4A4
+   CompCRC32 = &H0
    IsRoom = False
    Size = 108
 
 [Logic31]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &H2EA8397D
-   CompCRC32 = &H2EA8397D
+   CRC32 = &H79C4D28A
+   CompCRC32 = &H79C4D28A
    IsRoom = False
-   Size = 747
+   Size = 725
 
 [Logic32]
    ID = lgc.TerminalFunctions
@@ -995,8 +995,8 @@
    Description = ""
    Key = 0
    TPQN = 16
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1013,8 +1013,8 @@
    Description = ""
    Key = 0
    TPQN = 16
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1031,8 +1031,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1049,8 +1049,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1067,8 +1067,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1085,8 +1085,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1103,8 +1103,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1121,8 +1121,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1139,8 +1139,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1157,8 +1157,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1175,8 +1175,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1193,8 +1193,8 @@
    Size = 26
    Key = 0
    TPQN = 0
-   Inst0 = 80
-   Inst1 = 80
+   Inst0 = 98
+   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False

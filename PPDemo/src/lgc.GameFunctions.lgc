@@ -234,14 +234,7 @@ if (said("debug")) {
 if ((controller(cSave) || 
      said("save", "game") || 
      said("save"))) {
-  [ if in lobby, need to erase patient2 if currently visible
-  if (currentRoom == rm.Lobby && f237) {
-    erase(o5);
-  }
   save.game();
-  if (currentRoom == rm.Lobby && f237) {
-    draw(o5);
-  }
 }
 
 [ restore game

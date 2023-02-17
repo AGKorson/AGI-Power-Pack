@@ -21,7 +21,7 @@
 #define oPatient1        o4
 #define oPatient2        o5
 #define oPatient3        o6
-#define oPatient4        o5 [ patients 2 and 4 are never on screen at same time
+#define oPatient4        o7
 #define   LP_MOVERIGHT  0
 #define   LP_MOVELEFT   1
 #define   LP_MOVEDOWN   2
@@ -34,8 +34,8 @@
 #define   LP_READBOOK   9
 #define   LP_TAPTOE     8
 
-#define oMagazine       o7
-#define oPapers         o8
+#define oMagazine       o8
+#define oPapers         o9
 
 #define frontdooropen  f220
 #define fAllowPast     f221
@@ -54,9 +54,8 @@
 #define fEgoTalkPatient       f234
 #define checktalk      f235
 #define fPatientAtDoor f236
-#define fP24Visible    f237
-#define fFalling       f238
-#define fPagesTurned   f239
+#define fFalling       f237
+#define fPagesTurned   f238
 
 #define receptionistLoc v220
 #define   PHONE         1
@@ -153,7 +152,6 @@ if (newRoom) {
   [ add toolbar buttons
   load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
-[ TODO: one regular btn, one toggle btn  
   
   [ the horizon defines the upper limit of ego's movement
   set.horizon(94);
@@ -255,12 +253,13 @@ if (newRoom) {
   animate.obj(oPatient1);
   animate.obj(oPatient2);
   animate.obj(oPatient3);
-  [ animate.obj(oPatient4); [ uses same object as patient 2
+  animate.obj(oPatient4);
   
-  [ load patient 1 and 3 views at start
-  [ patient2/4 only loaded when needed
+  [ load patient views
   load.view(vw.Patient1); 
+  load.view(vw.Patient2);
   load.view(vw.Patient3);
+  load.view(vw.Patient4);
   
   [ patient 1 (always present)
   set.view(oPatient1, vw.Patient1);
@@ -275,18 +274,12 @@ if (newRoom) {
   patient1Timer = 25;
   
   [ patient 2
+  set.view(oPatient2, vw.Patient2);
   ignore.blocks(oPatient2);
   ignore.horizon(oPatient2);
-  
-  [ assume patient 2 is active
-  set(noScript);
-  load.view(vw.Patient2);
-  reset(noScript);
-  set.view(oPatient2, vw.Patient2);
   if (patient2Loc == LOC_GONE) {
     patient2Seq = SKIP;
   } else {
-    set.view(oPatient2, vw.Patient2);
     if (patient2Loc == LOC_LOBBY) {
       position(oPatient2, 139, 133);
       set.loop(oPatient2, LP_P_SIT);
@@ -295,19 +288,18 @@ if (newRoom) {
       patient2Seq = IDLE;
       patient2Timer = 30;
       draw(oPatient2);
-      set(fP24Visible);
     } else {
       position(oPatient2, 12, 92);
     }
   }
   
   [ patient 3
+  set.view(oPatient3, vw.Patient3);
   ignore.blocks(oPatient3);
   ignore.horizon(oPatient3);
   if (patient3Loc == LOC_GONE) {
     patient3Seq = SKIP;
   } else {
-    set.view(oPatient3, vw.Patient3);
     if (patient3Loc == LOC_LOBBY) {
       position(oPatient3, 130, 112);
       set.loop(oPatient3, LP_P_SIT);
@@ -322,15 +314,12 @@ if (newRoom) {
   }
   
   [ patient 4
+  set.view(oPatient4, vw.Patient4);
+  ignore.blocks(oPatient4);
+  ignore.horizon(oPatient4);
   if (patient4Loc == LOC_GONE) {
     patient4Seq = SKIP;
   } else {
-    [ swap in view for patient 4
-    set(noScript);
-    discard.view(vw.Patient2);
-    load.view(vw.Patient4);
-    reset(noScript);
-    set.view(oPatient4, vw.Patient4);
     if (patient4Loc == LOC_LOBBY) {
       position(oPatient4, 137, 127);
       set.loop(oPatient4, LP_P_SIT);
@@ -339,13 +328,13 @@ if (newRoom) {
       patient4Seq = IDLE;
       patient4Timer = 40;
       draw(oPatient4);
-      set(fP24Visible);
     } else {
       position(oPatient4, 12, 92);
     }
   }
   
   [ desk papers
+  [ TODO: ego can't get papers from desk
   animate.obj(oPapers);
   set.view(oPapers, vw.LobbyArt);
   set.loop(oPapers, 3);
@@ -391,21 +380,6 @@ if (newRoom) {
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
 [  return();
-}
-
-[ need to check for restore game so patient2/4 view can 
-[ be loaded and drawn correctly
-if (gameRestored) {
-  set(noScript);
-  if (patient4Loc == LOC_GONE) {
-    load.view(vw.Patient2);
-  } else {
-    load.view(vw.Patient4);
-  }
-  reset(noScript);
-  if (fP24Visible) {
-    draw(oPatient2);
-  }
 }
 
 [ check for one min timer
@@ -759,6 +733,9 @@ if (receptionistTimer > 0) {
         patient4Seq = STANDUP;
         set.loop(oPatient4, LP_P_SIT);
         set.cel(oPatient4, 0);
+        work1 = -2;
+        work2 = 0;
+        reposition(oPatient4, work1, work2);
         end.of.loop(oPatient4, fP4Done);
       }
       [ if patient1 or ego want to talk
@@ -1065,7 +1042,11 @@ if (patient1Timer > 0) {
       goto(p1SeqDone);
     }
     if (patient1Seq == MOVEHALL3) {
-      patient1Timer = 20;
+    [ TODO: adjust timer events for speed
+    [ current hardcoded values are based on speed of six
+    [ formula is (T * 60)/INT
+    [ T = desired time in seconds; INT = animationInterval
+      patient1Timer = 100;
       erase(oPatient1);
       goto(p1SeqDone);
     }
@@ -1124,7 +1105,6 @@ if (patient2Timer == 0) {
     set.loop(oPatient2, LP_MOVERIGHT);
     normal.cycle(oPatient2);
     draw(oPatient2);
-    set(fP24Visible);
     move.obj(oPatient2, 86, 91, 1, fP2Done);
     goto(p2SeqDone);
   }
@@ -1136,19 +1116,10 @@ if (patient2Timer == 0) {
   [ patient 2 arrives
   if (patient2Seq == ARRIVE) {
     patient2Seq = MOVESEAT1;
-    set(noScript);
-    current.view(oPatient2, work1);
-    if (work1 == vw.Patient4) {
-      discard.view.v(work1);
-    }
-    load.view(vw.Patient2);
-    reset(noScript);
-    set.view(oPatient2, vw.Patient2);
     set.loop(oPatient2, LP_MOVEUP);
     normal.cycle(oPatient2);
     position(oPatient2, 116, 167);
     draw(oPatient2);
-    set(fP24Visible);
     move.obj(oPatient2, 116, 142, 1, fP2Done);
     goto(p2SeqDone);
   }
@@ -1243,7 +1214,6 @@ if (fP2Done) {
   }
   if (patient2Seq == MOVEHALL3) {
     erase(oPatient2);
-    reset(fP24Visible);
     goto(p2SeqDone);
   }
   if (patient2Seq == RTNHALL1) {
@@ -1268,7 +1238,6 @@ if (fP2Done) {
   if (patient2Seq == RTNHALL4) {
     patient2Seq = IDLE;
     erase(oPatient2);
-    reset(fP24Visible);
     reset(fPatientAtDoor);
   }
 }
@@ -1313,11 +1282,11 @@ if (patient3Timer == 0) {
   if (patient3Seq == SKIP) {
     goto(P3SeqDone);
   }
-  
+[ TODO: calling trace when a print window is open works, but 
+[ it's blank until enter pressed; then it begins tracing
   [ patient 3 arrives
   if (patient3Seq == ARRIVE) {
     patient3Seq = MOVESEAT1;
-    set.view(oPatient3, vw.Patient3);
     set.loop(oPatient3, LP_MOVEUP);
     normal.cycle(oPatient3);
     position(oPatient3, 116, 167);
@@ -1476,7 +1445,6 @@ if (patient4Timer == 0) {
     patient4Seq = RTNHALL1;
     set.loop(oPatient4, LP_MOVERIGHT);
     draw(oPatient4);
-    set(fP24Visible);
     move.obj(oPatient4, 86, 91, 1, fP4Done);
     goto(p4SeqDone);
   }
@@ -1488,19 +1456,10 @@ if (patient4Timer == 0) {
   [ patient 4 arrives
   if (patient4Seq == ARRIVE) {
     patient4Seq = MOVESEAT1;
-    set(noScript);
-    current.view(oPatient2, work1);
-    if (work1 == vw.Patient2) {
-      discard.view.v(work1);
-    }
-    load.view(vw.Patient4);
-    reset(noScript);
-    set.view(oPatient4, vw.Patient4);
     set.loop(oPatient4, LP_MOVEUP);
     normal.cycle(oPatient4);
     position(oPatient4, 116, 167);
     draw(oPatient4);
-    set(fP24Visible);
     move.obj(oPatient4, 116, 142, 1, fP4Done);
     goto(p4SeqDone);
   }
@@ -1567,6 +1526,11 @@ if (fP4Done) {
   }
   if (patient4Seq == SITDOWN) {
     patient4Seq = IDLE;
+    set.loop(oPatient4, LP_P_GETPHONE);
+    set.cel(oPatient4, 0);
+    work1 = 2;
+    work2 = 0;
+    reposition(oPatient4, work1, work2);
     random(20, 60, work1);
     patient4Timer = work1;
     goto(p4SeqDone);
@@ -1594,7 +1558,6 @@ if (fP4Done) {
   }
   if (patient4Seq == MOVEHALL3) {
     erase(oPatient4);
-    reset(fP24Visible);
     goto(p4SeqDone);
   }
   if (patient4Seq == RTNHALL1) {
@@ -1619,7 +1582,6 @@ if (fP4Done) {
   if (patient4Seq == RTNHALL4) {
     patient4Seq = IDLE;
     erase(oPatient4);
-    reset(fP24Visible);
     reset(fPatientAtDoor);
   }
 }

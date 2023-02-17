@@ -49,7 +49,6 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 25) && mouseY > 7) {
   }
 }
 
-
 [ check for button click
 if (controller(cLeftClick)) {
   if (!deathType) {
@@ -182,15 +181,7 @@ if (mouseBtn != 1) {
         call(lgc.CacheOptions);
         restart.game();
       } else {
-      [ TODO: with new button strategy, patient2/4 can both be assigned at same time
-        [ if in lobby, need to erase patient2 if currently visible
-        if (currentRoom == rm.Lobby && f237) {
-          erase(o5);
-        }
         save.game();
-        if (currentRoom == rm.Lobby && f237) {
-          draw(o5);
-        }
       }
     }
     [ if on button3:
