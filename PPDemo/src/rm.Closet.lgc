@@ -60,8 +60,21 @@ if (newRoom) {
   [ the horizon defines the upper limit of ego's movement
   set.horizon(0);
   
+  [ add button-up images
+  set(noScript);
+  load.view(vw.ButtonsUp);
+  add.to.pic(vw.ButtonsUp, 0, 0, 15, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 1, 32, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 2, 48, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 3, 64, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 4, 81, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 5, 97, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 6, 113, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 7, 129, 16, 15, 4);
+  discard.view(vw.ButtonsUp);
+  reset(noScript);
   [ add toolbar buttons
-  load.view(vw.Toolbar);
+  load.view(vw.ButtonsUp);
   call(lgc.InitToolbar);
   
   load.view(vw.ClosetArt);
@@ -240,12 +253,17 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   
 }
 
-[ if NOT clicking on the actual toolbar, check for
-[ clicks on ingame items (unless wait cursor is active)
-if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 167 && 
-    (cursoricon == C_TALK || cursoricon == C_LOOK || cursoricon == C_USE) && 
-    controller(cLeftClick)) {
-
+[ if cursor is look/talk/use and left-click and NOT 
+[ clicking on the actual toolbar, check for clicks
+[ on in-game items
+if (cursoricon > C_WALK && cursoricon < C_WAIT && 
+    controller(cLeftClick) &&
+    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+  [ ignore borders
+  if ((mouseX < 41 || mouseX > 113 || mouseY < 70 || mouseY > 166)) {
+    goto(doneclick);
+  }
+  
   [ if still sitting (after falling)
   if (fallSeq == FALLDONE) {
     print("You should stand up first.");

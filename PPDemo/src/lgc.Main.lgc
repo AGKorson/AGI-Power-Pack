@@ -324,6 +324,7 @@ if (newRoom) {
     load.logics(lgc.GameFunctions);
     [ also toolbar functions
     load.logics(lgc.ToolbarFunctions);
+    load.logics(lgc.UseItem);
   }
   [ if debugging is active
   if (debugging) {
@@ -881,7 +882,12 @@ if (!disableGameFunctions) {
     return();
   }
   
-  call(lgc.GameFunctions); 
+  if (cursormode < C_DISK) {
+    call(lgc.GameFunctions);
+  } else {
+    [ if using an item, use different function call
+    call(lgc.UseItem);
+  }
   call(lgc.ToolbarFunctions);
 }
   

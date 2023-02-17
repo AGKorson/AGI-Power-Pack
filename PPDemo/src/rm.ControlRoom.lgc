@@ -67,8 +67,21 @@ if (newRoom) {
   [ default horizion is 36; adjust it as needed
   set.horizon(120);
   
+  [ add button-up images
+  set(noScript);
+  load.view(vw.ButtonsUp);
+  add.to.pic(vw.ButtonsUp, 0, 0, 15, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 1, 32, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 2, 48, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 3, 64, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 4, 81, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 5, 97, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 6, 113, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 7, 129, 16, 15, 4);
+  discard.view(vw.ButtonsUp);
+  reset(noScript);
   [ add toolbar buttons
-  load.view(vw.Toolbar);
+  load.view(vw.ButtonsUp);
   call(lgc.InitToolbar);
   
   if (previousRoom == rm.Office) {
@@ -118,232 +131,236 @@ if (newRoom) {
 [ EVERY CYCLE
 [ **************************************
 
-[ if NOT clicking on the actual toolbar, check for
-[ clicks on ingame items
-if (cursoricon != C_WAIT && controller(cLeftClick)) {
-  [ ignore toolbar
-  if (mouseX > 13 && mouseX < 146 && mouseY < 26) {
-  } else {
-    [ look
-    if (cursormode == C_LOOK) {
-      [ ego
-      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
-        print("You see you.");
-        goto(doneclick);
-      }
-      
-      [ doorway to stairwell 71, 159, 90, 167
-      if (mouseX > 70 && mouseX < 91 && mouseY > 166 && mouseY < 176) {
-        [ check for door open/close
-        if (resetBaDASS) {
-          [ door is open
-          print("The door to the stairwell is open.");
-        } else {
-          print("The door to the stairwell is shut.");
-        }
-        goto(doneclick);
-      }
-      
-      [ office entrance 4, 103, 15, 148
-      if (mouseX > 3 && mouseX < 16 && mouseY > 110 && mouseY < 157) {
-        print("This doorway leads to an office.");
-        goto(doneclick);
-      }
-      [ supply room entrance 142, 103, 154, 148
-      if (mouseX > 141 && mouseX < 155 && mouseY > 110 && mouseY < 157) {
-        print("This doorway leads to a storage room.");
-        goto(doneclick);
-      }
-      
-      [ keyboard/mouse 67, 112, 96, 122
-      if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
-        print("The mouse and keyboard are for controlling the computer terminal.");
-        goto(doneclick);
-      }
-      
-      [ control panels
-      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT) 
-      [ priority value indicates which panel
-      work1 /= 16;
-      if (work1 == 5) {
-        [ terminal
-        print("This looks like an old style computer terminal display. A "
-              "floppy disk drive is located to the right of the display.");
-        goto(doneclick);
-      }
-      if (work1 == 6) {
-        [ ERIDOCC
-        if (showERIDOCC) {
-          print("This is the ERIDOCC module interface display.");
-        } else {
-          print("This display is showing an error message. It's real purpose "
-                "is not known.");
-        }
-        goto(doneclick);
-      }
-      if (work1 == 7) {
-        [ OFROCC
-        if (showOFROCC) {
-          print("This is the OFROCC module interface display.");
-        } else {
-          print("This display is showing an error message. It's real purpose "
-                "is not known.");
-        }
-        goto(doneclick);
-      }
-      if (work1 == 8) {
-        [ ESADOCC
-        if (showERIDOCC) {
-          print("This is the ERIDOCC module interface display.");
-        } else {
-          print("This display is showing an error message. It's real purpose "
-                "is not known.");
-        }
-        goto(doneclick);
-      }
-      if (work1 == 9) {
-        [ ICAPOCC
-        if (showICAPOCC) {
-          print("This is the ICAPOCC module interface display.");
-        } else {
-          print("This display is showing an error message. It's real purpose "
-                "is not known.");
-        }
-        goto(doneclick);
-      }
-      if (work1 == 10) {
-        [ RANDOCC
-        if (showRANDOCC) {
-          print("This is the RANDOCC module interface display.");
-        } else {
-          print("This display is showing an error message. It's real purpose "
-                "is not known.");
-        }
-        goto(doneclick);
-      }
-      if (work1 == 11) {
-        [ CAISOCC
-        if (showCAISOCC) {
-          print("This is the CAISOCC module interface display.");
-        } else {
-          print("This display is showing an error message. It's real purpose "
-                "is not known.");
-        }
-        goto(doneclick);
-      }
-  
-      [ main console 31, 46, 128, 131
-      if(mouseX > 30 && mouseX < 129 && mouseY > 53 && mouseY < 140) {
-        print("This massive computer control console takes up most of the "
-              "room. There is a central terminal station, and six auxillary "
-              "display panels.");
-        goto(doneclick);
-      }
-      [ nothing specific
-      print("The room is dominated by a large control panel in the center "
-            "of the room. There are exits leading to the left and right.");
-      goto(doneclick);
-    }
-    
-    [ talk
-    if (cursormode == C_TALK) {
-      [ ego
-      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
-        print("You have nothing to say.");
-      } else {
-        print("There is no one here to talk to.");
-      }
-      goto(doneclick);
-    }
-    
-    [ use
-    if (cursormode == C_USE) {
-      [ ego
-      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
-        print("Please don't touch yourself. Not even when you're alone.");
-        goto(doneclick);
-      }
-      
-      reset(nearTerminal);
-      if (obj.in.box(ego, 64, 133, 104, 138)) {
-        set(nearTerminal);
-      }
-      
-      [ keyboard/mouse 67, 112, 96, 122
-      if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
-        if (nearTerminal) {
-          set(showMOCC);
-        } else {
-          print("You need to move closer to reach the keyboard and mouse.");
-        }
-        goto(doneclick);
-      }
-      
-      [ check for control panels
-      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT) 
-      [ priority value indicates which panel
-      work1 /= 16;
-      if (work1 == 5) {
-        [ terminal
-        if (nearTerminal) {
-          set(showMOCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-      if (work1 == 6) {
-        [ ERIDOCC
-        if (nearTerminal) {
-          set(showERIDOCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-      if (work1 == 7) {
-        [ OFROCC
-        if (nearTerminal) {
-          set(showOFROCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-      if (work1 == 8) {
-        [ ESADOCC
-        if (nearTerminal) {
-          set(showESADOCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-      if (work1 == 9) {
-        [ ICAPOCC
-        if (nearTerminal) {
-          set(showICAPOCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-      if (work1 == 10) {
-        [ RANDOCC
-        if (nearTerminal) {
-          set(showRANDOCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-      if (work1 == 11) {
-        [ CAISOCC
-        if (nearTerminal) {
-          set(showCAISOCC);
-        } else {
-          print("Use the mouse and keyboard to interact with this system.");
-        }
-      }
-    }
-  
-    :doneclick
-    set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+[ if cursor is look/talk/use and left-click and NOT 
+[ clicking on the actual toolbar, check for clicks
+[ on in-game items
+if (cursoricon > C_WALK && cursoricon < C_WAIT && 
+    controller(cLeftClick) &&
+    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+  [ ignore borders
+  if ((mouseX < 3 || mouseX > 156 || mouseY < 20 || mouseY > 175)) {
+    goto(doneclick);
   }
+
+  [ look
+  if (cursormode == C_LOOK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You see you.");
+      goto(doneclick);
+    }
+    
+    [ doorway to stairwell 71, 159, 90, 167
+    if (mouseX > 70 && mouseX < 91 && mouseY > 166 && mouseY < 176) {
+      [ check for door open/close
+      if (resetBaDASS) {
+        [ door is open
+        print("The door to the stairwell is open.");
+      } else {
+        print("The door to the stairwell is shut.");
+      }
+      goto(doneclick);
+    }
+    
+    [ office entrance 4, 103, 15, 148
+    if (mouseX > 3 && mouseX < 16 && mouseY > 110 && mouseY < 157) {
+      print("This doorway leads to an office.");
+      goto(doneclick);
+    }
+    [ supply room entrance 142, 103, 154, 148
+    if (mouseX > 141 && mouseX < 155 && mouseY > 110 && mouseY < 157) {
+      print("This doorway leads to a storage room.");
+      goto(doneclick);
+    }
+    
+    [ keyboard/mouse 67, 112, 96, 122
+    if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
+      print("The mouse and keyboard are for controlling the computer terminal.");
+      goto(doneclick);
+    }
+    
+    [ control panels
+    block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT) 
+    [ priority value indicates which panel
+    work1 /= 16;
+    if (work1 == 5) {
+      [ terminal
+      print("This looks like an old style computer terminal display. A "
+            "floppy disk drive is located to the right of the display.");
+      goto(doneclick);
+    }
+    if (work1 == 6) {
+      [ ERIDOCC
+      if (showERIDOCC) {
+        print("This is the ERIDOCC module interface display.");
+      } else {
+        print("This display is showing an error message. It's real purpose "
+              "is not known.");
+      }
+      goto(doneclick);
+    }
+    if (work1 == 7) {
+      [ OFROCC
+      if (showOFROCC) {
+        print("This is the OFROCC module interface display.");
+      } else {
+        print("This display is showing an error message. It's real purpose "
+              "is not known.");
+      }
+      goto(doneclick);
+    }
+    if (work1 == 8) {
+      [ ESADOCC
+      if (showERIDOCC) {
+        print("This is the ERIDOCC module interface display.");
+      } else {
+        print("This display is showing an error message. It's real purpose "
+              "is not known.");
+      }
+      goto(doneclick);
+    }
+    if (work1 == 9) {
+      [ ICAPOCC
+      if (showICAPOCC) {
+        print("This is the ICAPOCC module interface display.");
+      } else {
+        print("This display is showing an error message. It's real purpose "
+              "is not known.");
+      }
+      goto(doneclick);
+    }
+    if (work1 == 10) {
+      [ RANDOCC
+      if (showRANDOCC) {
+        print("This is the RANDOCC module interface display.");
+      } else {
+        print("This display is showing an error message. It's real purpose "
+              "is not known.");
+      }
+      goto(doneclick);
+    }
+    if (work1 == 11) {
+      [ CAISOCC
+      if (showCAISOCC) {
+        print("This is the CAISOCC module interface display.");
+      } else {
+        print("This display is showing an error message. It's real purpose "
+              "is not known.");
+      }
+      goto(doneclick);
+    }
+
+    [ main console 31, 46, 128, 131
+    if(mouseX > 30 && mouseX < 129 && mouseY > 53 && mouseY < 140) {
+      print("This massive computer control console takes up most of the "
+            "room. There is a central terminal station, and six auxillary "
+            "display panels.");
+      goto(doneclick);
+    }
+    [ nothing specific
+    print("The room is dominated by a large control panel in the center "
+          "of the room. There are exits leading to the left and right.");
+    goto(doneclick);
+  }
+  
+  [ talk
+  if (cursormode == C_TALK) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("You have nothing to say.");
+    } else {
+      print("There is no one here to talk to.");
+    }
+    goto(doneclick);
+  }
+  
+  [ use
+  if (cursormode == C_USE) {
+    [ ego
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("Please don't touch yourself. Not even when you're alone.");
+      goto(doneclick);
+    }
+    
+    reset(nearTerminal);
+    if (obj.in.box(ego, 64, 133, 104, 138)) {
+      set(nearTerminal);
+    }
+    
+    [ keyboard/mouse 67, 112, 96, 122
+    if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
+      if (nearTerminal) {
+        set(showMOCC);
+      } else {
+        print("You need to move closer to reach the keyboard and mouse.");
+      }
+      goto(doneclick);
+    }
+    
+    [ check for control panels
+    block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT) 
+    [ priority value indicates which panel
+    work1 /= 16;
+    if (work1 == 5) {
+      [ terminal
+      if (nearTerminal) {
+        set(showMOCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+    if (work1 == 6) {
+      [ ERIDOCC
+      if (nearTerminal) {
+        set(showERIDOCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+    if (work1 == 7) {
+      [ OFROCC
+      if (nearTerminal) {
+        set(showOFROCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+    if (work1 == 8) {
+      [ ESADOCC
+      if (nearTerminal) {
+        set(showESADOCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+    if (work1 == 9) {
+      [ ICAPOCC
+      if (nearTerminal) {
+        set(showICAPOCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+    if (work1 == 10) {
+      [ RANDOCC
+      if (nearTerminal) {
+        set(showRANDOCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+    if (work1 == 11) {
+      [ CAISOCC
+      if (nearTerminal) {
+        set(showCAISOCC);
+      } else {
+        print("Use the mouse and keyboard to interact with this system.");
+      }
+    }
+  }
+
+  :doneclick
+  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
 }
 
 [ **************************************

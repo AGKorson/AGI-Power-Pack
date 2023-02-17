@@ -58,7 +58,6 @@
 #define fFalling       f238
 #define fPagesTurned   f239
 
-
 #define receptionistLoc v220
 #define   PHONE         1
 #define   COMPUTER      2
@@ -138,10 +137,23 @@ if (newRoom) {
   draw.pic(currentRoom);
   discard.pic(currentRoom);
   
+  [ add button-up images
+  set(noScript);
+  load.view(vw.ButtonsUp);
+  add.to.pic(vw.ButtonsUp, 0, 0, 15, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 1, 32, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 2, 48, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 3, 64, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 4, 81, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 5, 97, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 6, 113, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 7, 129, 16, 15, 4);
+  discard.view(vw.ButtonsUp);
+  reset(noScript);
   [ add toolbar buttons
-  load.view(vw.Toolbar);
+  load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
-  
+[ TODO: one regular btn, one toggle btn  
   
   [ the horizon defines the upper limit of ego's movement
   set.horizon(94);
@@ -1722,11 +1734,16 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
 }
 
-[ if mouse-click but NOT clicking on the toolbar, 
-[ check for clicks on ingame items
-if (mouseX >= 0 && mouseX < 155 && mouseY > 30 && mouseY < 164 && 
-    (cursoricon == C_TALK || cursoricon == C_LOOK || cursoricon == C_USE) && 
-    controller(cLeftClick)) {
+[ if cursor is look/talk/use and left-click and NOT 
+[ clicking on the actual toolbar, check for clicks
+[ on in-game items
+if (cursoricon > C_WALK && cursoricon < C_WAIT && 
+    controller(cLeftClick) &&
+    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+  [ ignore borders
+  if ((mouseX > 154 || mouseY < 31 || mouseY > 163)) {
+    goto(doneclick);
+  }
   if (cursormode == C_LOOK) {
     [ ego
     if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {

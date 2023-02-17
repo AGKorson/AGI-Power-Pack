@@ -31,8 +31,11 @@ if (deathType < 254) {
   program.control();
   
   [ change save button to restart
-  set.cel(tbSave, 8);
-  
+  set(noScript);
+  load.view(vw.ButtonsUp);
+  add.to.pic(vw.ButtonsUp, 0, 8, 48, 16, 15, 4);
+  discard.view(vw.ButtonsUp);
+  reset(noScript);
 [  [ clear status lines
 [  clear.lines(23, 24, 0);
   

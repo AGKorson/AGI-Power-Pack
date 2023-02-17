@@ -302,7 +302,18 @@ if (controller(cChooseItem)) {
   [ in the inventory screen
   if (selectedItem > 0 && selectedItem != 255) {
     [ use or examine selected item
-    [if (examineitem) {
+    if (cursormode == C_USE) {
+      [ disk
+      if (selectedItem == 2) {
+        cursormode = C_DISK;
+        status.line.off();
+        prevent.input();
+      }
+      [ keyfob
+      [ cassette
+      [ other stuff for reading
+      
+    } else {
       [ PQ list doesn't use a view
       if (selectedItem == 13) {
         call(lgc.PQList);
@@ -323,11 +334,7 @@ if (controller(cChooseItem)) {
                 "team when KQIII was first designed.");
         }
       }
-    [}
-    [if (useitem) {
-    [  change cursor
-    [  enable useitem mode
-    [}
+    }
   }
 }
 

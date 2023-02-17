@@ -237,6 +237,9 @@ if (newRoom) {
   oldSpeed = animationInterval;
   animationInterval = FAST_SPEED;
 
+  [ blank out end of export string (39 spaces, one null char)
+  s19 = "                                       ";
+  
   [ need to show the pic before text can be added
   show.pic();
   
@@ -1012,16 +1015,14 @@ if (btnAction == B_PREVIEW) {
 
 if (btnAction == B_SAVE) {
   [ to modify (save) the cursor, code must be run
-  [ from its owning logic (logic 90)
+  [ from logic 0
   set(saveCursor);
-  call(lgc.GameFunctions);
 }
 
 if (btnAction == B_RESTORE) {
   [ load default cursor, overwriting any changes made
   [ (also must be run from logic 0)
   set(restoreCursor);
-  call(lgc.GameFunctions);
 }
 
 if (btnAction == B_EXPORT) {

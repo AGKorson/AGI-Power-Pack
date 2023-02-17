@@ -4,93 +4,45 @@
 
 [[ fade in
 
-animate.obj(tbPoint);
-animate.obj(tbQuit);
-animate.obj(tbSave);
-animate.obj(tbRestore);
-animate.obj(tbMove);
-animate.obj(tbLook);
-animate.obj(tbTalk);
-animate.obj(tbUse);
+animate.obj(tbStateBtn);
+animate.obj(tbActionBtn);
 
-set.view(tbPoint, vw.Toolbar);
-set.view(tbQuit, vw.Toolbar);
-set.view(tbSave, vw.Toolbar);
-set.view(tbRestore, vw.Toolbar);
-set.view(tbMove, vw.Toolbar);
-set.view(tbLook, vw.Toolbar);
-set.view(tbTalk, vw.Toolbar);
-set.view(tbUse, vw.Toolbar);
+set.view(tbStateBtn, vw.ButtonsDown);
+set.view(tbActionBtn, vw.ButtonsDown);
 
-  set.cel(tbPoint, 0);
-  set.cel(tbQuit, 1);
-  set.cel(tbSave, 2);
-  set.cel(tbRestore, 3);
-  set.cel(tbMove, 4);
-  set.cel(tbLook, 5);
-  set.cel(tbTalk, 6);
-  set.cel(tbUse, 7);
+set.cel(tbStateBtn, 0);
+set.cel(tbActionBtn, 0);
+
+stop.cycling(tbStateBtn);
+stop.cycling(tbActionBtn);
+
+ignore.horizon(tbStateBtn);
+ignore.horizon(tbActionBtn);
+
+set.priority(tbStateBtn, 15);
+set.priority(tbActionBtn, 15);
 
 if (cursormode == C_DEFAULT) {
-  set.loop(tbPoint, 1);
+  set.cel(tbStateBtn, 0);
+  position(tbStateBtn, 15, 16);
 }
 if (cursormode == C_WALK) {
-  set.loop(tbMove, 1);
+  set.cel(tbStateBtn, 4);
+  position(tbStateBtn, 81, 16);
 }
 if (cursormode == C_LOOK) {
-  set.loop(tbLook, 1);
+  set.cel(tbStateBtn, 5);
+  position(tbStateBtn, 97, 16);
 }
 if (cursormode == C_TALK) {
-  set.loop(tbTalk, 1);
+  set.cel(tbStateBtn, 6);
+  position(tbStateBtn, 113, 16);
 }
 if (cursormode == C_USE) {
-  set.loop(tbUse, 1);
+  set.cel(tbStateBtn, 7);
+  position(tbStateBtn, 129, 16);
 }
-
-stop.cycling(tbPoint);
-stop.cycling(tbQuit);
-stop.cycling(tbSave);
-stop.cycling(tbRestore);
-stop.cycling(tbMove);
-stop.cycling(tbLook);
-stop.cycling(tbTalk);
-stop.cycling(tbUse);
-
-ignore.horizon(tbPoint);
-ignore.horizon(tbQuit);
-ignore.horizon(tbSave);
-ignore.horizon(tbRestore);
-ignore.horizon(tbMove);
-ignore.horizon(tbLook);
-ignore.horizon(tbTalk);
-ignore.horizon(tbUse);
-
-position(tbPoint, 15, 16);
-position(tbQuit, 32, 16);
-position(tbSave, 48, 16);
-position(tbRestore, 64, 16);
-position(tbMove, 81, 16);
-position(tbLook, 97, 16);
-position(tbTalk, 113, 16);
-position(tbUse, 129, 16);
-
-set.priority(tbPoint, 15);
-set.priority(tbQuit, 15);
-set.priority(tbSave, 15);
-set.priority(tbRestore, 15);
-set.priority(tbMove, 15);
-set.priority(tbLook, 15);
-set.priority(tbTalk, 15);
-set.priority(tbUse, 15);
-
-draw(tbPoint);
-draw(tbQuit);
-draw(tbSave);
-draw(tbRestore);
-draw(tbMove);
-draw(tbLook);
-draw(tbTalk);
-draw(tbUse);
+draw(tbStateBtn);
 
 return();
 

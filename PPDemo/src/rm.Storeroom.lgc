@@ -177,8 +177,21 @@ if (newRoom) {
     draw(oDeskDrawer);
   }
   
+  [ add button-up images
+  set(noScript);
+  load.view(vw.ButtonsUp);
+  add.to.pic(vw.ButtonsUp, 0, 0, 15, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 1, 32, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 2, 48, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 3, 64, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 4, 81, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 5, 97, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 6, 113, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 7, 129, 16, 15, 4);
+  discard.view(vw.ButtonsUp);
+  reset(noScript);
   [ add toolbar buttons
-  load.view(vw.Toolbar);
+  load.view(vw.ButtonsUp);
   call(lgc.InitToolbar);
   
   [ add ego to the room
@@ -212,8 +225,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     [ only if coffin is open
     if (vCoffinState == OPEN) {
       print("You lean over the coffin to get a closer look at the pillow.");
-      call(lgc.Pillow);
-      call(lgc.RedrawRoom);
+      goto(lookpillow);
     } else {
       print("There's no pillow here.");
     }
@@ -387,9 +399,16 @@ if (posn(ego, 112, 154, 123, 162)) {
   release.priority(oChest);
 }
 
-[ if NOT clicking on the toolbar, check for
-[ clicks on in-game items
-if (mouseY > 25 && controller(cLeftClick)) {
+[ if cursor is look/talk/use and left-click and NOT 
+[ clicking on the actual toolbar, check for clicks
+[ on in-game items
+if (cursoricon > C_WALK && cursoricon < C_WAIT && 
+    controller(cLeftClick) &&
+    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+  [ ignore borders
+  if ((mouseX < 27 || mouseX > 149 || mouseY < 25 || mouseY > 167)) {
+    goto(doneclick);
+  }
   [ look
   if (cursormode == C_LOOK) {
     [ ego
@@ -657,7 +676,12 @@ if (mouseY > 25 && controller(cLeftClick)) {
       if (vCoffinState == OPEN) {
         print("The coffin is empty except for a silk pillow and a padded "
               "lining. It actually looks quite comfortable.");
-
+        [ if on pillow, show it
+        if (mouseX > 27 && mouseX < 150 && mouseY > 35 && mouseY < 153) {
+          :lookpillow
+          call(lgc.Pillow);
+          call(lgc.RedrawRoom);
+        }
       } else {
         print("It's Count Dracula's coffin from King's Quest II. Hopefully "
               "no body is in there.");

@@ -1,0 +1,21 @@
+[ 
+[ lgc.UseItem
+[
+[ when in 'use-item' mode, this logic 
+[ handles the user's input (click)
+
+[ check for mouse clicks
+if (controller(cLeftClick)) {
+  if (selectedItem == 2) {
+    print("it's a disk!");
+  }
+  accept.input();
+  status.line.on();
+  cursormode = C_USE;
+}
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

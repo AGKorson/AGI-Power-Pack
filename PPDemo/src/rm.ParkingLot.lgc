@@ -37,6 +37,24 @@ if (newRoom) {
   draw.pic(currentRoom);
   discard.pic(currentRoom);
   
+[ TODO: need to redraw buttons after restoring
+  [ add button-up images
+  set(noScript);
+  load.view(vw.ButtonsUp);
+  add.to.pic(vw.ButtonsUp, 0, 0, 15, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 1, 32, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 2, 48, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 3, 64, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 4, 81, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 5, 97, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 6, 113, 16, 15, 4);
+  add.to.pic(vw.ButtonsUp, 0, 7, 129, 16, 15, 4);
+  discard.view(vw.ButtonsUp);
+  reset(noScript);
+  [ add toolbar buttons
+  load.view(vw.ButtonsDown);
+  call(lgc.InitToolbar);
+  
   [ the horizon defines the upper limit of ego's movement
   set.horizon(117);
   
@@ -177,10 +195,6 @@ if (newRoom) {
     egodir = STOPPED;
     draw(ego);
   }
-  
-  [ add toolbar buttons
-  load.view(vw.Toolbar);
-  call(lgc.InitToolbar);
   
   [ display the picture on screen
   show.pic();
@@ -582,436 +596,437 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
 }
 
-[ if NOT clicking on the actual toolbar, check for
-[ clicks on ingame items (unless wait cursor is active)
-
-if (cursoricon != C_WAIT && controller(cLeftClick)) {
-  [ ignore toolbar
-  if (mouseX > 13 && mouseX < 146 && mouseY < 26) {
-  } else {
-    if (cursormode == C_LOOK) {
-      [ same as 'look'
-      [ check for objects first
-      
-      [ ego
-      if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
-        print("Yes, Drew is a handsome fellow. Easy on the eyes.");
-        goto(doneclick);
+[ if cursor is look/talk/use and left-click and NOT 
+[ clicking on the actual toolbar, check for clicks
+[ on in-game items
+if (cursoricon > C_WALK && cursoricon < C_WAIT && 
+    controller(cLeftClick) &&
+    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+  [ ignore borders
+  if ((mouseY < 31 || mouseY > 175)) {
+    goto(doneclick);
+  }
+  if (cursormode == C_LOOK) {
+    [ same as 'look'
+    [ check for objects first
+    
+    [ ego
+    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+      print("Yes, Drew is a handsome fellow. Easy on the eyes.");
+      goto(doneclick);
+    }
+    
+    [ ego car
+    if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      current.loop(egoCar, work1);
+      if (work1 > 18) {
+        work1 -= 19;
       }
-      
-      [ ego car
-      if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        current.loop(egoCar, work1);
-        if (work1 > 18) {
-          work1 -= 19;
-        }
-        if (work1 < 8) {
-          print("This is your car. You drove it here.");
+      if (work1 < 8) {
+        print("This is your car. You drove it here.");
+      } else {
+        if (work1 < 12) {
+          print("Your minivan is great to have on long road trips like this one.");
         } else {
-          if (work1 < 12) {
-            print("Your minivan is great to have on long road trips like this one.");
+          if (work1 < 17) {
+            print("Your truck doesn't get the best mileage, but it's great for hauling stuff.");
           } else {
-            if (work1 < 17) {
-              print("Your truck doesn't get the best mileage, but it's great for hauling stuff.");
+            if (work1 == 17) {
+              print("This is your red sportscar. You love to go fast!");
             } else {
-              if (work1 == 17) {
-                print("This is your red sportscar. You love to go fast!");
-              } else {
-                print("Yeah, this is your batmobile. How cool is that?");
-              }
+              print("Yeah, this is your batmobile. How cool is that?");
             }
           }
         }
-        goto(doneclick);
       }
-      
-      [ patient
-      if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
+      goto(doneclick);
+    }
+    
+    [ patient
+    if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
+      [ coming or going?
+      if ((patientSeq == 4 || patientSeq == 5 ||
+           patientSeq == 13 || patientSeq == 14)) {
+        print("This person is leaving.");
+      } else {
+        print("This person must have an appointment. They seem to be in a hurry.");
+      }
+      goto(doneclick);
+    }
+    
+    [ patient car
+    if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      current.loop(patientCar, work1);
+      if (work1 > 18) {
+        work1 -= 19;
+      }
+      if (work1 < 8) {
+        print("It's a patient's car.");
+      } else {
+        if (work1 < 12) {
+          print("This minivan belongs to one of the patients.");
+        } else {
+          if (work1 < 17) {
+            print("It's a truck belonging to one of the patients.");
+          } else {
+            if (work1 == 17) {
+              print("This sportscar belongs to one of the patients.");
+            } else {
+              print("A batmobile? Who drives a batmobile to a doctor's appointment?");
+            }
+          }
+        }
+      }
+      goto(doneclick);
+    }
+
+    [ parked cars
+    reset(fClickOn);
+    if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
+      set(fClickOn);
+    }
+    if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
+      set(fClickOn);
+    }
+    if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
+      set(fClickOn);
+    }
+    if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
+      set(fClickOn);
+    }
+    if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
+      set(fClickOn);
+    }
+    if(fClickOn) {
+      print("There are a several cars in the parking lot. Only one is yours. This is not the one.");
+      goto(doneclick);
+    }
+    
+    [ then check background
+    [ pixel color can help with discriminating what was clicked
+    block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+
+    if (work1 > 239) {
+      [ foreground tree
+      print("Giant evergreen trees surround the parking lot.");
+      goto(doneclick);
+    }
+    
+    if (work1 > 111) { 
+      [ forest/mountain/sky
+      print("The forest and mountain are beautiful to look at.");
+      goto(doneclick);
+    }
+    if (work1 > 95) {
+      [ lawn/sidewalk
+      print("The lawn and shrubbery is well maintained.");
+      goto(doneclick);
+    }
+    if (work1 > 79) {
+      [ building
+      [ door
+      if (mouseX > 53 && mouseX < 60 && mouseY < 127 && mouseY > 112) {
+        print("There is a large automatic glass door at the entrance to building.");
+      } else {
+        print("The building looks almost the same as it did thirty years ago.");
+      }
+      goto(doneclick);
+    }
+    [ if nothing else, must be parking lot
+    print("It's a parking lot. What else do you want me to say?");
+    goto(doneclick);
+  }
+
+  if (cursormode == C_TALK) {
+    [ same as 'talk to'
+
+    [ ego
+    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+      print("You have nothing to say to yourself.");
+      goto(doneclick);
+    }
+    
+    [ ego car
+    if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      print("Your car has nothing to say.");
+      goto(doneclick);
+    }
+    
+    [ patient
+    if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, patient, work1);
+      if (work1 <= 20) {
         [ coming or going?
         if ((patientSeq == 4 || patientSeq == 5 ||
              patientSeq == 13 || patientSeq == 14)) {
-          print("This person is leaving.");
+          print("\"Sorry, gotta run!\"");
         } else {
-          print("This person must have an appointment. They seem to be in a hurry.");
+          print("\"Can't talk now, I'm late for my appointment.\"");
         }
-        goto(doneclick);
+      } else {
+        print("The person is too far away to hear you.");
       }
       
-      [ patient car
-      if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        current.loop(patientCar, work1);
-        if (work1 > 18) {
-          work1 -= 19;
-        }
-        if (work1 < 8) {
-          print("It's a patient's car.");
-        } else {
-          if (work1 < 12) {
-            print("This minivan belongs to one of the patients.");
-          } else {
-            if (work1 < 17) {
-              print("It's a truck belonging to one of the patients.");
-            } else {
-              if (work1 == 17) {
-                print("This sportscar belongs to one of the patients.");
-              } else {
-                print("A batmobile? Who drives a batmobile to a doctor's appointment?");
-              }
-            }
-          }
-        }
-        goto(doneclick);
-      }
-
-      [ parked cars
-      reset(fClickOn);
-      if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
-        set(fClickOn);
-      }
-      if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
-        set(fClickOn);
-      }
-      if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
-        set(fClickOn);
-      }
-      if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
-        set(fClickOn);
-      }
-      if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
-        set(fClickOn);
-      }
-      if(fClickOn) {
-        print("There are a several cars in the parking lot. Only one is yours. This is not the one.");
-        goto(doneclick);
-      }
-      
-      [ then check background
-      [ pixel color can help with discriminating what was clicked
-      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
-
-      if (work1 > 239) {
-        [ foreground tree
-        print("Giant evergreen trees surround the parking lot.");
-        goto(doneclick);
-      }
-      
-      if (work1 > 111) { 
-        [ forest/mountain/sky
-        print("The forest and mountain are beautiful to look at.");
-        goto(doneclick);
-      }
-      if (work1 > 95) {
-        [ lawn/sidewalk
-        print("The lawn and shrubbery is well maintained.");
-        goto(doneclick);
-      }
-      if (work1 > 79) {
-        [ building
-        [ door
-        if (mouseX > 53 && mouseX < 60 && mouseY < 127 && mouseY > 112) {
-          print("There is a large automatic glass door at the entrance to building.");
-        } else {
-          print("The building looks almost the same as it did thirty years ago.");
-        }
-        goto(doneclick);
-      }
-      [ if nothing else, must be parking lot
-      print("It's a parking lot. What else do you want me to say?");
       goto(doneclick);
     }
-  
-    if (cursormode == C_TALK) {
-      [ same as 'talk to'
-
-      [ ego
-      if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
-        print("You have nothing to say to yourself.");
-        goto(doneclick);
-      }
-      
-      [ ego car
-      if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        print("Your car has nothing to say.");
-        goto(doneclick);
-      }
-      
-      [ patient
-      if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
-        distance(ego, patient, work1);
-        if (work1 <= 20) {
-          [ coming or going?
-          if ((patientSeq == 4 || patientSeq == 5 ||
-               patientSeq == 13 || patientSeq == 14)) {
-            print("\"Sorry, gotta run!\"");
-          } else {
-            print("\"Can't talk now, I'm late for my appointment.\"");
-          }
-        } else {
-          print("The person is too far away to hear you.");
-        }
-        
-        goto(doneclick);
-      }
-      
-      [ patient car
-      if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        [ if patient is in car
-        if ((patientSeq == 1 || patientSeq == 7 || patientSeq == 8 ||
-             patientSeq == 10 || patientSeq == 11 || patientSeq == 12 ||
-             patientSeq == 13 || patientSeq == 19 || patientSeq == 20)) {
-          print("The person in the car can't hear you.");
-        } else {
-          print("There is no one in the car to talk to.");
-        }
-        goto(doneclick);
-      }
-
-      [ parked cars
-      reset(fClickOn);
-      if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
-        set(fClickOn);
-      }
-      if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
-        set(fClickOn);
-      }
-      if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
-        set(fClickOn);
-      }
-      if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
-        set(fClickOn);
-      }
-      if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
-        set(fClickOn);
-      }
-      if(fClickOn) {
+    
+    [ patient car
+    if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      [ if patient is in car
+      if ((patientSeq == 1 || patientSeq == 7 || patientSeq == 8 ||
+           patientSeq == 10 || patientSeq == 11 || patientSeq == 12 ||
+           patientSeq == 13 || patientSeq == 19 || patientSeq == 20)) {
+        print("The person in the car can't hear you.");
+      } else {
         print("There is no one in the car to talk to.");
-        goto(doneclick);
       }
-      
-      [ ignore anything else that's clicked on
       goto(doneclick);
     }
 
-    if (cursormode == C_USE) {
-      [ same as 'use item'
-      [ ego
-      if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
-        print("Please don't touch yourself in public. There may be children watching.");
-        goto(doneclick);
-      }
+    [ parked cars
+    reset(fClickOn);
+    if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
+      set(fClickOn);
+    }
+    if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
+      set(fClickOn);
+    }
+    if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
+      set(fClickOn);
+    }
+    if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
+      set(fClickOn);
+    }
+    if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
+      set(fClickOn);
+    }
+    if(fClickOn) {
+      print("There is no one in the car to talk to.");
+      goto(doneclick);
+    }
+    
+    [ ignore anything else that's clicked on
+    goto(doneclick);
+  }
 
-      [ ego car
-      if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        :entercar
-        if (posn(ego, 39, 132, 56, 146)) {
-          if (carLocked) {
-            print("The door is locked.");
-            return();
-          }
-          [ display a msgbox with 'yes/no' buttons
-          set(leaveWindow);
-          print("Are you sure you want to \nleave?\n\n");
-          draw(btnYes);
-          draw(btnNo);
-          [ need to force update so the buttons get drawn right now
-          force.update(btnYes);
-          [ add button text
-          set.text.attribute(-1, 0);
-          set.text.attribute(BLACK, WHITE);
-          display(12, 33, "Yes");
-          display(12, 43, "No");
-          set.text.attribute(0, -1);
-          [ change to default cursor (it will change back 
-          [ after dialog box is dismissed)
-          if (cursoricon != C_DEFAULT) {
-            [ change it
-            cursoricon = C_DEFAULT;
-            set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
-            [ disable click2move
-            reset(click2move);
-          }
-          [ clear input and controller before starting wait loop
-          set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+  if (cursormode == C_USE) {
+    [ same as 'use item'
+    [ ego
+    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+      print("Please don't touch yourself in public. There may be children watching.");
+      goto(doneclick);
+    }
+
+    [ ego car
+    if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      :entercar
+      if (posn(ego, 39, 132, 56, 146)) {
+        if (carLocked) {
+          print("The door is locked.");
+          return();
+        }
+        [ display a msgbox with 'yes/no' buttons
+        set(leaveWindow);
+        print("Are you sure you want to \nleave?\n\n");
+        draw(btnYes);
+        draw(btnNo);
+        [ need to force update so the buttons get drawn right now
+        force.update(btnYes);
+        [ add button text
+        set.text.attribute(-1, 0);
+        set.text.attribute(BLACK, WHITE);
+        display(12, 33, "Yes");
+        display(12, 43, "No");
+        set.text.attribute(0, -1);
+        [ change to default cursor (it will change back 
+        [ after dialog box is dismissed)
+        if (cursoricon != C_DEFAULT) {
+          [ change it
+          cursoricon = C_DEFAULT;
+          set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
+          [ disable click2move
+          reset(click2move);
+        }
+        [ clear input and controller before starting wait loop
+        set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+        lastChar = 0;
+        work1 = 0;
+        :wait
+        if (!have.key() && mouseBtn != 1) {
+          goto(wait);
+        }
+        [ if left button was pressed, check buttons
+        if (mouseBtn == 1) {
           lastChar = 0;
-          work1 = 0;
-          :wait
-          if (!have.key() && mouseBtn != 1) {
-            goto(wait);
-          }
-          [ if left button was pressed, check buttons
-          if (mouseBtn == 1) {
-            lastChar = 0;
-            if (posn(btnYes, ON.OBJ, 0, &mouseX, &mouseY)) {
-              work1 = 1;
-            } else {
-              if (posn(btnNo, ON.OBJ, 0, &mouseX, &mouseY)) {
-                work1 = 2;
-              }
-            }
+          if (posn(btnYes, ON.OBJ, 0, &mouseX, &mouseY)) {
+            work1 = 1;
           } else {
-            [ 'ENTER', 'Y' or 'y' for YES
-            if ((lastChar == 13 || lastChar == 89 || lastChar == 121)) {
-              work1 = 1;
-            }
-            [ 'ESC', 'N' or 'n' for NO
-            if ((lastChar == 27 || lastChar == 78 || lastChar == 110)) {
+            if (posn(btnNo, ON.OBJ, 0, &mouseX, &mouseY)) {
               work1 = 2;
             }
           }
-          [ if wrong keypress, or click was not on button, continue waiting
-          if (work1 == 0) {
-            goto(wait);
+        } else {
+          [ 'ENTER', 'Y' or 'y' for YES
+          if ((lastChar == 13 || lastChar == 89 || lastChar == 121)) {
+            work1 = 1;
           }
-          [ hide buttons, then close print window
-          erase(btnYes);
-          erase(btnNo);
-          close.window();
-          [ if 'NO', do nothing; if 'YES', end the game
-          if (work1 == 1) {
-            erase(ego);
-            print("You get in your car and drive away.");
-            deathType = 99;
-            egoCarSeq = 10;
-            set(fEgoDead);
-            [ 5 pts for leaving
+          [ 'ESC', 'N' or 'n' for NO
+          if ((lastChar == 27 || lastChar == 78 || lastChar == 110)) {
+            work1 = 2;
+          }
+        }
+        [ if wrong keypress, or click was not on button, continue waiting
+        if (work1 == 0) {
+          goto(wait);
+        }
+        [ hide buttons, then close print window
+        erase(btnYes);
+        erase(btnNo);
+        close.window();
+        [ if 'NO', do nothing; if 'YES', end the game
+        if (work1 == 1) {
+          erase(ego);
+          print("You get in your car and drive away.");
+          deathType = 99;
+          egoCarSeq = 10;
+          set(fEgoDead);
+          [ 5 pts for leaving
+          work1 = 5;
+          call(lgc.ScoreHandler);
+          if (floppyfiles > 1) {
+            [ 5 more pts for leaving with source code
             work1 = 5;
             call(lgc.ScoreHandler);
-            if (floppyfiles > 1) {
-              [ 5 more pts for leaving with source code
-              work1 = 5;
-              call(lgc.ScoreHandler);
-            }
           }
-          [ there is a timing glitch in AGI (not sure if it's a DOSBox thing
-          [ or inherent to MSDOS/AGI; but on occasion, a second 'ghost click'
-          [ will set the left-click controller when the dialog is dismissed)
-          [ to fix this, skip the controller on the very next cycle
-          set(fSkip1);
-        } else {
-          print("You are too far away to get in your vehicle from here.");
         }
-        goto(doneclick);
+        [ there is a timing glitch in AGI (not sure if it's a DOSBox thing
+        [ or inherent to MSDOS/AGI; but on occasion, a second 'ghost click'
+        [ will set the left-click controller when the dialog is dismissed)
+        [ to fix this, skip the controller on the very next cycle
+        set(fSkip1);
+      } else {
+        print("You are too far away to get in your vehicle from here.");
       }
-      
-      [ patient
-      if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
-        distance(ego, patient, work1);
-        if (work1 < 6) {
-          print("Get your ands off me, you big jerk!");
-        } else {
-          print("You are too far away to touch that person.");
-        }
-        goto(doneclick);
+      goto(doneclick);
+    }
+    
+    [ patient
+    if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, patient, work1);
+      if (work1 < 6) {
+        print("Get your ands off me, you big jerk!");
+      } else {
+        print("You are too far away to touch that person.");
       }
-      
-      [ patient car
-      if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-        [ is car moving?
-        if ((patientSeq > 18 || patientSeq == 10 || patientSeq == 11 || 
-            patientSeq == 12 || patientSeq == 13 || patientSeq == 7 || 
-            patientSeq == 8 || patientSeq == 1)) {
-          print("It's not a good idea to touch a moving vehicle.");
-        } else {
-          distance(ego, patientCar, work1);
-          if (work1 < 14) {
-            current.loop(patientCar, work1);
-            if (work1 > 18) {
-              work1 -= 19;
-            }
-            if (work1 < 8) {
-              print("This is not your car. It's locked anyway.");
+      goto(doneclick);
+    }
+    
+    [ patient car
+    if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      [ is car moving?
+      if ((patientSeq > 18 || patientSeq == 10 || patientSeq == 11 || 
+          patientSeq == 12 || patientSeq == 13 || patientSeq == 7 || 
+          patientSeq == 8 || patientSeq == 1)) {
+        print("It's not a good idea to touch a moving vehicle.");
+      } else {
+        distance(ego, patientCar, work1);
+        if (work1 < 14) {
+          current.loop(patientCar, work1);
+          if (work1 > 18) {
+            work1 -= 19;
+          }
+          if (work1 < 8) {
+            print("This is not your car. It's locked anyway.");
+          } else {
+            if (work1 < 12) {
+              print("The owner of this minivan would not appreciate you stealing it.");
             } else {
-              if (work1 < 12) {
-                print("The owner of this minivan would not appreciate you stealing it.");
+              if (work1 < 17) {
+                print("There's nothing worth taking from this truck.");
               } else {
-                if (work1 < 17) {
-                  print("There's nothing worth taking from this truck.");
+                if (work1 == 17) {
+                  print("This sportcar is really neat, but that's no reason to steal it.");
                 } else {
-                  if (work1 == 17) {
-                    print("This sportcar is really neat, but that's no reason to steal it.");
-                  } else {
-                    prevent.input();
-                    program.control();
-                    stop.motion(ego);
-                    deathSeq = 1;
-                  }
+                  prevent.input();
+                  program.control();
+                  stop.motion(ego);
+                  deathSeq = 1;
                 }
               }
             }
-          } else {
-            print("You are too far away to touch that vehicle.");
-          }
-        }
-        goto(doneclick);
-      }
-
-      [ parked cars
-      reset(fClickOn);
-      if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
-        set(fClickOn);
-      }
-      if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
-        set(fClickOn);
-      }
-      if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
-        set(fClickOn);
-      }
-      if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
-        set(fClickOn);
-      }
-      if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
-        set(fClickOn);
-      }
-      if(fClickOn) {
-        print("There's nothing you can do with this car.");
-        goto(doneclick);
-      }
-      
-      [ then check background
-      [ pixel color can help with discriminating what was clicked
-      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
-
-      if (work1 > 239) {
-        [ foreground tree
-        print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
-        reset(handsWashed);
-        if (!touchTrees) {
-          set(touchTrees);
-          [ lose 1 point
-          work1 = -1;
-          call(lgc.ScoreHandler);
-        }
-        goto(doneclick);
-      }
-      
-      if (work1 > 111) { 
-        [ forest/mountain/sky
-        [ nothing
-        goto(doneclick);
-      }
-      if (work1 > 95) {
-        [ lawn/sidewalk
-        print("There's nothing you can do with the shrubbery or lawn. Leave it be.");
-        goto(doneclick);
-      }
-      if (work1 > 79) {
-        [ building
-        if (egoX < 71 && egoY < 121) {
-          [ door
-          if (mouseX > 53 && mouseY < 60 && mouseY > 113) {
-            print("The door will open automatically when you approach.");
-          } else {
-            print("You run your hands over the weathered building exterior. It's rough.");
           }
         } else {
-          print("You are not close enough to touch the building.");
+          print("You are too far away to touch that vehicle.");
         }
       }
+      goto(doneclick);
+    }
+
+    [ parked cars
+    reset(fClickOn);
+    if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
+      set(fClickOn);
+    }
+    if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
+      set(fClickOn);
+    }
+    if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
+      set(fClickOn);
+    }
+    if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
+      set(fClickOn);
+    }
+    if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
+      set(fClickOn);
+    }
+    if(fClickOn) {
+      print("There's nothing you can do with this car.");
+      goto(doneclick);
     }
     
-    :doneClick
-    set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+    [ then check background
+    [ pixel color can help with discriminating what was clicked
+    block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+
+    if (work1 > 239) {
+      [ foreground tree
+      print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
+      reset(handsWashed);
+      if (!touchTrees) {
+        set(touchTrees);
+        [ lose 1 point
+        work1 = -1;
+        call(lgc.ScoreHandler);
+      }
+      goto(doneclick);
+    }
+    
+    if (work1 > 111) { 
+      [ forest/mountain/sky
+      [ nothing
+      goto(doneclick);
+    }
+    if (work1 > 95) {
+      [ lawn/sidewalk
+      print("There's nothing you can do with the shrubbery or lawn. Leave it be.");
+      goto(doneclick);
+    }
+    if (work1 > 79) {
+      [ building
+      if (egoX < 71 && egoY < 121) {
+        [ door
+        if (mouseX > 53 && mouseY < 60 && mouseY > 113) {
+          print("The door will open automatically when you approach.");
+        } else {
+          print("You run your hands over the weathered building exterior. It's rough.");
+        }
+      } else {
+        print("You are not close enough to touch the building.");
+      }
+    }
   }
+  :doneClick
+  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);
 }
 
 [*****

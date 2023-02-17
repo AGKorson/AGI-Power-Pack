@@ -3,6 +3,15 @@
 [ 
 
 #define toggleBtn    f240
+[#define C_DEFAULT   1
+[#define C_WALK      2
+[#define C_LOOK      3
+[#define C_TALK      4
+[#define C_USE       5
+[#define C_WAIT      6
+[#define C_DISK       7
+[#define C_FOB        8
+[#define C_TAPE       9
 
 [ if wait cursor is active, do nothing
 if (cursoricon == C_WAIT) {
@@ -45,16 +54,17 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 25) && mouseY > 7) {
 if (controller(cLeftClick)) {
   if (!deathType) {
     [ if on button1:
-    if (posn(tbPoint, -1, 1, &mouseX, &mouseY)) {
+    if (mouseX > 14 && mouseX < 31 && mouseY > 8 && mouseY < 25) {
+    print("default");
       if (cursormode != C_DEFAULT) {
         [ select it
         cursormode = C_DEFAULT;
         set(toggleBtn);
       }
     }
-    
+
     [ if on button5:
-    if (posn(tbMove, -1, 1, &mouseX, &mouseY)) {
+    if (mouseX > 80 && mouseX < 97 && mouseY > 8 && mouseY < 25) {
       if (cursormode != C_WALK) {
         [ select it
         cursormode = C_WALK;
@@ -63,7 +73,7 @@ if (controller(cLeftClick)) {
     }
   
     [ if on button6:
-    if (posn(tbLook, -1, 1, &mouseX, &mouseY)) {
+    if (mouseX > 96 && mouseX < 113 && mouseY > 8 && mouseY < 25) {
       if (cursormode != C_LOOK) {
         [ select it
         cursormode = C_LOOK;
@@ -72,7 +82,7 @@ if (controller(cLeftClick)) {
     }
   
     [ if on button7:
-    if (posn(tbTalk, -1, 1, &mouseX, &mouseY)) {
+    if (mouseX > 112 && mouseX < 129 && mouseY > 8 && mouseY < 25) {
       if (cursormode != C_TALK) {
         [ select it
         cursormode = C_TALK;
@@ -81,7 +91,7 @@ if (controller(cLeftClick)) {
     }
   
     [ if on button8:
-    if (posn(tbUse, -1, 1, &mouseX, &mouseY)) {
+    if (mouseX > 128 && mouseX < 145 && mouseY > 8 && mouseY < 25) {
       if (cursormode != C_USE) {
         [ select it
         cursormode = C_USE;
@@ -98,18 +108,28 @@ if (controller(cLeftClick)) {
   [ check for mouse down/mouse up on quit/save/restore buttons
   if (!tbBtnDown) {
     [ if on button2:
-    if (posn(tbQuit, -1, 1, &mouseX, &mouseY)) {
-      set.loop(tbQuit, 1);
+    if (mouseX > 31 && mouseX < 48 && mouseY > 8 && mouseY < 25) {
+      set.cel(tbActionBtn, 1);
+      position(tbActionBtn, 32, 16);
+      draw(tbActionBtn);
       set(tbBtnDown);
     }
     [ if on button3:
-    if (posn(tbSave, -1, 1, &mouseX, &mouseY)) {
-      set.loop(tbSave, 1);
+    if (mouseX > 47 && mouseX < 64 && mouseY > 8 && mouseY < 25) {
+      if (deathType) {
+        set.cel(tbActionBtn, 8);
+      } else {
+        set.cel(tbActionBtn, 2);
+      }
+      position(tbActionBtn, 48, 16);
+      draw(tbActionBtn);
       set(tbBtnDown);
     }
     [ if on button4:
-    if (posn(tbRestore, -1, 1, &mouseX, &mouseY)) {
-      set.loop(tbRestore, 1);
+    if (mouseX > 63 && mouseX < 80 && mouseY > 8 && mouseY < 25) {
+      set.cel(tbActionBtn, 3);
+      position(tbActionBtn, 64, 16);
+      draw(tbActionBtn);
       set(tbBtnDown);
     }
   }
@@ -119,29 +139,24 @@ if (controller(cLeftClick)) {
 if (toggleBtn) {
   reset(toggleBtn);
   if (cursormode == C_DEFAULT) {
-    set.loop(tbPoint, 1);
-  } else {
-    set.loop(tbPoint, 0);
+    set.cel(tbStateBtn, 0);
+    reposition.to(tbStateBtn, 15, 16);
   }
   if (cursormode == C_WALK) {
-    set.loop(tbMove, 1);
-  } else {
-    set.loop(tbMove, 0);
+    set.cel(tbStateBtn, 4);
+    reposition.to(tbStateBtn, 81, 16);
   }
   if (cursormode == C_LOOK) {
-    set.loop(tbLook, 1);
-  } else {
-    set.loop(tbLook, 0);
+    set.cel(tbStateBtn, 5);
+    reposition.to(tbStateBtn, 97, 16);
   }
   if (cursormode == C_TALK) {
-    set.loop(tbTalk, 1);
-  } else {
-    set.loop(tbTalk, 0);
+    set.cel(tbStateBtn, 6);
+    reposition.to(tbStateBtn, 113, 16);
   }
   if (cursormode == C_USE) {
-    set.loop(tbUse, 1);
-  } else {
-    set.loop(tbUse, 0);
+    set.cel(tbStateBtn, 7);
+    reposition.to(tbStateBtn, 129, 16);
   }
 }
 
@@ -149,23 +164,26 @@ if (toggleBtn) {
 if (mouseBtn != 1) {
   if (tbBtnDown) {
     reset(tbBtnDown);
-    current.loop(tbQuit, work1);
-    current.loop(tbSave, work2);
-    current.loop(tbRestore, work3);
-    set.loop(tbQuit, 0);
-    set.loop(tbSave, 0);
-    set.loop(tbRestore, 0);
-    force.update(tbQuit);
+    [ which btn is down (cel is set)
+    current.cel(tbActionBtn, work1);
+    [ restart uses same button as save
+    if (work1 == 8) {
+      work1 = 2;
+    }
+    erase(tbActionBtn);
+    force.update(tbActionBtn);
+    set.cel(tbActionBtn, 0);
     [ take appropriate action
-    if (work1 == 1 && posn(tbQuit, -1, 1, &mouseX, &mouseY)) {
+    if (work1 == 1 && mouseX > 31 && mouseX < 48 && mouseY > 8 && mouseY < 25) {
       quit(0);
     }
-    if (work2 == 1 && posn(tbSave, -1, 1, &mouseX, &mouseY)) {
+    if (work1 == 2 && mouseX > 47 && mouseX < 64 && mouseY > 8 && mouseY < 25) {
       [ if dead, restart; if not dead, save
       if (deathType) {
         call(lgc.CacheOptions);
         restart.game();
       } else {
+      [ TODO: with new button strategy, patient2/4 can both be assigned at same time
         [ if in lobby, need to erase patient2 if currently visible
         if (currentRoom == rm.Lobby && f237) {
           erase(o5);
@@ -177,11 +195,11 @@ if (mouseBtn != 1) {
       }
     }
     [ if on button3:
-    if (work3 == 1 && posn(tbRestore, -1, 1, &mouseX, &mouseY)) {
+    if (work1 == 3 && mouseX > 63 && mouseX < 80 && mouseY > 8 && mouseY < 25) {
       restore.game();
     }
     
-    [ ignore clicks for one cycle
+    [ ignore clicks for rest of cycle
     set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
   }
 }
@@ -197,3 +215,4 @@ return();
 #message 4 "%g43"
 #message 5 "%g44"
 #message 6 "%g45"
+#message 7 "0707FFffffff03c003c003c003c003c003c003c003c003c003c007c00fc0ffffFFff000000000000e817e8170810f81ff81ff81ff81f3818b019a019000000000000"

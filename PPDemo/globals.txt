@@ -8,14 +8,8 @@
 #define NORMAL_SPEED             6
 #define SLOW_SPEED              12
 #define cursor                "_"
-#define tbPoint                 o9
-#define tbQuit                 o10
-#define tbSave                 o11
-#define tbRestore              o12
-#define tbMove                 o13
-#define tbLook                 o14
-#define tbTalk                 o15
-#define tbUse                  o16
+#define tbStateBtn             o15
+#define tbActionBtn            o16
 #define cMenu                   c0 [ menu: n/a;     key: ESC; used to display the menu
 #define cAbout                  c1 [ menu: PPDemo;  key: none
 #define cVersion                c2 [ menu: PPDemo;  key: Alt+V
@@ -182,6 +176,9 @@
 #define C_TALK                   4
 #define C_USE                    5
 #define C_WAIT                   6
+#define C_DISK                   7
+#define C_FOB                    8
+#define C_TAPE                   9
 #define car0car1               v73
 #define car2car3               v74
 #define car4car5               v75
