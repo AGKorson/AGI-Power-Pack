@@ -270,34 +270,10 @@ touch tone freqs:
 
 For inventory screen,  change purpose and menu text depending on cursor. 'Look'  when eye icon selected, 'use' when hand is selected.  Disable inventory for all other icons.
 
- explode to white; fade in to 
-large stylized AGI, and fade in
-PowerPack notation
-
-fireworks, or color waves- some
-kind of background animation
-
-then scroll credits:
-
-     Power Pack 
-    programmed by
-    Andrew Korson
-
-       Demo Game
-written and programmed by
-     Andrew Korson
-
-background art by
-  klownstein
-
-animation art by
-  klownstein
-
-additional art by
-  Andrew Korson
-
-music and sound effects by
-   Andrew Korson
+usable items:
+disk
+keyfob
+cassette
 
 Playtesters: tbd
 
@@ -307,3 +283,11 @@ Playtesters: tbd
   3: 48, 164
   4: 46, 164
   5: 34, 164
+
+#message 51 "0707FFffffff03c003c003c003c003c003c003c003c003c003c007c00fc0ffffFFff"
+            "000000000000e817e8170810f81ff81ff81ff81f3818b019a019000000000000"
+
+
+
+#message 51 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
+            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"

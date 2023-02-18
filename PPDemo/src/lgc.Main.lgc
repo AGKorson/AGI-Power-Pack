@@ -381,14 +381,7 @@ if (!disableGameFunctions) {
           reset(soundOn);
         } else {
           set(soundOn);
-          [     1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 
-          [ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
-          [ |   1   2   3   4   5   6   7   8   |
-          [63 <64 <56 <48 <40 <32 <24 <16  <8   0
-          [    60  52  44  36  28  20  12   4                               
-          [15 <16 <14 <12 <10  <8  <6  <4  <2   0
-          [    15  13  11   9   7   5   3   1   
-          [ calculate new sound level
+          [ calculate new sound level from clicked value
           work1 /= 2;
           work1 *= -8;
           work1 += 68;
@@ -593,7 +586,7 @@ if (closetTimerDone) {
   reset(closetopen);
   if (currentRoom > 6) {
 [ TODO: need a 'msg' logic to hold all messages in logic0 that don't have to be there
-    print("Uh oh. Did you forget to do something in the closet before going downstairs?");
+    print("%l90|8");
     set(trapped);
   }
 }
@@ -604,6 +597,8 @@ if (isset(gameRestored)) {
   clear.lines(23, 24, 0);
   [ need to 're-disable menu separators)
   disable.item(cDummy);
+  [ and redraw toolbar buttons
+  call(lgc.InitToolbar);
 }
 
 [ if clock display is needed

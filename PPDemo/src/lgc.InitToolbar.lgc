@@ -2,47 +2,62 @@
 [ lgc.InitToolbar
 [ 
 
-[[ fade in
-
-animate.obj(tbStateBtn);
-animate.obj(tbActionBtn);
-
-set.view(tbStateBtn, vw.ButtonsDown);
-set.view(tbActionBtn, vw.ButtonsDown);
-
-set.cel(tbStateBtn, 0);
-set.cel(tbActionBtn, 0);
-
-stop.cycling(tbStateBtn);
-stop.cycling(tbActionBtn);
-
-ignore.horizon(tbStateBtn);
-ignore.horizon(tbActionBtn);
-
-set.priority(tbStateBtn, 15);
-set.priority(tbActionBtn, 15);
-
-if (cursormode == C_DEFAULT) {
+[ if not restoring, animate the two buttonw
+if (!gameRestored) {
+  animate.obj(tbStateBtn);
+  animate.obj(tbActionBtn);
+  
+  set.view(tbStateBtn, vw.ButtonsDown);
+  set.view(tbActionBtn, vw.ButtonsDown);
+  
   set.cel(tbStateBtn, 0);
-  position(tbStateBtn, 15, 16);
+  set.cel(tbActionBtn, 0);
+  
+  stop.cycling(tbStateBtn);
+  stop.cycling(tbActionBtn);
+  
+  ignore.horizon(tbStateBtn);
+  ignore.horizon(tbActionBtn);
+  
+  set.priority(tbStateBtn, 15);
+  set.priority(tbActionBtn, 15);
+
+  if (cursormode == C_DEFAULT) {
+    set.cel(tbStateBtn, 0);
+    position(tbStateBtn, 15, 16);
+  }
+  if (cursormode == C_WALK) {
+    set.cel(tbStateBtn, 4);
+    position(tbStateBtn, 81, 16);
+  }
+  if (cursormode == C_LOOK) {
+    set.cel(tbStateBtn, 5);
+    position(tbStateBtn, 97, 16);
+  }
+  if (cursormode == C_TALK) {
+    set.cel(tbStateBtn, 6);
+    position(tbStateBtn, 113, 16);
+  }
+  if (cursormode == C_USE) {
+    set.cel(tbStateBtn, 7);
+    position(tbStateBtn, 129, 16);
+  }
+  draw(tbStateBtn);
 }
-if (cursormode == C_WALK) {
-  set.cel(tbStateBtn, 4);
-  position(tbStateBtn, 81, 16);
-}
-if (cursormode == C_LOOK) {
-  set.cel(tbStateBtn, 5);
-  position(tbStateBtn, 97, 16);
-}
-if (cursormode == C_TALK) {
-  set.cel(tbStateBtn, 6);
-  position(tbStateBtn, 113, 16);
-}
-if (cursormode == C_USE) {
-  set.cel(tbStateBtn, 7);
-  position(tbStateBtn, 129, 16);
-}
-draw(tbStateBtn);
+
+[ add button-up images
+set(noScript);
+load.view(vw.ButtonsUp);
+add.to.pic(vw.ButtonsUp, 0, 0, 15, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 1, 32, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 2, 48, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 3, 64, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 4, 81, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 5, 97, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 6, 113, 16, 15, 4);
+add.to.pic(vw.ButtonsUp, 0, 7, 129, 16, 15, 4);
+discard.view(vw.ButtonsUp);
+reset(noScript);
 
 return();
 

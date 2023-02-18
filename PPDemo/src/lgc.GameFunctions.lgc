@@ -445,5 +445,6 @@ return();
 #message 5 "What? Where?"
 #message 6 "You can't get that here!"
 #message 7 "What do you want me to do with it?"
+#message 8 "Uh oh. Did you forget to do something in the closet before going downstairs?"
 #message 11 gameAboutMsg
 #message 12 gameVersionMsg
