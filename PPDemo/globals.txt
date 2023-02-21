@@ -80,7 +80,7 @@
 #define closetopen             f46 [ set when closet door is open
 #define broommoved             f47 [ set once broom is picked up and moved
 #define faucetfixed            f48 [ set when faucet in closet has been tightened
-#define receptionistInHall     f49 [ set when receptionist is in hallway, so she can shoo ego back to lobby
+#define allowedPastLobby       f49 [ set once ego is allowed in hallway, so receptionist can shoo him back to lobby
 #define firstLobbyVisit        f50
 #define ctrlroomunlocked       f51 [ set when correct pin entered on door keypad for first time
 #define enableCAISOCC          f52

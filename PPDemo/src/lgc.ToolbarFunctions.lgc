@@ -181,7 +181,31 @@ if (mouseBtn != 1) {
         call(lgc.CacheOptions);
         restart.game();
       } else {
+        [ because patient views aren't loaded, need to erase them
+        [ prior to saving; then redraw afterward; when restoring,
+        [ the views need to be loaded BEFORE the patients are redrawn
+        if (currentRoom == rm.Lobby) {
+          #define oPatient2        o5
+          #define oPatient3        o6
+          #define oPatient4        o7
+          [ erase patients 2,3,4
+          erase(oPatient2);
+          erase(oPatient3);
+          erase(oPatient4);
+        } 
         save.game();
+        if (currentRoom == rm.Lobby) {
+          [ redraw patients, if currently in the room
+          if (patient2Loc != LOC_GONE) {
+            draw(oPatient2);
+          }
+          if (patient3Loc != LOC_GONE) {
+            draw(oPatient3);
+          }
+          if (patient4Loc != LOC_GONE) {
+            draw(oPatient4);
+          }
+        }
       }
     }
     [ if on button3:

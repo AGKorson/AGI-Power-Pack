@@ -7,6 +7,16 @@
 [ (reusing object number for patient 2 will arrive. Patient 3
 [ then leaves; no more patient changes after that.
 [
+[ This room is a memory hog! In order to make it work with four
+[ different patients, the views for patients are only loaded when
+[ the patients using them are active; they are disarded after the
+[ patient leaves the screen. AGI's memory model doesn't make that 
+[ easy. Scripting has to be turned off for the views, and they 
+[ need to be loaded/discarded in proper order every time a patient
+[ leaves. When saving/restoring, patient objects need to be temp-
+[ orarily erased, then redrawn after view resources are properly
+[ set up.
+
 [ ********************************************************************
 
 #define backpane         o1
@@ -38,23 +48,23 @@
 #define oPapers         o9
 
 #define frontdooropen  f220
-#define fAllowPast     f221
-#define fRDone         f222
-#define fP1Done        f223
-#define fP2Done        f224
-#define fP3Done        f225
-#define fP4Done        f226 
-#define fPaneDone      f227
-#define fAskToPee      f228
-#define fOneMinute     f229
-#define fEgoWaitTalk   f230
-#define fSlipped       f231
-#define fPatient1Talking      f232
-#define fEgoTalkReceptionist  f233
-#define fEgoTalkPatient       f234
-#define checktalk      f235
-#define fPatientAtDoor f236
-#define fFalling       f237
+#define fRDone         f221
+#define fP1Done        f222
+#define fP2Done        f223
+#define fP3Done        f224
+#define fP4Done        f225
+#define fPaneDone      f226
+#define fAskToPee      f227
+#define fOneMinute     f228
+#define fEgoWaitTalk   f229
+#define fPatient1Talking      f230
+#define fEgoTalkReceptionist  f231
+#define fEgoTalkPatient       f232
+#define checktalk      f233
+#define fPatientAtDoor f234
+#define fTripping      f235
+#define fFalling       f236
+#define fSlipped       f237
 #define fPagesTurned   f238
 
 #define receptionistLoc v220
@@ -64,28 +74,30 @@
 #define   HALL          4
 #define receptionistSeq    v221
 #define receptionistTimer  v222
+#define receptionistCtr v223
 
-#define patient1Seq    v223
-#define patient1Timer  v224
-#define patient1Ctr    v225
+#define patient1Seq    v224 [ sequence marker
+#define patient1Timer  v225 [ timer for events, uses delta from gameclock seconds
+#define patient1Ctr    v226 [ counter, used for events measured in cycles
+#define bookcycles     v227
 
-#define patient2Seq    v226
-#define patient2Timer  v227
-#define patient2Ctr    v228
+#define patient2Seq    v228
+#define patient2Timer  v229
+#define patient2Ctr    v230
 
-#define patient3Seq    v229
-#define patient3Timer  v230
-#define patient3Ctr    v231
+#define patient3Seq    v231
+#define patient3Timer  v232
+#define patient3Ctr    v233
 
-#define patient4Seq    v232 [ patient 2 and 4 are never on screen at same time
-#define patient4Timer  v233
-#define patient4Ctr    v234
+#define patient4Seq    v234 [ patient 2 and 4 are never on screen at same time
+#define patient4Timer  v235
+#define patient4Ctr    v236
 
-#define tmpSec         v235
-#define tmpMin         v236
-#define secondCtr      v237
+#define tmpSec         v237
+#define tmpMin         v238
+#define secondCtr      v239
 
-[ sequence actions for receptionist
+[ sequence actions for receptionist and patients
 #define   SKIP         -1
 #define   IDLE          0
 #define   MOVEPHONE     1
@@ -135,7 +147,6 @@ if (newRoom) {
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);
-  
   [ add toolbar buttons
   load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
@@ -179,18 +190,37 @@ if (newRoom) {
   load.view(vw.ReceptionistWalk);
   load.view(vw.ReceptionistAct);
   animate.obj(oReceptionist);
-  set.view(oReceptionist, vw.ReceptionistAct);
-  set.loop(oReceptionist, LP_R_TALKPHONE);
-  receptionistLoc = PHONE;
-  position(oReceptionist, 60, 96);
-  receptionistTimer = 20;
   ignore.horizon(oReceptionist);
-  draw(oReceptionist);
+
+  [ if coming from hall after ego was kicked out
+  if (!allowedPastLobby && previousRoom == rm.Hallway) {
+    [ begin offscreen
+    set.view(oReceptionist, vw.ReceptionistWalk);
+    position(oReceptionist, 16, 93);
+    receptionistLoc = HALL;
+    receptionistSeq = WAITHALL;
+    random(5, 8, receptionistTimer);
+    receptionistTimer += elapsedSeconds;
+  } else {
+    [ begin on phone
+    set.view(oReceptionist, vw.ReceptionistAct);
+    set.loop(oReceptionist, LP_R_TALKPHONE);
+    receptionistLoc = PHONE;
+    receptionistSeq = IDLE;
+    position(oReceptionist, 60, 96);
+    [ phone conversation start at 3-5 seconds
+    random(3, 5, receptionistTimer);
+    receptionistTimer += elapsedSeconds;
+    draw(oReceptionist);
+  }
+  if (receptionistTimer > 59) {
+    receptionistTimer -= 60;
+  }
   
   [ patients
   [ patient 1 is old lady; sits against back wall,
   [ uses phone, reads book, talks to receptionist;
-  [ never leaves lobby
+  [ never leaves lobby, except to use restroom
   
   [ patient 2 sits against side wall, uses phone, 
   [taps toe, goes to hall, leaves
@@ -203,7 +233,7 @@ if (newRoom) {
   [ patient 3 leaves; after arriving, sits against side
   [ wall, uses phone, talks to receptionist, goes to
   [ hall; never leaves lobby area
-  
+
   [ patient actions are managed by timer, at designated
   [ intervals (minutes) patients take actions:
   [      P1  P2  P3  P4  
@@ -237,18 +267,9 @@ if (newRoom) {
   tmpSec = -1;
   tmpMin = elapsedMinutes;
 
-  animate.obj(oPatient1);
-  animate.obj(oPatient2);
-  animate.obj(oPatient3);
-  animate.obj(oPatient4);
-  
-  [ load patient views
-  load.view(vw.Patient1); 
-  load.view(vw.Patient2);
-  load.view(vw.Patient3);
-  load.view(vw.Patient4);
-  
   [ patient 1 (always present)
+  animate.obj(oPatient1);
+  load.view(vw.Patient1); 
   set.view(oPatient1, vw.Patient1);
   set.loop(oPatient1, LP_P_SIT);
   set.cel(oPatient1, 0);
@@ -258,22 +279,39 @@ if (newRoom) {
   ignore.horizon(oPatient1);
   draw(oPatient1);
   patient1Seq = IDLE;
-  patient1Timer = 25;
+  [ idle time is random, from 4 - 8 seconds
+  random(4, 8, patient1Timer);
+  patient1Timer += elapsedSeconds;
+  if (patient1Timer > 59) {
+    patient1Timer -= 60;
+  }
+  
+  [ to save on memory, patient 2/3/4 views are
+  [ only loaded when needed; need to turn off
+  [ scripting when managing memory this way
+  set(noScript);
   
   [ patient 2
-  set.view(oPatient2, vw.Patient2);
+  animate.obj(oPatient2);
   ignore.blocks(oPatient2);
   ignore.horizon(oPatient2);
   if (patient2Loc == LOC_GONE) {
     patient2Seq = SKIP;
+    patient2Timer = 255;
   } else {
+    load.view(vw.Patient2);
+    set.view(oPatient2, vw.Patient2);
     if (patient2Loc == LOC_LOBBY) {
       position(oPatient2, 139, 133);
       set.loop(oPatient2, LP_P_SIT);
       set.cel(oPatient2, 0);
       stop.cycling(oPatient2);
       patient2Seq = IDLE;
-      patient2Timer = 30;
+      random(2, 4, patient2Timer);
+      patient2Timer += elapsedSeconds;
+      if (patient2Timer > 59) {
+        patient2Timer -= 60;
+      }
       draw(oPatient2);
     } else {
       position(oPatient2, 12, 92);
@@ -281,19 +319,26 @@ if (newRoom) {
   }
   
   [ patient 3
-  set.view(oPatient3, vw.Patient3);
+  animate.obj(oPatient3);
   ignore.blocks(oPatient3);
   ignore.horizon(oPatient3);
   if (patient3Loc == LOC_GONE) {
     patient3Seq = SKIP;
+    patient3Timer = 255;
   } else {
+    load.view(vw.Patient3);
+    set.view(oPatient3, vw.Patient3);
     if (patient3Loc == LOC_LOBBY) {
       position(oPatient3, 130, 112);
       set.loop(oPatient3, LP_P_SIT);
       set.cel(oPatient3, 0);
       stop.cycling(oPatient3);
       patient3Seq = IDLE;
-      patient3Timer = 35;
+      random(2, 4, patient3Timer);
+      patient3Timer += elapsedSeconds;
+      if (patient3Timer > 59) {
+        patient3Timer -= 60;
+      }
       draw(oPatient3);
     } else {
       position(oPatient3, 12, 92);
@@ -301,27 +346,36 @@ if (newRoom) {
   }
   
   [ patient 4
-  set.view(oPatient4, vw.Patient4);
+  animate.obj(oPatient4);
   ignore.blocks(oPatient4);
   ignore.horizon(oPatient4);
   if (patient4Loc == LOC_GONE) {
     patient4Seq = SKIP;
+    patient4Timer = 255;
   } else {
+    load.view(vw.Patient4);
+    set.view(oPatient4, vw.Patient4);
     if (patient4Loc == LOC_LOBBY) {
       position(oPatient4, 137, 127);
       set.loop(oPatient4, LP_P_SIT);
       set.cel(oPatient4, 0);
       stop.cycling(oPatient4);
       patient4Seq = IDLE;
-      patient4Timer = 40;
+      random(2, 4, patient4Timer);
+      patient4Timer += elapsedSeconds;
+      if (patient4Timer > 59) {
+        patient4Timer -= 60;
+      }
       draw(oPatient4);
     } else {
       position(oPatient4, 12, 92);
     }
   }
   
+  [ restore scripting
+  reset(noScript);
+  
   [ desk papers
-  [ TODO: ego can't get papers from desk
   animate.obj(oPapers);
   set.view(oPapers, vw.LobbyArt);
   set.loop(oPapers, 3);
@@ -369,6 +423,29 @@ if (newRoom) {
 [  return();
 }
 
+if (gameRestored) {
+  set(noScript);
+  [ patient 2
+  if (patient2Loc != LOC_GONE) {
+    load.view(vw.Patient2);
+    set.view(oPatient2, vw.Patient2);
+    draw(oPatient2);
+  }
+  [ patient 3
+  if (patient3Loc != LOC_GONE) {
+    load.view(vw.Patient3);
+    set.view(oPatient3, vw.Patient3);
+    draw(oPatient3);
+  }
+  [ patient 4
+  if (patient4Loc != LOC_GONE) {
+    load.view(vw.Patient4);
+    set.view(oPatient4, vw.Patient4);
+    draw(oPatient4);
+  }
+  reset(noScript);
+}
+
 [ check for one min timer
 if (firstLobbyVisit) {
   if (tmpSec != elapsedSeconds) {
@@ -403,7 +480,7 @@ if ((egoX > 78 || egoY > 125)) {
   if ((fEgoWaitTalk || fEgoTalkReceptionist)) {
     if ((fEgoTalkReceptionist || receptionistSeq == STANDSPEAK1)) {
       receptionistSeq = STOPCONV;
-      receptionistTimer = 1;
+      receptionistCtr = 1;
     }
     reset(fEgoWaitTalk);
     reset(fEgoTalkReceptionist);
@@ -433,8 +510,9 @@ if (checktalk) {
               print.at("\"I'll be right with you.\"", 6, 6, 35);
               block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
               set(fEgoWaitTalk);
-              if (receptionistTimer > 1) {
-                receptionistTimer = 1;
+              [ shorten receptionist's time on task
+              if (receptionistTimer != 255) {
+                receptionistTimer = 254;
               }
             }
           }
@@ -448,23 +526,17 @@ if (checktalk) {
   }
 }
 
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
 [**************************************************************
 [ RECEPTIONIST
 [**************************************************************
-if (receptionistTimer > 0) {
-  [ for talking, need to coordinate ego and patient1; if receptionist
-  [ is talking with either one, the other has to wait
-  if ((fEgoWaitTalk || patient1Seq == WAITCOUNTER || 
-       patient2Seq == EXAMREADY || patient3Seq == EXAMREADY || 
-       patient4Seq == EXAMREADY)) {
-    receptionistTimer = 1;
-  }
-  --receptionistTimer;
-  if (receptionistTimer == 0) {
+
+[ if a counter is active
+if (receptionistCtr > 0) {
+  --receptionistCtr;
+  if (receptionistCtr == 0) {
+    [ reset counter
+    receptionistCtr = 0;
+    
     [ answering patient 1 request for bathroom
     if (patient1Seq == TALKCOUNTER1) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -475,8 +547,9 @@ if (receptionistTimer > 0) {
       set.cel(oReceptionist, 0);
       stop.cycling(oReceptionist);
       patient1Seq = TALKCOUNTER2;
-      patient1Timer = 5;
+      patient1Ctr = 5;
     }
+    
     [ respond to ego or patient1 request to speak
     if ((fEgoWaitTalk || patient1Seq == WAITCOUNTER) && receptionistSeq == STANDSPEAK1) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -489,7 +562,7 @@ if (receptionistTimer > 0) {
         set.loop(oPatient1, LP_P_SPEAK);
         start.cycling(oPatient1);
         patient1Seq = TALKCOUNTER1;
-        patient1Timer = 10;
+        patient1Ctr = 10;
         set(fPatient1Talking);
         [ cancel ego talk, if it was in progress
         reset(fEgoWaitTalk);
@@ -500,13 +573,15 @@ if (receptionistTimer > 0) {
         set(fEgoTalkReceptionist);
       }
     }
+    
     [ if done talking to ego/patient1
     if (receptionistSeq == STOPCONV) {
       [ receptionist goes back to the phone
       receptionistSeq = MOVEPHONE;
       [ force done flag so it happens immediately
       set(fRDone);
-      receptionistTimer = 1;
+      receptionistTimer = 254;
+      
       [ update view and loop so the normal phone sequence will work correctly
       set.view(oReceptionist, vw.ReceptionistWalk);
       set.loop(oReceptionist, LP_MOVEDOWN);
@@ -515,6 +590,21 @@ if (receptionistTimer > 0) {
       work2 = 11;
       reposition(oReceptionist, work1, work2);
     }
+  }
+}
+
+[ if a timer is active
+if (receptionistTimer != 255) {
+  [ force action if a conversation is starting
+  [ or if other force condition (==254)
+  if ((fEgoWaitTalk || patient1Seq == WAITCOUNTER || 
+       patient2Seq == EXAMREADY || patient3Seq == EXAMREADY || 
+       patient4Seq == EXAMREADY || receptionistTimer == 254)) {
+    receptionistTimer = elapsedSeconds;
+  }
+  if (receptionistTimer == elapsedSeconds) {
+    [ reset timer
+    receptionistTimer = 255;
     
     [ if timer is up, and receptionist is not doing anything, 
     [ go to a new location
@@ -522,245 +612,257 @@ if (receptionistTimer > 0) {
       receptionistSeq = NEWLOCATION;
     }
   }
-} else {
-  [ no timer; check for an action that uses the flag to indicate it is complete
-  if (fRDone) {
-    [ always reset the timer
-    reset(fRDone);
-    [ if done with first leg of return-from-hall
-    if (receptionistSeq == RTNHALL1) {
-      [ move to second point on return path
-      receptionistSeq = RTNHALL2;
-      move.obj(oReceptionist, 60, 99, 1, fRDone);
+}
+
+[ check for an action that uses the flag to indicate it is complete
+if (fRDone) {
+  [ always reset the timer
+  reset(fRDone);
+  [ if done with first leg of return-from-hall
+  if (receptionistSeq == RTNHALL1) {
+    [ move to second point on return path
+    receptionistSeq = RTNHALL2;
+    move.obj(oReceptionist, 60, 99, 1, fRDone);
+    goto(doneRSeq);
+  }
+  [ if at second point of return-to-hall (or if standing up at phone station)
+  if ((receptionistSeq == RTNHALL2 || receptionistSeq == STANDUP)) {
+    [ after standing up, select the walking view 
+    if (receptionistSeq == STANDUP) {
+      set.view(oReceptionist, vw.ReceptionistWalk);
+      normal.cycle(oReceptionist);
+      work1 = 0;
+      work2 = 11;
+      reposition(oReceptionist, work1, work2);
+    }
+    [ if next destination is the computer, move there
+    if (receptionistLoc == COMPUTER) {
+      receptionistSeq = MOVECOMP;
+      move.obj(oReceptionist, 24, 99, 1, fRDone);
       goto(doneRSeq);
     }
-    [ if at second point of return-to-hall (or if standing up at phone station)
-    if ((receptionistSeq == RTNHALL2 || receptionistSeq == STANDUP)) {
-      [ after standing up, select the walking view 
+    [ if next destination is the phone, move there
+    if (receptionistLoc == PHONE) {
+      receptionistSeq = MOVEPHONE;
+      [ use front facing loop for entire move
+      set.loop(oReceptionist, LP_MOVEDOWN);
+      fix.loop(oReceptionist);
+      move.obj(oReceptionist, 60, 107, 1, fRDone);
+      goto(doneRSeq);
+    }
+    [ if next destination is the desk area, move there
+    if (receptionistLoc == DESK) {
+      receptionistSeq = R_MOVEDESK;
+      move.obj(oReceptionist, 41, 113, 1, fRDone);
+      goto(doneRSeq);
+    }
+    [ if next destination is the hall, move to first hall point
+    if (receptionistLoc == HALL) {
       if (receptionistSeq == STANDUP) {
-        set.view(oReceptionist, vw.ReceptionistWalk);
-        normal.cycle(oReceptionist);
-        work1 = 0;
-        work2 = 11;
-        reposition(oReceptionist, work1, work2);
-      }
-      [ if next destination is the computer, move there
-      if (receptionistLoc == COMPUTER) {
-        receptionistSeq = MOVECOMP;
-        move.obj(oReceptionist, 24, 99, 1, fRDone);
-        goto(doneRSeq);
-      }
-      [ if next destination is the phone, move there
-      if (receptionistLoc == PHONE) {
-        receptionistSeq = MOVEPHONE;
-        [ use front facing loop for entire move
-        set.loop(oReceptionist, LP_MOVEDOWN);
+        [ force facing away loop if heading to hall from phone
+        set.loop(oReceptionist, LP_MOVEUP);
         fix.loop(oReceptionist);
-        move.obj(oReceptionist, 60, 107, 1, fRDone);
-        goto(doneRSeq);
       }
-      [ if next destination is the desk area, move there
-      if (receptionistLoc == DESK) {
-        receptionistSeq = R_MOVEDESK;
-        move.obj(oReceptionist, 41, 113, 1, fRDone);
-        goto(doneRSeq);
-      }
-      [ if next destination is the hall, move to first hall point
-      if (receptionistLoc == HALL) {
-        if (receptionistSeq == STANDUP) {
-          [ force facing away loop if heading to hall from phone
-          set.loop(oReceptionist, LP_MOVEUP);
-          fix.loop(oReceptionist);
-        }
-        receptionistSeq = MOVEHALL1;
-        move.obj(oReceptionist, 60, 99, 1, fRDone);
-        [ if at phone (standing up)
-        goto(doneRSeq);
-      }
-    }
-    [ if at first point of hall move (right in front of the doorway)
-    if (receptionistSeq == MOVEHALL1) {
-      [ move to second point
-      release.loop(oReceptionist);
-      receptionistSeq = MOVEHALL2;
-      move.obj(oReceptionist, 60, 93, 1, fRDone);
+      receptionistSeq = MOVEHALL1;
+      move.obj(oReceptionist, 60, 99, 1, fRDone);
+      [ if at phone (standing up)
       goto(doneRSeq);
     }
-    [ if at second point of hall move (just past the doorway, into the hall) 
-    if (receptionistSeq == MOVEHALL2) {
-      [ move to the third point
-      receptionistSeq = MOVEHALL3;
-      move.obj(oReceptionist, 16, 93, 1, fRDone);
-      goto(doneRSeq);
+  }
+  [ if at first point of hall move (right in front of the doorway)
+  if (receptionistSeq == MOVEHALL1) {
+    [ move to second point
+    release.loop(oReceptionist);
+    receptionistSeq = MOVEHALL2;
+    move.obj(oReceptionist, 60, 93, 1, fRDone);
+    goto(doneRSeq);
+  }
+  [ if at second point of hall move (just past the doorway, into the hall) 
+  if (receptionistSeq == MOVEHALL2) {
+    [ move to the third point
+    receptionistSeq = MOVEHALL3;
+    move.obj(oReceptionist, 16, 93, 1, fRDone);
+    goto(doneRSeq);
+  }
+  [ if at third point of hall move, (out of view, to the left)
+  if (receptionistSeq == MOVEHALL3) {
+    [ done moving; set timer and hide receptionist until
+    [ timer is up, 8 - 12 seconds
+    receptionistSeq = WAITHALL;
+    random(8, 12, receptionistTimer);
+    receptionistTimer += elapsedSeconds;
+    if (receptionistTimer > 59) {
+      receptionistTimer -= 60;
     }
-    [ if at third point of hall move, (out of view, to the left)
-    if (receptionistSeq == MOVEHALL3) {
-      [ done moving; set timer and hide receptionist until
-      [ timer is up
-      receptionistSeq = WAITHALL;
-      random(10, 30, work1);
-      receptionistTimer = work1;
-      erase(oReceptionist);
-      goto(doneRSeq);
+    erase(oReceptionist);
+    goto(doneRSeq);
+  }
+  [ if at the computer station
+  if (receptionistSeq == MOVECOMP) {
+    [ done moving, set timer and show 'use computer' loop
+    receptionistSeq = IDLE;
+    [ type for 7 - 12 seconds
+    random(7, 12, receptionistTimer);
+    receptionistTimer += elapsedSeconds;
+    if (receptionistTimer > 59) {
+      receptionistTimer -= 60;
     }
-    [ if at the computer station
-    if (receptionistSeq == MOVECOMP) {
-      [ done moving, set timer and show 'use computer' loop
-      receptionistSeq = IDLE;
-      random(20, 80, work1);
-      receptionistTimer = work1;
-      [ switch to the action view
-      set.view(oReceptionist, vw.ReceptionistAct);
-      set.loop(oReceptionist, LP_TYPING);
-      goto(doneRSeq);
+    [ switch to the action view
+    set.view(oReceptionist, vw.ReceptionistAct);
+    set.loop(oReceptionist, LP_TYPING);
+    goto(doneRSeq);
+  }
+  [ if at the desk
+  if (receptionistSeq == R_MOVEDESK) {
+    receptionistSeq = WAITDESK;
+    set.view(oReceptionist, vw.ReceptionistAct);
+    set.loop(oReceptionist, LP_FLIPPING);
+    work1 = 2;
+    cycle.time(oReceptionist, work1);
+    [ done moving, flip pages
+    if (fPagesTurned) {
+      [ flip them back
+      reverse.loop(oPapers, fRDone);
+      set.cel(oReceptionist, 3);
+      reverse.cycle(oReceptionist);
+    } else {
+      [ flip forward
+      end.of.loop(oPapers, fRDone);
+      set.cel(oReceptionist, 0);
     }
-    [ if at the desk
-    if (receptionistSeq == R_MOVEDESK) {
-      receptionistSeq = WAITDESK;
-      set.view(oReceptionist, vw.ReceptionistAct);
-      set.loop(oReceptionist, LP_FLIPPING);
-      work1 = 2;
-      cycle.time(oReceptionist, work1);
-      [ done moving, flip pages
-      if (fPagesTurned) {
-        [ flip them back
+    goto(doneRSeq);  
+  }
+  if (receptionistSeq == WAITDESK) {
+    [ flip three times
+    current.loop(oPapers, work1);
+    if (fPagesTurned) {
+      if (work1 == 3) {
+        [ done turning pages
+        set.view(oReceptionist, vw.ReceptionistWalk);
+        work1 = 1;
+        cycle.time(oReceptionist, work1);
+        receptionistSeq = NEWLOCATION;
+        reset(fPagesTurned);
+        normal.cycle(oReceptionist);
+      } else {
+        --work1;
+        set.loop.v(oPapers, work1);
+        set.cel(oPapers, 7);
         reverse.loop(oPapers, fRDone);
-        set.cel(oReceptionist, 3);
-        reverse.cycle(oReceptionist);
+      }
+    } else {
+      if (work1 == 5) {
+        [ done turning pages
+        set.view(oReceptionist, vw.ReceptionistWalk);
+        work1 = 1;
+        cycle.time(oReceptionist, work1);
+        receptionistSeq = NEWLOCATION;
+        set(fPagesTurned);
       } else {
-        [ flip forward
+        ++work1;
+        set.loop.v(oPapers, work1);
+        set.cel(oPapers, 0);
         end.of.loop(oPapers, fRDone);
-        set.cel(oReceptionist, 0);
-      }
-      goto(doneRSeq);  
-    }
-    if (receptionistSeq == WAITDESK) {
-      [ flip three times
-      current.loop(oPapers, work1);
-      if (fPagesTurned) {
-        if (work1 == 3) {
-          [ done turning pages
-          set.view(oReceptionist, vw.ReceptionistWalk);
-          work1 = 1;
-          cycle.time(oReceptionist, work1);
-          receptionistSeq = NEWLOCATION;
-          reset(fPagesTurned);
-          normal.cycle(oReceptionist);
-        } else {
-          --work1;
-          set.loop.v(oPapers, work1);
-          set.cel(oPapers, 7);
-          reverse.loop(oPapers, fRDone);
-        }
-      } else {
-        if (work1 == 5) {
-          [ done turning pages
-          set.view(oReceptionist, vw.ReceptionistWalk);
-          work1 = 1;
-          cycle.time(oReceptionist, work1);
-          receptionistSeq = NEWLOCATION;
-          set(fPagesTurned);
-        } else {
-          ++work1;
-          set.loop.v(oPapers, work1);
-          set.cel(oPapers, 0);
-          end.of.loop(oPapers, fRDone);
-        }
       }
     }
-    [ if done hanging up phone
-    if (receptionistSeq == HANGUP) {
-      [ begin standing up (adjust loop and position)
-      receptionistSeq = STANDUP;
+  }
+  [ if done hanging up phone
+  if (receptionistSeq == HANGUP) {
+    [ begin standing up (adjust loop and position)
+    receptionistSeq = STANDUP;
+    work1 = -2;
+    work2 = 0;
+    reposition(oReceptionist, work1, work2);
+    set.loop(oReceptionist, LP_R_SIT);
+    set.cel(oReceptionist, 0);
+    end.of.loop(oReceptionist, fRDone);
+    goto(doneRSeq);
+  }
+  [ if done moving to phone
+  if (receptionistSeq == MOVEPHONE) {
+    [ switch view to the action view and reposition
+    release.loop(oReceptionist);
+    set.view(oReceptionist, vw.ReceptionistAct);
+    work1 = 0;
+    work2 = -11;
+    reposition(oReceptionist, work1, work2);
+    [ if patient 2/3/4 ready to see nurse, announce it
+    if (patient2Seq == EXAMREADY) {
+      block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      print.at("\"Ms. Cole, the nurse will see you now.\"", 6, 6, 35);
+      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      [ patient called to exam room
+      patient2Loc = LOC_EXAM;
+      patient2Seq = STANDUP;
+      set.loop(oPatient2, LP_P_SIT);
+      set.cel(oPatient2, 0);
+      end.of.loop(oPatient2, fP2Done);
+    }
+    if (patient3Seq == EXAMREADY) {
+      block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      print.at("\"Mr. Lowe, the nurse will see you now.\"", 6, 6, 35);
+      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      [ patient called to exam room
+      patient3Loc = LOC_EXAM;
+      patient3Seq = STANDUP;
+      set.loop(oPatient3, LP_P_SIT);
+      set.cel(oPatient3, 0);
+      end.of.loop(oPatient3, fP3Done);
+    }
+    if (patient4Seq == EXAMREADY) {
+      block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      print.at("\"Mr. Walls, the nurse will see you now.\"", 6, 6, 35);
+      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      [ patient called to exam room
+      patient4Loc = LOC_EXAM;
+      patient4Seq = STANDUP;
+      set.loop(oPatient4, LP_P_SIT);
+      set.cel(oPatient4, 0);
       work1 = -2;
       work2 = 0;
-      reposition(oReceptionist, work1, work2);
-      set.loop(oReceptionist, LP_R_SIT);
+      reposition(oPatient4, work1, work2);
+      end.of.loop(oPatient4, fP4Done);
+    }
+    [ if patient1 or ego want to talk
+    if ((patient1Seq == WAITCOUNTER || fEgoWaitTalk)) {
+      [ switch to 'stand and speak' mode
+      receptionistSeq = STANDSPEAK1;
+      set.loop(oReceptionist, LP_R_SPEAK);
       set.cel(oReceptionist, 0);
-      end.of.loop(oReceptionist, fRDone);
-      goto(doneRSeq);
+      start.cycling(oReceptionist);
+      [ speak for 5 cycles
+      receptionistCtr = 5;
+    } else {
+      [ if not talking to ego or patient, sit down
+      receptionistSeq = SITDOWN;
+      set.loop(oReceptionist, LP_R_SIT);
+      set.cel(oReceptionist, 5);
+      reverse.loop(oReceptionist, fRDone);
     }
-    [ if done moving to phone
-    if (receptionistSeq == MOVEPHONE) {
-      [ switch view to the action view and reposition
-      release.loop(oReceptionist);
-      set.view(oReceptionist, vw.ReceptionistAct);
-      work1 = 0;
-      work2 = -11;
-      reposition(oReceptionist, work1, work2);
-      [ if patient 2/3/4 ready to see nurse, announce it
-      if (patient2Seq == EXAMREADY) {
-        block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-        print.at("\"Ms. Cole, the nurse will see you now.\"", 6, 6, 35);
-        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-        [ patient called to exam room
-        patient2Loc = LOC_EXAM;
-        patient2Seq = STANDUP;
-        set.loop(oPatient2, LP_P_SIT);
-        set.cel(oPatient2, 0);
-        end.of.loop(oPatient2, fP2Done);
-      }
-      if (patient3Seq == EXAMREADY) {
-        block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-        print.at("\"Mr. Lowe, the nurse will see you now.\"", 6, 6, 35);
-        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-        [ patient called to exam room
-        patient3Loc = LOC_EXAM;
-        patient3Seq = STANDUP;
-        set.loop(oPatient3, LP_P_SIT);
-        set.cel(oPatient3, 0);
-        end.of.loop(oPatient3, fP3Done);
-      }
-      if (patient4Seq == EXAMREADY) {
-        block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-        print.at("\"Mr. Walls, the nurse will see you now.\"", 6, 6, 35);
-        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-        [ patient called to exam room
-        patient4Loc = LOC_EXAM;
-        patient4Seq = STANDUP;
-        set.loop(oPatient4, LP_P_SIT);
-        set.cel(oPatient4, 0);
-        work1 = -2;
-        work2 = 0;
-        reposition(oPatient4, work1, work2);
-        end.of.loop(oPatient4, fP4Done);
-      }
-      [ if patient1 or ego want to talk
-      if ((patient1Seq == WAITCOUNTER || fEgoWaitTalk)) {
-        [ switch to 'stand and speak' mode
-        receptionistSeq = STANDSPEAK1;
-        set.loop(oReceptionist, LP_R_SPEAK);
-        set.cel(oReceptionist, 0);
-        start.cycling(oReceptionist);
-        receptionistTimer = 5;
-      } else {
-        [ if not talking to ego or patient, sit down
-        receptionistSeq = SITDOWN;
-        set.loop(oReceptionist, LP_R_SIT);
-        set.cel(oReceptionist, 5);
-        reverse.loop(oReceptionist, fRDone);
-      }
-      goto(doneRSeq);
-    }
-    [ if done sitting down,
-    if (receptionistSeq == SITDOWN) {
-      [ pick up the phone
-      receptionistSeq = GETPHONE;
-      set.loop(oReceptionist, LP_R_GETPHONE);
-      work1 = 2;
-      work2 = 0;
-      reposition(oReceptionist, work1, work2);
-      end.of.loop(oReceptionist, fRDone);
-      goto(doneRSeq);
-    }
-    [ after picking up the phone
-    if (receptionistSeq == GETPHONE) {
-      [ start talking for a random amount of time 
-      set.loop(oReceptionist, LP_R_TALKPHONE);
-      normal.cycle(oReceptionist);
-      receptionistSeq = IDLE;
-      random(20, 60, work1);
-      receptionistTimer = work1;
+    goto(doneRSeq);
+  }
+  [ if done sitting down,
+  if (receptionistSeq == SITDOWN) {
+    [ pick up the phone
+    receptionistSeq = GETPHONE;
+    set.loop(oReceptionist, LP_R_GETPHONE);
+    work1 = 2;
+    work2 = 0;
+    reposition(oReceptionist, work1, work2);
+    end.of.loop(oReceptionist, fRDone);
+    goto(doneRSeq);
+  }
+  [ after picking up the phone
+  if (receptionistSeq == GETPHONE) {
+    [ start talking for a random amount of time 
+    set.loop(oReceptionist, LP_R_TALKPHONE);
+    normal.cycle(oReceptionist);
+    receptionistSeq = IDLE;
+    [ talk for 5 - 10 seconds
+    random(5, 10, receptionistTimer);
+    receptionistTimer += elapsedSeconds;
+    if (receptionistTimer > 59) {
+      receptionistTimer -= 60;
     }
   }
 }
@@ -846,12 +948,45 @@ if (receptionistSeq == NEWLOCATION) {
 [**************************************************************
 [ PATIENT 1
 [**************************************************************
+[ if a counter is active
+if (patient1Ctr > 0) {
+  [ countdown
+  -- patient1Ctr;
+  if (patient1Ctr == 0) {
+    [ ready to speak first line
+    if (patient1Seq == TALKCOUNTER1) {
+      [ set flag so there will not be another request
+      set(fAskToPee);
+      set.cel(oPatient1, 0);
+      stop.cycling(oPatient1);
+      block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
+      print.at("\"May I use the restroom please?\"", 8, 38, 30);
+      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      [ set timer for receptionist to speak
+      receptionistCtr = 10;
+      start.cycling(oReceptionist);
+    }
+    [ ready to speak second line
+    if (patient1Seq == TALKCOUNTER2) {
+      block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
+      print.at("\"Thank you!\"", 8, 38, 30);
+      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      patient1Seq = MOVEHALL1;
+      set.loop(oPatient1, LP_MOVERIGHT);
+      move.obj(oPatient1, 86, 107, 1, fP1Done);
+      [ receptionist goes back to the phone
+      receptionistSeq = STOPCONV;
+      receptionistCtr = 1;
+      reset(fPatient1Talking);
+    }
+  }
+}
+
 [ if a timer is active
-if (patient1Timer > 0) {
-  [ continue the countdown
-  --patient1Timer;
-  [ when counter hits zero, take action
-  if (patient1Timer == 0) {
+if (patient1Timer != 255) {
+  if (patient1Timer == elapsedSeconds) {
+    [ timer is done, take action
+    patient1Timer = 255;
     [ if patient is not doing anything
     if (patient1Seq == IDLE) {
       [ find a new task (but asking for bathroom break will
@@ -907,42 +1042,19 @@ if (patient1Timer > 0) {
       goto(p1SeqDone);
     }
     if (patient1Seq == READBOOK) {
-      --patient1Ctr;
-      if (patient1Ctr == 0) {
+      --bookcycles;
+      if (bookcycles == 0) {
         patient1Seq = STOWBOOK;
         set.loop(oPatient1, LP_GETBOOK);
         set.cel(oPatient1, 5);
         reverse.loop(oPatient1, fP1Done);
+        work1 = 1;
+        cycle.time(oPatient1, work1);
       } else {
+        [ turn the page
         end.of.loop(oPatient1, fP1Done);
       }
       goto(p1SeqDone);
-    }
-    [ ready to speak first line
-    if (patient1Seq == TALKCOUNTER1) {
-      [ set flag so there will not be another request
-      set(fAskToPee);
-      set.cel(oPatient1, 0);
-      stop.cycling(oPatient1);
-      block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
-      print.at("\"May I use the restroom please?\"", 8, 38, 30);
-      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-      [ set timer for receptionist to speak
-      receptionistTimer = 10;
-      start.cycling(oReceptionist);
-    }
-    [ ready to speak second line
-    if (patient1Seq == TALKCOUNTER2) {
-      block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
-      print.at("\"Thank you!\"", 8, 38, 30);
-      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-      patient1Seq = MOVEHALL1;
-      set.loop(oPatient1, LP_MOVERIGHT);
-      move.obj(oPatient1, 86, 107, 1, fP1Done);
-      [ receptionist goes back to the phone
-      receptionistSeq = STOPCONV;
-      receptionistTimer = 1;
-      reset(fPatient1Talking);
     }
     [ if patient is at end of hall, ready to come back
     if (patient1Seq == MOVEHALL3) {
@@ -953,108 +1065,134 @@ if (patient1Timer > 0) {
       move.obj(oPatient1, 86, 92, 1, fP1Done);
     }
   }
-} else {
-  if (fP1Done) {
-    reset(fP1Done);
-    [ next sequence
-    if (patient1Seq == GETPHONE) {
-      patient1Seq = USEPHONE;
-      set.loop(oPatient1, LP_USEPHONE);
-      normal.cycle(oPatient1);
-      random(50, 120, work1);
-      patient1Timer = work1;
-      goto(p1SeqDone);
+}
+
+[ check for a completed action
+if (fP1Done) {
+  reset(fP1Done);
+  [ next sequence
+  if (patient1Seq == GETPHONE) {
+    patient1Seq = USEPHONE;
+    set.loop(oPatient1, LP_USEPHONE);
+    normal.cycle(oPatient1);
+    [ spend 5-12 seconds on phone
+    random(5, 12, patient1Timer);
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
     }
-    if (patient1Seq == STOWPHONE) {
-      patient1Seq = IDLE;
-      set.loop(oPatient1, LP_P_GETPHONE);
-      set.cel(oPatient1, 0);
-      work1 = 1;
-      cycle.time(oPatient1, work1);
-      stop.cycling(oPatient1);
-      random(40, 80, work1);
-      patient1Timer = work1;
-      goto(p1SeqDone);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == STOWPHONE) {
+    patient1Seq = IDLE;
+    set.loop(oPatient1, LP_P_GETPHONE);
+    set.cel(oPatient1, 0);
+    work1 = 1;
+    cycle.time(oPatient1, work1);
+    stop.cycling(oPatient1);
+    [ idle time is random, from 4 - 8 seconds
+    random(4, 8, patient1Timer);
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
     }
-    if (patient1Seq == GETBOOK) {
-      patient1Seq = READBOOK;
-      set.loop(oPatient1, LP_READBOOK);
-      set.cel(oPatient1, 0);
-      stop.cycling(oPatient1);
-      patient1Timer = 10;
-      random(5, 15, work1);
-      patient1Ctr = work1;
-      goto(p1SeqDone);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == GETBOOK) {
+    patient1Seq = READBOOK;
+    set.loop(oPatient1, LP_READBOOK);
+    set.cel(oPatient1, 0);
+    stop.cycling(oPatient1);
+    work1 = 2;
+    cycle.time(oPatient1, work1);
+    [ spend 3-5 seconds on each page
+    random(3, 5, patient1Timer);
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
     }
-    if (patient1Seq == READBOOK) {
-      set.cel(oPatient1, 0);
-      stop.cycling(oPatient1);
-      patient1Timer = 10;
-      goto(p1SeqDone);
+    random(5, 15, bookcycles);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == READBOOK) {
+    set.cel(oPatient1, 0);
+    stop.cycling(oPatient1);
+    [ spend 3-5 seconds on each page
+    random(3, 5, patient1Timer);
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
     }
-    if ((patient1Seq == STOWBOOK || patient1Seq == RTNHALL4)) {
-      patient1Seq = IDLE;
-      set.loop(oPatient1, LP_P_SIT);
-      set.cel(oPatient1, 0);
-      work1 = 1;
-      cycle.time(oPatient1, work1);
-      stop.cycling(oPatient1);
-      patient1Timer = 20;
-      goto(p1SeqDone);
+    goto(p1SeqDone);
+  }
+  if ((patient1Seq == STOWBOOK || patient1Seq == RTNHALL4)) {
+    patient1Seq = IDLE;
+    set.loop(oPatient1, LP_P_SIT);
+    set.cel(oPatient1, 0);
+    work1 = 1;
+    cycle.time(oPatient1, work1);
+    stop.cycling(oPatient1);
+    [ idle time is 4 - 8 seconds
+    random(4, 8, patient1Timer);
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
     }
-    if (patient1Seq == STANDUP) {
-      patient1Seq = MOVECOUNTER;
-      set.loop(oPatient1, LP_MOVELEFT);
-      normal.cycle(oPatient1);
-      move.obj(oPatient1, 76, 117, 1, fP1Done);
-      goto(p1SeqDone);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == STANDUP) {
+    patient1Seq = MOVECOUNTER;
+    set.loop(oPatient1, LP_MOVELEFT);
+    normal.cycle(oPatient1);
+    move.obj(oPatient1, 76, 117, 1, fP1Done);
+    goto(p1SeqDone);
+  }
+  [ when at counter, waiting for receptionist
+  if (patient1Seq == MOVECOUNTER) {
+    [ stop cycling, and wait
+    patient1Seq = WAITCOUNTER;
+    stop.cycling(oPatient1);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == MOVEHALL1) {
+    patient1Seq = MOVEHALL2;
+    set.loop(oPatient1, LP_MOVEUP);
+    move.obj(oPatient1, 86, 92, 1, fP1Done);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == MOVEHALL2) {
+    patient1Seq = MOVEHALL3;
+    set.loop(oPatient1, LP_MOVELEFT);
+    move.obj(oPatient1, 12, 92, 1, fP1Done);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == MOVEHALL3) {
+    [ wait in bathroom for ~20 seconds
+    patient1Timer = 20;
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
     }
-    [ when at counter, waiting for receptionist
-    if (patient1Seq == MOVECOUNTER) {
-      [ stop cycling, and wait
-      patient1Seq = WAITCOUNTER;
-      stop.cycling(oPatient1);
-      goto(p1SeqDone);
-    }
-    if (patient1Seq == MOVEHALL1) {
-      patient1Seq = MOVEHALL2;
-      set.loop(oPatient1, LP_MOVEUP);
-      move.obj(oPatient1, 86, 92, 1, fP1Done);
-      goto(p1SeqDone);
-    }
-    if (patient1Seq == MOVEHALL2) {
-      patient1Seq = MOVEHALL3;
-      set.loop(oPatient1, LP_MOVELEFT);
-      move.obj(oPatient1, 12, 92, 1, fP1Done);
-      goto(p1SeqDone);
-    }
-    if (patient1Seq == MOVEHALL3) {
-    [ TODO: adjust timer events for speed
-    [ current hardcoded values are based on speed of six
-    [ formula is (T * 60)/INT
-    [ T = desired time in seconds; INT = animationInterval
-      patient1Timer = 100;
-      erase(oPatient1);
-      goto(p1SeqDone);
-    }
-    if (patient1Seq == RTNHALL1) {
-      patient1Seq = RTNHALL2;
-      set.loop(oPatient1, LP_MOVEDOWN);
-      move.obj(oPatient1, 86, 97, 1, fP1Done);
-      goto(p1SeqDone);
-    }
-    if (patient1Seq == RTNHALL2) {
-      patient1Seq = RTNHALL3;
-      set.loop(oPatient1, LP_MOVERIGHT);
-      move.obj(oPatient1, 106, 97, 1, fP1Done);
-      goto(p1SeqDone);
-    }
-    if (patient1Seq == RTNHALL3) {
-      patient1Seq = RTNHALL4;
-      set.loop(oPatient1, LP_P_SIT);
-      set.cel(oPatient1, 3);
-      reverse.loop(oPatient1, fP1Done);
-    }
+    erase(oPatient1);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == RTNHALL1) {
+    patient1Seq = RTNHALL2;
+    set.loop(oPatient1, LP_MOVEDOWN);
+    move.obj(oPatient1, 86, 97, 1, fP1Done);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == RTNHALL2) {
+    patient1Seq = RTNHALL3;
+    set.loop(oPatient1, LP_MOVERIGHT);
+    move.obj(oPatient1, 106, 97, 1, fP1Done);
+    goto(p1SeqDone);
+  }
+  if (patient1Seq == RTNHALL3) {
+    patient1Seq = RTNHALL4;
+    set.loop(oPatient1, LP_P_SIT);
+    set.cel(oPatient1, 3);
+    reverse.loop(oPatient1, fP1Done);
   }
 }
 :p1SeqDone
@@ -1062,20 +1200,75 @@ if (patient1Timer > 0) {
 [**************************************************************
 [ PATIENT 2
 [**************************************************************
-[ if individual timer is active
-if (patient2Timer > 0) {
-  [ countdown timer
-  --patient2Timer;
+
+[ if a counter is active
+if (patient2Ctr > 0) {
+  --patient2Ctr;
+  if (patient2Ctr == 0) {
+    [ patient 2 arrives
+    if (patient2Seq == ARRIVE) {
+      patient2Seq = MOVESEAT1;
+      set.loop(oPatient2, LP_MOVEUP);
+      normal.cycle(oPatient2);
+      position(oPatient2, 116, 167);
+      draw(oPatient2);
+      move.obj(oPatient2, 116, 142, 1, fP2Done);
+      goto(p2SeqDone);
+    }
+  }
 }
 
-if (patient2Timer == 0) {
+[ if timer is active
+if (patient2Timer != 255) {
+  if (patient2Timer == elapsedSeconds) {
+    [ timer is done, take action
+    patient2Timer = 255;
+    
+    [ check for idle time
+    if ((patient2Seq == IDLE || patient2Seq == TAPTOE)) {
+      [ choose a random action (toe tap, or phone)
+      random(1, 2, work1);
+      if (work1 == 1) {
+        [ tap toe for 6 - 12 seconds
+        patient2Seq = TAPTOE;
+        random(6, 12, patient2Timer);
+        patient2Timer += elapsedSeconds;
+        if (patient2Timer > 59) {
+          patient2Timer -= 60;
+        }
+        set.loop(oPatient2, LP_TAPTOE);
+        normal.cycle(oPatient2);
+      } else {
+        [ get phone
+        patient2Seq = GETPHONE;
+        set.loop(oPatient2, LP_P_GETPHONE);
+        set.cel(oPatient2, 0);
+        end.of.loop(oPatient2, fP2Done);
+      }
+      goto(p2SeqDone);
+    }
+    
+    if (patient2Seq == USEPHONE) {
+      patient2Seq = STOWPHONE;
+      set.loop(oPatient2, LP_P_GETPHONE);
+      set.cel(oPatient2, 8);
+      reverse.loop(oPatient2, fP2Done);
+      goto(p2SeqDone);
+    }
+  }
+} else {
   [ check for main timer events
   if (patientClock > 0 && patientClock < 6 && patient2Loc == LOC_GONE) {
     [ patient arrives
+    [ load view, but don't script it
+    set(noScript);
+    load.view(vw.Patient2);
+    set.view(oPatient2, vw.Patient2);
+    reset(noScript);
     patient2Loc = LOC_LOBBY;
     set(fPatientAtDoor);
     [ set timer to allow door to open
-    patient2Timer = 12;
+    patient2Ctr = 12;
     patient2Seq = ARRIVE;
     goto(p2SeqDone);
   }
@@ -1095,67 +1288,32 @@ if (patient2Timer == 0) {
     move.obj(oPatient2, 86, 91, 1, fP2Done);
     goto(p2SeqDone);
   }
-  
-  if (patient2Seq == SKIP) {
-    goto(P2SeqDone);
-  }
-  
-  [ patient 2 arrives
-  if (patient2Seq == ARRIVE) {
-    patient2Seq = MOVESEAT1;
-    set.loop(oPatient2, LP_MOVEUP);
-    normal.cycle(oPatient2);
-    position(oPatient2, 116, 167);
-    draw(oPatient2);
-    move.obj(oPatient2, 116, 142, 1, fP2Done);
-    goto(p2SeqDone);
-  }
-  
-  [ check for idle time
-  if ((patient2Seq == IDLE || patient2Seq == TAPTOE)) {
-    [ choose a random action (toe tap, or phone)
-    random(1, 2, work1);
-    if (work1 == 1) {
-      [ tap toe
-      patient2Seq = TAPTOE;
-      random(30, 60, work1);
-      patient2Timer = work1;
-      set.loop(oPatient2, LP_TAPTOE);
-      normal.cycle(oPatient2);
-    } else {
-      [ get phone
-      patient2Seq = GETPHONE;
-      set.loop(oPatient2, LP_P_GETPHONE);
-      set.cel(oPatient2, 0);
-      end.of.loop(oPatient2, fP2Done);
-    }
-    goto(p2SeqDone);
-  }
-  
-  if (patient2Seq == USEPHONE) {
-    patient2Seq = STOWPHONE;
-    set.loop(oPatient2, LP_P_GETPHONE);
-    set.cel(oPatient2, 8);
-    reverse.loop(oPatient2, fP2Done);
-    goto(p2SeqDone);
-  }
 }
 
 [ check for sequence completion flag
 if (fP2Done) {
   reset(fP2Done);
-  [ start using phone
   if (patient2Seq == GETPHONE) {
+    [ use phone for 8-16 seconds
     patient2Seq = USEPHONE;
-    random(40, 120, work1);
-    patient2Timer = work1;
+    random(8, 16, patient2Timer);
+    patient2Timer += elapsedSeconds;
+    if (patient2Timer > 59) {
+      patient2Timer -= 60;
+    }
     set.loop(oPatient2, LP_USEPHONE);
     set.cel(oPatient2, 0);
     normal.cycle(oPatient2);
     goto(p2SeqDone);
   }
   if (patient2Seq == STOWPHONE) {
+    [ do nothing for 4-8 seconds
     patient2Seq = IDLE;
+    random(4, 8, patient2Timer);
+    patient2Timer += elapsedSeconds;
+    if (patient2Timer > 59) {
+      patient2Timer -= 60;
+    }
     goto(p2SeqDone);
   }
   if (patient2Seq == MOVESEAT1) {
@@ -1173,9 +1331,13 @@ if (fP2Done) {
     goto(p2SeqDone);
   }
   if (patient2Seq == SITDOWN) {
+    [ sit idle for 5-10 seconds
     patient2Seq = IDLE;
-    random(20, 40, work1);
-    patient2Timer = work1;
+    random(5, 10, patient2Timer);
+    patient2Timer += elapsedSeconds;
+    if (patient2Timer > 59) {
+      patient2Timer -= 60;
+    }
     goto(p2SeqDone);
   }
   if (patient2Seq == STANDUP) {
@@ -1226,6 +1388,15 @@ if (fP2Done) {
     patient2Seq = IDLE;
     erase(oPatient2);
     reset(fPatientAtDoor);
+    [ unload view, but don't script it
+    set(noScript);
+    erase(oPatient3);
+    discard.view(vw.Patient3);
+    discard.view(vw.Patient2);
+    load.view(vw.Patient3);
+    set.view(oPatient3, vw.Patient3);
+    draw(oPatient3);
+    reset(noScript);
   }
 }
 :p2SeqDone
@@ -1233,20 +1404,74 @@ if (fP2Done) {
 [**************************************************************
 [ PATIENT 3
 [**************************************************************
-[ if individual timer is active
-if (patient3Timer > 0) {
-  [ countdown timer
-  --patient3Timer;
+
+[ if a counter is active
+if (patient3Ctr > 0) {
+  --patient3Ctr;
+  if (patient3Ctr == 0) {
+    [ patient 3 arrives
+    if (patient3Seq == ARRIVE) {
+      patient3Seq = MOVESEAT1;
+      set.loop(oPatient3, LP_MOVEUP);
+      normal.cycle(oPatient3);
+      position(oPatient3, 116, 167);
+      draw(oPatient3);
+      move.obj(oPatient3, 116, 126, 1, fP3Done);
+      goto(p3SeqDone);
+    }
+  }
 }
 
-if (patient3Timer == 0) {
+[ if a timer is active
+if (patient3Timer != 255) {
+  if (patient3Timer == elapsedSeconds) {
+    [ timer is done, take action
+    patient3Timer = 255;
+    
+    [ check for idle time
+    if (patient3Seq == IDLE) {
+      [ choose a random action (do nothing, or phone)
+      random(1, 4, work1);
+      if (work1 == 1) {
+        [ do nothing for 6-10 seconds
+        patient3Seq = IDLE;
+        random(6, 10, patient3Timer);
+        patient3Timer += elapsedSeconds;
+        if (patient3Timer > 59) {
+          patient3Timer -= 60;
+        }
+        stop.cycling(oPatient3);
+      } else {
+        [ get phone
+        patient3Seq = GETPHONE;
+        set.loop(oPatient3, LP_P_GETPHONE);
+        set.cel(oPatient3, 0);
+        end.of.loop(oPatient3, fP3Done);
+      }
+      goto(p3SeqDone);
+    }
+    
+    if (patient3Seq == USEPHONE) {
+      patient3Seq = STOWPHONE;
+      set.loop(oPatient3, LP_P_GETPHONE);
+      set.cel(oPatient3, 8);
+      reverse.loop(oPatient3, fP3Done);
+      goto(p3SeqDone);
+    }
+  }
+} else {
   [ check for main timer events
   if (patientClock > 4 && patientClock < 12 && patient3Loc == LOC_GONE) {
     [ patient arrives
+    [ load view, but don't script it
+    set(noScript);
+    load.view(vw.Patient3);
+    set.view(oPatient3, vw.Patient3);
+    reset(noScript);
     patient3Loc = LOC_LOBBY;
     set(fPatientAtDoor);
     [ set timer to allow door to open
-    patient3Timer = 12;
+    patient3Ctr = 12;
     patient3Seq = ARRIVE;
     goto(p3SeqDone);
   }
@@ -1265,50 +1490,6 @@ if (patient3Timer == 0) {
     move.obj(oPatient3, 86, 91, 1, fP3Done);
     goto(p3SeqDone);
   }
-  
-  if (patient3Seq == SKIP) {
-    goto(P3SeqDone);
-  }
-[ TODO: calling trace when a print window is open works, but 
-[ it's blank until enter pressed; then it begins tracing
-  [ patient 3 arrives
-  if (patient3Seq == ARRIVE) {
-    patient3Seq = MOVESEAT1;
-    set.loop(oPatient3, LP_MOVEUP);
-    normal.cycle(oPatient3);
-    position(oPatient3, 116, 167);
-    draw(oPatient3);
-    move.obj(oPatient3, 116, 126, 1, fP3Done);
-    goto(p3SeqDone);
-  }
-  
-  [ check for idle time
-  if (patient3Seq == IDLE) {
-    [ choose a random action (do nothing, or phone)
-    random(1, 2, work1);
-    if (work1 == 1) {
-      [ do nothing
-      patient3Seq = IDLE;
-      random(30, 80, work1);
-      patient3Timer = work1;
-      stop.cycling(oPatient3);
-    } else {
-      [ get phone
-      patient3Seq = GETPHONE;
-      set.loop(oPatient3, LP_P_GETPHONE);
-      set.cel(oPatient3, 0);
-      end.of.loop(oPatient3, fP3Done);
-    }
-    goto(p3SeqDone);
-  }
-  
-  if (patient3Seq == USEPHONE) {
-    patient3Seq = STOWPHONE;
-    set.loop(oPatient3, LP_P_GETPHONE);
-    set.cel(oPatient3, 8);
-    reverse.loop(oPatient3, fP3Done);
-    goto(p3SeqDone);
-  }
 }
 
 [ check for sequence completion flag
@@ -1316,16 +1497,26 @@ if (fP3Done) {
   reset(fP3Done);
 
   if (patient3Seq == GETPHONE) {
+    [ use phone for 8 - 12 seconds
     patient3Seq = USEPHONE;
-    random(50, 180, work1);
-    patient3Timer = work1;
+    random(8, 12, patient3Timer);
+    patient3Timer += elapsedSeconds;
+    if (patient3Timer > 59) {
+      patient3Timer -= 60;
+    }
     set.loop(oPatient3, LP_USEPHONE);
     set.cel(oPatient3, 0);
     normal.cycle(oPatient3);
     goto(p3SeqDone);
   }
   if (patient3Seq == STOWPHONE) {
+    [ sit idle for 6-10 seconds
     patient3Seq = IDLE;
+    random(6, 10, patient3Timer);
+    patient3Timer += elapsedSeconds;
+    if (patient3Timer > 59) {
+      patient3Timer -= 60;
+    }
     goto(p3SeqDone);
   }
   if (patient3Seq == MOVESEAT1) {
@@ -1343,9 +1534,13 @@ if (fP3Done) {
     goto(p3SeqDone);
   }
   if (patient3Seq == SITDOWN) {
+    [ sit idle for 6-10 seconds
     patient3Seq = IDLE;
-    random(20, 40, work1);
-    patient3Timer = work1;
+    random(6, 10, patient3Timer);
+    patient3Timer += elapsedSeconds;
+    if (patient3Timer > 59) {
+      patient3Timer -= 60;
+    }
     goto(p3SeqDone);
   }
   if (patient3Seq == STANDUP) {
@@ -1396,6 +1591,15 @@ if (fP3Done) {
     patient3Seq = IDLE;
     erase(oPatient3);
     reset(fPatientAtDoor);
+    [ unload view, but don't script it
+    set(noScript);
+    erase(oPatient4);
+    discard.view(vw.Patient4);
+    discard.view(vw.Patient3);
+    load.view(vw.Patient4);
+    set.view(oPatient4, vw.Patient4);
+    draw(oPatient4);
+    reset(noScript);
   }
 }
 :p3SeqDone
@@ -1403,20 +1607,73 @@ if (fP3Done) {
 [**************************************************************
 [ PATIENT 4
 [**************************************************************
-[ if individual timer is active
-if (patient4Timer > 0) {
-  [ countdown timer
-  --patient4Timer;
+[ if a counter is active
+if (patient4Ctr > 0) {
+  --patient4Ctr;
+  if (patient4Ctr == 0) {
+    [ patient 4 arrives
+    if (patient4Seq == ARRIVE) {
+      patient4Seq = MOVESEAT1;
+      set.loop(oPatient4, LP_MOVEUP);
+      normal.cycle(oPatient4);
+      position(oPatient4, 116, 167);
+      draw(oPatient4);
+      move.obj(oPatient4, 116, 142, 1, fP4Done);
+      goto(p4SeqDone);
+    }
+  }
 }
 
-if (patient4Timer == 0) {
+[ if a timer is active
+if (patient4Timer != 255) {
+  if (patient4Timer == elapsedSeconds) {
+    [ timer is done, take action
+    patient4Timer = 255;
+    
+    [ check for idle time
+    if (patient4Seq == IDLE) {
+      [ choose a random action (do nothing, or phone)
+      random(1, 4, work1);
+      if (work1 == 1) {
+        [ do nothing for 4-8 seconds
+        patient4Seq = IDLE;
+        random(4, 8, patient4Timer);
+        patient4Timer += elapsedSeconds;
+        if (patient4Timer > 59) {
+          patient4Timer -= 60;
+        }
+        stop.cycling(oPatient4);
+      } else {
+        [ get phone
+        patient4Seq = GETPHONE;
+        set.loop(oPatient4, LP_P_GETPHONE);
+        set.cel(oPatient4, 0);
+        end.of.loop(oPatient4, fP4Done);
+      }
+      goto(p4SeqDone);
+    }
+    
+    if (patient4Seq == USEPHONE) {
+      patient4Seq = STOWPHONE;
+      set.loop(oPatient4, LP_P_GETPHONE);
+      set.cel(oPatient4, 8);
+      reverse.loop(oPatient4, fP4Done);
+      goto(p4SeqDone);
+    }
+  }
+} else {
   [ check for main timer events
   if (patientClock > 10 && patientClock < 16 && patient4Loc == LOC_GONE) {
     [ patient arrives
+    [ load view, but don't script it
+    set(noScript);
+    load.view(vw.Patient4);
+    set.view(oPatient4, vw.Patient4);
+    reset(noScript);
     patient4Loc = LOC_LOBBY;
     set(fPatientAtDoor);
     [ set timer to allow door to open 
-    patient4Timer = 12;
+    patient4Ctr = 12;
     patient4Seq = ARRIVE;
     goto(p4SeqDone);
   }
@@ -1435,49 +1692,6 @@ if (patient4Timer == 0) {
     move.obj(oPatient4, 86, 91, 1, fP4Done);
     goto(p4SeqDone);
   }
-  
-  if (patient4Seq == SKIP) {
-    goto(P4SeqDone);
-  }
-  
-  [ patient 4 arrives
-  if (patient4Seq == ARRIVE) {
-    patient4Seq = MOVESEAT1;
-    set.loop(oPatient4, LP_MOVEUP);
-    normal.cycle(oPatient4);
-    position(oPatient4, 116, 167);
-    draw(oPatient4);
-    move.obj(oPatient4, 116, 142, 1, fP4Done);
-    goto(p4SeqDone);
-  }
-  
-  [ check for idle time
-  if (patient4Seq == IDLE) {
-    [ choose a random action (do nothing, or phone)
-    random(1, 2, work1);
-    if (work1 == 1) {
-      [ do nothing
-      patient4Seq = IDLE;
-      random(30, 60, work1);
-      patient4Timer = work1;
-      stop.cycling(oPatient4);
-    } else {
-      [ get phone
-      patient4Seq = GETPHONE;
-      set.loop(oPatient4, LP_P_GETPHONE);
-      set.cel(oPatient4, 0);
-      end.of.loop(oPatient4, fP4Done);
-    }
-    goto(p4SeqDone);
-  }
-  
-  if (patient4Seq == USEPHONE) {
-    patient4Seq = STOWPHONE;
-    set.loop(oPatient4, LP_P_GETPHONE);
-    set.cel(oPatient4, 8);
-    reverse.loop(oPatient4, fP4Done);
-    goto(p4SeqDone);
-  }
 }
 
 [ check for sequence completion flag
@@ -1485,16 +1699,26 @@ if (fP4Done) {
   reset(fP4Done);
 
   if (patient4Seq == GETPHONE) {
+    [ use phone for 7-12 seconds
     patient4Seq = USEPHONE;
-    random(50, 180, work1);
-    patient4Timer = work1;
+    random(7, 12, patient4Timer);
+    patient4Timer += elapsedSeconds;
+    if (patient4Timer > 59) {
+      patient4Timer -= 60;
+    }
     set.loop(oPatient4, LP_USEPHONE);
     set.cel(oPatient4, 0);
     normal.cycle(oPatient4);
     goto(p4SeqDone);
   }
   if (patient4Seq == STOWPHONE) {
+    [ sit idle for 4-8 seconds
     patient4Seq = IDLE;
+    random(4, 8, patient4Timer);
+    patient4Timer += elapsedSeconds;
+    if (patient4Timer > 59) {
+      patient4Timer -= 60;
+    }
     goto(p4SeqDone);
   }
   if (patient4Seq == MOVESEAT1) {
@@ -1518,8 +1742,13 @@ if (fP4Done) {
     work1 = 2;
     work2 = 0;
     reposition(oPatient4, work1, work2);
-    random(20, 60, work1);
-    patient4Timer = work1;
+    [ sit idle for 4-8 seconds
+    patient4Seq = IDLE;
+    random(4, 8, patient4Timer);
+    patient4Timer += elapsedSeconds;
+    if (patient4Timer > 59) {
+      patient4Timer -= 60;
+    }
     goto(p4SeqDone);
   }
   if (patient4Seq == STANDUP) {
@@ -1570,6 +1799,10 @@ if (fP4Done) {
     patient4Seq = IDLE;
     erase(oPatient4);
     reset(fPatientAtDoor);
+    [ unload view, but don't script it
+    set(noScript);
+    discard.view(vw.Patient4);
+    reset(noScript);
   }
 }
 :p4SeqDone
@@ -1613,8 +1846,27 @@ if (fPaneDone) {
 }
 
 [ check for a slip
-if (egoHitSpecial && !fFalling) {
-  set(fFalling);
+if (egoHitSpecial && !fTripping) {
+  set(fTripping);
+  load.view(vw.Tripping);
+  if (egoY > 150) {
+    set.view(ego, vw.Tripping);
+    set.loop(ego, 0);
+    fix.loop(ego);
+    work1 = 150;
+    work2 = 1;
+    move.obj.v(ego, egoX, work1, work2, fFalling);
+  } else {
+    set(fFalling);
+  }
+  [ no more player input/control
+  program.control();
+  prevent.input();
+}
+if (fFalling) {
+  reset(fFalling);
+  erase(ego);
+  discard.view(vw.Tripping); 
   load.view(vw.EgoSlip);
   set.view(ego, vw.EgoSlip);
   set.loop(ego, 0);
@@ -1626,10 +1878,10 @@ if (egoHitSpecial && !fFalling) {
   [ allow cycle at rest
   work1 = 0;
   set.upper.left(&ego, &work1);
-  [ no more player input/control
   stop.motion(ego);
-  prevent.input();
+  draw(ego);
 }
+
 if (fSlipped) {
   reset(fSlipped);
   print("Didn't you notice that wet spot???");
@@ -1653,10 +1905,11 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (fEgoTalkReceptionist) {
     block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
     if (said("use", "bathroom")) {
-      print.at("\"Sure! It's through that doorway. Go left and it's the second door on the right.\"", 6, 6, 35);
+      print.at("\"Sure! It's through that doorway. Go left and it's the second "
+               "door on the right.\"", 6, 6, 35);
       work1 = 3;
       call(lgc.ScoreHandler);
-      set(fAllowPast);
+      set(allowedPastLobby);
       goto(resetmsg);
     } 
     [ TODO: more responses for receptionist conversation
@@ -1701,7 +1954,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ receptionist
     if (posn(oReceptionist, ON.OBJ, 1, &mouseX, &mouseY)) {
-      print("The receptionist looks really busy. It takes a lot of effort to manage this facility and all its patients.");
+      print("The receptionist looks really busy. It takes a lot of effort to "
+            "manage this facility and all its patients.");
       goto(doneclick);
     }
     [ patient 1
@@ -1713,22 +1967,18 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           goto(doneclick);
         }
         if (patient1Seq > 33 && patient1Seq == 37) {        
-          print("This patient is reading a book. It's nice to know that some people can survive without constantly checking their cell phone.");
+          print("This patient is reading a book. It's nice to know that some "
+                "people can survive without constantly checking their cell phone.");
         }
       } else {
-        print("This old lady has been here a long time. She doesn't seem to upset about the long wait though.");
+        print("This old lady has been here a long time. She doesn't seem to "
+              "upset about the long wait though.");
       }
       goto(doneclick);
     }    
-    [ patient2/4
+    [ patient 2
     if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
-      [ determine which patient
-      current.view(oPatient2, work1);
-      if (work1 == vw.Patient2) {
-        print("The young lady seems very impatient. She must be in a hurry.");
-      } else {
-        print("With those thick glasses, you wonder if this guy is here for an eye exam.");
-      }
+      print("The young lady seems very impatient. She must be in a hurry.");
       goto(doneclick);
     }
     
@@ -1738,16 +1988,31 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
+    [ patient 4
+    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("With those thick glasses, you wonder if this guy is here for an eye exam.");
+      goto(doneclick);
+    }
+    
     [ magazine
     if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
       print("It's an old computer magazine from the 1990s.");
       goto(doneclick);
     }
+    
+    [ desk papers
+    if (posn(oPapers, ON.OBJ, 1, &mouseX, &mouseY)) {
+      print("This stack of papers must be very important to the administration "
+            "of this clinic.");
+      goto(doneclick);
+    }
+    
     [ other things to look at
     
     [ computer 22, 73, 32, 86
     if (mouseX > 21 && mouseX < 33 && mouseY > 80 && mouseY < 95) {
-      print("The receptionist uses this computer to manage patient accounts and scheduling.");
+      print("The receptionist uses this computer to manage patient "
+            "accounts and scheduling.");
       goto(doneclick);
     }
     [ entry door 112, 150, 139, 167
@@ -1757,7 +2022,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ floor sign 2, 125, 8, 140
     if (mouseX > 1 && mouseX < 9 && mouseY > 132 && mouseY < 149) {
-      print("It says \"CAUTION - Wet Floor\". You should probably stay away to be safe.");
+      print("It says \"CAUTION - Wet Floor\". You should probably stay "
+            "away to be safe.");
       goto(doneclick);
     }
     [ table 127, 88, 133, 97
@@ -1783,7 +2049,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     work1 /= 16;
     if ((work1 == 1 || work1 == 5)) {
       if (mouseX > 99 && mouseX < 153 && mouseY > 86 && mouseY < 146) {
-        print("The benches are old and worn, but look reasonably comfortable for sitting if you need to wait for an appointment.");
+        print("The benches are old and worn, but look reasonably comfortable "
+              "for sitting if you need to wait for an appointment.");
         goto(doneclick);
       }
     }
@@ -1791,17 +2058,20 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
     work1 /= 16;
     if (work1 == 9) {
-      print("The walls are painted in light blue, with a white accent below the rail line.");
+      print("The walls are painted in light blue, with a white accent below "
+            "the rail line.");
       goto(doneclick);
     }
     [ hall (25, 52, 95, 94)
     if (mouseX > 24 && mouseX < 96 && mouseY > 59 && mouseY < 103) {
-      print("You can see a hallway behind the lobby. That might be an area worth exploring.");
+      print("You can see a hallway behind the lobby. That might be an area "
+            "worth exploring.");
       goto(doneclick);
     }
     [ floor y>86 and y<149
     if (mouseY > 94 && mouseY < 157) {
-      print("The floor looks like it has just been cleaned. You can see a few damp spots near the left exit.");
+      print("The floor looks like it has just been cleaned. You can see a "
+            "few damp spots near the left exit.");
       goto(doneclick);
     }
     [ ceiling y < 36
@@ -1846,18 +2116,22 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     if (posn(oPatient1, ON.OBJ, 0, &mouseX, &mouseY)) {
-      distance(ego, oPatient3, work1);
+      distance(ego, oPatient1, work1);
       if (work1 < 24) {
+        block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
         print("\"Get your hands off me, you pervert!\"");
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
         print("You are not close enough.");
       }
       goto(doneclick);
     }
     if (posn(oPatient2, ON.OBJ, 0, &mouseX, &mouseY)) {
-      distance(ego, oPatient3, work1);
+      distance(ego, oPatient2, work1);
       if (work1 < 24) {
-        print("Don't touch me!");
+        block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
+        print("\"Don't touch me!\"");
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
         print("You are not close enough.");
       }
@@ -1866,7 +2140,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (posn(oPatient3, ON.OBJ, 0, &mouseX, &mouseY)) {
       distance(ego, oPatient3, work1);
       if (work1 < 24) {
-        print("Ooh, do that again. I like that!");
+        block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+        print("\"Ooh, do that again. I like that!\"");
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      } else {
+        print("You are not close enough.");
+      }
+    }
+    if (posn(oPatient4, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, oPatient4, work1);
+      if (work1 < 24) {
+        block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+        print("\"Ooh, do that again. I like that!\"");
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
         print("You are not close enough.");
       }
@@ -1874,7 +2160,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ magazine
     if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oMagazine, work1);
-[print("distance: %v46");
       if (work1 < 20) {
         print("You decide to pick up the old magazine.");
         get("magazine");
@@ -1884,6 +2169,22 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         print("You are not close enough.");
       }
+    }
+    [ desk papers
+    if (posn(oPapers, ON.OBJ, 1, &mouseX, &mouseY)) {
+      distance(ego, oMagazine, work1);
+      if (work1 < 20) {
+        print("These papers probably contain sensitive information "
+              "about the clinic and its patients. You shouldn't "
+              "take them.");
+      } else {
+        print("You are not close enough.");
+      }
+      goto(doneclick);
+    }
+    [ floor sign 2, 125, 8, 140
+    if (mouseX > 1 && mouseX < 9 && mouseY > 132 && mouseY < 149) {
+      print("You are not close enough.");
     }
     goto(doneclick);
   }
@@ -1900,15 +2201,9 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
 if (edgeEgoHit == TOP_EDGE) {
   [ only if allowed past (or if receptionist is in hallway)
-  if ((fAllowPast || receptionistSeq == RTNHALL1 || 
+  if ((allowedPastLobby || receptionistSeq == RTNHALL1 || 
        receptionistSeq == MOVEHALL2 || receptionistSeq == MOVEHALL3 ||
        receptionistSeq == WAITHALL)) {
-    [ if not allowed yet, set flag so receptionist in hall can send ego back
-    if (!fAllowPast) {
-      set(receptionistInHall);
-    } else {
-      reset(receptionistInHall);
-    }
     [ if patient 1 visited restroom, reset first visit flag
     if (fAskToPee) {
       reset(firstLobbyVisit);

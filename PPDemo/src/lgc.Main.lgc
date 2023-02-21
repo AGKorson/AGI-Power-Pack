@@ -585,7 +585,6 @@ if (closetTimerDone) {
   reset(closetTimerDone);
   reset(closetopen);
   if (currentRoom > 6) {
-[ TODO: need a 'msg' logic to hold all messages in logic0 that don't have to be there
     print("%l90|8");
     set(trapped);
   }

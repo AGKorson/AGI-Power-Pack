@@ -16,9 +16,8 @@
 #define closedoor      f221
 #define fDoorDone      f222
 #define clickOn        f223
-#define fMustGoBack    f224
-#define openExamDoor   f225
-#define fExamDoorDone  f226
+#define openExamDoor   f224
+#define fExamDoorDone  f225
 
 #define examDoorSeq    v220
 #define gExamCount     v221
@@ -95,7 +94,7 @@ if (newRoom)
     set.loop(ego, 0);
   } else {
     [ if ego is in hall without permission
-    if (receptionistInHall) {
+    if (!allowedPastLobby) {
       [ add receptionist
       load.view(vw.ReceptionistWalk);
       animate.obj(oReceptionist);
@@ -104,7 +103,6 @@ if (newRoom)
       stop.cycling(oReceptionist);
       position(oReceptionist, 115, 143);
       draw(oReceptionist);
-      set(fMustGoBack);
     }
     position(ego, 151, 139);
     egodir = STOPPED;
@@ -125,7 +123,7 @@ if (newRoom)
   }
 
 [ if ego is not allowed
-if (fMustGoBack) {
+if (!allowedPastLobby) {
   print("Excuse me sir! Only patients are allowed past the lobby. Please go back.");
   goto(exit);
 }
@@ -551,7 +549,7 @@ if (egoHitSpecial) {
     }
   }
 }
-if ((edgeEgoHit == RIGHT_EDGE || fMustGoBack)) {
+if ((edgeEgoHit == RIGHT_EDGE || !allowedPastLobby)) {
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
