@@ -175,7 +175,7 @@ if(newRoom) {
   set.horizon(0);
   
   [ load the test sounds
-  load.sound(m.Theme);
+  load.sound(m.PPDTheme);
   load.sound(s.InstTest);
   load.sound(s.NoiseTest1);
   load.sound(s.NoiseTest2);
@@ -1633,7 +1633,7 @@ if (btnAction > 0) {
         goto(SETINST);
       }
       
-      sound(m.Theme, sndDone);
+      sound(m.PPDTheme, sndDone);
       [ update button text
       set.text.attribute(-1, 0);
       set.text.attribute(BLACK, WHITE);

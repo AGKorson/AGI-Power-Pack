@@ -1253,7 +1253,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ coffin (when closed)
     if ((vCoffinState == CLOSED || vCoffinState == CLOSING)) {
       if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
-[ TODO: use labels to manage 'said' statements that duplicate clicks
         :openCoffin
         [ is ego on wrong side?
         if (posn(ego, 28, 141, 54, 149)) {

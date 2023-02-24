@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "2/20/2023 5:08:22 PM"
+   LastEdit = "2/23/2023 4:29:07 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -48,7 +48,7 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H619EE8A3
+   CompCRC32 = &H0
    CRC32 = &H619EE8A3
    ID = lgc.Main
    IsRoom = False
@@ -56,11 +56,11 @@
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &HFECE7FF7
-   CRC32 = &HFECE7FF7
+   CompCRC32 = &H0
+   CRC32 = &HE0BC3E0
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 1633
+   Size = 2159
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -82,8 +82,8 @@
 [Logic93]
    ID = lgc.GameHelp
    Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
-   CRC32 = &HAD287E39
-   CompCRC32 = &H0
+   CRC32 = &H84927D67
+   CompCRC32 = &H84927D67
    IsRoom = False
    Size = 842
 
@@ -138,7 +138,7 @@
 [Logic25]
    ID = cp.ESADOCC
    Description = ""
-   CRC32 = &H29250F56
+   CRC32 = &H66775792
    CompCRC32 = &H0
    IsRoom = True
    Size = 7513
@@ -170,24 +170,24 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &HFBC4E2CC
-   CompCRC32 = &H0
+   CRC32 = &H4D98104B
+   CompCRC32 = &H4D98104B
    IsRoom = True
    Size = 2328
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H4E0CBA58
-   CompCRC32 = &H4E0CBA58
+   CRC32 = &H40FFC7A3
+   CompCRC32 = &H40FFC7A3
    IsRoom = True
-   Size = 6062
+   Size = 6223
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
    CRC32 = &H7DC3921E
-   CompCRC32 = &H7DC3921E
+   CompCRC32 = &H0
    IsRoom = True
    Size = 8427
 
@@ -195,7 +195,7 @@
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
    CRC32 = &H8B841015
-   CompCRC32 = &H8B841015
+   CompCRC32 = &H0
    IsRoom = True
    Size = 3176
 
@@ -242,8 +242,8 @@
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H9EF36DC3
-   CompCRC32 = &H0
+   CRC32 = &H870706F5
+   CompCRC32 = &H870706F5
    IsRoom = True
    Size = 9142
 
@@ -386,8 +386,8 @@
 [Logic31]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &H55606EA7
-   CompCRC32 = &H55606EA7
+   CRC32 = &HC0C4A0E3
+   CompCRC32 = &H0
    IsRoom = False
    Size = 775
 
@@ -458,10 +458,10 @@
 [Logic17]
    ID = lgc.ExamineItem
    Description = ""
-   CRC32 = &H94D670C3
-   CompCRC32 = &H0
+   CRC32 = &H6FA09BF9
+   CompCRC32 = &H6FA09BF9
    IsRoom = False
-   Size = 208
+   Size = 190
 
 [Logic18]
    ID = lgc.ReadManual
@@ -475,7 +475,7 @@
    ID = lgc.RedrawRoom
    Description = ""
    CRC32 = &H1F0DABF8
-   CompCRC32 = &H0
+   CompCRC32 = &H1F0DABF8
    IsRoom = False
    Size = 544
 
@@ -491,7 +491,7 @@
    ID = lgc.ReadNotebook
    Description = ""
    CRC32 = &HACC5DF45
-   CompCRC32 = &H0
+   CompCRC32 = &HACC5DF45
    IsRoom = False
    Size = 2410
 
@@ -506,10 +506,10 @@
 [Logic35]
    ID = lgc.PQList
    Description = ""
-   CRC32 = &HF52B90AF
-   CompCRC32 = &H0
+   CRC32 = &HAB33B9AA
+   CompCRC32 = &HAB33B9AA
    IsRoom = False
-   Size = 265
+   Size = 262
 
 [Logic36]
    ID = lgc.Pillow
@@ -811,7 +811,7 @@
 
 [::BEGIN Sounds::]
 [Sound0]
-   ID = m.Theme
+   ID = m.PPDTheme
    Description = "A theme song that can be played while title screen is shown."
    Key = 0
    TPQN = 4
@@ -829,10 +829,14 @@
    Size = 1586
 
 [Sound1]
-   ID = s.DoorClose
-   Description = "A simple sound effect for an automatic opening door."
+   ID = s.KQ1Theme
+   Description = ""
    Key = 0
-   TPQN = 16
+   TPQN1 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -840,17 +844,17 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Size = 31
+   TPQN = 0
 
 [Sound2]
-   ID = s.DoorOpen
-   Description = "A simple sound effect for an automatic closing door."
+   ID = s.KQ2Theme
+   Description = ""
    Key = 0
-   TPQN = 16
+   TPQN2 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -858,17 +862,17 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Size = 31
+   TPQN = 0
 
-[Sound3]
+[Sound23]
    ID = s.InstTest
    Description = "used in sound control panel to test instruments"
    Key = 0
-   TPQN = 16
+   TPQN23 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -876,17 +880,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound3]
+   ID = s.KQ3Theme
+   Description = ""
+   Key = 0
+   TPQN3 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 56
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound4]
+[Sound24]
    ID = s.NoiseTest1
    Description = ""
    Key = 0
-   TPQN = 16
+   TPQN24 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -894,17 +916,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound4]
+   ID = s.KQ4Theme
+   Description = ""
+   Key = 0
+   TPQN4 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 46
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound5]
+[Sound25]
    ID = s.NoiseTest2
    Description = ""
    Key = 0
-   TPQN = 16
+   TPQN25 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -912,17 +952,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound5]
+   ID = s.SQ1Theme
+   Description = ""
+   Key = 0
+   TPQN5 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 46
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound6]
+[Sound26]
    ID = s.Drip
    Description = ""
    Key = 0
-   TPQN = 4
+   TPQN26 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -930,17 +988,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound6]
+   ID = s.SQ2.Theme
+   Description = ""
+   Key = 0
+   TPQN6 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 21
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound7]
+[Sound27]
    ID = s.Crumble1
    Description = ""
    Key = 0
-   TPQN = 4
+   TPQN27 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -948,17 +1024,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound7]
+   ID = s.MUMGTheme
+   Description = ""
+   Key = 0
+   TPQN7 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 66
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound8]
+[Sound28]
    ID = s.Crumble2
    Description = ""
    Key = 0
-   TPQN = 4
+   TPQN28 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -966,17 +1060,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound8]
+   ID = s.LarryTheme
+   Description = ""
+   Key = 0
+   TPQN8 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 36
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound9]
+[Sound29]
    ID = s.ButtonClick
    Description = ""
    Key = 0
-   TPQN = 16
+   TPQN29 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
@@ -984,17 +1096,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound9]
+   ID = s.MH1Theme
+   Description = ""
+   Key = 0
+   TPQN9 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 21
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound10]
+[Sound30]
    ID = s.Tone0
    Description = ""
    Key = 0
-   TPQN = 16
+   TPQN30 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 98
    Inst1 = 98
    Inst2 = 80
@@ -1002,17 +1132,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound10]
+   ID = s.MH2Theme
+   Description = ""
+   Key = 0
+   TPQN10 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 26
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
-[Sound11]
+[Sound31]
    ID = s.Tone1
    Description = ""
    Key = 0
-   TPQN = 16
+   TPQN31 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 98
    Inst1 = 98
    Inst2 = 80
@@ -1020,17 +1168,71 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound11]
+   ID = s.PQ1Theme
+   Description = ""
+   Key = 0
+   TPQN11 = 16
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
-   Size = 26
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound32]
+   ID = s.Tone2
+   Description = ""
+   Key = 0
+   TPQN32 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
 [Sound12]
-   ID = s.Tone2
-   Size = 26
+   ID = s.GRTheme
+   Description = ""
    Key = 0
+   TPQN12 = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
    TPQN = 0
+
+[Sound33]
+   ID = s.Tone3
+   Description = ""
+   Key = 0
+   TPQN33 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 98
    Inst1 = 98
    Inst2 = 80
@@ -1038,17 +1240,35 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
+   TPQN = 0
 
 [Sound13]
-   ID = s.Tone3
-   Size = 26
+   ID = s.DoorOpen
+   Description = "A simple sound effect for an automatic closing door."
    Key = 0
+   TPQN13 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
    TPQN = 0
+
+[Sound34]
+   ID = s.Tone4
+   Description = ""
+   Key = 0
+   TPQN34 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
    Inst0 = 98
    Inst1 = 98
    Inst2 = 80
@@ -1056,155 +1276,151 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
+   TPQN = 0
+
+[Sound35]
+   ID = s.Tone5
+   Description = ""
+   Key = 0
+   TPQN35 = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
    Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound36]
+   ID = s.Tone6
    Description = ""
+   Key = 0
+   TPQN36 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound37]
+   ID = s.Tone7
+   Description = ""
+   Key = 0
+   TPQN37 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound38]
+   ID = s.Tone8
+   Description = ""
+   Key = 0
+   TPQN38 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound39]
+   ID = s.Tone9
+   Description = ""
+   Key = 0
+   TPQN39 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound40]
+   ID = s.ToneStar
+   Description = ""
+   Key = 0
+   TPQN40 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
+
+[Sound41]
+   ID = s.TonePound
+   Description = ""
+   Key = 0
+   TPQN41 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   TPQN = 0
 
 [Sound14]
-   ID = s.Tone4
-   Size = 26
+   ID = s.DoorClose
+   Description = "A simple sound effect for an automatic opening door."
    Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
+   TPQN14 = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
    Inst2 = 80
    Mute0 = False
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound15]
-   ID = s.Tone5
-   Size = 26
-   Key = 0
    TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound16]
-   ID = s.Tone6
-   Size = 26
-   Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound17]
-   ID = s.Tone7
-   Size = 26
-   Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound18]
-   ID = s.Tone8
-   Size = 26
-   Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound19]
-   ID = s.Tone9
-   Size = 26
-   Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound20]
-   ID = s.ToneStar
-   Size = 26
-   Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
-
-[Sound21]
-   ID = s.TonePound
-   Size = 26
-   Key = 0
-   TPQN = 0
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Description = ""
 [::END Sounds::]
 
 [::BEGIN Views::]
@@ -1517,4 +1733,9 @@
    ID = vw.ButtonsDown
    Description = ""
    Size = 1093
+
+[View113]
+   ID = vw.InvPQList
+   Description = ""
+   Size = 423
 [::END Views::]

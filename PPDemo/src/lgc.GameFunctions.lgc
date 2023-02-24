@@ -320,36 +320,115 @@ if (controller(cChooseItem)) {
   if (selectedItem > 0 && selectedItem != 255) {
     [ use or examine selected item
     if (cursormode == C_USE) {
+      [ magazine
+      if (selectedItem == 1) {
+        [ same as 'read magazine'
+        goto(readmag);
+      }
       [ disk
       if (selectedItem == 2) {
-        cursormode = C_DISK;
-        status.line.off();
-        prevent.input();
+        [ disk can only be used in control room
+        if (currentRoom == rm.ControlRoom) {
+          cursormode = C_DISK;
+          status.line.off();
+          prevent.input();
+        } else {
+          print("There is nothing you can do with the disk here.");
+        }
       }
       [ keyfob
-      [ cassette
-      [ other stuff for reading
+      if (selectedItem == 3) {
+        [ disk can only be used in parking lot
+        if (currentRoom == rm.ParkingLot) {
+          if (carLocked) {
+            print("Using your keyfob, you unlock your car door.");
+            reset(carLocked);
+            work1 = -2;
+            call(lgc.ScoreHandler);
+          } else {
+            print("Thinking it's best not to take any chances, "
+                  "you hit the lock button on your keyfob to "
+                  "prevent your car from being stolen.");
+            set(carLocked);
+            work1 = 2;
+            call(lgc.ScoreHandler);
+          }
+        } else {
+          print("You are too far fromy your vehicle for the keyfob to work.");
+        }
       
-    } else {
-      [ PQ list doesn't use a view
+      }
+      [ cassette
+      if (selectedItem == 4) {
+        [ TODO: load cassette into walkman
+      }
+      [ walkman
+      if (selectedItem == 5) {
+        [ TODO: use the walkman
+      }
+      [ memo
+      if (selectedItem == 6) {
+        [ read the memo
+        goto(readMemo);
+      }
+      [ post-it note
+      if (selectedItem == 7) {
+        [ read the note
+        selectedItem += 100;
+        call(lgc.ExamineItem);
+        call(lgc.RedrawRoom);
+      }
+      [ BaDASS manual
+      if (selectedItem == 8) {
+        [ read the manual
+        goto(readManual);
+      }
+      [ notebook
+      if (selectedItem == 9) {
+        [ read the notebook
+        goto(readNotebook);
+      }
+      [ folder
+      if (selectedItem == 10) {
+        selectedItem += 100;
+        call(lgc.ExamineItem);
+        call(lgc.RedrawRoom);
+      }
+      [ scroll
+      if (selectedItem == 11) {
+        goto(readScroll);
+      }
+      [ music sheet
+      if (selectedItem == 12) {
+        selectedItem += 100;
+        call(lgc.ExamineItem);
+        call(lgc.RedrawRoom);
+      }
+      [ PQ idea list
       if (selectedItem == 13) {
         call(lgc.PQList);
         call(lgc.RedrawRoom);
-      } else {
-        selectedItem += 100;
-        show.obj.v(selectedItem);
-        [ some items get a second, detailed look
-        [  post-it note, folder, music sheet
-        if ((selectedItem == 107 || selectedItem == 110 || 
-             selectedItem == 112)) {
-          call(lgc.ExamineItem);
-        }
-        [ some items get additional information'
-        if (selectedItem == 111) {
-          [ scroll
-          print("It was probably used by the original development "
-                "team when KQIII was first designed.");
-        }
+      }
+    } else {
+      selectedItem += 100;
+      show.obj.v(selectedItem);
+[      [ some items get a second, detailed look
+[      [  post-it note, folder, music sheet
+[      if ((selectedItem == 107 || selectedItem == 110 || 
+[           selectedItem == 112)) {
+[        call(lgc.ExamineItem);
+[        call(lgc.RedrawRoom);
+[      }
+      [ some items get additional information
+      if (selectedItem == 101) {
+        [ magazine
+        print("The articles are, of course, outdated, but probably "
+              "very interesting as nostalgia items.");
+      }
+      if (selectedItem == 111) {
+        [ scroll
+        print("It was probably used by the original development "
+              "team when KQIII was first designed.");
       }
     }
   }
@@ -373,6 +452,7 @@ if ((!haveInput || haveMatch)) {
 [ read memo
 if (said("read", "memo")) {
   if (has("memo")) {
+    :readMemo
     call(txt.Memo);
   } else {
     print("You don't have it.");
@@ -381,6 +461,7 @@ if (said("read", "memo")) {
 [ read magazine
 if (said("read", "magazine")) {
   if (has("magazine")) {
+    :readmag
     call(lgc.ReadMagazine);
     call(lgc.RedrawRoom);
   } else {
@@ -390,6 +471,7 @@ if (said("read", "magazine")) {
 [ read manual
 if (said("read", "manual")) {
   if (has("BaDASS manual")) {
+    :readManual
     call(lgc.ReadManual);
     call(lgc.RedrawRoom);
   } else {
@@ -399,6 +481,7 @@ if (said("read", "manual")) {
 [ read scroll
 if (said("read", "scroll")) {
   if (has("scroll")) {
+    :readScroll
     call(lgc.ReadScroll);
     call(lgc.RedrawRoom);
   } else {
@@ -409,6 +492,7 @@ if (said("read", "scroll")) {
 [ read notebook
 if (said("read", "notebook")) {
   if (has("notebook")) {
+    :readNotebook
     call(lgc.ReadNotebook);
     call(lgc.RedrawRoom);
   } else {

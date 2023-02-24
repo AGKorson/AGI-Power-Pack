@@ -554,6 +554,22 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("look")) {
     print("You are in the Sierra building parking lot.");
   }
+  if (said("use", "keyfob")) {
+    if (carLocked) {
+      print("Using your keyfob, you unlock your car door.");
+      reset(carLocked);
+      work1 = -2;
+      call(lgc.ScoreHandler);
+    } else {
+      print("Thinking it's best not to take any chances, "
+            "you hit the lock button on your keyfob to "
+            "prevent your car from being stolen.");
+      set(carLocked);
+      work1 = 2;
+      call(lgc.ScoreHandler);
+    }
+  }
+  
   if (said("lock", "car")) {
     [ if already locked
     if (carLocked) {

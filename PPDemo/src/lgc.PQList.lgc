@@ -73,8 +73,6 @@ if (!have.key()) {
 }
 [ any key to exit
 
-[ pop colors
-set.text.attribute(0, -1);
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 

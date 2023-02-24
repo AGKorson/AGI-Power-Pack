@@ -12,8 +12,14 @@ block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 [ fade out current picture
 block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 
-[ hide status bar
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
 status.line.off();
+
+[ save current colors
+set.text.attribute(-1, 0);
 
 [ draw the picture for selected item
 if (selectedItem == 107) {
@@ -25,11 +31,11 @@ if (selectedItem == 110) {
 if (selectedItem == 112) {
   work1 = pic.MusicSheet;
 }
-set(noScript);
 load.pic(work1);
 draw.pic(work1);
 discard.pic(work1);
-reset(noScript);
+
+[ hide objects while showing items
 block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
 show.pic();
 
@@ -48,27 +54,13 @@ if (selectedItem == 110) {
 [ fade in
 block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
 lastChar = 0;
-:waitnote
+:waitforit
 if (!have.key()) {
-  goto(waitnote);
+  goto(waitforit);
 }
 
 [ fade out
 block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-set(noScript);
-load.pic(currentRoom);
-draw.pic(currentRoom);
-discard.pic(currentRoom);
-reset(noScript);
-block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
-show.pic();
-[ restore status bar
-status.line.on();
-[ restart the game clock while examining items
-block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
-
-[ fade in
-block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
 
 return();
 
