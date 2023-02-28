@@ -192,6 +192,9 @@
 [   - add function to allow pausing the internal game clock while the
 [     game is still running
 [
+[   - add functions to load and play sounds by variable, and also to
+[     discard sounds
+[
 [ Detailed explanations of each power pack feature are included in its 
 [ respective code block below, including syntax, limitations and 
 [ considerations. Examples of all features are provided in the AGI Power Pack 
@@ -1729,7 +1732,6 @@ stop.sound();
             "\x43\xE8\xD8\xFF\xB4\x60\xE8\xD3\xFF\xB4\x63\xE8\xCE\xFF\xB4\x80"
             "\xE8\xC9\xFF\xB4\x83\xE8\xC4\xFF\xB4\xE0\xE8\xBF\xFF\xB4\xE3\xE8"
             "\xBA\xFF\xB4\xC0\xE8\xB5\xFF\xC3"
-
             [ SetAllInstruments
             "\xF6\x06\xB1\x15\x01\x74\x1B\x56\xBE\x61\xB1\x1E\x0E\x1F\xFC\x32"
             "\xC9\xE8\xB4\xFF\xFE\xC1\x80\xF9\x03\x75\xF6\x1F\xC6\x06\x13\x1E"
@@ -2070,16 +2072,16 @@ if (said(3, 153, 3372)){} [ 0D2C
             "\xFE\x4F\x09\x80\x7F\x09\x01\x73\x1A\x8A\x1E\xEC\x1D\x80\x7F\x09"
             "\x01\x73\x21\x88\x3E\xE9\x1D\xA0\xED\x1D\x51\xE8\xD5\xB9\x59\x32"
             "\xFF\xEB\x11\x80\x7F\x09\xFF\x75\x0B\x80\x6F\x09\xC4\x8A\x1E\xEC"
-            "\x1D\xFE\x4F\x09\x88\x3E\xEA\x1D\x5B\x1F\x58\xCF"
+            "\x1D\xFE\x4F\x09\x88\x3E\xEA\x1D\x5B\x1F\x58\xCF\x90"
             [ StartTimer
             "\xAC\x32\xFF\x8A\xD8\x8A\x4F\x09\xA2\xEC\x1D\xAC\x8A\xD8\x8A\x6F"
-            "\x09\xA2\xEB\x1D\xAC\x83\xF9\x01\x73\x05\xE8\x9A\xB9\xEB\x0F\xA2"
-            "\xED\x1D\xC6\x06\xE9\x1D\x01\x88\x3E\xEA\x1D\xE8\x8F\xB9\x8B\xC6"
+            "\x09\xA2\xEB\x1D\xAC\x83\xF9\x01\x73\x05\xE8\x99\xB9\xEB\x0F\xA2"
+            "\xED\x1D\xC6\x06\xE9\x1D\x01\x88\x3E\xEA\x1D\xE8\x8E\xB9\x8B\xC6"
             "\x5D\x5F\x5E\xC3"
             [ ToggleTimer
             "\xAC\x3C\x01\x72\x02\xB0\x01\xA2\xE9\x1D\xAD\x8B\xC6\x5D\x5F\x5E"
             "\xC3"
-if (said(246, 154, 47553)){} [ B9C1
+if (said(247, 154, 47553)){} [ B9C1
 [ modify cycle.time to use the patch
 #message 155 "\xE9\x09\x4E"
 if (said(3, 155, 27573)){} [ 6BB5
@@ -2201,7 +2203,7 @@ if (said(1, NULLMSG, 7658, 0)){} [ DS:1DEA
             "\xC2\x8A\xC6\x52\x50\xE8\x8C\x6B\x83\xC4\x04\xC3"
             [ FindSaidWords
             "\x8B\x36\x9D\x0C\x83\xC6\x35\x8B\xCE\x8B\xD1\x3B\x36\x69\x09\x73"
-            "\xEC\xF6\x04\x80\x75\x03\x46\xEB\xF2\x8A\x7C\x01\x8A\x5C\x02\x39"
+            "\xD0\xF6\x04\x80\x75\x03\x46\xEB\xF2\x8A\x7C\x01\x8A\x5C\x02\x39"
             "\xD8\x74\x12\x83\xC6\x03\x8B\xCE\xFF\xC1\x83\x3C\x01\x73\xDC\x8B"
             "\xD6\xFF\xC2\xEB\xD6\x83\xEC\x28\x8D\x7E\xCA\x8B\xF2\xAC\x24\x7F"
             "\x34\x7F\x88\x05\xFF\xC7\xF6\x44\xFF\x80\x74\xF1\x83\xC6\x03\x39"
@@ -3669,12 +3671,12 @@ if (said(2, 228, 8512)){} [ 2140
 [
 [ SYNTAX:
 [   to hide objects on screen:
-[   block(-47, 1, ANY**, ANY**);
+[   block(-47, 1, ANY*, ANY*);
 [
 [   to restore objects on screen:
-[   block(-47, 0, ANY**, ANY**);
+[   block(-47, 0, ANY*, ANY*);
 [
-[   ** This argument is ignored, so it can be any value
+[   * This argument is ignored, so it can be any value
 [
 [ LIMITATIONS/CONSIDERATIONS: When hidden, all screen objects are removed from 
 [ the screen, but they will continue to move and cycle. Restoring them will 
@@ -3744,6 +3746,57 @@ if (said(11, 234, 32327)){} [ 7E47
 
 [******************************************************************************
 [
+[ VARIABLE SOUND FUNCTIONS
+[ 
+[ This patch creates variable versions for loading and playing sounds. It also 
+[ adds a new 'discard.sound.v' function
+[
+[ SYNTAX:
+[   [ load.sound.v:
+[   block(-49, 0, vSNDNUM*, ANY**);
+[
+[   [ sound.v:
+[   block(-49, 1, vSNDNUM*, vDONEFLAG*);
+[
+[   [ discard.sound.v:
+[   block(-49, 2, vSNDNUM, ANY*);
+[
+[    * The compiler expects numbers for all arguments so pass variables as
+[      numbers, without the 'v' prefix
+[
+[   ** This argument is ignored, so it can be any value
+[
+[ LIMITATIONS/CONSIDERATIONS: The load.sound.v and sound.v functions work 
+[ exactly the same as their normal counterparts.
+[
+[ If a sound is not loaded when the discard.sound.v function is called, the 
+[ function does nothing- it does not return an error code. 
+[
+[ Sound number 255 is reserved and cannot be used; it is needed to support the
+[ scripting feature during save/restore operations. If you load/play/discard a
+[ sound with number 255, subsequent saving/restoring of a game may crash AGI.
+[
+[ PATCH CODE:
+            [ DiscardSound
+#message 235 "\x50\xE8\x3D\x74\x5F\x0B\xC0\x74\x21\x47\x50\x57\x6A\x05\xE8\x0A"
+            "\x94\x83\xC4\x04\x8B\x3E\x5E\x12\xC1\x2D\x10\xE8\xA0\x8D\xE8\x4C"
+            "\x38\x83\xC4\x02\xE8\xD1\x8D\xE8\xA7\x38\x8B\xC6\xC3"
+            [ SndFnHandler
+            "\xAC\x3C\x01\xAD\x8A\xD8\x8A\x47\x09\x72\x14\x77\x1D\x8A\xDC\x8A"
+            "\x67\x09\x4E\x4E\x89\x04\x56\xE8\xF5\x74\x83\xC4\x02\xEB\x12\x2A"
+            "\xE4\x50\xE8\x3D\x74\x83\xC4\x02\xEB\x05\x2A\xE4\xE8\xA4\xFF\x8B"
+            "\xC6\x5D\x5F\x5E\xC3"
+            [ CheckA2P
+            "\x83\xFF\x01\x0F\x82\xBE\x8B\x8B\xC7\x48\xE8\x91\xFF\xE9\x6D\x8B"
+if (said(126, 235, 56271)){} [ DBCF
+[ modify StateReload to use patch
+#message 236 "\x31\xDC"
+if (said(2, 236, 26712)){} [ 6858
+[******************************************************************************
+
+
+[******************************************************************************
+[
 [ CUSTOM FUNCTION HANDLERS
 [ 
 [ This patch modifies the block command and set.key command to be launch 
@@ -3769,25 +3822,25 @@ if (said(11, 234, 32327)){} [ 7E47
 [
 [ PATCH CODE:
             [ BlockHandler
-#message 235 "\x8B\x76\x08\x80\x3C\xD0\x0F\x82\xB6\x9E\xAC\xF6\xD8\xD0\xE0\x32"
-            "\xE4\x8B\xD8\x2E\xFF\xA7\xE5\xDB\x27\xA0\x27\xA0\x5C\xA7\x3E\xC8"
+#message 237 "\x8B\x76\x08\x80\x3C\xCF\x0F\x82\x44\x9E\xAC\xF6\xD8\xD0\xE0\x32"
+            "\xE4\x8B\xD8\x2E\xFF\xA7\x57\xDC\x27\xA0\x27\xA0\x5C\xA7\x3E\xC8"
             "\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8"
             "\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8\x3E\xC8"
             "\xED\xCB\x1F\xCC\x1F\xCC\x9E\xCD\x65\xCE\xC6\xCE\x04\xCF\xA4\xCF"
-            "\x70\xBA\xA4\xBA\xD1\xCF\xD1\xCF\xD1\xCF\xD1\xCF\xD1\xCF\xD1\xCF"
+            "\x71\xBA\xA5\xBA\xD1\xCF\xD1\xCF\xD1\xCF\xD1\xCF\xD1\xCF\xD1\xCF"
             "\x30\xD0\x30\xD0\x30\xD0\xBB\xD0\xBB\xD0\xBB\xD0\xBB\xD0\x18\xD2"
-            "\xEE\xDA\xEE\xDA\x69\xDB\xBB\xDB"
+            "\xEE\xDA\xEE\xDA\x69\xDB\xBB\xDB\xFC\xDB"
             [ SetKeyHandler
-            "\x8B\x76\x08\x80\x7C\x02\xFC\x0F\x82\xF6\x6F\xAD\x8A\x1C\x32\xFF"
-            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\x67\xDC\x58\x40\x8B\xE5\x5D\x5F"
+            "\x8B\x76\x08\x80\x7C\x02\xFC\x0F\x82\x82\x6F\xAD\x8A\x1C\x32\xFF"
+            "\xF6\xDB\xD1\xE3\x56\x2E\xFF\x97\xDB\xDC\x58\x40\x8B\xE5\x5D\x5F"
             "\x5E\xC3\xC5\xA6\xCF\xAF\xE2\xAF\x2C\xB0"
-if (said(162, 235, 56271)){} [ DBCF
+if (said(164, 237, 56385)){} [ DC41
 [ modify block command to use the patch
-#message 236 "\xE9\x40\x61"
-if (said(3, 236, 31372)){} [ 7A8C
+#message 238 "\xE9\xB2\x61"
+if (said(3, 238, 31372)){} [ 7A8C
 [ modify set.key command to use the patch
-#message 237 "\xE9\xFF\x8F"
-if (said(3, 237, 19525)){} [ 4C45
+#message 239 "\xE9\x73\x90"
+if (said(3, 239, 19525)){} [ 4C45
 [******************************************************************************
 
 
@@ -3809,10 +3862,16 @@ if (said(3, 237, 19525)){} [ 4C45
 [ Pack will raise an error and exit. (This is not an issue in DOSBox, and on a
 [ native MSDOS machine, more than 256K will almost always be plenty.)
 [
-[ The message text segment is a full 64Kbytes long, which means it is possible
+[ The message text segment is a full 64 Kbytes long, which means it is possible
 [ to have very large amounts of text available without impacting the main 
-[ memory heap. If you attempt to load resources that take up more space than 
-[ that, the Power Pack will display an out of memory message and quit.
+[ memory heap. If you attempt to load resources with messages that exceeds  
+[ the 64KB limit, the Power Pack will display an out of memory message and
+[ quit.
+[
+[ When a logic is loaded, it first puts the entire logic in the regular heap
+[ and THEN move the messages. This means there must be enough room on the
+[ regular heap for the full logic to initially load it- the memory savings 
+[ happens after the load.
 [
 [ Because of the special status of Logic 0, its message text data needs to
 [ remain in the main memory segment. You should try to minimize the amount of
@@ -3822,59 +3881,59 @@ if (said(3, 237, 19525)){} [ 4C45
 [
 [ PATCH CODE:
             [ LoadLogic2Patch
-#message 238 "\x83\xC4\x04\x8B\x5C\x08\x8B\x07\x29\x06\x4D\x0A\x50\x53\x1E\x8B"
+#message 240 "\x83\xC4\x04\x8B\x5C\x08\x8B\x07\x29\x06\x4D\x0A\x50\x53\x1E\x8B"
             "\x1E\x5E\x0B\x53\x89\x5C\x08\x43\xF7\xDB\x3B\xD8\x73\x23\x83\xEC"
             "\x64\x53\x50\xB8\x4E\x6F\xA3\xF0\x09\xB8\x20\x74\xA3\xF2\x09\xB8"
-            "\x65\x78\xA3\xF4\x09\xB8\x74\x20\xA3\xF6\x09\xB8\xF0\x09\xE9\x47"
-            "\x37\x01\x06\x5E\x0B\xA1\x60\x0B\x50\xE8\x7C\x7D\x83\xC4\x0A\xE9"
-            "\x86\x35"
+            "\x65\x78\xA3\xF4\x09\xB8\x74\x20\xA3\xF6\x09\xB8\xF0\x09\xE9\xD5"
+            "\x36\x01\x06\x5E\x0B\xA1\x60\x0B\x50\xE8\x0A\x7D\x83\xC4\x0A\xE9"
+            "\x14\x35"
             [ LogicMsgPatch
-            "\x1E\xA1\x60\x0B\x50\x1F\x8B\x05\x83\xF8\x01\x73\x04\x1F\xE9\x64"
-            "\x45\x03\xC6\x8B\xF0\x33\xC9\x41\x80\x3C\x01\x72\x03\x46\xEB\xF7"
-            "\x1F\x51\x50\xFF\x36\x60\x0B\xFF\x36\x62\x0B\x1E\xE8\x47\x7D\x83"
+            "\x1E\xA1\x60\x0B\x50\x1F\x8B\x05\x83\xF8\x01\x73\x04\x1F\xE9\xF2"
+            "\x44\x03\xC6\x8B\xF0\x33\xC9\x41\x80\x3C\x01\x72\x03\x46\xEB\xF7"
+            "\x1F\x51\x50\xFF\x36\x60\x0B\xFF\x36\x62\x0B\x1E\xE8\xD5\x7C\x83"
             "\xC4\x0A\xA1\x62\x0B\x8B\xE5\x5D\x5F\x5E\xC3"
             [ LogicCallPatch
             "\x83\xC4\x02\x8B\x3E\x79\x09\x80\x7D\x03\x01\x72\x10\x8B\x5D\x08"
-            "\x1E\xA1\x60\x0B\x50\x1F\x8B\x07\x1F\x29\x06\x5E\x0B\xE9\x05\x36"
+            "\x1E\xA1\x60\x0B\x50\x1F\x8B\x07\x1F\x29\x06\x5E\x0B\xE9\x93\x35"
             [ RestorePatch
-            "\x56\x57\xB8\x5C\x09\xA3\x2D\x09\x6A\x02\x68\x8C\xDD\x0E\x68\xAD"
-            "\x07\x1E\xE8\x06\x7D\x83\xC4\x0A\x33\xC0\xA3\x5E\x0B\x8B\x1E\x79"
+            "\x56\x57\xB8\x5C\x09\xA3\x2D\x09\x6A\x02\x68\xFE\xDD\x0E\x68\xAD"
+            "\x07\x1E\xE8\x94\x7C\x83\xC4\x0A\x33\xC0\xA3\x5E\x0B\x8B\x1E\x79"
             "\x09\x8B\x5F\x08\x1E\xA1\x60\x0B\x50\x1F\x33\xC0\x89\x07\x1F\x5F"
             "\x58\xC3"
             [ FormatPatch
-            "\x8B\x76\x08\x3B\x36\x62\x0B\x75\x19\x56\xE8\x75\x6F\x8B\x1E\x4D"
-            "\x0A\x53\x89\x5E\xF0\x40\x01\x06\x4D\x0A\xE8\x80\x6F\x83\xC4\x04"
-            "\x8B\xF0\xE9\x2F\x42"
+            "\x8B\x76\x08\x3B\x36\x62\x0B\x75\x19\x56\xE8\x03\x6F\x8B\x1E\x4D"
+            "\x0A\x53\x89\x5E\xF0\x40\x01\x06\x4D\x0A\xE8\x0E\x6F\x83\xC4\x04"
+            "\x8B\xF0\xE9\xBD\x41"
             [ FmtDonePatch
             "\x8B\x76\x08\x3B\x36\x62\x0B\x75\x06\x8B\x46\xF0\xA3\x4D\x0A\x8B"
             "\xC7\x8B\xE5\x5D\x5F\x5E\xC3"
             [ PatchCmdData
             "\x5D\x51"
-if (said(285, 238, 56433)){} [ DC71
+if (said(285, 240, 56547)){} [ DCE3
 [ modify LoadLogic2 to calculate msg text end
-#message 239 "\x8B\x5C\x08\x03\x1F\x53\x90\x90\x90\x90"
-if (said(10, 239, 4649)){} [ 1229
+#message 241 "\x8B\x5C\x08\x03\x1F\x53\x90\x90\x90\x90"
+if (said(10, 241, 4649)){} [ 1229
 [ modify LoadLogic2 to use the patch
-#message 240 "\xE9\x28\xCA"
-if (said(3, 240, 4678)){} [ 1246
+#message 242 "\xE9\x9A\xCA"
+if (said(3, 242, 4678)){} [ 1246
 [ patch LogicCall to release msg memory
-#message 241 "\xE9\xDB\xC9"
-if (said(3, 241, 4896)){} [ 1320
+#message 243 "\xE9\x4D\xCA"
+if (said(3, 243, 4896)){} [ 1320
 [ patch ClearMemory to reset msgmem_ptr
-#message 242 "\x5E\x0B"
-if (said(2, 242, 5263)){} [ 148F
+#message 244 "\x5E\x0B"
+if (said(2, 244, 5263)){} [ 148F
 [ setup patch command to do the restore
-#message 243 "\x1E\xDD"
-if (said(2, 243, 1965, 0)){} [ DS:07AD
+#message 245 "\x90\xDD"
+if (said(2, 245, 1965, 0)){} [ DS:07AD
 [ patch FormatTextOut to make a local copy of message being formatted
-#message 244 "\x83\xEC\x10\x8B\x7E\x0A\xE9\xAF\xBD"
-if (said(10, 244, 8088)){} [ 1F98
+#message 246 "\x83\xEC\x10\x8B\x7E\x0A\xE9\x21\xBE"
+if (said(10, 246, 8088)){} [ 1F98
 [ restore mem_ptr after done formatting
-#message 245 "\xE9\x8A\xBB"
-if (said(3, 245, 8680)){} [ 21E8
+#message 247 "\xE9\xFC\xBB"
+if (said(3, 247, 8680)){} [ 21E8
 [ patch LogicMsg to get message text from the new segment
-#message 246 "\x39\x1E\x6F\x09\x0F\x85\x9D\xBA\x8B\x05\xEB\x05"
-if (said(12, 246, 8734)){} [ 221E
+#message 248 "\x39\x1E\x6F\x09\x0F\x85\x0F\xBB\x8B\x05\xEB\x05"
+if (said(12, 248, 8734)){} [ 221E
 [******************************************************************************
 
 
