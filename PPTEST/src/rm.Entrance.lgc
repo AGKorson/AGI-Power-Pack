@@ -98,7 +98,7 @@ if (said("test")) {
 
 if (said("jump", "test")) {
   get.num("Test number: ", teststep);
-  if (teststep > 0 && teststep < 43) {
+  if (teststep > 0 && teststep < 46) {
     set(ppTesting);
     set(newtest);
     [ set id
@@ -242,13 +242,13 @@ if (ppTesting) {
     call(lgc.TestPart2);
   }
   
-  [ tests 35-42 are in part 3
-  if (teststep > 34 && teststep < 43) {
+  [ tests 35-44 are in part 3
+  if (teststep > 34 && teststep < 46) {
     stepcounter = 34;
     call(lgc.TestPart3);
   }
   
-  if (teststep == 43) {
+  if (teststep == 46) {
     ++teststep;
     reset(newtest);
     reset(ppTesting);

@@ -197,11 +197,11 @@ if (currentRoom == 0) {
     }
     
     [ check for restart and save tests
-    s11 = "testrestore";
+    s11 = "testrestart";
     if (compare.strings(s2, s11)) {
       set.string(s2, "");
       set(ppTesting);
-      teststep = 41;
+      teststep = 44;
       subteststep = 1;
       set(newtest);
     }
@@ -209,7 +209,7 @@ if (currentRoom == 0) {
     if (compare.strings(s2, s11)) {
       set.string(s2, "");
       set(ppTesting);
-      teststep = 42;
+      teststep = 45;
       subteststep = 2;
       set(newtest);
     }

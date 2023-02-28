@@ -25,7 +25,7 @@
 
 [***********************************************************
 [
-[ run tests 35-42
+[ run tests 35-44
 [
 [ TEST35: date/time functions
 [ TEST36: creating, reading/writing data files
@@ -33,8 +33,10 @@
 [ TEST38: support for words with non-alphabetic characters 
 [ TEST39: on object test command 
 [ TEST40: message text relocation
-[ TEST41: restart support for power pack 
-[ TEST42: save/restore support for power pack 
+[ TEST41: pause clock
+[ TEST42: variable sound functions
+[ TEST43: restart support for power pack 
+[ TEST44: save/restore support for power pack 
 [***********************************************************
 
 if (newtest) {
@@ -411,7 +413,95 @@ if (teststep == stepcounter) {
   }
 }
 
-[ TEST41: restart support for power pack 
+[ TEST41: hiding objects
+++stepcounter; 
+if (teststep == stepcounter) {
+  if (subteststep == 0) {
+    if (newtest) {
+      reset(newtest);
+      print("Hiding ego. Confirm he's gone. "
+            "Press CTRL+Z or enter 'continue' when done testing."); 
+      block(-47, 1, 0, 0);
+    }
+    
+    [ check for continue
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      get.string(strAnswer, "Did ego disappear? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
+    return();
+  }
+  if (subteststep == 1) {
+    if (newtest) {
+      reset(newtest);
+      print("Restoring ego. Confirm he's back. "
+            "Press CTRL+Z or enter 'continue' when done testing."); 
+      block(-47, 0, 0, 0);
+    }
+    
+    [ check for continue
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      get.string(strAnswer, "Did ego reappear? ", 22, 0, 3);
+      goto(nexttest);
+    }
+    return();
+  }
+}
+
+[ TEST42: pause clock
+++stepcounter; 
+if (teststep == stepcounter) {
+  if (newtest) {
+    display(24, 0, "%v63: PAUSE CLOCK TEST");
+    reset(newtest);
+    print("Enter 'pause clock' to pause internal clock, 'start clock' to restart it. "
+          "Press CTRL+Z or enter 'continue' when done testing."); 
+  }
+  if (said("pause", "clock")) {
+    block(-48, 1, 0, 0);
+  }
+  if (said("start", "clock")) {
+    block(-48, 0, 0, 0);
+  }
+  display(23, 0, "clock: %v13|2:%v12|2:%v11|2");
+  
+  [ check for continue
+  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+    [ check results
+    get.string(strAnswer, "Did clock pause/restart correctly? ", 22, 0, 3);
+    goto(nexttest);
+  }
+}
+
+[ TEST43: variable sound functions
+++stepcounter;
+if (teststep == stepcounter) {
+  if (newtest) {
+    reset(newtest);
+    display(24, 0, "%v63: VARIABLE SOUND FUNCTIONS");
+    print("Loading and playing a sound by variable - ");
+    work1 = 1;
+    work2 = 240;
+    block(-49, 0, &work1, 0);
+    block(-49, 1, &work1, &work2);
+  }
+  if (f240) {
+    reset(f240);
+    print("sound is done, discarding it.");
+    work1 = 1;
+    block(-49, 2, &work1, 0);
+  }
+  [ check for continue
+  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+    [ check results
+    get.string(strAnswer, "Did sound play correctly? ", 22, 0, 3);
+    goto(nexttest);
+  }
+}
+
+[ TEST44: restart support for power pack 
 ++stepcounter;
 if (teststep == stepcounter) {
   if (subteststep == 0) {
@@ -491,8 +581,8 @@ if (teststep == stepcounter) {
       s7 = "%v22"; [ numberOfVoices;
       block(STR.FORMAT, &s7, &s7, 0); [ str.format(sINPUT, sRESULT)
       reset(soundDone);
-      [ use string as flag to indicate restoring
-      s2 = "testrestore";
+      [ use string as flag to indicate restarting
+      s2 = "testrestart";
       print("Ready to restart.");
       :restart
       restart.game();
@@ -756,7 +846,7 @@ if (teststep == stepcounter) {
   }
 }
 
-[ TEST42: save/restore support for power pack 
+[ TEST45: save/restore support for power pack 
 ++stepcounter;
 if (teststep == stepcounter) {
   if (subteststep == 0) {
@@ -801,6 +891,11 @@ if (teststep == stepcounter) {
       step.time(ego, work1);
       [ adjust dblclick speed for turbo
       dblClickDelay = 12;
+      [ load and discard a sound resource by var
+      print("Loading and discarding a sound resource.");
+      work1 = 1;
+      block(-49, 0, &work1, 0);
+      block(-49, 2, &work1, 0);
       [ point and click on, straight mode
       print("Enabling click-to-move in 'straight' mode. Click "
             "on a distant point to start ego moving for this test, "
