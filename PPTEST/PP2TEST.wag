@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = DGN
    Interpreter = 2.917
-   LastEdit = "2/27/2023 3:59:24 PM"
+   LastEdit = "2/27/2023 4:34:42 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -185,10 +185,10 @@
 [Logic104]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H42AD0616
-   CompCRC32 = &H42AD0616
+   CRC32 = &H75DA8BB8
+   CompCRC32 = &H75DA8BB8
    IsRoom = False
-   Size = 21833
+   Size = 22856
 
 [Logic105]
    ID = lgc.mod2426
@@ -305,10 +305,10 @@
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &H3C1215BD
-   CompCRC32 = &H3C1215BD
+   CRC32 = &HB132621B
+   CompCRC32 = &HB132621B
    IsRoom = False
-   Size = 11081
+   Size = 11084
 
 [Logic93]
    ID = lgc.GameHelp
