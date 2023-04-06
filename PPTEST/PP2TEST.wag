@@ -161,112 +161,112 @@
 [Logic101]
    ID = lgc.mod2089
    Description = ""
-   CRC32 = &HD366C913
-   CompCRC32 = &HD366C913
+   CRC32 = &HDC7E7A3D
+   CompCRC32 = &HDC7E7A3D
    IsRoom = False
    Size = 21472
 
 [Logic102]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &H174A1C2E
-   CompCRC32 = &H174A1C2E
+   CRC32 = &H606AE48
+   CompCRC32 = &H606AE48
    IsRoom = False
    Size = 21053
 
 [Logic103]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &H1C49719
-   CompCRC32 = &H1C49719
+   CRC32 = &H92C06C15
+   CompCRC32 = &H92C06C15
    IsRoom = False
    Size = 21833
 
 [Logic104]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H75DA8BB8
-   CompCRC32 = &H75DA8BB8
+   CRC32 = &H74FC53D2
+   CompCRC32 = &H74FC53D2
    IsRoom = False
    Size = 22856
 
 [Logic105]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H8054600B
-   CompCRC32 = &H8054600B
+   CRC32 = &HC45EA080
+   CompCRC32 = &HC45EA080
    IsRoom = False
    Size = 21833
 
 [Logic106]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &HCBCC1DFE
-   CompCRC32 = &HCBCC1DFE
+   CRC32 = &H8FC6DD75
+   CompCRC32 = &H8FC6DD75
    IsRoom = False
    Size = 21837
 
 [Logic107]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &HADFC125D
-   CompCRC32 = &HADFC125D
+   CRC32 = &H929FDA9B
+   CompCRC32 = &H929FDA9B
    IsRoom = False
    Size = 21837
 
 [Logic108]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H4DB1910F
-   CompCRC32 = &H4DB1910F
+   CRC32 = &HA68F93E6
+   CompCRC32 = &HA68F93E6
    IsRoom = False
    Size = 21837
 
 [Logic109]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HADBFE0E2
-   CompCRC32 = &HADBFE0E2
+   CRC32 = &HD471A458
+   CompCRC32 = &HD471A458
    IsRoom = False
    Size = 21480
 
 [Logic110]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &H6D7F3B96
-   CompCRC32 = &H6D7F3B96
+   CRC32 = &HDA50BC0F
+   CompCRC32 = &HDA50BC0F
    IsRoom = False
    Size = 21480
 
 [Logic111]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H50B9779C
-   CompCRC32 = &H50B9779C
+   CRC32 = &H5FCFAF5C
+   CompCRC32 = &H5FCFAF5C
    IsRoom = False
    Size = 21480
 
 [Logic112]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &HB2F55F25
-   CompCRC32 = &HB2F55F25
+   CRC32 = &HC88C9B27
+   CompCRC32 = &HC88C9B27
    IsRoom = False
    Size = 21480
 
 [Logic113]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H719DFA5E
-   CompCRC32 = &H719DFA5E
+   CRC32 = &H71B344DE
+   CompCRC32 = &H71B344DE
    IsRoom = False
-   Size = 22480
+   Size = 22482
 
 [Logic114]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &HA5622C85
-   CompCRC32 = &HA5622C85
+   CRC32 = &H4191459E
+   CompCRC32 = &H4191459E
    IsRoom = False
    Size = 21502
 
@@ -289,10 +289,10 @@
 [Logic7]
    ID = lgc.TestPart1
    Description = ""
-   CRC32 = &HE01567E6
-   CompCRC32 = &HE01567E6
+   CRC32 = &HDC8B9B7A
+   CompCRC32 = &HDC8B9B7A
    IsRoom = False
-   Size = 10506
+   Size = 10672
 
 [Logic8]
    ID = lgc.TestPart2
@@ -305,10 +305,10 @@
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &HB132621B
-   CompCRC32 = &HB132621B
+   CRC32 = &H8B5DCCCD
+   CompCRC32 = &H8B5DCCCD
    IsRoom = False
-   Size = 11084
+   Size = 11081
 
 [Logic93]
    ID = lgc.GameHelp

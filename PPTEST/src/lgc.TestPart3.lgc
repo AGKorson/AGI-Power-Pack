@@ -571,6 +571,7 @@ if (teststep == stepcounter) {
       } else {
         if (hasFM) {
           print("Enabling FM Synth sound playback.");
+          
           set(4channelsound);
           work1 = 0;
           set.key(0, 0, c254);  [ set.key(MODE, ANY***, c254);

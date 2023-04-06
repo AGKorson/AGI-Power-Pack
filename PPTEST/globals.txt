@@ -173,6 +173,10 @@
 #define DIV                    -46
 #define HIDE.OBJS              -47
 #define PAUSE.CLOCK            -48
+#define SND.V.FN               -49
+#define LOAD.SOUND.V             0
+#define PLAY.SOUND.V             1
+#define DISCARD.SOUND.V          2
 #define ON.OBJ                  -1
 #define SET.INPUT             s255
 #define SET.CMPMODE           s254

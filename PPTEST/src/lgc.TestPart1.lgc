@@ -18,6 +18,8 @@
 #define tmpMsg            v226
 #define volume            v227
 
+#define sndDone           f220
+
 [***********************************************************
 [ run tests 1-20:
 [
@@ -801,6 +803,28 @@ if (teststep == stepcounter) {
     [ force stop
     stop.sound();
   }
+  
+  [ subtest 0: sound functions
+  if (subteststep == 0) {
+    if (newtest) {
+      reset(newtest);
+      display(24, 0, "%v63: SOUND FUNCTION TESTS");
+      print("Testing variable sound load/play/discard functions");
+      work1 = kq1theme;
+      block(SND.V.FN, LOAD.SOUND.V, &work1, 0); [ load.sound.v(vSNDNUM)
+      work2 = &sndDone;
+      block(SND.V.FN, PLAY.SOUND.V, &work1, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+    } else {
+      if (sndDone) {
+        block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
+        print("did sound play correctly?");
+        goto(nextsubtest);
+      }
+    }
+    return();
+  }   
+  
+  [ always update volume for rest of sound tests
   work1 = 63;
   work1 -= attenuation;
   if (work1 != volume) {
@@ -808,7 +832,10 @@ if (teststep == stepcounter) {
     display(2, 15, "volume: %v227 ");
   }
   
-  if (newtest && subteststep == 0) {
+  [subtest 1: detect
+  if (newtest && subteststep == 1) {
+    load.sound(kq1theme);
+    load.sound(s.Noise);
     display(24, 0, "%v63: SOUND TEST");
     set(soundOn);
     display(2, 15, "volume: %v227 ");
@@ -818,8 +845,6 @@ if (teststep == stepcounter) {
       ++teststep;
       return();
     }
-    load.sound(kq1theme);
-    load.sound(s.Noise);
     if (numberOfVoices == 2) {
       s6 = "n FM synth";
       s7 = "this card";
@@ -840,11 +865,12 @@ if (teststep == stepcounter) {
           "for %s7.");
     print("For all tests, you can press CTRL+Z or enter 'continue' "
           "to end the sound early.");
-    subteststep = 1;
+    ++subteststep;
     set(newtest);
   }
-  [ subtest 1: single channel PC
-  if (subteststep == 1 && newtest) {
+  
+  [ subtest 2: single channel PC
+  if (subteststep == 2 && newtest) {
     display(24, 0, "%v63: SOUND TEST");
     display(2, 15, "volume: %v227 ");
     print("First test is single channel PC sound. Volume should not be "
@@ -854,8 +880,8 @@ if (teststep == stepcounter) {
     sound(kq1theme, soundDone);
   }
   
-  [ subtest 2: 4chan fm synth default
-  if (subteststep == 2) {
+  [ subtest 3: 4chan fm synth default
+  if (subteststep == 3) {
     if ((numberOfVoices == 2 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -870,8 +896,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 3: 4chan fm synth chg channel
-  if (subteststep == 3) {
+  [ subtest 4: 4chan fm synth chg channel
+  if (subteststep == 4) {
     if ((numberOfVoices == 2 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -894,8 +920,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 4: 4chan fm synth custom channel
-  if (subteststep == 4) {
+  [ subtest 5: 4chan fm synth custom channel
+  if (subteststep == 5) {
     if ((numberOfVoices == 2 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -917,8 +943,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 5: 4chan fm synth noise default
-  if (subteststep == 5) {
+  [ subtest 6: 4chan fm synth noise default
+  if (subteststep == 6) {
     if ((numberOfVoices == 2 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -931,8 +957,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 6: 4chan fm synth custom noise test
-  if (subteststep == 6) {
+  [ subtest 7: 4chan fm synth custom noise test
+  if (subteststep == 7) {
     if ((numberOfVoices == 2 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -951,8 +977,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 7: 4chan midi default
-  if (subteststep == 7) {
+  [ subtest 8: 4chan midi default
+  if (subteststep == 8) {
     if((numberOfVoices == 3 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -968,8 +994,8 @@ if (teststep == stepcounter) {
     }
   }
   
-  [ subtest 8: 4chan midi chg channel
-  if (subteststep == 8) {
+  [ subtest 9: 4chan midi chg channel
+  if (subteststep == 9) {
     if ((numberOfVoices == 3 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -992,8 +1018,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 9: 4chan midi noise
-  if (subteststep == 9) {
+  [ subtest 10: 4chan midi noise
+  if (subteststep == 10) {
     if ((numberOfVoices == 3 || numberOfVoices == 4)) {
       if (newtest) {
         display(24, 0, "%v63: SOUND TEST");
@@ -1006,8 +1032,8 @@ if (teststep == stepcounter) {
       ++subteststep;
     }
   }
-  [ subtest 10: done
-  if (subteststep == 10) {
+  [ subtest 11: done
+  if (subteststep == 11) {
     ++teststep;
     set(newtest);
     subteststep = 0;
