@@ -7,13 +7,35 @@
 [ check for mouse clicks
 if (controller(cLeftClick)) {
   if (selectedItem == 2) {
-    print("it's a disk!");
+    if (mouseX > 82 && mouseX < 104 && mouseY > 90 && mouseY < 113) {
+      if (obj.in.box(ego, 64, 133, 104, 138)) {
+        print("You insert the disk and flip the latch to secure it.");
+        set(floppyInserted);
+        work1 = cp.Terminal;
+        put("floppy disk", work1);
+        work1 = -4;
+        call(lgc.ScoreHandler);
+      } else {
+        print("Move closer.");
+        return();
+      }
+    } else {
+      print("The disk can't be used there.");
+      return();
+    }
   }
   accept.input();
   status.line.on();
   cursormode = C_USE;
 }
 
+if (controller(cRightClick)) {
+  [ cancel - do nothing
+  accept.input();
+  status.line.on();
+  cursormode = C_USE;
+}
+  
 return();
 
 [*****

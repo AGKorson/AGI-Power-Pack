@@ -76,6 +76,19 @@ if (controller(cRightClick)) {
   }
 }
 
+[ check generic new room actions
+if (newRoom) {
+  [ check for walkman
+  if (currentTrack > 0 && currentTrack < 128 && currentRoom != rm.Lobby) {
+    [ load it, and start it
+    set(noScript);
+    block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+    work1 = &musicDone;
+    block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+    reset(noScript);
+  }
+}
+
 [ **************************************
 [ PROCESS PLAYER INPUT
 [ **************************************
@@ -116,76 +129,6 @@ if (work1 < 255) {
     goto(loop1);
   }
 }
-
-[ ---------------------------------------------
-[ debug/test
-if (said("test", "sound")) {
-  load.sound(s.Tone1);
-  load.sound(s.Tone2);
-  load.sound(s.Tone3);
-  load.sound(s.Tone4);
-  load.sound(s.Tone5);
-  load.sound(s.Tone6);
-  load.sound(s.Tone7);
-  load.sound(s.Tone8);
-  load.sound(s.Tone9);
-  load.sound(s.Tone0);
-  load.sound(s.ToneStar);
-  load.sound(s.TonePound);
-  v242 = 1;
-  set(f243);
-  reset(useMIDI);
-}
-if (v242 == 1 && f243) {
-  sound(s.Tone1, f243);
-  ++v242;
-}
-if (v242 == 2 && f243) {
-  sound(s.Tone2, f243);
-  ++v242;
-}
-if (v242 == 3 && f243) {
-  sound(s.Tone3, f243);
-  ++v242;
-}
-if (v242 == 4 && f243) {
-  sound(s.Tone4, f243);
-  ++v242;
-}
-if (v242 == 5 && f243) {
-  sound(s.Tone5, f243);
-  ++v242;
-}
-if (v242 == 6 && f243) {
-  sound(s.Tone6, f243);
-  ++v242;
-}
-if (v242 == 7 && f243) {
-  sound(s.Tone7, f243);
-  ++v242;
-}
-if (v242 == 8 && f243) {
-  sound(s.Tone8, f243);
-  ++v242;
-}
-if (v242 == 9 && f243) {
-  sound(s.Tone9, f243);
-  ++v242;
-}
-if (v242 == 10 && f243) {
-  sound(s.ToneStar, f243);
-  ++v242;
-}
-if (v242 == 11 && f243) {
-  sound(s.Tone0, f243);
-  ++v242;
-}
-if (v242 == 12 && f243) {
-  sound(s.TonePound, f243);
-  ++v242;
-}
-[ end debug/test
-[-----------------------------------
 
 [ now check for any controllers that may have been activated
 if (controller(cAbout)) {
@@ -364,7 +307,31 @@ if (controller(cChooseItem)) {
       }
       [ walkman
       if (selectedItem == 5) {
-        [ TODO: use the walkman
+        if (currentRoom == rm.Lobby && warnWalkman) {
+          print("The receptionist asked you to not play your music in the lobby.");
+        } else {
+          [ TODO: use the walkman
+          
+          [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
+          [ for now, just play the cassette
+          set(cassetteLoaded);
+          get.num("Side? (0=A, 1=B): ", work1);
+          if (work1) {
+            set(cassetteSide);
+            currentTrack = 63;
+          } else {
+            reset(cassetteSide);
+            currentTrack = 22;
+          }
+          [ if in lobby, don't actually play; receptionist will tell player to stop
+          if (currentRoom != rm.Lobby) {
+            set(noScript);
+            block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+            work1 = &musicDone;
+            block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+            reset(noScript);
+          }
+        }
       }
       [ memo
       if (selectedItem == 6) {

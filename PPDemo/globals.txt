@@ -109,6 +109,10 @@
 #define scoreSafe              f75
 #define scorePillow            f76
 #define scoreChest             f77
+#define cassetteLoaded         f78
+#define cassetteSide           f79
+#define warnWalkman            f80
+#define scorePlayTape          f81
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
@@ -214,7 +218,7 @@
 #define OPENING                  5
 #define floppyfiles            v96 [ 0=blank; 1=zip; 2=txt; 3=both
 #define cpusage                v97 [ bitfield indicates which control panels have been used by player
-#define 2E_MOUSE                -1
+#define currentTrack           v98 [ zero if not playing and reset; negative if paused
 #define MSGBOX.COLOR.V          -1
 #define MSGBOX.COLOR            -2
 #define CONFIGURE.MOUSE         -3
@@ -264,6 +268,10 @@
 #define DIV                    -46
 #define HIDE.OBJS              -47
 #define PAUSE.CLOCK            -48
+#define SND.V.FN               -49
+#define LOAD.SOUND.V             0
+#define PLAY.SOUND.V             1
+#define DISCARD.SOUND.V          2
 #define ON.OBJ                  -1
 #define SET.INPUT             s255
 #define SET.CMPMODE           s254

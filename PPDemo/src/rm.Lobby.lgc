@@ -413,6 +413,8 @@ if (newRoom) {
   draw(backpane);
   draw(frontpane);
 
+  [ walkman is not allowed, so skip check here
+  
   [ display the picture on screen
   show.pic();
   [ fade in
@@ -444,6 +446,22 @@ if (gameRestored) {
     draw(oPatient4);
   }
   reset(noScript);
+}
+
+[ check for walkman; if in use, have player stop it
+if (currentTrack > 0 && currentTrack < 128) {
+  [ reset it
+  currentTrack *= -1;
+  if (warnWalkman) {
+    print("You turn off the walkman as you enter the lobby to comply "
+          "with the receptionist's instructions.");
+  } else {
+    block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+    print.at("\"Excuse me, can you please turn off your music? Thanks!\"", 6, 6, 35);
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+    print("You decide it's best to comply with the receptionist's request, and turn off the walkman.");
+    set(warnWalkman);
+  }
 }
 
 [ check for one min timer

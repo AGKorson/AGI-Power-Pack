@@ -60,7 +60,7 @@ if (newRoom) {
   block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   
   [ add toolbar buttons
-  load.view(vw.ButtonsUp);
+  load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
   
   [ load view with this room's art

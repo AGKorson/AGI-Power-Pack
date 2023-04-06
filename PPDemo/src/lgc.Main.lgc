@@ -1,3 +1,23 @@
+[pause();
+[work1=2;
+[load.pic(work1);
+[draw.pic(work1);
+[discard.pic(work1);
+[configure.screen(1,22,0);
+[set.text.attribute(49, 0);
+[text.screen();
+[display(0, 0, "test text");
+[pause();
+
+[show.pic();
+[print.at("test message3",  15, 5, 3);
+[print.at("test message2",  15, 5, 2);
+[print.at("test message1",  15, 5, 1);
+[print.at("test message0",  15, 5, 0);
+[print("Hello world!");
+[print("I don't understand your request.");
+[print("I don't understand your  request.");
+
 [ ********************************************************************
 [
 [ lgc.Main: Main logic
@@ -155,6 +175,7 @@ if (currentRoom == 0) {
       goto(continue);
     }
     :continue
+    
     [ confirm video, sound and mouse settings
     if (monitorType != EGA) {
       load.logics(lgc.Error);
@@ -172,6 +193,18 @@ if (currentRoom == 0) {
       quit(1);
     }
   }
+
+[set.text.attribute(BLACK, WHITE);
+[display(1,1,"\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F");
+[display(2,1,"\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F");
+[display(3,1,"\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF");
+[display(4,1,"\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF");
+[display(5,1,"\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF");
+[display(6,1,"\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF");
+[display(7,1,"\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF");
+[display(8,1,"\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF");
+[print.at("pause",13,5,30);
+[quit(1);
 
   [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
@@ -358,6 +391,17 @@ if (newRoom) {
       [ stop the timer
       reset(closetTimerStart);
       block(TOGGLE.TIMER, 0, 0, 0); [ toggle.timer(STATE)
+    }
+  }
+  
+  [ if cassette was playing (loaded and not paused)
+  if (cassetteLoaded && currentTrack > 0 && currentTrack < 128) {
+    [ skip to next track
+    ++currentTrack;
+    [ if side is done
+    if ((currentTrack == 63 || currentTrack == 106)) {
+      [ stop the tape
+      currentTrack = 0;
     }
   }
 }
@@ -884,7 +928,35 @@ if (!disableGameFunctions) {
   }
   call(lgc.ToolbarFunctions);
 }
-  
+
+[ music check
+if (musicDone) {
+  reset(musicDone);
+  [ only if cassette is playing AND not paused
+  if (cassetteLoaded && currentTrack < 128) {
+    [ discard current sound
+    set(noScript);
+    block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
+    ++currentTrack;
+    if (cassetteSide) {
+      work1 = 106;
+    } else {
+      work1 = 63;
+    }
+    [ check if end of side is reached
+    if (currentTrack >= work1) {
+      currentTrack = 0;
+      reset(cassetteLoaded);
+    } else {      
+      [ play next track
+      set(noScript);
+      block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+      work1 = &musicDone;
+      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound.v(vSNDNUM, vDONEFLAG)
+    }
+    reset(noScript);
+  }
+}
 [ check player input for unknown words
 if (haveInput && !haveMatch && unknownWordNum > 0) {
   reset(haveInput);

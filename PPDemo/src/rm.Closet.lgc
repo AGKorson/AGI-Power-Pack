@@ -61,7 +61,7 @@ if (newRoom) {
   set.horizon(0);
   
   [ add toolbar buttons
-  load.view(vw.ButtonsUp);
+  load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
   
   load.view(vw.ClosetArt);
@@ -142,6 +142,7 @@ if (newRoom) {
     driptimerM = 0;
     driptimerS = 3;
     block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
+    load.sound(s.Drip);
   }
   
   [ add additional room initialization here
@@ -203,6 +204,10 @@ if (dripdone && !faucetfixed) {
     set.cel(drip, 0);
     end.of.loop(drip, dripdone);
     start.update(drip);
+    [ only play sound if walkman is not in use
+    if (currentTrack == 0) {
+      sound(s.Drip, soundDone);
+    }
   }
   toggle(dripping);    
 }
@@ -605,7 +610,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (clickmops) {
       if ((posn(ego, 52, 138, 61, 149) || posn(ego, 41, 148, 51, 155))) {
         print("As much as you've always wanted to become a janitor, perhaps you "
-              " should just leave the mops and brooms alone.");
+              "should just leave the mops and brooms alone.");
       } else {
         print("You can't reach that from here.");
       }
@@ -1029,7 +1034,7 @@ return();
 #message 35 "You already tightened the faucet handle."
 #message 36 "After tightening the faucet handle, the drip stops."
 #message 37 "Might as well wash your hands"
-#message 38 "As much as you've always wanted to become a janitor, perhaps you  should just leave the mops and brooms alone."
+#message 38 "As much as you've always wanted to become a janitor, perhaps you should just leave the mops and brooms alone."
 #message 39 "You decide to leave the plunger alone. It smells bad."
 #message 40 "The boxes are up too high for you to reach."
 #message 41 "The boxes are sealed up. You shouldn't open them."

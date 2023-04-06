@@ -178,7 +178,7 @@ if (newRoom) {
   }
   
   [ add toolbar buttons
-  load.view(vw.ButtonsUp);
+  load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
   
   [ add ego to the room

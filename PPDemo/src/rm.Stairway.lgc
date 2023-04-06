@@ -94,7 +94,7 @@ if (newRoom) {
   draw(ego);
   
   [ add toolbar buttons
-  load.view(vw.ButtonsUp);
+  load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
   
   [ display the picture on screen

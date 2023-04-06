@@ -120,7 +120,7 @@ if (newRoom)
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   return();
-  }
+}
 
 [ if ego is not allowed
 if (!allowedPastLobby) {

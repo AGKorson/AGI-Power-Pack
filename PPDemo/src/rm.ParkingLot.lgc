@@ -181,7 +181,7 @@ if (newRoom) {
     egodir = STOPPED;
     draw(ego);
   }
-  
+    
   [ display the picture on screen
   show.pic();
   [ fade in

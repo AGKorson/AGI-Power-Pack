@@ -144,7 +144,7 @@ if (newRoom) {
   block(FADE.IN, 0, 20, 0); [ fade.in(BYVAR, DELAY, COLOR)
   
   [ load the theme song
-  load.sound(m.theme);
+  load.sound(m.PPDTheme);
 [[  [ and begin playing
 [[  sound(m.theme, musicDone);
 }

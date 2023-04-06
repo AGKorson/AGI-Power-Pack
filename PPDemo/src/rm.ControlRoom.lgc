@@ -68,7 +68,7 @@ if (newRoom) {
   set.horizon(120);
   
   [ add toolbar buttons
-  load.view(vw.ButtonsUp);
+  load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
   
   if (previousRoom == rm.Office) {
@@ -269,6 +269,25 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
+    [ floppy drive
+    if (mouseX > 82 && mouseX < 104 && mouseY > 90 && mouseY < 113) {
+      if (obj.in.box(ego, 64, 133, 104, 138)) {
+        work1 = cp.Terminal;
+        if (obj.in.room("floppy disk", work1)) {
+            print("You undo the door latch and remove the disk.");
+            reset(floppyInserted);
+            get("floppy disk");
+            work1 = 4;
+            call(lgc.ScoreHandler);
+        } else {
+          print("The disk drive is empty.");
+        }
+      } else {
+        print("Move closer.");
+      }
+      goto(doneclick);
+    }
+    
     reset(nearTerminal);
     if (obj.in.box(ego, 64, 133, 104, 138)) {
       set(nearTerminal);
@@ -406,11 +425,15 @@ if ((said("remove", "disk") || said("remove", "disk", "drive") ||
      said("get", "disk") || said("get", "disk", "drive"))) {
   work1 = cp.Terminal;
   if (obj.in.room("floppy disk", work1)) {
-    print("Ok.");
-    set(floppyInserted);
-    get("floppy disk");
-    work1 = 4;
-    call(lgc.ScoreHandler);
+    if (obj.in.box(ego, 64, 133, 104, 138)) {
+      print("Ok.");
+      reset(floppyInserted);
+      get("floppy disk");
+      work1 = 4;
+      call(lgc.ScoreHandler);
+    } else {
+      print("Move closer.");
+    }
   } else {
     if (has("floppy disk")) {
       print("You already have the disk.");
