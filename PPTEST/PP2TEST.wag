@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = DGN
    Interpreter = 2.917
-   LastEdit = "2/27/2023 4:34:42 PM"
+   LastEdit = "4/7/2023 2:38:59 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -55,11 +55,11 @@
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
-   CompCRC32 = &HDEC0B5D6
-   CRC32 = &HDEC0B5D6
+   CompCRC32 = &H14FCF253
+   CRC32 = &H14FCF253
    ID = rm.Entrance
    IsRoom = True
-   Size = 946
+   Size = 937
    Description = "An example room with several exits."
 
 [Logic2]
@@ -289,26 +289,26 @@
 [Logic7]
    ID = lgc.TestPart1
    Description = ""
-   CRC32 = &HDC8B9B7A
-   CompCRC32 = &HDC8B9B7A
+   CRC32 = &HEFDBA377
+   CompCRC32 = &HEFDBA377
    IsRoom = False
-   Size = 10672
+   Size = 10626
 
 [Logic8]
    ID = lgc.TestPart2
    Description = ""
-   CRC32 = &H787939C7
-   CompCRC32 = &H787939C7
+   CRC32 = &H3B776CE
+   CompCRC32 = &H3B776CE
    IsRoom = False
-   Size = 11025
+   Size = 11089
 
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &H8B5DCCCD
-   CompCRC32 = &H8B5DCCCD
+   CRC32 = &H369E62E9
+   CompCRC32 = &H369E62E9
    IsRoom = False
-   Size = 11081
+   Size = 10936
 
 [Logic93]
    ID = lgc.GameHelp

@@ -97,6 +97,9 @@ if (currentRoom == 0) {
     work1 = IntVersion;
     work1 += 49;
     print.v(work1);
+  } else {
+    [ first step for restart is to retrieve interpreter version from errorinfo (v18)
+    IntVersion = errorParameter;
   }
 
   [ default ego parameters
@@ -114,25 +117,14 @@ if (currentRoom == 0) {
   set(debugging); 
   [ set up trace window (remove this before releasing your game if
   [ you don't want debug features included)
-  if (IntVersion > VERSION_2272) {
-    load.logics(lgc.TraceInfo);
-    trace.info(lgc.TraceInfo, 3, 15);
-  } else {
-    load.logics(lgc.TraceInfo160);
-    trace.info(lgc.TraceInfo160, 3, 15);
-  }
-[  [ enable tracing as needed
-[  set(enableTrace);
-[  trace.on();
-
+  load.logics(lgc.TraceInfo);
+  trace.info(lgc.TraceInfo, 3, 15);
 
   [ now continue with specific steps depending on whether 
   [ this is a restart, or the original game beginning
   if (gameRestarted) {
   
     [ steps needed specifically for a restart
-    [ retrieve interpreter version from errorinfo (v18)
-    IntVersion = errorParameter;
     
     print("Restarting - Version: %v30");
     
@@ -140,39 +132,38 @@ if (currentRoom == 0) {
     [ picture is cleared
     clear.lines(22, 24, BLACK);
     
-    [ if version has a menu (2.089/2.272 do not)
-    if (IntVersion > VERSION_2272) {
-      disable.item(cDummy);
-      set(enableMenu);
-      
-      [ debug mode is disabled by default (remove these
-      [ lines before distributing your game if you are
-      [ not including debug mode)
-      disable.item(cShowEgo);
-      disable.item(cShowPriority);
-      disable.item(cShowMem);
-      disable.item(cObjInfo);
-      disable.item(cXY);
-      disable.item(cGimme);
-    }
+    disable.item(cDummy);
+    set(enableMenu);
+    
+    [ debug mode is disabled by default (remove these
+    [ lines before distributing your game if you are
+    [ not including debug mode)
+    disable.item(cShowEgo);
+    disable.item(cShowPriority);
+    disable.item(cShowMem);
+    disable.item(cObjInfo);
+    disable.item(cXY);
+    disable.item(cGimme);
     
     [ set mouse dblclick speed
     if (enableDblClick) {
       dblClickDelay = 4;
     }
-    
+
     [ check for restart and save tests
-    s11 = "testrestore";
+    s11 = "testrestart";
     if (compare.strings(s2, s11)) {
+      set.string(s2, "");
       set(ppTesting);
-      teststep = 40;
+      teststep = 44;
       subteststep = 1;
       set(newtest);
     }
     s11 = "testsave";
     if (compare.strings(s2, s11)) {
+      set.string(s2, "");
       set(ppTesting);
-      teststep = 41;
+      teststep = 45;
       subteststep = 2;
       set(newtest);
     }
@@ -190,64 +181,61 @@ if (currentRoom == 0) {
     [ memory, set the script size before doing anything else)
     [ script.size(50);
 
-    [ if version has a menu (2.089/2.272 do not)
-    if (IntVersion > VERSION_2272) {
-      [ next build the game menu (again, before doing anything
-      [ else to keep room.0 memory block as small as possible)
-      set.menu("AGI");
-      set.menu.item("About€     ", cAbout);
-      set.menu.item("Help   <F1>", cHelp);
-      set.menu("File");
-      set.menu.item("Save     <F5>", cSave);
-      set.menu.item("Restore  <F7>", cRestore);
-      set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
-      set.menu.item("Restart  <F9>", cRestart);
-      set.menu.item("Quit  <Alt-Z>", cQuit);
-      set.menu("Action");
-      set.menu.item("See Object  <F4>", cShowObj);
-      set.menu.item("Inventory  <Tab>", cStatus);
-      set.menu("Special");
-      set.menu.item("Sound On/Off      <F2>", cToggleSound);
-      if (machineType == PC && monitorType < 2) {
-        [ cga display can toggle monitor
-        set.menu.item("Color/BW      <Ctrl R>", cToggleMonitor);
-      }
-      set.menu.item("Clock On/Off      <F6>", cClock);
-      set.menu.item("Joystick      <Ctrl J>", cInitJoy);
-      set.menu.item("Pause            <Esc>", cPause);
-      set.menu("Speed");
-      set.menu.item("Normal ", cNormal);
-      set.menu.item("Slow   ", cSlow);
-      set.menu.item("Fast   ", cFast);
-      set.menu.item("Fastest", cFastest);
-      [ set up debug menu - remove this menu and its menu
-      [ items before distributing your game if you don't 
-      [ want to include the debug mode
-      set.menu("Debug");
-      set.menu.item("Debug Help        ", cDebugHelp);
-      set.menu.item("Ego Info   <Alt-E>", cShowEgo);
-      set.menu.item("Pri Screen <Alt-P>", cShowPriority);
-      set.menu.item("Memory     <Alt-M>", cShowMem);
-      set.menu.item("Obj Info   <Alt-I>", cObjInfo);
-      set.menu.item("Coords     <Alt-X>", cXY);
-      set.menu.item("Get All           ", cGimme);
-  
-      [ submit the menu (which makes it ready to use)
-      submit.menu();
-      set(enableMenu);
-      [ disable the separator lines
-      disable.item(cDummy);
-      
-      [ debug mode is disabled by default (remove these
-      [ lines before distributing your game if you are
-      [ not including debug mode)
-      disable.item(cShowEgo);
-      disable.item(cShowPriority);
-      disable.item(cShowMem);
-      disable.item(cObjInfo);
-      disable.item(cXY);
-      disable.item(cGimme);
+    [ next build the game menu (again, before doing anything
+    [ else to keep room.0 memory block as small as possible)
+    set.menu("AGI");
+    set.menu.item("About€     ", cAbout);
+    set.menu.item("Help   <F1>", cHelp);
+    set.menu("File");
+    set.menu.item("Save     <F5>", cSave);
+    set.menu.item("Restore  <F7>", cRestore);
+    set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
+    set.menu.item("Restart  <F9>", cRestart);
+    set.menu.item("Quit  <Alt-Z>", cQuit);
+    set.menu("Action");
+    set.menu.item("See Object  <F4>", cShowObj);
+    set.menu.item("Inventory  <Tab>", cStatus);
+    set.menu("Special");
+    set.menu.item("Sound On/Off      <F2>", cToggleSound);
+    if (machineType == PC && monitorType < 2) {
+      [ cga display can toggle monitor
+      set.menu.item("Color/BW      <Ctrl R>", cToggleMonitor);
     }
+    set.menu.item("Clock On/Off      <F6>", cClock);
+    set.menu.item("Joystick      <Ctrl J>", cInitJoy);
+    set.menu.item("Pause            <Esc>", cPause);
+    set.menu("Speed");
+    set.menu.item("Normal ", cNormal);
+    set.menu.item("Slow   ", cSlow);
+    set.menu.item("Fast   ", cFast);
+    set.menu.item("Fastest", cFastest);
+    [ set up debug menu - remove this menu and its menu
+    [ items before distributing your game if you don't 
+    [ want to include the debug mode
+    set.menu("Debug");
+    set.menu.item("Debug Help        ", cDebugHelp);
+    set.menu.item("Ego Info   <Alt-E>", cShowEgo);
+    set.menu.item("Pri Screen <Alt-P>", cShowPriority);
+    set.menu.item("Memory     <Alt-M>", cShowMem);
+    set.menu.item("Obj Info   <Alt-I>", cObjInfo);
+    set.menu.item("Coords     <Alt-X>", cXY);
+    set.menu.item("Get All           ", cGimme);
+
+    [ submit the menu (which makes it ready to use)
+    submit.menu();
+    set(enableMenu);
+    [ disable the separator lines
+    disable.item(cDummy);
+    
+    [ debug mode is disabled by default (remove these
+    [ lines before distributing your game if you are
+    [ not including debug mode)
+    disable.item(cShowEgo);
+    disable.item(cShowPriority);
+    disable.item(cShowMem);
+    disable.item(cObjInfo);
+    disable.item(cXY);
+    disable.item(cGimme);
     
     [ this logic sets up the game; assigns key controllers, 
     [ configures the screen and other startup activities
@@ -341,26 +329,23 @@ if (deathType > 0) {
     [ load the death handler logic
     load.logics(lgc.Death);
     
-    [ if version has a menu (2.089/2.272 do not)
-    if (IntVersion > VERSION_2272) {
-      [disable some menu items
-      disable.item(cDebugHelp);
-      disable.item(cSave);
-      disable.item(cPause);
-      disable.item(cShowObj);
-      disable.item(cClock);
-      disable.item(cInitJoy);
-      disable.item(cNormal);
-      disable.item(cFastest);
-      disable.item(cFast);
-      disable.item(cSlow);
-      disable.item(cShowEgo);
-      disable.item(cShowPriority);
-      disable.item(cShowMem);
-      disable.item(cObjInfo);
-      disable.item(cXY);
-      disable.item(cGimme);
-    }
+    [disable some menu items
+    disable.item(cDebugHelp);
+    disable.item(cSave);
+    disable.item(cPause);
+    disable.item(cShowObj);
+    disable.item(cClock);
+    disable.item(cInitJoy);
+    disable.item(cNormal);
+    disable.item(cFastest);
+    disable.item(cFast);
+    disable.item(cSlow);
+    disable.item(cShowEgo);
+    disable.item(cShowPriority);
+    disable.item(cShowMem);
+    disable.item(cObjInfo);
+    disable.item(cXY);
+    disable.item(cGimme);
   }
     
   [ call the death handler, where you update the screen
@@ -413,12 +398,9 @@ if (!disableGameFunctions) {
     call(lgc.DebugHelp);
   }
 
-  [ if version has a menu (2.089/2.272 do not)
-  if (IntVersion > VERSION_2272) {
-    [ MENU ACTIVATION
-    if (controller(cMenu)) {
-      menu.input();
-    }
+  [ MENU ACTIVATION
+  if (controller(cMenu)) {
+    menu.input();
   }
   
   [ SAVE GAME
@@ -471,38 +453,36 @@ if (!disableGameFunctions) {
     status();
   }
 
-  [ if version allows viewing items (2.089/2.272 do not)
-  if (IntVersion > VERSION_2272) {
-    [ EXAMINE INVENTORY ITEMS
-    if ((controller(cShowObj) || 
-         said("look", "inventory"))) {
-         
-      [ enable section of inventory items
-      set(enableItemSelect);
-      [ show inventory screen
-      status();
-      
-      [ player has chosen an object (value of SelectedItem)
-      [ note: SelectedItem is set to 255 if ESC is pressed 
-      [in the inventory screen
-      if (selectedItem > 0 && selectedItem != 255) {
-        if (selectedItem == 1) {
-          show.obj(vw.Inv.TestItem);
-        }
-        [ NOTE: If you have several objects, it is easier to give
-        [ them consecutive view numbers. Then you can do the
-        [ following (view numbers start at 220 for this
-        [ example):
-        [   v255 = selectedItem; v255 += 219;
-        [   show.obj.v(v255);
-        [ If you do this, you don't have to have separate statements for each
-        [ object.
+  [ EXAMINE INVENTORY ITEMS
+  if ((controller(cShowObj) || 
+       said("look", "inventory"))) {
+       
+    [ enable section of inventory items
+    set(enableItemSelect);
+    [ show inventory screen
+    status();
+    
+    [ player has chosen an object (value of SelectedItem)
+    [ note: SelectedItem is set to 255 if ESC is pressed 
+    [in the inventory screen
+    if (selectedItem > 0 && selectedItem != 255) {
+      if (selectedItem == 1) {
+        show.obj(vw.Inv.TestItem);
       }
-        
-      [ disable selection of inventory items
-      reset(enableItemSelect);
+      [ NOTE: If you have several objects, it is easier to give
+      [ them consecutive view numbers. Then you can do the
+      [ following (view numbers start at 220 for this
+      [ example):
+      [   v255 = selectedItem; v255 += 219;
+      [   show.obj.v(v255);
+      [ If you do this, you don't have to have separate statements for each
+      [ object.
     }
+      
+    [ disable selection of inventory items
+    reset(enableItemSelect);
   }
+
   [ QUIT GAME
   if ((controller(cQuit) || 
        said("quit", "game") || 
@@ -607,17 +587,15 @@ if (isset(gameRestored)) {
   clear.lines(23, 24, 0);
   [ debugging off by default
   reset(debugging);
-  if (IntVersion > VERSION_2272) {
-    [ disable menu separators)
-    disable.item(cDummy);
-    [ disable debug menu items
-    disable.item(cShowEgo);
-    disable.item(cShowPriority);
-    disable.item(cShowMem);
-    disable.item(cObjInfo);
-    disable.item(cXY);
-    disable.item(cGimme);
-  }
+  [ disable menu separators)
+  disable.item(cDummy);
+  [ disable debug menu items
+  disable.item(cShowEgo);
+  disable.item(cShowPriority);
+  disable.item(cShowMem);
+  disable.item(cObjInfo);
+  disable.item(cXY);
+  disable.item(cGimme);
 }
 
 [ IMPORTANT: This calls the logic for the current room - this

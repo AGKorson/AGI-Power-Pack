@@ -48,8 +48,7 @@
 
 
 [ TEST1:  49 controller assignment slots
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 1) {
   if (subteststep == 0) {
     if (newtest) {
       display(24, 0, "%v63: CONTROLLER ASSIGNMENT TEST");
@@ -148,8 +147,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST2:  'set.game.id' does not quit the game
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 2) {
   if (newtest) {
     display(24, 0, "%v63: SET.GAME.ID TEST");
     print("If this fails, game will quit without warning...");
@@ -165,8 +163,7 @@ if (teststep == stepcounter) {
 
 [ TEST3:  extended characters in graphics and text modes, 
 [         regardless of color
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 3) {
   if (newtest) {
     reset(newtest);
     display(24, 0, "%v63: EXTENDED CHARACTER SUPPORT TEST");
@@ -190,7 +187,7 @@ if (teststep == stepcounter) {
   
   [ check for continue
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-    configure.screen(-1, 0, 0);
+[    configure.screen(-1, 0, 0);
     [ check results
     get.string(strAnswer, "Did ext chars display correctly? ", 22, 0, 3);
     goto(nexttest);
@@ -200,8 +197,7 @@ if (teststep == stepcounter) {
 
 [ TEST4:  'clear.text.rect' and 'clear.lines' commands in
 [         color, and scrolling
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 4) {
   if (newtest) {
     display(24, 0, "%v63: CLEAR IN COLOR TEST");
     reset(newtest);
@@ -226,8 +222,7 @@ if (teststep == stepcounter) {
 
 [ TEST5:  full color text printing/display on the graphics
 [         screen
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 5) {
   if (newtest) {
     display(24, 0, "%v63: FULL COLOR TEXT TEST");
     reset(newtest);
@@ -248,8 +243,7 @@ if (teststep == stepcounter) {
 
 [ TEST6:  'set.text.attributes' command passes colors by
 [         variable
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 6) {
   if (newtest) {
     display(24, 0, "%v63: SET COLORS BY VARIABLE TEST");
     reset(newtest);
@@ -285,8 +279,7 @@ if (teststep == stepcounter) {
 
 [ TEST7:  'set.text.attributes' command allows "pushing" 
 [         "and popping" the current attributes
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 7) {
   if (newtest) {
     display(24, 0, "%v63: PUSH/POP COLORS TEST");
     reset(newtest);
@@ -308,8 +301,7 @@ if (teststep == stepcounter) {
 
 [ TEST8:  set message box colors (foreground, background
 [         and border) to any combination of colors
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 8) {
   if (newtest) {
     display(24, 0, "%v63: MSGBOX COLORS TEST");
     reset(newtest);
@@ -333,8 +325,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST9:  80 column 'graphics' and 'text.screen'  modes
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 9) {
   if (newtest) {
     display(24, 0, "%v63: 80 COLUMN MODE TEST");
     reset(newtest);
@@ -380,8 +371,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST10: 'auto-cycle' feature
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 10) {
   if (newtest) {
     display(24, 0, "%v63: AUTOCYCLE TEST");
     reset(newtest);
@@ -410,8 +400,7 @@ if (teststep == stepcounter) {
 
 [ TEST11: 'get.num' command so it ignores non-numeric key
 [         presses
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 11) {
   if (newtest) {
     display(24, 0, "%v63: GET.NUM TEST");
     reset(newtest);
@@ -429,8 +418,7 @@ if (teststep == stepcounter) {
 
 [ TEST12: 'set.string' to set the input line text
 [         programmatically
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 12) {
   if (newtest) {
     display(24, 0, "%v63: SET INPUT LINE TEST");
     reset(newtest);
@@ -457,8 +445,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST13: 'set.string' to change the string compare function
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 13) {
   if (newtest) {
     display(24, 0, "%v63: COMPARE STRINGS TEST");
     reset(newtest);
@@ -534,8 +521,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST14: mouse support (changing cursor; 40/80; inventory)
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 14) {
   if (newtest && subteststep == 0) {
     display(24, 0, "%v63: MOUSE SUPPORT TEST");
     reset(newtest);
@@ -625,8 +611,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST15: input processing ignores non-printable characters
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 15) {
   if (newtest) {
     display(24, 0, "%v63: NON-PRINTABLE CHARACTERS TEST");
     reset(newtest);
@@ -651,8 +636,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST16: inventory screen uses graphics display
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 16) {
   if (newtest && subteststep == 0) {
     display(24, 0, "%v63: INVENTORY SCREEN TEST");
     reset(newtest);
@@ -702,8 +686,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST17: custom status line
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 17) {
   if (newtest && subteststep == 0) {
     display(24, 0, "%v63: CUSTOM STATUS LINE TEST");
     reset(newtest);
@@ -749,8 +732,7 @@ if (teststep == stepcounter) {
 
 [ TEST18: 'click-to-move' support when the mouse is active, 
 [         and options
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 18) {
   if (newtest) {
     display(24, 0, "%v63: CLICK-TO-MOVE TEST");
     print("With mouse enabled, left clicks can be used to "
@@ -773,8 +755,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST19: 'wander' command correction
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 19) {
   if (newtest) {
     display(24, 0, "%v63: WANDER BUG TEST");
     print("Wander bugfix will be tested next. This may be hard to "
@@ -797,8 +778,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST20: FMsynth and MIDI sound card support
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 20) {
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
     [ force stop
     stop.sound();
@@ -1051,7 +1031,6 @@ if (teststep == stepcounter) {
 }
   
 [ TEST21 and above are in second logic
-++stepcounter;
 return();
 
 :nexttest

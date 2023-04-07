@@ -232,19 +232,16 @@ if (ppTesting) {
   
   [ tests 1-20 are in part 1
   if (teststep < 21) {
-    stepcounter = 0;
     call(lgc.TestPart1);
   }
   
   [ tests 21-34 are in part 2
   if (teststep > 20 && teststep < 35) {
-    stepcounter = 20;
     call(lgc.TestPart2);
   }
   
-  [ tests 35-44 are in part 3
+  [ tests 35-45 are in part 3
   if (teststep > 34 && teststep < 46) {
-    stepcounter = 34;
     call(lgc.TestPart3);
   }
   

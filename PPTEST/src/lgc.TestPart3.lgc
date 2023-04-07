@@ -25,7 +25,7 @@
 
 [***********************************************************
 [
-[ run tests 35-44
+[ Tests 35-44
 [
 [ TEST35: date/time functions
 [ TEST36: creating, reading/writing data files
@@ -33,10 +33,11 @@
 [ TEST38: support for words with non-alphabetic characters 
 [ TEST39: on object test command 
 [ TEST40: message text relocation
-[ TEST41: pause clock
-[ TEST42: variable sound functions
-[ TEST43: restart support for power pack 
-[ TEST44: save/restore support for power pack 
+[ TEST41: hiding objects
+[ TEST42: pause clock
+[ TEST43: variable sound functions
+[ TEST44: restart support for power pack 
+[ TEST45: save/restore support for power pack 
 [***********************************************************
 
 if (newtest) {
@@ -44,8 +45,7 @@ if (newtest) {
 }
 
 [ TEST35: date/time functions
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 35) {
   if (newtest) {
     display(24, 0, "%v63: DATE/TIME TEST");
     reset(newtest);
@@ -94,8 +94,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST36: creating, reading/writing data files
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 36) {
   if (subteststep == 0 && newtest) {
     display(24, 0, "%v63: READ/WRITE DATA TEST");
     reset(newtest);
@@ -247,8 +246,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST37: polling the shift, ctrl and alt keys
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 37) {
   if (newtest) {
     display(24, 0, "%v63: SHIFT-CTRL-ALT TEST");
     reset(newtest);
@@ -285,8 +283,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST38: support for words with non-alphabetic characters 
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 38) {
   if (subteststep == 0) {
     if (newtest) {
       display(24, 0, "%v63: EXTENDED CHAR WORDS TEST");
@@ -341,8 +338,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST39: on object test command 
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 39) {
   if (subteststep == 0) {
     if (newtest) {
       display(24, 0, "%v63: ON.OBJ TEST");
@@ -387,8 +383,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST40: message text relocation
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 40) {
   if (newtest) {
     display(24, 0, "%v63: RESTART TEST");
     reset(newtest);
@@ -414,8 +409,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST41: hiding objects
-++stepcounter; 
-if (teststep == stepcounter) {
+if (teststep == 41) {
   if (subteststep == 0) {
     if (newtest) {
       reset(newtest);
@@ -451,8 +445,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST42: pause clock
-++stepcounter; 
-if (teststep == stepcounter) {
+if (teststep == 42) {
   if (newtest) {
     display(24, 0, "%v63: PAUSE CLOCK TEST");
     reset(newtest);
@@ -476,34 +469,40 @@ if (teststep == stepcounter) {
 }
 
 [ TEST43: variable sound functions
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 43) {
+  [ these tests moved to sound check test
   if (newtest) {
     reset(newtest);
     display(24, 0, "%v63: VARIABLE SOUND FUNCTIONS");
-    print("Loading and playing a sound by variable - ");
-    work1 = 1;
-    work2 = 240;
-    block(-49, 0, &work1, 0);
-    block(-49, 1, &work1, &work2);
-  }
-  if (f240) {
-    reset(f240);
-    print("sound is done, discarding it.");
-    work1 = 1;
-    block(-49, 2, &work1, 0);
-  }
-  [ check for continue
-  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-    [ check results
-    get.string(strAnswer, "Did sound play correctly? ", 22, 0, 3);
+    print("These tests were moved to TEST 20.");
     goto(nexttest);
   }
+  
+[  if (newtest) {
+[    reset(newtest);
+[    display(24, 0, "%v63: VARIABLE SOUND FUNCTIONS");
+[    print("Loading and playing a sound by variable - ");
+[    work1 = 1;
+[    work2 = 240;
+[    block(-49, 0, &work1, 0);
+[    block(-49, 1, &work1, &work2);
+[  }
+[  if (f240) {
+[    reset(f240);
+[    print("sound is done, discarding it.");
+[    work1 = 1;
+[    block(-49, 2, &work1, 0);
+[  }
+[  [ check for continue
+[  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+[    [ check results
+[    get.string(strAnswer, "Did sound play correctly? ", 22, 0, 3);
+[    goto(nexttest);
+[  }
 }
 
 [ TEST44: restart support for power pack 
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 44) {
   if (subteststep == 0) {
     if (newtest) {
       display(24, 0, "%v63: RESTART TEST");
@@ -848,8 +847,7 @@ if (teststep == stepcounter) {
 }
 
 [ TEST45: save/restore support for power pack 
-++stepcounter;
-if (teststep == stepcounter) {
+if (teststep == 45) {
   if (subteststep == 0) {
     if (newtest) {
       display(24, 0, "%v63: SAVE/RESTORE TEST");
@@ -1017,7 +1015,6 @@ if (teststep == stepcounter) {
     [ compare.strings should be binary;
     [ palette should be custom
     if (newtest) {
-[      reset(newtest); [ skip to next test immediately
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       s10 = "test string";
       s11 = "TEST!string";
@@ -1067,9 +1064,7 @@ if (teststep == stepcounter) {
     [ run the timer
     ++tmpTimer1;
     if (tmpTimer2 != elapsedSeconds) {
-[      if (tmpTimer1 > maxCPS) {
         maxCPS = tmpTimer1;
-[      }
       tmpTimer2 = elapsedSeconds;
       tmpTimer1 = 0;
     }
