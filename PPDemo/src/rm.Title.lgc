@@ -76,6 +76,10 @@ if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   
+  [ start up sequence doesn't need to use scripts since it will 
+  [ never be part of a game restore
+  set(noScript);
+  
   [ since this is the first room in the game, there is no
   [ previous room that faded out; so we force a fade.out
   [ (with zero delay) so this room can then be faded back in
@@ -399,7 +403,7 @@ if (titleSeq == TS_SCROLLCREDS) {
 
 if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
   [ display letters, one at a time
-  [ and fade them in at same time??
+  [ and fade them in at same time
   ++delaycounter;
   if (delaycounter == 1) {
     delaycounter = 0;
@@ -453,8 +457,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
     if (letterindex < 64) {
       block(BYTE2HEX, &sChar, &letterindex, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor1, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor1, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor1, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor1, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor1, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color2
     if (letterindex > 3 && letterindex < 68) {
@@ -462,8 +466,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 4;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor2, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor2, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor2, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor2, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor2, &sChar, 0); [ sstr.concat(sINPUT, sADD)
     }
     [color3
     if (letterindex > 7 && letterindex < 72) {
@@ -471,8 +475,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 8;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor3, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor3, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor3, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor3, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor3, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color4
     if (letterindex > 11 && letterindex < 76) {
@@ -480,8 +484,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 12;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor4, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor4, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor4, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor4, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor4, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color5
     if (letterindex > 15 && letterindex < 80) {
@@ -489,8 +493,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 16;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor5, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor5, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor5, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor5, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor5, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color6
     if (letterindex > 19 && letterindex < 84) {
@@ -498,8 +502,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 20;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor6, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor6, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor6, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor6, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor6, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color7
     if (letterindex > 23 && letterindex < 88) {
@@ -507,8 +511,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 24;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor7, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor7, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor7, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor7, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor7, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color8
     if (letterindex > 27 && letterindex < 92) {
@@ -516,8 +520,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 28;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor8, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor8, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor8, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor8, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor8, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     [color9
     if (letterindex > 31 && letterindex < 96) {
@@ -525,8 +529,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
       work1 -= 32;
       block(BYTE2HEX, &sChar, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor9, 0); [ str.copy(sINPUT, sRESULT)
-      block(STR.CONCAT, &sColor9, &sChar, 0); [ sINPUT, sADD)
-      block(STR.CONCAT, &sColor9, &sChar, 0); [ sINPUT, sADD)
+      block(STR.CONCAT, &sColor9, &sChar, 0); [ str.concat(sINPUT, sADD)
+      block(STR.CONCAT, &sColor9, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
     block(SET.PALETTE, 0, &m3, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
     
@@ -771,7 +775,10 @@ if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
   block(SET.PALETTE, 0, &m1, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   [ enable game functions for rest of game
   reset(disableGameFunctions);
+  [ restore default speed
   animationInterval = tmpSpeed;
+  [ allow scripting
+  reset(noScript);
   [ begin game in starting room
   new.room(rm.ParkingLot); [ ##LE001##
 }
