@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/11/2023 8:11:32 AM"
+   LastEdit = "4/12/2023 2:37:40 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -818,8 +818,12 @@
 [Picture44]
    ID = pic.Walkman
    Description = ""
-   Size = 153
-   BkgdImg = ""
+   Size = 294
+   BkgdImg = "PPDemo Art\walkman.bmp"
+   BkgdShow = False
+   BkgdTrans = 127
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|2880|1512
 [::END Pictures::]
 
 [::BEGIN Sounds::]
