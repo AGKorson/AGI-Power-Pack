@@ -585,6 +585,9 @@ if (teststep == 44) {
       s2 = "testrestart";
       print("Ready to restart.");
       :restart
+      if (IntVersion > 3) {
+        set(noPromptRestart);
+      }
       restart.game();
       [ in case user cancels
       print("Please restart.");
