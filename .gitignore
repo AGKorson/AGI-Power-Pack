@@ -34,4 +34,5 @@ PPDemo/WORDS.TOK.EXTENDED
 AGI Powerpack Mods.xlsx
 AGI Powerpack Mods msgmove.xlsx
 PPDemo/PPDEMO.CFG
+PPDemo/support/**
 *.bak
