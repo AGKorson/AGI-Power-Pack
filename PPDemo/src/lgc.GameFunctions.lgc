@@ -317,11 +317,11 @@ if (controller(cChooseItem)) {
           set(cassetteLoaded);
           get.num("Side? (0=A, 1=B): ", work1);
           if (work1) {
-            set(cassetteSide);
+            set(cassetteSideB);
             currentTrack = 63;
           } else {
-            reset(cassetteSide);
-            currentTrack = 22;
+            reset(cassetteSideB);
+            currentTrack = 1;
           }
           [ if in lobby, don't actually play; receptionist will tell player to stop
           if (currentRoom != rm.Lobby) {

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/12/2023 2:37:40 PM"
+   LastEdit = "4/20/2023 8:28:01 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -21,7 +21,8 @@
    CodePage = 437
    SierraSyntax = False
    SourceFileExt = .lgc
-
+   PowerPack = True
+   
 [Palette]
    Color0 = &H00000000
    Color1 = &H00AA0000
@@ -48,27 +49,27 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H1805B457
-   CRC32 = &H1805B457
+   CompCRC32 = &H52D246F7
+   CRC32 = &H52D246F7
    ID = lgc.Main
    IsRoom = False
-   Size = 5190
+   Size = 5194
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &HCC317BC7
-   CRC32 = &HCC317BC7
+   CompCRC32 = &HBF3F55AF
+   CRC32 = &HBF3F55AF
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 2138
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H10DDD998
-   CRC32 = &H10DDD998
+   CompCRC32 = &H1D41C950
+   CRC32 = &H1D41C950
    IsRoom = False
    ID = lgc.Init
-   Size = 1046
+   Size = 1305
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
@@ -818,12 +819,8 @@
 [Picture44]
    ID = pic.Walkman
    Description = ""
-   Size = 294
-   BkgdImg = "PPDemo Art\walkman.bmp"
-   BkgdShow = False
-   BkgdTrans = 127
-   BkgdPosn = 0|0|0|0
-   BkgdSize = 320|168|2880|1512
+   Size = 1409
+   BkgdImg = ""
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -2950,7 +2947,7 @@
 [View23]
    ID = vw.Patient1
    Description = ""
-   Size = 3241
+   Size = 4967
 
 [View24]
    ID = vw.Patient2
@@ -3136,4 +3133,9 @@
    ID = vw.InvPQList
    Description = ""
    Size = 423
+
+[View50]
+   ID = vw.WalkmanArt
+   Description = ""
+   Size = 308
 [::END Views::]

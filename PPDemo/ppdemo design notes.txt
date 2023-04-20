@@ -49,8 +49,8 @@ X       +2 pts:  use CAISOCC
 X       +2 pts:  use ERIDOCC
 X       +2 pts:  use EFROCC
 X       +2 pts:  use RANDOCC
-X       -4 pts:  putting disk in drive
-X       +4 pts:  taking disk out of drive
+O       -4 pts:  putting disk in drive !change to positive pts for inserting
+O       +4 pts:  taking disk out of drive ! no negative points
 X       +5 pts:  copying PP source to floppy
 X       +1 pt:   copying memo to floppy
 X       +3 pts:  getting memo from printer
@@ -73,11 +73,11 @@ X       +4 pts:  getting 80s mix tape
         +4 pts:  playing mix tape in walkman
 
 
-1. Intro/Opening Credits: TBD
-    BACKGROUND: TBD
-    ANIMATION ART: TBD
+1. Intro/Opening Credits: Show animated AGI Guy Studio logo, then animated Power Pack logo. Fade out, then fade in Demo title page - "Sierra Quest - a Power Pack Demo game"
+    BACKGROUND: AGI Guy Studioand Power Pack done; need Sierra Quest background
+    ANIMATION ART: done (unless more needed for Sierra Quest title page)
     SOUND: TBD
-    CODING: TBD
+    CODING: mostly done; need to finalize after finishing music and title page art
 
 2. Ending Credits: TBD
     BACKGROUND: TBD
@@ -94,9 +94,9 @@ X       +4 pts:  getting 80s mix tape
 
 4. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. One to three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If ego approaches, receptionist will stop work and speak to ego. If ego asks to use restroom, permission is granted to go into hallway. If ego tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will tell a patient to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Ego should take the magazine and read it. A cone/placard warns of wet/slippery floor to left of the screen. If ego tries to go past the cone, he slips, falls and dies.
 
-    BACKGROUND: need cone warning of slippery floor (can a puddle be simulated?); posters/pictures on walls (sign next to hallway entrance will provide hint that ego needs permission to get past)
-    ANIMATION ART: ego slipping/falling/dying; magazine on table (is a new table needed?); inventory view of magazine;
-    SOUND: door open/close; background music
+    BACKGROUND: posters/pictures on walls (sign next to hallway entrance will provide hint that ego needs permission to get past)
+    ANIMATION ART: done
+    SOUND: door open/close; receptionist sounds (typing, phone ring, etc?)
     SCORING: +1 for slipping on wet floor; +5 for asking to use bathroom; +3 for getting magazine; +2 for reading it;
     CODING: 'said' statements
 
@@ -118,7 +118,7 @@ X       +4 pts:  getting 80s mix tape
 4. Closet: Full of 'janitor' stuff. When ego moves far enough into room, he trips over a broom. (If go tries to pick up broom, that also starts the tripping sequence.) Tripping results in ego causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; ego can fix it to get extra points. If broom is left on floor, ego will trip again (but not actually fall over) at random time intervals. Ego can put broom in corner to get extra points. Touching the plunger will subtract points. Ego can wash hands in sink to recover lost points.
 
     BACKGROUND: done
-    ANIMATION ART: hand washing animation (ego walks to sink, back turned to player; should be very simple)
+    ANIMATION ART: done
     SOUND: open/close door; tripping/falling/breaking wall; water drip; 
     SCORING: +3 for closing closet door; +5 for making hole in wall; -1 each time for tripping over broom after hole is made; +2 for putting broom in corner; -3 for touching plunger; +1/+3 for washing hands after touching tree/plunger; +3 pts for fixing drip
     CODING: 'said' statements, wash hands 
@@ -127,8 +127,8 @@ X       +4 pts:  getting 80s mix tape
  
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: done
-    SCORING: light flicker/buzz
+    SOUND: light flicker/buzz
+    SCORING: n/a
     CODING: 'said' statements
 
 6. Stairway: At bottom of stairs is a door to the PP Control Room. The door is locked with a keypad code needed to enter. The code can be found in the magazine article. To open the door, a close up picture/room is used to enter the code. Correct code will open door. There are lights along the stairway. One of them flickers every few seconds.
@@ -168,15 +168,15 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
 8. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a coded password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
 
     BACKGROUND: done
-    ANIMATION ART: memo on printer item view; password list item view; picture to hide safe; floppy disk item view; folder item view; notebook item view; 
+    ANIMATION ART: done 
     SOUND: tbd (drawer opening; safe open/close; picture swinging?) 
     SCORING: 3 pts for getting memo from printer; 3 pts for getting password list; 2 pts for getting walkman; 2 pts for finding safe; 3 pts for getting BadASS code; 2 pts for getting floppy disk; 3 pts for getting notebook; 2 pts moving rug; 3 pts for getting folder with sound password
     CODING: 'said' statements
 
 8A. Safe door closeup: spinning combo lock dial.Enter correct combination to open.
 
-    BACKGROUND: done
-    ANIMATION ART: dial numbers, dial center, handle 
+    BACKGROUND: redraw to look nicer (current version is too rough/plain)
+    ANIMATION ART: ddial center, handle 
     SOUND: 'click' for dial spin; unlock sound 
     SCORING: 3 pts for opening safe
     CODING: done
@@ -184,8 +184,8 @@ Once all passwords are entered, and BaDASS is restarted, door will unlock; ego c
 9. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. On top of PQ podium is a sheet listing possible PQ sequels, and a coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
 
     BACKGROUND: done
-    ANIMATION art: closeup of pillow; closeup of podium showing page with password 
-    SOUND: 80s mix tape music, coffin open/close
+    ANIMATION art: done 
+    SOUND: coffin open/close
     SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in walkman
     CODING: 'said' statements 
 
@@ -272,22 +272,22 @@ For inventory screen,  change purpose and menu text depending on cursor. 'Look' 
 
 usable items:
 disk
-keyfob
 cassette
+keyfob
 
 Playtesters: tbd
 
-  0: 52, 162
-  1: 32, 162
-  2: 46, 167
-  3: 48, 164
-  4: 46, 164
-  5: 34, 164
 
-#message 51 "0707FFffffff03c003c003c003c003c003c003c003c003c003c007c00fc0ffffFFff"
-            "000000000000e817e8170810f81ff81ff81ff81f3818b019a019000000000000"
+extra cursors: 
+floppy disk: "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF0000000000000000EE770E70FE7FFE7FFE7FFE7F3E78BC790000000000000000"
 
 
+Walkman closeup:
+use cassette to insert it into walkman (choose side first)
 
-#message 51 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
-            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
+to use:
+walkman pic:- play/stop/rewind/fast-forward; use hideobjs and pause timer; use add2pic to show button action, and show spinning cassette wheels
+
+play starts the current track (unless at end)
+rewind backs up, every second or so for a track; 
+ff same going forward; 
