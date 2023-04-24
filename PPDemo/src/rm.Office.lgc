@@ -151,7 +151,6 @@ if (newRoom) {
     if (officeDskDrStatus == OPEN1) {
       position(oDeskDrawer, 84, 126);
       if (has("Walkman")) {
-      [ TODO: picture/views/logics/sounds to use the walkman
         set.loop(oDeskDrawer, 2);
         set.cel(oDeskDrawer, 2);
       } else {

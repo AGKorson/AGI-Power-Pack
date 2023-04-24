@@ -13,6 +13,9 @@
   #define H_STOP_EJ    10
   #define H_PLAY       11
   
+[ stop the game clock while examining items
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+
 [ no script entries for this sequence
 set(noScript);
 [ no regular input either
@@ -106,12 +109,6 @@ if (!have.key()) {
 
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-
-[ restore previuos room
-call(lgc.RedrawRoom);
-
-[ restore scripting
-reset(noScript);
 
 return();
 

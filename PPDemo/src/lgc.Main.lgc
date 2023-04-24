@@ -380,7 +380,7 @@ if (newRoom) {
     [ skip to next track
     ++currentTrack;
     [ if side is done
-    if ((currentTrack == 63 || currentTrack == 106)) {
+    if ((currentTrack == 42 || currentTrack == 85)) {
       [ stop the tape
       currentTrack = 0;
     }

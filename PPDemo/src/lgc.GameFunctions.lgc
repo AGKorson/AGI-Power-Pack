@@ -299,7 +299,6 @@ if (controller(cChooseItem)) {
         } else {
           print("You are too far fromy your vehicle for the keyfob to work.");
         }
-      
       }
       [ cassette
       if (selectedItem == 4) {
@@ -313,14 +312,14 @@ if (controller(cChooseItem)) {
           [ TODO: use the walkman
           [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
           call(lgc.Walkman);
-set(f10);trace.on();
+          call(lgc.RedrawRoom);
           
           [ for now, just play the cassette
           set(cassetteLoaded);
           get.num("Side? (0=A, 1=B): ", work1);
           if (work1) {
             set(cassetteSideB);
-            currentTrack = 63;
+            currentTrack = 42;
           } else {
             reset(cassetteSideB);
             currentTrack = 1;
