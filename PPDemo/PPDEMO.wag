@@ -414,7 +414,7 @@
    CRC32 = &HD08ACE1B
    CompCRC32 = &HD08ACE1B
    IsRoom = False
-   Size = 3960
+   Size = 3962
 
 [Logic13]
    ID = rm.SafeDoor
@@ -438,7 +438,7 @@
    CRC32 = &H24AB57EB
    CompCRC32 = &H24AB57EB
    IsRoom = False
-   Size = 90
+   Size = 98
 
 [Logic15]
    ID = lgc.SaveOptions
@@ -446,7 +446,7 @@
    CRC32 = &HC44AE482
    CompCRC32 = &HC44AE482
    IsRoom = False
-   Size = 267
+   Size = 362
 
 [Logic16]
    ID = lgc.CacheOptions
@@ -454,7 +454,7 @@
    CRC32 = &HF60C21D0
    CompCRC32 = &HF60C21D0
    IsRoom = False
-   Size = 145
+   Size = 265
 
 [Logic17]
    ID = lgc.ExamineItem
@@ -470,7 +470,7 @@
    CRC32 = &H1033FC4E
    CompCRC32 = &H1033FC4E
    IsRoom = False
-   Size = 3282
+   Size = 3284
 
 [Logic19]
    ID = lgc.RedrawRoom
@@ -547,7 +547,7 @@
 [Picture7]
    ID = pic.Stairway
    Description = ""
-   Size = 1083
+   Size = 1078
    BkgdImg = ""
 
 [Picture8]
@@ -578,13 +578,13 @@
    ID = pic.cp.Sound
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 595
 
 [Picture28]
    ID = pic.cp.Paint
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 1
 
 [Picture22]
    ID = pic.cp.Instrument
@@ -596,13 +596,13 @@
    ID = pic.cp.SpeedStatus
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 436
 
 [Picture27]
    ID = pic.cp.Mouse
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 461
 
 [Picture1]
    ID = pic.Introduction
@@ -654,7 +654,7 @@
    ID = pic.TestPalette
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 2402
 
 [Picture13]
    ID = pic.SafeDoor
@@ -684,7 +684,7 @@
    ID = pic.DoorKeypad
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 1334
 
 [Picture20]
    ID = pic.cp.Error
@@ -836,19 +836,19 @@
    ID = ovl.Walkman4
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 328
 
 [Picture47]
    ID = ovl.Walkman3
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 260
 
 [Picture46]
    ID = ovl.Walkman2
    Description = ""
    BkgdImg = ""
-   Size = -1
+   Size = 340
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -874,7 +874,7 @@
    ID = s.DoorOpen
    Description = "A simple sound effect for an automatic closing door."
    Key = 0
-   TPQN106 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -886,13 +886,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 31
 
 [Sound1]
    ID = m.KQ1Track1
    Description = ""
    Key = 0
-   TPQN1 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -904,13 +904,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1206
 
 [Sound107]
    ID = s.DoorClose
    Description = "A simple sound effect for an automatic opening door."
    Key = 0
-   TPQN107 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -922,13 +922,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 31
 
 [Sound2]
    ID = m.KQ1Track2
    Description = ""
    Key = 0
-   TPQN2 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -940,13 +940,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 656
 
 [Sound108]
    ID = s.InstTest
    Description = "used in sound control panel to test instruments"
    Key = 0
-   TPQN108 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -958,13 +958,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 56
 
 [Sound3]
    ID = m.DDPGTrack1
    Description = ""
    Key = 0
-   TPQN3 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -976,13 +976,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1736
 
 [Sound109]
    ID = s.NoiseTest1
    Description = ""
    Key = 0
-   TPQN109 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -994,13 +994,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 46
 
 [Sound4]
    ID = m.DDPGTrack2
    Description = ""
    Key = 0
-   TPQN4 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1012,13 +1012,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 906
 
 [Sound110]
    ID = s.NoiseTest2
    Description = ""
    Key = 0
-   TPQN110 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1030,13 +1030,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 46
 
 [Sound5]
    ID = m.KQ2Track1
    Description = ""
    Key = 0
-   TPQN5 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1048,13 +1048,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1291
 
 [Sound111]
    ID = s.Drip
    Description = ""
    Key = 0
-   TPQN111 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1066,13 +1066,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 21
 
 [Sound6]
    ID = m.KQ2Track2
    Description = ""
    Key = 0
-   TPQN6 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1084,13 +1084,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1676
 
 [Sound112]
    ID = s.Crumble1
    Description = ""
    Key = 0
-   TPQN112 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1102,13 +1102,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 66
 
 [Sound7]
    ID = m.KQ2Track3
    Description = ""
    Key = 0
-   TPQN7 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1120,13 +1120,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1261
 
 [Sound113]
    ID = s.Crumble2
    Description = ""
    Key = 0
-   TPQN113 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1138,13 +1138,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 36
 
 [Sound8]
    ID = m.KQ2Track4
    Description = ""
    Key = 0
-   TPQN8 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1156,13 +1156,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 496
 
 [Sound114]
    ID = s.ButtonClick
    Description = ""
    Key = 0
-   TPQN114 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1174,13 +1174,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 21
 
 [Sound9]
    ID = m.KQ2Track5
    Description = ""
    Key = 0
-   TPQN9 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1192,13 +1192,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 631
 
 [Sound115]
    ID = s.Tone0
    Description = ""
    Key = 0
-   TPQN115 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1210,13 +1210,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound10]
    ID = m.KQ2Track6
    Description = ""
    Key = 0
-   TPQN10 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1228,13 +1228,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1296
 
 [Sound116]
    ID = s.Tone1
    Description = ""
    Key = 0
-   TPQN116 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1246,13 +1246,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound11]
    ID = m.KQ2Track7
    Description = ""
    Key = 0
-   TPQN11 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1264,13 +1264,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 991
 
 [Sound117]
    ID = s.Tone2
    Description = ""
    Key = 0
-   TPQN117 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1282,13 +1282,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound12]
    ID = m.BCTrack1
    Description = ""
    Key = 0
-   TPQN12 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1300,13 +1300,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 746
 
 [Sound118]
    ID = s.Tone3
    Description = ""
    Key = 0
-   TPQN118 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1318,13 +1318,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound13]
    ID = m.BCTrack2
    Description = ""
    Key = 0
-   TPQN13 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1336,13 +1336,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 451
 
 [Sound119]
    ID = s.Tone4
    Description = ""
    Key = 0
-   TPQN119 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1354,13 +1354,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound14]
    ID = m.BCTrack3
    Description = ""
    Key = 0
-   TPQN14 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1372,13 +1372,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 741
 
 [Sound120]
    ID = s.Tone5
    Description = ""
    Key = 0
-   TPQN120 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1390,13 +1390,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound15]
    ID = m.SQ1Track1
    Description = ""
    Key = 0
-   TPQN15 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1408,13 +1408,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 5901
 
 [Sound121]
    ID = s.Tone6
    Description = ""
    Key = 0
-   TPQN121 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1426,13 +1426,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound16]
    ID = m.SQ1Track2
    Description = ""
    Key = 0
-   TPQN16 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1444,13 +1444,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1321
 
 [Sound122]
    ID = s.Tone7
    Description = ""
    Key = 0
-   TPQN122 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1462,13 +1462,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound17]
    ID = m.SQ1Track3
    Description = ""
    Key = 0
-   TPQN17 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1480,13 +1480,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1611
 
 [Sound123]
    ID = s.Tone8
    Description = ""
    Key = 0
-   TPQN123 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1498,13 +1498,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound18]
    ID = m.SQ1Track4
    Description = ""
    Key = 0
-   TPQN18 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1516,13 +1516,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1691
 
 [Sound124]
    ID = s.Tone9
    Description = ""
    Key = 0
-   TPQN124 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1534,13 +1534,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound19]
    ID = m.KQ3Track1
    Description = ""
    Key = 0
-   TPQN19 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1552,13 +1552,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 631
 
 [Sound125]
    ID = s.ToneStar
    Description = ""
    Key = 0
-   TPQN125 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1570,13 +1570,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound20]
    ID = m.KQ3Track2
    Description = ""
    Key = 0
-   TPQN20 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1588,13 +1588,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 511
 
 [Sound126]
    ID = s.TonePound
    Description = ""
    Key = 0
-   TPQN126 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1606,13 +1606,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 26
 
 [Sound21]
    ID = m.KQ3Track3
    Description = ""
    Key = 0
-   TPQN21 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1624,13 +1624,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1056
 
 [Sound22]
    ID = m.KQ3Track4
    Description = ""
    Key = 0
-   TPQN22 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1642,13 +1642,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1911
 
 [Sound23]
    ID = m.KQ3Track5
    Description = ""
    Key = 0
-   TPQN23 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1660,13 +1660,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 781
 
 [Sound24]
    ID = m.KQ3Track6
    Description = ""
    Key = 0
-   TPQN24 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1678,13 +1678,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1091
 
 [Sound25]
    ID = m.LLLTrack1
    Description = ""
    Key = 0
-   TPQN25 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1696,13 +1696,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 3911
 
 [Sound26]
    ID = m.LLLTrack2
    Description = ""
    Key = 0
-   TPQN26 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1714,13 +1714,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1476
 
 [Sound27]
    ID = m.LLLTrack3
    Description = ""
    Key = 0
-   TPQN27 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1732,13 +1732,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1541
 
 [Sound28]
    ID = m.LLLTrack4
    Description = ""
    Key = 0
-   TPQN28 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1750,13 +1750,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 4616
 
 [Sound29]
    ID = m.LLLTrack5
    Description = ""
    Key = 0
-   TPQN29 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1768,13 +1768,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2511
 
 [Sound30]
    ID = m.MMGTrack1
    Description = ""
    Key = 0
-   TPQN30 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1786,13 +1786,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 976
 
 [Sound31]
    ID = m.MMGTrack2
    Description = ""
    Key = 0
-   TPQN31 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1804,13 +1804,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 766
 
 [Sound32]
    ID = m.MMGTrack3
    Description = ""
    Key = 0
-   TPQN32 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1822,13 +1822,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 991
 
 [Sound33]
    ID = m.MMGTrack4
    Description = ""
    Key = 0
-   TPQN33 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1840,13 +1840,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 541
 
 [Sound34]
    ID = m.MMGTrack5
    Description = ""
    Key = 0
-   TPQN34 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1858,13 +1858,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 766
 
 [Sound35]
    ID = m.MMGTrack6
    Description = ""
    Key = 0
-   TPQN35 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1876,13 +1876,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 676
 
 [Sound36]
    ID = m.MMGTrack7
    Description = ""
    Key = 0
-   TPQN36 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1894,13 +1894,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 986
 
 [Sound37]
    ID = m.MMGTrack8
    Description = ""
    Key = 0
-   TPQN37 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1912,13 +1912,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 891
 
 [Sound38]
    ID = m.MMGTrack9
    Description = ""
    Key = 0
-   TPQN38 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1930,13 +1930,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 606
 
 [Sound39]
    ID = m.MMGTrack10
    Description = ""
    Key = 0
-   TPQN39 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1948,13 +1948,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 581
 
 [Sound40]
    ID = m.MMGTrack11
    Description = ""
    Key = 0
-   TPQN40 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1966,13 +1966,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2026
 
 [Sound41]
    ID = m.MMGTrack12
    Description = ""
    Key = 0
-   TPQN41 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -1984,13 +1984,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 351
 
 [Sound42]
    ID = m.PQ1Track1
    Description = ""
    Key = 0
-   TPQN42 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2002,13 +2002,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1591
 
 [Sound43]
    ID = m.PQ1Track2
    Description = ""
    Key = 0
-   TPQN43 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2020,13 +2020,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1631
 
 [Sound44]
    ID = m.PQ1Track3
    Description = ""
    Key = 0
-   TPQN44 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2038,13 +2038,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2221
 
 [Sound45]
    ID = m.PQ1Track4
    Description = ""
    Key = 0
-   TPQN45 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2056,13 +2056,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 626
 
 [Sound46]
    ID = m.PQ1Track5
    Description = ""
    Key = 0
-   TPQN46 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2074,13 +2074,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 601
 
 [Sound47]
    ID = m.SQ2Track1
    Description = ""
    Key = 0
-   TPQN47 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2092,13 +2092,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 4941
 
 [Sound48]
    ID = m.SQ2Track2
    Description = ""
    Key = 0
-   TPQN48 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2110,13 +2110,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 471
 
 [Sound49]
    ID = m.SQ2Track3
    Description = ""
    Key = 0
-   TPQN49 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2128,13 +2128,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 506
 
 [Sound50]
    ID = m.SQ2Track4
    Description = ""
    Key = 0
-   TPQN50 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2146,13 +2146,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 461
 
 [Sound51]
    ID = m.GRTrack1
    Description = ""
    Key = 0
-   TPQN51 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2164,13 +2164,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2351
 
 [Sound52]
    ID = m.GRTrack2
    Description = ""
    Key = 0
-   TPQN52 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2182,13 +2182,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1161
 
 [Sound53]
    ID = m.GRTrack3
    Description = ""
    Key = 0
-   TPQN53 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2200,13 +2200,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 3191
 
 [Sound54]
    ID = m.GRTrack4
    Description = ""
    Key = 0
-   TPQN54 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2218,13 +2218,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2051
 
 [Sound55]
    ID = m.GRTrack5
    Description = ""
    Key = 0
-   TPQN55 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2236,13 +2236,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 816
 
 [Sound56]
    ID = m.GRTrack6
    Description = ""
    Key = 0
-   TPQN56 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2254,13 +2254,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 661
 
 [Sound57]
    ID = m.GRTrack7
    Description = ""
    Key = 0
-   TPQN57 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2272,13 +2272,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2316
 
 [Sound58]
    ID = m.MH1Track1
    Description = ""
    Key = 0
-   TPQN58 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2290,13 +2290,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 431
 
 [Sound59]
    ID = m.MH1Track2
    Description = ""
    Key = 0
-   TPQN59 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2308,13 +2308,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1026
 
 [Sound60]
    ID = m.MH1Track3
    Description = ""
    Key = 0
-   TPQN60 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2326,13 +2326,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1611
 
 [Sound61]
    ID = m.MH1Track4
    Description = ""
    Key = 0
-   TPQN61 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2344,13 +2344,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 716
 
 [Sound62]
    ID = m.MH1Track5
    Description = ""
    Key = 0
-   TPQN62 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2362,13 +2362,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2586
 
 [Sound63]
    ID = m.MH1Track6
    Description = ""
    Key = 0
-   TPQN63 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2380,13 +2380,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2181
 
 [Sound64]
    ID = m.MH1Track7
    Description = ""
    Key = 0
-   TPQN64 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2398,13 +2398,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 961
 
 [Sound65]
    ID = m.KQ4Track1
    Description = ""
    Key = 0
-   TPQN65 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2416,13 +2416,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2316
 
 [Sound66]
    ID = m.KQ4Track2
    Description = ""
    Key = 0
-   TPQN66 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2434,13 +2434,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1406
 
 [Sound67]
    ID = m.KQ4Track3
    Description = ""
    Key = 0
-   TPQN67 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2452,13 +2452,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 256
 
 [Sound68]
    ID = m.KQ4Track4
    Description = ""
    Key = 0
-   TPQN68 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2470,13 +2470,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2361
 
 [Sound69]
    ID = m.KQ4Track5
    Description = ""
    Key = 0
-   TPQN69 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2488,13 +2488,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2016
 
 [Sound70]
    ID = m.KQ4Track6
    Description = ""
    Key = 0
-   TPQN70 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2506,13 +2506,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1851
 
 [Sound71]
    ID = m.KQ4Track7
    Description = ""
    Key = 0
-   TPQN71 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2524,13 +2524,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1886
 
 [Sound72]
    ID = m.KQ4Track8
    Description = ""
    Key = 0
-   TPQN72 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2542,13 +2542,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 581
 
 [Sound73]
    ID = m.KQ4Track9
    Description = ""
    Key = 0
-   TPQN73 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2560,13 +2560,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 971
 
 [Sound74]
    ID = m.KQ4Track10
    Description = ""
    Key = 0
-   TPQN74 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2578,13 +2578,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 501
 
 [Sound75]
    ID = m.KQ4Track11
    Description = ""
    Key = 0
-   TPQN75 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2596,13 +2596,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2146
 
 [Sound76]
    ID = m.KQ4Track12
    Description = ""
    Key = 0
-   TPQN76 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2614,13 +2614,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1436
 
 [Sound77]
    ID = m.KQ4Track13
    Description = ""
    Key = 0
-   TPQN77 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2632,13 +2632,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1731
 
 [Sound78]
    ID = m.KQ4Track14
    Description = ""
    Key = 0
-   TPQN78 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2650,13 +2650,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1106
 
 [Sound79]
    ID = m.MH2Track1
    Description = ""
    Key = 0
-   TPQN79 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2668,13 +2668,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1416
 
 [Sound80]
    ID = m.MH2Track2
    Description = ""
    Key = 0
-   TPQN80 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2686,13 +2686,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 891
 
 [Sound81]
    ID = m.MH2Track3
    Description = ""
    Key = 0
-   TPQN81 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2704,13 +2704,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1611
 
 [Sound82]
    ID = m.MH2Track4
    Description = ""
    Key = 0
-   TPQN82 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2722,13 +2722,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 271
 
 [Sound83]
    ID = m.MH2Track5
    Description = ""
    Key = 0
-   TPQN83 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2740,13 +2740,13 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 1021
 
 [Sound84]
    ID = m.MH2Track6
    Description = ""
    Key = 0
-   TPQN84 = 4
+   TPQN = 4
    Visible0 = True
    Visible1 = True
    Visible2 = True
@@ -2758,7 +2758,7 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   TPQN = 0
+   Size = 2181
 [::END Sounds::]
 
 [::BEGIN Views::]
@@ -2800,7 +2800,7 @@
 [View40]
    ID = vw.MsgBoxColors
    Description = ""
-   Size = -1
+   Size = 199
 
 [View41]
    ID = vw.EgoDead
@@ -2840,7 +2840,7 @@
 [View0]
    ID = vw.Ego
    Description = "this is Drew"
-   Size = -1
+   Size = 2800
 
 [View19]
    ID = vw.ParkedCars
@@ -2850,7 +2850,7 @@
 [View1]
    ID = vw.EgoSmall
    Description = ""
-   Size = -1
+   Size = 840
 
 [View4]
    ID = vw.SmallPerson3
@@ -2860,12 +2860,12 @@
 [View18]
    ID = vw.HallwayArt
    Description = ""
-   Size = -1
+   Size = 2882
 
 [View20]
    ID = vw.cp.RANDOCC
    Description = ""
-   Size = -1
+   Size = 1066
 
 [View5]
    ID = vw.SmallPerson4
@@ -2895,7 +2895,7 @@
 [View24]
    ID = vw.Patient2
    Description = ""
-   Size = 6510
+   Size = 6086
 
 [View28]
    ID = vw.Nurse
@@ -2925,7 +2925,7 @@
 [View29]
    ID = vw.ReceptionistWalk
    Description = ""
-   Size = -1
+   Size = 2181
 
 [View27]
    ID = vw.Security
