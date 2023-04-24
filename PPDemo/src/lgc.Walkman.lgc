@@ -1,0 +1,120 @@
+[ 
+[ lgc.Walkman
+[ 
+[ close up of the walkman; player can press start/pause,
+[ rewind, fast forward and eject
+[
+
+#define helpText     v220
+  #define H_BLANK       4
+  #define H_EXIT        7
+  #define H_FASTFWD     8
+  #define H_REWIND      9
+  #define H_STOP_EJ    10
+  #define H_PLAY       11
+  
+[ no script entries for this sequence
+set(noScript);
+[ no regular input either
+prevent.input();
+status.line.off();
+
+[ fade out until done loading
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ hide objects while showing manual
+block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+
+[ display correct walkman picture
+work1 = pic.Walkman;
+load.pic(work1);
+draw.pic(work1);
+discard.pic(work1);
+if (cassetteLoaded) {
+  work1 = ovl.Walkman2;
+} else {
+  work1 = ovl.Walkman1;
+}
+load.pic(work1);
+overlay.pic(work1);
+discard.pic(work1);
+show.pic();
+
+[ fade back in
+block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+
+[ main input loop; wait until a key is pressed
+lastChar = 0;
+:waitforit
+
+  [ get button by priority color
+  block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+  work1 /= 64;
+  if (work1 != helpText) {
+    [ show button help if over a button
+    helpText = work1;
+    if (work1 == H_BLANK) {
+      clear.lines(23, 23, BLACK);
+    }
+    if (work1 == H_EXIT) {
+      display(23, 32, "return to game");
+    }
+    if (work1 == H_FASTFWD) {
+      display(23, 32, " fast forward ");
+    }
+    if (work1 == H_REWIND) {
+      display(23, 32, "    rewind    ");
+    }
+    if (work1 == H_STOP_EJ) {
+      display(23, 32, "  stop/eject  ");
+    }
+    if (work1 == H_PLAY) {
+      display(23, 32, "     play     ");
+    }
+  }
+  
+  [ check for mouse click (mouse press, since events aren't 
+  [ triggered unless main loop is used)
+  if (mouseBtn == 1) {
+    if (work1 == 7) {
+      [ exit
+      goto(exit);
+    }
+    if (work1 == 8) {
+      [ fast forward
+    }
+    if (work1 == 9) {
+      [ rewind
+    }
+    if (work1 == 10) {
+      [ stop/eject
+    }
+    if (work1 == 11) {
+      [ play
+    }
+  }
+  
+if (!have.key()) {
+  goto(waitforit);
+}
+[ any key will exit
+
+:exit
+
+[ fade out during the switch
+block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+[ restore previuos room
+call(lgc.RedrawRoom);
+
+[ restore scripting
+reset(noScript);
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****

@@ -311,8 +311,10 @@ if (controller(cChooseItem)) {
           print("The receptionist asked you to not play your music in the lobby.");
         } else {
           [ TODO: use the walkman
-          
           [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
+          call(lgc.Walkman);
+set(f10);trace.on();
+          
           [ for now, just play the cassette
           set(cassetteLoaded);
           get.num("Side? (0=A, 1=B): ", work1);
