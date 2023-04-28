@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "4/24/2023 7:31:31 AM"
+   LastEdit = "4/28/2023 5:58:44 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -53,15 +53,13 @@
    CRC32 = &H3AD2089D
    ID = lgc.Main
    IsRoom = False
-   Size = 5194
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H7940356A
-   CRC32 = &H7940356A
+   CompCRC32 = &HF030B2A3
+   CRC32 = &H602B48B7
    ID = lgc.GameFunctions
    IsRoom = False
-   Size = 2142
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
@@ -69,7 +67,6 @@
    CRC32 = &H1D41C950
    IsRoom = False
    ID = lgc.Init
-   Size = 1305
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
 
 [Logic92]
@@ -78,7 +75,6 @@
    CRC32 = &H91B75908
    CompCRC32 = &H91B75908
    IsRoom = False
-   Size = 216
 
 [Logic93]
    ID = lgc.GameHelp
@@ -86,7 +82,6 @@
    CRC32 = &H84927D67
    CompCRC32 = &H84927D67
    IsRoom = False
-   Size = 842
 
 [Logic94]
    ID = lgc.DebugHelp
@@ -94,7 +89,6 @@
    CRC32 = &H683B785C
    CompCRC32 = &H683B785C
    IsRoom = False
-   Size = 1031
 
 [Logic95]
    ID = lgc.Death
@@ -102,7 +96,6 @@
    CRC32 = &H4EF64D68
    CompCRC32 = &H4EF64D68
    IsRoom = False
-   Size = 2194
 
 [Logic96]
    ID = lgc.TraceInfo
@@ -110,7 +103,6 @@
    CRC32 = &H468C4A4A
    CompCRC32 = &H468C4A4A
    IsRoom = False
-   Size = 2617
 
 [Logic21]
    ID = cp.Terminal
@@ -118,7 +110,6 @@
    CRC32 = &HC4C456DE
    CompCRC32 = &HC4C456DE
    IsRoom = True
-   Size = 7810
 
 [Logic23]
    ID = cp.RANDOCC
@@ -126,7 +117,6 @@
    CRC32 = &H34C2A0BE
    CompCRC32 = &H34C2A0BE
    IsRoom = True
-   Size = 1956
 
 [Logic24]
    ID = cp.ICAPOCC
@@ -134,7 +124,6 @@
    CRC32 = &H3569BEF
    CompCRC32 = &H3569BEF
    IsRoom = True
-   Size = 3257
 
 [Logic25]
    ID = cp.ESADOCC
@@ -142,7 +131,6 @@
    CRC32 = &H66775792
    CompCRC32 = &H66775792
    IsRoom = True
-   Size = 7513
 
 [Logic22]
    ID = cp.CAISOCC
@@ -150,7 +138,6 @@
    CRC32 = &HC2CC50EC
    CompCRC32 = &HC2CC50EC
    IsRoom = True
-   Size = 12307
 
 [Logic26]
    ID = cp.OFROCC
@@ -158,7 +145,6 @@
    CRC32 = &H124B3E2F
    CompCRC32 = &H124B3E2F
    IsRoom = True
-   Size = 1824
 
 [Logic27]
    ID = cp.ERIDOCC
@@ -166,7 +152,6 @@
    CRC32 = &H1A8681CB
    CompCRC32 = &H1A8681CB
    IsRoom = True
-   Size = 4374
 
 [Logic1]
    ID = rm.Title
@@ -174,7 +159,6 @@
    CRC32 = &HA9B2BCFF
    CompCRC32 = &HA9B2BCFF
    IsRoom = True
-   Size = 2332
 
 [Logic2]
    ID = rm.ParkingLot
@@ -182,7 +166,6 @@
    CRC32 = &H76C4989D
    CompCRC32 = &H76C4989D
    IsRoom = True
-   Size = 6223
 
 [Logic3]
    ID = rm.Lobby
@@ -190,7 +173,6 @@
    CRC32 = &H9F36313E
    CompCRC32 = &H9F36313E
    IsRoom = True
-   Size = 8719
 
 [Logic4]
    ID = rm.Hallway
@@ -198,7 +180,6 @@
    CRC32 = &HAD6E4CE0
    CompCRC32 = &HAD6E4CE0
    IsRoom = True
-   Size = 3176
 
 [Logic8]
    ID = rm.ControlRoom
@@ -206,7 +187,6 @@
    CRC32 = &H18D46353
    CompCRC32 = &H18D46353
    IsRoom = True
-   Size = 3068
 
 [Logic5]
    ID = rm.Closet
@@ -214,7 +194,6 @@
    CRC32 = &H6EE535F1
    CompCRC32 = &H6EE535F1
    IsRoom = True
-   Size = 5795
 
 [Logic6]
    ID = rm.SecretRoom
@@ -222,7 +201,6 @@
    CRC32 = &H440B2AEB
    CompCRC32 = &H440B2AEB
    IsRoom = True
-   Size = 821
 
 [Logic7]
    ID = rm.Stairway
@@ -230,7 +208,6 @@
    CRC32 = &H4C2B3312
    CompCRC32 = &H4C2B3312
    IsRoom = True
-   Size = 1576
 
 [Logic9]
    ID = rm.Office
@@ -238,7 +215,6 @@
    CRC32 = &H40B3B77A
    CompCRC32 = &H40B3B77A
    IsRoom = True
-   Size = 5204
 
 [Logic10]
    ID = rm.Storeroom
@@ -246,7 +222,6 @@
    CRC32 = &H9F01FB9B
    CompCRC32 = &H9F01FB9B
    IsRoom = True
-   Size = 9142
 
 [Logic102]
    ID = lgc.mod2411
@@ -254,7 +229,6 @@
    CRC32 = &H92C06C15
    CompCRC32 = &H92C06C15
    IsRoom = False
-   Size = 22855
 
 [Logic103]
    ID = lgc.mod2425
@@ -262,7 +236,6 @@
    CRC32 = &H74FC53D2
    CompCRC32 = &H74FC53D2
    IsRoom = False
-   Size = 22856
 
 [Logic104]
    ID = lgc.mod2426
@@ -270,7 +243,6 @@
    CRC32 = &HC45EA080
    CompCRC32 = &HC45EA080
    IsRoom = False
-   Size = 22856
 
 [Logic105]
    ID = lgc.mod2435
@@ -278,7 +250,6 @@
    CRC32 = &H8FC6DD75
    CompCRC32 = &H8FC6DD75
    IsRoom = False
-   Size = 22860
 
 [Logic106]
    ID = lgc.mod2439
@@ -286,7 +257,6 @@
    CRC32 = &H929FDA9B
    CompCRC32 = &H929FDA9B
    IsRoom = False
-   Size = 22860
 
 [Logic107]
    ID = lgc.mod2440
@@ -294,7 +264,6 @@
    CRC32 = &HA68F93E6
    CompCRC32 = &HA68F93E6
    IsRoom = False
-   Size = 22829
 
 [Logic108]
    ID = lgc.mod2903
@@ -302,7 +271,6 @@
    CRC32 = &HD471A458
    CompCRC32 = &HD471A458
    IsRoom = False
-   Size = 22480
 
 [Logic109]
    ID = lgc.mod2911
@@ -310,7 +278,6 @@
    CRC32 = &HDA50BC0F
    CompCRC32 = &HDA50BC0F
    IsRoom = False
-   Size = 22480
 
 [Logic110]
    ID = lgc.mod2912
@@ -318,7 +285,6 @@
    CRC32 = &H5FCFAF5C
    CompCRC32 = &H5FCFAF5C
    IsRoom = False
-   Size = 22480
 
 [Logic111]
    ID = lgc.mod2915
@@ -326,7 +292,6 @@
    CRC32 = &HC88C9B27
    CompCRC32 = &HC88C9B27
    IsRoom = False
-   Size = 22480
 
 [Logic112]
    ID = lgc.mod2917
@@ -334,7 +299,6 @@
    CRC32 = &H71B344DE
    CompCRC32 = &H71B344DE
    IsRoom = False
-   Size = 22482
 
 [Logic113]
    ID = lgc.mod2936
@@ -342,7 +306,6 @@
    CRC32 = &H4191459E
    CompCRC32 = &H4191459E
    IsRoom = False
-   Size = 22494
 
 [Logic97]
    ID = lgc.Error
@@ -350,7 +313,6 @@
    CRC32 = &HA51F01D6
    CompCRC32 = &HA51F01D6
    IsRoom = False
-   Size = 1616
 
 [Logic98]
    ID = lgc.Debug
@@ -358,7 +320,6 @@
    CRC32 = &H8B4FFB3
    CompCRC32 = &H8B4FFB3
    IsRoom = False
-   Size = 1124
 
 [Logic99]
    ID = lgc.Version2Check
@@ -366,7 +327,6 @@
    CRC32 = &H5703161B
    CompCRC32 = &H5703161B
    IsRoom = False
-   Size = 362
 
 [Logic29]
    ID = lgc.Statusbar
@@ -374,7 +334,6 @@
    CRC32 = &H828B0E7E
    CompCRC32 = &H828B0E7E
    IsRoom = False
-   Size = 606
 
 [Logic30]
    ID = lgc.InitToolbar
@@ -382,7 +341,6 @@
    CRC32 = &H1DDEB5A3
    CompCRC32 = &H1DDEB5A3
    IsRoom = False
-   Size = 187
 
 [Logic31]
    ID = lgc.ToolbarFunctions
@@ -390,7 +348,6 @@
    CRC32 = &HC0C4A0E3
    CompCRC32 = &HC0C4A0E3
    IsRoom = False
-   Size = 775
 
 [Logic32]
    ID = lgc.TerminalFunctions
@@ -398,7 +355,6 @@
    CRC32 = &HB774F47
    CompCRC32 = &HB774F47
    IsRoom = False
-   Size = 9498
 
 [Logic12]
    ID = rm.DoorKeypad
@@ -406,7 +362,6 @@
    CRC32 = &HA9D80463
    CompCRC32 = &HA9D80463
    IsRoom = True
-   Size = 1288
 
 [Logic33]
    ID = lgc.ReadMagazine
@@ -414,7 +369,6 @@
    CRC32 = &HD08ACE1B
    CompCRC32 = &HD08ACE1B
    IsRoom = False
-   Size = 3962
 
 [Logic13]
    ID = rm.SafeDoor
@@ -422,7 +376,6 @@
    CRC32 = &HBBCDD65F
    CompCRC32 = &HBBCDD65F
    IsRoom = True
-   Size = 3345
 
 [Logic14]
    ID = txt.Memo
@@ -430,7 +383,6 @@
    CRC32 = &H9E577EB1
    CompCRC32 = &H9E577EB1
    IsRoom = False
-   Size = 1840
 
 [Logic11]
    ID = lgc.ScoreHandler
@@ -438,7 +390,6 @@
    CRC32 = &H24AB57EB
    CompCRC32 = &H24AB57EB
    IsRoom = False
-   Size = 98
 
 [Logic15]
    ID = lgc.SaveOptions
@@ -446,7 +397,6 @@
    CRC32 = &HC44AE482
    CompCRC32 = &HC44AE482
    IsRoom = False
-   Size = 362
 
 [Logic16]
    ID = lgc.CacheOptions
@@ -454,7 +404,6 @@
    CRC32 = &HF60C21D0
    CompCRC32 = &HF60C21D0
    IsRoom = False
-   Size = 265
 
 [Logic17]
    ID = lgc.ExamineItem
@@ -462,7 +411,6 @@
    CRC32 = &H6FA09BF9
    CompCRC32 = &H6FA09BF9
    IsRoom = False
-   Size = 190
 
 [Logic18]
    ID = lgc.ReadManual
@@ -470,7 +418,6 @@
    CRC32 = &H1033FC4E
    CompCRC32 = &H1033FC4E
    IsRoom = False
-   Size = 3284
 
 [Logic19]
    ID = lgc.RedrawRoom
@@ -478,7 +425,6 @@
    CRC32 = &H1F0DABF8
    CompCRC32 = &H1F0DABF8
    IsRoom = False
-   Size = 544
 
 [Logic20]
    ID = lgc.ReadScroll
@@ -486,7 +432,6 @@
    CRC32 = &H3F412D50
    CompCRC32 = &H3F412D50
    IsRoom = False
-   Size = 759
 
 [Logic28]
    ID = lgc.ReadNotebook
@@ -494,7 +439,6 @@
    CRC32 = &HACC5DF45
    CompCRC32 = &HACC5DF45
    IsRoom = False
-   Size = 2410
 
 [Logic34]
    ID = lgc.Podium
@@ -502,7 +446,6 @@
    CRC32 = &HA41A5171
    CompCRC32 = &HA41A5171
    IsRoom = False
-   Size = 415
 
 [Logic35]
    ID = lgc.PQList
@@ -510,7 +453,6 @@
    CRC32 = &HAB33B9AA
    CompCRC32 = &HAB33B9AA
    IsRoom = False
-   Size = 262
 
 [Logic36]
    ID = lgc.Pillow
@@ -518,7 +460,6 @@
    CRC32 = &H5324496A
    CompCRC32 = &H5324496A
    IsRoom = False
-   Size = 120
 
 [Logic37]
    ID = lgc.UseItem
@@ -526,51 +467,43 @@
    CRC32 = &H94CABACF
    CompCRC32 = &H94CABACF
    IsRoom = False
-   Size = 190
 
 [Logic38]
    ID = lgc.Walkman
    Description = ""
-   CRC32 = &HCACEF2B5
-   CompCRC32 = &HCACEF2B5
+   CRC32 = &H61509909
+   CompCRC32 = &H8B32A243
    IsRoom = False
-   Size = 300
 [::END Logics::]
 
 [::BEGIN Pictures::]
 [Picture6]
    ID = pic.SecretRoom
-   Size = 1289
    Description = ""
    BkgdImg = ""
 
 [Picture7]
    ID = pic.Stairway
    Description = ""
-   Size = 1078
    BkgdImg = ""
 
 [Picture8]
    ID = pic.ControlRoom
    Description = ""
-   Size = 1501
    BkgdImg = ""
 
 [Picture21]
    ID = pic.cp.Terminal
-   Size = 453
    BkgdImg = ""
    Description = ""
 
 [Picture23]
    ID = pic.cp.Msgbox
-   Size = 632
    BkgdImg = ""
    Description = ""
 
 [Picture24]
    ID = pic.cp.Palette
-   Size = 548
    BkgdImg = ""
    Description = ""
 
@@ -578,73 +511,61 @@
    ID = pic.cp.Sound
    Description = ""
    BkgdImg = ""
-   Size = 595
 
 [Picture28]
    ID = pic.cp.Paint
    Description = ""
    BkgdImg = ""
-   Size = 1
 
 [Picture22]
    ID = pic.cp.Instrument
    Description = ""
    BkgdImg = ""
-   Size = 489
 
 [Picture26]
    ID = pic.cp.SpeedStatus
    Description = ""
    BkgdImg = ""
-   Size = 436
 
 [Picture27]
    ID = pic.cp.Mouse
    Description = ""
    BkgdImg = ""
-   Size = 461
 
 [Picture1]
    ID = pic.Introduction
    Description = "A simple introductory screen picture. Add scrolling credits for a nice effect."
    BkgdImg = ""
-   Size = 245
 
 [Picture2]
    ID = pic.ParkingLot
    Description = ""
-   Size = 6381
    BkgdImg = ""
 
 [Picture3]
    ID = pic.Lobby
    Description = ""
-   Size = 2597
    BkgdImg = ""
 
 [Picture4]
    ID = pic.Hallway
    Description = ""
    BkgdImg = ""
-   Size = 644
 
 [Picture5]
    ID = pic.Closet
    Description = ""
    BkgdImg = ""
-   Size = 1343
 
 [Picture9]
    ID = pic.Office
    Description = ""
    BkgdImg = ""
-   Size = 1092
 
 [Picture10]
    ID = pic.Storeroom
    Description = ""
    BkgdImg = ""
-   Size = 6883
    BkgdShow = ""
    BkgdTrans = ""
    BkgdPosn = ""
@@ -654,29 +575,24 @@
    ID = pic.TestPalette
    Description = ""
    BkgdImg = ""
-   Size = 2402
 
 [Picture13]
    ID = pic.SafeDoor
-   Size = 1629
    Description = ""
    BkgdImg = ""
 
 [Picture14]
    ID = pic.MagazineCover
-   Size = 3304
    BkgdImg = ""
    Description = ""
 
 [Picture15]
    ID = pic.MagazinePages
-   Size = 239
    BkgdImg = ""
    Description = ""
 
 [Picture16]
    ID = pic.MagazineEnd
-   Size = 185
    BkgdImg = ""
    Description = ""
 
@@ -684,30 +600,25 @@
    ID = pic.DoorKeypad
    Description = ""
    BkgdImg = ""
-   Size = 1334
 
 [Picture20]
    ID = pic.cp.Error
    Description = ""
-   Size = 6
    BkgdImg = ""
 
 [Picture11]
    ID = pic.ComboList
    Description = ""
-   Size = 960
    BkgdImg = ""
 
 [Picture17]
    ID = pic.FolderInterior
    Description = ""
-   Size = 236
    BkgdImg = ""
 
 [Picture18]
    ID = pic.MusicSheet
    Description = ""
-   Size = 2276
    BkgdImg = ""
    BkgdShow = ""
    BkgdTrans = ""
@@ -717,19 +628,16 @@
 [Picture19]
    ID = pic.ManualCover
    Description = ""
-   Size = 1198
    BkgdImg = ""
 
 [Picture29]
    ID = pic.ManualPages
    Description = ""
-   Size = 475
    BkgdImg = ""
 
 [Picture31]
    ID = pic.Scroll
    Description = ""
-   Size = 2041
    BkgdImg = "PPDemo Art\scroll.jpg"
    BkgdShow = False
    BkgdTrans = 127
@@ -739,25 +647,21 @@
 [Picture32]
    ID = pic.NotebookCover
    Description = ""
-   Size = 769
    BkgdImg = ""
 
 [Picture33]
    ID = pic.NotebookPages
    Description = ""
-   Size = 1079
    BkgdImg = ""
 
 [Picture34]
    ID = pic.PodiumTopPaper
    Description = ""
-   Size = 728
    BkgdImg = ""
 
 [Picture35]
    ID = pic.PodiumTopClear
    Description = ""
-   Size = 745
    BkgdImg = "src\woodgrain.jpg"
    BkgdShow = False
    BkgdTrans = 204
@@ -767,13 +671,11 @@
 [Picture36]
    ID = pic.PQList
    Description = ""
-   Size = 136
    BkgdImg = ""
 
 [Picture37]
    ID = pic.Pillow
    Description = ""
-   Size = 4580
    BkgdImg = src\pillow.jpg
    BkgdShow = False
    BkgdTrans = 127
@@ -783,43 +685,36 @@
 [Picture38]
    ID = pic.Explode1
    Description = ""
-   Size = 118
    BkgdImg = ""
 
 [Picture39]
    ID = pic.Explode2
    Description = ""
-   Size = 121
    BkgdImg = ""
 
 [Picture40]
    ID = pic.Explode3
    Description = ""
-   Size = 133
    BkgdImg = ""
 
 [Picture41]
    ID = pic.Explode4
    Description = ""
-   Size = 138
    BkgdImg = ""
 
 [Picture42]
    ID = pic.Explode5
    Description = ""
-   Size = 135
    BkgdImg = ""
 
 [Picture43]
    ID = pic.Credits
    Description = ""
-   Size = 510
    BkgdImg = ""
 
 [Picture44]
    ID = pic.Walkman
    Description = ""
-   Size = 1230
    BkgdImg = "support\PPDemo Art\walkman.bmp"
    BkgdShow = False
    BkgdTrans = 127
@@ -829,26 +724,22 @@
 [Picture45]
    ID = ovl.Walkman1
    Description = ""
-   Size = 278
    BkgdImg = ""
 
 [Picture48]
    ID = ovl.Walkman4
    Description = ""
    BkgdImg = ""
-   Size = 328
 
 [Picture47]
    ID = ovl.Walkman3
    Description = ""
    BkgdImg = ""
-   Size = 260
 
 [Picture46]
    ID = ovl.Walkman2
    Description = ""
    BkgdImg = ""
-   Size = 340
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -868,7 +759,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1586
 
 [Sound106]
    ID = s.DoorOpen
@@ -886,7 +776,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 31
 
 [Sound1]
    ID = m.KQ1Track1
@@ -904,7 +793,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1206
 
 [Sound107]
    ID = s.DoorClose
@@ -922,7 +810,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 31
 
 [Sound2]
    ID = m.KQ1Track2
@@ -940,7 +827,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 656
 
 [Sound108]
    ID = s.InstTest
@@ -958,7 +844,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 56
 
 [Sound3]
    ID = m.DDPGTrack1
@@ -976,7 +861,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1736
 
 [Sound109]
    ID = s.NoiseTest1
@@ -994,7 +878,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 46
 
 [Sound4]
    ID = m.DDPGTrack2
@@ -1012,7 +895,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 906
 
 [Sound110]
    ID = s.NoiseTest2
@@ -1030,7 +912,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 46
 
 [Sound5]
    ID = m.KQ2Track1
@@ -1048,7 +929,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1291
 
 [Sound111]
    ID = s.Drip
@@ -1066,7 +946,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 21
 
 [Sound6]
    ID = m.KQ2Track2
@@ -1084,7 +963,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1676
 
 [Sound112]
    ID = s.Crumble1
@@ -1102,7 +980,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 66
 
 [Sound7]
    ID = m.KQ2Track3
@@ -1120,7 +997,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1261
 
 [Sound113]
    ID = s.Crumble2
@@ -1138,7 +1014,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 36
 
 [Sound8]
    ID = m.KQ2Track4
@@ -1156,7 +1031,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 496
 
 [Sound114]
    ID = s.ButtonClick
@@ -1174,7 +1048,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 21
 
 [Sound9]
    ID = m.KQ2Track5
@@ -1192,7 +1065,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 631
 
 [Sound115]
    ID = s.Tone0
@@ -1210,7 +1082,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound10]
    ID = m.KQ2Track6
@@ -1228,7 +1099,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1296
 
 [Sound116]
    ID = s.Tone1
@@ -1246,7 +1116,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound11]
    ID = m.KQ2Track7
@@ -1264,7 +1133,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 991
 
 [Sound117]
    ID = s.Tone2
@@ -1282,7 +1150,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound12]
    ID = m.BCTrack1
@@ -1300,7 +1167,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 746
 
 [Sound118]
    ID = s.Tone3
@@ -1318,7 +1184,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound13]
    ID = m.BCTrack2
@@ -1336,7 +1201,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 451
 
 [Sound119]
    ID = s.Tone4
@@ -1354,7 +1218,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound14]
    ID = m.BCTrack3
@@ -1372,7 +1235,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 741
 
 [Sound120]
    ID = s.Tone5
@@ -1390,7 +1252,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound15]
    ID = m.SQ1Track1
@@ -1408,7 +1269,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 5901
 
 [Sound121]
    ID = s.Tone6
@@ -1426,7 +1286,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound16]
    ID = m.SQ1Track2
@@ -1444,7 +1303,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1321
 
 [Sound122]
    ID = s.Tone7
@@ -1462,7 +1320,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound17]
    ID = m.SQ1Track3
@@ -1480,7 +1337,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1611
 
 [Sound123]
    ID = s.Tone8
@@ -1498,7 +1354,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound18]
    ID = m.SQ1Track4
@@ -1516,7 +1371,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1691
 
 [Sound124]
    ID = s.Tone9
@@ -1534,7 +1388,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound19]
    ID = m.KQ3Track1
@@ -1552,7 +1405,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 631
 
 [Sound125]
    ID = s.ToneStar
@@ -1570,7 +1422,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound20]
    ID = m.KQ3Track2
@@ -1588,7 +1439,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 511
 
 [Sound126]
    ID = s.TonePound
@@ -1606,7 +1456,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 26
 
 [Sound21]
    ID = m.KQ3Track3
@@ -1624,7 +1473,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1056
 
 [Sound22]
    ID = m.KQ3Track4
@@ -1642,7 +1490,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1911
 
 [Sound23]
    ID = m.KQ3Track5
@@ -1660,7 +1507,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 781
 
 [Sound24]
    ID = m.KQ3Track6
@@ -1678,7 +1524,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1091
 
 [Sound25]
    ID = m.LLLTrack1
@@ -1696,7 +1541,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 3911
 
 [Sound26]
    ID = m.LLLTrack2
@@ -1714,7 +1558,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1476
 
 [Sound27]
    ID = m.LLLTrack3
@@ -1732,7 +1575,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1541
 
 [Sound28]
    ID = m.LLLTrack4
@@ -1750,7 +1592,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 4616
 
 [Sound29]
    ID = m.LLLTrack5
@@ -1768,7 +1609,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2511
 
 [Sound30]
    ID = m.MMGTrack1
@@ -1786,7 +1626,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 976
 
 [Sound31]
    ID = m.MMGTrack2
@@ -1804,7 +1643,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 766
 
 [Sound32]
    ID = m.MMGTrack3
@@ -1822,7 +1660,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 991
 
 [Sound33]
    ID = m.MMGTrack4
@@ -1840,7 +1677,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 541
 
 [Sound34]
    ID = m.MMGTrack5
@@ -1858,7 +1694,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 766
 
 [Sound35]
    ID = m.MMGTrack6
@@ -1876,7 +1711,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 676
 
 [Sound36]
    ID = m.MMGTrack7
@@ -1894,7 +1728,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 986
 
 [Sound37]
    ID = m.MMGTrack8
@@ -1912,7 +1745,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 891
 
 [Sound38]
    ID = m.MMGTrack9
@@ -1930,7 +1762,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 606
 
 [Sound39]
    ID = m.MMGTrack10
@@ -1948,7 +1779,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 581
 
 [Sound40]
    ID = m.MMGTrack11
@@ -1966,7 +1796,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2026
 
 [Sound41]
    ID = m.MMGTrack12
@@ -1984,7 +1813,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 351
 
 [Sound42]
    ID = m.PQ1Track1
@@ -2002,7 +1830,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1591
 
 [Sound43]
    ID = m.PQ1Track2
@@ -2020,7 +1847,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1631
 
 [Sound44]
    ID = m.PQ1Track3
@@ -2038,7 +1864,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2221
 
 [Sound45]
    ID = m.PQ1Track4
@@ -2056,7 +1881,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 626
 
 [Sound46]
    ID = m.PQ1Track5
@@ -2074,7 +1898,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 601
 
 [Sound47]
    ID = m.SQ2Track1
@@ -2092,7 +1915,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 4941
 
 [Sound48]
    ID = m.SQ2Track2
@@ -2110,7 +1932,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 471
 
 [Sound49]
    ID = m.SQ2Track3
@@ -2128,7 +1949,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 506
 
 [Sound50]
    ID = m.SQ2Track4
@@ -2146,7 +1966,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 461
 
 [Sound51]
    ID = m.GRTrack1
@@ -2164,7 +1983,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2351
 
 [Sound52]
    ID = m.GRTrack2
@@ -2182,7 +2000,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1161
 
 [Sound53]
    ID = m.GRTrack3
@@ -2200,7 +2017,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 3191
 
 [Sound54]
    ID = m.GRTrack4
@@ -2218,7 +2034,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2051
 
 [Sound55]
    ID = m.GRTrack5
@@ -2236,7 +2051,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 816
 
 [Sound56]
    ID = m.GRTrack6
@@ -2254,7 +2068,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 661
 
 [Sound57]
    ID = m.GRTrack7
@@ -2272,7 +2085,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2316
 
 [Sound58]
    ID = m.MH1Track1
@@ -2290,7 +2102,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 431
 
 [Sound59]
    ID = m.MH1Track2
@@ -2308,7 +2119,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1026
 
 [Sound60]
    ID = m.MH1Track3
@@ -2326,7 +2136,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1611
 
 [Sound61]
    ID = m.MH1Track4
@@ -2344,7 +2153,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 716
 
 [Sound62]
    ID = m.MH1Track5
@@ -2362,7 +2170,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2586
 
 [Sound63]
    ID = m.MH1Track6
@@ -2380,7 +2187,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2181
 
 [Sound64]
    ID = m.MH1Track7
@@ -2398,7 +2204,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 961
 
 [Sound65]
    ID = m.KQ4Track1
@@ -2416,7 +2221,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2316
 
 [Sound66]
    ID = m.KQ4Track2
@@ -2434,7 +2238,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1406
 
 [Sound67]
    ID = m.KQ4Track3
@@ -2452,7 +2255,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 256
 
 [Sound68]
    ID = m.KQ4Track4
@@ -2470,7 +2272,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2361
 
 [Sound69]
    ID = m.KQ4Track5
@@ -2488,7 +2289,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2016
 
 [Sound70]
    ID = m.KQ4Track6
@@ -2506,7 +2306,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1851
 
 [Sound71]
    ID = m.KQ4Track7
@@ -2524,7 +2323,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1886
 
 [Sound72]
    ID = m.KQ4Track8
@@ -2542,7 +2340,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 581
 
 [Sound73]
    ID = m.KQ4Track9
@@ -2560,7 +2357,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 971
 
 [Sound74]
    ID = m.KQ4Track10
@@ -2578,7 +2374,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 501
 
 [Sound75]
    ID = m.KQ4Track11
@@ -2596,7 +2391,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2146
 
 [Sound76]
    ID = m.KQ4Track12
@@ -2614,7 +2408,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1436
 
 [Sound77]
    ID = m.KQ4Track13
@@ -2632,7 +2425,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1731
 
 [Sound78]
    ID = m.KQ4Track14
@@ -2650,7 +2442,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1106
 
 [Sound79]
    ID = m.MH2Track1
@@ -2668,7 +2459,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1416
 
 [Sound80]
    ID = m.MH2Track2
@@ -2686,7 +2476,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 891
 
 [Sound81]
    ID = m.MH2Track3
@@ -2704,7 +2493,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1611
 
 [Sound82]
    ID = m.MH2Track4
@@ -2722,7 +2510,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 271
 
 [Sound83]
    ID = m.MH2Track5
@@ -2740,7 +2527,6 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 1021
 
 [Sound84]
    ID = m.MH2Track6
@@ -2758,327 +2544,262 @@
    Mute1 = False
    Mute2 = False
    Mute3 = False
-   Size = 2181
 [::END Sounds::]
 
 [::BEGIN Views::]
 [View8]
    ID = vw.cp.ICAPOCC
    Description = ""
-   Size = 371
 
 [View9]
    ID = vw.cp.ERIDOCC
    Description = ""
-   Size = 420
 
 [View10]
    ID = vw.cp.OFROCC
-   Size = 1523
    Description = ""
 
 [View11]
    ID = vw.cp.ESADOCC
-   Size = 594
    Description = ""
 
 [View12]
    ID = vw.cp.CAISOCC
-   Size = 591
    Description = ""
 
 [View13]
    ID = vw.ButtonsUp
    Description = ""
-   Size = 1195
 
 [View14]
    ID = vw.ClosetArt
    Description = ""
-   Size = 4084
 
 [View40]
    ID = vw.MsgBoxColors
    Description = ""
-   Size = 199
 
 [View41]
    ID = vw.EgoDead
    Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
-   Size = 1723
 
 [View2]
    ID = vw.SmallPerson1
    Description = ""
-   Size = 802
 
 [View3]
    ID = vw.SmallPerson2
    Description = ""
-   Size = 804
 
 [View7]
    ID = vw.LobbyArt
    Description = ""
-   Size = 1678
 
 [View17]
    ID = vw.StairwayArt
    Description = ""
-   Size = 1149
 
 [View15]
    ID = vw.StorageRoomArt
    Description = ""
-   Size = 5402
 
 [View16]
    ID = vw.Cars
    Description = ""
-   Size = 7419
 
 [View0]
    ID = vw.Ego
    Description = "this is Drew"
-   Size = 2800
 
 [View19]
    ID = vw.ParkedCars
    Description = ""
-   Size = 1125
 
 [View1]
    ID = vw.EgoSmall
    Description = ""
-   Size = 840
 
 [View4]
    ID = vw.SmallPerson3
    Description = ""
-   Size = 808
 
 [View18]
    ID = vw.HallwayArt
    Description = ""
-   Size = 2882
 
 [View20]
    ID = vw.cp.RANDOCC
    Description = ""
-   Size = 1066
 
 [View5]
    ID = vw.SmallPerson4
    Description = ""
-   Size = 807
 
 [View6]
    ID = vw.SmallPerson5
    Description = ""
-   Size = 810
 
 [View22]
    ID = vw.Tripping
    Description = ""
-   Size = 4992
 
 [View21]
    ID = vw.OfficeArt
    Description = ""
-   Size = 3268
 
 [View23]
    ID = vw.Patient1
    Description = ""
-   Size = 4967
 
 [View24]
    ID = vw.Patient2
    Description = ""
-   Size = 6086
 
 [View28]
    ID = vw.Nurse
    Description = ""
-   Size = 2379
 
 [View30]
    ID = vw.ReceptionistAct
    Description = ""
-   Size = 2454
 
 [View31]
    ID = vw.ParkingLotArt
    Description = ""
-   Size = 439
 
 [View25]
    ID = vw.Patient3
    Description = ""
-   Size = 4656
 
 [View26]
    ID = vw.Patient4
    Description = ""
-   Size = 5012
 
 [View29]
    ID = vw.ReceptionistWalk
    Description = ""
-   Size = 2181
 
 [View27]
    ID = vw.Security
    Description = ""
-   Size = 2727
 
 [View34]
    ID = vw.EgoArrest
    Description = ""
-   Size = 1086
 
 [View35]
    ID = vw.EgoSlip
    Description = ""
-   Size = 1715
 
 [View36]
    ID = vw.MagazineArt
    Description = ""
-   Size = 590
 
 [View37]
    ID = vw.PINPad
    Description = ""
-   Size = 3443
 
 [View104]
    ID = vw.inv.Cassette
    Description = ""
-   Size = 2007
 
 [View105]
    ID = vw.inv.Walkman
    Description = ""
-   Size = 525
 
 [View101]
    ID = vw.inv.Magazine
    Description = ""
-   Size = 561
 
 [View102]
    ID = vw.inv.FloppyDisk
    Description = ""
-   Size = 412
 
 [View103]
    ID = vw.inv.Keyfob
    Description = ""
-   Size = 299
 
 [View106]
    ID = vw.inv.Memo
    Description = ""
-   Size = 386
 
 [View107]
    ID = vw.inv.Postit
    Description = ""
-   Size = 466
 
 [View108]
    ID = vw.inv.Manual
    Description = ""
-   Size = 397
 
 [View109]
    ID = vw.inv.Notebook
    Description = ""
-   Size = 1246
 
 [View110]
    ID = vw.inv.Folder
    Description = ""
-   Size = 360
 
 [View111]
    ID = vw.inv.Scroll
    Description = ""
-   Size = 452
 
 [View112]
    ID = vw.inv.MusicSheet
    Description = ""
-   Size = 403
 
 [View32]
    ID = vw.CtrlRoomArt
    Description = ""
-   Size = 3519
 
 [View33]
    ID = vw.SafeArt
    Description = ""
-   Size = 26114
 
 [View39]
    ID = vw.EgoCoffin
    Description = ""
-   Size = 8362
 
 [View38]
    ID = vw.SafeHandle
    Description = ""
-   Size = 5997
 
 [View42]
    ID = vw.SafeDoor2
    Description = ""
-   Size = 13596
 
 [View43]
    ID = vw.EgoWashingHands
    Description = ""
-   Size = 1484
 
 [View44]
    ID = vw.TerminalArt
    Description = ""
-   Size = 115
 
 [View45]
    ID = vw.ManualArt
    Description = ""
-   Size = 77
 
 [View46]
    ID = vw.Logos
    Description = ""
-   Size = 3889
 
 [View47]
    ID = vw.IntroBanners
    Description = ""
-   Size = 1850
 
 [View48]
    ID = vw.Credits
    Description = ""
-   Size = 14330
 
 [View49]
    ID = vw.ButtonsDown
    Description = ""
-   Size = 1093
 
 [View113]
    ID = vw.InvPQList
    Description = ""
-   Size = 423
 
 [View50]
    ID = vw.WalkmanArt
    Description = ""
-   Size = 308
 [::END Views::]

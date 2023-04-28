@@ -5,7 +5,7 @@
 [ rewind, fast forward and eject
 [
 
-#define helpText     v220
+#define helpText      v220
   #define H_BLANK       4
   #define H_EXIT        7
   #define H_FASTFWD     8
@@ -13,6 +13,8 @@
   #define H_STOP_EJ    10
   #define H_PLAY       11
   
+#define coverClosed   f220
+
 [ stop the game clock while examining items
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 
@@ -46,6 +48,16 @@ overlay.pic(work1);
 discard.pic(work1);
 show.pic();
 
+[ cover always starts closed
+set(coverClosed);
+
+[ if currently playing, reload and restart music
+if ( currentTrack > 0 && currentTrack < 128) {
+  block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+  work1 = &musicDone;
+  block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+}
+  
 [ fade back in
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
@@ -55,7 +67,7 @@ lastChar = 0;
 
   [ get button by priority color
   block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
-  work1 /= 64;
+  work1 /= 16;
   if (work1 != helpText) {
     [ show button help if over a button
     helpText = work1;
@@ -77,33 +89,228 @@ lastChar = 0;
     if (work1 == H_PLAY) {
       display(23, 32, "     play     ");
     }
-  }
-  
-  [ check for mouse click (mouse press, since events aren't 
-  [ triggered unless main loop is used)
-  if (mouseBtn == 1) {
-    if (work1 == 7) {
-      [ exit
-      goto(exit);
-    }
-    if (work1 == 8) {
-      [ fast forward
-    }
-    if (work1 == 9) {
-      [ rewind
-    }
-    if (work1 == 10) {
-      [ stop/eject
-    }
-    if (work1 == 11) {
-      [ play
+    if (work1 == 12) {
+      display(23, 32, "     door     ");
     }
   }
   
+  [ check for track end
+  if (musicDone) {
+    [ discard current track
+    #discard.sound.v(&currentTrack);
+    [ next track
+    ++currentTrack;
+    if (cassettSideB) {
+      if (currentTrack == 42) {
+        currentTrack = 0;
+      }
+    } else {
+      if (currentTrack == 85) {
+        currentTrack = 0;
+      }
+    }
+    [ if another track is now active, play it
+    if (currentTrack > 0) {
+      block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+      work2 = &musicDone;
+      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+    }
+  }
+  
+[ loop until button clicked or key pressed
 if (!have.key()) {
   goto(waitforit);
 }
-[ any key will exit
+
+[ ESC or right-click to exit
+if (lastChar == 27) {
+  goto(exit);
+}
+
+[ check for mouse click (mouse press, since events aren't 
+[ triggered unless main loop is used)
+if (mouseBtn == 1) {
+  if (work1 == 7) {
+    [ exit button also exits
+    print("good bye");
+    goto(exit);
+  }
+  
+  if (work1 == 8) {
+    [ fast forward
+    print("fast forward");
+    [ if cassette is loaded and cover closed
+    if (cassetteLoaded && coverClosed) {
+      [ advance to next track, based on side
+      [ 1 - 41 means playing side A
+      [ -1 to -41 means paused/stopped side A
+      [ 42 - 84 means playing side B
+      [ -42 to -84 means paused side B
+      [ 0 means end of tape
+      if (currentTrack > 0 && currentTrack < 127) {
+        [ stop current track
+        stop.sound();
+        #discard.sound.v(&currentTrack);
+        [ move to next track
+        ++currentTrack;
+        if (cassettSideB) {
+          if (currentTrack == 85) {
+            currentTrack = 0;
+          }
+        } else {
+          if (currentTrack == 42) {
+            currentTrack = 0;
+          }
+        }
+        [ if another track is now active, play it
+        if (currentTrack > 0) {
+          block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+          work2 = &musicDone;
+          block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+        }
+      } else {
+        if (currentTrack > 128) {
+          [ advance but don't play
+          --currentTrack;
+          if (cassettSideB) {
+            if (currentTrack == -85) {
+              currentTrack = 0;
+            }
+          } else {
+            if (currentTrack == -42) {
+              currentTrack = 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  if (work1 == 9) {
+    [ rewind
+    print("rewind");
+    [ if cassette is loaded and cover closed
+    if (cassetteLoaded && coverClosed) {
+      [ go back to previous track, based on side
+      [ 1 - 41 means playing side A
+      [ -1 to -41 means paused/stopped side A
+      [ 42 - 84 means playing side B
+      [ -42 to -84 means paused side B
+      [ 0 means end of tape
+      if (currentTrack > 0 && currentTrack < 127) {
+        [ stop current track
+        stop.sound();
+        #discard.sound.v(&currentTrack);
+        [ move to previous track
+        --currentTrack;
+        if (cassettSideB) {
+          if (currentTrack == 41) {
+            currentTrack = 42;
+          }
+        } else {
+          if (currentTrack == 0) {
+            currentTrack = 1;
+          }
+        }
+        [ play active track
+        block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+        work2 = &musicDone;
+        block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+      } else {
+        if (currentTrack > 128) {
+          [ rewind but don't play
+          ++currentTrack;
+          if (cassettSideB) {
+            if (currentTrack == -41) {
+              currentTrack = -42;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (work1 == 10) {
+    [ stop/eject
+    print("stop/eject");
+    if (currentTrack > 0 && currentTrack < 128) {
+      print("stop");
+      stop.sound();
+      reset(musicDone);
+      block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
+      currentTrack *= -1;
+    } else {
+      print("eject");
+      if (coverClosed) {
+        reset(coverClosed);
+        if (cassetteLoaded) {
+          work2 = ovl.Walkman4;
+        } else {
+          work2 = ovl.Walkman3;
+        }
+        load.pic(work2);
+        overlay.pic(work2);
+        discard.pic(work2);
+        show.pic();
+      }
+    }
+    
+  }
+  if (work1 == 11) {
+    [ play
+    if (cassetteLoaded && coverClosed && currentTrack > 128) {
+      currentTrack *= -1;
+      block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+      work2 = &musicDone;
+      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+    }
+  }
+  
+  if (work1 == 12) {
+    [ cover
+    if (coverClosed) {
+      if ((currentTrack == 0 || currentTrack > 128 || !cassetteLoaded)) {
+        reset(coverClosed);
+        if (cassetteLoaded) {
+          work2 = ovl.Walkman4;
+        } else {
+          work2 = ovl.Walkman3;
+        }
+        load.pic(work2);
+        overlay.pic(work2);
+        discard.pic(work2);
+        show.pic();
+      }
+    } else {
+      set(coverClosed);
+      if (cassetteLoaded) {
+        work2 = ovl.Walkman2;
+      } else {
+        work2 = ovl.Walkman1;
+      }
+      load.pic(work2);
+      overlay.pic(work2);
+      discard.pic(work2);
+      show.pic();
+    }
+  }
+  
+  if (work1 == 13) {
+    [ tape/cavity - cover must be open
+    toggle(cassetteLoaded);
+    if (cassetteLoaded) {
+      work2 = ovl.Walkman1;
+    } else {
+      work2 = ovl.Walkman2;
+    }
+    load.pic(work2);
+    overlay.pic(work2);
+    discard.pic(work2);
+    show.pic();
+  }
+}
+
+[ go back to the input loop
+goto(waitforit);
 
 :exit
 
