@@ -224,12 +224,14 @@ block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

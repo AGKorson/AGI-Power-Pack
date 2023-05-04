@@ -577,7 +577,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     } else {
       print("Thinking it's best not to take any chances, "
             "you hit the lock button on your keyfob to "
-            "prevent it from being stolen.");
+            "prevent your car from being stolen.");
       set(carLocked);
       work1 = 2;
       call(lgc.ScoreHandler);
@@ -845,7 +845,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         if (cursoricon != C_DEFAULT) {
           [ change it
           cursoricon = C_DEFAULT;
-          set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
+          set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
           [ disable click2move
           reset(click2move);
         }
@@ -1050,13 +1050,11 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-#message 7 "You are in the Sierra building parking lot."
-#message 8 "You see nothing of interest."
-#message 9 "There is no one here to talk to."
-#message 10 "There is nothing to manipulate here."
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

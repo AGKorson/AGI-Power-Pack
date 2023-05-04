@@ -1177,9 +1177,9 @@ if (update) {
 :done
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
 #message 1 "%v46|2"
 #message 2  "  BLACK   "
 #message 3  "   BLUE   "

@@ -410,7 +410,12 @@ if ((said("insert", "disk") || said("insert", "disk", "drive"))) {
       set(floppyInserted);
       work1 = cp.Terminal;
       put("floppy disk", work1);
-      work1 = -4;
+      [ first time awards bonus points
+      if (scoreFloppy) {
+        work1 = -4;
+      } else {
+        work1 = -2;
+      }
       call(lgc.ScoreHandler);
     } else {
       print("Move closer.");
@@ -453,42 +458,73 @@ if ((said("remove", "disk") || said("remove", "disk", "drive") ||
 [}
 
 if (showMOCC) {  
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.Terminal);  [ ##LE005##
 }
 
 if (showCAISOCC) {
-  [ fade out, then change room
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
+  [ fade out
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  [ use default cursor
+  set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ then change room
   new.room(cp.CAISOCC);  [ ##LE002##
 }
   
 if (showESADOCC) {
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.ESADOCC);  [ ##LE008##
 }
 
 if (showICAPOCC) {
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.ICAPOCC);  [ ##LE009##
 }
 
 if (showRANDOCC) {
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.RANDOCC);  [ ##LE010##
 }
 
 if (showOFROCC) {
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.OFROCC);  [ ##LE011##
 }
 
 if (showERIDOCC) {
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+  }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   new.room(cp.ERIDOCC);  [ ##LE012##
@@ -525,11 +561,13 @@ if (edgeEgoHit == BOTTOM_EDGE) {
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

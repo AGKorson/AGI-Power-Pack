@@ -3,15 +3,6 @@
 [ 
 
 #define toggleBtn    f240
-[#define C_DEFAULT   1
-[#define C_WALK      2
-[#define C_LOOK      3
-[#define C_TALK      4
-[#define C_USE       5
-[#define C_WAIT      6
-[#define C_DISK       7
-[#define C_FOB        8
-[#define C_TAPE       9
 
 [ if wait cursor is active, do nothing
 if (cursoricon == C_WAIT) {
@@ -220,13 +211,14 @@ if (mouseBtn != 1) {
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-#message 7 "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF0000000000000000EE77EE770E70FE7FFE7FFE7F1E78DC790000000000000000"
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

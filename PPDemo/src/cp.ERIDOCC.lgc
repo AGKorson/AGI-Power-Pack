@@ -753,7 +753,7 @@ if (cursormode) {
       sTemp = "%m1";
     }
     else {
-      sTemp = "%g40";
+      sTemp = "%g20";
       [ also remove coordinates display
       set.text.attribute(-1, 0);
       set.text.attribute(BLACK, LT_GRAY);
@@ -1388,7 +1388,7 @@ lastChar = 0;
 [ if index has changed, draw a new cursor
 if (newIndex != cIndex) {
   cIndex = newIndex;
-  cIndex += 40;
+  cIndex += 20;
   sCursor = "%g";
   s17 = "%v227";
   block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
@@ -1525,7 +1525,7 @@ return();
 #message 18 "  use  "
 #message 19 " wait  "
 #message 20 "%m1"
-#message 21 "%g40"
+#message 21 "%g20"
 #message 22 "%g"
 #message 23 "%v227"
 #message 24 "%s11"

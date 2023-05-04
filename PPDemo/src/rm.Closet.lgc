@@ -205,7 +205,8 @@ if (dripdone && !faucetfixed) {
     end.of.loop(drip, dripdone);
     start.update(drip);
     [ only play sound if walkman is not in use
-    if (currentTrack == 0) {
+    if ((currentTrack == 0 || currentTrack > 128)) {
+      set(playSound);
       sound(s.Drip, soundDone);
     }
   }
@@ -997,51 +998,11 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-#message 7 "This is an old janitor closet."
-#message 8 "You see you."
-#message 9 "After tripping over that stupid broom, you're glad you moved it out of the way."
-#message 10 "That broom looks like a serious tripping hazard!"
-#message 11 "It's the broom you tripped over."
-#message 12 "The faucet is no longer dripping."
-#message 13 "The faucet has a slight drip."
-#message 14 "It's a typical utility closet sink. Great for rinsing mops."
-#message 15 "There are several mops and brooms hanging on the wall."
-#message 16 "This old plunger looks like it needs to be rinsed clean."
-#message 17 "There are several boxes on the top shelf."
-#message 18 "The label on the boxes says 'Toilet Paper - 100 rolls'. That's a lot of toilet paper."
-#message 19 "There are an assortment of typical cleaning supplies on this shelf."
-#message 20 "This is a study metal shelf unit."
-#message 21 "The stainless steel drain keeps the floor dry."
-#message 22 "It looks like a drain pipe from the second floor."
-#message 23 "There is a large hole in the wall where you fell."
-#message 24 "The wall looks severely cracked and worn here."
-#message 25 "You see a drain pipe hanging from the ceiling."
-#message 26 "The walls are stained and worn. They could be use a new coat of paint."
-#message 27 "The floor is scuffed and worn, but clean. There is a drain in the center."
-#message 28 "You have nothing to say."
-#message 29 "There is no one here to talk to."
-#message 30 "Please don't touch yourself. Not even in a closet."
-#message 31 "You decide to leave the broom where it is."
-#message 32 "You can't reach that from here."
-#message 33 "As you bend over to pick up the broom, you trip and fall!"
-#message 34 "You decide to move the broom out of the way so you won't trip on it anymore."
-#message 35 "You already tightened the faucet handle."
-#message 36 "After tightening the faucet handle, the drip stops."
-#message 37 "Might as well wash your hands"
-#message 38 "As much as you've always wanted to become a janitor, perhaps you should just leave the mops and brooms alone."
-#message 39 "You decide to leave the plunger alone. It smells bad."
-#message 40 "The boxes are up too high for you to reach."
-#message 41 "The boxes are sealed up. You shouldn't open them."
-#message 42 "You have no need for cleaning supplies."
-#message 43 "There is nothing you can do with the shelf."
-#message 44 "The drain is firmly attached to the floor. You can't pull it up."
-#message 45 "You can't reach the pipe. Not even if you jumped."
-#message 46 "Look out for that broom!"
-#message 47 "As you fall against the wall, it caves in, revealing a large hole."
-#message 48 "You trip over the broom again!"
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

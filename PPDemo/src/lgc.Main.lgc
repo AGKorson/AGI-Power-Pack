@@ -34,6 +34,8 @@
 [
 
 [ ********************************************************************
+
+
 [:wait
 [if (!have.key()) {
 [  goto(wait);
@@ -263,67 +265,8 @@ set.menu.item(m39, cShowClicks); [ "Display Clicks: Off"
 }
 
 [ **************************************
-[ EVERY CYCLE
+[ NEW ROOM
 [ **************************************
-
-[!!!!!! BEGIN TEMPORARY DEBUG CODE
-if (controller(cLogInput)) {
-  [ toggle the message
-  toggle(fLogInput);
-  s23 = "Log Input:      %s22";
-  if (fLogInput) {
-    s22 = " On";    
-  } else {
-    s22 = "Off";
-  }
-  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m38, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
-}
-[ show click data
-if (controller(cShowClicks)) {
-  [ toggle the message
-  toggle(fShowClicks);
-  s23 = "Display Clicks: %s22";
-  if (fShowClicks) {
-    s22 = " On";
-  } else {
-    s22 = "Off";
-  }
-  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m39, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
-}
-if (fShowClicks) {
-  [ used to assist in creating click statements and said statements
-  if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
-    get.posn(ego, work1, work2);
-    display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
-  }
-  [[ show the open closet door timer
-  [ display(24, 0, "%v79|2:%v80|2");
-  [ show remaining available memory
-  display(24, 0, "mem pages: %v8  ");
-}
-if (fLogInput) {
-  if (haveInput) {
-    if (unknownWordNum > 0) {
-      log("unknown word: %v9");
-    } else {
-      log("");
-    }
-  }
-}
-if (said("test", "get")) {
-  get.num("add to score: ", work1);
-  call(lgc.ScoreHandler);
-}
-if (said("test", "drop")) {
-  get.num("sub from score: ", work1);
-  work1 *= -1;
-  call(lgc.ScoreHandler);
-}
-[!!!!!! END TEMPORARY DEBUG CODE
-
-[ if a new room has just been loaded
 if (newRoom) {
   [ First interpreter cycle in a new room
   [ Note: Everything other than logic 0 is discarded
@@ -386,6 +329,67 @@ if (newRoom) {
     }
   }
 }
+
+[ **************************************
+[ EVERY CYCLE
+[ **************************************
+
+[!!!!!! BEGIN TEMPORARY DEBUG CODE
+if (controller(cLogInput)) {
+  [ toggle the message
+  toggle(fLogInput);
+  s23 = "Log Input:      %s22";
+  if (fLogInput) {
+    s22 = " On";    
+  } else {
+    s22 = "Off";
+  }
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m38, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+}
+[ show click data
+if (controller(cShowClicks)) {
+  [ toggle the message
+  toggle(fShowClicks);
+  s23 = "Display Clicks: %s22";
+  if (fShowClicks) {
+    s22 = " On";
+  } else {
+    s22 = "Off";
+  }
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, 0, &m39, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+}
+if (fShowClicks) {
+  [ used to assist in creating click statements and said statements
+  if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
+    get.posn(ego, work1, work2);
+    display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
+  }
+  [[ show the open closet door timer
+  [ display(24, 0, "%v79|2:%v80|2");
+  [ show remaining available memory
+  display(24, 0, "mem pages: %v8  ");
+}
+if (fLogInput) {
+  if (haveInput) {
+    if (unknownWordNum > 0) {
+      log("unknown word: %v9");
+    } else {
+      log("");
+    }
+  }
+}
+if (said("test", "get")) {
+  get.num("add to score: ", work1);
+  call(lgc.ScoreHandler);
+}
+if (said("test", "drop")) {
+  get.num("sub from score: ", work1);
+  work1 *= -1;
+  call(lgc.ScoreHandler);
+}
+[!!!!!! END TEMPORARY DEBUG CODE
 
 [ check for menu activation
 if (!disableGameFunctions) {
@@ -644,8 +648,11 @@ if (clockOn) {
 
 [ dynamic menu checks need to be in logic 0, not in the game function logic
 [ sound options
-[ TODO: can't change sound type while a sound is playing
 if (controller(cToggleSound)) {
+  if (soundOn && currentTrack > 0 && currentTrack < 128) {
+    [ turning sound off stops walkman
+    currentTrack *= -1;
+  }
   toggle(soundOn);
   [ update the config file
   call(lgc.SaveOptions);
@@ -653,10 +660,22 @@ if (controller(cToggleSound)) {
 if (controller(cSoundPC)) {
   [ if not already in PC sound mode
   if (4channelsound) {
+    if (currentTrack > 0 && currentTrack < 128) {
+      stop.sound();
+    }
+    if (playSound) {
+      reset(playSound);
+      stop.sound();
+    }
     reset(4channelsound);
     reset(useMIDI);
     [ convert attenuation
     attenuation /= 4;
+    if (currentTrack > 0 && currentTrack < 128) {
+      work1 = &musicDone;
+      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+      reset(noScript);
+    }
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -664,6 +683,13 @@ if (controller(cSoundPC)) {
 if (controller(cSoundFM)) {
   [ if not already in FM mode
   if ((!4channelsound || useMIDI)) {
+    if (currentTrack > 0 && currentTrack < 128) {
+      stop.sound();
+    }
+    if (playSound) {
+      reset(playSound);
+      stop.sound();
+    }
     if (!4channelsound) {
       work1 = attenuation;
       work1 *= 4;
@@ -681,6 +707,11 @@ if (controller(cSoundFM)) {
     set(4channelsound);
     reset(useMIDI);
     set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    if (currentTrack > 0 && currentTrack < 128) {
+      work1 = &musicDone;
+      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+      reset(noScript);
+    }
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -688,6 +719,13 @@ if (controller(cSoundFM)) {
 if (controller(cSoundMIDI)) {
   [ if not already in MIDI mode
   if ((!4channelsound || !useMIDI)) {
+    if (currentTrack > 0 && currentTrack < 128) {
+      stop.sound();
+    }
+    if (playSound) {
+      reset(playSound);
+      stop.sound();
+    }
     if (!4channelsound) {
       work1 = attenuation;
       work1 *= 4;
@@ -705,6 +743,11 @@ if (controller(cSoundMIDI)) {
     set(4channelsound);
     set(useMIDI);
     set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    if (currentTrack > 0 && currentTrack < 128) {
+      work1 = &musicDone;
+      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+      reset(noScript);
+    }
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -872,10 +915,10 @@ if (!disableGameFunctions) {
     [ set s12 to default of designated cursor
     work1 = &s12;
     work2 = v227;
-    work2 += 46;
+    work2 += 30;
     block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
     [ now copy it to the current cursor msgnum
-    work2 -= 6;
+    work2 -= 10;
     block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
     [ force update by resetting the cursor index
     v227 = -1;
@@ -937,6 +980,12 @@ if (musicDone) {
   }
 }
 
+[ sound check
+if (soundDone) {
+  reset(soundDone);
+  reset(playSound);
+}
+
 [ check player input for unknown words
 if (haveInput && !haveMatch && unknownWordNum > 0) {
   reset(haveInput);
@@ -992,8 +1041,9 @@ oldDays = elapsedDays;
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
+
 [ dynamic menu items (message numbers pre-assigned)
 #message  1 "Examine Item  <F4>" 
 #message  2 "Sound: On   <F2>"
@@ -1053,41 +1103,55 @@ return();
 #message 39 "Display Clicks: Off"
 
  [ active cursors
-#message 40 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
+#message 20 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"
 [ walk
-#message 41 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
+#message 21 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
             "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
 [ look
-#message 42 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
+#message 22 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
             "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
 [ talk
-#message 43 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
+#message 23 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
             "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
 [ use 
-#message 44 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
+#message 24 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
             "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
 [ wait 
-#message 45 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
+#message 25 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
             "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
+[ disk
+#message 26 "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF"
+            "0000000000000000EE77EE770E70FE7FFE7FFE7F1E78DC790000000000000000"
+[ tape
+#message 27 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
+            "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
+
 [ default cursors
-#message 46 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
+#message 30 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"
 [ walk
-#message 47 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
+#message 31 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
             "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
 [ look
-#message 48 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
+#message 32 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
             "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
 [ talk
-#message 49 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
+#message 33 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
             "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
 [ use 
-#message 50 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
+#message 34 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
             "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
 [ wait
-#message 51 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
+#message 35 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
             "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
+[ disk
+#message 36 "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF"
+            "0000000000000000EE77EE770E70FE7FFE7FFE7F1E78DC790000000000000000"
+[ tape
+#message 37 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
+            "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
+
 
 #message 52 "%s16"
 #message 53 "22215909FFFF030F020000"

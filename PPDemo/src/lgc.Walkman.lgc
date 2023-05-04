@@ -6,14 +6,19 @@
 [
 
 #define helpText      v220
-  #define H_BLANK       4
-  #define H_EXIT        7
-  #define H_FASTFWD     8
-  #define H_REWIND      9
-  #define H_STOP_EJ    10
-  #define H_PLAY       11
-  
+#define   H_BLANK       4
+#define   H_EXIT        7
+#define   H_FASTFWD     8
+#define   H_REWIND      9
+#define   H_STOP_EJ    10
+#define   H_PLAY       11
+#define   H_COVER      12
+#define   H_INSIDE     13
+
+#define tmpCursor     v221
+
 #define coverClosed   f220
+#define mouseDown     f221
 
 [ stop the game clock while examining items
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
@@ -26,8 +31,10 @@ status.line.off();
 
 [ fade out until done loading
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
+tmpCursor = C_DEFAULT;
 set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
 
 [ hide objects while showing manual
@@ -57,7 +64,7 @@ if ( currentTrack > 0 && currentTrack < 128) {
   work1 = &musicDone;
   block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
 }
-  
+
 [ fade back in
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
@@ -73,34 +80,62 @@ lastChar = 0;
     helpText = work1;
     if (work1 == H_BLANK) {
       clear.lines(23, 23, BLACK);
+      tmpCursor = C_DEFAULT;
     }
     if (work1 == H_EXIT) {
       display(23, 32, "return to game");
+      tmpCursor = C_DEFAULT;
     }
     if (work1 == H_FASTFWD) {
       display(23, 32, " fast forward ");
+      tmpCursor = C_USE;
     }
     if (work1 == H_REWIND) {
       display(23, 32, "    rewind    ");
+      tmpCursor = C_USE;
     }
     if (work1 == H_STOP_EJ) {
       display(23, 32, "  stop/eject  ");
+      tmpCursor = C_USE;
     }
     if (work1 == H_PLAY) {
       display(23, 32, "     play     ");
+      tmpCursor = C_USE;
     }
-    if (work1 == 12) {
-      display(23, 32, "     door     ");
+    if (work1 == H_COVER ) {
+      clear.lines(23, 23, BLACK);
+      if (coverClosed) {
+        tmpCursor = C_DEFAULT;
+      } else {
+        tmpCursor = C_USE;
+      }
+    }
+    if (work1 == H_INSIDE) {
+      clear.lines(23, 23, BLACK);
+      if (has("cassette tape")) {
+        tmpCursor = C_TAPE;
+      } else {
+        if (cassetteLoaded) {
+          tmpCursor = C_USE;
+        } else {
+          tmpCursor = C_DEFAULT;
+        }
+      }
     }
   }
   
+  if (tmpCursor != cursoricon) {
+    cursoricon = tmpCursor;
+    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  }
+
   [ check for track end
   if (musicDone) {
     [ discard current track
-    #discard.sound.v(&currentTrack);
+    block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     [ next track
     ++currentTrack;
-    if (cassettSideB) {
+    if (cassetteSideB) {
       if (currentTrack == 42) {
         currentTrack = 0;
       }
@@ -127,18 +162,23 @@ if (lastChar == 27) {
   goto(exit);
 }
 
+[ clear mouse flag when button is up
+if (mouseBtn == 0) {
+  reset(mouseDown);
+}
+
 [ check for mouse click (mouse press, since events aren't 
 [ triggered unless main loop is used)
-if (mouseBtn == 1) {
+if (mouseBtn == 1 && !mouseDown) {
+  set(mouseDown);
+  
+  [ exit
   if (work1 == 7) {
-    [ exit button also exits
-    print("good bye");
     goto(exit);
   }
   
+  [ fast forward
   if (work1 == 8) {
-    [ fast forward
-    print("fast forward");
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
       [ advance to next track, based on side
@@ -150,10 +190,10 @@ if (mouseBtn == 1) {
       if (currentTrack > 0 && currentTrack < 127) {
         [ stop current track
         stop.sound();
-        #discard.sound.v(&currentTrack);
+        block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
         [ move to next track
         ++currentTrack;
-        if (cassettSideB) {
+        if (cassetteSideB) {
           if (currentTrack == 85) {
             currentTrack = 0;
           }
@@ -172,7 +212,7 @@ if (mouseBtn == 1) {
         if (currentTrack > 128) {
           [ advance but don't play
           --currentTrack;
-          if (cassettSideB) {
+          if (cassetteSideB) {
             if (currentTrack == -85) {
               currentTrack = 0;
             }
@@ -185,9 +225,9 @@ if (mouseBtn == 1) {
       }
     }
   }
+  
+  [ rewind
   if (work1 == 9) {
-    [ rewind
-    print("rewind");
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
       [ go back to previous track, based on side
@@ -199,10 +239,10 @@ if (mouseBtn == 1) {
       if (currentTrack > 0 && currentTrack < 127) {
         [ stop current track
         stop.sound();
-        #discard.sound.v(&currentTrack);
+        block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
         [ move to previous track
         --currentTrack;
-        if (cassettSideB) {
+        if (cassetteSideB) {
           if (currentTrack == 41) {
             currentTrack = 42;
           }
@@ -219,7 +259,7 @@ if (mouseBtn == 1) {
         if (currentTrack > 128) {
           [ rewind but don't play
           ++currentTrack;
-          if (cassettSideB) {
+          if (cassetteSideB) {
             if (currentTrack == -41) {
               currentTrack = -42;
             }
@@ -229,17 +269,14 @@ if (mouseBtn == 1) {
     }
   }
 
+  [ stop/eject
   if (work1 == 10) {
-    [ stop/eject
-    print("stop/eject");
     if (currentTrack > 0 && currentTrack < 128) {
-      print("stop");
       stop.sound();
       reset(musicDone);
       block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
       currentTrack *= -1;
     } else {
-      print("eject");
       if (coverClosed) {
         reset(coverClosed);
         if (cassetteLoaded) {
@@ -253,11 +290,19 @@ if (mouseBtn == 1) {
         show.pic();
       }
     }
-    
   }
+  
+  [ play
   if (work1 == 11) {
-    [ play
     if (cassetteLoaded && coverClosed && currentTrack > 128) {
+      if (!scoreWalkman) {
+        set(scoreWalkman);
+        work1 = 4;
+        call(lgc.ScoreHandler);
+      }
+      if (!soundOn) {
+        set(soundOn);
+      }
       currentTrack *= -1;
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       work2 = &musicDone;
@@ -265,22 +310,9 @@ if (mouseBtn == 1) {
     }
   }
   
+  [ cover
   if (work1 == 12) {
-    [ cover
-    if (coverClosed) {
-      if ((currentTrack == 0 || currentTrack > 128 || !cassetteLoaded)) {
-        reset(coverClosed);
-        if (cassetteLoaded) {
-          work2 = ovl.Walkman4;
-        } else {
-          work2 = ovl.Walkman3;
-        }
-        load.pic(work2);
-        overlay.pic(work2);
-        discard.pic(work2);
-        show.pic();
-      }
-    } else {
+    if (!coverClosed) {
       set(coverClosed);
       if (cassetteLoaded) {
         work2 = ovl.Walkman2;
@@ -294,18 +326,29 @@ if (mouseBtn == 1) {
     }
   }
   
+  [ tape/cavity - cover must be open
   if (work1 == 13) {
-    [ tape/cavity - cover must be open
-    toggle(cassetteLoaded);
     if (cassetteLoaded) {
-      work2 = ovl.Walkman1;
+      work2 = ovl.Walkman3;
+      get("cassette tape");
+      reset(cassetteLoaded);
+      load.pic(work2);
+      overlay.pic(work2);
+      discard.pic(work2);
+      show.pic();
+      tmpCursor = C_TAPE;
     } else {
-      work2 = ovl.Walkman2;
+      if (has("cassette tape")) {
+        work2 = ovl.Walkman4;
+        drop("cassette tape");
+        set(cassetteLoaded);
+        load.pic(work2);
+        overlay.pic(work2);
+        discard.pic(work2);
+        show.pic();
+        tmpCursor = C_USE;
+      }
     }
-    load.pic(work2);
-    overlay.pic(work2);
-    discard.pic(work2);
-    show.pic();
   }
 }
 
@@ -314,11 +357,26 @@ goto(waitforit);
 
 :exit
 
+[ if playing, stop/unload
+if (currentTrack > 0 && currentTrack < 128) {
+  stop.sound();
+  reset(musicDone);
+  block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
+}
+
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

@@ -52,6 +52,6 @@ if (negativeScore) {
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

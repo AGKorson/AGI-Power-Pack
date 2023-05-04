@@ -64,6 +64,6 @@ block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

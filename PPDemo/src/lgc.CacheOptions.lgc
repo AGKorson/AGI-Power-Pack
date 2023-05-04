@@ -66,6 +66,6 @@ block(STR.FORMAT, &s19, &s19, 0); [ str.format(sINPUT, sRESULT)
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

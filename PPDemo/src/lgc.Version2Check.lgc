@@ -104,6 +104,6 @@ if (compare.strings(s1, s56)) {
 IntVersion = 0;
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

@@ -118,7 +118,7 @@ accept.input();
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
 #message 1 "³" 

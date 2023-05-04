@@ -95,13 +95,29 @@ if (newRoom) {
   pressButton = -1;
   
   [ use a palette with a much darker 'dark gray'
-  block(SET.PALETTE, 0, &m8, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
-
+  block(SET.PALETTE, 0, &m9, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  
+  [ button sounds
+  work1 = s.Tone0;
+  :loadit
+    block(SND.V.FN, LOAD.SOUND.V, &work1, 0); [ load.sound.v(vSNDNUM)
+    ++work1;
+  if (work1 < 127) {
+    goto(loadit);
+  }
+  load.sound(s.WrongCode);
+  load.sound(s.RightCode);
+  
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 127) {
+    currentTrack *= -1;
+  }
+  
   [ display the picture on screen
   show.pic();
   [ use a finger cursor
   cursoricon = -1; [cursormode;
-  set.key(0, &m10, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(0, &m11, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade in
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
   return();
@@ -140,7 +156,6 @@ if (indicatorTimer) {
 [ check for keypad button presses
 if (mouseBtn == 1) { 
   if (pressButton == -1) {
-    [ TODO: need sound effects for button presses and right/wrong code
     block(GET.PIXEL, &mouseX, &mouseY, &pressButton); [ get.pixel(vX, vY, vRESULT) 
     [ priority value indicates button
     pressButton /= 16;
@@ -224,6 +239,14 @@ if (mouseBtn == 1) {
       set.cel.v(oDigit2, digit2);
       set.cel.v(oDigit3, digit3);
       set.cel.v(oDigit4, digit4);
+      
+      [ sound for all but asterisk
+      if (pressButton < 11) {
+        work1 = pressButton;
+        work1 += s.Tone0;
+        work2 = &soundDone;
+        block(SND.V.FN, PLAY.SOUND.V, &work1, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+      }
     } else {
       [ no button
       pressButton = -1;
@@ -249,9 +272,11 @@ if (mouseBtn == 1) {
           set.cel(oIndicator, 11);
           indicatorTimer = 6;
           set(correctcode);
+          sound(s.RightCode, soundDone);
         } else {
           set.cel(oIndicator, 12);
           indicatorTimer = 6;
+          sound(s.WrongCode, soundDone);
         }
       }
     }
@@ -307,24 +332,27 @@ if ((unlockdoor || controller(cRightClick))) {
   [ fade out to black (faster than room fade)
   block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore palette
-  block(SET.PALETTE, 0, &m9, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  block(SET.PALETTE, 0, &m10, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
   new.room.v(previousRoom);
 }
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-
-#message 8 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A09090915153F153F15153F3F3F15153F153F3F3F153F3F3F"
-#message 9 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
-
-#message 10 "0400FFF3FFE1FFE1FFE1FFE149E000E000E000800000000000000100018001800380"
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"
+[ custom palette
+#message 9 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A09090915153F153F15153F3F3F15153F153F3F3F153F3F3F"
+[ default palete
+#message 10 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
+[ finger pointer
+#message 11 "0400FFF3FFE1FFE1FFE1FFE149E000E000E000800000000000000100018001800380"
            "0000000C000C000C000C000CB60DB60DB60DFE6FFE6FFE6FFC7FFC3FFC3F0000" 

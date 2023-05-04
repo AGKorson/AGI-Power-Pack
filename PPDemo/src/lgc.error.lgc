@@ -15,9 +15,9 @@ log("Error: %v17 Value: %v18");
 quit(1);
 return();
 
-[ *************************************************
-[ messages             [ declared messages go here
-[ *************************************************
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
 #message 1 "discard.view(%v18):%m30"
 #message 2 "set.view(o%v18,_):%m26"
 #message 3 "set.view(_,%v18):%m30"

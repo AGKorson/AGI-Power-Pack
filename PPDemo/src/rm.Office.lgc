@@ -6,6 +6,9 @@
 [
 [ ********************************************************************
 
+[ TODO: opening bottom cabinet shows desk go through ego's legs
+[ TODO: view/use should work the same for items that are only displayed
+
 #define oSafe          o1
 #define oPicture       o2
 #define oDeskDrawer    o3
@@ -56,8 +59,8 @@ if (newRoom) {
   work1 = 24;
   block(STR.RIGHT, &palette, &tmpStr, &work1); [ strRight(sINPUT, sRESULT, vLEN)
   block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ sINPUT, sADD)
-  block(SET.MSG, 0, &m7, &tmpPalette); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  block(SET.PALETTE, 0, &m7, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  block(SET.MSG, 0, &m9, &tmpPalette); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  block(SET.PALETTE, 0, &m9, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   
   [ add toolbar buttons
   load.view(vw.ButtonsDown);
@@ -375,7 +378,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           if (!has("folder")) {
             print("It looks like there's something under this corner "
                   "of the rug.");
-[ closeup of folder for sound control panel (ESADOCC) password
           } else {
             print("One corner is folded back.");
           }
@@ -485,7 +487,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ is ego close enough?
       if (obj.in.box(ego, 74, 131, 101, 136)) {
         if (officeDskDrStatus == OPEN1 && mouseY < 132) {
-          [ cicking on top drawer item
+          [ clicking on top drawer item
           if (!has("Walkman")) {
             get("Walkman");
             work1 = 2;
@@ -581,7 +583,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         if (officeFileDrStatus == OPEN3 && mouseY < 131) {
           if (!has("floppy disk")) {
             get("floppy disk");
-            work1 = 2;
+            work1 = 4;
             call(lgc.ScoreHandler);
             print("You decide to take one of the disks.");
             set.loop(oFileDrawer, 3);
@@ -1004,22 +1006,24 @@ if (egoX > 100 && egoHitSpecial) {
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore normal palette
-  block(SET.PALETTE, 0, &m8, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  block(SET.PALETTE, 0, &m10, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   new.room(rm.ControlRoom);  [ ##LE001##
 }
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-#message 7 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15001E1E3F15153F153F3F3F153F3F3F"
-[#message 7 "000000 00002A 002A00 002A2A 2A0000 2A002A 2A1500 2A2A2A 
-[            151515 15153F 153F15 001E1E 3F1515 3F153F 3F3F15 3F3F3F"
-#message 8 "%s2"
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"
+[ custom palette
+#message 9 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15001E1E3F15153F153F3F3F153F3F3F"
+[ default palette
+#message 10 "%s2"

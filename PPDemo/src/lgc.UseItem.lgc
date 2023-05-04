@@ -38,6 +38,6 @@ if (controller(cRightClick)) {
   
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

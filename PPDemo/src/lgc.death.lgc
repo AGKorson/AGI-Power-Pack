@@ -213,7 +213,7 @@ if (haveInput && !haveMatch) {
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
 #message 1 "You are now dead."
 #message 2 "Thank you for playing this game. Better luck next time!"

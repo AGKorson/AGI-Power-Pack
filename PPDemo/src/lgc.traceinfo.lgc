@@ -12,7 +12,7 @@
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
 #message 1 "increment"
 #message 2 "decrement"

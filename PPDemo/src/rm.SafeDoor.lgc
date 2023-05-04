@@ -14,6 +14,7 @@
 #define oNum25         o6
 #define oNum30         o7
 #define oNum35         o8
+#define oDialCenter    o9
 
 #define currentNum    v220
 #define comboNum1     v221
@@ -26,6 +27,7 @@
 #define comboRev3     v227
 #define startNum      v228
 #define tickCounter   v229
+#define handleCel     v230
 
 #define setNum1       f220
 #define setNum2       f221
@@ -59,8 +61,9 @@ if (newRoom) {
   [ access to cursor icons
   load.logics(lgc.GameFunctions);
   
-  [ TODO: load sound effects
+  [ TODO: load safe sound effects
   
+  load.view(vw.SafeDoor2);
   load.view(vw.SafeArt);
   animate.obj(oNum00);
   set.view(oNum00, vw.SafeArt);
@@ -142,6 +145,14 @@ if (newRoom) {
   ignore.objs(oNum35);
   draw(oNum35);
   
+  animate.obj(oDialCenter);
+  set.view(oDialCenter, vw.SafeDoor2);
+  set.cel(oDialCenter, 0);
+  stop.cycling(oDialCenter);
+  set.priority(oDialCenter, 15);
+  position(oDialCenter, 32, 98);
+  draw(oDialCenter);
+  
   [ initialize the dial
   currentNum = 0;
   tickCounter = 10;
@@ -170,6 +181,64 @@ if (newRoom) {
 }
 
 if (fOpening) {
+  if (!fOpenSafe) {
+    ++handleCel;
+    if (handleCel < 12) {
+      set.cel.v(oNum00, handleCel);
+      if (handleCel == 2) {
+        work1 = 3;
+        work2 = -1;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 3) {
+        work1 = 2;
+        work2 = -2;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 4) {
+        work1 = 1;
+        work2 = -7;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 5) {
+        work1 = 1;
+        work2 = -5;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 6) {
+        work1 = 2;
+        work2 = -9;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 7) {
+        work1 = 2;
+        work2 = -10;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 8) {
+        work1 = 1;
+        work2 = -9;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 9) {
+        work1 = 1;
+        work2 = -12;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 10) {
+        work1 = 1;
+        work2 = -12;
+        reposition(oNum00, work1, work2);
+      }
+      if (handleCel == 11) {
+        work1 = 0;
+        work2 = -13;
+        reposition(oNum00, work1, work2);
+      }
+    } else {
+      set(fOpenSafe);
+    }
+  }
   goto(checkexit);
 }
 
@@ -219,17 +288,18 @@ if (controller(cLeftClick)) {
       add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
       erase(oNum35);
       discard.view(vw.SafeArt);
+
       [ clear the pre-drawn handle
-      strPicCmds = "F007F3F45A37455B315C495D2D5E975F2B6097612A6297632A6497652A6697672C6897692F6A476B336C41FF";
-      block(PIC.DRAW, 0, &strPicCmds, 0); [ pic.draw(FILLSTYLE, sCMDS)
-      [ animate the handle
       load.view(vw.SafeHandle);
+      add.to.pic(vw.SafeHandle, 0, 0, 94, 151, 7, 4);
+      [ animate the handle
       set.view(oNum00, vw.SafeHandle);
       set.loop(oNum00, 0);
-      set.cel(oNum00, 0);
+      handleCel = 1;
+      set.cel(oNum00, 1);
       position(oNum00, 94, 151);
       draw(oNum00);
-      end.of.loop(oNum00, fOpenSafe);
+      stop.cycling(oNum00);
       set(fOpening);
       if (!scoreSafe) {
         set(scoreSafe);
@@ -388,10 +458,6 @@ if (spinRight) {
 [ update numbers as the dial spins
 if (updateCombo) {
   reset(updateCombo);
-[  display(12, 60, "currentNum: %v220 ");
-[  display(13, 60, "combo1: %v221/%v225  ");
-[  display(14, 60, "combo2: %v222/%v226  ");
-[  display(15, 60, "combo3: %v223/%v227  ");
   set.cel.v(oNum00, currentNum);
   set.cel.v(oNum05, currentNum);
   set.cel.v(oNum10, currentNum);
@@ -400,6 +466,7 @@ if (updateCombo) {
   set.cel.v(oNum25, currentNum);
   set.cel.v(oNum30, currentNum);
   set.cel.v(oNum35, currentNum);
+  set.cel.v(oDialCenter, currentNum);
   work1 = 0;
   block(SET.PALETTE, 1, &tickCounter, &work1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   
@@ -414,6 +481,7 @@ if (updateCombo) {
         reposition.to(oNum25, 15, 134);
         reposition.to(oNum30, 10, 96);
         reposition.to(oNum35, 16, 58);
+        reposition.to(oDialCenter, 32, 98);
         goto(checkexit);
       }
       if (currentNum == 1) {
@@ -425,6 +493,7 @@ if (updateCombo) {
         reposition.to(oNum25, 19, 141);
         reposition.to(oNum30, 9, 104);
         reposition.to(oNum35, 13, 65);
+        reposition.to(oDialCenter, 32, 99);
         goto(checkexit);
       }
       if (currentNum == 2) {
@@ -436,6 +505,7 @@ if (updateCombo) {
         reposition.to(oNum25, 24, 144);
         reposition.to(oNum30, 10, 111);
         reposition.to(oNum35, 12, 73);
+        reposition.to(oDialCenter, 32, 100);
         goto(checkexit);
       }
       if (currentNum == 3) {
@@ -447,6 +517,7 @@ if (updateCombo) {
         reposition.to(oNum25, 27, 146);
         reposition.to(oNum30, 12, 120);
         reposition.to(oNum35, 10, 81);
+        reposition.to(oDialCenter, 32, 101);
         goto(checkexit);
       }
       if (currentNum == 4) {
@@ -458,6 +529,7 @@ if (updateCombo) {
         reposition.to(oNum25, 31, 148);
         reposition.to(oNum30, 13, 126);
         reposition.to(oNum35, 9, 89);
+        reposition.to(oDialCenter, 32, 102);
         goto(checkexit);
       }
       if (currentNum == 5) {
@@ -469,6 +541,7 @@ if (updateCombo) {
         reposition.to(oNum25, 34, 147);
         reposition.to(oNum30, 16, 134);
         reposition.to(oNum35, 10, 95);
+        reposition.to(oDialCenter, 32, 103);
         goto(checkexit);
       }
       if (currentNum == 6) {
@@ -480,6 +553,7 @@ if (updateCombo) {
         reposition.to(oNum25, 41, 149);
         reposition.to(oNum30, 20, 140);
         reposition.to(oNum35, 9, 104);
+        reposition.to(oDialCenter, 33, 104);
         goto(checkexit);
       }
       if (currentNum == 7) {
@@ -491,6 +565,7 @@ if (updateCombo) {
         reposition.to(oNum25, 43, 147);
         reposition.to(oNum30, 24, 145);
         reposition.to(oNum35, 10, 111);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 8) {
@@ -502,6 +577,7 @@ if (updateCombo) {
         reposition.to(oNum25, 47, 145);
         reposition.to(oNum30, 28, 147);
         reposition.to(oNum35, 12, 121);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 9) {
@@ -513,6 +589,7 @@ if (updateCombo) {
         reposition.to(oNum25, 52, 142);
         reposition.to(oNum30, 31, 147);
         reposition.to(oNum35, 13, 126);
+        reposition.to(oDialCenter, 35, 105);
         goto(checkexit);
       }
     } else {
@@ -525,6 +602,7 @@ if (updateCombo) {
         reposition.to(oNum25, 55, 135);
         reposition.to(oNum30, 36, 147);
         reposition.to(oNum35, 16, 136);
+        reposition.to(oDialCenter, 35, 105);
         goto(checkexit);
       }
       if (currentNum == 11) {
@@ -536,6 +614,7 @@ if (updateCombo) {
         reposition.to(oNum25, 58, 126);
         reposition.to(oNum30, 41, 148);
         reposition.to(oNum35, 20, 142);
+        reposition.to(oDialCenter, 35, 105);
         goto(checkexit);
       }
       if (currentNum == 12) {
@@ -547,6 +626,7 @@ if (updateCombo) {
         reposition.to(oNum25, 61, 120);
         reposition.to(oNum30, 44, 146);
         reposition.to(oNum35, 24, 145);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 13) {
@@ -558,6 +638,7 @@ if (updateCombo) {
         reposition.to(oNum25, 63, 111);
         reposition.to(oNum30, 48, 145);
         reposition.to(oNum35, 27, 148);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 14) {
@@ -569,6 +650,7 @@ if (updateCombo) {
         reposition.to(oNum25, 65, 104);
         reposition.to(oNum30, 52, 140);
         reposition.to(oNum35, 30, 148);
+        reposition.to(oDialCenter, 33, 104);
         goto(checkexit);
       }
       if (currentNum == 15) {
@@ -580,6 +662,7 @@ if (updateCombo) {
         reposition.to(oNum25, 66, 96);
         reposition.to(oNum30, 56, 134);
         reposition.to(oNum35, 36, 147);
+        reposition.to(oDialCenter, 32, 103);
         goto(checkexit);
       }
       if (currentNum == 16) {
@@ -591,6 +674,7 @@ if (updateCombo) {
         reposition.to(oNum25, 66, 88);
         reposition.to(oNum30, 59, 128);
         reposition.to(oNum35, 41, 148);
+        reposition.to(oDialCenter, 32, 102);
         goto(checkexit);
       }
       if (currentNum == 17) {
@@ -602,6 +686,7 @@ if (updateCombo) {
         reposition.to(oNum25, 63, 81);
         reposition.to(oNum30, 61, 119);
         reposition.to(oNum35, 44, 146);
+        reposition.to(oDialCenter, 32, 101);
         goto(checkexit);
       }
       if (currentNum == 18) {
@@ -613,6 +698,7 @@ if (updateCombo) {
         reposition.to(oNum25, 60, 71);
         reposition.to(oNum30, 63, 111);
         reposition.to(oNum35, 47, 146);
+        reposition.to(oDialCenter, 32, 100);
         goto(checkexit);
       }
       if (currentNum == 19) {
@@ -624,6 +710,7 @@ if (updateCombo) {
         reposition.to(oNum25, 58, 66);
         reposition.to(oNum30, 65, 104);
         reposition.to(oNum35, 52, 141);
+        reposition.to(oDialCenter, 32, 99);
         goto(checkexit);
       }
     }
@@ -638,6 +725,7 @@ if (updateCombo) {
         reposition.to(oNum25, 55, 58);
         reposition.to(oNum30, 66, 96);
         reposition.to(oNum35, 55, 135);
+        reposition.to(oDialCenter, 32, 98);
         goto(checkexit);
       }
       if (currentNum == 21) {
@@ -649,6 +737,7 @@ if (updateCombo) {
         reposition.to(oNum25, 52, 51);
         reposition.to(oNum30, 66, 87);
         reposition.to(oNum35, 58, 126);
+        reposition.to(oDialCenter, 32, 99);
         goto(checkexit);
       }
       if (currentNum == 22) {
@@ -660,6 +749,7 @@ if (updateCombo) {
         reposition.to(oNum25, 47, 46);
         reposition.to(oNum30, 62, 80);
         reposition.to(oNum35, 61, 120);
+        reposition.to(oDialCenter, 32, 100);
         goto(checkexit);
       }
       if (currentNum == 23) {
@@ -671,6 +761,7 @@ if (updateCombo) {
         reposition.to(oNum25, 43, 42);
         reposition.to(oNum30, 61, 72);
         reposition.to(oNum35, 63, 111);
+        reposition.to(oDialCenter, 32, 101);
         goto(checkexit);
       }
       if (currentNum == 24) {
@@ -682,6 +773,7 @@ if (updateCombo) {
         reposition.to(oNum25, 40, 38);
         reposition.to(oNum30, 58, 65);
         reposition.to(oNum35, 65, 103);
+        reposition.to(oDialCenter, 32, 102);
         goto(checkexit);
       }
       if (currentNum == 25) {
@@ -693,6 +785,7 @@ if (updateCombo) {
         reposition.to(oNum25, 36, 39);
         reposition.to(oNum30, 56, 59);
         reposition.to(oNum35, 66, 96);
+        reposition.to(oDialCenter, 32, 103);
         goto(checkexit);
       }
       if (currentNum == 26) {
@@ -704,6 +797,7 @@ if (updateCombo) {
         reposition.to(oNum25, 30, 38);
         reposition.to(oNum30, 52, 50);
         reposition.to(oNum35, 66, 88);
+        reposition.to(oDialCenter, 33, 104);
         goto(checkexit);
       }
       if (currentNum == 27) {
@@ -715,6 +809,7 @@ if (updateCombo) {
         reposition.to(oNum25, 27, 42);
         reposition.to(oNum30, 47, 46);
         reposition.to(oNum35, 63, 80);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 28) {
@@ -726,6 +821,7 @@ if (updateCombo) {
         reposition.to(oNum25, 24, 47);
         reposition.to(oNum30, 42, 42);
         reposition.to(oNum35, 62, 72);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 29) {
@@ -737,6 +833,7 @@ if (updateCombo) {
         reposition.to(oNum25, 19, 51);
         reposition.to(oNum30, 40, 39);
         reposition.to(oNum35, 58, 65);
+        reposition.to(oDialCenter, 35, 105);
         goto(checkexit);
       }
     } else {
@@ -749,6 +846,7 @@ if (updateCombo) {
         reposition.to(oNum25, 16, 59);
         reposition.to(oNum30, 35, 37);
         reposition.to(oNum35, 56, 57);
+        reposition.to(oDialCenter, 35, 105);
         goto(checkexit);
       }
       if (currentNum == 31) {
@@ -760,6 +858,7 @@ if (updateCombo) {
         reposition.to(oNum25, 14, 66);
         reposition.to(oNum30, 30, 38);
         reposition.to(oNum35, 52, 49);
+        reposition.to(oDialCenter, 35, 105);
         goto(checkexit);
       }
       if (currentNum == 32) {
@@ -771,6 +870,7 @@ if (updateCombo) {
         reposition.to(oNum25, 12, 72);
         reposition.to(oNum30, 28, 42);
         reposition.to(oNum35, 47, 45);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 33) {
@@ -782,6 +882,7 @@ if (updateCombo) {
         reposition.to(oNum25, 10, 82);
         reposition.to(oNum30, 24, 46);
         reposition.to(oNum35, 43, 41);
+        reposition.to(oDialCenter, 34, 105);
         goto(checkexit);
       }
       if (currentNum == 34) {
@@ -793,6 +894,7 @@ if (updateCombo) {
         reposition.to(oNum25, 10, 88);
         reposition.to(oNum30, 19, 50);
         reposition.to(oNum35, 40, 38);
+        reposition.to(oDialCenter, 33, 104);
         goto(checkexit);
       }
       if (currentNum == 35) {
@@ -804,6 +906,7 @@ if (updateCombo) {
         reposition.to(oNum25, 10, 96);
         reposition.to(oNum30, 16, 57);
         reposition.to(oNum35, 35, 37);
+        reposition.to(oDialCenter, 32, 103);
         goto(checkexit);
       }
       if (currentNum == 36) {
@@ -815,6 +918,7 @@ if (updateCombo) {
         reposition.to(oNum25, 9, 104);
         reposition.to(oNum30, 14, 64);
         reposition.to(oNum35, 30, 38);
+        reposition.to(oDialCenter, 32, 102);
         goto(checkexit);
       }
       if (currentNum == 37) {
@@ -826,6 +930,7 @@ if (updateCombo) {
         reposition.to(oNum25, 10, 112);
         reposition.to(oNum30, 12, 71);
         reposition.to(oNum35, 27, 41);
+        reposition.to(oDialCenter, 32, 101);
         goto(checkexit);
       }
       if (currentNum == 38) {
@@ -837,6 +942,7 @@ if (updateCombo) {
         reposition.to(oNum25, 13, 120);
         reposition.to(oNum30, 10, 81);
         reposition.to(oNum35, 24, 46);
+        reposition.to(oDialCenter, 32, 100);
         goto(checkexit);
       }
       if (currentNum == 39) {
@@ -848,6 +954,7 @@ if (updateCombo) {
         reposition.to(oNum25, 13, 125);
         reposition.to(oNum30, 10, 88);
         reposition.to(oNum35, 19, 50);
+        reposition.to(oDialCenter, 32, 99);
       }
     }
   }
@@ -875,16 +982,17 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
 [ add exit checks here (or use layout editor)
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
-
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"
 [             blk   blu     grn    cyn    red     mgt    brn   ltg
 [#message ## "000000 00002A 002A00 002A2A 2A0000 2A002A 2A1500 2A2A2A"
 [            "151515 15153F 153F15 153F3F 3F1515 3F153F 3F3F15 3F3F3F"

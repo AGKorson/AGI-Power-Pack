@@ -302,42 +302,52 @@ if (controller(cChooseItem)) {
       }
       [ cassette
       if (selectedItem == 4) {
-        [ TODO: load cassette into walkman
+        if (has("Walkman")) {
+          [ show the walkman
+          selectedItem = 5;
+        } else {
+          [ nothing to do with the cassette
+          print("There is nothing you can do with the cassette right now.");
+        }
       }
       [ walkman
       if (selectedItem == 5) {
-        if (currentRoom == rm.Lobby && warnWalkman) {
-          print("The receptionist asked you to not play your music in the lobby.");
+        if (currentRoom == rm.Lobby) {
+          if (warnWalkman) {
+            print("The receptionist asked you to not play your music in the lobby.");
+          } else {
+            [ not allowed
+            block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+            print.at("\"Excuse me, our patients prefer quiet- please don't play music in the lobby. Thanks!\"", 6, 6, 35);
+            block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+            print("You decide it's best to comply with the receptionist's request, and put the walkman back in your pocket.");
+            set(warnWalkman);
+            [ receptionistLoc = HALL            
+            if (v220 == 4) {
+              print("(How did she hear that from all the way out in the hallway?)");
+            }
+          }
         } else {
-          [ TODO: use the walkman
           if (currentTrack >0 && currentTrack < 128) {
             [ stop and unload current track; it will get restarted
             [ after showing the walkman
             stop.sound();
+            set(noScript);
             block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
+            reset(noScript);
           }
-            [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
+          [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
           call(lgc.Walkman);
           call(lgc.RedrawRoom);
           
-[          [ for now, just play the cassette
-[          set(cassetteLoaded);
-[          get.num("Side? (0=A, 1=B): ", work1);
-[          if (work1) {
-[            set(cassetteSideB);
-[            currentTrack = 42;
-[          } else {
-[            reset(cassetteSideB);
-[            currentTrack = 1;
-[          }
-[          [ if in lobby, don't actually play; receptionist will tell player to stop
-[          if (currentRoom != rm.Lobby) {
-[            set(noScript);
-[            block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-[            work1 = &musicDone;
-[            block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
-[            reset(noScript);
-[          }
+          if (currentTrack >0 && currentTrack < 128) {
+            [ restart current track
+            set(noScript);
+            block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+            work1 = &musicDone;
+            block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+            reset(noScript);
+          }
         }
       }
       [ memo
@@ -518,7 +528,7 @@ if ((said("use", "anyword") || said("use", "anyword", "rol"))) {
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
 #message 1 "I am going to tell on you!"
 #message 2 "Don't say anymore words like that!"

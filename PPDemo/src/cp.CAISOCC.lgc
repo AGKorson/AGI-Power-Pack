@@ -6,7 +6,7 @@
 [ CAISOCC
 [
 [ ********************************************************************
- 
+
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -203,7 +203,7 @@ if(newRoom) {
   
   [ test sound 
 [  load.sound(s.InstTest);
-  load.sound(s.ButtonClick);
+load.sound(s.Tone0);
   
   [ make sure sound mode is 4channel FMsynth
   if (4channelsound) {
@@ -222,7 +222,7 @@ if(newRoom) {
     [ save current value
     reset(oldMIDI);
   }
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+  set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(oMode);
@@ -301,7 +301,7 @@ if(newRoom) {
   enable.item(mouse);
   reset(cursormode);
   btnAction = 0;
-
+  
   [ copy the custom instrument values from lgc.Main
   work1 = 1;
   work2 = 53;
@@ -888,9 +888,6 @@ if (loadinst) {
   [ I don't think they're related at all
   set.text.attribute(-1, 0);
   
-[  [ clear status/info line
-[  clear.lines(22, 22, LT_GRAY);
-[  
   [ if copying an instrument show all fields as 'edited'
   if (selectItem) {
     set.text.attribute(BLACK, LT_CYAN);
@@ -1853,6 +1850,9 @@ if (btnAction > 0) {
   [ always stop sound when a new button is pushed
   stop.sound();
   
+  [ clear status/info line
+  clear.lines(22, 22, LT_GRAY);
+  
   [ Done button
   if (btnAction == B_DONE) {
     [ restore ego movement parameters
@@ -1888,6 +1888,9 @@ if (btnAction > 0) {
       set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
     }
 
+    [ show wait cursor
+    cursoricon = C_WAIT;
+    set.key(0, &m160, mouse); [ set.cursor(BYVAR, MSGNUM);
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
     
@@ -2025,7 +2028,7 @@ if (btnAction > 0) {
     work2 = &m142;
     set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
 [    sound(s.InstTest, soundDone);
-    sound(s.ButtonClick, soundDone);
+sound(s.Tone0, soundDone);
     set(sndTest);
     [ update button test
     set.text.attribute(-1, 0);
@@ -2355,3 +2358,6 @@ return();
 #message 157 "Shape of the waveform, from 0..3"
 #message 158 "Feedback strength, from 0..7"
 #message 159 "If selected, connects operators."
+[ wait cursor
+#message 160 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
+            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"

@@ -85,7 +85,7 @@ set.text.attribute(WHITE, BLACK);
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
 #message 1 "ษอออออออออออออออออออออออออออออออออออออป"
 #message 2 "บ                                     บ"

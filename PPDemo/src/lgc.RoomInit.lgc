@@ -75,6 +75,9 @@ if (currentRoom < 21 && currentRoom != 1) {
 }
 
 if (currentRoom == rm.Title) {
+  [ enable mouse in title room
+  enable.item(mouse);
+
   [ disable game functions; they will be re-enabled after title screen is done
   set(disableGameFunctions);
 }
@@ -146,5 +149,5 @@ if (work1 > 219) {
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************

@@ -442,7 +442,7 @@ currentTrack = -1;
 return();
 
 [ **************************************
-[ MESSAGES
+[ DECLARED MESSAGES
 [ **************************************
 #message 1 ">"
 #message 2 cursor

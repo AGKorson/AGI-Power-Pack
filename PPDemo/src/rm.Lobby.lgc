@@ -461,6 +461,9 @@ if (currentTrack > 0 && currentTrack < 128) {
     block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
     print("You decide it's best to comply with the receptionist's request, and turn off the walkman.");
     set(warnWalkman);
+    if (receptionistLoc == HALL) {
+      print("(How did she hear that from all the way out in the hallway?)");
+    }
   }
 }
 
@@ -469,8 +472,6 @@ if (firstLobbyVisit) {
   if (tmpSec != elapsedSeconds) {
     tmpSec = elapsedSeconds;
     ++secondCtr;
-[[ debug code to track timer
-[display(23, 68, "%v12|2:%v11|2 (%v82)  ");
     if (secondCtr == 45) {
 [    if (secondCtr == 10) {
       set(fOneMinute);
@@ -2101,14 +2102,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   
   if (cursormode == C_TALK) {
     [ receptionist
-    if (posn(oReceptionist, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oReceptionist, ON.OBJ, 1, &mouseX, &mouseY)) {
       set(checktalk);
       goto(doneclick);
     }
-    if (posn(oPatient1, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
       print("talk patient1");
     }
-    if (posn(oPatient2, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
       [ determine which patient
       current.view(oPatient2, work1);
       if (work1 == vw.Patient2) {
@@ -2117,23 +2118,23 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         print("talk patient4");
       }
     }
-    if (posn(oPatient3, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient3, ON.OBJ, 1, &mouseX, &mouseY)) {
       print("talk patient3");
     }
     goto(doneclick);
   }
   
   if (cursormode == C_USE) {
-    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
       print("Please don't touch yourself in public.");
       goto(doneclick);
     }
     [ receptionist
-    if (posn(oReceptionist, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oReceptionist, ON.OBJ, 1, &mouseX, &mouseY)) {
       print("You can't reach her from here.");
       goto(doneclick);
     }
-    if (posn(oPatient1, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oPatient1, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -2144,7 +2145,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       goto(doneclick);
     }
-    if (posn(oPatient2, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oPatient2, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -2155,7 +2156,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       goto(doneclick);
     }
-    if (posn(oPatient3, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient3, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oPatient3, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -2165,7 +2166,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         print("You are not close enough.");
       }
     }
-    if (posn(oPatient4, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient4, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oPatient4, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -2263,12 +2264,14 @@ if (edgeEgoHit == BOTTOM_EDGE) {
 }
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
-#message 1 "%g40"
-#message 2 "%g41"
-#message 3 "%g42"
-#message 4 "%g43"
-#message 5 "%g44"
-#message 6 "%g45"
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

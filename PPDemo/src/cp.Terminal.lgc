@@ -1878,7 +1878,7 @@ if ((lastChar == 13 || lastChar == 10)) {
               [ a drive
               if (floppyInserted) {
                 if (floppyFormatted) {
-                  output = "Volume in drive a is %s5";
+                  output = "Volume in drive A is %s5";
                 } else {
                   output = "Disk read error";
                 }
@@ -1887,7 +1887,7 @@ if ((lastChar == 13 || lastChar == 10)) {
               } 
             } else {
               [ c drive
-              output = "Volume in drive a is AMOSDISK";
+              output = "Volume in drive C is AMOSDISK";
             }
           } else {
             output = "The specified drive is invalid";
