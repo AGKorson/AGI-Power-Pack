@@ -176,6 +176,7 @@ if (newRoom) {
   [ file drawer
   animate.obj(oFileDrawer);
   set.view(oFileDrawer, vw.OfficeArt);
+  set.priority(oFileDrawer, 10);
   ignore.objs(oFileDrawer);
   stop.cycling(oFileDrawer);
   if (officeFileDrStatus != CLOSED) {

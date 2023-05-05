@@ -74,6 +74,15 @@ if (mouseBtn == 1) {
         print("The rest of the manual is just a bunch of boring "
               "text. It's not worth your time to read it.");
         --pageNum;
+        [ redraw covered up text
+        set.text.attribute(BLACK, WHITE);
+        display( 9,  9, " Default Interface Port:");
+        display( 8, 44, "ating System that is comp-");
+        display( 9, 44, "atible with one of these");
+        display(10, 44, "standards:");
+        display(11, 44, "  \x07 Unix version 1.1");
+        display(12, 44, "  \x07 Sun OS version 4.4");
+        display(13, 44, "  \x07 MSDOS Mainframe OS");
         goto(waitforit);
       } else {
         pageImg = pic.ManualPages;
