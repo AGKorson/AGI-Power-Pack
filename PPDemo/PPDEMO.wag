@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "5/5/2023 11:15:30 AM"
+   LastEdit = "5/5/2023 2:16:23 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HCB6129BC
-   CRC32 = &HCB6129BC
+   CompCRC32 = &HC4B7F24C
+   CRC32 = &HC4B7F24C
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -373,8 +373,8 @@
 [Logic13]
    ID = rm.SafeDoor
    Description = ""
-   CRC32 = &H3487BA6
-   CompCRC32 = &H3487BA6
+   CRC32 = &H526ADD06
+   CompCRC32 = &H3F11E40A
    IsRoom = True
 
 [Logic14]
@@ -2578,6 +2578,23 @@
    Visible1 = True
    Visible2 = True
    Visible3 = True
+
+[Sound85]
+   ID = s.SafeDial
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
 [::END Sounds::]
 
 [::BEGIN Views::]
@@ -2786,7 +2803,7 @@
    Description = ""
 
 [View33]
-   ID = vw.SafeArt
+   ID = vw.SafeArt1
    Description = ""
 
 [View39]
@@ -2798,7 +2815,7 @@
    Description = ""
 
 [View42]
-   ID = vw.SafeDoor2
+   ID = vw.SafeDial
    Description = ""
 
 [View43]
@@ -2839,5 +2856,9 @@
 
 [View51]
    ID = vw.SafeDoor2a
+   Description = ""
+
+[View52]
+   ID = vw.SafeArt2
    Description = ""
 [::END Views::]

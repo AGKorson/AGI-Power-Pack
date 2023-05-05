@@ -2,7 +2,8 @@
 [
 [ rm.SafeDoor
 [
-[ 
+[ views for dial numbers take up A LOT of memory; need to split them
+[ into two views, and use memory-swap techniques to manage them
 [
 [ ********************************************************************
 
@@ -36,17 +37,21 @@
 #define spinRight     f224
 #define updateCombo   f225
 #define fOpening      f226
+#define tmp4channel   f227
 
 #define strPicCmds     s12
 
 
 if (newRoom) {
   [ this is the first cycle through this room
+  [ no scripting in this room
+  set(noScript);
+  
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);
-  
+
   [ the horizon defines the upper limit of ego's movement
   set.horizon(1);
   
@@ -62,11 +67,35 @@ if (newRoom) {
   load.logics(lgc.GameFunctions);
   
   [ TODO: load safe sound effects
+  load.sound(s.SafeDial);
+  load.sound(s.DoorOpen);
+  if (4channelsound) {
+    set(tmp4channel);
+  }
+  if (!4channelsound) {
+    set(4channelsound);
+  }
+  if (useMIDI) {
+    [ use FM for this room
+    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  }
+  work1 = 4;
+  work2 = 1;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+
+  [ center dial logo
+  load.view(vw.SafeDial);
+  [ start with dial art for positions 0-19
+  load.view(vw.SafeArt1);
+    
+  [ TODO: split number view into two different views
+  [ will require re-aligning the cels 
+  [ a loop for each position, with 8 numbers per loop
+  [ instead of changing cel, change loop when dial spins
+  [ if number is 0-19, use view1; if 20-39, use view2
   
-  load.view(vw.SafeDoor2);
-  load.view(vw.SafeArt);
   animate.obj(oNum00);
-  set.view(oNum00, vw.SafeArt);
+  set.view(oNum00, vw.SafeArt1);
   set.loop(oNum00, 0);
   set.cel(oNum00, 0);
   stop.cycling(oNum00);
@@ -76,7 +105,7 @@ if (newRoom) {
   draw(oNum00);
 
   animate.obj(oNum05);
-  set.view(oNum05, vw.SafeArt);
+  set.view(oNum05, vw.SafeArt1);
   set.loop(oNum05, 1);
   set.cel(oNum05, 0);
   stop.cycling(oNum05);
@@ -86,7 +115,7 @@ if (newRoom) {
   draw(oNum05);
   
   animate.obj(oNum10);
-  set.view(oNum10, vw.SafeArt);
+  set.view(oNum10, vw.SafeArt1);
   set.loop(oNum10, 2);
   set.cel(oNum10, 0);
   stop.cycling(oNum10);
@@ -96,7 +125,7 @@ if (newRoom) {
   draw(oNum10);
   
   animate.obj(oNum15);
-  set.view(oNum15, vw.SafeArt);
+  set.view(oNum15, vw.SafeArt1);
   set.loop(oNum15, 3);
   set.cel(oNum15, 0);
   stop.cycling(oNum15);
@@ -106,7 +135,7 @@ if (newRoom) {
   draw(oNum15);
   
   animate.obj(oNum20);
-  set.view(oNum20, vw.SafeArt);
+  set.view(oNum20, vw.SafeArt1);
   set.loop(oNum20, 4);
   set.cel(oNum20, 0);
   stop.cycling(oNum20);
@@ -116,7 +145,7 @@ if (newRoom) {
   draw(oNum20);
   
   animate.obj(oNum25);
-  set.view(oNum25, vw.SafeArt);
+  set.view(oNum25, vw.SafeArt1);
   set.loop(oNum25, 5);
   set.cel(oNum25, 0);
   stop.cycling(oNum25);
@@ -126,7 +155,7 @@ if (newRoom) {
   draw(oNum25);
   
   animate.obj(oNum30);
-  set.view(oNum30, vw.SafeArt);
+  set.view(oNum30, vw.SafeArt1);
   set.loop(oNum30, 6);
   set.cel(oNum30, 0);
   stop.cycling(oNum30);
@@ -136,7 +165,7 @@ if (newRoom) {
   draw(oNum30);
   
   animate.obj(oNum35);
-  set.view(oNum35, vw.SafeArt);
+  set.view(oNum35, vw.SafeArt1);
   set.loop(oNum35, 7);
   set.cel(oNum35, 0);
   stop.cycling(oNum35);
@@ -146,7 +175,7 @@ if (newRoom) {
   draw(oNum35);
   
   animate.obj(oDialCenter);
-  set.view(oDialCenter, vw.SafeDoor2);
+  set.view(oDialCenter, vw.SafeDial);
   set.cel(oDialCenter, 0);
   stop.cycling(oDialCenter);
   set.priority(oDialCenter, 15);
@@ -177,6 +206,8 @@ if (newRoom) {
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade in
   block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+show.mem();
+  
   return();
 }
 
@@ -252,7 +283,7 @@ if (controller(cLeftClick)) {
         comboNum3 == 14) {
       print("The safe door opens!");
       [ add numbers permanently
-      comboNum1 = vw.SafeArt;
+      comboNum1 = vw.SafeArt1;
       comboNum2 = 4;
       comboNum3 = 4;
       get.posn(oNum00, work1, work2);
@@ -287,7 +318,7 @@ if (controller(cLeftClick)) {
       work3 = 7;
       add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
       erase(oNum35);
-      discard.view(vw.SafeArt);
+      discard.view(vw.SafeArt1);
 
       [ clear the pre-drawn handle
       load.view(vw.SafeHandle);
@@ -306,6 +337,8 @@ if (controller(cLeftClick)) {
         work1 = 3;
         call(lgc.ScoreHandler);
       }
+      [ restore correct instruments, then
+      sound(s.DoorOpen, soundDone);
     } else {
       print("Nothing happens. That must not be the right combination.");
       comboNum1 = -1;
@@ -457,6 +490,7 @@ if (spinRight) {
 
 [ update numbers as the dial spins
 if (updateCombo) {
+sound(s.SafeDial, soundDone);
   reset(updateCombo);
   set.cel.v(oNum00, currentNum);
   set.cel.v(oNum05, currentNum);
@@ -971,11 +1005,22 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore default palette
   block(SET.PALETTE, 0, &m15, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  [ restore sound settings
+  if (!tmp4channel) {
+    reset(4channelsound);
+  }
+  if (useMIDI) {
+    [ 
+    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  }
   [ reenable input
   accept.input();
   reset(disableGameFunctions);
   [ restore statusline
   status.line.on();
+  [ restore scripting
+  reset(noScript);
+  
   new.room.v(previousRoom);
 }
 
