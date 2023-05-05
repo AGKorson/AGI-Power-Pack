@@ -147,15 +147,20 @@ if (newRoom) {
   [ set initial timer to slightly faster random amount
   random(40, 140, patientTimer);
   
-  [ if starting (coming from intro screen)
-  if (previousRoom == rm.Title) {
-    [ begin opening sequence
+  [ if starting (coming from intro screen) and first game
+  if (previousRoom == rm.Title && forceAutoloop) {
+    [ begin opening sequence dialog
     egoCarSeq = 1;
+    [ reset forceAutoloop
+    reset(forceAutoloop);
   } else {
+    [ enable menu/mouse input
+    set(enableMenu);
+    reset(disableGameFunctions);
     [ skip opening sequence
     egoCarSeq = 0;
     [ if car wasn't locked, there's a chance it gets stolen
-    if (previousRoom !=0 && !carLocked) {
+    if (previousRoom > rm.Title && !carLocked) {
       random(1, 10, work1);
       if (work1 == 10) {
         [ it's gone!
@@ -170,8 +175,8 @@ if (newRoom) {
       stop.cycling(egoCar);
     }
     
-    [ if restarting 
-    if (previousRoom == 0)  {
+    [ if startng/restarting 
+    if ((previousRoom == 0 || previousRoom == rm.Title)) {
       [ add ego next to car
       position(ego, 50, 139);
     } else {
@@ -187,8 +192,9 @@ if (newRoom) {
   [ fade in
   block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
   
-  [ if not coming from intro, restore cursor
-  if (previousRoom != rm.Title) {
+  [ if not showing opening dialog
+  if (egoCarSeq == 0) {
+    [ restore cursor
     cursoricon = cursormode;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   }

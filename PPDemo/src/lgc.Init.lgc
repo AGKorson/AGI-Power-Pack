@@ -265,10 +265,10 @@ if (gameRestarted) {
       [ use default
       s22 = m4;
     }
-    
   } else {
-    [ if no file found, reset v18
+    [ reset v18
     errorParameter = 0;
+    [ if no file found, use defaults
     :defaultfile
     [ use MIDI, and set desired instruments
     set(4channelsound);
@@ -320,6 +320,9 @@ if (gameRestarted) {
     if (work1 < 23) {
       goto(nextinst2);
     }
+    [ use f20(forceAutoLoop) to force opening screen dialog (it's
+    [ not used in this game for anything else)
+    set(forceAutoLoop);
   }
   
   [ enable custom status bar (lgc.Statusbar)
