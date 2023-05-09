@@ -157,23 +157,6 @@ if (currentRoom == 0) {
     }
     :continue
     
-[load.sound(s.SafeDial);
-[attenuation = 0;
-[set(4channelsound);
-[work1=1;
-[work2=4;
-[:nextinst
-[  set.key(&work2, &work1, c253);
-[  print("test inst: %v46:");
-[  sound(s.SafeDial, f99);
-[  print("next inst...");
-[  ++work1;
-[  if (work1 < 130) {
-[    goto(nextinst);
-[  }
-[quit(1);
-
-
     [ confirm video, sound and mouse settings
     if (monitorType != EGA) {
       load.logics(lgc.Error);

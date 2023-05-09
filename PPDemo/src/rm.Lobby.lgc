@@ -1914,9 +1914,9 @@ if (deathType) {
   return();
 }
 
-[*****
-:handleInput       [ check for input from player
-[*****
+[ **************************************
+[ PROCESS PLAYER INPUT
+[ **************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   
@@ -1932,6 +1932,15 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       goto(resetmsg);
     } 
     [ TODO: more responses for receptionist conversation
+    [ ask about sierra
+    [ ask name
+    [ ask for appointment
+    [ ask to see doctor/nurse
+    [ ask about patients
+    [ ask about tasks- phone/papers/computers
+    [ magazine
+    [ wet floor, sign
+    
     print.at("\"I can't help you with that.\"", 6, 6, 35);
     :resetmsg
     block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)

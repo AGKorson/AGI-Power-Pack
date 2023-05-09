@@ -9,6 +9,7 @@ General:
     MENU - done
     STATUSBAR - done
     HELP SCREEN - not started
+
     SCORING SUMMARY:
 X       -1 pt:   touching trees
 X       -2 pts:  touching plunger
@@ -65,20 +66,47 @@ X       +1 pt:   opening treasure chest
 X       +3 pts:  getting scroll from chest
 X       +3 pts:  getting music sheet
 X       +4 pts:  getting 80s mix tape
-        +4 pts:  playing mix tape in walkman
+X       +4 pts:  playing mix tape in walkman
 MAX SCORE: 145
+
+INVENTORY: when 'examining', show typical view with description for all items; several items need additional text, and several items need a close up for 'examining'. Most items that are read need to be 'used' to read them.
+  ITEM:           EXAMINE         USE
+ 1 magazine       view, text      close up (read)      
+ 2 floppy disk    view only       insert into control room console
+ 3 car keyfob     view only       lock/unlock car in parking lot
+ 4 cassette tape  view only       insert into walkman (in walkman closeup)
+ 5 Walkman        view only       close up
+ 6 memo           view, text      close up (read)
+ 7 post-it note   view, close up  close up (look at)
+ 8 BaDASS manual  view, text      close up (read)
+ 9 notebook       view, text      close up (read)
+10 folder         view, text      close up (look at [inside])
+11 scroll         view, text      close up (read)
+12 music sheet    view, text      close up (look at)
+13 PQ idea list   view, close up  close up (look at)
+
 
 1. Intro/Opening Credits: Show animated AGI Guy Studio logo, then animated Power Pack logo. Fade out, then fade in Demo title page - "Sierra Quest - a Power Pack Demo game"
     BACKGROUND: AGI Guy Studio and Power Pack done; need Sierra Quest background
     ANIMATION ART: done (unless more needed for Sierra Quest title page)
     SOUND: TBD
     CODING: mostly done; need to finalize after finishing music and title page art
+    DESIGNERS: 
+        Power Pack programmed by: Andrew Korson
+        Demo Game written and programmed by: Andrew Korson
+        Background art by: Klownstein
+        Animation art by: Klownstein
+        Additional art by: Andrew Korson
+        Music and Sound effects by: Andrew Korson
+        additional sound by: doomlazer
+
 
 2. Ending Credits: TBD
     BACKGROUND: TBD
     ANIMATION ART: TBD
     SOUND: TBD
     CODING: TBD   
+        Playtesters: TBD
 
 3. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss. If a patient arrives in a batmobile and ego tries to touch it, it shocks and kills him. Touching the trees will get sap on ego's hands, which costs a point; he can wash in the sink in the closet to get the point back. Ego can get back in car; this ends game (winning condition is to have disk with PP source code.)
     BACKGROUND: done
@@ -186,8 +214,8 @@ Once BaDASS is restarted and all passwords are entered, door will unlock; ego ca
 8A. Safe door closeup: spinning combo lock dial.Enter correct combination to open.
 
     BACKGROUND: done
-    ANIMATION ART: handle 
-    SOUND: 'click' for dial spin; unlock sound 
+    ANIMATION ART: done 
+    SOUND: done 
     SCORING: 3 pts for opening safe
     CODING: done
 
@@ -292,12 +320,3 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SOUND: button click
     SCORING: n/a
     CODING: done
-
-For inventory screen,  change purpose and menu text depending on cursor. 'Look'  when eye icon selected, 'use' when hand is selected.  Disable inventory for all other icons.
-
-usable items:
-disk
-cassette
-keyfob
-
-Playtesters: tbd

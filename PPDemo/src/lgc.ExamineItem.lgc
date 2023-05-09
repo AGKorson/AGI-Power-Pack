@@ -21,6 +21,10 @@ status.line.off();
 [ save current colors
 set.text.attribute(-1, 0);
 
+[ use default mouse cursor
+cursoricon = C_DEFAULT;
+set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
 [ draw the picture for selected item
 if (selectedItem == 107) {
   work1 = pic.ComboList;
@@ -30,6 +34,9 @@ if (selectedItem == 110) {
 }
 if (selectedItem == 112) {
   work1 = pic.MusicSheet;
+}
+if (selectedItem == 113) {
+  work1 = pic.PQList;
 }
 load.pic(work1);
 draw.pic(work1);
@@ -50,6 +57,40 @@ if (selectedItem == 110) {
   display(10, 47, "Snd4chan$");
   set.text.attribute(0, -1);
 }
+if (selectedItem == 113) {
+  [ add text after drawing the picture
+  [ 4     5         6   X      
+  [ 4567890123456789012345
+  [      Police Quest 
+  [ X     Sequel Ideas
+  [ X
+  [ X   Hollywood Heists
+  [ XX
+  [ XX   The Vengance 
+  [ XX      
+  [ XX   The Ofrocc
+  [ XXX     Infiltration
+  [ XXX  PqII:10-36
+  [ XXX
+  [ XXXX  LA Burning
+  [ 4     5         6       X      
+  [ 4567890123456789012345
+  [PW: PqII:10-36
+  
+  set.text.attribute(BLACK, WHITE);
+  display(5, 33, "Police Quest");
+  display(6, 34, "Sequel Ideas");
+  [
+  display(8, 32, "Hollywood Heists");
+  [
+  display(10, 33, "The Vengance");
+  [
+  display(12, 33, "The Ofrocc");
+  display(13, 36, "Infiltration");
+  display(14, 34, "PqII:10-36");
+  [
+  display(16, 34, "LA Burning");
+}
 
 [ fade in
 block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
@@ -67,3 +108,11 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
+#message 1 "%g20"
+#message 2 "%g21"
+#message 3 "%g22"
+#message 4 "%g23"
+#message 5 "%g24"
+#message 6 "%g25"
+#message 7 "%g26"
+#message 8 "%g27"

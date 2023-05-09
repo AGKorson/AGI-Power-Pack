@@ -6,9 +6,6 @@
 [
 [ ********************************************************************
 
-[ TODO: opening bottom cabinet shows desk go through ego's legs
-[ TODO: view/use should work the same for items that are only displayed
-
 #define oSafe          o1
 #define oPicture       o2
 #define oDeskDrawer    o3

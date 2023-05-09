@@ -6,9 +6,12 @@
 [
 [ ********************************************************************
 
+[ **************************************
+[ LOCAL DEFINES
+[ **************************************
 #define egoCar        o1
-#define patient       o2
-#define patientCar    o3
+#define oPatient      o2
+#define oPatientCar   o3
 #define btnYes        o4
 #define btnNo         o5
 
@@ -30,6 +33,9 @@
 #define fSkip1       f227
 #define fElectrocuted  f228
 
+[ **************************************
+[ FIRST CYCLE ONLY
+[ **************************************
 if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
@@ -112,18 +118,20 @@ if (newRoom) {
   set.view(ego, vw.EgoSmall);
   
   [ patient car
-  animate.obj(patientCar);
-  set.view(patientCar, vw.Cars);
-  ignore.objs(patientCar);
+  animate.obj(oPatientCar);
+  set.view(oPatientCar, vw.Cars);
+  ignore.objs(oPatientCar);
   [ don't draw until needed
   
   [ tiny patient view
-  animate.obj(patient);
+  animate.obj(oPatient);
   load.view(vw.SmallPerson1);
   load.view(vw.SmallPerson2);
   load.view(vw.SmallPerson3);
   load.view(vw.SmallPerson4); 
   load.view(vw.SmallPerson5);
+  load.view(vw.SmallPerson6);
+  load.view(vw.SmallPerson7);
   [ don't draw until needed
   
   [ buttons for end game msgbox
@@ -200,10 +208,9 @@ if (newRoom) {
   }
 }
 
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
+[ **************************************
+[  NON-INPUT CODE 
+[ **************************************
 if (egoCarSeq) {
   [ ego arrives
   if (egoCarSeq == 1) {
@@ -296,17 +303,17 @@ if (patientTimer == 0) {
   random(80, 250, patientTimer);
   if (fPatientHere) {
     [ time for patient to leave
-    position(patient, 55, 117);
+    position(oPatient, 55, 117);
     if (f2ndspot) {
       [ go back to parking spot 2
-      move.obj(patient, 55, 127, 1, fPatientDone);
+      move.obj(oPatient, 55, 127, 1, fPatientDone);
       patientSeq = 16;
     } else {
       [ go back to parking spot 1
-      move.obj(patient, 55, 127, 1, fPatientDone);
+      move.obj(oPatient, 55, 127, 1, fPatientDone);
       patientSeq = 4;
     }
-    draw(patient);
+    draw(oPatient);
   } else {
     [ time for patient to arrive
     random(0, 1, work1);
@@ -314,21 +321,21 @@ if (patientTimer == 0) {
       reset(f2ndspot);
       patientSeq = 1; [ got to spot #1
       random(0, 18, work1);
-      set.loop.v(patientCar, work1);
-      position(patientCar, 0, 131);
-      move.obj(patientCar, 18, 143, 2, fPatientDone);
+      set.loop.v(oPatientCar, work1);
+      position(oPatientCar, 0, 131);
+      move.obj(oPatientCar, 18, 143, 2, fPatientDone);
     } else {
       set(f2ndspot);
       patientSeq = 10; [ go to spot #2
       random(19, 37, work1);
-      set.loop.v(patientCar, work1);
-      position(patientCar, 143, 128);
-      move.obj(patientCar, 99, 128, 2, fPatientDone);
+      set.loop.v(oPatientCar, work1);
+      position(oPatientCar, 143, 128);
+      move.obj(oPatientCar, 99, 128, 2, fPatientDone);
     }
-    draw(patientCar);
+    draw(oPatientCar);
     [ choose a random patient
-    random(2, 6, work1);
-    set.view.v(patient, work1);
+    random(2, 8, work1);
+    set.view.v(oPatient, work1);
   }
 } else {
   if (patientSeq == IDLE) {
@@ -339,117 +346,117 @@ if (patientTimer == 0) {
 if (fPatientDone) {
   [ parking spot 2
   if (patientSeq == 20) {
-    erase(patientCar);
+    erase(oPatientCar);
     reset(fPatientHere);
     reset(fPatientDone);
     patientSeq = IDLE;
     unblock();
   }
   if (patientSeq == 19) {
-    move.obj(patientCar, 0, 131, 2, fPatientDone);
+    move.obj(oPatientCar, 0, 131, 2, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 18) {
-    erase(patient);
-    start.cycling(patientCar);
-    move.obj(patientCar, 61, 131, 1, fPatientDone);
+    erase(oPatient);
+    start.cycling(oPatientCar);
+    move.obj(oPatientCar, 61, 131, 1, fPatientDone);
     unblock();
     ++patientSeq;
   }
   if (patientSeq == 17) {
-    move.obj(patient, 88, 142, 1, fPatientDone);
+    move.obj(oPatient, 88, 142, 1, fPatientDone);
     ++patientSeq;  
   }
   if (patientSeq == 16) {
-    move.obj(patient, 70, 142, 1, fPatientDone);
+    move.obj(oPatient, 70, 142, 1, fPatientDone);
     ++patientSeq;  
   }
   if (patientSeq == 15) {
-    erase(patient);
+    erase(oPatient);
     patientSeq = IDLE;
     set(fPatientHere);
     reset(fPatientDone);
   }
   if (patientSeq == 14) {
-    move.obj(patient, 55, 117, 1, fPatientDone);
+    move.obj(oPatient, 55, 117, 1, fPatientDone);
     ++patientSeq;  
   }
   if (patientSeq == 13) {
-    stop.cycling(patientCar);
-    ignore.blocks(patientCar);
+    stop.cycling(oPatientCar);
+    ignore.blocks(oPatientCar);
     block(78, 138, 99, 142);
-    position(patient, 88, 142);
-    draw(patient);
-    move.obj(patient, 72, 142, 1, fPatientDone);
+    position(oPatient, 88, 142);
+    draw(oPatient);
+    move.obj(oPatient, 72, 142, 1, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 12) {
     ++patientSeq;  
-    move.obj(patientCar, 83, 141, 1, fPatientDone);
+    move.obj(oPatientCar, 83, 141, 1, fPatientDone);
   }
   if (patientSeq == 11) {
     ++patientSeq;  
-    move.obj(patientCar, 61, 141, 1, fPatientDone);
+    move.obj(oPatientCar, 61, 141, 1, fPatientDone);
   }
   if (patientSeq == 10) {
     ++patientSeq;  
-    move.obj(patientCar, 75, 129, 2, fPatientDone);
+    move.obj(oPatientCar, 75, 129, 2, fPatientDone);
   }
   
   [ parking spot 1
   if (patientSeq == 9) {
-    erase(patientCar);
+    erase(oPatientCar);
     reset(fPatientHere);
     reset(fPatientDone);
     patientSeq = IDLE;
   }
   if (patientSeq == 8) {
-    move.obj(patientCar, 143, 128, 2, fPatientDone);
+    move.obj(oPatientCar, 143, 128, 2, fPatientDone);
     ++patientSeq;
   }  
   if (patientSeq == 7) {
-    move.obj(patientCar, 20, 128, 2, fPatientDone);
+    move.obj(oPatientCar, 20, 128, 2, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 6) {
-    erase(patient);
-    start.cycling(patientCar);
-    move.obj(patientCar, 5, 143, 1, fPatientDone);
+    erase(oPatient);
+    start.cycling(oPatientCar);
+    move.obj(oPatientCar, 5, 143, 1, fPatientDone);
     unblock();
     ++patientSeq;
   }
   if (patientSeq == 5) {
-    move.obj(patient, 25, 140, 1, fPatientDone);
+    move.obj(oPatient, 25, 140, 1, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 4) {
-    move.obj(patient, 38, 127, 1, fPatientDone);
+    move.obj(oPatient, 38, 127, 1, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 3) {
-    erase(patient);
+    erase(oPatient);
     patientSeq = IDLE;
     set(fPatientHere);
     reset(fPatientDone);
   }
   if (patientSeq == 2) {
-    move.obj(patient, 55, 117, 1, fPatientDone);
+    move.obj(oPatient, 55, 117, 1, fPatientDone);
     ++patientSeq;
   }
   if (patientSeq == 1) {
-    stop.cycling(patientCar);
-    ignore.blocks(patientCar);
+    stop.cycling(oPatientCar);
+    ignore.blocks(oPatientCar);
     block(14, 140, 34, 144);
-    position(patient, 25, 140);
-    draw(patient);
-    move.obj(patient, 55, 125, 1, fPatientDone);
+    position(oPatient, 25, 140);
+    draw(oPatient);
+    move.obj(oPatient, 55, 125, 1, fPatientDone);
     ++patientSeq;
   }
 }
 
 if (!fEgoDead) {
   [ check for ego getting run over
-  get.posn(patientCar, carX, carY);
+  get.posn(oPatientCar, carX, carY);
   work1 = carY;
   work1 -= 2;
   if (egoY >= work1 && egoY <= carY) {
@@ -466,7 +473,7 @@ if (!fEgoDead) {
       }
       set(fEgoDead);
       [ temporarily stop driving
-      stop.update(patientCar);
+      stop.update(oPatientCar);
       load.view(vw.EgoDead);
       set.view(ego, vw.EgoDead);
       egoDir = STOPPED;
@@ -529,7 +536,7 @@ if (fRunOver) {
   work1 = 1;
   cycle.time(ego, work1);
   accept.input();
-  ignore.objs(patient);
+  ignore.objs(oPatient);
 }
 
 [ check for end of electrocution death cycle
@@ -538,7 +545,7 @@ if (fElectrocuted && deathSeq == 6) {
   ++deathSeq;
   deathType = 5;
   accept.input();
-  ignore.objs(patient);
+  ignore.objs(oPatient);
 }
 
 [ if dead, skip player input
@@ -546,15 +553,14 @@ if (fEgoDead) {
   [ check for stolen car
   if (deathType == 7) {
     print("Hey! Where is your car???");
-  ignore.objs(patient);
+  ignore.objs(oPatient);
   }
   return();
 }
 
-
-[*****
-:handleInput       [ check for input from player
-[*****
+[ **************************************
+[ PROCESS PLAYER INPUT
+[ **************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
   if (said("look")) {
@@ -651,7 +657,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient
-    if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
       [ coming or going?
       if ((patientSeq == 4 || patientSeq == 5 ||
            patientSeq == 13 || patientSeq == 14)) {
@@ -663,8 +669,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient car
-    if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
-      current.loop(patientCar, work1);
+    if (posn(oPatientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+      current.loop(oPatientCar, work1);
       if (work1 > 18) {
         work1 -= 19;
       }
@@ -731,8 +737,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     if (work1 > 79) {
-      [ building
-      [ door
+      [ building, door
       if (mouseX > 53 && mouseX < 60 && mouseY < 127 && mouseY > 112) {
         print("There is a large automatic glass door at the entrance to building.");
       } else {
@@ -761,8 +766,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient
-    if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
-      distance(ego, patient, work1);
+    if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, oPatient, work1);
       if (work1 <= 20) {
         [ coming or going?
         if ((patientSeq == 4 || patientSeq == 5 ||
@@ -779,7 +784,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient car
-    if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
       [ if patient is in car
       if ((patientSeq == 1 || patientSeq == 7 || patientSeq == 8 ||
            patientSeq == 10 || patientSeq == 11 || patientSeq == 12 ||
@@ -919,8 +924,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient
-    if (posn(patient, ON.OBJ, 0, &mouseX, &mouseY)) {
-      distance(ego, patient, work1);
+    if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
+      distance(ego, oPatient, work1);
       if (work1 < 6) {
         print("Get your ands off me, you big jerk!");
       } else {
@@ -930,16 +935,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient car
-    if (posn(patientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
       [ is car moving?
       if ((patientSeq > 18 || patientSeq == 10 || patientSeq == 11 || 
           patientSeq == 12 || patientSeq == 13 || patientSeq == 7 || 
           patientSeq == 8 || patientSeq == 1)) {
         print("It's not a good idea to touch a moving vehicle.");
       } else {
-        distance(ego, patientCar, work1);
+        distance(ego, oPatientCar, work1);
         if (work1 < 14) {
-          current.loop(patientCar, work1);
+          current.loop(oPatientCar, work1);
           if (work1 > 18) {
             work1 -= 19;
           }

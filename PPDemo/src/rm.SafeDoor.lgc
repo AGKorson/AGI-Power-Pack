@@ -7,15 +7,17 @@
 [
 [ ********************************************************************
 
-#define oNum00         o1
-#define oNum05         o2
-#define oNum10         o3
-#define oNum15         o4
-#define oNum20         o5
-#define oNum25         o6
-#define oNum30         o7
-#define oNum35         o8
-#define oDialCenter    o9
+#define oBlank1        o1
+#define oBlank2        o2
+#define oNum00         o3
+#define oNum05         o4
+#define oNum10         o5
+#define oNum15         o6
+#define oNum20         o7
+#define oNum25         o8
+#define oNum30         o9
+#define oNum35        o10
+#define oDialCenter   o11
 
 #define currentNum    v220
 #define comboNum1     v221
@@ -29,6 +31,7 @@
 #define startNum      v228
 #define tickCounter   v229
 #define handleCel     v230
+#define viewNum       v231
 
 #define setNum1       f220
 #define setNum2       f221
@@ -38,9 +41,7 @@
 #define updateCombo   f225
 #define fOpening      f226
 #define tmp4channel   f227
-
-#define strPicCmds     s12
-
+#define swapViews     f228
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -66,7 +67,7 @@ if (newRoom) {
   [ access to cursor icons
   load.logics(lgc.GameFunctions);
   
-  [ TODO: load safe sound effects
+  [ force 4 channel-FM for sound effects
   load.sound(s.SafeDial);
   load.sound(s.DoorOpen);
   if (4channelsound) {
@@ -86,17 +87,18 @@ if (newRoom) {
   [ center dial logo
   load.view(vw.SafeDial);
   [ start with dial art for positions 0-19
-  load.view(vw.SafeArt1);
-    
-  [ TODO: split number view into two different views
+  load.view(vw.SafeNumbers1);
+  
   [ will require re-aligning the cels 
   [ a loop for each position, with 8 numbers per loop
   [ instead of changing cel, change loop when dial spins
   [ if number is 0-19, use view1; if 20-39, use view2
+  currentNum = 0;
+  viewNum = vw.SafeNumbers1;
   
   animate.obj(oNum00);
-  set.view(oNum00, vw.SafeArt1);
-  set.loop(oNum00, 0);
+  set.view(oNum00, vw.SafeNumbers1);
+  set.loop.v(oNum00, currentNum);
   set.cel(oNum00, 0);
   stop.cycling(oNum00);
   set.priority(oNum00, 8);
@@ -105,9 +107,9 @@ if (newRoom) {
   draw(oNum00);
 
   animate.obj(oNum05);
-  set.view(oNum05, vw.SafeArt1);
-  set.loop(oNum05, 1);
-  set.cel(oNum05, 0);
+  set.view(oNum05, vw.SafeNumbers1);
+  set.loop.v(oNum05, currentNum);
+  set.cel(oNum05, 1);
   stop.cycling(oNum05);
   set.priority(oNum05, 8);
   position(oNum05, 57, 54);
@@ -115,9 +117,9 @@ if (newRoom) {
   draw(oNum05);
   
   animate.obj(oNum10);
-  set.view(oNum10, vw.SafeArt1);
-  set.loop(oNum10, 2);
-  set.cel(oNum10, 0);
+  set.view(oNum10, vw.SafeNumbers1);
+  set.loop.v(oNum10, currentNum);
+  set.cel(oNum10, 2);
   stop.cycling(oNum10);
   set.priority(oNum10, 8);
   position(oNum10, 65, 95);
@@ -125,9 +127,9 @@ if (newRoom) {
   draw(oNum10);
   
   animate.obj(oNum15);
-  set.view(oNum15, vw.SafeArt1);
-  set.loop(oNum15, 3);
-  set.cel(oNum15, 0);
+  set.view(oNum15, vw.SafeNumbers1);
+  set.loop.v(oNum15, currentNum);
+  set.cel(oNum15, 3);
   stop.cycling(oNum15);
   set.priority(oNum15, 8);
   position(oNum15, 55, 137);
@@ -135,42 +137,42 @@ if (newRoom) {
   draw(oNum15);
   
   animate.obj(oNum20);
-  set.view(oNum20, vw.SafeArt1);
-  set.loop(oNum20, 4);
-  set.cel(oNum20, 0);
+  set.view(oNum20, vw.SafeNumbers1);
+  set.loop.v(oNum20, currentNum);
+  set.cel(oNum20, 4);
   stop.cycling(oNum20);
   set.priority(oNum20, 8);
-  position(oNum20, 36, 153);
+  position(oNum20, 36, 147);
   ignore.objs(oNum20);
   draw(oNum20);
   
   animate.obj(oNum25);
-  set.view(oNum25, vw.SafeArt1);
-  set.loop(oNum25, 5);
-  set.cel(oNum25, 0);
+  set.view(oNum25, vw.SafeNumbers1);
+  set.loop.v(oNum25, currentNum);
+  set.cel(oNum25, 5);
   stop.cycling(oNum25);
   set.priority(oNum25, 8);
-  position(oNum25, 16, 137);
+  position(oNum25, 15, 134);
   ignore.objs(oNum25);
   draw(oNum25);
   
   animate.obj(oNum30);
-  set.view(oNum30, vw.SafeArt1);
-  set.loop(oNum30, 6);
-  set.cel(oNum30, 0);
+  set.view(oNum30, vw.SafeNumbers1);
+  set.loop.v(oNum30, currentNum);
+  set.cel(oNum30, 6);
   stop.cycling(oNum30);
   set.priority(oNum30, 8);
-  position(oNum30, 7, 96);
+  position(oNum30, 10, 96);
   ignore.objs(oNum30);
   draw(oNum30);
   
   animate.obj(oNum35);
-  set.view(oNum35, vw.SafeArt1);
-  set.loop(oNum35, 7);
-  set.cel(oNum35, 0);
+  set.view(oNum35, vw.SafeNumbers1);
+  set.loop.v(oNum35, currentNum);
+  set.cel(oNum35, 7);
   stop.cycling(oNum35);
   set.priority(oNum35, 8);
-  position(oNum35, 16, 61);
+  position(oNum35, 16, 58);
   ignore.objs(oNum35);
   draw(oNum35);
   
@@ -181,6 +183,22 @@ if (newRoom) {
   set.priority(oDialCenter, 15);
   position(oDialCenter, 32, 98);
   draw(oDialCenter);
+  
+  [ blanks, to clear areas during view swaps
+  animate.obj(oBlank1);
+  set.view(oBlank1, vw.SafeDial);
+  set.loop(oBlank1, 1);
+  stop.cycling(oBlank1);
+  ignore.objs(oBlank1);
+  position(oBlank1, 136, 167);
+  draw(oBlank1);
+  animate.obj(oBlank2);
+  set.view(oBlank2, vw.SafeDial);
+  set.loop(oBlank2, 1);
+  stop.cycling(oBlank2);
+  ignore.objs(oBlank2);
+  position(oBlank2, 136, 167);
+  draw(oBlank2);
   
   [ initialize the dial
   currentNum = 0;
@@ -273,53 +291,60 @@ if (fOpening) {
   goto(checkexit);
 }
 
-[ check for handle click
+[ mouse clicks
 if (controller(cLeftClick)) {
   block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
   work1 /= 16;
+  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM)
+  
+  [ check for handle click
   if (work1 == 7) {
     [ check for correct combo
     if (comboNum1 == 36 && comboNum2 == 8 && comboRev2 == 1 &&
         comboNum3 == 14) {
       print("The safe door opens!");
-      [ add numbers permanently
-      comboNum1 = vw.SafeArt1;
+      [ add numbers permanently - re-use combo variables that are no
+      [ longer needed
+      comboNum1 = currentNum;
+      if (currentNum > 19) {
+        comboNum1 -= 20;
+      }
       comboNum2 = 4;
       comboNum3 = 4;
       get.posn(oNum00, work1, work2);
       work3 = 0;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum00);
       get.posn(oNum05, work1, work2);
       work3 = 1;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum05);
       get.posn(oNum10, work1, work2);
       work3 = 2;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum10);
       get.posn(oNum15, work1, work2);
       work3 = 3;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum15);
       get.posn(oNum20, work1, work2);
       work3 = 4;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum20);
       get.posn(oNum25, work1, work2);
       work3 = 5;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum25);
       get.posn(oNum30, work1, work2);
       work3 = 6;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum30);
       get.posn(oNum35, work1, work2);
       work3 = 7;
-      add.to.pic.v(comboNum1, work3, currentNum, work1, work2, comboNum2, comboNum3);
+      add.to.pic.v(viewNum, comboNum1, work3, work1, work2, comboNum2, comboNum3);
       erase(oNum35);
-      discard.view(vw.SafeArt1);
-
+      discard.view.v(viewNum);
+      
       [ clear the pre-drawn handle
       load.view(vw.SafeHandle);
       add.to.pic(vw.SafeHandle, 0, 0, 94, 151, 7, 4);
@@ -348,6 +373,11 @@ if (controller(cLeftClick)) {
       comboRev2 = 0;
       comboRev3 = 0;
     }
+  }
+  
+  [ exit
+  if (work1 == 8) {
+    goto(exit);
   }
 }
 
@@ -450,7 +480,7 @@ if (spinRight) {
     spinCount = SPIN_DELAY;
     [ adjust number
     currentNum -= 1;
-    if (currentNum > 39) {
+    if (currentNum == -1) {
       currentNum = 39;
     }
     [ adjust tick counter
@@ -490,16 +520,121 @@ if (spinRight) {
 
 [ update numbers as the dial spins
 if (updateCombo) {
-sound(s.SafeDial, soundDone);
+  sound(s.SafeDial, soundDone);
+  
+  work1 = currentNum;
+  [ check that correct view is set
+  if (currentNum > 19) {
+    work1 -= 20;
+    if (viewNum == vw.SafeNumbers1) {
+      viewNum =vw.SafeNumbers2;
+      position(oNum00, 136, 167);
+      position(oNum05, 136, 167);
+      position(oNum10, 136, 167);
+      position(oNum15, 136, 167);
+      position(oNum20, 136, 167);
+      position(oNum25, 136, 167);
+      position(oNum30, 136, 167);
+      position(oNum35, 136, 167);
+      erase(oNum00);
+      erase(oNum05);
+      erase(oNum10);
+      erase(oNum15);
+      erase(oNum20);
+      erase(oNum25);
+      erase(oNum30);
+      erase(oNum35);
+      discard.view(vw.SafeNumbers1);
+      load.view(vw.SafeNumbers2);
+      set(swapViews);
+    }
+  } else {
+    if (viewNum == vw.SafeNumbers2) {
+      viewNum =vw.SafeNumbers1;
+      position(oNum00, 136, 167);
+      position(oNum05, 136, 167);
+      position(oNum10, 136, 167);
+      position(oNum15, 136, 167);
+      position(oNum20, 136, 167);
+      position(oNum25, 136, 167);
+      position(oNum30, 136, 167);
+      position(oNum35, 136, 167);
+      erase(oNum00);
+      erase(oNum05);
+      erase(oNum10);
+      erase(oNum15);
+      erase(oNum20);
+      erase(oNum25);
+      erase(oNum30);
+      erase(oNum35);
+      discard.view(vw.SafeNumbers2);
+      load.view(vw.SafeNumbers1);
+      set(swapViews);
+    }
+  }
+  if (swapViews) {
+    reset(swapViews);
+    set.view.v(oNum00, viewNum);
+    set.view.v(oNum05, viewNum);
+    set.view.v(oNum10, viewNum);
+    set.view.v(oNum15, viewNum);
+    set.view.v(oNum20, viewNum);
+    set.view.v(oNum25, viewNum);
+    set.view.v(oNum30, viewNum);
+    set.view.v(oNum35, viewNum);
+    draw(oNum00);
+    draw(oNum05);
+    draw(oNum10);
+    draw(oNum15);
+    draw(oNum20);
+    draw(oNum25);
+    draw(oNum30);
+    draw(oNum35);
+    draw(oBlank1);
+    draw(oBlank2);
+    if (currentNum == 39) {
+      set.cel(oBlank1, 0);
+      set.cel(oBlank2, 1);
+      reposition.to(oBlank1, 39, 29);
+      reposition.to(oBlank2, 16, 52);
+      goto(movenumbers);
+    }
+    if (currentNum == 0) {
+      set.cel(oBlank1, 2);
+      set.cel(oBlank2, 3);
+      reposition.to(oBlank1, 24, 35);
+      reposition.to(oBlank2, 11, 75);
+      goto(movenumbers);
+    }
+    if (currentNum == 19) {
+      set.cel(oBlank1, 4);
+      set.cel(oBlank2, 5);
+      reposition.to(oBlank1, 35, 31);
+      reposition.to(oBlank2, 18, 52);
+      goto(movenumbers);
+    }
+    if (currentNum == 20) {
+      set.cel(oBlank1, 6);
+      set.cel(oBlank2, 7);
+      reposition.to(oBlank1, 25, 34);
+      reposition.to(oBlank2, 10, 85);
+    }
+  } else {
+    [ erase the blanks
+    erase(oBlank1);
+    erase(oBlank2);
+  }
+  :movenumbers
   reset(updateCombo);
-  set.cel.v(oNum00, currentNum);
-  set.cel.v(oNum05, currentNum);
-  set.cel.v(oNum10, currentNum);
-  set.cel.v(oNum15, currentNum);
-  set.cel.v(oNum20, currentNum);
-  set.cel.v(oNum25, currentNum);
-  set.cel.v(oNum30, currentNum);
-  set.cel.v(oNum35, currentNum);
+  set.loop.v(oNum00, work1);
+  set.loop.v(oNum05, work1);
+  set.loop.v(oNum10, work1);
+  set.loop.v(oNum15, work1);
+  set.loop.v(oNum20, work1);
+  set.loop.v(oNum25, work1);
+  set.loop.v(oNum30, work1);
+  set.loop.v(oNum35, work1);
+  [
   set.cel.v(oDialCenter, currentNum);
   work1 = 0;
   block(SET.PALETTE, 1, &tickCounter, &work1); [ set.palette(BYVAR, PALETTE, LOADONLY)
@@ -998,6 +1133,7 @@ sound(s.SafeDial, soundDone);
 [ ESC or right-click to cancel;
 [ correct combo to open
 if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
+  :exit
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
