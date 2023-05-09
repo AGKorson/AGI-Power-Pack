@@ -5,6 +5,8 @@
 [ An example room with several exits.
 [
 [ ********************************************************************
+[ TODO: more said statements for control room
+[ TODO: sound effect for system failure
 
 #define showMOCC         f220
 #define showCAISOCC      f221

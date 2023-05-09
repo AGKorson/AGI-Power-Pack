@@ -18,7 +18,12 @@
 [ set up.
 
 [ ********************************************************************
+[ TODO: more said statements for lobby
+[ TODO: sound effects for phone, typing, doors
 
+[ **************************************
+[ LOCAL DEFINES
+[ **************************************
 #define backpane         o1
 #define frontpane        o2
 #define oReceptionist    o3

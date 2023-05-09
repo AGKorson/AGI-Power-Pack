@@ -5,7 +5,12 @@
 [ 
 [
 [ ********************************************************************
+[ TODO: sound effects for open/close door
+[ TODO: more said statements for closet
 
+[ **************************************
+[ LOCAL DEFINES
+[ **************************************
 #define wall        o1
 #define broom       o2
 #define drip        o3
@@ -144,6 +149,10 @@ if (newRoom) {
     block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
     load.sound(s.Drip);
   }
+  
+  [ breaking wall sounds
+  load.sound(s.Crumble1);
+  load.sound(s.Crumble2);
   
   [ add additional room initialization here
   egoDir = STOPPED;
@@ -705,14 +714,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-
-
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
-[ add other room specific statements here
-
 [ trip and fall into wall
 if (egoHitSpecial && !wallbreak && fallSeq == NOFALL) {
   [ fall, and break wall
@@ -751,21 +752,29 @@ if (fDone && fallSeq == MOVE2WALL2) {
 }
 if (fDone && fallSeq == FALLDOWN) {
   fallSeq = BREAKWALL;
+  [ no walkman to worry about when wall breaks
+  sound(s.Crumble1, soundDone);
   start.update(wall);
   end.of.loop(wall, fDone);
 }
-if (fDone && fallSeq == BREAKWALL) {
-  reset(fDone);
-  fallSeq = SITUP;
-  print("As you fall against the wall, it caves in, revealing a large hole.");
-  set(wallbreak);
-  stop.update(wall);
-  ignore.objs(wall);
-  set.loop(ego, 3);
-  set.cel(ego, 0);
-  end.of.loop(ego, fDONE);
+if (fallSeq == BREAKWALL) {
+  current.cel(wall, work1);
+  if (work1 == 10) {
+    sound(s.Crumble2, soundDone);
+  }
+  if (fDone) {
+    reset(fDone);
+    fallSeq = SITUP;
+    print("As you fall against the wall, it caves in, revealing a large hole.");
+    set(wallbreak);
+    stop.update(wall);
+    ignore.objs(wall);
+    set.loop(ego, 3);
+    set.cel(ego, 0);
+    end.of.loop(ego, fDONE);
+  }
 }
-if (fDone && fallSeq ==  SITUP) {
+if (fDone && fallSeq == SITUP) {
   reset(fDone);
   player.control();
   accept.input();

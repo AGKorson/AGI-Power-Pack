@@ -2,7 +2,7 @@
 [
 [ lgc.Death: Death handler
 [
-[ This logic is run when the player dies.
+[ This logic is run when the player dies, or otherwise ends the game.
 [ The death message displayed depends on the value of deathType.
 [
 [ 0: not dead
@@ -20,6 +20,8 @@
 [ 255: winning sequence complete
 [
 [ ********************************************************************
+
+[ TODO: add deathcount handler (count how many times/ways player dies)
 
 [ if message announcing death hasn't been displayed yet
 if (deathType < 254) { 
@@ -94,6 +96,7 @@ if (deathType < 254) {
   }
 }
 
+
 [ decrement timer
 if (deathTimer > 0) {
   deathTimer--;
@@ -102,6 +105,8 @@ if (deathTimer > 0) {
 [ after a delay, show ending message to player
 if (deathTimer == 1) {
   if (deathType == 255) {
+    [ TODO: ending credits/music
+    
     [ check for module resets
     work1 = 0;
     if (enableCAISOCC) {

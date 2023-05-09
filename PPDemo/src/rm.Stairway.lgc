@@ -5,6 +5,8 @@
 [ 
 [
 [ ********************************************************************
+[ TODO: sound effect for light flicker
+[ TODO: more said statements in stairway
 
 #define lightshadow   o1
 #define door          o2

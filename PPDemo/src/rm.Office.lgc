@@ -5,6 +5,8 @@
 [ 
 [
 [ ********************************************************************
+[ TODO: sound effects for tripping on rug, opening/closing picture, closing safe
+[ TODO: more said statements for office
 
 #define oSafe          o1
 #define oPicture       o2

@@ -5,6 +5,8 @@
 [ 
 [
 [ ********************************************************************
+[ TODO: sound effects for coffin open/close
+[ TODO: more said statements for storeroom
 
 #define oClockHour      o1
 #define oClockMinute    o2

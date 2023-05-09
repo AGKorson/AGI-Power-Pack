@@ -102,7 +102,7 @@ if(newRoom) {
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 16); [ bit.and(BYVAL, VAR, MASK)
   if (work1 == 16) {
-    work1 = 2;
+    work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 16); [ bit.or(BYVAL, VAR, MASK)
   }

@@ -21,7 +21,7 @@ X       -2 pts   unlocking car (gain it back when getting in car)
 X       +3 pts:  asking to use the bathroom to gain access to hallway
 X       +3 pts:  getting magazine from lobby table
 X       +2 pts:  reading magazine (finding password clue)
-X       +5 pts:  getting in car (for net of +3)
+X       +5 pts:  getting in car
 X       +5 pts:  ending game with source disk
 X       +1 pt:   1st time opening closet door
 X       +5 pts:  breaking hole in wall
@@ -32,18 +32,18 @@ X       +6 pts:  entering correct door code for control room door
 X       -1 pt:   entering wrong code three times in a row
 X       +2 pts:  reset MOCC
 X       +5 pts:  restore BaDASS
-X       +5 pts:  restore ICAPOCC
-X       +5 pts:  restore ESADOCC
-X       +5 pts:  restore CAISOCC
-X       +5 pts:  restore ERIDOCC
-X       +5 pts:  restore EFROCC
-X       +5 pts:  restore RANDOCC
-X       +2 pts:  use ICAPOCC
-X       +2 pts:  use ESADOCC
-X       +2 pts:  use CAISOCC
-X       +2 pts:  use ERIDOCC
-X       +2 pts:  use EFROCC
-X       +2 pts:  use RANDOCC
+X       +2 pts:  restore ICAPOCC
+X       +2 pts:  restore ESADOCC
+X       +2 pts:  restore CAISOCC
+X       +2 pts:  restore ERIDOCC
+X       +2 pts:  restore OFROCC
+X       +2 pts:  restore RANDOCC
+X       +5 pts:  use ICAPOCC
+X       +5 pts:  use ESADOCC
+X       +5 pts:  use CAISOCC
+X       +5 pts:  use ERIDOCC
+X       +5 pts:  use OFROCC
+X       +5 pts:  use RANDOCC
 X       +2 pts:  putting disk in drive, 1st time
 X       -4 pts:  dropping disk (in drive)
 X       +4 pts:  taking disk out of drive
@@ -110,7 +110,7 @@ INVENTORY: when 'examining', show typical view with description for all items; s
 
 3. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss. If a patient arrives in a batmobile and ego tries to touch it, it shocks and kills him. Touching the trees will get sap on ego's hands, which costs a point; he can wash in the sink in the closet to get the point back. Ego can get back in car; this ends game (winning condition is to have disk with PP source code.)
     BACKGROUND: done
-    ANIMATION ART: - couple more small patient views for variety (different color hair/clothes)
+    ANIMATION ART: done
     SOUND: car sounds, door sound for entering building, shock sound
     SCORING: -1 for touching trees; +1 for getting run over; +1 for getting shocked by batmobile; +5 for getting in car to end game; +20 if game ends with power pack source disk
     CODING: 'said' statements
@@ -142,7 +142,7 @@ INVENTORY: when 'examining', show typical view with description for all items; s
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: open/close door; tripping/falling/breaking wall; water drip; 
+    SOUND: open/close door; tripping/falling/breaking wall 
     SCORING: +3 for closing closet door; +5 for making hole in wall; -1 each time for tripping over broom after hole is made; +2 for putting broom in corner; -3 for touching plunger; +1 first time washing hands; +1/+3 for washing hands after touching tree/plunger; +3 pts for fixing drip
     CODING: 'said' statements 
 
@@ -194,14 +194,13 @@ Touch tone frequencies:
     -animation speed panel
     -color palette panel
 
-When ego enters from the stairwell, the control panel fails (flash screen, sound effects), door slams shut and won't open. Terminal is only part of panel working. It's a DOS-like system. Most commands don't work; there's memory corruption. Ego has to reboot/restart system to get it working correctly. Once rebooted, the six control panels and the security system (BaDASS - Building and Digital Access Security System) need passwords to be restarted. BaDASS can only be restarted when all other control panels are restarted. Each system/panel needs a password; they can be found among things in the office and store room. 
-Once BaDASS is restarted and all passwords are entered, door will unlock; ego can leave, going back to car in parking lot to end the game. Ego needs to copy the PP source code to a floppy disk in order to get max points. 
+When ego enters from the stairwell, the control panel fails (flash screen, sound effects), door slams shut and won't open. Terminal is only part of panel working. It's a DOS-like system. Most commands don't work; there's memory corruption. Ego has to reboot/restart system to get it working correctly. Once rebooted, the six control panels and the security system (BaDASS - Building and Digital Access Security System) need passwords to be restarted. The passwords can be found among things in the office and store room. Once BaDASS is restarted, door will unlock; ego can leave, going back to car in parking lot to end the game. Ego needs to copy the PP source code to a floppy disk in order to 'win'. 
 
     BACKGROUND: done
     ANIMATION ART: done 
     SOUND: system failure sound effect;
     SCORING: +5 pts for each module successfully restored (30 pts total); +10 pts for restoring BaDASS; 4 pts for inserting drive; +6 for copying source files to floppy
-    CODING: 'said' statements (check door-unlock code!)
+    CODING: 'said' statements
 
 8. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
 

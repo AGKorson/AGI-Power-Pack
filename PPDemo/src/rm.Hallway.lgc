@@ -5,7 +5,13 @@
 [ 
 [
 [ ********************************************************************
+[ TODO: sign on closet door that says 'keep shut'
+[ TODO: sound effects for open/close doors, getting arrested
+[ TODO: more said statements for hallway
 
+[ **************************************
+[ LOCAL DEFINES
+[ **************************************
 #define oClosetDoor    o1
 #define oExamDoor      o2
 #define oReceptionist  o3

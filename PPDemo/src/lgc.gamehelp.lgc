@@ -8,6 +8,9 @@
 [ ********************************************************************
 
 [ TODO: make a help screen
+[ Left panel has topics; use cursor to select topics; right panel will
+[ display relevant information. May include a hint system, but not 
+[sure yet.
 
 [ no input allowed while help screen is displayed
 prevent.input();

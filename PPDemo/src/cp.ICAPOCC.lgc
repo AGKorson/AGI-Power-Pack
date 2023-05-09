@@ -6,6 +6,7 @@
 [ ICAPOCC
 [
 [ ********************************************************************
+[ TODO: better preview options
 
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
@@ -117,7 +118,7 @@ if(newRoom) {
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 4); [ bit.and(BYVAL, VAR, MASK)
   if (work1 == 4) {
-    work1 = 2;
+    work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 4); [ bit.or(BYVAL, VAR, MASK)
   }
