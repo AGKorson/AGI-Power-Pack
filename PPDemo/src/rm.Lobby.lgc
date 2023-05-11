@@ -1167,6 +1167,9 @@ if (fP1Done) {
   if (patient1Seq == STANDUP) {
     patient1Seq = MOVECOUNTER;
     set.loop(oPatient1, LP_MOVELEFT);
+    [ disable cycle at rest
+    work1 = 1;
+    set.upper.left(&oPatient1, &work1);  [ autocycle(oSOBJ, vMODE)
     normal.cycle(oPatient1);
     move.obj(oPatient1, 76, 117, 1, fP1Done);
     goto(p1SeqDone);
@@ -1214,6 +1217,9 @@ if (fP1Done) {
   }
   if (patient1Seq == RTNHALL3) {
     patient1Seq = RTNHALL4;
+    [ allow cycle at rest
+    work1 = 0;
+    set.upper.left(&oPatient1, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient1, LP_P_SIT);
     set.cel(oPatient1, 3);
     reverse.loop(oPatient1, fP1Done);
@@ -1232,6 +1238,9 @@ if (patient2Ctr > 0) {
     [ patient 2 arrives
     if (patient2Seq == ARRIVE) {
       patient2Seq = MOVESEAT1;
+      [ disable cycle at rest
+      work1 = 1;
+      set.upper.left(&oPatient2, &work1);  [ autocycle(oSOBJ, vMODE)
       set.loop(oPatient2, LP_MOVEUP);
       normal.cycle(oPatient2);
       position(oPatient2, 116, 167);
@@ -1349,6 +1358,9 @@ if (fP2Done) {
   }
   if (patient2Seq == MOVESEAT2) {
     patient2Seq = SITDOWN;
+    [ allow cycle at rest
+    work1 = 0;
+    set.upper.left(&oPatient2, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient2, LP_P_SIT);
     set.cel(oPatient2, 3);
     reverse.loop(oPatient2, fP2Done);
@@ -1366,6 +1378,9 @@ if (fP2Done) {
   }
   if (patient2Seq == STANDUP) {
     patient2Seq = MOVEHALL1;
+    [ disable cycle at rest
+    work1 = 1;
+    set.upper.left(&oPatient2, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient2, LP_MOVELEFT);
     normal.cycle(oPatient2);
     move.obj(oPatient2, 88, 108, 1, fP2Done);
@@ -1436,6 +1451,9 @@ if (patient3Ctr > 0) {
     [ patient 3 arrives
     if (patient3Seq == ARRIVE) {
       patient3Seq = MOVESEAT1;
+      [ disable cycle at rest
+      work1 = 1;
+      set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
       set.loop(oPatient3, LP_MOVEUP);
       normal.cycle(oPatient3);
       position(oPatient3, 116, 167);
@@ -1552,6 +1570,9 @@ if (fP3Done) {
   }
   if (patient3Seq == MOVESEAT2) {
     patient3Seq = SITDOWN;
+    [ allow cycle at rest
+    work1 = 0;
+    set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient3, LP_P_SIT);
     set.cel(oPatient3, 3);
     reverse.loop(oPatient3, fP3Done);
@@ -1568,6 +1589,9 @@ if (fP3Done) {
     goto(p3SeqDone);
   }
   if (patient3Seq == STANDUP) {
+    [ disable cycle at rest
+    work1 = 1;
+    set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     patient3Seq = MOVEHALL1;
     set.loop(oPatient3, LP_MOVELEFT);
     normal.cycle(oPatient3);
@@ -1638,6 +1662,9 @@ if (patient4Ctr > 0) {
     [ patient 4 arrives
     if (patient4Seq == ARRIVE) {
       patient4Seq = MOVESEAT1;
+      [ disable cycle at rest
+      work1 = 1;
+      set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
       set.loop(oPatient4, LP_MOVEUP);
       normal.cycle(oPatient4);
       position(oPatient4, 116, 167);
@@ -1754,6 +1781,9 @@ if (fP4Done) {
   }
   if (patient4Seq == MOVESEAT2) {
     patient4Seq = SITDOWN;
+    [ allow cycle at rest
+    work1 = 0;
+    set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient4, LP_P_SIT);
     set.cel(oPatient4, 3);
     reverse.loop(oPatient4, fP4Done);
@@ -1777,6 +1807,9 @@ if (fP4Done) {
   }
   if (patient4Seq == STANDUP) {
     patient4Seq = MOVEHALL1;
+    [ disable cycle at rest
+    work1 = 1;
+    set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient4, LP_MOVELEFT);
     normal.cycle(oPatient4);
     move.obj(oPatient4, 88, 108, 1, fP4Done);

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "5/9/2023 10:39:21 AM"
+   LastEdit = "5/11/2023 7:44:50 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -107,8 +107,8 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H18444D4B
-   CompCRC32 = &H9460AF53
+   CRC32 = &H5D995BD2
+   CompCRC32 = &H5D995BD2
    IsRoom = True
 
 [Logic23]
@@ -128,7 +128,7 @@
 [Logic25]
    ID = cp.ESADOCC
    Description = ""
-   CRC32 = &H24BE6121
+   CRC32 = &H31B7F05D
    CompCRC32 = &H66775792
    IsRoom = True
 
@@ -142,7 +142,7 @@
 [Logic26]
    ID = cp.OFROCC
    Description = ""
-   CRC32 = &H1D74AEB4
+   CRC32 = &H10FE9789
    CompCRC32 = &H124B3E2F
    IsRoom = True
 
@@ -170,15 +170,15 @@
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &HC502D0AD
-   CompCRC32 = &HC502D0AD
+   CRC32 = &HB6DCD509
+   CompCRC32 = &HB6DCD509
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &H6E55A147
-   CompCRC32 = &H6E55A147
+   CRC32 = &H26CD6FBC
+   CompCRC32 = &H26CD6FBC
    IsRoom = True
 
 [Logic8]
@@ -191,8 +191,8 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H392F7F23
-   CompCRC32 = &H392F7F23
+   CRC32 = &H2FABBA33
+   CompCRC32 = &H2FABBA33
    IsRoom = True
 
 [Logic6]

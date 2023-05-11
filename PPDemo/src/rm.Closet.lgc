@@ -519,7 +519,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ broom is in corner
       if (mouseX > 40 && mouseX < 48 && mouseY > 138 && mouseY < 163) {
         if (obj.in.box(ego, 47, 149, 58, 155)) {
-          print("You decide to leave the broom where it is.");
+          print("You don't need the broom so you leave it in the corner.");
         } else {
           print("You can't reach that from here.");
         }
@@ -543,7 +543,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     if (clickbroom) {
       if ((obj.in.box(ego, 47, 146, 77, 156) ||
-           obj.in.box(ego, 61, 140, 85, 147))) {
+           obj.in.box(ego, 57, 140, 85, 147))) {
         if (!wallbreak) {
           print("As you bend over to pick up the broom, you trip and fall!");
           fallSeq = STARTFALL;

@@ -1789,12 +1789,15 @@ if ((lastChar == 13 || lastChar == 10)) {
         }
         [ only valid file is PWRPACK.TXT in
         [ c:\users\kw002 or a:
+[ TODO: ok to print from parent directories
         sTemp2 = "pwrpack.txt";
         if (compare.strings(input, sTemp2) && 
            (vCurDir == C_KW002 || vCurDir == A_ROOT)) {
           terminalfn = TYPE_PP;
           call(lgc.Terminalfunctions);
         } else {
+[ TODO: if input has backslashes, how to convert them for printing?
+[ TODO: this easily exceeds width; need to split as needed
           output = "%s12 is not a text file";
           terminalfn = ADDLINE_LF;
           call(lgc.Terminalfunctions);
