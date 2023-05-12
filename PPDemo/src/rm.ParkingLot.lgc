@@ -34,7 +34,6 @@
 #define fElectrocuted  f228
 
 [ TODO: sound effects for cars, door, batmobile shock
-[ TODO: more said statements for parking lot
 
 [ **************************************
 [ FIRST CYCLE ONLY
@@ -565,7 +564,26 @@ if (fEgoDead) {
 [ PROCESS PLAYER INPUT
 [ **************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
-  [ place said tests here
+[ TODO: more said statements for parking lot
+  [ look sky
+  [ look mountain
+  [ look building
+  [ look car
+  [ look patient
+  [ look tree/bushes
+  [ look parking lot
+  [ look sidewalk/lawn
+  [ look door
+  [ open door
+  [ get in car, enter car
+  [ drive away, leave, go home
+  [ take car, steal car, 
+  [ take/steal batmobile
+  [ hit/punch/kick/kill anything- not allowed "unprovoked violence is never acceptable"
+  [ climb anything - not allowed (in most rooms)
+  
+  
+ [ place said tests here
   if (said("look")) {
     print("You are in the Sierra building parking lot.");
   }

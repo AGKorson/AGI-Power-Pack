@@ -390,7 +390,7 @@ if (said("test", "drop")) {
 }
 [!!!!!! END TEMPORARY DEBUG CODE
 
-[ check for menu activation
+[ MENU AND STATUS BAR CHECKS
 if (!disableGameFunctions) {
   [ boolean trick to use single if statement
   if (!controller(cMenu) && (!controller(cLeftClick) || mouseY > 7)) {
@@ -438,18 +438,10 @@ if (!disableGameFunctions) {
         s23 = m16;
         block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
       } else {
-[        if (cursormode == C_LOOK) {
-[          [ enable look if 'look' icon
-
-[!!!! enable 'look item' for all other cursors
-          enable.item(cChooseItem);
-          s23 = m15;
-          block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
-          
-[        } else {
-[          [ disable for all others
-[          disable.item(cChooseItem);
-[        }
+        [ enable 'look item' for all other cursors
+        enable.item(cChooseItem);
+        s23 = m15;
+        block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
       }
     } else {
       [ not enabled if dead
@@ -606,19 +598,7 @@ if (!disableGameFunctions) {
   }
 }
 
-[ check for end of closet timer
-if (closetTimerDone) {
-  [ the door gets closed, and if ego is beyond the secret room, he's gonna get stuck
-  reset(closetTimerStart);
-  reset(closetTimerDone);
-  reset(closetopen);
-  if (currentRoom > 6) {
-    print("%l90|8");
-    set(trapped);
-  }
-}
-
-[ if this is first cycle since restore game executed
+[ CHECK FOR GAME RESTORE
 if (isset(gameRestored)) {
   [ make sure input area is cleared
   clear.lines(23, 24, 0);
@@ -628,12 +608,12 @@ if (isset(gameRestored)) {
   call(lgc.InitToolbar);
 }
 
-[ if clock display is needed
+[ CLOCK DISPLAY
 if (clockOn) {
   [ check current time every second
   if (clearStatusSeconds != elapsedSeconds) {
     if (realClock) {
-      [ check realtime clock every second, update if minute changes
+      [ check realtime clock every second
       block(GET.TIME, &currentHour, &currentMinute, &currentSecond); [ get.time(vHOUR, vMINUTE, vSECOND)
     }
     [ update the stored seconds value
@@ -641,12 +621,12 @@ if (clockOn) {
   }
 }
 
-[ ***********************
-[ CHECK CONTROLLER INPUT
-[ *********************** 
+[ **************************************
+[ DYNAMIC MENU CHECKS
+[ **************************************
+[ these checks need to be in logic 0, not in the game function logic
 
-[ dynamic menu checks need to be in logic 0, not in the game function logic
-[ sound options
+[ SOUND MENU ITEMS
 if (controller(cToggleSound)) {
   if (soundOn && currentTrack > 0 && currentTrack < 128) {
     [ turning sound off stops walkman
@@ -752,9 +732,9 @@ if (controller(cSoundMIDI)) {
   }
 }
 
-[ clock options
-[ toggle clock
+[ CLOCK MENU ITEMS
 if (controller(cClock)) {
+  [ toggle clock mode
   toggle(clockOn);
   if (clockOn) {
     if (realClock) {
@@ -794,7 +774,7 @@ if (controller(cGameClock)) {
   }
 }
 
-[ speed controls
+[ SPEED MENU ITEMS
 if ((controller(cSlow) || 
      said("slow") || 
      said("slow", "speed"))) {
@@ -850,9 +830,21 @@ if (controller(cFaster)) {
   }
 }
 
-[ ***********************
+[ **************************************
 [ NON-CONTROLLER CHECKS
-[ *********************** 
+[ **************************************
+
+[ check for end of closet timer
+if (closetTimerDone) {
+  [ the door gets closed, and if ego is beyond the secret room, he's gonna get stuck
+  reset(closetTimerStart);
+  reset(closetTimerDone);
+  reset(closetopen);
+  if (currentRoom > 6) {
+    print("%l90|8");
+    set(trapped);
+  }
+}
 
 [ check for ego death (usually happens a lot in AGI games...)
 if (deathType > 0) {
@@ -881,9 +873,8 @@ if (deathType > 0) {
 [ save current ego position
 get.posn(ego, egoX, egoY);
     
-[ IMPORTANT: This calls the logic for the current room - this
-[ is not done automatically by the interpreter so it has to be
-[ called manually by logic 0.
+[ ROOM SPECIFIC CODE
+[ (call BEFORE generic input checks)
 call.v(currentRoom);
 
 [ if debugging is active                
@@ -892,66 +883,7 @@ if (debugging) {
   call(lgc.Debug);
 }
 
-[ run game specific functions only if they are not disabled
-if (!disableGameFunctions) {
-  [ saving a cursor
-  if (saveCursor) {
-    reset(saveCursor);
-    [ copy s16 into designated cursor msg value
-    [ v227 is cursor index value in cp.ERIDOCC logic
-    work1 = v227;
-    work1 += 40;
-    work2 = 16;
-    block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
-    [ provide feedback
-    print.at("Cursor saved.", 14, 19, 15);
-    return();
-  }
-  
-  [ restore a cursor
-  if (restoreCursor) {
-    reset(restoreCursor);
-    [ set s12 to default of designated cursor
-    work1 = &s12;
-    work2 = v227;
-    work2 += 30;
-    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
-    [ now copy it to the current cursor msgnum
-    work2 -= 10;
-    block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
-    [ force update by resetting the cursor index
-    v227 = -1;
-    [ provide feedback
-    print.at("Cursor restored.", 14, 19, 17);
-    return();
-  }
-  
-  [ check for instrument change
-  if (saveCustomInst) {
-    reset(saveCustomInst);
-    work1 = 22;
-    block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-    work1 = v221; [ selinst in cp.CAISOCC
-    work1 += 52; [convert to msg offset
-    work2 = &s12; [ use string 12
-    block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
-    [ update config file
-    call(lgc.SaveOptions);
-    return();
-  }
-  
-  [ check common game functions, depending on current cursor
-  if (cursormode < C_DISK) {
-    call(lgc.GameFunctions);
-  } else {
-    [ if using an item, use different function call
-    call(lgc.UseItem);
-  }
-  [ check for toolbar buttons click
-  call(lgc.ToolbarFunctions);
-}
-
-[ music check
+[ WALKMAN MUSIC CHECK
 if (musicDone) {
   reset(musicDone);
   [ only if cassette is playing AND not paused or at end of side
@@ -979,13 +911,75 @@ if (musicDone) {
   }
 }
 
-[ sound check
+[ SOUND EFFECTS CHECK
 if (soundDone) {
   reset(soundDone);
   reset(playSound);
 }
 
-[ check player input for unknown words
+[ **************************************
+[ GENERIC CONTROLLERS & TEXT INPUT
+[ **************************************
+
+[ only if not disabled!
+if (!disableGameFunctions) {
+  [ saving a cursor from ERIDOCC
+  if (saveCursor) {
+    reset(saveCursor);
+    [ copy s16 into designated cursor msg value
+    [ v227 is cursor index value in cp.ERIDOCC logic
+    work1 = v227;
+    work1 += 40;
+    work2 = 16;
+    block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
+    [ provide feedback
+    print.at("Cursor saved.", 14, 19, 15);
+    return();
+  }
+  [ restore a cursor from ERIDOCC
+  if (restoreCursor) {
+    reset(restoreCursor);
+    [ set s12 to default of designated cursor
+    work1 = &s12;
+    work2 = v227;
+    work2 += 30;
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
+    [ now copy it to the current cursor msgnum
+    work2 -= 10;
+    block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    [ force update by resetting the cursor index
+    v227 = -1;
+    [ provide feedback
+    print.at("Cursor restored.", 14, 19, 17);
+    return();
+  }
+  
+  [ check for instrument change from CAISOCC
+  if (saveCustomInst) {
+    reset(saveCustomInst);
+    work1 = 22;
+    block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+    work1 = v221; [ selinst in cp.CAISOCC
+    work1 += 52; [convert to msg offset
+    work2 = &s12; [ use string 12
+    block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
+    [ update config file
+    call(lgc.SaveOptions);
+    return();
+  }
+  
+  [ check common game functions, depending on current cursor
+  if (cursormode < C_DISK) {
+    call(lgc.GameFunctions);
+  } else {
+    [ if using an item, use different function call
+    call(lgc.UseItem);
+  }
+  [ check for toolbar buttons click
+  call(lgc.ToolbarFunctions);
+}
+
+[ UNKNOWN WORD CHECK
 if (haveInput && !haveMatch && unknownWordNum > 0) {
   reset(haveInput);
   [copy word to a string
@@ -1020,7 +1014,7 @@ if (haveInput && !haveMatch && unknownWordNum > 0) {
     word.to.string(unknownWord, w10);
   }
   [choose a random unknown word response
-  random(33, 35, rndNum);
+  random(17, 19, rndNum);
   print.v(rndNum);
 }
   
@@ -1096,12 +1090,11 @@ return();
 [#message xx " Slow   "
 [#message xx " Fast   "
 [#message xx " Fastest"
+#message 17 "I don't understand \"%s1\""
+#message 18 "\"%s1\" is not in my vocabulary."
+#message 19 "What is \"%s1\""
 
-[debug menu items
-#message 38 "Log Input:      Off"
-#message 39 "Display Clicks: Off"
-
- [ active cursors
+[ active cursors
 #message 20 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"
 [ walk
@@ -1126,6 +1119,7 @@ return();
 #message 27 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
             "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
 
+[ TODO: move default cursors to game functions? (will save ~1K of heap space)
 [ default cursors
 #message 30 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"
@@ -1151,7 +1145,11 @@ return();
 #message 37 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
             "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
 
+[ debug menu items
+#message 38 "Log Input:      Off"
+#message 39 "Display Clicks: Off"
 
+[ FM instrument values
 #message 52 "%s16"
 #message 53 "22215909FFFF030F020000"
 #message 54 "22215909FFFF030F020000"
