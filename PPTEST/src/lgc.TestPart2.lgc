@@ -1129,7 +1129,7 @@ if (teststep == 33) {
           "you are ready to continue, press CTRL+Z or enter 'continue'");
   }
   if (controller(cLeftClick)) {
-    if (mouseY > 7 && mouseY < 176) {
+    if (mouseY < 168) {
       work1 = 0;
       block(GET.PIXEL, &mouseX, &mouseY, &work1);
       [ lower nibble is visual
