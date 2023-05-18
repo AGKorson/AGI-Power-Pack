@@ -19,7 +19,6 @@
 [
 [
 [ ********************************************************************
-[ TODO: confirm save function
 
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
@@ -137,9 +136,6 @@ if (!enableERIDOCC) {
 [ FIRST CYCLE ONLY
 [ **************************************
 if (newRoom) {
-  [ this is the first cycle through this room
-  [ load, draw and discard the picture resource for the current room
-
   [ if first time, score it
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 32); [ bit.and(BYVAL, VAR, MASK)
@@ -247,7 +243,7 @@ if (newRoom) {
   [ disable scripting for rest of activity in this room
   set(noScript);
   
-  [ setup for add.to.pic
+  [ setup for hotspot add.to.pic
   vView = vw.cp.ERIDOCC;
   vLoop = 6;
   vPri = 14; 
@@ -1078,16 +1074,16 @@ if (btnAction == B_EXPORT) {
   sBadChars = "\\/:*?\"<>|";
   block(STR.COPY, &sFilename, &sTempFile, 0); [ str.copy(sINPUT, sRESULT)
   :checkname
-  block(STR.RIGHT, &sTempFile, &sTempFile, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-  [ get 1st char value
-  block(CHAR2BYTE, &sTempFile, &work2, 0); [ char2byte(sCHAR, vRESULT)
-  work3 = 0;
-  block(INSTR, &sBadChars, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
-  if (work3 != -1) {
-    print.at("Invalid filename: %s20", 14, 19, 16);
-    goto(getfile);
-  }
-  --work1;
+    block(STR.RIGHT, &sTempFile, &sTempFile, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    [ get 1st char value
+    block(CHAR2BYTE, &sTempFile, &work2, 0); [ char2byte(sCHAR, vRESULT)
+    work3 = 0;
+    block(INSTR, &sBadChars, &work2, &work3); [ instr(sINPUT, vCHAR, vPOS)
+    if (work3 != -1) {
+      print.at("Invalid filename: %s20", 14, 19, 16);
+      goto(getfile);
+    }
+    --work1;
   if (work1 > 0) {
     goto(checkname);
   }

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "5/11/2023 7:44:50 AM"
+   LastEdit = "5/17/2023 9:32:11 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,15 +49,15 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H6D56E06F
-   CRC32 = &H6D56E06F
+   CompCRC32 = &HE7F66D7F
+   CRC32 = &HFA6FCC40
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &H332A5473
-   CRC32 = &H332A5473
+   CompCRC32 = &HE8237E4E
+   CRC32 = &HE8237E4E
    ID = lgc.GameFunctions
    IsRoom = False
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
@@ -107,50 +107,50 @@
 [Logic21]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H5D995BD2
-   CompCRC32 = &H5D995BD2
+   CRC32 = &H1F7FBF57
+   CompCRC32 = &H1F7FBF57
    IsRoom = True
 
 [Logic23]
    ID = cp.RANDOCC
    Description = ""
    CRC32 = &HD0909B7C
-   CompCRC32 = &H34C2A0BE
+   CompCRC32 = &HD0909B7C
    IsRoom = True
 
 [Logic24]
    ID = cp.ICAPOCC
    Description = ""
-   CRC32 = &H4E3DB07D
-   CompCRC32 = &HF1AA4BA4
+   CRC32 = &H18C4250B
+   CompCRC32 = &H18C4250B
    IsRoom = True
 
 [Logic25]
    ID = cp.ESADOCC
    Description = ""
    CRC32 = &H31B7F05D
-   CompCRC32 = &H66775792
+   CompCRC32 = &H31B7F05D
    IsRoom = True
 
 [Logic22]
    ID = cp.CAISOCC
    Description = ""
-   CRC32 = &HAB0FEBA
-   CompCRC32 = &H22039627
+   CRC32 = &HA9A91B32
+   CompCRC32 = &HA9A91B32
    IsRoom = True
 
 [Logic26]
    ID = cp.OFROCC
    Description = ""
    CRC32 = &H10FE9789
-   CompCRC32 = &H124B3E2F
+   CompCRC32 = &H10FE9789
    IsRoom = True
 
 [Logic27]
    ID = cp.ERIDOCC
    Description = ""
-   CRC32 = &H38E50FF0
-   CompCRC32 = &H38E50FF0
+   CRC32 = &HE1BB5D73
+   CompCRC32 = &H231434DF
    IsRoom = True
 
 [Logic1]
@@ -163,162 +163,162 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HFEDCFD0E
-   CompCRC32 = &HFEDCFD0E
+   CRC32 = &HB11C92DB
+   CompCRC32 = &HA97EABB7
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &HB6DCD509
+   CRC32 = &H5E1AD983
    CompCRC32 = &HB6DCD509
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &H26CD6FBC
+   CRC32 = &H7D5B74DE
    CompCRC32 = &H26CD6FBC
    IsRoom = True
 
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &HBF0A6D2C
+   CRC32 = &HCA96001
    CompCRC32 = &HBF0A6D2C
    IsRoom = True
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H2FABBA33
+   CRC32 = &H9D7FE2EF
    CompCRC32 = &H2FABBA33
    IsRoom = True
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
-   CRC32 = &H6AD6315A
-   CompCRC32 = &H6AD6315A
+   CRC32 = &H740EF346
+   CompCRC32 = &H10C73CB9
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &H4AFAD355
-   CompCRC32 = &H72C751E5
+   CRC32 = &H4FD80156
+   CompCRC32 = &H4AFAD355
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H99B749FA
-   CompCRC32 = &HFE0C52E1
+   CRC32 = &H5CB1050C
+   CompCRC32 = &H99B749FA
    IsRoom = True
 
 [Logic10]
    ID = rm.Storeroom
    Description = "maybe include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
    CRC32 = &H267BCF11
-   CompCRC32 = &H470F4EE6
+   CompCRC32 = &H267BCF11
    IsRoom = True
 
 [Logic102]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &HE108C221
+   CRC32 = &H4B3F7B4B
    CompCRC32 = &HE108C221
    IsRoom = False
 
 [Logic103]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HDC5A566D
+   CRC32 = &H7360E266
    CompCRC32 = &HDC5A566D
    IsRoom = False
 
 [Logic104]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H98EEB2A1
+   CRC32 = &H23C7E065
    CompCRC32 = &H98EEB2A1
    IsRoom = False
 
 [Logic105]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H2760D8CA
+   CRC32 = &HB56A2BA9
    CompCRC32 = &H2760D8CA
    IsRoom = False
 
 [Logic106]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &HCE2FC8BA
+   CRC32 = &H7E05993D
    CompCRC32 = &HCE2FC8BA
    IsRoom = False
 
 [Logic107]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &HFA3F81C7
+   CRC32 = &H2FF31DE8
    CompCRC32 = &HFA3F81C7
    IsRoom = False
 
 [Logic108]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &H5E7D8505
+   CRC32 = &HC3591F81
    CompCRC32 = &H5E7D8505
    IsRoom = False
 
 [Logic109]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HE0F5EA3C
+   CRC32 = &H3A1FF3F4
    CompCRC32 = &HE0F5EA3C
    IsRoom = False
 
 [Logic110]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H656AF96F
+   CRC32 = &H9DD02E8B
    CompCRC32 = &H656AF96F
    IsRoom = False
 
 [Logic111]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &HF229CD14
+   CRC32 = &HF10E1CD5
    CompCRC32 = &HF229CD14
    IsRoom = False
 
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H54B74480
+   CRC32 = &H1A114C3F
    CompCRC32 = &H54B74480
    IsRoom = False
 
 [Logic113]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H4D102434
+   CRC32 = &H518CA91C
    CompCRC32 = &H4D102434
    IsRoom = False
 
 [Logic97]
    ID = lgc.Error
    Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
-   CRC32 = &H6B738E55
-   CompCRC32 = &H6B738E55
+   CRC32 = &H9B7D2BBB
+   CompCRC32 = &H9B7D2BBB
    IsRoom = False
 
 [Logic98]
    ID = lgc.Debug
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
-   CRC32 = &HF4926492
-   CompCRC32 = &HF4926492
+   CRC32 = &H6C777A4D
+   CompCRC32 = &H6C777A4D
    IsRoom = False
 
 [Logic99]
@@ -415,8 +415,8 @@
 [Logic18]
    ID = lgc.ReadManual
    Description = ""
-   CRC32 = &HFEDCE39C
-   CompCRC32 = &HFEDCE39C
+   CRC32 = &H1608B0DD
+   CompCRC32 = &H1608B0DD
    IsRoom = False
 
 [Logic19]
@@ -505,11 +505,6 @@
    Description = ""
    BkgdImg = ""
 
-[Picture28]
-   ID = pic.cp.Paint
-   Description = ""
-   BkgdImg = ""
-
 [Picture22]
    ID = pic.cp.Instrument
    Description = ""
@@ -563,11 +558,6 @@
    BkgdTrans = ""
    BkgdPosn = ""
    BkgdSize = ""
-
-[Picture30]
-   ID = pic.TestPalette
-   Description = ""
-   BkgdImg = ""
 
 [Picture13]
    ID = pic.SafeDoor
@@ -2581,6 +2571,57 @@
    Description = ""
    Key = 0
    TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound86]
+   ID = s.Car
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound87]
+   ID = s.CarStart
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound88]
+   ID = s.CarStop
+   Description = ""
+   Key = 0
+   TPQN = 4
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80

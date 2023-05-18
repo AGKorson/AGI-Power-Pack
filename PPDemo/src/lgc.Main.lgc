@@ -216,6 +216,7 @@ if (currentRoom == 0) {
     set.menu.item("About           ", cAbout);
     set.menu.item("Version  <Alt-V>", cVersion);
     set.menu.item("Help        <F1>", cHelp);
+[    set.menu.item("Skip Intro      ", cIntro);
     set.menu("File");
     set.menu.item("Save     <F5>", cSave);
     set.menu.item("Restore  <F7>", cRestore);
@@ -392,8 +393,8 @@ if (said("test", "drop")) {
 
 [ MENU AND STATUS BAR CHECKS
 if (!disableGameFunctions) {
-  [ boolean trick to use single if statement
-  if (!controller(cMenu) && (!controller(cLeftClick) || mouseY > 7)) {
+  [ boolean trick to use single if statement (-1 to -8 is ypos of top row
+  if (!controller(cMenu) && (!controller(cLeftClick) || mouseY > 191)) {
   } else {
     [ check for click on sound bar
     if (mouseX > 137) {
@@ -944,6 +945,8 @@ if (!disableGameFunctions) {
     work2 = v227;
     work2 += 30;
     block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
+    [ format it
+    block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
     [ now copy it to the current cursor msgnum
     work2 -= 10;
     block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
@@ -1119,31 +1122,15 @@ return();
 #message 27 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
             "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
 
-[ TODO: move default cursors to game functions? (will save ~1K of heap space)
-[ default cursors
-#message 30 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
-            "00000040006000700078007C007E007F807F007C006C00460006000300030000"
-[ walk
-#message 31 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
-            "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
-[ look
-#message 32 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
-            "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
-[ talk
-#message 33 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
-            "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
-[ use 
-#message 34 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
-            "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
-[ wait
-#message 35 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
-            "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
-[ disk
-#message 36 "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF"
-            "0000000000000000EE77EE770E70FE7FFE7FFE7F1E78DC790000000000000000"
-[ tape
-#message 37 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
-            "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
+[ default cursor pointers
+#message 30 "%l90|1"
+#message 31 "%l90|2"
+#message 32 "%l90|3"
+#message 33 "%l90|4"
+#message 34 "%l90|5"
+#message 35 "%l90|6"
+#message 36 "%l90|7"
+#message 37 "%l90|8"
 
 [ debug menu items
 #message 38 "Log Input:      Off"

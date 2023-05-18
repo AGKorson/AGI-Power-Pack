@@ -1,9 +1,5 @@
 PP Demo Design notes/Walk-through
 -----------------------------
-X = item done
-I = item in progress
-O = item not started
-
 General: 
     TOOLBAR - done
     MENU - done
@@ -80,7 +76,7 @@ INVENTORY: when 'examining', show typical view with description for all items; s
  7 post-it note   view, close up  close up (look at)
  8 BaDASS manual  view, text      close up (read)
  9 notebook       view, text      close up (read)
-10 folder         view, text      close up (look at [inside])
+10 folder         view, text      close up (open/look at [inside])
 11 scroll         view, text      close up (read)
 12 music sheet    view, text      close up (look at)
 13 PQ idea list   view, close up  close up (look at)
@@ -98,7 +94,7 @@ INVENTORY: when 'examining', show typical view with description for all items; s
         Animation art by: Klownstein
         Additional art by: Andrew Korson
         Music and Sound effects by: Andrew Korson
-        additional sound by: doomlazer
+        Additional sound by: doomlazer
 
 
 2. Ending Credits: TBD
@@ -138,23 +134,23 @@ INVENTORY: when 'examining', show typical view with description for all items; s
     SCORING: +1 for getting arrested; +1 for opening closet door
     CODING: 'said' statements
 
-4. Closet: Full of 'janitor' stuff. When ego moves far enough into room, he trips over a broom. (If ego tries to pick up broom, that also starts the tripping sequence.) Tripping results in ego causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; ego can fix it to get extra points. If broom is left on floor, ego will trip again (but not actually fall over) at random time intervals. Ego can put broom in corner to get extra points. Touching the plunger will subtract points. Ego can wash hands in sink to recover lost points.
+6. Closet: Full of 'janitor' stuff. When ego moves far enough into room, he trips over a broom. (If ego tries to pick up broom, that also starts the tripping sequence.) Tripping results in ego causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; ego can fix it to get extra points. If broom is left on floor, ego will trip again (but not actually fall over) at random time intervals. Ego can put broom in corner to get extra points. Touching the plunger will subtract points. Ego can wash hands in sink to recover lost points.
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: open/close door; tripping/falling/breaking wall 
+    SOUND: open/close door 
     SCORING: +3 for closing closet door; +5 for making hole in wall; -1 each time for tripping over broom after hole is made; +2 for putting broom in corner; -3 for touching plunger; +1 first time washing hands; +1/+3 for washing hands after touching tree/plunger; +3 pts for fixing drip
     CODING: 'said' statements 
 
-5. Secret Room: Connects the closet to the stairway. No other purpose/action for this room.
+7. Secret Room: Connects the closet to the stairway. No other purpose/action for this room.
  
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: light flicker/buzz
+    SOUND: n/a
     SCORING: n/a
     CODING: 'said' statements
 
-6. Stairway: At bottom of stairs is a door to the PP Control Room. The door is locked with a keypad code needed to enter. The code can be found in the magazine article. To open the door, a close up picture/room is used to enter the code. Correct code will open door. There are lights along the stairway. One of them flickers every few seconds.
+8. Stairway: At bottom of stairs is a door to the PP Control Room. The door is locked with a keypad code needed to enter. The code can be found in the magazine article. To open the door, a close up picture/room is used to enter the code. Correct code will open door. There are lights along the stairway. One of them flickers every few seconds.
 
     BACKGROUND: done
     ANIMATION ART: done
@@ -162,7 +158,7 @@ INVENTORY: when 'examining', show typical view with description for all items; s
     SCORING: n/a
     CODING: 'said' statements
 
-6A. Closeup of keypad for entering code: The keypad is a standard 12 button keypad; 0-9, plus clear/enter buttons. Correct code will open door, scoring points. If wrong code entered too many times, lose a point, kick player back to room and make them wait a minute.
+8A. Closeup of keypad for entering code: The keypad is a standard 12 button keypad; 0-9, plus clear/enter buttons. Correct code will open door, scoring points. If wrong code entered too many times, lose a point, kick player back to room and make them wait a minute.
 Touch tone frequencies:
 
     Button Tone1   Tone2  equivalent AGI sound index
@@ -186,7 +182,7 @@ Touch tone frequencies:
     SCORING: +6 points when correct code entered; -1 when wrong code is entered three times in a row
     CODING: done
 
-7. Control Room: The AGI Power Pack Control Room has a large console in the middle of room. Two exits, to right and left lead to an office, and a store room, respectively. The console consists of a central terminal (keyboard and monitor, with disk drive), and six panels:
+9. Control Room: The AGI Power Pack Control Room has a large console in the middle of room. Two exits, to right and left lead to an office, and a store room, respectively. The console consists of a central terminal (keyboard and monitor, with disk drive), and six panels:
     -mouse cursor panel
     -sound mode panel
     -custom FM instrument panel
@@ -202,15 +198,15 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
     SCORING: +5 pts for each module successfully restored (30 pts total); +10 pts for restoring BaDASS; 4 pts for inserting drive; +6 for copying source files to floppy
     CODING: 'said' statements
 
-8. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
+10. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
 
     BACKGROUND: done
     ANIMATION ART: done 
-    SOUND: safe open/close; picture swinging?
+    SOUND: safe open/close; picture swinging; drawers open/close
     SCORING: 3 pts for getting memo from printer; 3 pts for getting password list; 2 pts for getting walkman; 2 pts for finding safe; 3 pts for getting BadASS code; 4 pts for getting floppy disk; 3 pts for getting notebook; 2 pts moving rug; 3 pts for getting folder with sound password
     CODING: 'said' statements
 
-8A. Safe door closeup: spinning combo lock dial.Enter correct combination to open.
+10A. Safe door closeup: spinning combo lock dial.Enter correct combination to open.
 
     BACKGROUND: done
     ANIMATION ART: done 
@@ -218,7 +214,7 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
     SCORING: 3 pts for opening safe
     CODING: done
 
-8B: Walkman closeup: use cassette to insert it into walkman; spacebar to flip/change side? Play starts the current track (unless at end)
+10B: Walkman closeup: use cassette to insert it into walkman; spacebar to flip/change side? Play starts the current track (unless at end)
 rewind backs up one track; fast-forward moves to next track.
 
     BACKGROUND: done
@@ -227,29 +223,29 @@ rewind backs up one track; fast-forward moves to next track.
     SCORING: n/a
     CODING: done
 
-9. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. On top of PQ podium is a sheet listing possible PQ sequels, and a coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
+11. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. On top of PQ podium is a sheet listing possible PQ sequels, and a coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
 
     BACKGROUND: done
     ANIMATION art: done 
-    SOUND: coffin open/close
+    SOUND: coffin open/close; clock chimes (maybe westminster?); drawers open/close; chest open/close
     SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in walkman
     CODING: 'said' statements 
 
-9A: Coffin pillow close up: no interaction
+11A: Coffin pillow close up: no interaction
     BACKGROUND: done
     ANIMATION ART: n/a 
     SOUND: n/a 
     SCORING: n/a
     CODING: done
 
-9B: Podium closeup: no interaction
+11B: Podium closeup: no interaction
     BACKGROUND: done
     ANIMATION ART: n/a 
     SOUND: n/a 
     SCORING: n/a
     CODING: done
 
-10: Help Screen: use text screen. Left panel has topics; use cursor to select topics; right panel will display relevant information. May include a hint system, but not sure yet.
+12: Help Screen: use text screen. Left panel has topics; use cursor to select topics; right panel will display relevant information. May include a hint system, but not sure yet.
     BACKGROUND: n/a
     ANIMATION ART: n/a
     SOUND: tbd
@@ -258,7 +254,7 @@ rewind backs up one track; fast-forward moves to next track.
 
 Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version is shown, with no ability to interact. Once enabled, the panels are available. Usage info is available on main console using typical 'help file' command. Changes made by ego will be applied globally for rest of game.
 
-11. Indexed Chromatic Association Properties Options Control Console
+13. Indexed Chromatic Association Properties Options Control Console
    palette control
 
     BACKGROUND: done
@@ -267,7 +263,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SCORING: n/a
     CODING: better testing sequence (choose room to test?)
 
-12. Electronic Synthesized Audio Data Options Control Console
+14. Electronic Synthesized Audio Data Options Control Console
    sound mode/instrument selection
 
     BACKGROUND: done
@@ -276,7 +272,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SCORING: n/a
     CODING: done
 
-13. Custom Acoustic Instrument Setting Options Control Console
+15. Custom Acoustic Instrument Setting Options Control Console
    fm instrument editor
 
     BACKGROUND: done
@@ -285,8 +281,14 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SCORING: n/a
     CODING: done (confirm save function)
 
-14. Emulated Rodent Input Device Options Control Console
+16. Emulated Rodent Input Device Options Control Console
    mouse settings
+
+mouse clicks
+getpixel
+onobj
+
+
 
     BACKGROUND: done
     ANIMATION ART: done
@@ -294,7 +296,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SCORING: n/a
     CODING: done (confirm save function)
 
-15. Overall Frame Rate Options Control Console
+17. Overall Frame Rate Options Control Console
    turbo mode/speed control
 
     BACKGROUND: done
@@ -303,7 +305,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SCORING: n/a
     CODING: done
 
-16. Rectangular Alpha-Numeric Display Options Control Console
+18. Rectangular Alpha-Numeric Display Options Control Console
    msgbox customizer
 
     BACKGROUND: done
@@ -312,10 +314,10 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SCORING: n/a
     CODING: done
 
-17. Master Options Control Console
+19. Master Options Control Console
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done

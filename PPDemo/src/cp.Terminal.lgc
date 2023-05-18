@@ -1134,12 +1134,32 @@ if ((lastChar == 13 || lastChar == 10)) {
         }
         
         [ valid dir values from c:\users:
-        [ kw002
+        [ .., kw002
         if (vCurDir == C_USERS) {
+          sTemp2 = "..";
+          if (compare.strings(input, sTemp2)) {
+            vCurDir = C_ROOT;
+            output = "DIR --> C:\\\\";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            goto(getInput);
+          }
           sTemp2 = "kw002";
           if (compare.strings(input, sTemp2)) {
             vCurDir = C_KW002;
             output = "DIR --> C:\\\\USERS\\\\KW002";
+            terminalfn = ADDLINE_LF;
+            call(lgc.TerminalFunctions);
+            goto(getInput);
+          }
+        }
+        [ valid dir values from c:\users\kw002:
+        [ ..
+        if (vCurDir == C_KW002) {
+          sTemp2 = "..";
+          if (compare.strings(input, sTemp2)) {
+            vCurDir = C_USERS;
+            output = "DIR --> C:\\\\USERS";
             terminalfn = ADDLINE_LF;
             call(lgc.TerminalFunctions);
             goto(getInput);
@@ -1787,18 +1807,57 @@ if ((lastChar == 13 || lastChar == 10)) {
           call(lgc.Terminalfunctions);
           goto(getInput);
         }
-        [ only valid file is PWRPACK.TXT in
-        [ c:\users\kw002 or a:
-[ TODO: ok to print from parent directories
+        [ PWRPACK.TXT in c:\users\kw002 or (a: if copied)
+        reset(tmpFlag);
         sTemp2 = "pwrpack.txt";
-        if (compare.strings(input, sTemp2) && 
-           (vCurDir == C_KW002 || vCurDir == A_ROOT)) {
+        if (compare.strings(input, sTemp2)) {
+          if (vCurDir == C_KW002) {
+            set(tmpFlag);
+            goto(checktype);
+          }
+          if (vCurDir == A_ROOT && (floppyfiles == 1 || floppyfiles == 3) ) {
+            set(tmpFlag);
+            goto(checktype);
+          }
+        }
+        [ kw002\PWRPACK.TXT in c:\users
+        sTemp2 = "kw002\\pwrpack.txt";
+        if (compare.strings(input, sTemp2) && vCurDir == C_USERS) {
+          set(tmpFlag);
+          goto(checktype);
+        }
+        [ users\kw002\PWRPACK.TXT in c:\
+        sTemp2 = "users\\kw002\\pwrpack.txt";
+        if (compare.strings(input, sTemp2) && vCurDir == C_ROOT) {
+          set(tmpFlag);
+          goto(checktype);
+        }
+        [ c:\users\kw002\PWRPACK.TXT in any directory
+        sTemp2 = "c:\\users\\kw002\\pwrpack.txt";
+        if (compare.strings(input, sTemp2)) {
+          set(tmpFlag);
+          goto(checktype);
+        }
+        [ a:\PWRPACK.TXT or a:PWRPACK.TXT in any directory
+        [    (if copied and disk installed/formatted)
+        if (floppyInserted && (floppyfiles == 1 || floppyfiles == 3)) {
+          sTemp2 = "a:\\pwrpack.txt";
+          if (compare.strings(input, sTemp2)) {
+            set(tmpFlag);
+            goto(checktype);
+          }
+          sTemp2 = "a:pwrpack.txt";
+          if (compare.strings(input, sTemp2)) {
+            set(tmpFlag);
+          }
+        }
+        :checktype
+        if (tmpFlag) {
+          reset(tmpFlag);
           terminalfn = TYPE_PP;
           call(lgc.Terminalfunctions);
         } else {
-[ TODO: if input has backslashes, how to convert them for printing?
-[ TODO: this easily exceeds width; need to split as needed
-          output = "%s12 is not a text file";
+          output = "file not found or invalid file format";
           terminalfn = ADDLINE_LF;
           call(lgc.Terminalfunctions);
         }

@@ -20,10 +20,10 @@ status.line.off();
 set.text.attribute(-1, 0);
 set.text.attribute(BLACK, WHITE);
 
-load.view(vw.ManualArt);
-[ ! IMPORTANT! since this is a called logic,
-[ anything loaded MUST be manually discarded 
-[ before returning!!
+[[load.view(vw.ManualArt);
+[[[ ! IMPORTANT! since this is a called logic,
+[[[ anything loaded MUST be manually discarded 
+[[[ before returning!!
 
 [ start with cover, which is page 1
 pageImg = pic.ManualCover;
@@ -256,8 +256,8 @@ goto(waitforit);
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 
-[ ! All resources must be manually discarded before returning
-discard.view(vw.ManualArt);
+[[[[ ! All resources must be manually discarded before returning
+[[[discard.view(vw.ManualArt);
 return();
 
 [ **************************************

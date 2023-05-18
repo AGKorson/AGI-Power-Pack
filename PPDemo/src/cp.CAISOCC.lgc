@@ -6,7 +6,6 @@
 [ CAISOCC
 [
 [ ********************************************************************
-[ TODO: confirm save function
 
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased

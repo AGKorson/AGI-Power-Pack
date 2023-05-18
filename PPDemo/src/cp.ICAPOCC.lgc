@@ -6,7 +6,6 @@
 [ ICAPOCC
 [
 [ ********************************************************************
-[ TODO: better preview options
 
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
@@ -1004,52 +1003,53 @@ if (btnAction == B_RESTORE) {
 }
 
 if (btnAction == B_PREV_PAL) {
-  [ show a sample screen with entire color palette
+  [ let user choose a room number; preview that picture
+  get.num("Room # to preview (1 - 10):", work1);
+  if (work1 > 0 && work1 < 11) {
+    [ fade to black, 2msec fade value
+    block(FADE.OUT, 0, 2, BLACK);
+    [ change to temporary palette, load but don't display it
+    block(SET.PALETTE, 0, &prevPal, 1);
   
-  [ fade to black, 2msec fade value
-  block(FADE.OUT, 0, 2, BLACK);
-  [ change to temporary palette, load but don't display it
-  block(SET.PALETTE, 0, &prevPal, 1);
+    [ load the test picture
+    set(noScript);
+    load.pic(work1);
+    draw.pic(work1);
+    discard.pic(work1);
+    show.pic();
   
-  [ load the test picture
-  work1 = pic.TestPalette;
-  set(noScript);
-  load.pic(work1);
-  draw.pic(work1);
-  discard.pic(work1);
-  show.pic();
+    [ fade in from black, 2msec fade value
+    block(FADE.IN, 0, 2, BLACK);
   
-  [ fade in from black, 2msec fade value
-  block(FADE.IN, 0, 2, BLACK);
+    [ wait for a keypress
+    lastChar = 0;
+    :loop4
+    if (!have.key()) {
+      goto(loop4);
+    }
   
-  [ wait for a keypress
-  lastChar = 0;
-  :loop4
-  if (!have.key()) {
-    goto(loop4);
+    [ fade to black, 2msec fade value
+    block(FADE.OUT, 0, 2, BLACK);
+    [ restore room palette (but don't update it yet)
+    block(SET.PALETTE, 0, &displayPal, 1);
+    
+    [ restore room picture
+    load.pic(currentRoom);
+    draw.pic(currentRoom);
+    discard.pic(currentRoom);
+    show.pic();
+    [ redraw button text by recursing
+    set(refresh);
+    call(cp.ICAPOCC);
+    
+    [ fade in from black, 2msec fade value
+    block(FADE.IN, 0, 2, BLACK);
+    
+    [ force index update
+    colorindex = -1;
+    
+    reset(noScript);
   }
-  
-  [ fade to black, 2msec fade value
-  block(FADE.OUT, 0, 2, BLACK);
-  [ restore room palette (but don't update it yet)
-  block(SET.PALETTE, 0, &displayPal, 1);
-  
-  [ restore room picture
-  load.pic(currentRoom);
-  draw.pic(currentRoom);
-  discard.pic(currentRoom);
-  show.pic();
-  [ redraw button text by recursing
-  set(refresh);
-  call(cp.ICAPOCC);
-  
-  [ fade in from black, 2msec fade value
-  block(FADE.IN, 0, 2, BLACK);
-  
-  [ force index update
-  colorindex = -1;
-  
-  reset(noScript);
 }
 
 [ always reset button action
