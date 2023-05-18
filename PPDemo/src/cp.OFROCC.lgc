@@ -477,7 +477,7 @@ if (cursormode) {
   [ check for mouse click
   if (controller(cLeftClick)) {
     [ over cursor type keyboard option [31, 53 - 49, 66]
-    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+    if (mouseX > 32 && mouseX < 38 && mouseY > 51 && mouseY < 64) {
       [ switch to keyboard cursor
       set(cursormode);
       disable.item(mouse);
@@ -497,40 +497,40 @@ if (cursormode) {
       draw(oCursorR);
     }
     
-    [ over OK button [3, 103 - 32, 112] (need to add 8 to y due to pic offset)
-    if (mouseX > 2 && mouseX < 33 && mouseY > 110 && mouseY < 120) {
+    [ over OK button [3, 103 - 32, 112]
+    if (mouseX > 2 && mouseX < 33 && mouseY > 102 && mouseY < 113) {
       btnAction = B_OK;
     }
       
     [ over Cancel button [3, 119 - 32, 128]
-    if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 136) {
+    if (mouseX > 2 && mouseX < 33 && mouseY > 118 && mouseY < 129) {
       btnAction = B_CANCEL;
     }
     
     [ over Turbo button [5, 79 - 9, 88]
-    if (mouseX > 4 && mouseX < 10 && mouseY > 86 && mouseY < 97) {
+    if (mouseX > 4 && mouseX < 10 && mouseY > 78 && mouseY < 89) {
       btnAction = B_TURBO;
     }
     
     [ over Slow button [63, 39 - 92, 48]
-    if (mouseX > 62 && mouseX < 93 && mouseY > 46 && mouseY < 56) {
+    if (mouseX > 62 && mouseX < 93 && mouseY > 38 && mouseY < 49) {
       btnAction = B_SLOW;
     }
     [ over Normal button [63, 55 - 92, 64]
-    if (mouseX > 62 && mouseX < 93 && mouseY > 62 && mouseY < 72) {
+    if (mouseX > 62 && mouseX < 93 && mouseY > 54 && mouseY < 65) {
       btnAction = B_NORMAL;
     }
     [ over Fast button [63, 71 - 92, 80]
-    if (mouseX > 62 && mouseX < 93 && mouseY > 78 && mouseY < 88) {
+    if (mouseX > 62 && mouseX < 93 && mouseY > 70 && mouseY < 81) {
       btnAction = B_FAST;
     }
     [ over Fast button [63, 87 - 92, 96]
-    if (mouseX > 62 && mouseX < 93 && mouseY > 94 && mouseY < 104) {
+    if (mouseX > 62 && mouseX < 93 && mouseY > 88 && mouseY < 97) {
       btnAction = B_FASTEST;
     }
     
     [ over slider zone
-    if (mouseY > 150 && mouseY < 165) {
+    if (mouseY > 142 && mouseY < 157) {
       get.posn(oSlider, cursorX, cursorY);
       [ adjust for button width
       cursorY = cursorX;

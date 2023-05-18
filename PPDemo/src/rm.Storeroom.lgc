@@ -393,9 +393,9 @@ if (posn(ego, 112, 154, 123, 162)) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 27 || mouseX > 149 || mouseY < 25 || mouseY > 167)) {
+  if ((mouseX < 27 || mouseX > 149 || mouseY < 17 || mouseY > 159)) {
     goto(doneclick);
   }
   [ look
@@ -407,7 +407,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 1
-    if (mouseX > 11 && mouseX < 32 && mouseY > 37 && mouseY < 69) {
+    if (mouseX > 11 && mouseX < 32 && mouseY > 29 && mouseY < 61) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
@@ -417,7 +417,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 2
-    if (mouseX > 17 && mouseX < 33 && mouseY > 72 && mouseY < 88) {
+    if (mouseX > 17 && mouseX < 33 && mouseY > 64 && mouseY < 80) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
@@ -427,10 +427,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 3
-    if (mouseX > 40 && mouseX < 74 && mouseY > 42 && mouseY < 61) {
+    if (mouseX > 40 && mouseX < 74 && mouseY > 34 && mouseY < 53) {
       set(fCheckClick);
     }
-    if (mouseX > 49 && mouseX < 66 && mouseY > 60 && mouseY < 72) {
+    if (mouseX > 49 && mouseX < 66 && mouseY > 52 && mouseY < 64) {
       set(fCheckClick);
     }
     if (fCheckClick) {
@@ -445,7 +445,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
         
     [ clock
-    if (mouseX > 35 && mouseX < 48 && mouseY > 70 && mouseY < 129) {
+    if (mouseX > 35 && mouseX < 48 && mouseY > 62 && mouseY < 121) {
       print("The clock in Mixed Up Mother Goose was modeled after "
             "this grandfather clock.");
       block(GET.TIME, &work1, &work2, &work3); [ get.time(vHOUR, vMINUTE, vSECOND)
@@ -462,7 +462,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ podium
-    if (mouseX > 60 && mouseX < 72 && mouseY > 106 && mouseY < 129) {
+    if (mouseX > 60 && mouseX < 72 && mouseY > 98 && mouseY < 121) {
       print("It's the podium from the Police Quest I briefing room. "
             "You can imagine Sierra managers standing behind it giving "
             "briefings to project staff.");
@@ -478,12 +478,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ desk lamp
-    if (mouseX > 68 && mouseX < 79 && mouseY > 79 && mouseY < 93) {
+    if (mouseX > 68 && mouseX < 79 && mouseY > 71 && mouseY < 85) {
       print("This old desk lamp doesn't look like anything special.");
       goto(doneclick);
     }
     [ bookshelf
-    if (mouseX > 49 && mouseX < 68 && mouseY > 71 && mouseY < 120) {
+    if (mouseX > 49 && mouseX < 68 && mouseY > 63 && mouseY < 112) {
       print("The empty bookshelf is covered in dust. It probably once "
             "held computer hardware and software manuals used by Sierra "
             "developers.");
@@ -506,18 +506,18 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     [ file cabinets
-    if (mouseX > 68 && mouseX < 93 && mouseY > 87 && mouseY < 123) {
+    if (mouseX > 68 && mouseX < 93 && mouseY > 79 && mouseY < 115) {
       print("There are several old filing cabinets pushed against "
             "the back wall.");
       goto(doneclick);
     }
     [ overhead light
-    if (mouseX > 71 && mouseX < 81 && mouseY > 65 && mouseY < 72) {
+    if (mouseX > 71 && mouseX < 81 && mouseY > 57 && mouseY < 64) {
       print("This overhead light bathes the entire room in a warm light.");
       goto(doneclick);
     }
     [ wall mirror
-    if (mouseX > 78 && mouseX < 93 && mouseY > 53 && mouseY < 84) {
+    if (mouseX > 78 && mouseX < 93 && mouseY > 45 && mouseY < 76) {
       print("It looks like the magic mirror from King's Quest II. But there's "
             "nothing magic about this mirror. All you see is your own "
             "reflection in the dull, dusty surface.");
@@ -532,13 +532,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     [ desk
-    if (mouseX > 93 && mouseX < 113 && mouseY > 104 && mouseY < 123) {
+    if (mouseX > 93 && mouseX < 113 && mouseY > 96 && mouseY < 115) {
       print("This desk is of the same style as furniture found in King's "
             "Quest III.");
       goto(doneclick);
     }
     [ birdcage
-    if (mouseX > 108 && mouseX < 116 && mouseY > 41 && mouseY < 60) {
+    if (mouseX > 108 && mouseX < 116 && mouseY > 33 && mouseY < 52) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if ((work1 == 69 || work1 == 77)) { [69/77=magenta/lt magenta vis & red pri)
@@ -547,19 +547,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ desk mirror
-    if (mouseX > 98 && mouseX < 108 && mouseY > 72 && mouseY < 104) {
+    if (mouseX > 98 && mouseX < 108 && mouseY > 64 && mouseY < 96) {
       print("The mirror is very dusty, but you can still see your handsome "
             "reflection in it.");
       goto(doneclick);
     }
     [ pitcher and basin
-    if (mouseX > 117 && mouseX < 128 && mouseY > 99 && mouseY < 114) {
+    if (mouseX > 117 && mouseX < 128 && mouseY > 91 && mouseY < 106) {
       print("This is an antique water pitcher and wash basin, that would "
             "have been used in the days before indoor plumbing.");
       goto(doneclick);
     }
     [ banner
-    if (mouseX > 121 && mouseX < 140 && mouseY > 54 && mouseY < 123) {
+    if (mouseX > 121 && mouseX < 140 && mouseY > 46 && mouseY < 115) {
       print("A copy of this banner can be found in King's Quest III.");
       goto(doneclick);
     }
@@ -576,7 +576,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     [ cabinet
-    if (mouseX > 128 && mouseX < 147 && mouseY > 123 && mouseY < 164) {
+    if (mouseX > 128 && mouseX < 147 && mouseY > 115 && mouseY < 156) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
@@ -595,7 +595,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     [ bureau/chest
-    if (mouseX > 113 && mouseX < 136 && mouseY > 107 && mouseY < 148) {
+    if (mouseX > 113 && mouseX < 136 && mouseY > 99 && mouseY < 140) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
@@ -606,13 +606,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     [ wardrobe
-    if (mouseX > 95 && mouseX < 120 && mouseY > 56 && mouseY < 119) {
+    if (mouseX > 95 && mouseX < 120 && mouseY > 48 && mouseY < 111) {
       print("This wardrobe is of the same style as furniture found in "
             "King's Quest III.");
       goto(doneclick);
     }
     [ robots
-    if (mouseX > 135 && mouseX < 147 && mouseY > 140 && mouseY < 167) {
+    if (mouseX > 135 && mouseX < 147 && mouseY > 132 && mouseY < 160) {
       print("These robot models look exactly like the Space Quest I robots.");
       goto(doneclick);
     }
@@ -632,7 +632,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ chair
-    if (mouseX > 77 && mouseX < 96 && mouseY > 134 && mouseY < 162) {
+    if (mouseX > 77 && mouseX < 96 && mouseY > 126 && mouseY < 154) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       work1 /= 16; [ get priority color only
@@ -644,7 +644,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ arcade
-    if (mouseX > 53 && mouseX < 63 && mouseY > 133 && mouseY < 158) {
+    if (mouseX > 53 && mouseX < 63 && mouseY > 125 && mouseY < 150) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
@@ -654,7 +654,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     [ coffin
-    if (mouseX > 27 && mouseX < 53 && mouseY > 150 && mouseY < 164) {
+    if (mouseX > 27 && mouseX < 53 && mouseY > 142 && mouseY < 156) {
       set(fCheckClick);
     }
     if (posn(oCoffin, -1, 1, &mouseX, &mouseY)) {
@@ -666,7 +666,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         print("The coffin is empty except for a silk pillow and a padded "
               "lining. It actually looks quite comfortable.");
         [ if on pillow, show it
-        if (mouseX > 27 && mouseX < 150 && mouseY > 35 && mouseY < 153) {
+        if (mouseX > 27 && mouseX < 52 && mouseY > 144 && mouseY < 148) {
           :lookpillow
           call(lgc.Pillow);
           call(lgc.RedrawRoom);
@@ -678,25 +678,25 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ coat hanger
-    if (mouseX > 14 && mouseX < 24 && mouseY > 98 && mouseY < 134) {
+    if (mouseX > 14 && mouseX < 24 && mouseY > 90 && mouseY < 126) {
       print("You've seen this bizarre looking coat hanger before, in "
             "King's Quest II.");
       goto(doneclick);
     }
     [ boxes
-    if (mouseX > 9 && mouseX < 30 && mouseY > 134 && mouseY < 167) {
+    if (mouseX > 9 && mouseX < 30 && mouseY > 126 && mouseY < 159) {
       set(fCheckClick);
     }
-    if (mouseX > 53 && mouseX < 62 && mouseY > 158 && mouseY < 168) {
+    if (mouseX > 53 && mouseX < 62 && mouseY > 150 && mouseY < 160) {
       set(fCheckClick);
     }
-    if (mouseX > 69 && mouseX < 81 && mouseY > 154 && mouseY < 168) {
+    if (mouseX > 69 && mouseX < 81 && mouseY > 146 && mouseY < 160) {
       set(fCheckClick);
     }
-    if (mouseX > 90 && mouseX < 103 && mouseY > 160 && mouseY < 168) {
+    if (mouseX > 90 && mouseX < 103 && mouseY > 152 && mouseY < 160) {
       set(fCheckClick);
     }
-    if (mouseX > 104 && mouseX < 116 && mouseY > 151 && mouseY < 169) {
+    if (mouseX > 104 && mouseX < 116 && mouseY > 143 && mouseY < 161) {
       set(fCheckClick);
     }
     if (fCheckClick) {
@@ -732,7 +732,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 1 - always out of reach
-    if (mouseX > 11 && mouseX < 32 && mouseY > 37 && mouseY < 69) {
+    if (mouseX > 11 && mouseX < 32 && mouseY > 29 && mouseY < 61) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
@@ -742,7 +742,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 2 - always out of reach
-    if (mouseX > 17 && mouseX < 33 && mouseY > 72 && mouseY < 88) {
+    if (mouseX > 17 && mouseX < 33 && mouseY > 64 && mouseY < 80) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
@@ -752,10 +752,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 3 - always out of reach
-    if (mouseX > 40 && mouseX < 74 && mouseY > 42 && mouseY < 61) {
+    if (mouseX > 40 && mouseX < 74 && mouseY > 34 && mouseY < 53) {
       set(fCheckClick);
     }
-    if (mouseX > 49 && mouseX < 66 && mouseY > 60 && mouseY < 72) {
+    if (mouseX > 49 && mouseX < 66 && mouseY > 52 && mouseY < 64) {
       set(fCheckClick);
     }
     if (fCheckClick) {
@@ -769,7 +769,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
         
     [ clock
-    if (mouseX > 35 && mouseX < 48 && mouseY > 70 && mouseY < 129) {
+    if (mouseX > 35 && mouseX < 48 && mouseY > 62 && mouseY < 121) {
       if (posn(ego, 32, 109, 52, 127)) {
         print("The glass door on the clock is locked. You can't open it.");
       } else {
@@ -779,7 +779,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ podium
-    if (mouseX > 60 && mouseX < 72 && mouseY > 106 && mouseY < 129) {
+    if (mouseX > 60 && mouseX < 72 && mouseY > 98 && mouseY < 121) {
       if (posn(ego, 58, 112, 74, 119)) {
         [ behind of podium
         if (!has("PQ idea list")) {
@@ -802,7 +802,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ desk lamp
-    if (mouseX > 68 && mouseX < 79 && mouseY > 79 && mouseY < 93) {
+    if (mouseX > 68 && mouseX < 79 && mouseY > 71 && mouseY < 85) {
       if (posn(ego, 62, 102, 80, 114)) {
         print("You have no use for the lamp.");
       } else {
@@ -812,7 +812,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ bookshelf
-    if (mouseX > 49 && mouseX < 68 && mouseY > 71 && mouseY < 120) {
+    if (mouseX > 49 && mouseX < 68 && mouseY > 63 && mouseY < 112) {
       if (posn(ego, 44, 106, 70, 116)) {
         print("You run your fingers through the dust on the shelves. "
               "There is nothing of interest here.");
@@ -823,7 +823,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ top file drawer, closed  76, 89, 83, 95
-    if (mouseX > 75 && mouseX < 84 && mouseY > 96 && mouseY < 104 &&
+    if (mouseX > 75 && mouseX < 84 && mouseY > 88 && mouseY < 96 &&
         storeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 73, 117, 93, 122)) {
@@ -840,7 +840,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
       
     [ middle file drawer, closed 76, 98, 83, 105
-    if (mouseX > 75 && mouseX < 84 && mouseY > 105 && mouseY < 114 &&
+    if (mouseX > 75 && mouseX < 84 && mouseY > 97 && mouseY < 106 &&
         storeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 73, 117, 93, 122)) {
@@ -857,7 +857,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ bottom file drawer, closed 76, 107, 83, 114
-    if (mouseX > 75 && mouseX < 84 && mouseY > 114 && mouseY < 123 &&
+    if (mouseX > 75 && mouseX < 84 && mouseY > 106 && mouseY < 115 &&
         storeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 73, 117, 93, 122)) {
@@ -879,13 +879,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ is ego close enough?
       if (obj.in.box(ego, 73, 117, 93, 122)) {
         [ contents check
-        if (storeFileDrStatus== OPEN1 && mouseY < 101) {
+        if (storeFileDrStatus== OPEN1 && mouseY < 93) {
           goto(doneclick);
         }
-        if (storeFileDrStatus== OPEN2 && mouseY < 110) {
+        if (storeFileDrStatus== OPEN2 && mouseY < 102) {
           goto(doneclick);
         }
-        if (storeFileDrStatus== OPEN3 && mouseY < 119) {
+        if (storeFileDrStatus== OPEN3 && mouseY < 111) {
           if (!has("cassette tape")) {
             get("cassette tape");
             work1 = 4;
@@ -909,10 +909,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ blocked file cabinets
-    if (mouseX > 69 && mouseX < 75 && mouseY > 93 && mouseY < 107) {
+    if (mouseX > 69 && mouseX < 75 && mouseY > 85 && mouseY < 99) {
       set(fCheckClick);
     }
-    if (mouseX > 84 && mouseX < 93 && mouseY > 91 && mouseY < 121) {
+    if (mouseX > 84 && mouseX < 93 && mouseY > 83 && mouseY < 113) {
       set(fCheckClick);
     }
     if (fCheckClick) {
@@ -927,19 +927,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ overhead light - always out of reach
-    if (mouseX > 71 && mouseX < 81 && mouseY > 65 && mouseY < 72) {
+    if (mouseX > 71 && mouseX < 81 && mouseY > 57 && mouseY < 64) {
       print("The light is way beyond your reach.");
       goto(doneclick);
     }
 
     [ wall mirror - always beyond reach
-    if (mouseX > 78 && mouseX < 93 && mouseY > 53 && mouseY < 84) {
+    if (mouseX > 78 && mouseX < 93 && mouseY > 45 && mouseY < 76) {
       print("The wall mirror is too high to reach.");
       goto(doneclick);
     }
     
     [ desk drawer when closed 100, 102, 106, 108
-    if (mouseX > 99 && mouseX < 107 && mouseY > 109 && mouseY < 117 &&
+    if (mouseX > 99 && mouseX < 107 && mouseY > 101 && mouseY < 109 &&
         storeDeskDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 94, 121, 112, 126)) {
@@ -960,7 +960,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ is ego close enough?
       if (obj.in.box(ego, 94, 121, 112, 126)) {
         [ contents check
-        if (storeFileDrStatus== OPEN && mouseY < 119) {
+        if (storeFileDrStatus== OPEN && mouseY < 111) {
           [ nothing in this drawer
           goto(doneclick);
         }
@@ -975,7 +975,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ birdcage - always out of reach
-    if (mouseX > 108 && mouseX < 116 && mouseY > 41 && mouseY < 60) {
+    if (mouseX > 108 && mouseX < 116 && mouseY > 33 && mouseY < 52) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if ((work1 == 69 || work1 == 77)) { [69/77=magenta/lt magenta vis & red pri)
@@ -985,7 +985,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ desk mirror
-    if (mouseX > 98 && mouseX < 108 && mouseY > 72 && mouseY < 104) {
+    if (mouseX > 98 && mouseX < 108 && mouseY > 64 && mouseY < 96) {
       if (posn(ego, 93, 114, 113, 124)) {
         print("After touching the mirror, all you did was leave behind "
               "some smudged fingerprints.");
@@ -996,7 +996,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ pitcher and basin
-    if (mouseX > 117 && mouseX < 128 && mouseY > 99 && mouseY < 114) {
+    if (mouseX > 117 && mouseX < 128 && mouseY > 91 && mouseY < 106) {
       if (posn(ego, 103, 115, 119, 126)) {
         print("You have no need for the pitcher and basin.");
       } else {
@@ -1006,7 +1006,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ banner - always out of reach
-    if (mouseX > 121 && mouseX < 140 && mouseY > 54 && mouseY < 123) {
+    if (mouseX > 121 && mouseX < 140 && mouseY > 46 && mouseY < 115) {
       if (posn(ego, 108, 120, 136, 141)) {
         print("The banner is just out of reach.");
       } else {
@@ -1017,10 +1017,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ cabinet door (when closed)
     if ((vDoorState == CLOSED || vDoorState == CLOSING)) {
-      if (mouseX > 129 && mouseX < 133 && mouseY > 126 && mouseY < 151) {
+      if (mouseX > 129 && mouseX < 133 && mouseY > 118 && mouseY < 143) {
         set(fCheckClick);
       }
-      if (mouseX > 132 && mouseX < 137 && mouseY > 130 && mouseY < 155) {
+      if (mouseX > 132 && mouseX < 137 && mouseY > 122 && mouseY < 147) {
         set(fCheckClick);
       }
       if (fCheckClick) {
@@ -1052,7 +1052,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ cabinet door (when opened)
     if ((vDoorState == OPEN || vDoorState == OPENING)) {
       [ item check
-      if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 128 && mouseY < 151) {
+      if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 120 && mouseY < 143) {
         if (!has("music sheet")) {
           get("music sheet");
           print("You take the sheet from the cabinet.");
@@ -1064,10 +1064,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         }
         goto(doneclick);
       }
-      if (mouseX > 124 && mouseX < 130 && mouseY > 126 && mouseY < 145) {
+      if (mouseX > 124 && mouseX < 130 && mouseY > 118 && mouseY < 137) {
         set(fCheckClick);
       }
-      if (mouseX > 133 && mouseX < 137 && mouseY > 134 && mouseY < 158) {
+      if (mouseX > 133 && mouseX < 137 && mouseY > 126 && mouseY < 150) {
         set(fCheckClick);
       }
       if (fCheckClick) {
@@ -1080,10 +1080,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ chest drawer when closed 115, 110, 118, 126 and 119, 116, 122, 131
     if (storeChestDrStatus == CLOSED) {
-      if (mouseX > 114 && mouseX < 119 && mouseY > 117 && mouseY < 135) {
+      if (mouseX > 114 && mouseX < 119 && mouseY > 109 && mouseY < 127) {
         set(fCheckClick);
       }
-      if (mouseX > 118 && mouseX < 123 && mouseY > 123 && mouseY < 140) {
+      if (mouseX > 118 && mouseX < 123 && mouseY > 115 && mouseY < 132) {
         set(fCheckClick);
       }
       if (fCheckClick) {
@@ -1125,7 +1125,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if ((obj.in.box(ego, 101, 122, 114, 130) || 
            obj.in.box(ego, 104, 131, 120, 138))) {
         [ contents check
-        if (storeChestDrStatus== OPEN && mouseY < 119) {
+        if (storeChestDrStatus== OPEN && mouseY < 111) {
           goto(doneclick);
         }
         set.loop(oChestDrawer, 4);
@@ -1139,7 +1139,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ bureau
-    if (mouseX > 113 && mouseX < 136 && mouseY > 107 && mouseY < 148) {
+    if (mouseX > 113 && mouseX < 136 && mouseY > 99 && mouseY < 140) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
@@ -1154,13 +1154,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ wardrobe - always out of reach 96, 49, 119, 100
-    if (mouseX > 95 && mouseX < 120 && mouseY > 56 && mouseY < 109) {
+    if (mouseX > 95 && mouseX < 120 && mouseY > 48 && mouseY < 101) {
       print("The wardrobe is blocked by the desk. You can't reach it.");
       goto(doneclick);
     }
 
     [ robots
-    if (mouseX > 135 && mouseX < 147 && mouseY > 140 && mouseY < 167) {
+    if (mouseX > 135 && mouseX < 147 && mouseY > 132 && mouseY < 159) {
       if (posn(ego, 127, 150, 141, 167)) {
         print("These robots are far too large to carry, even with your "
               "enormously oversized pockets.");
@@ -1171,7 +1171,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ chair
-    if (mouseX > 77 && mouseX < 96 && mouseY > 134 && mouseY < 162) {
+    if (mouseX > 77 && mouseX < 96 && mouseY > 126 && mouseY < 154) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       work1 /= 16; [ get priority color only
@@ -1186,7 +1186,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ arcade
-    if (mouseX > 53 && mouseX < 63 && mouseY > 133 && mouseY < 158) {
+    if (mouseX > 53 && mouseX < 63 && mouseY > 125 && mouseY < 150) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, AMOUNT)
@@ -1231,7 +1231,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ is ego close enough?
       if (obj.in.box(ego, 111, 147, 138, 166)) {
         [ contents check 121,147 128,152
-        if (storeChestStatus == OPEN && mouseX > 120 && mouseX < 129 && mouseY > 154 && mouseY < 174) {
+        if (storeChestStatus == OPEN && mouseX > 120 && mouseX < 129 && mouseY > 146 && mouseY < 166) {
           if (!has("scroll")) {
             get("scroll");
             work1 = 3;
@@ -1254,7 +1254,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ coffin (when closed)
     if ((vCoffinState == CLOSED || vCoffinState == CLOSING)) {
-      if (mouseX > 27 && mouseX < 54 && mouseY > 150 && mouseY < 165) {
+      if (mouseX > 27 && mouseX < 54 && mouseY > 142 && mouseY < 157) {
         :openCoffin
         [ is ego on wrong side?
         if (posn(ego, 28, 141, 54, 149)) {
@@ -1282,7 +1282,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ coffin and lid (when open)
     if ((vCoffinState == OPEN || vCoffinState == OPENING)) {
-      if (mouseX > 27 && mouseX < 54 && mouseY > 144 && mouseY < 155) {
+      if (mouseX > 27 && mouseX < 54 && mouseY > 136 && mouseY < 147) {
         [ if open, ego must be close enough, so just close it without further checks
         :closeCoffin
         reverse.loop(oCoffin, fCoffin);
@@ -1291,7 +1291,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ coat hanger
-    if (mouseX > 14 && mouseX < 24 && mouseY > 98 && mouseY < 134) {
+    if (mouseX > 14 && mouseX < 24 && mouseY > 90 && mouseY < 126) {
       if (posn(ego, 19, 135, 28, 147)) {
         print("The coat rack is just outside of your reach.");
       } else {
@@ -1301,19 +1301,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ boxes
-    if (mouseX > 9 && mouseX < 30 && mouseY > 134 && mouseY < 167) {
+    if (mouseX > 9 && mouseX < 30 && mouseY > 126 && mouseY < 159) {
       set(fCheckClick);
     }
-    if (mouseX > 53 && mouseX < 62 && mouseY > 158 && mouseY < 168) {
+    if (mouseX > 53 && mouseX < 62 && mouseY > 150 && mouseY < 160) {
       set(fCheckClick);
     }
-    if (mouseX > 69 && mouseX < 81 && mouseY > 154 && mouseY < 168) {
+    if (mouseX > 69 && mouseX < 81 && mouseY > 146 && mouseY < 160) {
       set(fCheckClick);
     }
-    if (mouseX > 90 && mouseX < 103 && mouseY > 160 && mouseY < 168) {
+    if (mouseX > 90 && mouseX < 103 && mouseY > 152 && mouseY < 160) {
       set(fCheckClick);
     }
-    if (mouseX > 104 && mouseX < 116 && mouseY > 151 && mouseY < 169) {
+    if (mouseX > 104 && mouseX < 116 && mouseY > 143 && mouseY < 161) {
       set(fCheckClick);
     }
     if (fCheckClick) {

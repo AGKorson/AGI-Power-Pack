@@ -465,12 +465,12 @@ if (cursormode) {
   [ mouse is active: check for mouse actions
   
   [ is cursor over the palette? [54, 115 - 150, 163]
-  if (mouseX > 54 && mouseX < 150 && mouseY > 123 && mouseY < 171) {
+  if (mouseX > 54 && mouseX < 150 && mouseY > 115 && mouseY < 163) {
     [ calculate color index
-    colorindex = mousex;
+    colorindex = mouseX;
     colorindex -= 54;
     colorindex /= 12;
-    if (mousey > 147) {
+    if (mouseY > 139) {
       colorindex += 8;
     }
   } else {
@@ -481,18 +481,18 @@ if (cursormode) {
 
   [ check for mouse clicks
   if (controller(cLeftClick)) {
-    [ over OK button [2,118 - 29,129] (need to add 8 to y due to pic offset)
-    if (mouseX > 2 && mouseX < 29 && mouseY > 126 && mouseY < 137) {
+    [ over OK button [2,118 - 29,129]
+    if (mouseX > 2 && mouseX < 29 && mouseY > 118 && mouseY < 129) {
       btnAction = B_OK;
     }
       
     [ over Cancel button [2, 134 - 29, 145]
-    if (mouseX > 2 && mouseX < 29 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 2 && mouseX < 29 && mouseY > 134 && mouseY < 145) {
       btnAction = B_CANCEL;
     }
     
     [ over Reset button [2, 150 - 29, 161]
-    if (mouseX > 2 && mouseX < 29 && mouseY > 158 && mouseY < 169) {
+    if (mouseX > 2 && mouseX < 29 && mouseY > 150 && mouseY < 161) {
       btnAction = B_RESET;
     }
     
@@ -502,17 +502,17 @@ if (cursormode) {
     } 
     
     [ over right button bg option
-    if (mouseX > 104 && mouseX < 110 && mouseY > 95 && mouseY < 104) {
+    if (mouseX > 104 && mouseX < 110 && mouseY > 87 && mouseY < 96) {
       btnAction = B_OP_BG;
     }
   
     [ over right button border option 
-    if (mouseX > 128 && mouseX < 134 && mouseY > 95 && mouseY < 104) {
+    if (mouseX > 128 && mouseX < 134 && mouseY > 87 && mouseY < 96) {
       btnAction = B_OP_BD;
     }
   
     [ over cursor type keyboard option 
-    if (mouseX > 30 && mouseX < 38 && mouseY > 95 && mouseY < 104) {
+    if (mouseX > 30 && mouseX < 38 && mouseY > 87 && mouseY < 96) {
       [ switch to keyboard cursor
       set(cursormode);
       disable.item(mouse);

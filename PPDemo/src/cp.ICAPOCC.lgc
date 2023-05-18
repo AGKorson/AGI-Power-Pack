@@ -732,7 +732,7 @@ if (cursormode) {
   [ check for mouse clicks
   if (controller(cLeftClick)) {
     [ over cursor type keyboard option 
-    if (mouseX > 30 && mouseX < 38 && mouseY > 95 && mouseY < 104) {
+    if (mouseX > 30 && mouseX < 38 && mouseY > 87 && mouseY < 96) {
       [ switch to keyboard cursor
       set(cursormode);
       disable.item(mouse);
@@ -752,50 +752,49 @@ if (cursormode) {
       draw(oCursorR);
     }
 
-    [ over OK button [2, 118 - 33, 129] (need to add 8 to y due to pic offset)
-    if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 137) {
+    [ over OK button [2, 118 - 33, 129]
+    if (mouseX > 2 && mouseX < 33 && mouseY > 118 && mouseY < 129) {
       btnAction = B_OK;
     }
       
     [ over Cancel button [2, 134 - 33, 145]
-    if (mouseX > 2 && mouseX < 33 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 2 && mouseX < 33 && mouseY > 134 && mouseY < 145) {
       btnAction = B_CANCEL;
     }
     
     [ over Reset button [2, 150 - 33, 161]
-    if (mouseX > 2 && mouseX < 33 && mouseY > 158 && mouseY < 169) {
+    if (mouseX > 2 && mouseX < 33 && mouseY > 150 && mouseY < 161) {
       btnAction = B_RESET;
     }
     
     [ over IndexDn button [66, 46 - 73, 57]
-    if (mouseX > 66 && mouseX < 73 && mouseY > 54 && mouseY < 65) {
+    if (mouseX > 66 && mouseX < 73 && mouseY > 46 && mouseY < 57) {
       btnAction = B_IDX_DN;
     }
     
     [ over IndexUp button [94, 46 - 101, 57]
-    if (mouseX > 94 && mouseX < 101 && mouseY > 54 && mouseY < 65) {
+    if (mouseX > 94 && mouseX < 101 && mouseY > 46 && mouseY < 57) {
       btnAction = B_IDX_UP;
     }
     
     [ over SetColor button [74, 118 - 105, 129]
-    if (mouseX > 74 && mouseX < 105 && mouseY > 126 && mouseY < 137) {
+    if (mouseX > 74 && mouseX < 105 && mouseY > 118 && mouseY < 129) {
       btnAction = B_SET_COL;
     }
     
     [ over RestoreColor button [74, 134 - 105, 145]
-    if (mouseX > 74 && mouseX < 105 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 74 && mouseX < 105 && mouseY > 134 && mouseY < 145) {
       btnAction = B_RESTORE;
     }
     [ over PreviewPalette button [38, 118 - 69, 137]
-    if (mouseX > 38 && mouseX < 69 && mouseY > 126 && mouseY < 145) {
+    if (mouseX > 38 && mouseX < 69 && mouseY > 118 && mouseY < 137) {
       btnAction = B_PREV_PAL;
     }
     
     [ over red slider zone
     if (mouseX >= 115 && mouseX <= 124) {
       get.posn(oSliderRed, tmpCol, tmpRow);
-      [ adjust for pic offset, and button height
-      tmpRow += 8;
+      [ adjust for button height
       tmpCol = tmpRow;
       tmpCol -= 7;
       [ is mouse is on the button?
@@ -805,7 +804,6 @@ if (cursormode) {
         [ calculate offset from actual object position
         [ to mouse position (ofst = posy - mY)
         slideoffset = tmpRow;
-        slideoffset -= 8; [ correction for pic offset
         slideoffset -= mouseY;
       }
     }
@@ -813,8 +811,7 @@ if (cursormode) {
     [ over green slider zone
     if (mouseX >= 131 && mouseX <= 140) {
       get.posn(oSliderGreen, tmpCol, tmpRow);
-      [ adjust for pic offset, and button height
-      tmpRow += 8;
+      [ adjust for button height
       tmpCol = tmpRow;
       tmpCol -= 7;
       [ is mouse is on the button?
@@ -824,7 +821,6 @@ if (cursormode) {
         [ calculate offset from actual object position
         [ to mouse position (ofst = posy - mY)
         slideoffset = tmpRow;
-        slideoffset -= 8; [ correction for pic offset
         slideoffset -= mouseY;
       }
     }
@@ -832,8 +828,7 @@ if (cursormode) {
     [ over blue slider zone
     if (mouseX >= 147 && mouseX <= 156) {
       get.posn(oSliderBlue, tmpCol, tmpRow);
-      [ adjust for pic offset, and button height
-      tmpRow += 8;
+      [ adjust for button height
       tmpCol = tmpRow;
       tmpCol -= 7;
       [ is mouse is on the button?
@@ -843,7 +838,6 @@ if (cursormode) {
         [ calculate offset from actual object position
         [ to mouse position (ofst = posy - mY)
         slideoffset = tmpRow;
-        slideoffset -= 8; [ correction for pic offset
         slideoffset -= mouseY;
       }
     }
@@ -995,7 +989,7 @@ if (btnAction == B_SET_COL) {
 }
 
 if (btnAction == B_RESTORE) {
-  [ restore default value for this color
+  [ TODO: restore default value for this color
   [ (this returns to whatever it was edited to; NOT the default
   [ AGI color; maybe rename this 'cancel edit'?
   [ by forcing an index value refresh

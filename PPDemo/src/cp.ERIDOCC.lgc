@@ -718,11 +718,10 @@ if (cursormode) {
   
   [ first determine if cursor is over the grid
   reset(tmpFlag);
-  [ (adjust yval for picture offset [8])
-  if (mouseX > 56 && mouseX < 105 && mouseY > 46 && mouseY < 143) {
+  if (mouseX > 56 && mouseX < 105 && mouseY > 38 && mouseY < 135) {
     set(tmpFlag);
   }
-  if (mouseX > 109 && mouseX < 158 && mouseY > 46 && mouseY < 143) {
+  if (mouseX > 109 && mouseX < 158 && mouseY > 38 && mouseY < 135) {
     set(tmpFlag);
   }
   [ tmpFlag is set when cursor is over the grid
@@ -764,11 +763,11 @@ if (cursormode) {
   
   [ if on grid, determine gridx/gridy/gridmode
   if (fOnGrid) {
-    tmpY = mousey;
-    tmpY -= 47;
+    tmpY = mouseY;
+    tmpY -= 39;
     tmpY /= 6;
     [ x is a bit more complicated
-    tmpX = mousex;
+    tmpX = mouseX;
     if (tmpX > 109) {
       [ on mask grid
       gridmode = 1;
@@ -824,18 +823,18 @@ if (cursormode) {
     [dbl-click on hotspot text
     if (controller(cLeftDblClick)) {
       [ hotX
-      if (mouseX > 86 && mouseX < 105 && mouseY > 158 && mouseY < 169) {
+      if (mouseX > 86 && mouseX < 105 && mouseY > 150 && mouseY < 161) {
         btnAction = B_HOTX;
       }
       [ hotY
-      if (mouseX > 126 && mouseX < 145 && mouseY > 158 && mouseY < 169) {
+      if (mouseX > 126 && mouseX < 145 && mouseY > 150 && mouseY < 161) {
         btnAction = B_HOTY;
       }
     }
     [ left click on all other buttons
     if (controller(cLeftClick)) {
       [ over cursor type keyboard option  54-65
-      if (mouseX > 30 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+      if (mouseX > 30 && mouseX < 38 && mouseY > 55 && mouseY < 64) {
         [ switch to keyboard cursor
         set(cursormode);
         disable.item(mouse);
@@ -855,40 +854,40 @@ if (cursormode) {
         draw(oCursorR);
       }
 
-      [ over PREVIEW button [2, 102 - 33, 129] (need to add 8 to y due to pic offset)
-      if (mouseX > 2 && mouseX < 33 && mouseY > 94 && mouseY < 105) {
+      [ over PREVIEW button [2, 102 - 33, 129]
+      if (mouseX > 2 && mouseX < 33 && mouseY > 86 && mouseY < 97) {
         btnAction = B_PREVIEW;
       }
         
-      [ over SAVE button [2, 102 - 33, 113] (need to add 8 to y due to pic offset)
-      if (mouseX > 2 && mouseX < 33 && mouseY > 110 && mouseY < 121) {
+      [ over SAVE button [2, 102 - 33, 113]
+      if (mouseX > 2 && mouseX < 33 && mouseY > 102 && mouseY < 113) {
         btnAction = B_SAVE;
       }
         
-      [ over RESTORE button [2, 118 - 33, 129] (need to add 8 to y due to pic offset)
-      if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 137) {
+      [ over RESTORE button [2, 118 - 33, 129]
+      if (mouseX > 2 && mouseX < 33 && mouseY > 118 && mouseY < 129) {
         btnAction = B_RESTORE;
       }
         
-      [ over EXPORT button [2, 134 - 33, 145] (need to add 8 to y due to pic offset)
-      if (mouseX > 2 && mouseX < 33 && mouseY > 142 && mouseY < 153) {
+      [ over EXPORT button [2, 134 - 33, 145]
+      if (mouseX > 2 && mouseX < 33 && mouseY > 134 && mouseY < 145) {
         btnAction = B_EXPORT;
       }
       
-      [ over EXIT button [2, 150 - 33, 161] (need to add 8 to y due to pic offset)
-      if (mouseX > 2 && mouseX < 33 && mouseY > 158 && mouseY < 169) {
+      [ over EXIT button [2, 150 - 33, 161]
+      if (mouseX > 2 && mouseX < 33 && mouseY > 150 && mouseY < 161) {
         btnAction = B_EXIT;
       }
     
-      [ over IDX_DN button [86, 22 - 93, 33] (need to add 8 to y due to pic offset)
-      if (mouseX > 86 && mouseX < 93 && mouseY > 30 && mouseY < 41) {
+      [ over IDX_DN button [86, 22 - 93, 33]
+      if (mouseX > 86 && mouseX < 93 && mouseY > 22 && mouseY < 33) {
         if (cIndex > 0) {
           btnAction = B_IDX_DN;
         }
       }
       
-      [ over IDX_DN button [126, 22 - 133, 33] (need to add 8 to y due to pic offset)
-      if (mouseX > 126 && mouseX < 133 && mouseY > 30 && mouseY < 41) {
+      [ over IDX_DN button [126, 22 - 133, 33]
+      if (mouseX > 126 && mouseX < 133 && mouseY > 22 && mouseY < 33) {
         if (cIndex < 5) {
           btnAction = B_IDX_UP;
         }

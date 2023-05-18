@@ -591,14 +591,14 @@ if (dropmode == CHOOSING) {
   }
   
   [ if mouse is over the listbox text
-  if (mouseX > 7 && mouseX < 48 && mouseY > 79 && mouseY < 136) {
+  if (mouseX > 7 && mouseX < 48 && mouseY > 71 && mouseY < 128) {
 
     [ check for left click
     if (controller(cLeftClick)) {
       [ convert yvalue to index
       work1 = mouseY;
       work1 /= 8;
-      work1 -= 10;
+      work1 -= 9;
       [ is it a valid offset?
       if (work1 != listrow) {
         [ adjust row and index
@@ -624,13 +624,13 @@ if (dropmode == CHOOSING) {
     [ check for click OR dblclick
     if ((controller(cLeftClick) || controller(cLeftDblClick))) {
       [ if on up arrow, scroll up
-      if (mouseY > 79 && mouseY < 86) {
+      if (mouseY > 71 && mouseY < 78) {
         btnAction = SC_UP;
         goto(donemouse);
       }
       
       [ if on down arrow, scroll down
-      if (mouseY > 128 && mouseY < 136) {
+      if (mouseY > 120 && mouseY < 128) {
         btnAction = SC_DOWN;
         goto(donemouse);
       }
@@ -638,18 +638,16 @@ if (dropmode == CHOOSING) {
       [ adjust compare values to top of scroll
       [ window and scrollbox position
       get.posn(oScrlBox, work3, work2);
-      work2 += 8;
       [ if above scrollbox, page up
-      if (mouseY > 85 && mouseY < work2) {
+      if (mouseY > 77 && mouseY < work2) {
         btnAction = SC_PGUP;
         goto(donemouse);
       }
       [ adjust compare values to scrollbox position
       [ and bottom of scroll window
       get.posn(oScrlBox, work3, work1);
-      work1 += 8;
       [ if below scrollbox, page down
-      if (mouseY > work1 && mouseY < 129) {
+      if (mouseY > work1 && mouseY < 121) {
         btnAction = SC_PGDN;
       }
       :donemouse
@@ -1490,7 +1488,7 @@ if (cursormode) {
   [ check for mouse click
   if (controller(cLeftClick)) {
     [ over cursor type keyboard option [33, 56 - 37, 63]
-    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+    if (mouseX > 32 && mouseX < 38 && mouseY > 55 && mouseY < 64) {
       [ switch to keyboard cursor
       set(cursormode);
       disable.item(mouse);
@@ -1517,12 +1515,12 @@ if (cursormode) {
     }
     
     [ over Done button [5, 135 - 26, 144]
-    if (mouseX > 4 && mouseX < 27 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 4 && mouseX < 27 && mouseY > 134 && mouseY < 145) {
       btnAction = B_DONE;
     }
       
     [ over Test button [31, 135 - 52, 144]
-    if (mouseX > 30 && mouseX < 53 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 30 && mouseX < 53 && mouseY > 134 && mouseY < 145) {
       [ if a sound is playing, it's actually 'stop'
       if (sndTest) {
         btnAction = B_STOP;
@@ -1532,43 +1530,43 @@ if (cursormode) {
     }
     
     [ over Copy Inst button [5, 151 - 52, 160]
-    if (mouseX > 4 && mouseX < 53 && mouseY > 158 && mouseY < 169) {
+    if (mouseX > 4 && mouseX < 53 && mouseY > 150 && mouseY < 161) {
       btnAction = B_COPY;
     }
     
     [ over Save button [115, 15 - 132, 24]
-    if (mouseX > 114 && mouseX < 133 && mouseY > 22 && mouseY < 33) {
+    if (mouseX > 114 && mouseX < 133 && mouseY > 14 && mouseY < 25) {
       [ only if enabled
       if (instDirty) {
         btnAction = B_SAVE;
       }
     }
     [ over Reset button [139, 15 - 156, 24]
-    if (mouseX > 138 && mouseX < 157 && mouseY > 22 && mouseY < 33) {
+    if (mouseX > 138 && mouseX < 157 && mouseY > 14 && mouseY < 25) {
       btnAction = B_RESET;
     }
     
     [ over modulator checkbox zone (x between 63, 66)
     if (mouseX > 62 && mouseX < 67) {
       [ confirm within y bounds of checkboxes
-      if (mouseY > 47 && mouseY < 80) {
+      if (mouseY > 39 && mouseY < 72) {
         [ convert yval to checkbox offset
         newpos = mouseY;
-        newpos += 24;
+        newpos += 16;
         newpos /= 8;
       }
     }
     [ over modulator checkbox zone (x between 113, 116)
     if (mouseX > 112 && mouseX < 117) {
       [ confirm within y bounds of checkboxes
-      if (mouseY > 47 && mouseY < 80) {
+      if (mouseY > 39 && mouseY < 72) {
         [ convert yval to checkbox offset
         newpos = mouseY;
-        newpos += 128;
+        newpos += 120;
         newpos /= 8;
       }
       [ check for connection checkbox
-      if (mouseY > 159 && mouseY < 168) {
+      if (mouseY > 151 && mouseY < 160) {
         [ convert yval to checkbox offset
         newpos = CP_CONN;
       }
@@ -1576,33 +1574,33 @@ if (cursormode) {
     
     [ over modulator text entry zone (x between 92, 99)
     if (mouseX > 91 && mouseX < 100) {
-      if (mouseY > 87 && mouseY < 152) {
+      if (mouseY > 79 && mouseY < 144) {
         [ convert yval to checkbox offset
         newpos = mouseY;
         newpos /= 8;
-        newpos += 2;
+        newpos += 1;
       }
-      if (mouseY >159 && mouseY < 168) {
+      if (mouseY > 151 && mouseY < 160) {
         newpos = CP_FDBACK;
       }
     }
     
     [ over carrier text entry zone ( x between 142, 149)
     if (mouseX > 141 && mouseX < 150) {
-      if (mouseY > 87 && mouseY < 152) {
+      if (mouseY > 79 && mouseY < 144) {
         [ convert yval to checkbox offset
         newpos = mouseY;
         newpos /= 8;
-        newpos += 15;
+        newpos += 14;
       }
     }
     
     [ over instrument listbox zone
-    if (mouseX > 7 && mouseX < 50 && mouseY > 87 && mouseY < 128) {
+    if (mouseX > 7 && mouseX < 50 && mouseY > 79 && mouseY < 120) {
       [ select a new instrument
       selinst = mouseY;
       selinst /= 8;
-      selinst -= 10;
+      selinst -= 9;
       set(update);
       set(loadinst);
     }
@@ -1613,18 +1611,18 @@ if (cursormode) {
     [ over modulator checkbox zone (x between 63, 66)
     if (mouseX > 62 && mouseX < 67) {
       [ confirm within y bounds of checkboxes
-      if (mouseY > 47 && mouseY < 80) {
+      if (mouseY > 39 && mouseY < 72) {
         set(toggleCheck);
       }
     }
     [ over modulator checkbox zone (x between 113, 116)
     if (mouseX > 112 && mouseX < 117) {
       [ confirm within y bounds of checkboxes
-      if (mouseY > 47 && mouseY < 80) {
+      if (mouseY > 39 && mouseY < 72) {
         set(toggleCheck);
       }
       [ check for connection checkbox
-      if (mouseY > 159 && mouseY < 168) {
+      if (mouseY > 151 && mouseY < 160) {
         set(toggleCheck);
       }
     }

@@ -465,6 +465,7 @@ if (dropmode == DROPDOWN) {
   }
   if (currentInst == 4) {
     clear.text.rect(16, 19, 20, 38, WHITE);
+    erase(oVolSlider);
   }
   [ determine row offset (row value of listbox top)
   work1 = currentInst;
@@ -675,6 +676,9 @@ if (dropmode == CHOOSING) {
       work1 = mouseY;
       work1 /= 8;
       work1 -= offsetrow;
+      [ text rows are not relative to pic; need
+      [ to correct for pic offset (1 row = 8 pixels)
+      ++work1;
       [ is it a valid offset?
       if (work1 < 5 && work1 != listrow) {
         [ deselect old
@@ -720,7 +724,9 @@ if (dropmode == CHOOSING) {
       [ convert offset row to y value
       work1 = offsetrow;
       work1 *= 8;
-      --work1;
+      [ text rows are not relative to picture; need to 
+      [ adjust for picture offset
+      work1 -= 9;
       [ bottom of up arrow
       work2 = work1;
       work2 += 8;
@@ -921,7 +927,10 @@ if (dropmode == DROPUP) {
     btnAction = currentInst;
     btnAction += 11;
   }
-  
+  [ make sure slider is visible (it's hidden when
+  [ instrument 4 is selected)
+  draw(oVolSlider);
+
   [ done - force an update
   set(update);
 }
@@ -1275,7 +1284,7 @@ if (cursormode) {
   [ check for mouse click
   if (controller(cLeftClick)) {
     [ over cursor type keyboard option [33, 56 - 37, 63]
-    if (mouseX > 32 && mouseX < 38 && mouseY > 63 && mouseY < 72) {
+    if (mouseX > 32 && mouseX < 38 && mouseY > 55 && mouseY < 64) {
       [ switch to keyboard cursor
       set(cursormode);
       disable.item(mouse);
@@ -1299,86 +1308,86 @@ if (cursormode) {
       draw(oCursorR);
     }
     [ 1channel [9, 80 - 13, 87]
-    if (mouseX > 8 && mouseX < 14 && mouseY > 87 && mouseY < 96) {
+    if (mouseX > 8 && mouseX < 14 && mouseY > 79 && mouseY < 88) {
       btnAction = B_1CHAN;
     }
     
     [ 4channel FMsynth [9, 96 - 13, 103]
-    if (mouseX > 8 && mouseX < 14 && mouseY > 103 && mouseY < 112) {
+    if (mouseX > 8 && mouseX < 14 && mouseY > 95 && mouseY < 104) {
       btnAction = B_4CHFM;
     }
     
     [ 4channel MIDI [9, 112 - 13, 119]
-    if (mouseX > 8 && mouseX < 14 && mouseY > 119 && mouseY < 128) {
+    if (mouseX > 8 && mouseX < 14 && mouseY > 111 && mouseY < 120) {
       btnAction = B_4CHMD;
     }
     
     [ over OK button [3, 127 - 32, 136]
-    if (mouseX > 2 && mouseX < 33 && mouseY > 134 && mouseY < 145) {
+    if (mouseX > 2 && mouseX < 33 && mouseY > 126 && mouseY < 137) {
       btnAction = B_OK;
     }
       
     [ over Cancel button [3, 143 - 32, 152]
-    if (mouseX > 2 && mouseX < 33 && mouseY > 150 && mouseY < 161) {
+    if (mouseX > 2 && mouseX < 33 && mouseY > 142 && mouseY < 153) {
       btnAction = B_CANCEL;
     }
     
     [ test all [35, 135 - 52, 144]
-    if (mouseX > 34 && mouseX < 53 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 34 && mouseX < 53 && mouseY > 134 && mouseY < 145) {
       btnAction = B_TESTALL;
     }
     
     [ test 0 [63, 39 - 68, 48]
-    if (mouseX > 62 && mouseX < 69 && mouseY > 46 && mouseY < 57) {
+    if (mouseX > 62 && mouseX < 69 && mouseY > 38 && mouseY < 49) {
       btnAction = B_TEST0;
     }
     
     [ test 1 [63, 63 - 68, 72]
-    if (mouseX > 62 && mouseX < 69 && mouseY > 70 && mouseY < 81) {
+    if (mouseX > 62 && mouseX < 69 && mouseY > 62 && mouseY < 73) {
       btnAction = B_TEST1;
     }
     
     [ test 2 [63, 87 - 68, 96]
-    if (mouseX > 62 && mouseX < 69 && mouseY > 94 && mouseY < 105) {
+    if (mouseX > 62 && mouseX < 69 && mouseY > 86 && mouseY < 97) {
       btnAction = B_TEST2;
     }
     
     [ test 3 [63, 111 - 68, 120]
-    if (mouseX > 62 && mouseX < 69 && mouseY > 118 && mouseY < 129) {
+    if (mouseX > 62 && mouseX < 69 && mouseY > 110 && mouseY < 121) {
       btnAction = B_TEST3;
     }
     
     [ test 4 [63, 135 - 68, 144]
-    if (mouseX > 62 && mouseX < 69 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 62 && mouseX < 69 && mouseY > 134 && mouseY < 145) {
       btnAction = B_TEST4;
     }
     
     [ instrument 0 [75, 39 - 152, 48]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 46 && mouseY < 57) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 38 && mouseY < 49) {
       btnAction = B_INST0;
     }
     
     [ instrument 1 [75, 63 - 152, 72]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 70 && mouseY < 81) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 62 && mouseY < 73) {
       btnAction = B_INST1;
    }
     
     [ instrument 2 [75, 87 - 152, 96]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 94 && mouseY < 105) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 86 && mouseY < 97) {
       btnAction = B_INST2;
     }
     
     [ instrument 3 [75, 111 - 152, 120]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 118 && mouseY < 129) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 110 && mouseY < 121) {
       btnAction = B_INST3;
     }
     
     [ instrument 4 [75, 135 - 152, 144]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 142 && mouseY < 153) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 134 && mouseY < 145) {
       btnAction = B_INST4;
     }
     [ over slider zone (y between 154, 167)
-    if (mouseY > 160 && mouseY < 175) {
+    if (mouseY > 152 && mouseY < 167) {
       get.posn(oVolSlider, cursorX, cursorY);
       [ adjust for button width
       cursorY = cursorX;
@@ -1427,29 +1436,29 @@ if (cursormode) {
   [ check for dblclick (only if in 4channel mode)
   if (controller(cLeftDblClick) && 4channelSound) {
     [ instrument 0 [75, 39, - 152, 48]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 46 && mouseY < 57) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 38 && mouseY < 49) {
       dropmode = DROPDOWN;
     }
     
     [ instrument 1 [75, 63 - 152, 72]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 70 && mouseY < 81) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 62 && mouseY < 73) {
       dropmode = DROPDOWN;
     }
     
     [ instrument 2 [75, 87 - 152, 96]
-    if (mouseX > 74 && mouseX < 153 && mouseY > 94 && mouseY < 105) {
+    if (mouseX > 74 && mouseX < 153 && mouseY > 86 && mouseY < 97) {
       dropmode = DROPDOWN;
     }
     
     [ noise channels only if not in midi mode
     if (!useMIDI) {
       [ instrument 3 [75, 111 - 152, 120]
-      if (mouseX > 74 && mouseX < 153 && mouseY > 118 && mouseY < 129) {
+      if (mouseX > 74 && mouseX < 153 && mouseY > 110 && mouseY < 121) {
         dropmode = DROPDOWN;
       }
       
       [ instrument 4 [75, 135 - 152, 144]
-      if (mouseX > 74 && mouseX < 153 && mouseY > 142 && mouseY < 153) {
+      if (mouseX > 74 && mouseX < 153 && mouseY > 134 && mouseY < 145) {
         dropmode = DROPDOWN;
       }
     }

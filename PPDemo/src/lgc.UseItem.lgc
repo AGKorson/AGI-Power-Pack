@@ -7,7 +7,7 @@
 [ check for mouse clicks
 if (controller(cLeftClick)) {
   if (selectedItem == 2) {
-    if (mouseX > 82 && mouseX < 104 && mouseY > 90 && mouseY < 113) {
+    if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         print("You insert the disk and flip the latch to secure it.");
         set(floppyInserted);

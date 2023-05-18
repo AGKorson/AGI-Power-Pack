@@ -18,7 +18,7 @@ if (deathType > 0) {
 }
 
 [ if mouse is NOT over toolbar AND NOT over menu, show correct cursor
-if ((mouseX < 14 || mouseX > 145 || mouseY > 25) && mouseY > 7) {
+if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
   [ show correct cursor icon
   if (cursormode != cursoricon) {
     [ change it
@@ -44,7 +44,7 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 25) && mouseY > 7) {
 if (controller(cLeftClick)) {
   if (!deathType) {
     [ if on button1:
-    if (mouseX > 14 && mouseX < 31 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 14 && mouseX < 31 && mouseY < 17) {
       if (cursormode != C_DEFAULT) {
         [ select it
         cursormode = C_DEFAULT;
@@ -53,7 +53,7 @@ if (controller(cLeftClick)) {
     }
 
     [ if on button5:
-    if (mouseX > 80 && mouseX < 97 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 80 && mouseX < 97 && mouseY < 17) {
       if (cursormode != C_WALK) {
         [ select it
         cursormode = C_WALK;
@@ -62,7 +62,7 @@ if (controller(cLeftClick)) {
     }
   
     [ if on button6:
-    if (mouseX > 96 && mouseX < 113 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 96 && mouseX < 113 && mouseY < 17) {
       if (cursormode != C_LOOK) {
         [ select it
         cursormode = C_LOOK;
@@ -71,7 +71,7 @@ if (controller(cLeftClick)) {
     }
   
     [ if on button7:
-    if (mouseX > 112 && mouseX < 129 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 112 && mouseX < 129 && mouseY < 17) {
       if (cursormode != C_TALK) {
         [ select it
         cursormode = C_TALK;
@@ -80,7 +80,7 @@ if (controller(cLeftClick)) {
     }
   
     [ if on button8:
-    if (mouseX > 128 && mouseX < 145 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 128 && mouseX < 145 && mouseY < 17) {
       if (cursormode != C_USE) {
         [ select it
         cursormode = C_USE;
@@ -97,14 +97,14 @@ if (controller(cLeftClick)) {
   [ check for mouse down/mouse up on quit/save/restore buttons
   if (!tbBtnDown) {
     [ if on button2:
-    if (mouseX > 31 && mouseX < 48 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 31 && mouseX < 48 && mouseY < 17) {
       set.cel(tbActionBtn, 1);
       position(tbActionBtn, 32, 16);
       draw(tbActionBtn);
       set(tbBtnDown);
     }
     [ if on button3:
-    if (mouseX > 47 && mouseX < 64 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 47 && mouseX < 64 && mouseY < 17) {
       if (deathType) {
         set.cel(tbActionBtn, 8);
       } else {
@@ -115,7 +115,7 @@ if (controller(cLeftClick)) {
       set(tbBtnDown);
     }
     [ if on button4:
-    if (mouseX > 63 && mouseX < 80 && mouseY > 8 && mouseY < 25) {
+    if (mouseX > 63 && mouseX < 80 && mouseY < 17) {
       set.cel(tbActionBtn, 3);
       position(tbActionBtn, 64, 16);
       draw(tbActionBtn);
@@ -163,10 +163,10 @@ if (mouseBtn != 1) {
     force.update(tbActionBtn);
     set.cel(tbActionBtn, 0);
     [ take appropriate action
-    if (work1 == 1 && mouseX > 31 && mouseX < 48 && mouseY > 8 && mouseY < 25) {
+    if (work1 == 1 && mouseX > 31 && mouseX < 48 && mouseY < 17) {
       quit(0);
     }
-    if (work1 == 2 && mouseX > 47 && mouseX < 64 && mouseY > 8 && mouseY < 25) {
+    if (work1 == 2 && mouseX > 47 && mouseX < 64 && mouseY < 17) {
       [ if dead, restart; if not dead, save
       if (deathType) {
         call(lgc.CacheOptions);
@@ -200,7 +200,7 @@ if (mouseBtn != 1) {
       }
     }
     [ if on button3:
-    if (work1 == 3 && mouseX > 63 && mouseX < 80 && mouseY > 8 && mouseY < 25) {
+    if (work1 == 3 && mouseX > 63 && mouseX < 80 && mouseY < 17) {
       restore.game();
     }
     
