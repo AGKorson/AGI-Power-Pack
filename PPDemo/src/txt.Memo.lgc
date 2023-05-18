@@ -1,0 +1,103 @@
+prevent.input();
+configure.screen(255, 1, 1);
+set.text.attribute(255, BLACK);
+set.text.attribute(BLACK, WHITE);
+clear.text.rect(1, 4, 24, 75, WHITE);
+display(1, 5, "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+        "ÄÄÄÄ¿");
+display(5, 13, "To:   All Agi Mainframe OS Users");
+display(6, 13, "Subj: Password Management");
+display(8, 13, "1. As you know, the AMOS project has been developed ");
+display(9, 13, "to assist the AGI Power Pack development team in ");
+display(10, 13, "creating an enhanced AGI engine that will improve ");
+display(11, 13, "the graphics, sound and input capabilities of AGI. ");
+display(12, 13, "Although the emergence of the Sierra Creative ");
+display(13, 13, "Interpreter (SCI) has cast doubt on the ultimate ");
+display(14, 13, "future of the Power Pack, we will continue working as ");
+display(15, 13, "hard as we can as long as the project is funded.");
+display(17, 13, "2. There have been a few modifications made to AMOS to ");
+display(18, 13, "improve system security. All project members have been ");
+display(19, 13, "reissued new userids. Your new userid will be your ");
+display(20, 13, "initials and your employee IDnumber (which is based on ");
+display(21, 13, "seniority in the company, for example 'jd123'). ");
+display(23, 13, "3. Every account has been assigned the same temporary ");
+v242 = 1;
+v240 = 2;
+Label1:
+v241 = 5;
+display.v(v240, v241, v242);
+v241 = 74;
+display.v(v240, v241, v242);
+++v240;
+if (v240 < 25) {
+  goto(Label1);
+}
+lastChar = 0;
+Label2:
+if (!have.key()) {
+  goto(Label2);
+}
+clear.text.rect(2, 6, 24, 73, WHITE);
+set.text.attribute(WHITE, BLACK);
+clear.lines(0, 24, 254);
+set.text.attribute(BLACK, WHITE);
+clear.text.rect(23, 4, 23, 75, WHITE);
+display(3, 13, "password (Temp123!). You need to logon as soon as ");
+display(4, 13, "possible and choose another password that meets the ");
+display(5, 13, "new security requirements. Passwords must now be at ");
+display(6, 13, "least 8 characters long, and must include at least one ");
+display(7, 13, "upper case letter, lower case letter, number, and ");
+display(8, 13, "special character. ");
+display(10, 13, "4. Please note that ALL employees, including senior ");
+display(11, 13, "managers and company executives who have accounts, ");
+display(12, 13, "must reset their passwords. System security depends on ");
+display(13, 13, "all of us complying with the policies we have put in ");
+display(14, 13, "place to protect our work.");
+display(16, 13, "5. If you have any questions, please call one of the ");
+display(17, 13, "AMOS System Administrators.");
+display(23, 5, "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+        "ÄÄÄÄÄÙ");
+lastChar = 0;
+Label3:
+if (!have.key()) {
+  goto(Label3);
+}
+set.text.attribute(BLACK, 255);
+configure.screen(255, 1, 0);
+graphics();
+accept.input();
+return();
+
+[ Messages
+#message 1 "³"
+#message 2 "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"
+#message 3 "To:   All Agi Mainframe OS Users"
+#message 4 "Subj: Password Management"
+#message 5 "1. As you know, the AMOS project has been developed "
+#message 6 "to assist the AGI Power Pack development team in "
+#message 7 "creating an enhanced AGI engine that will improve "
+#message 8 "the graphics, sound and input capabilities of AGI. "
+#message 9 "Although the emergence of the Sierra Creative "
+#message 10 "Interpreter (SCI) has cast doubt on the ultimate "
+#message 11 "future of the Power Pack, we will continue working as "
+#message 12 "hard as we can as long as the project is funded."
+#message 13 "2. There have been a few modifications made to AMOS to "
+#message 14 "improve system security. All project members have been "
+#message 15 "reissued new userids. Your new userid will be your "
+#message 16 "initials and your employee IDnumber (which is based on "
+#message 17 "seniority in the company, for example 'jd123'). "
+#message 18 "3. Every account has been assigned the same temporary "
+#message 19 "password (Temp123!). You need to logon as soon as "
+#message 20 "possible and choose another password that meets the "
+#message 21 "new security requirements. Passwords must now be at "
+#message 22 "least 8 characters long, and must include at least one "
+#message 23 "upper case letter, lower case letter, number, and "
+#message 24 "special character. "
+#message 25 "4. Please note that ALL employees, including senior "
+#message 26 "managers and company executives who have accounts, "
+#message 27 "must reset their passwords. System security depends on "
+#message 28 "all of us complying with the policies we have put in "
+#message 29 "place to protect our work."
+#message 30 "5. If you have any questions, please call one of the "
+#message 31 "AMOS System Administrators."
+#message 32 "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
