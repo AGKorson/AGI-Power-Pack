@@ -2007,9 +2007,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX > 154 || mouseY < 31 || mouseY > 163)) {
+  if ((mouseX > 154 || mouseY < 19 || mouseY > 162)) {
     goto(doneclick);
   }
   if (cursormode == C_LOOK) {
@@ -2076,24 +2076,24 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ other things to look at
     
     [ computer 22, 73, 32, 86
-    if (mouseX > 21 && mouseX < 33 && mouseY > 80 && mouseY < 95) {
+    if (mouseX > 21 && mouseX < 33 && mouseY > 72 && mouseY < 87) {
       print("The receptionist uses this computer to manage patient "
             "accounts and scheduling.");
       goto(doneclick);
     }
     [ entry door 112, 150, 139, 167
-    if (mouseX > 111 && mouseX < 140 && mouseY > 157 && mouseY < 176) {
+    if (mouseX > 111 && mouseX < 140 && mouseY > 149 && mouseY < 168) {
       print("The glass entrance door opens and closes automatically.");
       goto(doneclick);
     }
     [ floor sign 2, 125, 8, 140
-    if (mouseX > 1 && mouseX < 9 && mouseY > 132 && mouseY < 149) {
+    if (mouseX > 1 && mouseX < 9 && mouseY > 124 && mouseY < 141) {
       print("It says \"CAUTION - Wet Floor\". You should probably stay "
             "away to be safe.");
       goto(doneclick);
     }
     [ table 127, 88, 133, 97
-    if (mouseX > 126 && mouseX < 134 && mouseY > 95 && mouseY < 106) {
+    if (mouseX > 126 && mouseX < 134 && mouseY > 87 && mouseY < 98) {
       print("The corner table is old and worn.");
       work1 = rm.Lobby;
       if (obj.in.room("magazine", work1)) {
@@ -2105,16 +2105,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
     work1 /= 16;
     if ((work1 == 0 || work1 == 11)) {
-      if (mouseX > 13 && mouseX < 76 && mouseY > 89 && mouseY < 129) {
+      if (mouseX > 13 && mouseX < 76 && mouseY > 81 && mouseY < 121) {
         print("This counter is where the receptionist spends most of her time.");
         goto(doneclick);
       }
     }
-    [ seats (100, 79, 152, 137) and pri = 1 or 5
+    [ seats (100, 78, 152, 137) and pri = 1 or 5
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
     work1 /= 16;
     if ((work1 == 1 || work1 == 5)) {
-      if (mouseX > 99 && mouseX < 153 && mouseY > 86 && mouseY < 146) {
+      if (mouseX > 99 && mouseX < 153 && mouseY > 77 && mouseY < 138) {
         print("The benches are old and worn, but look reasonably comfortable "
               "for sitting if you need to wait for an appointment.");
         goto(doneclick);
@@ -2129,13 +2129,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ hall (25, 52, 95, 94)
-    if (mouseX > 24 && mouseX < 96 && mouseY > 59 && mouseY < 103) {
+    if (mouseX > 24 && mouseX < 96 && mouseY > 51 && mouseY < 95) {
       print("You can see a hallway behind the lobby. That might be an area "
             "worth exploring.");
       goto(doneclick);
     }
     [ floor y>86 and y<149
-    if (mouseY > 94 && mouseY < 157) {
+    if (mouseY > 86 && mouseY < 149) {
       print("The floor looks like it has just been cleaned. You can see a "
             "few damp spots near the left exit.");
       goto(doneclick);
@@ -2249,7 +2249,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ floor sign 2, 125, 8, 140
-    if (mouseX > 1 && mouseX < 9 && mouseY > 132 && mouseY < 149) {
+    if (mouseX > 1 && mouseX < 9 && mouseY > 124 && mouseY < 141) {
       print("You are not close enough.");
     }
     goto(doneclick);

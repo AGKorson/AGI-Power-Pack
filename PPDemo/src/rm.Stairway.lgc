@@ -165,9 +165,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 13 || mouseX > 151 || mouseY < 27 || mouseY > 166)) {
+  if ((mouseX < 13 || mouseX > 151 || mouseY < 19 || mouseY > 158)) {
     goto(doneclick);
   }
   
@@ -180,19 +180,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ door
-    if (mouseX > 30 && mouseX < 44 && mouseY > 125 && mouseY < 162) {
+    if (mouseX > 30 && mouseX < 44 && mouseY > 117 && mouseY < 154) {
       print("This sturdy door must be protecting something very important.");
       goto(doneclick);
     }
     
     [ access control pad
-    if (mouseX > 45 && mouseX < 50 && mouseY > 143 && mouseY < 151) {
+    if (mouseX > 45 && mouseX < 50 && mouseY > 135 && mouseY < 143) {
       print("It's a door access keypad. With the right code, it will unlock the door.");
       goto(doneclick);
     }
     [ stairs/wall
     if (mouseX > 53) {
-      work1 = 223;
+      work1 = 215;
       work1 -= mouseX;
       if (work1 >= mouseY) {
         work2 = work1;
@@ -208,22 +208,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             }
           }
         }
-        goto(doneclick);
-      } else {
-        [ below stairs
-        goto(doneclick);
       }
+      goto(doneclick);
     }
     [ rest of wall
-    if (mouseX > 22 && mouseX < 60 && mouseY > 107 && mouseY < 162) {
-            print("The walls are a bit plain, and show signs of age with "
-                  "various cracks clearly visible.");
-            print("The stairwell is illuninated by a couple of overhead "
-                  "lights.");
-            if (!resetMOCC) {
-              print("The lower light flickers a lot, as if there is something "
-                    "not quite right with the electrical circuit.");
-            }
+    if (mouseX > 22 && mouseX < 60 && mouseY > 99 && mouseY < 154) {
+      print("The walls are a bit plain, and show signs of age with "
+            "various cracks clearly visible.");
+      print("The stairwell is illuninated by a couple of overhead "
+            "lights.");
+      if (!resetMOCC) {
+        print("The lower light flickers a lot, as if there is something "
+              "not quite right with the electrical circuit.");
+      }
       goto(doneclick);
     }
     
@@ -252,7 +249,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ door
-    if (mouseX > 30 && mouseX < 44 && mouseY > 125 && mouseY < 162) {
+    if (mouseX > 30 && mouseX < 44 && mouseY > 117 && mouseY < 154) {
       if (posn(ego, 26, 154, 43, 156)) {
         if (fDoorOpen) {
           [ close it
@@ -272,7 +269,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ access control pad
-    if (mouseX > 45 && mouseX < 50 && mouseY > 143 && mouseY < 151) {
+    if (mouseX > 45 && mouseX < 50 && mouseY > 135 && mouseY < 143) {
       if (posn(ego, 38, 154, 51, 157)) {
         [ if door is open
         if (fDoorOpen) {

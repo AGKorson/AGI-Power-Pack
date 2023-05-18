@@ -45,6 +45,7 @@ if (!egoExplored && currentRoom != rm.Entrance) {
   
 [ check for mouse menu activation
 if (controller(cLeftClick)) {
+[ 0 to 167 on picture; -8(F8) to -1(FF) above; 168 to 191 is below
   [ mouseY negative means above picture, on menu bar
   if (mouseY > 191 && IntVersion > VERSION_2272) {
     menu.input();

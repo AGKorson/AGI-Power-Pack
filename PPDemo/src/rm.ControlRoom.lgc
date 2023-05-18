@@ -125,9 +125,9 @@ if (newRoom) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 3 || mouseX > 156 || mouseY < 20 || mouseY > 175)) {
+  if ((mouseX < 3 || mouseX > 156 || mouseY < 20 || mouseY > 167)) {
     goto(doneclick);
   }
 
@@ -140,7 +140,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ doorway to stairwell 71, 159, 90, 167
-    if (mouseX > 70 && mouseX < 91 && mouseY > 166 && mouseY < 176) {
+    if (mouseX > 70 && mouseX < 91 && mouseY > 158 && mouseY < 168) {
       [ check for door open/close
       if (resetBaDASS) {
         [ door is open
@@ -152,18 +152,18 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ office entrance 4, 103, 15, 148
-    if (mouseX > 3 && mouseX < 16 && mouseY > 110 && mouseY < 157) {
+    if (mouseX > 3 && mouseX < 16 && mouseY > 102 && mouseY < 149) {
       print("This doorway leads to an office.");
       goto(doneclick);
     }
     [ supply room entrance 142, 103, 154, 148
-    if (mouseX > 141 && mouseX < 155 && mouseY > 110 && mouseY < 157) {
+    if (mouseX > 141 && mouseX < 155 && mouseY > 102 && mouseY < 149) {
       print("This doorway leads to a storage room.");
       goto(doneclick);
     }
     
     [ keyboard/mouse 67, 112, 96, 122
-    if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
+    if (mouseX > 66 && mouseX < 97 && mouseY > 111 && mouseY < 123) {
       print("The mouse and keyboard are for controlling the computer terminal.");
       goto(doneclick);
     }
@@ -240,7 +240,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ main console 31, 46, 128, 131
-    if(mouseX > 30 && mouseX < 129 && mouseY > 53 && mouseY < 140) {
+    if(mouseX > 30 && mouseX < 129 && mouseY > 45 && mouseY < 132) {
       print("This massive computer control console takes up most of the "
             "room. There is a central terminal station, and six auxillary "
             "display panels.");
@@ -272,7 +272,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ floppy drive
-    if (mouseX > 82 && mouseX < 104 && mouseY > 90 && mouseY < 113) {
+    if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         work1 = cp.Terminal;
         if (obj.in.room("floppy disk", work1)) {
@@ -296,7 +296,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ keyboard/mouse 67, 112, 96, 122
-    if (mouseX > 66 && mouseX < 97 && mouseY > 119 && mouseY < 131) {
+    if (mouseX > 66 && mouseX < 97 && mouseY > 111 && mouseY < 123) {
       if (nearTerminal) {
         set(showMOCC);
       } else {

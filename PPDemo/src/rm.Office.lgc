@@ -239,9 +239,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 32 || mouseX > 127 || mouseY < 72 || mouseY > 162)) {
+  if ((mouseX < 32 || mouseX > 127 || mouseY < 64 || mouseY > 154)) {
     goto(doneclick);
   }
   [ look
@@ -281,10 +281,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ computer/keyboard
     reset(fTmp);
-    if (mouseX > 66 && mouseX < 77 && mouseY > 100 && mouseY < 124) {
+    if (mouseX > 66 && mouseX < 77 && mouseY > 92 && mouseY < 116) {
       set(fTmp);
     }
-    if (mouseX > 69 && mouseX < 80 && mouseY > 122 && mouseY < 127) {
+    if (mouseX > 69 && mouseX < 80 && mouseY > 114 && mouseY < 119) {
       set(fTmp);
     }
     if (fTmp) {
@@ -294,7 +294,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ printer
-    if (mouseX > 77 && mouseX < 90 && mouseY > 114 && mouseY < 124) {
+    if (mouseX > 77 && mouseX < 90 && mouseY > 106 && mouseY < 116) {
       print("An old dot matrix printer sits next to the computer.");
       if (!has("memo")) {
         print("The output spool still has a piece of paper in it.");
@@ -349,13 +349,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ desk
-    if (mouseX > 62 && mouseX < 93 && mouseY > 117 && mouseY < 141) {
+    if (mouseX > 62 && mouseX < 93 && mouseY > 109 && mouseY < 133) {
       print("The plain metal desk is old and worn. It has two drawers.");
       goto(doneclick);
     }
     
     [ file cabinet
-    if (mouseX > 87 && mouseX < 102 && mouseY > 103 && mouseY < 138) {
+    if (mouseX > 87 && mouseX < 102 && mouseY > 95 && mouseY < 130) {
       print("A large 3-drawer filing cabinet is in the corner.");
       goto(doneclick);
     }
@@ -367,7 +367,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ rug
-    if (mouseX > 68 && mouseX < 99 && mouseY > 145 && mouseY < 158) {
+    if (mouseX > 68 && mouseX < 99 && mouseY > 137 && mouseY < 150) {
       [ ignore if on priority-4 pixel
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       work1 /= 16;
@@ -433,7 +433,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ lift/lower carpet 89, 141, 98, 149
-    if (mouseX > 88 && mouseX < 99 && mouseY > 148 && mouseY < 158) {
+    if (mouseX > 88 && mouseX < 99 && mouseY > 140 && mouseY < 150) {
       [ ego has to be close to the rug corner
       if (obj.in.box(ego, 80, 138, 104, 151)) {
         [ but not too close
@@ -465,7 +465,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ printer output
     if (!has("memo")) {
-      if (mouseX > 77 && mouseX < 88 && mouseY > 111 && mouseY < 123) {
+      if (mouseX > 77 && mouseX < 88 && mouseY > 103 && mouseY < 115) {
         [ is ego close enough?
         if (obj.in.box(ego, 73, 131, 97, 135)) {
           [ get the memo
@@ -486,7 +486,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         officeDskDrStatus != CLOSING) {
       [ is ego close enough?
       if (obj.in.box(ego, 74, 131, 101, 136)) {
-        if (officeDskDrStatus == OPEN1 && mouseY < 132) {
+        if (officeDskDrStatus == OPEN1 && mouseY < 124) {
           [ clicking on top drawer item
           if (!has("Walkman")) {
             get("Walkman");
@@ -499,7 +499,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             force.update(oDeskDrawer);      
           }
         } else {
-          if (officeDskDrStatus == OPEN2 && mouseY < 136) {
+          if (officeDskDrStatus == OPEN2 && mouseY < 128) {
             [ clicking on bottom drawer item
             if (!has("post-it note")) {
               get("post-it note");
@@ -526,7 +526,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ top desk drawer, closed
-    if (mouseX > 81 && mouseX < 93 && mouseY > 127 && mouseY < 133 && 
+    if (mouseX > 81 && mouseX < 93 && mouseY > 119 && mouseY < 125 && 
         officeDskDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 74, 131, 101, 136)) {
@@ -543,7 +543,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ bottom desk drawer, closed
-    if (mouseX > 81 && mouseX < 93 && mouseY > 132 && mouseY < 139 && 
+    if (mouseX > 81 && mouseX < 93 && mouseY > 124 && mouseY < 131 && 
         officeDskDrStatus == CLOSED) {
       [ is ego close enough
       if (obj.in.box(ego, 74, 131, 101, 136)) {
@@ -565,10 +565,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
 
-        if (officeFileDrStatus == OPEN1 && mouseY < 113) {
+        if (officeFileDrStatus == OPEN1 && mouseY < 105) {
           goto(doneclick);
         }
-        if (officeFileDrStatus == OPEN2 && mouseY < 122) {
+        if (officeFileDrStatus == OPEN2 && mouseY < 114) {
           if (!has("notebook")) {
             get("notebook");
             work1 = 3;
@@ -580,7 +580,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
           goto(doneclick);
         }
-        if (officeFileDrStatus == OPEN3 && mouseY < 131) {
+        if (officeFileDrStatus == OPEN3 && mouseY < 123) {
           if (!has("floppy disk")) {
             get("floppy disk");
             work1 = 4;
@@ -602,7 +602,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ top file drawer, closed
-    if (mouseX > 91 && mouseX < 101 && mouseY > 107 && mouseY < 117 &&
+    if (mouseX > 91 && mouseX < 101 && mouseY > 99 && mouseY < 109 &&
         officeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
@@ -619,7 +619,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
       
     [ middle file drawer, closed
-    if (mouseX > 91 && mouseX < 101 && mouseY > 116 && mouseY < 126 &&
+    if (mouseX > 91 && mouseX < 101 && mouseY > 108 && mouseY < 118 &&
         officeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
@@ -636,7 +636,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
       
     [ bottom file drawer, closed
-    if (mouseX > 92 && mouseX < 101 && mouseY > 126 && mouseY < 137 &&
+    if (mouseX > 92 && mouseX < 101 && mouseY > 118 && mouseY < 129 &&
         officeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
@@ -653,7 +653,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ picture, open
-    if (mouseX > 59 && mouseX < 66 && mouseY > 75 && mouseY < 126 && 
+    if (mouseX > 59 && mouseX < 66 && mouseY > 67 && mouseY < 118 && 
         pictureStatus == OPEN) {
       [ can't if safe is still open
       if (safeStatus != CLOSED) {
@@ -683,7 +683,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ picture, closed
-    if (mouseX > 45 && mouseX < 61 && mouseY > 95 && mouseY < 124 && 
+    if (mouseX > 45 && mouseX < 61 && mouseY > 87 && mouseY < 116 && 
         pictureStatus == CLOSED) {
       [ is ego close enough? 
       if (obj.in.box(ego, 38, 126, 65, 132)) {
@@ -708,7 +708,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ safe only accessible if picture is open
     if (pictureStatus == OPEN) {      
       [ safe door, open
-      if (mouseX > 44 && mouseX < 50 && mouseY > 114 && mouseY < 128 && 
+      if (mouseX > 44 && mouseX < 50 && mouseY > 106 && mouseY < 120 && 
           safeStatus == OPEN) {
         [ is ego close enough? 
         if (obj.in.box(ego, 38, 126, 65, 132)) {
@@ -733,7 +733,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       
       [ safe interior, open
-      if (mouseX > 49 && mouseX < 56 && mouseY > 112 && mouseY < 120 && 
+      if (mouseX > 49 && mouseX < 56 && mouseY > 104 && mouseY < 120 && 
           safeStatus == OPEN) {
         if (!has("BaDASS manual")) {
           get("BaDASS manual");
@@ -749,7 +749,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       
       [ safe door, closed
       [ player has to enter correct combo to get it open
-      if (mouseX > 48 && mouseX < 57 && mouseY > 111 && mouseY < 121 && 
+      if (mouseX > 48 && mouseX < 57 && mouseY > 103 && mouseY < 113 && 
           safeStatus == CLOSED) {
         [ is ego close enough? 
         if (obj.in.box(ego, 38, 126, 65, 132)) {
@@ -768,10 +768,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ computer/keyboard
     reset(fTmp);
-    if (mouseX > 66 && mouseX < 77 && mouseY > 100 && mouseY < 124) {
+    if (mouseX > 66 && mouseX < 77 && mouseY > 92 && mouseY < 116) {
       set(fTmp);
     }
-    if (mouseX > 69 && mouseX < 80 && mouseY > 122 && mouseY < 127) {
+    if (mouseX > 69 && mouseX < 80 && mouseY > 114 && mouseY < 127) {
       set(fTmp);
     }
     if (fTmp) {

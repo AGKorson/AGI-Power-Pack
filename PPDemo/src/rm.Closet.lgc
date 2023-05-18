@@ -260,9 +260,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 41 || mouseX > 113 || mouseY < 70 || mouseY > 166)) {
+  if ((mouseX < 41 || mouseX > 113 || mouseY < 62 || mouseY > 155)) {
     goto(doneclick);
   }
   
@@ -297,7 +297,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     } else {
       [ looking up or down
-      work2 += 8; [ adjust for pic offset
       work3 = work2; 
       work3 -= 33;
       if (mouseY < work3) {
@@ -340,23 +339,23 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     reset(clickbroom);
     if (broommoved) {
       [ broom is in corner
-      if (mouseX > 40 && mouseX < 48 && mouseY > 138 && mouseY < 163) {
+      if (mouseX > 40 && mouseX < 48 && mouseY > 130 && mouseY < 155) {
         print("After tripping over that stupid broom, you're glad you "
               "moved it out of the way.");
         goto(doneclick);
       }
     } else {
       [ broom is on floor
-      if (mouseX > 57 && mouseX < 65 && mouseY > 154 && mouseY < 162) {
+      if (mouseX > 57 && mouseX < 65 && mouseY > 146 && mouseY < 154) {
         set(clickbroom);
       }
-      if (mouseX > 62 && mouseX < 67 && mouseY > 151 && mouseY < 157) {
+      if (mouseX > 62 && mouseX < 67 && mouseY > 143 && mouseY < 149) {
         set(clickbroom);
       }
-      if (mouseX > 65 && mouseX < 70 && mouseY > 149 && mouseY < 155) {
+      if (mouseX > 65 && mouseX < 70 && mouseY > 141 && mouseY < 147) {
         set(clickbroom);
       }
-      if (mouseX > 68 && mouseX < 73 && mouseY > 147 && mouseY < 154) {
+      if (mouseX > 68 && mouseX < 73 && mouseY > 139 && mouseY < 146) {
         set(clickbroom);
       }
     }
@@ -370,13 +369,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ ladder (55, 93, 76, 105)
-    if (mouseX > 54 && mouseX < 77 && mouseY > 100 && mouseY < 114) {
+    if (mouseX > 54 && mouseX < 77 && mouseY > 92 && mouseY < 106) {
       print("There is a large ladder hanging on the wall.");
       goto(doneclick);
     }
     
-    [ faucet (62, 117, 66, 123)
-    if (mouseX > 61 && mouseX < 67 && mouseY > 124 && mouseY < 134) {
+    [ faucet (62, 117, 66, 125)
+    if (mouseX > 61 && mouseX < 67 && mouseY > 116 && mouseY < 126) {
       if (faucetfixed) {
         print("The faucet is no longer dripping.");
       } else {
@@ -385,21 +384,21 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ sink (59, 123, 68, 134)
-    if (mouseX > 58 && mouseX < 69 && mouseY > 130 && mouseY < 145) {
+    [ sink (59, 123, 68, 136)
+    if (mouseX > 58 && mouseX < 69 && mouseY > 122 && mouseY < 137) {
       print("It's a typical utility closet sink. Great for rinsing mops.");
       goto(doneclick);
     }
     
     [ mop/bucket/items on wall (41, 106, 48, 148 || 49, 117, 52, 142 || 53, 126, 58, 142)
     reset(clickmops);
-    if (mouseX > 40 && mouseX < 49 && mouseY > 113 && mouseY < 157) {
+    if (mouseX > 40 && mouseX < 49 && mouseY > 105 && mouseY < 149) {
       set(clickmops);
     }
-    if (mouseX > 48 && mouseX < 53 && mouseY > 124 && mouseY < 151) {
+    if (mouseX > 48 && mouseX < 53 && mouseY > 116 && mouseY < 143) {
       set(clickmops);
     }
-    if (mouseX > 52 && mouseX < 59 && mouseY > 133 && mouseY < 151) {
+    if (mouseX > 52 && mouseX < 59 && mouseY > 125 && mouseY < 143) {
       set(clickmops);
     }
     if (clickmops) {
@@ -408,50 +407,50 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ plunger (80, 129, 84, 141)
-    if (mouseX > 79 && mouseX < 85 && mouseY > 136 && mouseY < 151) {
+    [ plunger (80, 129, 84, 142)
+    if (mouseX > 79 && mouseX < 85 && mouseY > 128 && mouseY < 143) {
       print("This old plunger looks like it needs to be rinsed clean.");
       goto(doneclick);
     }
     [ boxes on top shelf (86, 92, 102, 102)
-    if (mouseX > 85 && mouseX < 103 && mouseY > 99 && mouseY < 111) {
+    if (mouseX > 85 && mouseX < 103 && mouseY > 91 && mouseY < 103) {
       print("There are several boxes on the top shelf.");
       goto(doneclick);
     }
     
     [ boxes on ground (90, 139, 112, 154)
-    if (mouseX > 89 && mouseX < 113 && mouseY > 146 && mouseY < 163) {
+    if (mouseX > 89 && mouseX < 113 && mouseY > 138 && mouseY < 155) {
       print("The label on the boxes says 'Toilet Paper - 100 rolls'. "
             "That's a lot of toilet paper.");
       goto(doneclick);
     }
     
     [ shelf1 supplies (89, 107, 102, 113)
-    if (mouseX > 88 && mouseX < 103 && mouseY > 114 && mouseY < 122) {
+    if (mouseX > 88 && mouseX < 103 && mouseY > 106 && mouseY < 114) {
       print("There are an assortment of typical cleaning supplies on this shelf.");
       goto(doneclick);
     }
     
     [ shelf2 supplies (89, 118, 102, 126)
-    if (mouseX > 88 && mouseX < 103 && mouseY > 125 && mouseY < 135) {
+    if (mouseX > 88 && mouseX < 103 && mouseY > 117 && mouseY < 127) {
       print("There are an assortment of typical cleaning supplies on this shelf.");
       goto(doneclick);
     }
     
     [ shelf (84, 103, 105, 141)
-    if (mouseX > 83 && mouseX < 106 && mouseY > 110 && mouseY < 150) {
+    if (mouseX > 83 && mouseX < 106 && mouseY > 102 && mouseY < 142) {
       print("This is a study metal shelf unit.");
       goto(doneclick);
     }
     
     [ floor drain (74, 142, 81, 158)
-    if (mouseX > 74 && mouseX < 81 && mouseY > 150 && mouseY < 166) {
+    if (mouseX > 74 && mouseX < 81 && mouseY > 142 && mouseY < 158) {
       print("The stainless steel drain keeps the floor dry.");
       goto(doneclick);
     }
     
-    [ steam pipe (44, 77, 98, 83)
-    if (mouseX > 43 && mouseX < 99 && mouseY > 84 && mouseY < 94) {
+    [ steam pipe (44, 77, 98, 85)
+    if (mouseX > 43 && mouseX < 99 && mouseY > 76 && mouseY < 86) {
       print("It looks like a drain pipe from the second floor.");
       goto(doneclick);
     }
@@ -468,17 +467,17 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
      
     [ nothing specific - check general areas
     [ ceiling - 41, 62, 113, 73
-    if (mouseX > 40 && mouseX < 114 && mouseY > 69 && mouseY < 82) {
+    if (mouseX > 40 && mouseX < 114 && mouseY > 61 && mouseY < 74) {
       print("You see a drain pipe hanging from the ceiling.");
       goto(doneclick);
     }
     [ walls - 41, 74, 113, 139
-    if (mouseX > 40 && mouseX < 114 && mouseY > 81 && mouseY < 148) {
+    if (mouseX > 40 && mouseX < 114 && mouseY > 73 && mouseY < 140) {
       print("The walls are stained and worn. They could be use a new coat of paint.");
       goto(doneclick);
     }
     [ floor - 41, 140, 113, 158
-    if (mouseX > 40 && mouseX < 114 && mouseY > 147 && mouseY < 167) {
+    if (mouseX > 40 && mouseX < 114 && mouseY > 139 && mouseY < 159) {
       print("The floor is scuffed and worn, but clean. There is a drain in the center.");
       goto(doneclick);
     }
@@ -517,7 +516,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     reset(clickbroom);
     if (broommoved) {
       [ broom is in corner
-      if (mouseX > 40 && mouseX < 48 && mouseY > 138 && mouseY < 163) {
+      if (mouseX > 40 && mouseX < 48 && mouseY > 130 && mouseY < 155) {
         if (obj.in.box(ego, 47, 149, 58, 155)) {
           print("You don't need the broom so you leave it in the corner.");
         } else {
@@ -527,16 +526,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     } else {
       [ broom is on floor
-      if (mouseX > 57 && mouseX < 65 && mouseY > 154 && mouseY < 162) {
+      if (mouseX > 57 && mouseX < 65 && mouseY > 146 && mouseY < 154) {
         set(clickbroom);
       }
-      if (mouseX > 62 && mouseX < 67 && mouseY > 151 && mouseY < 157) {
+      if (mouseX > 62 && mouseX < 67 && mouseY > 143 && mouseY < 149) {
         set(clickbroom);
       }
-      if (mouseX > 65 && mouseX < 70 && mouseY > 149 && mouseY < 155) {
+      if (mouseX > 65 && mouseX < 70 && mouseY > 141 && mouseY < 147) {
         set(clickbroom);
       }
-      if (mouseX > 68 && mouseX < 73 && mouseY > 147 && mouseY < 154) {
+      if (mouseX > 68 && mouseX < 73 && mouseY > 139 && mouseY < 146) {
         set(clickbroom);
       }
     }
@@ -561,14 +560,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ ladder (55, 93, 76, 105)
-    if (mouseX > 54 && mouseX < 77 && mouseY > 100 && mouseY < 114) {
+    if (mouseX > 54 && mouseX < 77 && mouseY > 92 && mouseY < 106) {
       print("You have not taken ladder safety training recently, so you "
             "decide to leave it on the wall.");
       goto(doneclick);
     }
     
-    [ faucet (62, 117, 66, 123)
-    if (mouseX > 61 && mouseX < 67 && mouseY > 124 && mouseY < 134) {
+    [ faucet (62, 117, 66, 125)
+    if (mouseX > 61 && mouseX < 67 && mouseY > 116 && mouseY < 126) {
       if (posn(ego, 57, 140, 70, 146)) {
         if (faucetfixed) {
           print("You already tightened the faucet handle.");
@@ -584,8 +583,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ sink (59, 123, 68, 134)
-    if (mouseX > 58 && mouseX < 69 && mouseY > 130 && mouseY < 145) {
+    [ sink (59, 123, 68, 136)
+    if (mouseX > 58 && mouseX < 69 && mouseY > 122 && mouseY < 137) {
       if (posn(ego, 57, 140, 70, 150)) {
         if (!handsWashed) {
           set(disableGameFunctions);
@@ -608,13 +607,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ mop/bucket/items on wall (41, 106, 48, 148 || 49, 117, 52, 142 || 53, 126, 58, 142)
     reset(clickmops);
-    if (mouseX > 40 && mouseX < 49 && mouseY > 113 && mouseY < 157) {
+    if (mouseX > 40 && mouseX < 49 && mouseY > 105 && mouseY < 149) {
       set(clickmops);
     }
-    if (mouseX > 48 && mouseX < 53 && mouseY > 124 && mouseY < 151) {
+    if (mouseX > 48 && mouseX < 53 && mouseY > 116 && mouseY < 143) {
       set(clickmops);
     }
-    if (mouseX > 52 && mouseX < 59 && mouseY > 133 && mouseY < 151) {
+    if (mouseX > 52 && mouseX < 59 && mouseY > 125 && mouseY < 143) {
       set(clickmops);
     }
     if (clickmops) {
@@ -627,8 +626,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ plunger (80, 129, 84, 141)
-    if (mouseX > 79 && mouseX < 85 && mouseY > 136 && mouseY < 151) {
+    [ plunger (80, 129, 84, 142)
+    if (mouseX > 79 && mouseX < 85 && mouseY > 128 && mouseY < 143) {
       if (obj.in.box(ego, 72, 138, 92, 147)) {
         print("Maybe touching a dirty smelly plunger wasn't such a good idea.");
         [ lose 2 points
@@ -642,7 +641,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     [ boxes on top shelf (86, 92, 102, 102)
-    if (mouseX > 85 && mouseX < 103 && mouseY > 99 && mouseY < 111) {
+    if (mouseX > 85 && mouseX < 103 && mouseY > 91 && mouseY < 103) {
       if (obj.in.box(ego, 83, 140, 108, 146)) {
         print("The boxes are up too high for you to reach.");
       } else {
@@ -652,7 +651,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ boxes on ground (90, 139, 112, 154)
-    if (mouseX > 89 && mouseX < 113 && mouseY > 146 && mouseY < 163) {
+    if (mouseX > 89 && mouseX < 113 && mouseY > 138 && mouseY < 155) {
       if (obj.in.box(ego, 83, 144, 108, 156)) {
         print("The boxes are sealed up. You shouldn't open them.");
       } else {
@@ -662,7 +661,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ shelf1 supplies (89, 107, 102, 113)
-    if (mouseX > 88 && mouseX < 103 && mouseY > 114 && mouseY < 122) {
+    if (mouseX > 88 && mouseX < 103 && mouseY > 106 && mouseY < 114) {
       if (obj.in.box(ego, 85, 140, 108, 148)) {
         print("You have no need for cleaning supplies.");
       } else {
@@ -672,7 +671,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ shelf2 supplies (89, 118, 102, 126)
-    if (mouseX > 88 && mouseX < 103 && mouseY > 125 && mouseY < 135) {
+    if (mouseX > 88 && mouseX < 103 && mouseY > 117 && mouseY < 127) {
       if (obj.in.box(ego, 85, 140, 108, 148)) {
         print("You have no need for cleaning supplies.");
       } else {
@@ -682,7 +681,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ shelf (84, 103, 105, 141)
-    if (mouseX > 83 && mouseX < 106 && mouseY > 110 && mouseY < 150) {
+    if (mouseX > 83 && mouseX < 106 && mouseY > 102 && mouseY < 142) {
       if (obj.in.box(ego, 74, 140, 108, 148)) {
         print("There is nothing you can do with the shelf.");
       } else {
@@ -692,7 +691,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ floor drain (74, 142, 81, 158)
-    if (mouseX > 74 && mouseX < 81 && mouseY > 150 && mouseY < 162) {
+    if (mouseX > 74 && mouseX < 81 && mouseY > 142 && mouseY < 154) {
       if (obj.in.box(ego, 66, 142, 89, 156)) {
         egodir = STOPPED;
         
@@ -704,7 +703,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ steam pipe (44, 77, 98, 83)
-    if (mouseX > 43 && mouseX < 99 && mouseY > 84 && mouseY < 94) {
+    if (mouseX > 43 && mouseX < 99 && mouseY > 76 && mouseY < 86) {
         egodir = STOPPED;
       print("You can't reach the pipe. Not even if you jumped.");
     }

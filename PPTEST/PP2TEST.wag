@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = DGN
    Interpreter = 2.917
-   LastEdit = "4/15/2023 11:00:59 AM"
+   LastEdit = "5/16/2023 6:45:54 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -97,7 +97,7 @@
 
 [Logic90]
    CompCRC32 = &H8ACBD23F
-   CRC32 = &H8ACBD23F
+   CRC32 = &H98D8DE65
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 659

@@ -240,9 +240,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 13 || mouseX > 151 || mouseY < 70 || mouseY > 155)) {
+  if ((mouseX < 13 || mouseX > 151 || mouseY < 55 || mouseY > 148)) {
     goto(doneclick);
   }
 
@@ -254,19 +254,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ vent duct - 68, 82, 78, 90
-    if (mouseX > 67 && mouseX < 79 && mouseY > 82 && mouseY < 92) {
+    [ vent duct - 68, 75, 78, 83
+    if (mouseX > 67 && mouseX < 79 && mouseY > 74 && mouseY < 84) {
       print("This vent duct provides a nice stream of cool air to "
             "help keep the building comfortable.");
       goto(doneclick);
     }
     
     [ doors
-    if (mouseX > 17 && mouseX < 25 && mouseY > 107 && mouseY < 149) {
+    if (mouseX > 17 && mouseX < 25 && mouseY > 100 && mouseY < 141) {
       print("This is a closet door. It has a sign on it that says \"Please keep this door closed.\"");
       goto(doneclick);
     }
-    if (mouseY > 106 && mouseY < 139) {
+    if (mouseY > 99 && mouseY < 133) {
       [ door 1 - 47, 107, 59, 138
       if (mouseX > 46 && mouseX < 60) {
         print("This door leads to one of the exam rooms.");
@@ -286,7 +286,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ transom windows - 47/87/127, 95, 59/99/139, 106
     reset(clickOn);
-    if (mouseY > 94 && mouseY < 106) {
+    if (mouseY > 87 && mouseY < 100) {
       if (mouseX > 46 && mouseX < 60) {
         set(clickOn);
       }
@@ -307,17 +307,17 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ door signs
     [62, 102, 68, 106
-    if (mouseX > 61 && mouseX < 69 && mouseY > 109 && mouseY < 115) {
+    if (mouseX > 61 && mouseX < 69 && mouseY > 101 && mouseY < 107) {
       print("The door sign says \"Exam Room 1\"");
       goto(doneclick);
     }
     [102, 102, 110, 109
-    if (mouseX > 101 && mouseX < 111 && mouseY > 109 && mouseY < 118) {
+    if (mouseX > 101 && mouseX < 111 && mouseY > 101 && mouseY < 110) {
       print("The door sign indicates this is a unisex bathroom.");
       goto(doneclick);
     }
     [142, 102, 148, 106
-    if (mouseX > 141 && mouseX < 149 && mouseY > 109 && mouseY < 115) {
+    if (mouseX > 141 && mouseX < 149 && mouseY > 101 && mouseY < 107) {
       print("The name plate for this office says \"Dr. Brane, MD\"");
       goto(doneclick);
     }
@@ -371,7 +371,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ other doors
-    if (mouseY > 106 && mouseY < 139) {
+    if (mouseY > 99 && mouseY < 133) {
       [ bathroom door
       if (mouseX > 86 && mouseX < 100) {
         if (posn(ego, 80, 132, 100, 138)) {
@@ -399,7 +399,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
     [ transom windows - 47/87/127, 95, 59/99/139, 106
     reset(clickOn);
-    if (mouseY > 94 && mouseY < 106) {
+    if (mouseY > 86 && mouseY < 100) {
       if (mouseX > 46 && mouseX < 60) {
         set(clickOn);
       }
@@ -415,8 +415,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
 
-    [ vent duct - 68, 82, 78, 90
-    if (mouseX > 67 && mouseX < 79 && mouseY > 82 && mouseY < 92) {
+    [ vent duct - 68, 75, 78, 83
+    if (mouseX > 67 && mouseX < 79 && mouseY > 75 && mouseY < 84) {
       print("The vent duct is too high for you to reach.");
       goto(doneclick);
     }

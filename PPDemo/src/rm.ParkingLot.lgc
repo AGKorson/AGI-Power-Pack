@@ -636,9 +636,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ on in-game items
 if (cursoricon > C_WALK && cursoricon < C_WAIT && 
     controller(cLeftClick) &&
-    (mouseX < 14 || mouseX > 145 || mouseY > 25)) {
-  [ ignore borders
-  if ((mouseY < 31 || mouseY > 175)) {
+    (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
+  [ ignore borders, off screen
+  if (mouseY > 167) {
     goto(doneclick);
   }
   if (cursormode == C_LOOK) {
@@ -717,19 +717,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
     [ parked cars
     reset(fClickOn);
-    if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
+    if (mouseX > 26 && mouseX < 41 && mouseY > 145 && mouseY < 157) {
       set(fClickOn);
     }
-    if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
+    if (mouseX > 46 && mouseX < 61 && mouseY > 144 && mouseY < 155) {
       set(fClickOn);
     }
-    if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
+    if (mouseX > 51 && mouseX < 66 && mouseY > 156 && mouseY < 167) {
       set(fClickOn);
     }
-    if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
+    if (mouseX > 106 && mouseX < 121 && mouseY > 130 && mouseY < 141) {
       set(fClickOn);
     }
-    if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
+    if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
       set(fClickOn);
     }
     if(fClickOn) {
@@ -759,7 +759,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 > 79) {
       [ building, door
-      if (mouseX > 53 && mouseX < 60 && mouseY < 127 && mouseY > 112) {
+      if (mouseX > 53 && mouseX < 60 && mouseY > 104 && mouseY < 139) {
         print("There is a large automatic glass door at the entrance to building.");
       } else {
         print("The building looks almost the same as it did thirty years ago.");
@@ -819,19 +819,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
     [ parked cars
     reset(fClickOn);
-    if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
+    if (mouseX > 26 && mouseX < 41 && mouseY > 145 && mouseY < 157) {
       set(fClickOn);
     }
-    if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
+    if (mouseX > 46 && mouseX < 61 && mouseY > 144 && mouseY < 155) {
       set(fClickOn);
     }
-    if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
+    if (mouseX > 51 && mouseX < 66 && mouseY > 156 && mouseY < 167) {
       set(fClickOn);
     }
-    if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
+    if (mouseX > 106 && mouseX < 121 && mouseY > 130 && mouseY < 141) {
       set(fClickOn);
     }
-    if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
+    if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
       set(fClickOn);
     }
     if(fClickOn) {
@@ -998,19 +998,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
     [ parked cars
     reset(fClickOn);
-    if (mouseX > 26 && mouseX < 41 && mouseY > 153 && mouseY < 165) {
+    if (mouseX > 26 && mouseX < 41 && mouseY > 145 && mouseY < 157) {
       set(fClickOn);
     }
-    if (mouseX > 46 && mouseX < 61 && mouseY > 152 && mouseY < 163) {
+    if (mouseX > 46 && mouseX < 61 && mouseY > 144 && mouseY < 155) {
       set(fClickOn);
     }
-    if (mouseX > 51 && mouseX < 66 && mouseY > 164 && mouseY < 175) {
+    if (mouseX > 51 && mouseX < 66 && mouseY > 156 && mouseY < 167) {
       set(fClickOn);
     }
-    if (mouseX > 106 && mouseX < 121 && mouseY > 138 && mouseY < 149) {
+    if (mouseX > 106 && mouseX < 121 && mouseY > 130 && mouseY < 141) {
       set(fClickOn);
     }
-    if (mouseX > 92 && mouseX < 107 && mouseY > 151 && mouseY < 162) {
+    if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
       set(fClickOn);
     }
     if(fClickOn) {
@@ -1049,7 +1049,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ building
       if (egoX < 71 && egoY < 121) {
         [ door
-        if (mouseX > 53 && mouseY < 60 && mouseY > 113) {
+        if (mouseX > 53 && mouseY < 52 && mouseY > 105) {
           print("The door will open automatically when you approach.");
         } else {
           print("You run your hands over the weathered building exterior. It's rough.");
