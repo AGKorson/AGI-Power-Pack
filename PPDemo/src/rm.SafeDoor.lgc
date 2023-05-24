@@ -67,19 +67,18 @@ if (newRoom) {
   [ access to cursor icons
   load.logics(lgc.GameFunctions);
   
-  [ force 4 channel-FM for sound effects
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 127) {
+    currentTrack *= -1;
+    stop.sound();
+  }
+  
+  [ sound effects
   load.sound(s.SafeDial);
   load.sound(s.DoorOpen);
-  if (4channelsound) {
-    set(tmp4channel);
-  }
-  if (!4channelsound) {
-    set(4channelsound);
-  }
-  if (useMIDI) {
-    [ use FM for this room
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-  }
+  work1 = 0;
+  work2 = 128;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
   work1 = 4;
   work2 = 1;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)

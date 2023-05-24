@@ -107,11 +107,16 @@ if (newRoom) {
   }
   load.sound(s.WrongCode);
   load.sound(s.RightCode);
-  
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 127) {
     currentTrack *= -1;
+    stop.sound();
   }
+  
+  [ set instrument for buttons
+  work1 = 0;
+  work2 = 128;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
   
   [ display the picture on screen
   show.pic();

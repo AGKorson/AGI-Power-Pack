@@ -638,8 +638,8 @@ if (dropmode == CHOOSING) {
     egoDir = 0;
   }
   
-  [ escape cancels the selection
-  if (controller(cMenu)) {
+  [ right-click or escape cancels the selection
+  if ((controller(cRightClick) || controller(cMenu))) {
     [ dropup to hide the list
     dropmode = DROPUP;
   }
@@ -662,12 +662,6 @@ if (dropmode == CHOOSING) {
     }
   }
   
-  [ check for right-click
-  if (controller(cRightClick)) {
-    [ dropup to hide the list
-    dropmode = DROPUP;
-  }
-  
   [ if mouse x value is over the listbox text
   if (mouseX > 75 && mouseX < 152) {
     [ check for left click
@@ -678,7 +672,7 @@ if (dropmode == CHOOSING) {
       work1 -= offsetrow;
       [ text rows are not relative to pic; need
       [ to correct for pic offset (1 row = 8 pixels)
-      ++work1;
+      work1 += 1;
       [ is it a valid offset?
       if (work1 < 5 && work1 != listrow) {
         [ deselect old
@@ -1619,7 +1613,7 @@ if (btnAction > 0) {
   if (btnAction == B_TESTALL) {
     [ if sound is not already playing start a sound
     if (!sndTest) {
-      [ set all music channel instruments (not noise)
+      [ set all music channel instruments, including noise if in FM mode
       cursorX = 0;
       :setinst      
         work1 = &tmpFM0;
@@ -1637,12 +1631,16 @@ if (btnAction > 0) {
           work2 += 13;
           set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
         }
-      if (cursorX < 2) {
-        ++cursorX;
-        goto(SETINST);
+      if (cursorX < 4) {
+        if ((cursorX < 2 || !useMIDI)) {
+          ++cursorX;
+          goto(SETINST);
+        }
       }
       
-      sound(m.PPDTheme, sndDone);
+[      sound(m.PPDTheme, sndDone);
+load.sound(s.Crash);
+sound(s.Crash, sndDone);
       [ update button text
       set.text.attribute(-1, 0);
       set.text.attribute(BLACK, WHITE);

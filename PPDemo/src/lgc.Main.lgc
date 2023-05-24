@@ -393,9 +393,9 @@ if (said("test", "drop")) {
 
 [ MENU AND STATUS BAR CHECKS
 if (!disableGameFunctions) {
-  [ boolean trick to use single if statement (-1 to -8 is ypos of top row
-  if (!controller(cMenu) && (!controller(cLeftClick) || mouseY > 191)) {
-  } else {
+[  if (lc && y>247) || cm ) {
+  if (!controller(cMenu) && (!controller(cLeftClick) || mouseY < 248)) {
+  } else {   
     [ check for click on sound bar
     if (mouseX > 137) {
       [ adjust sound volume based on clicked position
@@ -1141,5 +1141,5 @@ return();
 #message 53 "22215909FFFF030F020000"
 #message 54 "22215909FFFF030F020000"
 #message 55 "22215909FFFF030F020000"
-#message 56 "22215909FFFF030F020000"
-#message 57 "22215909FFFF030F020000"
+#message 56 "2F200000FFFF0F0F00030E"
+#message 57 "22242100C0C00C0C000000"

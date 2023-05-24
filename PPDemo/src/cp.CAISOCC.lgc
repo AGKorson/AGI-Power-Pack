@@ -564,6 +564,13 @@ if (dropmode == CHOOSING) {
     egoDir = 0;
   }
     
+  [ right-click or escape cancels the selection
+  if ((controller(cMenu) || controller(cRightClick))) {
+    reset(selectItem);
+    [ dropup to hide the list
+    dropmode = DROPUP;
+  }
+  
   [ keyboard works regardless of mode for listboxes
   [ return to select
   if (have.key()) {
@@ -574,20 +581,6 @@ if (dropmode == CHOOSING) {
       [ dropup to hide the list
       dropmode = DROPUP;
     }
-  }
-  
-  [ escape cancels the selection
-  if (controller(cMenu)) {
-    reset(selectItem);
-    [ dropup to hide the list
-    dropmode = DROPUP;
-  }
-  
-  [ check for right-click
-  if (controller(cRightClick)) {
-    reset(selectItem);
-    [ dropup to hide the list
-    dropmode = DROPUP;
   }
   
   [ if mouse is over the listbox text

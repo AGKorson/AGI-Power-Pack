@@ -150,9 +150,11 @@ if (newRoom) {
     load.sound(s.Drip);
   }
   
-  [ breaking wall sounds
-  load.sound(s.Crumble1);
-  load.sound(s.Crumble2);
+  if (!wallbreak) {
+    [ breaking wall sounds
+    load.sound(s.Crumble1);
+    load.sound(s.Crumble2);
+  }
   
   [ add additional room initialization here
   egoDir = STOPPED;
@@ -213,10 +215,13 @@ if (dripdone && !faucetfixed) {
     set.cel(drip, 0);
     end.of.loop(drip, dripdone);
     start.update(drip);
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
-      set(playSound);
+    [ only play sound if walkman is not in use, and not crashing through wall
+    if ((currentTrack == 0 || currentTrack > 128)  && (fallSeq == NOFALL || fallSeq >= SITUP)) {
+      work1 = 8;
+      work2 = 128;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
       sound(s.Drip, soundDone);
+      set(playSound);
     }
   }
   toggle(dripping);    
@@ -749,9 +754,14 @@ if (fDone && fallSeq == MOVE2WALL2) {
   set.cel(ego, 0);
   end.of.loop(ego, fDone);
 }
+
 if (fDone && fallSeq == FALLDOWN) {
   fallSeq = BREAKWALL;
-  [ no walkman to worry about when wall breaks
+  [ no walkman to worry about when wall breaks 
+  work1 = 0;
+  work2 = 100;  [ instrument 100
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set(playSound);
   sound(s.Crumble1, soundDone);
   start.update(wall);
   end.of.loop(wall, fDone);
@@ -759,6 +769,9 @@ if (fDone && fallSeq == FALLDOWN) {
 if (fallSeq == BREAKWALL) {
   current.cel(wall, work1);
   if (work1 == 10) {
+[    work1 = 0;
+[    work2 = 100;  [ instrument 100
+[    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
     sound(s.Crumble2, soundDone);
   }
   if (fDone) {

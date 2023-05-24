@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "5/18/2023 3:08:05 PM"
+   LastEdit = "5/24/2023 12:37:40 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HFA6FCC40
-   CRC32 = &HFA6FCC40
+   CompCRC32 = &H2C43EEA8
+   CRC32 = &H2C43EEA8
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -128,15 +128,15 @@
 [Logic25]
    ID = cp.ESADOCC
    Description = ""
-   CRC32 = &HDC1C6252
-   CompCRC32 = &HDC1C6252
+   CRC32 = &H1AAC91AE
+   CompCRC32 = &H1AAC91AE
    IsRoom = True
 
 [Logic22]
    ID = cp.CAISOCC
    Description = ""
-   CRC32 = &H8D97DF64
-   CompCRC32 = &H8D97DF64
+   CRC32 = &HC7EAF0FE
+   CompCRC32 = &HC7EAF0FE
    IsRoom = True
 
 [Logic26]
@@ -191,8 +191,8 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H9D7FE2EF
-   CompCRC32 = &H9D7FE2EF
+   CRC32 = &H17EDE4E1
+   CompCRC32 = &H17EDE4E1
    IsRoom = True
 
 [Logic6]
@@ -359,8 +359,8 @@
 [Logic12]
    ID = rm.DoorKeypad
    Description = ""
-   CRC32 = &HBAA86B06
-   CompCRC32 = &HBAA86B06
+   CRC32 = &H7AF79333
+   CompCRC32 = &H7AF79333
    IsRoom = True
 
 [Logic33]
@@ -373,8 +373,8 @@
 [Logic13]
    ID = rm.SafeDoor
    Description = ""
-   CRC32 = &H314F09CA
-   CompCRC32 = &H314F09CA
+   CRC32 = &HE205907D
+   CompCRC32 = &HE205907D
    IsRoom = True
 
 [Logic14]
@@ -2619,6 +2619,57 @@
 
 [Sound88]
    ID = s.CarStop
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound89]
+   ID = s.Crash
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound90]
+   ID = s.Phone
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound91]
+   ID = s.Shock
    Description = ""
    Key = 0
    TPQN = 4
