@@ -43,32 +43,30 @@
   #define TS_FADEOUT_WIN   9
   #define TS_ANIMATE_AGI  10
   #define TS_MOVE_AGI     11
-  #define TS_EXPLODE1     12
-  #define TS_EXPLODE2     13
-  #define TS_EXPLODE3     14
-  #define TS_EXPLODE4     15
-  #define TS_EXPLODE5     16
-  #define TS_FADEWHITE    17
-  #define TS_PPACK        18
-  #define TS_FADEOUT_PP   19
-  #define TS_FADEIN_SQ    20
-  #define TS_START_CREDITS 21
-  #define TS_SCROLLCREDS  22
+  #define TS_EXPLODE      12
+  #define TS_EXPLODED     13
+  #define TS_FADEWHITE    14
+  #define TS_PPACK        15
+  #define TS_PP_SHIFT     16
+  #define TS_FADEOUT_PP   17
+  #define TS_FADEIN_SQ    18
+  #define TS_START_CREDITS 19
+  #define TS_SCROLLCREDS  20
 #define titleTimer        v222
-#define letterindex       v223
+#define letterIndex       v223
 #define delaycounter      v224
 #define wordcount         v225
 #define musicDelay        v226
-#define creditline1        v227
+#define creditline1       v227
   #define CR_PPDESIGN    0
   #define CR_DEMODESIGN  1
   #define CR_BKGD_ART    2
   #define CR_ANIMATION   3
   #define CR_ADDL_ART    4
   #define CR_MUSIC       5
-#define creditstep1        v228
-#define creditline2        v229
-#define creditstep2        v230
+#define creditstep1       v228
+#define creditline2       v229
+#define creditstep2       v230
 
 #define fLogoDone         f220
 #define fShowLogo2        f221
@@ -86,11 +84,6 @@ if (newRoom) {
   [ (with zero delay) so this room can then be faded back in
   block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   
-[  load.pic(currentRoom);
-[  draw.pic(currentRoom);
-[  discard.pic(currentRoom);
-  
-
   [ disable player control
   program.control();
   
@@ -426,6 +419,7 @@ if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
     }
   }
 }
+
 if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
   [ display letters, one at a time
   [ and fade them in at same time
@@ -449,6 +443,7 @@ if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
     }
   }
 }
+
 if (titleSeq == TS_ANIMATE_AGI) {
   ++delaycounter;
   if (delaycounter == 1) {
@@ -547,7 +542,8 @@ if (titleSeq == TS_ANIMATE_AGI) {
   }
 }
 
-if (titleSeq == TS_MOVE_AGI && titleTimer == 0) {
+[if (titleSeq == TS_MOVE_AGI && titleTimer == 0) {
+if (titleSeq == TS_MOVE_AGI) {
   ++delaycounter;
   if (delaycounter == 4) {
     delaycounter = 0;
@@ -585,6 +581,34 @@ if (titleSeq == TS_MOVE_AGI && titleTimer == 0) {
         display(12, 18, "AGI");
       }
       ++letterindex;
+    }
+  }
+}
+
+if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
+  [delay
+  ++delayCounter;
+  if (delayCounter == 1) {
+    delayCounter = 0;
+    [ adjust color 
+    ++letterIndex;
+    if (letterIndex == 64) {
+      [ when fully shifted, begin timer
+      titleTimer = 45;
+    } else {
+      [ adjust colors to make the shift
+      block(BYTE2HEX, &s16, &letterIndex, 0); [ byte2hex(sRESULT, vINPUT)
+      work1 = 63;
+      work1 -= letterIndex;
+      block(BYTE2HEX, &s18, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      work1 = letterIndex;
+      work1 /= 3;
+      block(BYTE2HEX, &s17, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      work2 = 21;
+      work2 -= work1;
+      block(BYTE2HEX, &s19, &work2, 0); [ byte2hex(sRESULT, vINPUT)
+      [ set palette
+      block(SET.PALETTE, 0, &m4, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
     }
   }
 }
@@ -681,13 +705,13 @@ if (titleTimer > 0) {
       block(SET.PALETTE, 0, &m3, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
       [ fade in (no delay)
       block(FADE.IN, 0, 0, 0); [ fade.in(BYVAR, DELAY, COLOR)
-      [ begin fade in process
+      [ begin letter fade in process
       letterindex = 97;
       ++titleSeq;
       delaycounter = 0;
       return();
     }
-    if (titleSeq >= TS_EXPLODE1 && titleSeq <= TS_EXPLODE5) {
+    if (titleSeq == TS_EXPLODE) {
       work1 = titleSeq;
       work1 += 26;
       :drawpic
@@ -696,30 +720,43 @@ if (titleTimer > 0) {
         discard.pic(work1);
         show.pic();
         ++work1; 
-      if (work1 <= pic.Explode5) {
+      if (work1 <= pic.Explode7) {
         goto(drawpic);
       }
-      titleSeq = TS_EXPLODE5;
+      titleSeq = TS_EXPLODED;
       titleTimer = 1;
     }
     if (titleSeq == TS_FADEWHITE) {
       [ fade out white
       block(FADE.OUT, 0, 1, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
       ++titleSeq;
-      titleTimer = 1;
+[      titleTimer = 1;
+[      goto(getkey);
     }
     if (titleSeq == TS_PPACK) {
+[block(FADE.IN, 0, 0, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
+[set(f10);trace.on();
+
+      [ adjust palette to show text in start position
+      s14 = "000000";
+      s15 = "3F1515";
+      block(SET.PALETTE, 0, &m4, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
       load.pic(currentRoom);
       draw.pic(currentRoom);
       discard.pic(currentRoom);
       show.pic();
       [fade in
       block(FADE.IN, 0, 10, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
-      titleTimer = 45;
+      titleSeq = TS_PP_SHIFT;
+      letterIndex = 0;
+      s14 = "%s16%s17%s17";
+      s15 = "%s18%s19%s19";
     }
     if (titleSeq == TS_FADEOUT_PP) {
       block(FADE.OUT, 0, 8, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-      work1 = pic.Credits;
+      [ restore palette
+      block(SET.PALETTE, 0, &m5, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      work1 = pic.Title;
       load.pic(work1);
       draw.pic(work1);
       discard.pic(work1);
@@ -816,13 +853,21 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
-#message 1 "%s2" ["\x00\x00\x00\x00\x00\x2A\x00\x2A\x00\x00\x2A\x2A\x2A\x00\x00\x2A\x00\x2A\x2A\x15\x00\x2A\x2A\x2A\x15\x15\x15\x15\x15\x3F\x00\x3F\x15\x15\x3F\x3F\x3F\x15\x15\x3F\x15\x3F\x3F\x3F\x15\x3F\x3F\x3F"
+#message 1 "%s2"
 #message 2 "%s13"
 #message 3 "000000%s14%s15%s16%s17%s18%s19%s20%s21%s22%%003F15153F3F3F15153F153F3F3F153F3F3F"
 
+[           |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
+[palettes:  | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
+#message 4 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15%s14%%3F1515%s15%%3F3F153F3F3F"
 
-[[palettes: "| 0=BLACK   | 1=BLUE    | 2=GREEN   | 3=CYAN    | 4=RED     | 5=MAGENTA | 6=BROWN   | 7=LT_GRAY | 8=DK_GRAY | 9=LT_BLUE | 10=LT_GRN | 11=LT_CYN | 12=LT_RED | 13=LT_MGT | 14=YELLOW | 15=WHITE |
-[#message 1 "\x00\x00\x00\x00\x00\x2A\x00\x2A\x00\x00\x2A\x2A\x2A\x00\x00\x2A\x00\x2A\x2A\x15\x00\x2A\x2A\x2A\x15\x15\x15\x15\x15\x3F\x00\x3F\x15\x15\x3F\x3F\x3F\x15\x15\x3F\x15\x3F\x3F\x3F\x15\x3F\x3F\x3F"
+[ default palette
+#message 5 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
+
+
+[            |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
+[[palettes:  | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
+[#message 1 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
 [#message 2 "\x00\x00\x00\x00\x00\x29\x00\x29\x00\x00\x29\x29\x29\x00\x00\x29\x00\x29\x29\x14\x00\x29\x29\x29\x14\x14\x14\x14\x14\x3E\x00\x3E\x14\x14\x3E\x3E\x3E\x14\x14\x3E\x14\x3E\x3E\x3E\x14\x3E\x3E\x3E"
 [#message 3 "\x00\x00\x00\x00\x00\x28\x00\x28\x00\x00\x28\x28\x28\x00\x00\x28\x00\x28\x28\x14\x00\x28\x28\x28\x14\x14\x14\x14\x14\x3D\x00\x3D\x14\x14\x3D\x3D\x3D\x14\x14\x3D\x14\x3D\x3D\x3D\x14\x3D\x3D\x3D"
 [#message 4 "\x00\x00\x00\x00\x00\x28\x00\x28\x00\x00\x28\x28\x28\x00\x00\x28\x00\x28\x28\x14\x00\x28\x28\x28\x14\x14\x14\x14\x14\x3C\x00\x3C\x14\x14\x3C\x3C\x3C\x14\x14\x3C\x14\x3C\x3C\x3C\x14\x3C\x3C\x3C"

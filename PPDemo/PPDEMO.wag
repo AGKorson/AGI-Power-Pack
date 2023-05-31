@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "5/24/2023 12:37:40 PM"
+   LastEdit = "5/18/2023 3:08:05 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -129,7 +129,7 @@
    ID = cp.ESADOCC
    Description = ""
    CRC32 = &H1AAC91AE
-   CompCRC32 = &H1AAC91AE
+   CompCRC32 = &HF9AFDD4D
    IsRoom = True
 
 [Logic22]
@@ -156,21 +156,21 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H2A68A7B7
-   CompCRC32 = &H2A68A7B7
+   CRC32 = &H2DAC260
+   CompCRC32 = &H2DAC260
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HD6754E37
-   CompCRC32 = &HD6754E37
+   CRC32 = &HBEC79924
+   CompCRC32 = &HBEC79924
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H5E1AD983
+   CRC32 = &H190D9FD1
    CompCRC32 = &H5E1AD983
    IsRoom = True
 
@@ -192,7 +192,7 @@
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
    CRC32 = &H17EDE4E1
-   CompCRC32 = &H17EDE4E1
+   CompCRC32 = &HF91F1F4F
    IsRoom = True
 
 [Logic6]
@@ -521,8 +521,8 @@
    BkgdImg = ""
 
 [Picture1]
-   ID = pic.Introduction
-   Description = "A simple introductory screen picture. Add scrolling credits for a nice effect."
+   ID = pic.PowerPackLogo
+   Description = ""
    BkgdImg = ""
 
 [Picture2]
@@ -694,37 +694,47 @@
    Description = ""
    BkgdImg = ""
 
-[Picture43]
-   ID = pic.Credits
-   Description = ""
-   BkgdImg = ""
-
-[Picture44]
-   ID = pic.Walkman
-   Description = ""
-   BkgdImg = "support\PPDemo Art\walkman.bmp"
-   BkgdShow = False
-   BkgdTrans = 127
-   BkgdPosn = 17|0|0|9
-   BkgdSize = 303|167|2727|1503
-
-[Picture45]
-   ID = ovl.Walkman1
-   Description = ""
-   BkgdImg = ""
-
-[Picture48]
+[Picture50]
    ID = ovl.Walkman4
    Description = ""
    BkgdImg = ""
 
-[Picture47]
+[Picture49]
    ID = ovl.Walkman3
    Description = ""
    BkgdImg = ""
 
-[Picture46]
+[Picture48]
    ID = ovl.Walkman2
+   Description = ""
+   BkgdImg = ""
+
+[Picture47]
+   ID = ovl.Walkman1
+   Description = ""
+   BkgdImg = ""
+
+[Picture46]
+   ID = pic.Walkman
+   Description = ""
+   BkgdImg = "support\PPDemo Art\walkman.bmp"
+   BkgdTrans = 127
+   BkgdPosn = 17|0|0|9
+   BkgdSize = 303|167|2727|1503
+   BkgdShow = False
+
+[Picture45]
+   ID = pic.Title
+   Description = ""
+   BkgdImg = ""
+
+[Picture43]
+   ID = pic.Explode6
+   Description = ""
+   BkgdImg = ""
+
+[Picture44]
+   ID = pic.Explode7
    Description = ""
    BkgdImg = ""
 [::END Pictures::]

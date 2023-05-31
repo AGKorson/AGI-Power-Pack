@@ -16,6 +16,10 @@
 #define btnNo         o5
 
 #define egoCarSeq    v220
+#define   EC_ARRIVE    1
+#define   EC_PARKING   2
+#define   EC_PARKED    3
+
 #define patientSeq   v221
 #define   IDLE         0
 #define patientTimer v222
@@ -157,6 +161,12 @@ if (newRoom) {
   [ set initial timer to slightly faster random amount
   random(40, 140, patientTimer);
   
+  [ sound effects for this room
+  load.sound(s.Car);
+  load.sound(s.CarStart);
+  load.sound(s.CarStop);
+  load.sound(s.Shock);
+set(forceAutoloop);  
   [ if starting (coming from intro screen) and first game
   if (previousRoom == rm.Title && forceAutoloop) {
     [ begin opening sequence dialog
@@ -215,7 +225,7 @@ if (newRoom) {
 [ **************************************
 if (egoCarSeq) {
   [ ego arrives
-  if (egoCarSeq == 1) {
+  if (egoCarSeq == EC_ARRIVE) {
     [ disallow menu use
     reset(enableMenu);
     [ game functions are disabled
@@ -239,10 +249,20 @@ if (egoCarSeq) {
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    sound(s.Car, soundDone);
   }
-  if (egoCarSeq == 2 && fCarDone) {
-    [ ego gets out
+  if (egoCarSeq == EC_PARKING && soundDone) {
+    sound(s.Car, soundDone);
+  }
+  if (egoCarSeq == EC_PARKING && fCarDone) {
     reset(fCarDone);
+    [ stop car
+    sound(s.CarStop, soundDone);
+    ++egoCarSeq;
+  }
+  if (egoCarSeq == EC_PARKED && soundDone) {
+    [ ego gets out
+    reset(soundDone);
     egoCarSeq = 0;
     stop.cycling(egoCar);
     position(ego, 50, 139);

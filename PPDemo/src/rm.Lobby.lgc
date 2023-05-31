@@ -197,6 +197,9 @@ if (newRoom) {
   animate.obj(oReceptionist);
   ignore.horizon(oReceptionist);
 
+  [ telephone sound effect
+  load.sound(s.Phone);
+  
   [ if coming from hall after ego was kicked out
   if (!allowedPastLobby && previousRoom == rm.Hallway) {
     [ begin offscreen
@@ -922,6 +925,11 @@ if (receptionistSeq == NEWLOCATION) {
     if (work1 == receptionistLoc) {
       goto(newLoc);
     }
+  }
+  [ ring phone if it is next destination
+  if (work1 == PHONE) {
+    set(playSound);
+    sound(s.Phone, soundDone);
   }
   [ if currently in the hall
   if (receptionistLoc == HALL) {
