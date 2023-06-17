@@ -5,7 +5,6 @@
 [ 
 [
 [ ********************************************************************
-[ TODO: sound effects for open/close doors, getting arrested
 [ TODO: more said statements for hallway
 
 [ **************************************
@@ -25,8 +24,23 @@
 #define fExamDoorDone  f225
 
 #define examDoorSeq    v220
+#define    SHUT         0
+#define    OPENED       1
+#define    NURSETURN    2
+#define    NURSETALK    3
+#define    OPEN4        4
 #define gExamCount     v221
 #define arrestSeq      v222
+#define    NOARREST     0
+#define    COPARRIVES   1
+#define    GOTOEGO      2
+#define    TURNTOEGO    3
+#define    CUFFEGO      4
+#define    EGOWALKS     5
+#define    ESCORT1      6
+#define    SHUTDOOR     7
+#define    ESCORT2      8
+#define    ARRESTED     9
 #define arrestCounter  v223
 
 
@@ -44,6 +58,12 @@ if (newRoom)
   [ art work used in room
   load.view(vw.HallwayArt);
   load.view(vw.Nurse);
+  
+  [ sound effects and music
+  load.sound(s.DoorOpen);
+  load.sound(s.DoorClose);
+  load.sound(s.CallCops);
+  load.sound(s.PerpWalk);
   
   [ add the two doors that don't open
   add.to.pic(vw.HallwayArt, 1, 0, 86, 132, 12,  4);
@@ -124,7 +144,7 @@ if (newRoom)
   [ restore cursor
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  return();
+[  return();
 }
 
 [ if ego is not allowed
@@ -134,9 +154,9 @@ if (!allowedPastLobby) {
 }
 
 [ if ego is being escorted from the premises
-if (arrestSeq > 0) {
-  if (arrestSeq == 1) {
-    [ sonny appears
+if (arrestSeq > NOARREST) {
+  if (arrestSeq == COPARRIVES) {
+    [ cop appears
     animate.obj(oSecurity);
     load.view(vw.Security);
     set.view(oSecurity, vw.Security);
@@ -149,73 +169,92 @@ if (arrestSeq > 0) {
     work2 += 2;
     work3 = 1;
     move.obj.v(oSecurity, work1, work2, work3, fExamDoorDone);
-    ++arrestSeq;
+    arrestSeq = GOTOEGO;
   }
-  if (arrestSeq == 2 && fExamDoorDone) {
+  if (arrestSeq == GOTOEGO && fExamDoorDone) {
     [ turn to ego
     get.posn(ego, work1, work2);
     ++work2;
     work3 = 1;
     move.obj.v(oSecurity, work1, work2, work3, fExamDoorDone);
     work1 = egoX;
-    ++arrestSeq;
+    arrestSeq = TURNTOEGO;
   }
-  if (arrestSeq == 3 && fExamDoorDone) {
+  if (arrestSeq == TURNTOEGO && fExamDoorDone) {
     [ 'handcuff' ego
-    ++arrestSeq;
+    arrestSeq = CUFFEGO;
     arrestCounter = 15;
   }
-  if (arrestSeq == 4) {
+  if (arrestSeq == CUFFEGO) {
     if (arrestCounter > 0) {
       --arrestCounter;
     } else {
-      ++arrestSeq;
+      arrestSeq = EGOWALKS;
     }
   }
-  if (arrestSeq == 5) {
+  if (arrestSeq == EGOWALKS) {
+    [ only play sound if walkman is not in use
+    if ((currentTrack == 0 || currentTrack > 128)) {
+      work1 = 0;
+      work2 = 0;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      sound(s.PerpWalk, soundDone);
+      set(playSound);
+    }
     [ ego starts walking
     load.view(vw.EgoArrest);
     set.view(ego, vw.EgoArrest);
-[    get.posn(ego, work1, work2);
     work1 = egoX;
     work2 = egoY;
     work1 += 7;
     work3 = 1;
     move.obj.v(ego, work1, work2, work3, fExamDoorDone);
     set.loop(oSecurity, 0);
-    ++arrestSeq;
+    arrestSeq = ESCORT1;
   }
-  if (arrestSeq == 6 && fExamDoorDone) {
-    [ sonny escorts ego off screen
+  if (arrestSeq == ESCORT1 && fExamDoorDone) {
+    [ cop escorts ego off screen
     move.obj(ego, 159, 138, 1, fExamDoorDone);
     move.obj(oSecurity, 159, 140, 1, fExamDoorDone);
-    ++arrestSeq;
+    arrestSeq = SHUTDOOR;
   }
-  if (arrestSeq == 7 && posn(ego, 63, 134, 63, 148)) {
+  if (arrestSeq == SHUTDOOR && posn(ego, 63, 134, 63, 148)) {
     [ nurse shuts door
     reverse.loop(oExamDoor, fExamDoorDone);
     normal.cycle(oNurse);
-    ++arrestSeq;
+    arrestSeq = ESCORT2;
   }
   
   
 [ !debug
-if ((arrestSeq == 7 || arrestSeq == 8)) {
+if ((arrestSeq == SHUTDOOR || arrestSeq == ESCORT2)) {
   display(24, 0, "ego pos: (%v38, %v39)  egoedge: %v2   ");
 }
 
 
-  if (arrestSeq == 8 && edgeEgoHit == RIGHT_EDGE) {
+  if (arrestSeq == ESCORT2 && edgeEgoHit == RIGHT_EDGE) {
     [ done
     erase(ego);
     erase(oSecurity);
     deathType = 4;
-    ++arrestSeq;
+    arrestSeq = ARRESTED;
+    stop.sound();
     [ restore cursor
     cursoricon = cursormode;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   }
   return();
+}
+
+if (soundDone && arrestSeq >= ESCORT1 && arrestSeq != ARRESTED) {
+  [ only play sound if walkman is not in use
+  if ((currentTrack == 0 || currentTrack > 128)) {
+    work1 = 0;
+    work2 = 0;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    sound(s.PerpWalk, soundDone);
+    set(playSound);
+  }
 }
 
 [*****
@@ -439,8 +478,13 @@ if (opendoor) {
     print("The closet door is already open.");
   } else {
     if (posn(ego, 12, 129, 29, 148)) {
-       end.of.loop(oClosetDoor, fDoorDone);
-       
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        work1 = 0;
+        work2 = 128;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        sound(s.DoorOpen, soundDone);
+      }
+      end.of.loop(oClosetDoor, fDoorDone);
     } else {
       print("You are not close enough.");
     }
@@ -450,6 +494,12 @@ if (closedoor) {
   reset(closedoor);
   if (closetopen) {
     if (posn(ego, 12, 129, 29, 148)) {
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        work1 = 0;
+        work2 = 128;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        sound(s.DoorClose, soundDone);
+      }
       reverse.loop(oClosetDoor, fDoorDone);
       if (!scoreClosetDoor) {
         set(scoreClosetDoor);
@@ -477,8 +527,14 @@ if (fDoorDone) {
 [**************************************************************
 if (openExamDoor) {
 [  if (posn(ego, 40, 132, 60, 138)) {
+  if ((currentTrack == 0 || currentTrack > 128)) {
+    work1 = 0;
+    work2 = 128;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    sound(s.DoorOpen, soundDone);
+  }
     reset(openExamDoor);
-    examDoorSeq = 1;
+    examDoorSeq = OPENED;
     end.of.loop(oExamDoor, fExamDoorDone);
     set.cel(oNurse, 8);
     stop.cycling(oNurse);
@@ -491,15 +547,15 @@ if (openExamDoor) {
 }
 if (fExamDoorDone) {
   reset(fExamDoorDone);
-  if (examDoorSeq == 1) {
+  if (examDoorSeq == OPENED) {
     [ nurse turns around
-    examDoorSeq = 2;
+    examDoorSeq = NURSETURN;
     reverse.loop(oNurse, fExamDoorDone);
     goto(doneEDoorSeq);
   }
-  if (examDoorSeq == 2) {
+  if (examDoorSeq == NURSETURN) {
     if (gExamCount < 4) {
-      examDoorSeq = 3;
+      examDoorSeq = NURSETALK;
       reverse.loop(oExamDoor, fExamDoorDone);
       normal.cycle(oNurse);
       if (gExamCount == 0) {
@@ -515,6 +571,12 @@ if (fExamDoorDone) {
         print("Please stop interrupting me, or I will call security!");
       }
       ++gExamCount;
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        work1 = 0;
+        work2 = 128;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        sound(s.DoorClose, soundDone);
+      }
     } else {
       print("I asked you to stop interrupting!! Security!!!");
       prevent.input();
@@ -524,14 +586,23 @@ if (fExamDoorDone) {
       cursoricon = C_WAIT;
       set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
       set(disableGameFunctions);
-      arrestSeq = 1;
+      arrestSeq = COPARRIVES;
+      [ only play sound if walkman is not in use
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        work1 = 0;
+        work2 = 0;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        sound(s.CallCops, soundDone);
+        set(playSound);
+      }
     }
     goto(doneEDoorSeq);
   }
-  if (examDoorSeq == 3) {
+  if (examDoorSeq == NURSETALK) {
     accept.input();
     player.control();
     erase(oNurse);
+    examDoorSeq = SHUT;
   }
 }
 :doneEDoorSeq

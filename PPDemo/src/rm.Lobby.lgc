@@ -19,7 +19,6 @@
 
 [ ********************************************************************
 [ TODO: more said statements for lobby
-[ TODO: sound effects for phone, typing, doors
 
 [ **************************************
 [ LOCAL DEFINES
@@ -197,8 +196,10 @@ if (newRoom) {
   animate.obj(oReceptionist);
   ignore.horizon(oReceptionist);
 
-  [ telephone sound effect
+  [ sound effects
   load.sound(s.Phone);
+  load.sound(s.DoorOpen);
+  load.sound(s.DoorClose);
   
   [ if coming from hall after ego was kicked out
   if (!allowedPastLobby && previousRoom == rm.Hallway) {
@@ -246,25 +247,25 @@ if (newRoom) {
   [ intervals (minutes) patients take actions:
   [      P1  P2  P3  P4  
   [  0   L        
-  [  1   L   L             P2 ARRIVE
+  [  1   L   L           P2 ARRIVE
   [  2   L   L      
   [  3   L*  L           P1 RESTROOM
   [  4   L   L     
-  [  5   L   L   L           P3 ARRIVE
-  [  6   L   E   L         P2 EXAM
+  [  5   L   L   L       P3 ARRIVE
+  [  6   L   E   L       P2 EXAM
   [  7   L   E   L    
   [  8   L   E   L
-  [  9   L       L         P2 EXIT
+  [  9   L       L       P2 EXIT
   [  10  L       L    
-  [  11  L       L   L         P4 ARRIVE
-  [  12  L       E   L       P3 EXAM
+  [  11  L       L   L   P4 ARRIVE
+  [  12  L       E   L   P3 EXAM
   [  13  L       E   L  
   [  14  L       E   L  
-  [  15  L           L       P3 EXIT
-  [  16  L           E         P4 EXAM
+  [  15  L           L   P3 EXIT
+  [  16  L           E   P4 EXAM
   [  17  L           E  
   [  18  L           E  
-  [  19  L                     P4 EXIT
+  [  19  L               P4 EXIT
   [ 
   [ *first time ego enters lobby, patient 1 will 
   [ always ask to use restroom at  1 minute mark
@@ -514,6 +515,10 @@ if ((egoX > 78 || egoY > 125)) {
   }
 }
 
+[**************************************************************
+[ RECEPTIONIST
+[**************************************************************
+
 [ check for request to talk with receptionist
 if (checktalk) {
   reset(checktalk);
@@ -552,10 +557,6 @@ if (checktalk) {
     print.at("Move closer to the counter so she can hear you.", 6, 6, 35); 
   }
 }
-
-[**************************************************************
-[ RECEPTIONIST
-[**************************************************************
 
 [ if a counter is active
 if (receptionistCtr > 0) {
@@ -927,8 +928,11 @@ if (receptionistSeq == NEWLOCATION) {
     }
   }
   [ ring phone if it is next destination
-  if (work1 == PHONE) {
+  if (work1 == PHONE && !fEgoWaitTalk) {
     set(playSound);
+    work1 = 0;
+    work2 = 128;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     sound(s.Phone, soundDone);
   }
   [ if currently in the hall
@@ -1878,6 +1882,10 @@ if (fP4Done) {
 if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
   if (!frontdooropen) {
     [ open it
+    work1 = 0;
+    work2 = 128;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    sound(s.DoorOpen, soundDone);
     set(frontdooropen);
     start.cycling(backpane);
     normal.cycle(backpane);
@@ -1889,6 +1897,10 @@ if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
 } else {
   if (frontdooropen) {
     [ close it
+    work1 = 0;
+    work2 = 128;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    sound(s.DoorClose, soundDone);
     reset(frontdooropen);
     start.cycling(backpane);
     move.obj(backpane, 112, 162, 1, fPaneDone);

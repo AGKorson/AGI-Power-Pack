@@ -14,8 +14,9 @@
 [ 6: slipped on wet spot in lobby
 [ 7: car stolen
 
-[ 99: player drove off
+[ 99: ego driving away
 [
+[ 253: waiting for ego to drive away
 [ 254: death sequence complete
 [ 255: winning sequence complete
 [
@@ -24,7 +25,7 @@
 [ TODO: add deathcount handler (count how many times/ways player dies)
 
 [ if message announcing death hasn't been displayed yet
-if (deathType < 254) { 
+if (deathType < 253) { 
   [ re-allow input
   accept.input();
   [ clear the input line
@@ -47,10 +48,15 @@ if (deathType < 254) {
 
   [ WINNER!
   if (deathType == 99) {
-    [ not actually dead- game is over because ego left
-    print("Drew drives away, his visit to Sierra On-Line is over.");
-    [ set deathType to 'win'
-    deathType = 255;
+    if (v220 == 0) {
+      [ not actually dead- game is over because ego left
+      print("You drive away, your visit to Sierra On-Line is over.");
+      [ set deathType to 'win'
+      deathType = 255;
+    } else {
+      [ delay the ending
+      return();
+    }
   } else {
     [ hit by a car
     if (deathType == 1) {
@@ -95,7 +101,6 @@ if (deathType < 254) {
     deathType = 254;
   }
 }
-
 
 [ decrement timer
 if (deathTimer > 0) {

@@ -2,7 +2,6 @@
 [
 [ rm.Title: Opening/intro
 [
-[ TODO: finish art for PowerPack explosion and PPDemo Title page
 [ TODO: need opening credit sound effects and theme song
 [
 [********************************************************************
@@ -11,9 +10,8 @@
 [ LOCAL DEFINES
 [ **************************************
 
-#define oLogo1             o1
-#define oLogo2             o2
-#define oDrew              o2 [ re-use o2
+#define oLogo              o1
+#define oDrew              o2
 #define oCat               o3
 
 #define sText             s12
@@ -31,56 +29,51 @@
 
 #define tmpSpeed          v220
 #define titleSeq          v221
-  #define TS_FADEIN_AG     0
-  #define TS_SALUTE        1
-  #define TS_SALUTE_UP     2
-  #define TS_SALUTE_WAIT   3
-  #define TS_SALUTE_DOWN   4
-  #define TS_PAUSE1        5
-  #define TS_FADEOUT_AG    6
-  #define TS_FADEIN_WIN    7
-  #define TS_PAUSE2        8
-  #define TS_FADEOUT_WIN   9
-  #define TS_ANIMATE_AGI  10
-  #define TS_MOVE_AGI     11
-  #define TS_EXPLODE      12
-  #define TS_EXPLODED     13
-  #define TS_FADEWHITE    14
-  #define TS_PPACK        15
-  #define TS_PP_SHIFT     16
-  #define TS_FADEOUT_PP   17
-  #define TS_FADEIN_SQ    18
+  #define TS_FADEIN_AG      0
+  #define TS_SALUTE         1
+  #define TS_SALUTE_UP      2
+  #define TS_SALUTE_WAIT    3
+  #define TS_SALUTE_DOWN    4
+  #define TS_PAUSE1         5
+  #define TS_FADEOUT_AG     6
+  #define TS_FADEIN_WIN     7
+  #define TS_PAUSE2         8
+  #define TS_FADEOUT_WIN    9
+  #define TS_ANIMATE_AGI   10
+  #define TS_MOVE_AGI      11
+  #define TS_EXPLODE       12
+  #define TS_EXPLODED      13
+  #define TS_FADEWHITE     14
+  #define TS_PPACK         15
+  #define TS_PP_SHIFT      16
+  #define TS_FADEOUT_PP    17
+  #define TS_FADEIN_SQ     18
   #define TS_START_CREDITS 19
-  #define TS_SCROLLCREDS  20
+  #define TS_SCROLLCREDS   20
 #define titleTimer        v222
 #define letterIndex       v223
 #define delaycounter      v224
 #define wordcount         v225
 #define musicDelay        v226
-#define creditline1       v227
-  #define CR_PPDESIGN    0
-  #define CR_DEMODESIGN  1
-  #define CR_BKGD_ART    2
-  #define CR_ANIMATION   3
-  #define CR_ADDL_ART    4
-  #define CR_MUSIC       5
-#define creditstep1       v228
-#define creditline2       v229
-#define creditstep2       v230
+#define creditline        v227
+  #define CR_PPDESIGN      0
+  #define CR_DEMODESIGN    1
+  #define CR_BKGD_ART      2
+  #define CR_ANIMATION     3
+  #define CR_ADDL_ART      4
+  #define CR_MUSIC         5
+  #define CR_SOUND         6
+#define creditstep        v228
 
 #define fLogoDone         f220
-#define fShowLogo2        f221
 
 if (newRoom) {
-  [ this is the first cycle through this room
-  [ load, draw and discard the picture resource for the current room
-  
   [ start up sequence doesn't need to use scripts since it will 
   [ never be part of a game restore
   set(noScript);
   
   [ since this is the first room in the game, there is no
-  [ previous room that faded out; so we force a fade.out
+  [ previous room that faded out; so force a fade.out
   [ (with zero delay) so this room can then be faded back in
   block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   
@@ -97,14 +90,14 @@ if (newRoom) {
   load.view(vw.Logos);
   
   [ background
-  animate.obj(oLogo1);
-  set.view(oLogo1, vw.Logos);
-  set.loop(oLogo1, 0);
-  set.cel(oLogo1, 0);
-  ignore.objs(oLogo1);
-  stop.cycling(oLogo1);
-  set.priority(oLogo1, 4);
-  position(oLogo1, 67, 97);
+  animate.obj(oLogo);
+  set.view(oLogo, vw.Logos);
+  set.loop(oLogo, 0);
+  set.cel(oLogo, 0);
+  ignore.objs(oLogo);
+  stop.cycling(oLogo);
+  set.priority(oLogo, 4);
+  position(oLogo, 67, 97);
   
   [ Drew
   animate.obj(oDrew);
@@ -133,7 +126,7 @@ if (newRoom) {
   [ show the picture on screen
   show.pic(); 
   sText = "AGI GUY Studios presents...";
-  draw(oLogo1);
+  draw(oLogo);
   draw(oDrew);
   draw(oCat);
   
@@ -150,245 +143,250 @@ if (newRoom) {
 [ one-time events
 if (titleSeq == TS_SCROLLCREDS) {
   [ credit events are based on which line, its position and state/step
-  get.posn(oLogo1, work1, work2);
-  if (creditstep1 == 0) {
-    if (creditline1 == CR_PPDESIGN) {
+  get.posn(oLogo, work1, work2);
+  if (creditstep == 0) {
+    [ showing only top line of credit
+    if (creditline == CR_PPDESIGN) {
       if (work2 == 142) {
         [ show next line
-        creditstep1 = 1;
-        set.cel(oLogo1, 1);
+        creditstep = 1;
+        set.cel(oLogo, 1);
         work1 = 0;
         work2 = 22; [ 23; [ adjust by one to smooth out movmement
-        reposition(oLogo1, work1, work2);
+        reposition(oLogo, work1, work2);
       }
     }
-    if (creditline1 == CR_BKGD_ART) {
-      if (work2 == 147) {
-        [ show next line
-        creditstep1 = 1;
-        set.cel(oLogo1, 1);
-        work1 = 0;
-        work2 = 12; [ 13; [ adjust by one to smooth out movmement
-        reposition(oLogo1, work1, work2);
-      }
-    }
-    if (creditline1 == CR_ADDL_ART) {
-      if (work2 == 144) {
-        [ show next line
-        creditstep1 = 1;
-        set.cel(oLogo1, 1);
-        work1 = 0;
-        work2 = 14; [ 15; [ adjust by one to smooth out movmement
-        reposition(oLogo1, work1, work2);
-      }
-    }
-  }
-  if (creditstep1 == 1) {
-    if (creditline1 == CR_PPDESIGN) {
-      if (work2 == 147) {
-        [ show next line
-        creditstep1 = 2;
-        set.cel(oLogo1, 2);
-        work1 = 0;
-        work2 = 12; [ 13;  [ adjust by one to smooth out movement
-        reposition(oLogo1, work1, work2);
-      }
-    }
-    if (creditline1 == CR_BKGD_ART) {
-      if (work2 == 30) {
-        [ remove top line
-        creditstep1 = 2;
-        set.cel(oLogo1, 2);
-      }
-    }
-    if (creditline1 == CR_ADDL_ART) {
-      if (work2 == 30) {
-        [ remove top line
-        creditstep1 = 2;
-        set.cel(oLogo1, 2);
-      }
-    }
-  }
-  if (creditstep1 == 2) {
-    if (creditline1 == CR_PPDESIGN) {
-      if (work2 == 48) {
-        [ remove top line
-        creditstep1 = 3;
-        set.cel(oLogo1, 3);
-      }
-      
-      if (work2 == 108) {
-        [ if not showing yet, start logo2
-        if (!fShowLogo2) {
-          set(fShowLogo2);
-          set.view(oLogo2, vw.Credits);
-          set.loop(oLogo2, CR_DEMODESIGN);
-          set.cel(oLogo2, 0);
-          position(oLogo2, 32, 162);
-          ignore.horizon(oLogo2);
-          stop.cycling(oLogo2);
-          draw(oLogo2);
-          work1 = 6;
-          step.time(oLogo2, work1);
-          work1 = UP;
-          set.dir(oLogo2, work1);
-          creditline2 = CR_DEMODESIGN;
-          creditstep2 = 0;
-        }
-      }
-    }
-    if (creditline1 == CR_BKGD_ART) {
-      if (work2 == 12) {
-        [ restart with next credit line, at bottom
-        creditline1 = CR_ADDL_ART;
-        creditstep1 = 0;
-        set.loop(oLogo1, CR_ADDL_ART);
-        set.cel(oLogo1, 0);
-        reposition.to(oLogo1, 46, 164);
-        goto(getkey);
-      }
-    }
-    if (creditline1 == CR_ADDL_ART) {
-      if (work2 == 12) {
-        [ restart with first credit line, at bottom
-        creditline1 = CR_PPDESIGN;
-        creditstep1 = 0;
-        set.loop(oLogo1, CR_PPDESIGN);
-        set.cel(oLogo1, 0);
-        reposition.to(oLogo1, 52, 162);
-      }
-    }
-  }
-  if (creditstep1 == 3) {
-    if (creditline1 == CR_PPDESIGN) {
-      if (work2 == 30) {
-        [ remove middle line
-        creditstep1 = 4;
-        set.cel(oLogo1, 4);
-      }
-    }
-  }
-  if (creditstep1 == 4) {
-    if (creditline1 == CR_PPDESIGN) {
-      if (work2 == 12) {
-        [ restart with next credit line, at bottom
-        creditline1 = CR_BKGD_ART;
-        creditstep1 = 0;
-        set.loop(oLogo1, CR_BKGD_ART);
-        set.cel(oLogo1, 0);
-        reposition.to(oLogo1, 46, 167);
-      }
-    }
-  }
-  
-  [ logo2
-  get.posn(oLogo2, work1, work2);
-  if (creditstep2 == 0) {
-    if (creditline2 == CR_DEMODESIGN) {
+    if (creditline == CR_DEMODESIGN) {
       if (work2 == 142) {
         [ show next line
-        creditstep2 = 1;
-        set.cel(oLogo2, 1);
+        creditstep = 1;
+        set.cel(oLogo, 1);
         work1 = 0;
         work2 = 21; [ 22; [ adjust by one to smooth out movmement
-        reposition(oLogo2, work1, work2);
+        reposition(oLogo, work1, work2);
       }
     }
-    if (creditline2 == CR_ANIMATION) {
-      if (work2 == 144) {
+    if (creditline == CR_BKGD_ART) {
+      if (work2 == 147) {
         [ show next line
-        creditstep2 = 1;
-        set.cel(oLogo2, 1);
+        creditstep = 1;
+        set.cel(oLogo, 1);
         work1 = 0;
-        work2 = 13; [ 16; [ adjust by one to smooth out movmement
-        reposition(oLogo2, work1, work2);
+        work2 = 12; [ 13; [ adjust by one to smooth out movmement
+        reposition(oLogo, work1, work2);
       }
     }
-    if (creditline2 == CR_MUSIC) {
+    if (creditline == CR_ANIMATION) {
       if (work2 == 144) {
         [ show next line
-        creditstep2 = 1;
-        set.cel(oLogo2, 1);
+        creditstep = 1;
+        set.cel(oLogo, 1);
+        work1 = 0;
+        work2 = 13; [ 14; [ adjust by one to smooth out movmement
+        reposition(oLogo, work1, work2);
+      }
+    }
+    if (creditline == CR_ADDL_ART) {
+      if (work2 == 144) {
+        [ show next line
+        creditstep = 1;
+        set.cel(oLogo, 1);
         work1 = 0;
         work2 = 14; [ 15; [ adjust by one to smooth out movmement
-        reposition(oLogo2, work1, work2);
+        reposition(oLogo, work1, work2);
+      }
+    }
+    if (creditline == CR_MUSIC) {
+      if (work2 == 144) {
+        [ show next line
+        creditstep = 1;
+        set.cel(oLogo, 1);
+        work1 = 0;
+        work2 = 14; [ 15; [ adjust by one to smooth out movmement
+        reposition(oLogo, work1, work2);
+      }
+    }
+    if (creditline == CR_SOUND) {
+      if (work2 == 144) {
+        [ show next line
+        creditstep = 1;
+        set.cel(oLogo, 1);
+        work1 = 0;
+        work2 = 14; [ 15; [ adjust by one to smooth out movmement
+        reposition(oLogo, work1, work2);
       }
     }
   }
-  if (creditstep2 == 1) {
-    if (creditline2 == CR_DEMODESIGN) {
+  if (creditstep == 1) {
+    [ showing top two lines of 3-line credie
+    [ showing both lines of 2-line credit
+    if (creditline == CR_PPDESIGN) {
+      if (work2 == 147) {
+        [ show next line
+        creditstep = 2;
+        set.cel(oLogo, 2);
+        work1 = 0;
+        work2 = 12; [ 13;  [ adjust by one to smooth out movement
+        reposition(oLogo, work1, work2);
+      }
+    }
+    if (creditline == CR_DEMODESIGN) {
       if (work2 == 146) {
         [ show next line
-        creditstep2 = 2;
-        set.cel(oLogo2, 2);
+        creditstep = 2;
+        set.cel(oLogo, 2);
         work1 = 0;
         work2 = 13; [ 14;  [ adjust by one to smooth out movement
-        reposition(oLogo2, work1, work2);
+        reposition(oLogo, work1, work2);
       }
     }
-    if (creditline2 == CR_ANIMATION) {
+    if (creditline == CR_BKGD_ART) {
       if (work2 == 30) {
         [ remove top line
-        creditstep2 = 2;
-        set.cel(oLogo2, 2);
+        creditstep = 2;
+        set.cel(oLogo, 2);
       }
     }
-    if (creditline2 == CR_MUSIC) {
+    if (creditline == CR_ANIMATION) {
       if (work2 == 30) {
         [ remove top line
-        creditstep2 = 2;
-        set.cel(oLogo2, 2);
+        creditstep = 2;
+        set.cel(oLogo, 2);
+      }
+    }
+    if (creditline == CR_ADDL_ART) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep = 2;
+        set.cel(oLogo, 2);
+      }
+    }
+    if (creditline == CR_MUSIC) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep = 2;
+        set.cel(oLogo, 2);
+      }
+    }
+    if (creditline == CR_SOUND) {
+      if (work2 == 30) {
+        [ remove top line
+        creditstep = 2;
+        set.cel(oLogo, 2);
       }
     }
   }
-  if (creditstep2 == 2) {
-    if (creditline2 == CR_DEMODESIGN) {
+  if (creditstep == 2) {
+    [ showing all lines of 3-line credit
+    [ showing bottom line of 2-line credit
+    if (creditline == CR_PPDESIGN) {
       if (work2 == 48) {
         [ remove top line
-        creditstep2 = 3;
-        set.cel(oLogo2, 3);
+        creditstep = 3;
+        set.cel(oLogo, 3);
       }
     }
-    if (creditline2 == CR_ANIMATION) {
+    if (creditline == CR_DEMODESIGN) {
+      if (work2 == 48) {
+        [ remove top line
+        creditstep = 3;
+        set.cel(oLogo, 3);
+      }
+    }
+    if (creditline == CR_BKGD_ART) {
       if (work2 == 12) {
         [ restart with next credit line, at bottom
-        creditline2 = CR_MUSIC;
-        creditstep2 = 0;
-        set.loop(oLogo2, CR_MUSIC);
-        set.cel(oLogo2, 0);
-        reposition.to(oLogo2, 34, 162);
+        creditline = CR_ANIMATION;
+        creditstep = 0;
+        set.loop(oLogo, CR_ANIMATION);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 48, 164);
         goto(getkey);
       }
     }
-    if (creditline2 == CR_MUSIC) {
-      if (work2 == 12) {
-        [ restart with first credit line, at bottom
-        set.loop(oLogo2, CR_DEMODESIGN);
-        set.cel(oLogo2, 0);
-        reposition.to(oLogo2, 32, 162);
-        creditline2 = CR_DEMODESIGN;
-        creditstep2 = 0;
-      }
-    }
-  }
-  if (creditstep2 == 3) {
-    if (creditline2 == CR_DEMODESIGN) {
-      if (work2 == 30) {
-        [ remove middle line
-        creditstep2 = 4;
-        set.cel(oLogo2, 4);
-      }
-    }
-  }
-  if (creditstep2 == 4) {
-    if (creditline2 == CR_DEMODESIGN) {
+    if (creditline == CR_ANIMATION) {
       if (work2 == 12) {
         [ restart with next credit line, at bottom
-        creditline2 = CR_ANIMATION;
-        creditstep2 = 0;
-        set.loop(oLogo2, CR_ANIMATION);
-        set.cel(oLogo2, 0);
-        reposition.to(oLogo2, 48, 164);
+        creditline =  CR_ADDL_ART;
+        creditstep = 0;
+        set.loop(oLogo, CR_ADDL_ART);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 46, 164);
+        goto(getkey);
+      }
+    }
+    if (creditline == CR_ADDL_ART) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        creditline = CR_MUSIC;
+        creditstep = 0;
+        set.loop(oLogo, CR_MUSIC);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 34, 162);
+        goto(getkey);
+      }
+    }
+    if (creditline == CR_MUSIC) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        set.loop(oLogo, CR_SOUND);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 43, 162);
+        creditline = CR_SOUND;
+        creditstep = 0;
+        goto(getkey);
+      }
+    }
+    if (creditline == CR_SOUND) {
+      if (work2 == 12) {
+        [ restart with first credit line, at bottom
+        set.loop(oLogo, CR_PPDESIGN);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 52, 162);
+        creditline = CR_PPDESIGN;
+        creditstep = 0;
+        goto(getkey);
+      }
+    }
+  }
+  if (creditstep == 3) {
+    [ showing bottom two lines of 3-credit line
+    if (creditline == CR_PPDESIGN) {
+      if (work2 == 30) {
+        [ show only bottom line
+        creditstep = 4;
+        set.cel(oLogo, 4);
+      }
+    }
+    if (creditline == CR_DEMODESIGN) {
+      if (work2 == 30) {
+        [ show only bottom line
+        creditstep = 4;
+        set.cel(oLogo, 4);
+      }
+    }
+  }
+  if (creditstep == 4) {
+    [ showing bottom line of 3-credit line
+    if (creditline == CR_PPDESIGN) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        set.loop(oLogo, CR_DEMODESIGN);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 32, 162);
+        creditline = CR_DEMODESIGN;
+        creditstep = 0;
+        goto(getkey);
+      }
+    }
+    if (creditline == CR_DEMODESIGN) {
+      if (work2 == 12) {
+        [ restart with next credit line, at bottom
+        creditline = CR_BKGD_ART;
+        creditstep = 0;
+        set.loop(oLogo, CR_BKGD_ART);
+        set.cel(oLogo, 0);
+        reposition.to(oLogo, 46, 167);
       }
     }
   }
@@ -588,7 +586,7 @@ if (titleSeq == TS_MOVE_AGI) {
 if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
   [delay
   ++delayCounter;
-  if (delayCounter == 1) {
+  if (delayCounter == 3) {
     delayCounter = 0;
     [ adjust color 
     ++letterIndex;
@@ -597,16 +595,12 @@ if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
       titleTimer = 45;
     } else {
       [ adjust colors to make the shift
-      block(BYTE2HEX, &s16, &letterIndex, 0); [ byte2hex(sRESULT, vINPUT)
-      work1 = 63;
-      work1 -= letterIndex;
-      block(BYTE2HEX, &s18, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       work1 = letterIndex;
       work1 /= 3;
-      block(BYTE2HEX, &s17, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-      work2 = 21;
-      work2 -= work1;
-      block(BYTE2HEX, &s19, &work2, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s16, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s19, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      work1 += 42;
+      block(BYTE2HEX, &s18, &work1, 0); [ byte2hex(sRESULT, vINPUT)
       [ set palette
       block(SET.PALETTE, 0, &m4, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
     }
@@ -632,13 +626,13 @@ if (titleTimer > 0) {
       [ fadeout
       block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       [ change to WinAGI logo
-      erase(oLogo1);
+      erase(oLogo);
       erase(oDrew);
       erase(oCat);
-      set.loop(oLogo1, 3);
-      set.cel(oLogo1, 0);
-      position(oLogo1, 63, 104);
-      draw(oLogo1);
+      set.loop(oLogo, 3);
+      set.cel(oLogo, 0);
+      position(oLogo, 63, 104);
+      draw(oLogo);
       clear.lines(16, 16, BLACK);
       [ fade in
       block(FADE.IN, 0, 40, 0); [ fade.in(BYVAR, DELAY, COLOR)
@@ -654,7 +648,7 @@ if (titleTimer > 0) {
     if (titleSeq == TS_FADEOUT_WIN) {
       [ fadeout
       block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-      erase(oLogo1);
+      erase(oLogo);
       clear.lines(16, 16, BLACK);
       set.text.attribute(WHITE, BLACK);
       display(11, 15, "A");
@@ -737,9 +731,9 @@ if (titleTimer > 0) {
 [block(FADE.IN, 0, 0, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
 [set(f10);trace.on();
 
-      [ adjust palette to show text in start position
+      [ adjust palette to show text with no highlighting
       s14 = "000000";
-      s15 = "3F1515";
+      s15 = "2A0000";
       block(SET.PALETTE, 0, &m4, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
       load.pic(currentRoom);
       draw.pic(currentRoom);
@@ -749,7 +743,7 @@ if (titleTimer > 0) {
       block(FADE.IN, 0, 10, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
       titleSeq = TS_PP_SHIFT;
       letterIndex = 0;
-      s14 = "%s16%s17%s17";
+      s14 = "%s16%s16%s16";
       s15 = "%s18%s19%s19";
     }
     if (titleSeq == TS_FADEOUT_PP) {
@@ -772,18 +766,18 @@ if (titleTimer > 0) {
       [ start cycling credits
       discard.view(vw.Logos);
       load.view(vw.Credits);
-      set.view(oLogo1, vw.Credits);
-      set.loop(oLogo1, 0);
-      set.cel(oLogo1, 0);
-      position(oLogo1, 52, 162);
-      ignore.horizon(oLogo1);
-      draw(oLogo1);
-      work1 = 6;
-      step.time(oLogo1, work1);
+      set.view(oLogo, vw.Credits);
+      set.loop(oLogo, 0);
+      set.cel(oLogo, 0);
+      position(oLogo, 52, 162);
+      ignore.horizon(oLogo);
+      draw(oLogo);
+      work1 = 3;
+      step.time(oLogo, work1);
       work1 = UP;
-      set.dir(oLogo1, work1);
-      creditline1 = CR_PPDESIGN;
-      creditstep1 = 0;
+      set.dir(oLogo, work1);
+      creditline = CR_PPDESIGN;
+      creditstep = 0;
       ++titleSeq;
     }
   }
@@ -859,8 +853,8 @@ return();
 
 [           |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
 [palettes:  | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
-#message 4 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15%s14%%3F1515%s15%%3F3F153F3F3F"
-
+#message 4 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A%s14%%15153F003F15153F3F%s15%%3F153F3F3F153F3F3F"
+ 
 [ default palette
 #message 5 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
 

@@ -1634,13 +1634,13 @@ if (btnAction > 0) {
       if (cursorX < 4) {
         if ((cursorX < 2 || !useMIDI)) {
           ++cursorX;
-          goto(SETINST);
+          goto(setinst);
         }
       }
       
 [      sound(m.PPDTheme, sndDone);
-load.sound(s.Crash);
-sound(s.Crash, sndDone);
+load.sound(s.Car);
+sound(s.Car, sndDone);
       [ update button text
       set.text.attribute(-1, 0);
       set.text.attribute(BLACK, WHITE);

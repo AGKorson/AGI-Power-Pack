@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "5/18/2023 3:08:05 PM"
+   LastEdit = "6/16/2023 11:18:54 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -93,8 +93,8 @@
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &HECCAA658
-   CompCRC32 = &HECCAA658
+   CRC32 = &HEC98F893
+   CompCRC32 = &HEC98F893
    IsRoom = False
 
 [Logic96]
@@ -128,8 +128,8 @@
 [Logic25]
    ID = cp.ESADOCC
    Description = ""
-   CRC32 = &H1AAC91AE
-   CompCRC32 = &HF9AFDD4D
+   CRC32 = &HAA9D54FA
+   CompCRC32 = &HAA9D54FA
    IsRoom = True
 
 [Logic22]
@@ -156,29 +156,29 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H2DAC260
-   CompCRC32 = &H2DAC260
+   CRC32 = &HC933C3E4
+   CompCRC32 = &HC933C3E4
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HBEC79924
-   CompCRC32 = &HBEC79924
+   CRC32 = &HA703CE88
+   CompCRC32 = &HA703CE88
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H190D9FD1
-   CompCRC32 = &H5E1AD983
+   CRC32 = &H4AFC92BA
+   CompCRC32 = &H4AFC92BA
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &H7D5B74DE
-   CompCRC32 = &H7D5B74DE
+   CRC32 = &H48B0D248
+   CompCRC32 = &H48B0D248
    IsRoom = True
 
 [Logic8]
@@ -191,8 +191,8 @@
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H17EDE4E1
-   CompCRC32 = &HF91F1F4F
+   CRC32 = &H76332E51
+   CompCRC32 = &H6B2B43CF
    IsRoom = True
 
 [Logic6]
@@ -2680,6 +2680,40 @@
 
 [Sound91]
    ID = s.Shock
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound92]
+   ID = s.CallCops
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound93]
+   ID = s.PerpWalk
    Description = ""
    Key = 0
    TPQN = 4
