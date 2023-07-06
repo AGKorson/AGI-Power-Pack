@@ -202,8 +202,7 @@ if(newRoom) {
   load.logics(lgc.GameFunctions);
   
   [ test sound 
-[  load.sound(s.InstTest);
-load.sound(s.Tone0);
+  load.sound(s.InstTest);
   
   [ make sure sound mode is 4channel FMsynth
   if (4channelsound) {
@@ -488,7 +487,7 @@ if (dropmode == DROPDOWN) {
   tmpCol = 24;
   work3 = &m143;
   display.v(tmpRow, tmpCol, work3);
-  tmpRow += 6; [4;
+  tmpRow += 6;
   work3 = &m144;
   display.v(tmpRow, tmpCol, work3);
   set.text.attribute(0, -1);
@@ -938,7 +937,7 @@ if (loadinst) {
   
   [ set color for edit boxes
   if (selectItem) {
-    set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);
+    set.text.attribute(YELLOW, BLUE);
   } else {
     set.text.attribute(WHITE, BLUE);
   }
@@ -1115,7 +1114,7 @@ if (loadinst) {
   
   [ set color for edit boxes
   if (selectItem) {
-    set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);
+    set.text.attribute(YELLOW, BLUE);
   } else {
     set.text.attribute(WHITE, BLUE);
   }
@@ -1545,7 +1544,7 @@ if (cursormode) {
       if (mouseY > 39 && mouseY < 72) {
         [ convert yval to checkbox offset
         newpos = mouseY;
-        newpos += 16;
+        newpos += 32;
         newpos /= 8;
       }
     }
@@ -1555,7 +1554,7 @@ if (cursormode) {
       if (mouseY > 39 && mouseY < 72) {
         [ convert yval to checkbox offset
         newpos = mouseY;
-        newpos += 120;
+        newpos += 136;
         newpos /= 8;
       }
       [ check for connection checkbox
@@ -1571,7 +1570,7 @@ if (cursormode) {
         [ convert yval to checkbox offset
         newpos = mouseY;
         newpos /= 8;
-        newpos += 1;
+        newpos += 3;
       }
       if (mouseY > 151 && mouseY < 160) {
         newpos = CP_FDBACK;
@@ -1584,7 +1583,7 @@ if (cursormode) {
         [ convert yval to checkbox offset
         newpos = mouseY;
         newpos /= 8;
-        newpos += 14;
+        newpos += 16;
       }
     }
     
@@ -1999,7 +1998,8 @@ if (btnAction > 0) {
     [ tell lgc.Main to apply it
     set(saveCustomInst);
     print.at("Custom Instrument %v221 updated", 3, 3, 70);
-    
+[print.at("String value: %s12", 3, 3, 70);
+
     [ reset dirty flag
     reset(instDirty);
     set.text.attribute(-1, 0);
@@ -2018,8 +2018,9 @@ if (btnAction > 0) {
     work1 = 0;
     work2 = &m142;
     set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-[    sound(s.InstTest, soundDone);
-sound(s.Tone0, soundDone);
+    sound(s.InstTest, soundDone);
+[load.sound(s.Tone0);
+[sound(s.Tone0, soundDone);
     set(sndTest);
     [ update button test
     set.text.attribute(-1, 0);

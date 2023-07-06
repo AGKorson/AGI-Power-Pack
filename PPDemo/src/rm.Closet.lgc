@@ -5,7 +5,6 @@
 [ 
 [
 [ ********************************************************************
-[ TODO: sound effects for open/close door
 [ TODO: more said statements for closet
 
 [ **************************************
@@ -155,7 +154,7 @@ if (newRoom) {
     load.sound(s.Crumble1);
     load.sound(s.Crumble2);
   }
-  load.sound(s.DoorOpen)
+  load.sound(s.DoorOpen);
   load.sound(s.DoorClose);
   
   [ add additional room initialization here
@@ -220,7 +219,7 @@ if (dripdone && !faucetfixed) {
     [ only play sound if walkman is not in use, and not crashing through wall
     if ((currentTrack == 0 || currentTrack > 128)  && (fallSeq == NOFALL || fallSeq >= SITUP)) {
       work1 = 0;
-      work2 = 128;
+      work2 = 115;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
       sound(s.Drip, soundDone);
       set(playSound);
@@ -885,14 +884,14 @@ if (opendoor) {
     print("The closet door is already open.");
   } else {
     if (posn(ego, 97, 142, 106, 147)) {
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
-      work1 = 0;
-      work2 = 128;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      sound(s.DoorOpen, soundDone);
-      set(playSound);
-    }
+      [ only play sound if walkman is not in use
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        work1 = 0;
+        work2 = 128;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        sound(s.DoorOpen, soundDone);
+        set(playSound);
+      }
       end.of.loop(door, fDoorDone);
     } else {
       print("You are not close enough.");

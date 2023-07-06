@@ -5,7 +5,6 @@
 [ 
 [
 [ ********************************************************************
-[ TODO: sound effect for light flicker
 [ TODO: more said statements in stairway
 
 #define lightshadow   o1
@@ -49,6 +48,7 @@ if (newRoom) {
   if (resetMOCC) {
     flickerTime = 0;
   } else {
+    load.sound(s.Flicker);
     random(20, 30, flickerTime);
   }
   
@@ -123,6 +123,23 @@ if (flickerTime > 0) {
     if (lightOn) {
       erase(lightshadow);
       random(1, 8, flickerTime);
+      
+      [ only play sound if walkman is not in use
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        work1 = 0;
+        work2 = 128;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        ++work1;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        ++work1;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        ++work1;
+        ++work2;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        sound(s.Flicker, soundDone);
+        set(playSound);
+      }
+
     } else {
       draw(lightshadow);
       random(24, 80, flickerTime);

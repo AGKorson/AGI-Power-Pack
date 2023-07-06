@@ -137,6 +137,7 @@ if (newRoom) {
   [ load the theme song
   load.sound(m.PPDTheme);
 [[  [ and begin playing
+[ TODO: set sound parameters based on game settings
 [[  sound(m.theme, musicDone);
 }
 

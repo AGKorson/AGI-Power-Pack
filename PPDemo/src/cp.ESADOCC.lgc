@@ -521,7 +521,7 @@ if (dropmode == DROPDOWN) {
   selrow = offsetrow;
   selrow += listrow;
   
-  [position cursor to draw the box frame
+  [ position cursor to draw the box frame
   erase(oCursorB);
   erase(oCursorT);
   erase(oCursorL);
@@ -581,6 +581,13 @@ if (dropmode == DROPDOWN) {
   set.cel(oScrlBox, 0);
   position.v(oScrlBox, work1, work2);
   draw(oScrlBox);
+  
+  [ if in keybd mode, line below current selection
+  [ needs to be redrawn because cursor covered its 
+  [ top line of pixels
+  if (cursormode) {
+    set(redrawlist);
+  }
   
   set.text.attribute(0, -1);
   
@@ -743,7 +750,6 @@ if (dropmode == CHOOSING) {
       [ window and scrollbox position
       work1 -= 26;
       get.posn(oScrlBox, work3, work2);
-      work2 += 8;
       [ if above scrollbox, page up
       if (mouseY > work1 && mouseY < work2) {
         btnAction = SC_PGUP;
@@ -755,7 +761,6 @@ if (dropmode == CHOOSING) {
       work2 = work1;
       work2 += 27;
       get.posn(oScrlBox, work3, work1);
-      work1 += 8;
       [ if below scrollbox, page down
       if (mouseY > work1 && mouseY < work2) {
         btnAction = SC_PGDN;
@@ -1539,9 +1544,9 @@ if (btnAction > 0) {
       attenuation = tmpAttn;
     } else {
       [ OK - keep current sound settings
-      
+      [ TODO: need to save config file when sound settings change
       [ save new instrument values
-      print.at("Sound parameters updated.", 5, 6, 31);
+      print.at("Sound parameters updated.", 4, 6, 31);
       [ update instruments
       FMInst0 = tmpFM0;
       --FMInst0;
@@ -1776,6 +1781,9 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
+[ actual instrument values are one less (Acoust. Grand
+[ Piano is instrument #0 for example); this is because
+[ AGI messages start at 1 - message 0 is not allowed
 #message 1 "Acoust. Grand Piano"
 #message 2 "Bright Acous. Piano"
 #message 3 "Elec. Grand Piano  "

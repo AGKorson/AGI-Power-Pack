@@ -3734,7 +3734,7 @@ if (said(1, NULLMSG, 2916, 0)){} [ DS:0B64
 [ variables (v11, v12, v13, v14) are temporarily frozen, but the game 
 [ continues to run. This feature is useful when you need to do something like 
 [ getting input from the player, or displaying a screen as a cutscene or 
-[ interlude when you don’t want or need the game clock to continue running, 
+[ interlude when you don't want or need the game clock to continue running, 
 [ especially if it might interfere with other timing elements of your game.
 [
 [ The Power Pack Demo game includes some detailed examples of how to use the

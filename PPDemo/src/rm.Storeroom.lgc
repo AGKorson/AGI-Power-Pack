@@ -6,6 +6,8 @@
 [
 [ ********************************************************************
 [ TODO: sound effects for coffin open/close
+[ override settings for game sounds [midi vs fm eg]
+
 [ TODO: more said statements for storeroom
 
 #define oClockHour      o1
@@ -26,6 +28,7 @@
 #define vDoorState    v225 [ so only local variables needed to track state
 #define vCoffinDeathSeq  v226
 #define vCoffinCount  v227
+#define bellCount     v228
 
 #define fCoffin       f220
 #define fCheckClick   f221
@@ -36,7 +39,7 @@
 #define fChest        f226
 #define fEgoBackup    f227
 #define fInCoffin     f228
-
+#define hourBells     f229
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -92,6 +95,12 @@ if (newRoom) {
   draw(oClockHour);
   draw(oClockMinute);
   vCheckSecond = elapsedSeconds;
+  [ chime sounds
+  load.sound(s.WestminsterHour);
+  load.sound(s.WestminsterQtr);
+  load.sound(s.WestminsterHalf);
+  load.sound(s.WestminsterThree);
+  load.sound(s.HourChime);
   
   [ coffin lid
   animate.obj(oCoffin);
@@ -199,7 +208,6 @@ if (newRoom) {
   return();
 }
 
-
 [*****
 :handleInput       [ check for input from player
 [*****
@@ -261,6 +269,23 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 :noInput           [  all non-input related code goes here 
 [*****
 
+[ check for hour bell tolls
+if (hourBells && soundDone) {
+  reset(soundDone);
+  --bellCount;
+  if ((currentTrack == 0 || currentTrack > 128)) {
+    if (bellCount > 0) {
+      sound(s.HourChime, soundDone);
+      set(playSound);
+    } else {
+      reset(hourBells);
+    }
+  } else {
+    bellCount = 0;
+    reset(hourBells);
+  }
+}
+
 [ clock - check every second
 if (vCheckSecond != elapsedSeconds) {
   vCheckSecond = elapsedSeconds;
@@ -274,6 +299,45 @@ if (vCheckSecond != elapsedSeconds) {
       ++vClockHour;
       if (vClockHour == 12) {
         vClockHour = 0;
+      }
+    }
+    [ chimes, if not playing music
+    [ only play chimes if walkman is not in use
+    if ((currentTrack == 0 || currentTrack > 128)) {
+      if ((vClockMin == 0 || vClockMin == 15 || vClockMin == 30 || vClockMin == 45)) {
+        if (useMIDI) {
+          work1 = 0;
+          work2 = 14;
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+          ++work1;
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        } else {
+          work1 = 0;
+          work2 = &m9;
+          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG)
+          ++work1;
+          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG)
+        }
+        set(playSound);
+        if (vClockMin == 0) {
+          sound(s.WestminsterHour, soundDone);
+          set(hourBells);
+          bellCount = vClockHour;
+          if (bellCount == 0) {
+            bellCount = 12;
+          }
+          [ add one to account for starting tones
+          ++bellCount;
+        }
+        if (vClockMin == 15) {
+          sound(s.WestminsterQtr, soundDone);
+        }
+        if (vClockMin == 30) {
+          sound(s.WestminsterHalf, soundDone);
+        }
+        if (vClockMin == 45) {
+          sound(s.WestminsterThree, soundDone);
+        }
       }
     }
   }
@@ -1466,3 +1530,4 @@ return();
 #message 6 "%g25"
 #message 7 "%g26"
 #message 8 "%g27"
+#message 9 "C0C00000A0AC1F12030000"

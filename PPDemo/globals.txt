@@ -221,6 +221,10 @@
 #define floppyfiles            v96 [ 0=blank; 1=zip; 2=txt; 3=both
 #define cpusage                v97 [ bitfield indicates which control panels have been used by player
 #define currentTrack           v98 [ zero if at end of tape; negative if paused
+#define musicMode              v99
+#define PC_SOUND                 0
+#define FM_SOUND                 1
+#define MIDI_SOUND               2
 #define MSGBOX.COLOR.V          -1
 #define MSGBOX.COLOR            -2
 #define CONFIGURE.MOUSE         -3

@@ -16,7 +16,6 @@
 
 [ 99: ego driving away
 [
-[ 253: waiting for ego to drive away
 [ 254: death sequence complete
 [ 255: winning sequence complete
 [
@@ -25,7 +24,7 @@
 [ TODO: add deathcount handler (count how many times/ways player dies)
 
 [ if message announcing death hasn't been displayed yet
-if (deathType < 253) { 
+if (deathType < 254) { 
   [ re-allow input
   accept.input();
   [ clear the input line
