@@ -1589,7 +1589,7 @@ if (said(7, 125, 16023)){} [ 3E97
 [   set.key(vCHANNEL*, vINSTRUMENT*, c253);
 [
 [   [ to set a custom envelope for a sound channel:
-[   set.key(vCHANNEL*, vENVDATAMSG*, c252);
+[   set.key(vCHANNEL*, vENVDATASTR*, c252);
 [
 [   * The compiler expects this argument to be a number so pass the 
 [     variable as a number without the 'v' prefix
@@ -1646,7 +1646,7 @@ if (said(7, 125, 16023)){} [ 3E97
 [ instrument values that do provide for very nice playback of sounds, with 
 [ lots of variety.
 [ 
-[ You can also set the envelope data to a custom value by passing a message 
+[ You can also set the envelope data to a custom value by passing a string 
 [ (by variable) that contains 11 2-digit byte codes to the set.key command 
 [ with c252 as the controller argument. You need to have a good understanding 
 [ of FM chip details if you plan to use this option. See the Power Pack demo 
@@ -1656,9 +1656,10 @@ if (said(7, 125, 16023)){} [ 3E97
 [ In MIDI mode, instruments can be changed as well, but only for the three 
 [ tone tracks. The noise track is preset to a percussion instrument. 
 [ You cannot customize instruments when in MIDI mode. Only instruments 0-127 
-[ available in MIDI mode.
+[ are available in MIDI mode.
 [
-[ Separate instrument settings are maintained for each mode. 
+[ Separate instrument settings are maintained for each mode. You should always
+[ stop sounds before changing modes to avoid unexpected results. 
 [
 [ PATCH CODE:
             [ WriteFM
@@ -1765,7 +1766,7 @@ unblock();
             "\xE8\xE1\xAC\x83\xC4\x0A\xE8\xA9\xFE\xC3"
             [ CustomInst
             "\x8A\xD8\x8A\x47\x09\x8A\xDC\x8A\x67\x09\x3C\x05\x73\x28\x50\x8A"
-            "\xC4\x32\xE4\x50\xE8\x5C\x75\x83\xC4\x02\x8B\xF0\x58\xB1\x0B\x32"
+            "\xC4\xB4\x28\xF6\xE4\x05\x0D\x02\x90\x90\x8B\xF0\x58\xB1\x0B\x32"
             "\xED\xF6\xE1\x05\xE7\xAD\x8B\xF8\x06\x0E\x07\xAD\xE8\xE6\xED\xAA"
             "\xE2\xF9\x07\xE8\x72\xFE\xC3"
             [ GetMIDINote
@@ -3753,7 +3754,7 @@ if (said(1, NULLMSG, 2884, 0)){} [ DS:0B44
 [ variables (v11, v12, v13, v14) are temporarily frozen, but the game 
 [ continues to run. This feature is useful when you need to do something like 
 [ getting input from the player, or displaying a screen as a cutscene or 
-[ interlude when you don’t want or need the game clock to continue running, 
+[ interlude when you don't want or need the game clock to continue running, 
 [ especially if it might interfere with other timing elements of your game.
 [
 [ The Power Pack Demo game includes some detailed examples of how to use the
