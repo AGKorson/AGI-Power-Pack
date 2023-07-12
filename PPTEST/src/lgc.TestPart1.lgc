@@ -909,14 +909,15 @@ if (teststep == 20) {
         print("Setting custom FM synth channels (same as 1-2-3).");
         reset(newtest);
         work1 = 0;
-        work2 = 4;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL*, vENVDATAMSG*, c252);
+        work2 = &s6;
+        s6 = m4;
+        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
         ++work1;
-        ++work2;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL*, vENVDATAMSG*, c252);
+        s6 = m5;
+        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
         ++work1;
-        ++work2;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL*, vENVDATAMSG*, c252);
+        s6 = m6;
+        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
         sound(kq1theme, soundDone);
       }
     } else {
@@ -946,11 +947,12 @@ if (teststep == 20) {
         print("Setting custom FM synth noise (same as 4-5).");
         reset(newtest);
         work1 = 3;
-        work2 = 4;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL*, vENVDATAMSG*, c252);
+        work2 = &s6;
+        s6 = m4;
+        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
         ++work1;
-        ++work2;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL*, vENVDATAMSG*, c252);
+        s6 = m5;
+        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
         sound(s.Noise, soundDone);
       }
     } else {

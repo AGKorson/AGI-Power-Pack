@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = DGN
    Interpreter = 3.002086
-   LastEdit = "4/15/2023 11:01:15 AM"
+   LastEdit = "7/11/2023 5:43:05 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -20,6 +20,7 @@
    CodePage = 437
    SierraSyntax = False
    SourceFileExt = .lgc
+   PowerPack = False
 
 [Palette]
    Color0 = &H00000000
@@ -95,8 +96,8 @@
    Size = 82
 
 [Logic90]
-   CompCRC32 = &H3AD8ECC2
-   CRC32 = &H3AD8ECC2
+   CompCRC32 = &HB852F945
+   CRC32 = &HB852F945
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 659
@@ -177,16 +178,16 @@
 [Logic7]
    ID = lgc.TestPart1
    Description = ""
-   CRC32 = &HEFDBA377
-   CompCRC32 = &HEFDBA377
+   CRC32 = &HAFFC9B31
+   CompCRC32 = &HAFFC9B31
    IsRoom = False
    Size = 10626
 
 [Logic8]
    ID = lgc.TestPart2
    Description = ""
-   CRC32 = &H3B776CE
-   CompCRC32 = &H3B776CE
+   CRC32 = &HE2DF1EB
+   CompCRC32 = &HE2DF1EB
    IsRoom = False
    Size = 11089
 
@@ -209,40 +210,40 @@
 [Logic101]
    ID = lgc.mod3002086
    Description = ""
-   CRC32 = &H56C695F9
-   CompCRC32 = &H56C695F9
+   CRC32 = &H2BA5B78F
+   CompCRC32 = &H2BA5B78F
    IsRoom = False
    Size = 22529
 
 [Logic102]
    ID = lgc.mod3002098
    Description = ""
-   CRC32 = &H8B06B5C4
-   CompCRC32 = &H8B06B5C4
+   CRC32 = &H9E0C8672
+   CompCRC32 = &H9E0C8672
    IsRoom = False
    Size = 22569
 
 [Logic103]
    ID = lgc.mod3002102
    Description = ""
-   CRC32 = &H8A9A06D3
-   CompCRC32 = &H8A9A06D3
+   CRC32 = &H21E1CDAA
+   CompCRC32 = &H21E1CDAA
    IsRoom = False
    Size = 22575
 
 [Logic104]
    ID = lgc.mod3002107
    Description = ""
-   CRC32 = &HC8999D3A
-   CompCRC32 = &HC8999D3A
+   CRC32 = &H1C6C41FA
+   CompCRC32 = &H1C6C41FA
    IsRoom = False
    Size = 22575
 
 [Logic105]
    ID = lgc.mod3002149
    Description = ""
-   CRC32 = &H1B760249
-   CompCRC32 = &H1B760249
+   CRC32 = &HFA282805
+   CompCRC32 = &HFA282805
    IsRoom = False
    Size = 22564
 
