@@ -218,6 +218,10 @@ if (dripdone && !faucetfixed) {
     start.update(drip);
     [ only play sound if walkman is not in use, and not crashing through wall
     if ((currentTrack == 0 || currentTrack > 128)  && (fallSeq == NOFALL || fallSeq >= SITUP)) {
+      [ play drip sound, force 4-channel FM
+      set(4channelsound);
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      [ use correct instrument
       work1 = 0;
       work2 = 115;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
@@ -770,9 +774,6 @@ if (fDone && fallSeq == FALLDOWN) {
 if (fallSeq == BREAKWALL) {
   current.cel(wall, work1);
   if (work1 == 10) {
-[    work1 = 0;
-[    work2 = 100;  [ instrument 100
-[    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
     sound(s.Crumble2, soundDone);
   }
   if (fDone) {
@@ -886,9 +887,7 @@ if (opendoor) {
     if (posn(ego, 97, 142, 106, 147)) {
       [ only play sound if walkman is not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
-        work1 = 0;
-        work2 = 128;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        call(lgc.SetSound);
         sound(s.DoorOpen, soundDone);
         set(playSound);
       }
@@ -905,9 +904,7 @@ if (closedoor) {
       reverse.loop(door, fDoorDone);
       [ only play sound if walkman is not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
-        work1 = 0;
-        work2 = 128;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        call(lgc.SetSound);
         sound(s.DoorClose, soundDone);
         set(playSound);
       }

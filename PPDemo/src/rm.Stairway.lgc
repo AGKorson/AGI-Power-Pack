@@ -126,6 +126,10 @@ if (flickerTime > 0) {
       
       [ only play sound if walkman is not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
+        [ play flicker buzz sound, force 4-channel FM
+        set(4channelsound);
+        set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        [ use correct instruments
         work1 = 0;
         work2 = 128;
         set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
@@ -139,7 +143,6 @@ if (flickerTime > 0) {
         sound(s.Flicker, soundDone);
         set(playSound);
       }
-
     } else {
       draw(lightshadow);
       random(24, 80, flickerTime);

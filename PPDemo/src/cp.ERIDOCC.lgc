@@ -100,13 +100,15 @@
 #define maskgrid     f228
 #define prevcursor   f229
 
-#define sByte         s10 [ contains byte currently being modified
-#define sHotspot      s11 [ used to help set/display cursor hotspot
 #define sTemp         s12 [ uses s12, s13, s14, s15
 #define sCursor       s16 [ uses s16, s17, s18, s19
-#define sFilename     s20
-#define sBadChars     s21
-#define sTempFile     s22
+#define sByte         s20 [ contains byte currently being modified
+#define sHotspot      s21 [ used to help set/display cursor hotspot
+
+
+#define sFilename     s21 [ re-use hotspot string
+#define sBadChars     s22
+#define sTempFile     s23
 
 [if this control panel is not enabled show error screen
 if (!enableERIDOCC) {

@@ -33,6 +33,13 @@
 #define tmp1    v241
 #define tmp2    v242
 
+#define tmpStr1   s21
+#define tmpStr2   s22
+#define filename  s23
+
+[ set filename
+filename = "ppdemo.cfg";
+
 [ update settings
 if (soundOn) {
   work1 = 1;
@@ -62,47 +69,39 @@ if (realClock) {
 }
 
 [ blank the output string
-s22 = "                                       ";
+tmpStr2 = "                                       ";
 [ create sound/clock/speed output (in s23)
-s23 = "%v46%v47%v48%v23|2%v240%v241%v10|2";
+[ (use 4channel attenuation value[v101])
+tmpStr1 = "%v46%v47%v48%v101|2%v240%v241%v10|2";
 [ format it and copy to output string
-block(STR.FORMAT, &s23, &s22, 0); [ str.format(sINPUT, sRESULT)
-[ set filename
-s23 = "ppdemo.cfg";
+block(STR.FORMAT, &tmpStr1, &tmpStr2, 0); [ str.format(sINPUT, sRESULT)
 [ save output string to file
-work1 = &s22;
-block(NEW.FILE, &s23, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
+work1 = &tmpStr2;
+block(NEW.FILE, &filename, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
 
 [ blank the output string again
-s22 = "                                       ";
+tmpStr2 = "                                       ";
 [ format the FM values
-s23 = "%v63|3%v64|3%v65|3%v66|3%v67|3";
-block(STR.FORMAT, &s23, &s22, 0); [ str.format(sINPUT, sRESULT)
+tmpStr1 = "%v63|3%v64|3%v65|3%v66|3%v67|3";
+block(STR.FORMAT, &tmpStr1, &tmpStr2, 0); [ str.format(sINPUT, sRESULT)
 [ format the MIDI values
-s23 = "%v68|3%v69|3%v70|3";
-block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+tmpStr1 = "%v68|3%v69|3%v70|3";
+block(STR.FORMAT, &tmpStr1, &tmpStr1, 0); [ str.format(sINPUT, sRESULT)
 [ add MIDI to FM values
-block(STR.CONCAT, &s22, &s23, 0); [ sINPUT, sADD)
-[ set filename
-s23 = "ppdemo.cfg";
+block(STR.CONCAT, &tmpStr2, &tmpStr1, 0); [ sINPUT, sADD)
 [ save output string to file
 work1 = 1;
-work2 = &s22;
-block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+work2 = &tmpStr2;
+block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
 
-[ blank the output string again
-s22 = "                                       ";
 [ start with first instrument
 work1 = 2;
-work2 = &s22;
+work2 = &custInst0;
 :setinst
-  [ set string 22 to point to global instrument setting
-  block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
-  [ format it
-  block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
   [ now save it to config file
-  block(SAVE.STRING, &s23, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+  block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
   ++work1;
+  ++work2;
 [ copy five instrument settings
 if (work1 < 7) {
   goto(setinst);
@@ -113,8 +112,3 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
-#message 2 "%g53"
-#message 3 "%g54"
-#message 4 "%g55"
-#message 5 "%g56"
-#message 6 "%g57"

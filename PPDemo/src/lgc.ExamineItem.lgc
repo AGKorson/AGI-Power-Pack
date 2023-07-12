@@ -1,3 +1,4 @@
+[ ********************************************************************
 [ 
 [ lgc.ExamineItem
 [ 
@@ -5,6 +6,7 @@
 [ selectedItem variable has index (offset by 100) of 
 [ desired item
 [
+[ ********************************************************************
 
 [ stop the game clock while examining items
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)

@@ -472,14 +472,9 @@ if (opendoor) {
       [ only play sound effects if walkman not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
         [ play door-open sound, using current sound settings
-        [ TODO: set parameters based on current sound settings
-          set(4channelsound);
-          set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-          [ use correct instrument
-          work1 = 0;
-          work2 = 128;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        call(lgc.SetSound);
         sound(s.DoorOpen, soundDone);
+        set(playSound);
       }
       end.of.loop(oClosetDoor, fDoorDone);
     } else {
@@ -494,14 +489,9 @@ if (closedoor) {
       [ only play sound effects if walkman not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
         [ play door-open sound, using current sound settings
-        [ TODO: set parameters based on current sound settings
-          set(4channelsound);
-          set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-          [ use correct instrument
-          work1 = 0;
-          work2 = 128;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        call(lgc.SetSound);
         sound(s.DoorClose, soundDone);
+        set(playSound);
       }
       reverse.loop(oClosetDoor, fDoorDone);
       if (!scoreClosetDoor) {
@@ -532,14 +522,9 @@ if (openExamDoor) {
   [ only play sound effects if walkman not in use
   if ((currentTrack == 0 || currentTrack > 128)) {
     [ play open-door sound, using current sound settings
-    [ TODO: set parameters based on current sound settings
-      set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-      [ use correct instrument
-      work1 = 0;
-      work2 = 128;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    call(lgc.SetSound);
     sound(s.DoorOpen, soundDone);
+    set(playSound);
   }
   reset(openExamDoor);
   examDoorSeq = OPENED;
@@ -581,13 +566,7 @@ if (fExamDoorDone) {
       [ only play sound effects if walkman not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
         [ play door-close sound, using current sound settings
-        [ TODO: set parameters based on current sound settings 
-          set(4channelsound);
-          set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-          [ use correct instrument
-          work1 = 0;
-          work2 = 128;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        call(lgc.SetSound);
         sound(s.DoorClose, soundDone);
         set(playSound);
       }
@@ -608,13 +587,7 @@ if (fExamDoorDone) {
         reset(playSound);
       }
       [ play call-cops music, using current sound settings
-      [ TODO: set parameters based on current sound settings
-        set(4channelsound);
-        set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-        [ use correct instrument
-        work1 = 0;
-        work2 = 0;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      call(lgc.SetSound);
       sound(s.CallCops, soundDone);
       set(playSound);
     }

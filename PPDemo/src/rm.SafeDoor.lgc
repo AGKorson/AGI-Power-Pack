@@ -73,9 +73,13 @@ if (newRoom) {
     stop.sound();
   }
   
-  [ sound effects
   load.sound(s.SafeDial);
   load.sound(s.DoorOpen);
+  [ sound effects use 4channel, use FM
+  set(4channelsound);
+  reset(useMIDI);
+  set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  [ set instruments
   work1 = 0;
   work2 = 128;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
@@ -88,10 +92,9 @@ if (newRoom) {
   [ start with dial art for positions 0-19
   load.view(vw.SafeNumbers1);
   
-  [ will require re-aligning the cels 
-  [ a loop for each position, with 8 numbers per loop
-  [ instead of changing cel, change loop when dial spins
-  [ if number is 0-19, use view1; if 20-39, use view2
+  [ start at 0
+  [ TODO: initial start at random number
+  [ when coming back, start at previous number
   currentNum = 0;
   viewNum = vw.SafeNumbers1;
   
@@ -362,6 +365,7 @@ if (controller(cLeftClick)) {
         call(lgc.ScoreHandler);
       }
       [ restore correct instruments, then
+      call(lgc.SetSound);
       sound(s.DoorOpen, soundDone);
     } else {
       print("Nothing happens. That must not be the right combination.");
@@ -1146,7 +1150,7 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   }
   if (useMIDI) {
     [ 
-    set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
   }
   [ reenable input
   accept.input();

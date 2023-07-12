@@ -6,8 +6,7 @@
 [
 [ ********************************************************************
 [ TODO: sound effects for coffin open/close
-[ override settings for game sounds [midi vs fm eg]
-
+[ TODO: when clock playing, don't play other sounds
 [ TODO: more said statements for storeroom
 
 #define oClockHour      o1
@@ -275,6 +274,16 @@ if (hourBells && soundDone) {
   --bellCount;
   if ((currentTrack == 0 || currentTrack > 128)) {
     if (bellCount > 0) {
+      [ play chime sound, force 4-channel MIDI
+      set(4channelsound);
+      set(useMIDI);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      [ use correct instruments
+      work1 = 0;
+      work2 = 14;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      ++work1;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
       sound(s.HourChime, soundDone);
       set(playSound);
     } else {
@@ -305,19 +314,16 @@ if (vCheckSecond != elapsedSeconds) {
     [ only play chimes if walkman is not in use
     if ((currentTrack == 0 || currentTrack > 128)) {
       if ((vClockMin == 0 || vClockMin == 15 || vClockMin == 30 || vClockMin == 45)) {
-        if (useMIDI) {
-          work1 = 0;
-          work2 = 14;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-          ++work1;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-        } else {
-          work1 = 0;
-          work2 = &m9;
-          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG)
-          ++work1;
-          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG)
-        }
+        [ force midi
+        set(4channelsound);
+        set(useMIDI);
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        [ use correct instrument
+        work1 = 0;
+        work2 = 14;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        ++work1;
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
         set(playSound);
         if (vClockMin == 0) {
           sound(s.WestminsterHour, soundDone);
@@ -1530,4 +1536,3 @@ return();
 #message 6 "%g25"
 #message 7 "%g26"
 #message 8 "%g27"
-#message 9 "C0C00000A0AC1F12030000"

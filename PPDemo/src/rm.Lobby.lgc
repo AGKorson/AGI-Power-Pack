@@ -932,7 +932,7 @@ if (receptionistSeq == NEWLOCATION) {
   if (work1 == PHONE && !fEgoWaitTalk) {
     [ play ring sound, force 4-channel FM
     set(4channelsound);
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ use correct instrument
     work3 = 0;
     work2 = 128;
@@ -1895,13 +1895,7 @@ if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
     normal.cycle(frontpane);
     move.obj(frontpane, 127, 160, 1, fPaneDone);
     [ play door-open sound, use current sound settings
-    [ TODO: set parameters based on current sound settings
-      set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-      [ use correct instrument
-      work1 = 0;
-      work2 = 128;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    call(lgc.SetSound);
     sound(s.DoorOpen, soundDone);
     set(playSound);
   }
@@ -1916,13 +1910,7 @@ if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
     reverse.cycle(frontpane);
     move.obj(frontpane, 115, 160, 1, fPaneDone);
     [ play door-open sound, use current sound settings
-    [ TODO: set parameters based on current sound settings
-      set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
-      [ use correct instrument
-      work1 = 0;
-      work2 = 128;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    call(lgc.SetSound);
     sound(s.DoorClose, soundDone);
     set(playSound);
   }

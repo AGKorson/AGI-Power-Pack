@@ -1,12 +1,14 @@
+[ ********************************************************************
 [ 
 [ lgc.Statusbar
 [ 
-
 [ add score, name of game, and music icons
-
+[
 [0         1         2         3         4         5         6         7         ]
 [01234567890123456789012345678901234567890123456789012345678901234567890123456789]
 [ Score: xxx of yyy       AGI Power Pack Demo Game         hh:mm AM   |ssssssss| ]
+[
+[ ********************************************************************
 
 [ save colors
 set.text.attribute(-1, 0);
@@ -68,59 +70,42 @@ if (clockOn) {
   clear.text.rect(0, 49, 0, 68, WHITE);
 }
 
-[ to avoid conflicts with the current logic
-[ use error variables as temporary variables
-#define tmpCompare      v17
-#define tmpAdjust       v18
-
 [ sound status
 if (soundOn) {
   set.text.attribute(RED, WHITE);
-  if (4channelSound) {
-    tmpCompare = 8;
-    tmpAdjust = 8;
+  if (musicmode == PC_SOUND) {
+   s23 = "---------- ";
   } else {
-    tmpCompare = 2;
-    tmpAdjust = 2;
-  }
-  if (attenuation < tmpCompare) {
-    s23 = "ฦอออออออ\x0Eต ";
-  } else {
-    tmpCompare += tmpAdjust;
-    if (attenuation < tmpCompare) {
-      s23 = "ฦออออออ\x0Eอต ";
+    if (attenuation < 8) {
+      s23 = "ฦอออออออ\x0Eต ";
     } else {
-      tmpCompare += tmpAdjust;
-      if (attenuation < tmpCompare) {
-        s23 = "ฦอออออ\x0Eออต ";
+      if (attenuation < 16) {
+        s23 = "ฦออออออ\x0Eอต ";
       } else {
-        tmpCompare += tmpAdjust;
-        if (attenuation < tmpCompare) {
-          s23 = "ฦออออ\x0Eอออต ";
+        if (attenuation < 24) {
+          s23 = "ฦอออออ\x0Eออต ";
         } else {
-          tmpCompare += tmpAdjust;
-          if (attenuation < tmpCompare) {
-            s23 = "ฦอออ\x0Eออออต ";
+          if (attenuation < 32) {
+            s23 = "ฦออออ\x0Eอออต ";
           } else {
-            tmpCompare += tmpAdjust;
-            if (attenuation < tmpCompare) {
-              s23 = "ฦออ\x0Eอออออต ";
+            if (attenuation < 40) {
+              s23 = "ฦอออ\x0Eออออต ";
             } else {
-              tmpCompare += tmpAdjust;
-              if (attenuation < tmpCompare) {
-                s23 = "ฦอ\x0Eออออออต ";
+              if (attenuation < 48) {
+                s23 = "ฦออ\x0Eอออออต ";
               } else {
-                s23 = "ฦ\x0Eอออออออต ";
+                if (attenuation < 56) {
+                  s23 = "ฦอ\x0Eออออออต ";
+                } else {
+                  s23 = "ฦ\x0Eอออออออต ";
+                }
               }
             }
           }
         }
       }
-    }
-  }  
-  [ !!! don't forget to clear the error parameters!!!
-  tmpCompare = 0;
-  tmpAdjust = 0;
+    }  
+  }
 } else {
   set.text.attribute(LT_GRAY, WHITE);
   s23 = "ฦออออออออต ";

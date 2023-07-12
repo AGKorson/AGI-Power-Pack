@@ -1,3 +1,4 @@
+[ ********************************************************************
 [ 
 [ lgc.RedrawRoom
 [ 
@@ -7,6 +8,8 @@
 [
 [ Views don't need to be loaded, since they are already
 [ loaded by the room that called this function
+[
+[ ********************************************************************
 
 [ restore the current room
 load.pic(currentRoom);

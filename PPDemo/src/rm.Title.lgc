@@ -124,7 +124,9 @@ if (newRoom) {
   cycle.time(oCat, work1);
   
   [ show the picture on screen
-  show.pic(); 
+  show.pic();
+  [ save text colors
+  set.text.attribute(-1, 0);
   sText = "AGI GUY Studios presents...";
   draw(oLogo);
   draw(oDrew);
@@ -137,7 +139,7 @@ if (newRoom) {
   [ load the theme song
   load.sound(m.PPDTheme);
 [[  [ and begin playing
-[ TODO: set sound parameters based on game settings
+[[  [ (parameters are already set during initialization
 [[  sound(m.theme, musicDone);
 }
 
@@ -812,11 +814,12 @@ if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
   animationInterval = tmpSpeed;
   [ allow scripting
   reset(noScript);
+  [ restore colors
+  set.text.attribute(0, -1);
   [ begin game in starting room
   new.room(rm.ParkingLot); [ ##LE001##
 }
 
-  
 [ restart theme music if the intro screen is still showing
 [ and end was reached
 if (musicDone) {
@@ -841,7 +844,6 @@ if (musicDelay  > 0) {
 [[    sound(m.theme, musicDone);
   }
 }
-[[goto(getkey);
 
 return();
 

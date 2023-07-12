@@ -74,7 +74,7 @@
 #define saveCursor             f40 [ when set, the current cursor gets saved in logic 0
 #define restoreCursor          f41 [ when set, the default data for current cursor is restored
 #define turboMode              f42 [ when true, turbo option is set
-#define saveCustomInst         f43 [ used to update the custom instrument data in Logic0
+#define playSound              f43
 #define column80               f44 [ tracks display column count; true when 80 col mode is set
 #define wallbreak              f45 [ set after ego falls through wall in closet
 #define closetopen             f46 [ set when closet door is open
@@ -113,15 +113,19 @@
 #define cassetteSideB          f79
 #define warnWalkman            f80
 #define scorePlayTape          f81
-#define playSound              f82
-#define scoreFloppy            f83
-#define scoreWalkman           f84
+#define scoreFloppy            f82
+#define scoreWalkman           f83
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
 #define floppylabel             s5
 #define kwpassword              s6 [ password for kw002 account on MOCC
+#define custInst0               s7
+#define custInst1               s8
+#define custInst2               s9
+#define custInst3              s10
+#define custInst4              s11
 #define mouseX                 v27
 #define mouseY                 v28
 #define mouseBtn               v29

@@ -1,11 +1,13 @@
+[ ********************************************************************
 [ 
 [ lgc.Walkman
 [ 
 [ close up of the walkman; player can press start/pause,
 [ rewind, fast forward and eject
 [
+[ ********************************************************************
 
-#define helpText      v220
+#define helpText      v240
 #define   H_BLANK       4
 #define   H_EXIT        7
 #define   H_FASTFWD     8
@@ -15,10 +17,10 @@
 #define   H_COVER      12
 #define   H_INSIDE     13
 
-#define tmpCursor     v221
+#define tmpCursor     v241
 
-#define coverClosed   f220
-#define mouseDown     f221
+#define coverClosed   f240
+#define mouseDown     f241
 
 [ stop the game clock while examining items
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
@@ -58,6 +60,9 @@ show.pic();
 [ cover always starts closed
 set(coverClosed);
 
+[ set sound parameters
+call(lgc.SetSound);
+
 [ if currently playing, reload and restart music
 if ( currentTrack > 0 && currentTrack < 128) {
   block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
@@ -73,52 +78,54 @@ lastChar = 0;
 :waitforit
 
   [ get button by priority color
-  block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
-  work1 /= 16;
-  if (work1 != helpText) {
-    [ show button help if over a button
-    helpText = work1;
-    if (work1 == H_BLANK) {
-      clear.lines(23, 23, BLACK);
-      tmpCursor = C_DEFAULT;
-    }
-    if (work1 == H_EXIT) {
-      display(23, 32, "return to game");
-      tmpCursor = C_DEFAULT;
-    }
-    if (work1 == H_FASTFWD) {
-      display(23, 32, " fast forward ");
-      tmpCursor = C_USE;
-    }
-    if (work1 == H_REWIND) {
-      display(23, 32, "    rewind    ");
-      tmpCursor = C_USE;
-    }
-    if (work1 == H_STOP_EJ) {
-      display(23, 32, "  stop/eject  ");
-      tmpCursor = C_USE;
-    }
-    if (work1 == H_PLAY) {
-      display(23, 32, "     play     ");
-      tmpCursor = C_USE;
-    }
-    if (work1 == H_COVER ) {
-      clear.lines(23, 23, BLACK);
-      if (coverClosed) {
+  if (mouseY < 168) {
+    block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+    work1 /= 16;
+    if (work1 != helpText) {
+      [ show button help if over a button
+      helpText = work1;
+      if (work1 == H_BLANK) {
+        clear.lines(23, 23, BLACK);
         tmpCursor = C_DEFAULT;
-      } else {
+      }
+      if (work1 == H_EXIT) {
+        display(23, 32, "return to game");
+        tmpCursor = C_DEFAULT;
+      }
+      if (work1 == H_FASTFWD) {
+        display(23, 32, " fast forward ");
         tmpCursor = C_USE;
       }
-    }
-    if (work1 == H_INSIDE) {
-      clear.lines(23, 23, BLACK);
-      if (has("cassette tape")) {
-        tmpCursor = C_TAPE;
-      } else {
-        if (cassetteLoaded) {
-          tmpCursor = C_USE;
-        } else {
+      if (work1 == H_REWIND) {
+        display(23, 32, "    rewind    ");
+        tmpCursor = C_USE;
+      }
+      if (work1 == H_STOP_EJ) {
+        display(23, 32, "  stop/eject  ");
+        tmpCursor = C_USE;
+      }
+      if (work1 == H_PLAY) {
+        display(23, 32, "     play     ");
+        tmpCursor = C_USE;
+      }
+      if (work1 == H_COVER) {
+        clear.lines(23, 23, BLACK);
+        if (coverClosed) {
           tmpCursor = C_DEFAULT;
+        } else {
+          tmpCursor = C_USE;
+        }
+      }
+      if (work1 == H_INSIDE) {
+        clear.lines(23, 23, BLACK);
+        if (has("cassette tape")) {
+          tmpCursor = C_TAPE;
+        } else {
+          if (cassetteLoaded) {
+            tmpCursor = C_USE;
+          } else {
+            tmpCursor = C_DEFAULT;
+          }
         }
       }
     }
@@ -294,16 +301,22 @@ if (mouseBtn == 1 && !mouseDown) {
   
   [ play
   if (work1 == 11) {
+    [ cassette loaded, cover closed and currently paused/stopped
     if (cassetteLoaded && coverClosed && currentTrack > 128) {
       if (!scoreWalkman) {
         set(scoreWalkman);
         work1 = 4;
         call(lgc.ScoreHandler);
       }
+      [ always turn sound on if walkman is in use
       if (!soundOn) {
         set(soundOn);
       }
+      [ enable current track
       currentTrack *= -1;
+      [ set parameters
+      call(lgc.SetSound);
+      [ now begin playing current track
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       work2 = &musicDone;
       block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
@@ -356,13 +369,15 @@ if (mouseBtn == 1 && !mouseDown) {
 goto(waitforit);
 
 :exit
-
-[ if playing, stop/unload
+[ if playing, stop before changing room
 if (currentTrack > 0 && currentTrack < 128) {
   stop.sound();
   reset(musicDone);
   block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
 }
+
+[ restore script entries
+reset(noScript);
 
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -380,3 +395,10 @@ return();
 #message 6 "%g25"
 #message 7 "%g26"
 #message 8 "%g27"
+
+[ custom instrument connectors
+#message 9 "%g53"
+#message 10 "%g54"
+#message 11 "%g55"
+#message 12 "%g56"
+#message 13 "%g57"

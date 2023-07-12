@@ -1,8 +1,11 @@
+[ ********************************************************************
 [ 
 [ lgc.CacheOptions
 [ 
 [ cache sound, clock, speed, instrument settings before restarting
 [ uses s12 - s23
+[
+[ ********************************************************************
 
 [ sound settings
 if (soundOn) {
@@ -10,15 +13,17 @@ if (soundOn) {
 } else {
   work1 = 0;
 }
-if (4channelsound) {
-  work2 = 1;
-} else {
+if (musicmode == PC_SOUND) {
   work2 = 0;
-}
-if (useMIDI) {
-  work3 = 1;
-} else {
   work3 = 0;
+} else {
+  if (musicmode == FM_SOUND) {
+    work2 = 1;
+    work3 = 0;
+  } else {
+    work2 = 1;
+    work3 = 1;
+  }
 }
 s23 = "%v46%v47%v48";
 block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)

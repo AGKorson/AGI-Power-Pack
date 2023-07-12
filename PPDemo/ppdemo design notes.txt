@@ -81,6 +81,20 @@ INVENTORY: when 'examining', show typical view with description for all items; s
 12 music sheet    view, text      close up (look at)
 13 PQ idea list   view, close up  close up (look at)
 
+SOUNDS: Most game sounds use predefined settings. Cassette music and some game music can be changed via menu.
+custom sounds:
+  - s.Car
+  - s.CarStart
+  - s.CarStop
+  - s.Phone
+  - s.Shock
+  - s.Flicker
+  - clock chimes
+  - s.Drip
+  - s.Crumble1/2
+  - s.ButtonClick
+  - keypad tones
+
 
 1. Intro/Opening Credits: Show animated AGI Guy Studio logo, then animated Power Pack logo. Fade out, then fade in Demo title page - "Sierra Quest - a Power Pack Demo game"
     BACKGROUND: AGI Guy Studio and Power Pack done; need Sierra Quest background
@@ -283,12 +297,6 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
 16. Emulated Rodent Input Device Options Control Console
    mouse settings
-
-mouse clicks
-getpixel
-onobj
-
-
 
     BACKGROUND: done
     ANIMATION ART: done

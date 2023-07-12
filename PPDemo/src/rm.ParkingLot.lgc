@@ -286,7 +286,7 @@ if (egoCarSeq) {
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
     [ play car-running sound, force 4-channel FM
     set(4channelsound);
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ use correct instrument
     work1 = 0;
     work2 = CAR_INSTRUMENT;
@@ -304,13 +304,13 @@ if (egoCarSeq) {
     [ (sound parameters are already set, so just play the sound)
     reset(fCarDone);
     sound(s.CarStop, soundDone);
+    stop.cycling(egoCar);
     egoCarSeq = EC_PARKED;
   }
   if (egoCarSeq == EC_PARKED && soundDone) {
     [ ego gets out
     reset(soundDone);
     egoCarSeq = EC_IDLE;
-    stop.cycling(egoCar);
     position(ego, 50, 139);
     draw(ego);
     [ restore cursor for message
@@ -343,7 +343,7 @@ if (egoCarSeq) {
     }
     [ play car-start sound, force 4-channel FM
     set(4channelsound);
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ use correct instrument
     work1 = 0;
     work2 = CAR_INSTRUMENT;
@@ -440,7 +440,7 @@ if (patientTimer == 0) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -491,7 +491,7 @@ if (fPatientDone) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-start sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -536,7 +536,7 @@ if (fPatientDone) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-stop sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -595,7 +595,7 @@ if (fPatientDone) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-start sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -640,7 +640,7 @@ if (fPatientDone) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-stop sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -665,7 +665,7 @@ if (soundDone) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -693,7 +693,7 @@ if (soundDone) {
     if ((currentTrack == 0 || currentTrack > 128)) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
@@ -717,7 +717,7 @@ if (soundDone) {
       patientSeq > 200) {
     [ play car-running sound, force 4-channel FM
     set(4channelsound);
-    set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ use correct instrument
     work1 = 0;
     work2 = CAR_INSTRUMENT;
@@ -782,7 +782,7 @@ if (!fEgoDead) {
       if ((currentTrack == 0 || currentTrack > 128)) {
         [ play electrify sound, force 4-channel FM
         set(4channelsound);
-        set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         [ use correct instrument
         work1 = 3;
         work2 = 129;
@@ -800,7 +800,7 @@ if (!fEgoDead) {
         if ((currentTrack == 0 || currentTrack > 128)) {
           [ play electrify sound, force 4-channel FM
           set(4channelsound);
-          set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE)
+          set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
           [ use correct instrument
           work1 = 3;
           work2 = 129;

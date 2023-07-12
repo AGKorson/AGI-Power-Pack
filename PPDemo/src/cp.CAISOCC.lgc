@@ -109,9 +109,6 @@
 #define selectItem       f227
 #define redrawList       f228
 #define instDirty        f229
-[ f230 - f233 used as instrument parameters
-#define old4chan         f234
-#define oldMIDI          f235
 
 [ instrument parameter flags and variables
 #define modTremolo       f230
@@ -167,7 +164,7 @@ if (!enableCAISOCC) {
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
-    new.room.v(previousRoom); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
@@ -198,30 +195,13 @@ if(newRoom) {
   [ this view has all the art for cursors and buttons
   load.view(vw.cp.CAISOCC);
   
-  [ game functions to access global instruments
-  load.logics(lgc.GameFunctions);
-  
   [ test sound 
   load.sound(s.InstTest);
   
   [ make sure sound mode is 4channel FMsynth
-  if (4channelsound) {
-    [ save current value
-    set(old4chan);
-  } else {
-    [ temporarily set to 4chan
-    set(4channelsound);
-    reset(old4chan);
-  }
-  if (useMIDI) {
-    [ temporarily set to FMsynth
-    set(oldMIDI);
-    reset(useMIDI);
-  } else {
-    [ save current value
-    reset(oldMIDI);
-  }
-  set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+  set(4channelsound);
+  reset(useMIDI);
+  set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(oMode);
@@ -301,22 +281,22 @@ if(newRoom) {
   reset(cursormode);
   btnAction = 0;
   
-  [ copy the custom instrument values from lgc.Main
-  work1 = 1;
-  work2 = 53;
-  work3 = &m132;
+  [ local copy of custom instrument values
+  work1 = 7;
+  work2 = 1;
+  work3 = 132;
   tmpVal = &sTemp;
   :Loop1
-    sTemp = "%g";
-    strByte = "%v47Custom Inst %v46       ";
+    strByte = "%v46Custom Inst %v47       ";
     block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
+    sTemp = "%s";
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
     block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
     block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
     ++work1;
     ++work2;
     ++work3;
-  if (work1 < 6) {
+  if (work2 < 6) {
     goto(Loop1);
   }
   
@@ -721,7 +701,6 @@ if (dropmode == CHOOSING) {
   btnAction = 0;  
 }
 
-
 [ redraw text
 if (redrawList) {
   [ top row is always 10
@@ -888,8 +867,8 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 1: modulator  |tre|vib|sus|KSF|    frq mul   |
   work1 = 2;
-  block(STR.LEFT, &strInst, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ mod Tremolo
   if (work1 > 127) {
     work2 = &m138;
@@ -901,7 +880,7 @@ if (loadinst) {
   tmpRow = 6;
   tmpCol = 32;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 127);
+  block(BIT.AND, 0, &work1, 127); [ bit.and(BYVAL, VAR, MASK)
   [ mod Vibrato
   if (work1 > 63) {
     work2 = &m138;
@@ -912,7 +891,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 63);
+  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
   [ mod Sustain
   if (work1 > 31) {
     work2 = &m138;
@@ -923,7 +902,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 31);
+  block(BIT.AND, 0, &work1, 31); [ bit.and(BYVAL, VAR, MASK)
   [ mod keyb scaling
   if (work1 > 15) {
     work2 = &m138;
@@ -942,7 +921,7 @@ if (loadinst) {
     set.text.attribute(WHITE, BLUE);
   }
   [ freq mult
-  block(BIT.AND, 0, &work1, 15);
+  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
   modFreqMult = work1;
   tmpRow = 11;
   tmpCol += 14;
@@ -956,20 +935,20 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 3: modulator  | KSLvl |    output level      |
   work1 = 6;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ KSL
-  block(BIT.AND, 0, &work1, 192);
+  block(BIT.AND, 0, &work1, 192); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 64;
   modKSL = work1;
   ++tmpRow;
   work2 = &m140;
   display.v(tmpRow, tmpCol, work2);
   [ output level
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 63);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
   modLevel = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -982,12 +961,12 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 5: modulator  | attack rate   | decay rate   |
   work1 = 10;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ attack
-  block(BIT.AND, 0, &work1, 240);
+  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 16;
   modAttack = work1;
   ++tmpRow;
@@ -998,8 +977,8 @@ if (loadinst) {
   }
   display.v(tmpRow, tmpCol, work2);
   [ decay
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 15);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
   modDecay = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1012,12 +991,12 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 7: modulator  | sustain lvl   | release rt   |
   work1 = 14;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ sustainlvl
-  block(BIT.AND, 0, &work1, 240);
+  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 16;
   modSusLvl = work1;
   ++tmpRow;
@@ -1028,8 +1007,8 @@ if (loadinst) {
   }
   display.v(tmpRow, tmpCol, work2);
   [ release rate
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 15);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
   modRelease = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1042,12 +1021,12 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 9: modulator  |    not used           |wavfrm|
   work1 = 18;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ wave form
-  block(BIT.AND, 0, &work1, 3);
+  block(BIT.AND, 0, &work1, 3); [ bit.and(BYVAL, VAR, MASK)
   modWaveForm = work1;
   ++tmpRow;
   work2 = &m140;
@@ -1063,10 +1042,10 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 2: carrier    |tre|vib|sus|KSF|    frq mul   |
   work1 = 4;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ car Tremolo
   if (work1 > 127) {
     work2 = &m138;
@@ -1078,7 +1057,7 @@ if (loadinst) {
   tmpRow = 6;
   tmpCol = 57;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 127);
+  block(BIT.AND, 0, &work1, 127); [ bit.and(BYVAL, VAR, MASK)
   [ car Vibrato
   if (work1 > 63) {
     work2 = &m138;
@@ -1089,7 +1068,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 63);
+  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
   [ car Sustain
   if (work1 > 31) {
     work2 = &m138;
@@ -1100,7 +1079,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 31);
+  block(BIT.AND, 0, &work1, 31); [ bit.and(BYVAL, VAR, MASK)
   [ car keyb scaling
   if (work1 > 15) {
     work2 = &m138;
@@ -1120,7 +1099,7 @@ if (loadinst) {
   }
   
   [ freq mult
-  block(BIT.AND, 0, &work1, 15);
+  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
   carFreqMult = work1;
   tmpRow = 11;
   tmpCol = 71;
@@ -1134,20 +1113,20 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 4: carrier    | KSLvl |    output level      |
   work1 = 8;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ KSL
-  block(BIT.AND, 0, &work1, 192);
+  block(BIT.AND, 0, &work1, 192); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 64;
   carKSL = work1;
   ++tmpRow;
   work2 = &m140;
   display.v(tmpRow, tmpCol, work2);
   [ output level
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 63);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
   carLevel = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1160,12 +1139,12 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 6: carrier    | attack rate   | decay rate   |
   work1 = 12;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ attack
-  block(BIT.AND, 0, &work1, 240);
+  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 16;
   carAttack = work1;
   ++tmpRow;
@@ -1176,8 +1155,8 @@ if (loadinst) {
   }
   display.v(tmpRow, tmpCol, work2);
   [ decay
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 15);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
   carDecay = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1190,12 +1169,12 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 8: carrier    | sustain lvl   | release rt   |
   work1 = 16;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ sustainlvl
-  block(BIT.AND, 0, &work1, 240);
+  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 16;
   carSusLvl = work1;
   ++tmpRow;
@@ -1206,8 +1185,8 @@ if (loadinst) {
   }
   display.v(tmpRow, tmpCol, work2);
   [ release rate
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 15);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
   carRelease = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1220,12 +1199,12 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 10: carrier   |    not used           |wavfrm|
   work1 = 20;
-  block(STR.LEFT, &strInst, &strByte, &work1);
+  block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ wave form
-  block(BIT.AND, 0, &work1, 3);
+  block(BIT.AND, 0, &work1, 3); [ bit.and(BYVAL, VAR, MASK)
   carWaveForm = work1;
   ++tmpRow;
   work2 = &m140;
@@ -1235,10 +1214,10 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 11:           | 0   0   0   0 | feedback |con|
   work1 = 2;
-  block(STR.RIGHT, &strInst, &strByte, &work1);
-  block(HEX2BYTE, &strByte, &work1, 0);
+  block(STR.RIGHT, &strInst, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ feedback
-  block(BIT.AND, 0, &work1, 14);
+  block(BIT.AND, 0, &work1, 14); [ bit.and(BYVAL, VAR, MASK)
   work1 /= 2;
   feedback = work1;
   tmpRow = 20;
@@ -1252,8 +1231,8 @@ if (loadinst) {
   } else {
     set.text.attribute(WHITE, CYAN);
   }
-  block(HEX2BYTE, &strByte, &work1, 0);
-  block(BIT.AND, 0, &work1, 1);
+  block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
+  block(BIT.AND, 0, &work1, 1); [ bit.and(BYVAL, VAR, MASK)
   tmpCol = 57;
   if (work1 > 0) {
     work2 = &m138;
@@ -1295,14 +1274,12 @@ if (cursorpos > CP_RESET) {
         --newpos;
       }
     }
-    
     [ cursor right
     if (egoDir == RIGHT) {
       if (cursorpos < CP_C_TREM) {
         newpos += 13;
       }
     }
-    
     [ cursor down
     if (egoDir == DOWN) {
       if (cursorpos < CP_FDBACK) {
@@ -1312,14 +1289,12 @@ if (cursorpos > CP_RESET) {
         ++newpos;
       }
     }
-    
     [ cursor left
     if (egoDir == LEFT) {
       if (cursorpos > CP_FDBACK) {
         newpos -= 13;
       }
     }
-    
     [ only reset egoDir if in mouse mode; otherwise keyboard check
     [ will fail
     if (!cursormode) {
@@ -1362,7 +1337,6 @@ if (cursormode) {
         newpos = CP_SAVE;
       }
     }
-    
     [ cursor right
     if (egoDir == RIGHT) {
       if (cursorpos == CP_MOUSE) {
@@ -1388,7 +1362,6 @@ if (cursormode) {
         newpos = CP_RESET;
       }
     }
-    
     [ cursor down
     if (egoDir == DOWN) {
       if ((cursorpos == CP_MOUSE || cursorpos == CP_KEYB)) {
@@ -1417,7 +1390,6 @@ if (cursormode) {
         newpos = CP_C_TREM;
       }
     }
-    
     [ cursor left
     if (egoDir == LEFT) {
       if (cursorpos == CP_KEYB) {
@@ -1442,7 +1414,6 @@ if (cursormode) {
         newpos = CP_COPY;
       }
     }
-    
     [ always reset dir so another keypress can be detected
     egoDir = 0;
   }
@@ -1850,33 +1821,8 @@ if (btnAction > 0) {
     egoY = egoPrevY;
     egoDir = egoPrevDir;
   
-    [ restore instrument for channel 1 (it was used for 
-    [ testing in this room)
-    tmpVal = 0;
-    if (FMInst0 < 131) {
-      set.key(&tmpVal, &FMInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-    } else {
-      [ assign appropriate custom instrument
-      [ copy inst msg
-      work1 = &sTemp;
-      block(SET.STRING.V, &work1, &FMInst0, 0); [ set.string.v(vSTR, vMSG);
-      [strip off name
-      work1 = 22;
-      block(STR.LEFT, &sTemp, &sTemp, &work1); [ strLeft(sINPUT, sRESULT, vLEN)
-      [ refresh the msg
-      block(SET.MSG, 1, &FMInst0, &sTemp); [ set.msg(BYVAR, MSGOLD, STRNEW)
-      [ set the instrument
-      set.key(&tmpVal, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-    }
-    
-    [ restore sound settings
-    if (!old4chan) {
-      reset(4channelsound);
-    }
-    if (!oldMIDI) {
-      reset(useMIDI);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
-    }
+    [ update the config file to include any changes
+    call(lgc.SaveOptions);
 
     [ show wait cursor
     cursoricon = C_WAIT;
@@ -1884,8 +1830,8 @@ if (btnAction > 0) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
     
-    [ go back to previous room
-    new.room.v(previousRoom);
+    [ go back to control room
+    new.room(rm.ControlRoom); [ ##LE002##
   }
   
   [ Copy Inst button
@@ -1995,9 +1941,27 @@ if (btnAction > 0) {
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
     block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
     
-    [ tell lgc.Main to apply it
-    set(saveCustomInst);
+    [ save it
+    if (selinst == 1) {
+      block(STR.COPY, &strInst, &custInst0, 0); [ str.copy(sINPUT, sRESULT)
+    } else {
+      if (selinst == 2) {
+        block(STR.COPY, &strInst, &custInst1, 0); [ str.copy(sINPUT, sRESULT)
+      } else {
+        if (selinst == 3) {
+          block(STR.COPY, &strInst, &custInst2, 0); [ str.copy(sINPUT, sRESULT)
+        } else {
+          if (selinst == 4) {
+            block(STR.COPY, &strInst, &custInst3, 0); [ str.copy(sINPUT, sRESULT)
+          } else {
+            block(STR.COPY, &strInst, &custInst4, 0); [ str.copy(sINPUT, sRESULT)
+          }
+        }
+      }
+    }
     print.at("Custom Instrument %v221 updated", 3, 3, 70);
+    [ update will happen when closing
+    
 [print.at("String value: %s12", 3, 3, 70);
 
     [ reset dirty flag
@@ -2011,13 +1975,13 @@ if (btnAction > 0) {
     [ force reload to reset edit status
     set(loadinst);
   }
-  
+   
   [ Test button
   if (btnAction == B_TEST) {
     block(SET.MSG, 0, &m142, &strInst); [ set.msg(BYVAR, MSGOLD, STRNEW)
     work1 = 0;
-    work2 = &m142;
-    set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+    work2 = &strInst;
+    set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
     sound(s.InstTest, soundDone);
 [load.sound(s.Tone0);
 [sound(s.Tone0, soundDone);
@@ -2191,6 +2155,8 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
+[ actual channel values start at zero, but because
+[ messages have to start at zero, they get a '+1' offset
 #message 1 "02023000F1F58404000000Acoust. Grand Piano "
 #message 2 "82040500F1A50C35000002Bright Acous. Piano "
 #message 3 "42040805F1F401C4010002Elec. Grand Piano   "

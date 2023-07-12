@@ -84,7 +84,6 @@ if (currentRoom == rm.Title) {
 
 [ control panels
 if (currentRoom > 20) {
-
   [ if loading the terminal or instrument control panel
   if ((currentRoom == cp.Terminal || currentRoom == cp.CAISOCC)) {
     [ use 80 col mode
@@ -126,6 +125,9 @@ if (currentRoom > 20) {
   enable.item(mouse);
 
 }
+
+[ make sure input area is cleared
+clear.lines(23, 24, 0);
 
 [ reset/restore any global variables/flags that
 [ need to be reset whenever a new room is encountered

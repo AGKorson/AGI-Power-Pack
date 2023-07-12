@@ -15,7 +15,6 @@
 [ RMDIR      REN        RENAME     SUDO
 [ TYPE       VER        VOL
 [ ********************************************************************
-[ sound effects for control panel buttons?
 
 #define cursor_row    v240
 #define cursor_col    v241

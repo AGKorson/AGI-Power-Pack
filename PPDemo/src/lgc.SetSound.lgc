@@ -1,0 +1,51 @@
+[ ********************************************************************
+[ 
+[ lgc.SetSound
+[ 
+[ ********************************************************************
+
+[ set sound parameters for current mode
+if (musicmode == FM_SOUND) {
+  [ set FM sound mode
+  set(4channelsound);
+  reset(useMIDI);
+  set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  [ set FM instruments
+  work1 = 0;
+  :setFMinst
+    work2 = &FMInst0;
+    work2 += work1;
+    work2 = *work2;
+    if (work2 > 130) {
+      work2 -= 124;
+      set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
+    } else {
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    }
+  if (work1 < 4) {
+    ++work1;
+    goto(setFMinst);
+  }
+} else {
+  if (musicmode == MIDI_SOUND) {
+    [ set MIDI sound mode
+    set(4channelsound);
+    set(useMIDI);
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    [ set MIDI instruments
+    work1 = 0;
+    set.key(&work1, &MIDIInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    ++work1;
+    set.key(&work1, &MIDIInst1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    ++work1;
+    set.key(&work1, &MIDIInst2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+  } else {
+    reset(4channelsound);
+  }
+}
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

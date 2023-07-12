@@ -9,8 +9,6 @@
 [ allow instrument selection for each channel
 [ test button - play a short song
 [
-[ 4channelsound flag gets changed during editing; it has to be
-[ restored on cancel; instrument values don't; temp values are used
 [
 [ ********************************************************************
 
@@ -105,24 +103,22 @@
 #define offsetrow    v239 [ top row of listbox
 [ a few more variable are needed than normally assigned to rooms
 [ the dynamic variables (240-255) can be safely used here
-#define tmpAttn      v240
-#define slideoffset  v241
-#define mode         v242
+
+#define slideoffset  v240
+#define mode         v241
 #define     1CHAN     0
 #define     FMSYNTH   1
 #define     MIDI      2
-#define tmpMIDI0     v243
-#define tmpMIDI1     v244
-#define tmpMIDI2     v245
+#define tmpMIDI0     v242
+#define tmpMIDI1     v243
+#define tmpMIDI2     v244
 
 #define update       f220
-#define old4chan     f221
-#define oldMIDI      f222
-#define cursormode   f223
-#define sndTest      f224
-#define sndDone      f225
-#define redrawList   f226
-#define sliding      f227
+#define cursormode   f221
+#define sndTest      f222
+#define sndDone      f223
+#define redrawList   f224
+#define sliding      f225
 
 [if this control panel is not enabled show error screen
 if (!enableESADOCC) {
@@ -143,7 +139,7 @@ if (!enableESADOCC) {
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
-    new.room.v(previousRoom); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
@@ -267,7 +263,6 @@ if(newRoom) {
   stop.cycling(oVolSlider);
   set.priority(oVolSlider, 15);
   [ position depends on current sound attenuation
-  tmpAttn = attenuation;
   work1 = attenuation;
   work1 *= -1;
   work1 += 144;
@@ -276,18 +271,6 @@ if(newRoom) {
   [ (not used if 1chan)
   if (4channelsound) {
     draw(oVolSlider);
-  }
-  
-  [ make copy of current mode
-  if (4channelsound) {
-    set(old4chan);
-  } else {
-    reset(old4chan);
-  }
-  if (useMIDI) {
-    set(oldMIDI);
-  } else {
-    reset(oldMIDI);
   }
   
   [ instrument values
@@ -312,23 +295,6 @@ if(newRoom) {
   
   [ no instrument listbox is currently being edited
   currentInst = -1;
-
-  [ copy the custom FM instrument values from lgc.Main
-  s12 = "%g53";
-  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m144, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%g54";
-  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m145, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%g55";
-  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m146, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%g56";
-  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m147, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  s12 = "%g57";
-  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m148, &s12); [ set.msg(BYVAR, MSGOLD, STRNEW)
   
   [ mouse is enabled, not cursor; no button active
   reset(cursormode);
@@ -404,7 +370,7 @@ if (update) {
     cursorX += 3;
     [ noise channels are not applicable
     set.text.attribute(LT_GRAY, WHITE);
-    work1 = &m149;
+    work1 = &m139;
     display.v(cursorX, cursorY, work1);
     cursorX += 3;
     display.v(cursorX, cursorY, work1);
@@ -964,8 +930,6 @@ if (cursormode) {
       if (useMIDI) {
         if (cursorpos == CP_VOLUME) {
           newpos = CP_INST2;
-[        } else {
-[          newpos = CP_INST4;
         }
       }
     }
@@ -1424,8 +1388,8 @@ if (cursormode) {
     cursorY = 166;
     reposition.to.v(oVolSlider, work1, cursorY);
     [ convert position to attenuation value
-    work1 *= -1;
-    work1 += 144;
+    work1 *= -1; 
+    work1 += 144; [0-63
     [ if it changed, update speed
     if (work1 != attenuation) {
       attenuation = work1;
@@ -1492,7 +1456,7 @@ if (btnAction > 0) {
       set(4channelsound);
       [ FMsynth
       reset(useMIDI);
-      set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
       [ move the button
       erase(oChannels);
       position(oChannels, 8, 105);
@@ -1510,7 +1474,7 @@ if (btnAction > 0) {
       set(4channelsound);
       [ MIDI
       set(useMIDI);
-      set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
       [ move the button
       erase(oChannels);
       position(oChannels, 8, 121);
@@ -1527,27 +1491,10 @@ if (btnAction > 0) {
     egoY = egoPrevY;
     egoDir = egoPrevDir;
 
-    if (btnAction == B_CANCEL) {
-      [ restore sound settings
-      if (old4chan) {
-        set(4channelsound);
-      } else {
-        reset(4channelsound);
-      }
-      if (oldMIDI) {
-        set(useMIDI);
-        set.key(1, 0, SET.SNDMODE); [ set.sndmode(MODE);
-      } else {
-        reset(useMIDI);
-        set.key(0, 0, SET.SNDMODE); [ set.sndmode(MODE);
-      }
-      attenuation = tmpAttn;
-    } else {
-      [ OK - keep current sound settings
-      [ TODO: need to save config file when sound settings change
+    if (btnAction == B_OK) {
       [ save new instrument values
-      print.at("Sound parameters updated.", 4, 6, 31);
-      [ update instruments
+      print.at("Sound parameters updated.", 3, 6, 31);
+      [ update FM instrument settings
       FMInst0 = tmpFM0;
       --FMInst0;
       FMInst1 = tmpFM1;
@@ -1558,60 +1505,22 @@ if (btnAction > 0) {
       --FMInst3;
       FMInst4 = tmpFM4;
       --FMInst4;
-
-      [ update the FM instrument settings
-      cursorX = 0;
-      if (FMInst0 < 131) {
-        set.key(&cursorX, &FMInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      } else {
-        [ assign a custom instrument
-        work1 = FMInst0;
-        work1 += 13;
-        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-      }
-      ++cursorX;
-      if (FMInst1 < 131) {
-        set.key(&cursorX, &FMInst1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      } else {
-        [ assign a custom instrument
-        work1 = FMInst1;
-        work1 += 13;
-        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-      }
-      ++cursorX;
-      if (FMInst2 < 131) {
-        set.key(&cursorX, &FMInst2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      } else {
-        [ assign a custom instrument
-        work1 = FMInst2;
-        work1 += 13;
-        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-      }
-      ++cursorX;
-      if (FMInst3 < 131) {
-        set.key(&cursorX, &FMInst3, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      } else {
-        [ assign a custom instrument
-        work1 = FMInst3;
-        work1 += 13;
-        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-      }
-      ++cursorX;
-      if (FMInst4 < 131) {
-        set.key(&cursorX, &FMInst4, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      } else {
-        [ assign a custom instrument
-        work1 = FMInst4;
-        work1 += 13;
-        set.key(&cursorX, &work1, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
-      }
+      [ update MIDI instrument settings
+      MIDIInst0 = tmpMIDI0;
+      --tmpMIDI0;
+      MIDIInst1 = tmpMIDI1;
+      --tmpMIDI1;
+      MIDIInst2 = tmpMIDI2;
+      --tmpMIDI1;
+      [ update the config file
+      call(lgc.SaveOptions);
     }
     
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
     
-    [ go back to previous room
-    new.room.v(previousRoom); 
+    [ go back to control room
+    new.room(rm.ControlRoom); [ ##LE002##
   }
   
   [ test all sound channels
@@ -1627,14 +1536,14 @@ if (btnAction > 0) {
         }
         work1 += cursorX;
         work1 = *work1;
+        [ convert msg index to actual instrument value
         --work1;
         if (work1 < 131) {
           set.key(&cursorX, &work1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
         } else {
           [ assign a custom instrument
-          work2 = work1;
-          work2 += 13;
-          set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+          work2 -= 124;
+          set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
         }
       if (cursorX < 4) {
         if ((cursorX < 2 || !useMIDI)) {
@@ -1642,10 +1551,9 @@ if (btnAction > 0) {
           goto(setinst);
         }
       }
-      
 [      sound(m.PPDTheme, sndDone);
-load.sound(s.Car);
-sound(s.Car, sndDone);
+load.sound(s.WestminsterHour);
+sound(s.WestminsterHour, sndDone);
       [ update button text
       set.text.attribute(-1, 0);
       set.text.attribute(BLACK, WHITE);
@@ -1688,8 +1596,7 @@ sound(s.Car, sndDone);
   
   [ instrument buttons only work if 4chan is active
   if (4channelsound) {
-  
-    [ if an instrument test box
+    [ instrument test
     [ (noise channels only if not in midi mode)
     if (btnAction > B_TESTALL && btnAction < B_INST0) {
       if ((!useMIDI || btnAction < B_TEST3)) {
@@ -1703,17 +1610,30 @@ sound(s.Car, sndDone);
         work2 = *work2;
         [ tmp values are 1-based; convert to 0-base
         --work2;
-        [ use channel 0 for test
-        work1 = 0;
+        if (btnAction < B_TEST3) {
+          [ use channel 0 for test
+          work1 = 0;
+        } else {
+          work1 = btnAction;
+          work1 -= 7;
+        }
         [ change instrument
         if (work2 < 131) {
           set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
         } else {
           [ assign a custom instrument
-          work2 += 13;
-          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATAMSG);
+          work2 -= 124;
+          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
         }
-        sound(s.InstTest, sndDone);
+        if (btnAction < B_TEST3) {
+          sound(s.InstTest, sndDone);
+        } else {
+          if (btnAction == B_TEST3) {
+            sound(s.NoiseTest1, sndDone);
+          } else {
+            sound(s.NoiseTest2, sndDone);
+          }
+        }
       }
     }  
     
@@ -1922,14 +1842,4 @@ return();
 #message 136 "Custom Inst 5      "
 #message 137 "\x1E"
 #message 138 "\x1F"
-#message 139 "%g53"
-#message 140 "%g54"
-#message 141 "%g55"
-#message 142 "%g56"
-#message 143 "%g57"
-#message 144 "0000000000000000000000"
-#message 145 "0000000000000000000000"
-#message 146 "0000000000000000000000"
-#message 147 "0000000000000000000000"
-#message 148 "0000000000000000000000"
-#message 149 "   ----            "
+#message 139 "   ----            "

@@ -16,7 +16,7 @@
 [
 [ global = usable and accessible by all logics
 [     v27 - v219
-[     f17 - f18, f21 - fShowClicks
+[     f17 - f18, f21 - f219
 [     s2 - s11
 [
 [ local = usable and accessible by single room
@@ -190,16 +190,6 @@ if (currentRoom == 0) {
   [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
                         [ configures the screen and other startup activities
-  [ setup custom instruments
-  work1 = &m53;
-  work2 = &s18;
-  :setinst
-  block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  ++work1;
-  ++work2;
-  if (work1 < 58) {
-    goto(setinst);
-  }
   
   [ some start/restart actions have to be done within logic0
   if (gameRestarted) {
@@ -393,34 +383,37 @@ if (said("test", "drop")) {
 
 [ MENU AND STATUS BAR CHECKS
 if (!disableGameFunctions) {
-[  if (lc && y>247) || cm ) {
+  [ this trick makes it easy to test for
+  [ 'if (controller(cLeftClick) && y > 247) || controller(cMenu)'
   if (!controller(cMenu) && (!controller(cLeftClick) || mouseY < 248)) {
   } else {   
-    [ check for click on sound bar
-    if (mouseX > 137) {
-      [ adjust sound volume based on clicked position
-      work1 = mouseX;
-      work1 -= 138;
-      if (work1 >= 18) {
-        [ set to max vol
-        set(soundOn);
-        attenuation = 0;
-      } else {
-        if (work1 < 2) {
-          reset(soundOn);
-        } else {
+    [ check for click on sound bar (but no controller)
+    if (mouseX > 137 && !controller(cMenu)) {
+      [ only in non-PC modes
+      if (musicmode != PC_SOUND) {
+        [ adjust sound volume based on clicked position
+        work1 = mouseX;
+        work1 -= 138; [ 0-21
+        if (work1 >= 18) {
+          [ set to max vol
           set(soundOn);
-          [ calculate new sound level from clicked value
-          work1 /= 2;
-          work1 *= -8;
-          work1 += 68;
-          if (!4channelSound) {
-            work1 /= 4;
+          attenuation = 0;
+        } else { [ 0-17
+          if (work1 <= 2) {
+            [ sound at minimum volume
+  [          reset(soundOn);
+            attenuation = 63;
+          } else { [ 3-17
+            set(soundOn);
+            [ calculate new sound attenuations from clicked value
+            work1 *= -1;
+            work1 += 18;  [15-1
+            work1 *= 4;
+            attenuation = work1;
           }
-          attenuation = work1;
+          [ update the config file
+          call(lgc.SaveOptions);
         }
-      [ update the config file
-      call(lgc.SaveOptions);
       }
       return();
     }
@@ -635,13 +628,12 @@ if (controller(cToggleSound)) {
   [ update the config file
   call(lgc.SaveOptions);
 }
-[ TODO: need to completely re-write sound menu handlers
 if (controller(cSoundPC)) {
-  [ set musicmode to PC sound
-  musicMode = PC_SOUND;
-  
-  [ if not already in PC sound mode
-  if (4channelsound) {
+  [ if not already PC sound mode
+  if (musicMode != PC_SOUND) {
+    [ set musicmode to PC sound
+    musicMode = PC_SOUND;
+    [ if playing a sound or music
     if (currentTrack > 0 && currentTrack < 128) {
       stop.sound();
     }
@@ -649,13 +641,16 @@ if (controller(cSoundPC)) {
       reset(playSound);
       stop.sound();
     }
+    
+    [ set pc sound mode
     reset(4channelsound);
     reset(useMIDI);
-    [ convert attenuation
-    [ TODO: create two sound attenuation levels and manage them manually
-    attenuation /= 4;
+    
+    [ if playing cassette,
     if (currentTrack > 0 && currentTrack < 128) {
+      set(noScript);
       work1 = &musicDone;
+      call(lgc.SetSound);
       block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
       reset(noScript);
     }
@@ -665,7 +660,10 @@ if (controller(cSoundPC)) {
 }
 if (controller(cSoundFM)) {
   [ if not already in FM mode
-  if ((!4channelsound || useMIDI)) {
+  if (musicMode != FM_SOUND) {
+    [ set musicmode to FM synth
+    musicMode = FM_SOUND;
+    [ if playing a sound or music
     if (currentTrack > 0 && currentTrack < 128) {
       stop.sound();
     }
@@ -673,27 +671,11 @@ if (controller(cSoundFM)) {
       reset(playSound);
       stop.sound();
     }
-    if (!4channelsound) {
-      work1 = attenuation;
-      work1 *= 4;
-      if (attenuation > 15) {
-        ++work1;
-      }
-      if (attenuation > 31) {
-        ++work1;
-      }
-      if (attenuation > 47) {
-        ++work1;
-      }
-      attenuation = work1;
-    }
-    set(4channelsound);
-    reset(useMIDI);
-    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    [ if playing cassette,
     if (currentTrack > 0 && currentTrack < 128) {
+      call(lgc.SetSound);
       work1 = &musicDone;
       block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
-      reset(noScript);
     }
     [ update the config file
     call(lgc.SaveOptions);
@@ -701,7 +683,10 @@ if (controller(cSoundFM)) {
 }
 if (controller(cSoundMIDI)) {
   [ if not already in MIDI mode
-  if ((!4channelsound || !useMIDI)) {
+  if (musicmode != MIDI_SOUND) {
+    [ set musicmode to MIDI
+    musicmode = MIDI_SOUND;
+    [ if playing a sound or music
     if (currentTrack > 0 && currentTrack < 128) {
       stop.sound();
     }
@@ -709,27 +694,11 @@ if (controller(cSoundMIDI)) {
       reset(playSound);
       stop.sound();
     }
-    if (!4channelsound) {
-      work1 = attenuation;
-      work1 *= 4;
-      if (attenuation > 15) {
-        ++work1;
-      }
-      if (attenuation > 31) {
-        ++work1;
-      }
-      if (attenuation > 47) {
-        ++work1;
-      }
-      attenuation = work1;
-    }
-    set(4channelsound);
-    set(useMIDI);
-    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    [ if playing cassette,
     if (currentTrack > 0 && currentTrack < 128) {
+      call(lgc.SetSound);
       work1 = &musicDone;
       block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
-      reset(noScript);
     }
     [ update the config file
     call(lgc.SaveOptions);
@@ -743,16 +712,16 @@ if (controller(cClock)) {
   if (clockOn) {
     if (realClock) {
       [ status bar checks realtime minutes
-      set.cursor.char(" l29, v3, v7, v78, v23, f9");
+      set.cursor.char(" l29, v3, v7, v23, v99, v78, f9");
       [ force realtime clock update
       block(GET.TIME, &currentHour, &currentMinute, &currentSecond); [ get.time(vHOUR, vMINUTE, vSECOND)
     } else {
       [ status bar checks gametime seconds
-      set.cursor.char(" l29, v3, v7, v11, v23, f9");
+      set.cursor.char(" l29, v3, v7, v23, v99, v11, f9");
     }
   } else {
     [ status bar doesn't check for time
-    set.cursor.char(" l29, v3, v7, v23, f9");
+    set.cursor.char(" l29, v3, v7, v23, v99, f9");
   }
   [ update the config file
   call(lgc.SaveOptions);
@@ -761,7 +730,7 @@ if (controller(cRealClock)) {
   if (!realClock) {
     set(realClock);
     [ status bar checks realtime minutes
-    set.cursor.char(" l29, v3, v7, v78, v23, f9");
+    set.cursor.char(" l29, v3, v7, v23, v99, v78, f9");
     [ force realtime clock update
     block(GET.TIME, &currentHour, &currentMinute, &currentSecond); [ get.time(vHOUR, vMINUTE, vSECOND)
     [ update the config file
@@ -772,7 +741,7 @@ if (controller(cGameClock)) {
   if (realClock) {
     reset(realClock);
     [ status bar checks gametime seconds
-    set.cursor.char(" l29, v3, v7, v11, v23, f9");
+    set.cursor.char(" l29, v3, v7, v23, v99, v11, f9");
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -909,6 +878,7 @@ if (musicDone) {
       set(noScript);
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       work1 = &musicDone;
+      call(lgc.SetSound);
       block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound.v(vSNDNUM, vDONEFLAG)
     }
     reset(noScript);
@@ -957,20 +927,6 @@ if (!disableGameFunctions) {
     v227 = -1;
     [ provide feedback
     print.at("Cursor restored.", 14, 19, 17);
-    return();
-  }
-  
-  [ check for instrument change from CAISOCC
-  if (saveCustomInst) {
-    reset(saveCustomInst);
-    work1 = 22;
-    block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-    work1 = v221; [ selinst in cp.CAISOCC
-    work1 += 52; [convert to msg offset
-    work2 = &s12; [ use string 12
-    block(SET.MSG, 1, &work1, &work2); [set.msg(BYVAR, MSGNUM, STRNEW);
-    [ update config file
-    call(lgc.SaveOptions);
     return();
   }
   
@@ -1138,11 +1094,3 @@ return();
 [ debug menu items
 #message 38 "Log Input:      Off"
 #message 39 "Display Clicks: Off"
-
-[ FM instrument values
-#message 52 "%s16"
-#message 53 "22215909FFFF030F020000"
-#message 54 "22215909FFFF030F020000"
-#message 55 "22215909FFFF030F020000"
-#message 56 "2F200000FFFF0F0F00030E"
-#message 57 "22242100C0C00C0C000000"
