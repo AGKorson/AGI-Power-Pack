@@ -6,7 +6,6 @@
 [
 [ ********************************************************************
 [ TODO: sound effects for coffin open/close
-[ TODO: when clock playing, don't play other sounds
 [ TODO: more said statements for storeroom
 
 #define oClockHour      o1
@@ -38,7 +37,8 @@
 #define fChest        f226
 #define fEgoBackup    f227
 #define fInCoffin     f228
-#define hourBells     f229
+#define clockChiming  f229
+#define hourBells     f230
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -107,7 +107,8 @@ if (newRoom) {
   stop.cycling(oCoffin);
   ignore.objs(oCoffin);
   ignore.blocks(oCoffin);
-
+  load.sound(s.OpenCoffin);
+  
   [ cabinet door (uses same object as the coffin)
 
   [ chest
@@ -268,30 +269,39 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 :noInput           [  all non-input related code goes here 
 [*****
 
-[ check for hour bell tolls
-if (hourBells && soundDone) {
-  reset(soundDone);
-  --bellCount;
-  if ((currentTrack == 0 || currentTrack > 128)) {
-    if (bellCount > 0) {
-      [ play chime sound, force 4-channel MIDI
-      set(4channelsound);
-      set(useMIDI);
-      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-      [ use correct instruments
-      work1 = 0;
-      work2 = 14;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      ++work1;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-      sound(s.HourChime, soundDone);
-      set(playSound);
+if (soundDone) {
+  if (clockChiming) {
+    [ check for hour bell tolls
+    if (hourBells) {
+      reset(soundDone);
+      --bellCount;
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        if (bellCount > 0) {
+          [ play chime sound, force 4-channel MIDI
+          set(4channelsound);
+          set(useMIDI);
+          set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+          [ use correct instruments
+          work1 = 0;
+          work2 = 14;
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+          ++work1;
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+          sound(s.HourChime, soundDone);
+          set(playSound);
+        } else {
+          reset(hourBells);
+          reset(clockChiming);
+        }
+      } else {
+        bellCount = 0;
+        reset(hourBells);
+        reset(clockChiming);
+      }
     } else {
-      reset(hourBells);
+      [ not an hourly chime 
+      reset(clockChiming);
     }
-  } else {
-    bellCount = 0;
-    reset(hourBells);
   }
 }
 
@@ -325,6 +335,7 @@ if (vCheckSecond != elapsedSeconds) {
         ++work1;
         set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
         set(playSound);
+        set(clockChiming);
         if (vClockMin == 0) {
           sound(s.WestminsterHour, soundDone);
           set(hourBells);

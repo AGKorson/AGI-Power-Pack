@@ -873,7 +873,9 @@ if (musicDone) {
     [ check if end of side is reached
     if (currentTrack >= work1) {
       currentTrack = 0;
-    } else {      
+    } else {
+      [ make sure no sound effects are playing
+      stop.sound();
       [ play next track
       set(noScript);
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
