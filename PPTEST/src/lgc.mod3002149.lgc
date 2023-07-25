@@ -3012,11 +3012,11 @@ if (said(54, 210, 54878)){} [ D65E
 [ of white/red.
 [
 [ To clear the screen to a blank visual/priority color, use a value of -1 
-[ (255) for the third argument. The command-string argument is ignored and can 
-[ be any value. Pass the desired priority/visual color combination as the last 
-[ argument. The upper nibble (highest four bits are the priority screen color 
-[ and the lower nibble (lowest four bits) are the visual screen color.  
-[ Mathematically, COLORPAIR = 16 * PRICOLOR + VISCOLOR.
+[ (255) for FILLSTYLE. The command-string argument is replaced with a variable
+[ that contains the desired priority/visual color combination. The upper nibble
+[ (highest four bits) are the priority screen color and the lower nibble 
+[ (lowest four bits) are the visual screen color.  Mathematically:
+[      COLORPAIR = 16 * PRICOLOR + VISCOLOR.
 [
 [ The Power Pack Demo game includes some detailed examples of how to use the
 [ picdraw function to manipulate pictures.
