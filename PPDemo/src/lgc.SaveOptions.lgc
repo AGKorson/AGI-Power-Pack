@@ -72,7 +72,7 @@ if (realClock) {
 tmpStr2 = "                                       ";
 [ create sound/clock/speed output (in s23)
 [ (use 4channel attenuation value[v101])
-tmpStr1 = "%v46%v47%v48%v101|2%v240%v241%v10|2";
+tmpStr1 = "%v46%v47%v48%v23|2%v240%v241%v10|2";
 [ format it and copy to output string
 block(STR.FORMAT, &tmpStr1, &tmpStr2, 0); [ str.format(sINPUT, sRESULT)
 [ save output string to file
