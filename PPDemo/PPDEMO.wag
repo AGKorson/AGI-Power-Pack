@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "7/24/2023 8:17:52 PM"
+   LastEdit = "7/25/2023 11:31:21 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HE55CBC68
-   CRC32 = &HE55CBC68
+   CompCRC32 = &H9DF6BF47
+   CRC32 = &H9DF6BF47
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -156,7 +156,7 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H9B6A4903
+   CRC32 = &HE5B0B035
    CompCRC32 = &H0
    IsRoom = True
 
@@ -226,84 +226,84 @@
 [Logic102]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &HF164E487
+   CRC32 = &HEBD3ACC1
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic103]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &HF7DCD23A
+   CRC32 = &HEFF20B5B
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic104]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &H99AB126
+   CRC32 = &H8C46848B
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic105]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &H94809535
+   CRC32 = &H5535B429
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic106]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H414607E0
+   CRC32 = &H6A6DC6F5
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic107]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H99F845E5
+   CRC32 = &H135F1712
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic108]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HAE315EE6
+   CRC32 = &HEDD97363
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic109]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &H2552F4C0
+   CRC32 = &HE232A566
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic110]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &HD3F98A56
+   CRC32 = &H96165C53
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic111]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H6DFFD858
+   CRC32 = &H88146BBC
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic112]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &HEDC76F64
+   CRC32 = &H5E69C7A3
    CompCRC32 = &H0
    IsRoom = False
 
 [Logic113]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &HB0C8E9EA
+   CRC32 = &H813EDCA2
    CompCRC32 = &H0
    IsRoom = False
 
@@ -394,8 +394,8 @@
 [Logic15]
    ID = lgc.SaveOptions
    Description = ""
-   CRC32 = &H5E136F0D
-   CompCRC32 = &H0
+   CRC32 = &HF4557CCB
+   CompCRC32 = &HF4557CCB
    IsRoom = False
 
 [Logic16]
