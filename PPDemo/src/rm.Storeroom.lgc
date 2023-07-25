@@ -1,11 +1,11 @@
 [ ********************************************************************
 [
-[ rm.Storeroom
+[ rm.StoreRoom
 [
 [ 
 [
 [ ********************************************************************
-[ TODO: sound effects for coffin open/close
+
 [ TODO: more said statements for storeroom
 
 #define oClockHour      o1
@@ -197,6 +197,13 @@ if (newRoom) {
   draw(ego);
   egoDir = STOPPED;
   
+  load.sound(s.GetItem);
+  load.sound(s.OpenCoffin);
+  load.sound(s.CloseCoffin);
+  load.sound(s.CoffinSlam);
+  load.sound(s.OpenDrawer);
+  load.sound(s.CloseDrawer);
+  
   [ display the picture on screen
   show.pic();
   [ fade in
@@ -242,9 +249,10 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       goto(closeCoffin);
     }
   }
-  if ((said("get", "in", "coffin") || said("climb", "in", "coffin"))) {
-    [ is ego on wrong side? (lid will always be closed)
-    if (posn(ego, 28, 141, 54, 149)) {
+
+  if ((said("get in", "coffin") || said("climb", "in", "coffin"))) {
+    [ is ego on wrong side or is lid closed
+    if ((posn(ego, 28, 141, 54, 149) || vCoffinState != OPEN)) {
       print("The lid is closed.");
       goto(doneclick);
     }
@@ -410,12 +418,13 @@ if (fInCoffin) {
     reposition(ego, work1, work2);
     set.loop(ego, 2);
     set.cel(ego, 0);
-    work1 = 2;
+    work1 = 1;
     cycle.time(ego, work1);
     end.of.loop(ego, fInCoffin);
     ++vCoffinDeathSeq;
     erase(oCoffin);
- }
+    sound(s.CoffinSlam, soundDone);
+  }
   
   if (vCoffinDeathSeq == 1) {
     work1 = -6;
@@ -440,6 +449,12 @@ if (fInCoffin) {
     work1 = 0;
     set.upper.left(&ego, &work1);
     ++vCoffinDeathSeq;
+    [ stop walkman if active
+    if (currentTrack > 0 && currentTrack < 128) {
+      currentTrack *= -1;
+      stop.sound();
+      reset(musicDone);
+    }
   }
 }
 
@@ -476,7 +491,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     controller(cLeftClick) &&
     (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders
-  if ((mouseX < 27 || mouseX > 149 || mouseY < 17 || mouseY > 159)) {
+  if ((mouseX < 10 || mouseX > 149 || mouseY < 17 || mouseY > 159)) {
     goto(doneclick);
   }
   [ look
@@ -498,7 +513,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ moose 2
-    if (mouseX > 17 && mouseX < 33 && mouseY > 64 && mouseY < 80) {
+    if (mouseX > 17 && mouseX < 33 && mouseY > 65 && mouseY < 80) {
       [ check pixel color
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       if (work1 != 67) { [67=cyan vis/red pri
@@ -864,8 +879,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (posn(ego, 58, 112, 74, 119)) {
         [ behind of podium
         if (!has("PQ idea list")) {
-          print("You grab the paper from the top of the podium.");
+          [ play sound if walkman not active and no chimes
+          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            call(lgc.SetSound);
+            sound(s.GetItem, soundDone);
+          }
           get("PQ idea list");
+          print("You grab the paper from the top of the podium.");
           work1 = 3;
           call(lgc.ScoreHandler);
         } else {
@@ -914,6 +934,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oFileDrawer);
         end.of.loop(oFileDrawer, fFileDrawer);
         storeFileDrStatus = OPENING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -931,6 +956,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oFileDrawer);
         end.of.loop(oFileDrawer, fFileDrawer);
         storeFileDrStatus = OPENING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -948,6 +978,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oFileDrawer);
         end.of.loop(oFileDrawer, fFileDrawer);
         storeFileDrStatus = OPENING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -961,13 +996,20 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 73, 117, 93, 122)) {
         [ contents check
         if (storeFileDrStatus== OPEN1 && mouseY < 93) {
+          [ skip if clicking in drawer; it's empty
           goto(doneclick);
         }
         if (storeFileDrStatus== OPEN2 && mouseY < 102) {
+          [ skip if clicking in drawer; it's empty
           goto(doneclick);
         }
         if (storeFileDrStatus== OPEN3 && mouseY < 111) {
           if (!has("cassette tape")) {
+            [ play sound if walkman not active and no chimes
+            if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+              call(lgc.SetSound);
+              sound(s.GetItem, soundDone);
+            }
             get("cassette tape");
             work1 = 4;
             call(lgc.ScoreHandler);
@@ -977,12 +1019,18 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             set.cel(oFileDrawer, 2);
             force.update(oFileDrawer);      
           }
+          [ if clicking in drawer, nothing else to do
           goto(doneclick);
         }
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
         reverse.loop(oFileDrawer, fFileDrawer);
         storeFileDrStatus= CLOSING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -1029,6 +1077,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oDeskDrawer);
         end.of.loop(oDeskDrawer, fDeskDrawer);
         storeDeskDrStatus = OPENING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -1049,6 +1102,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         set.cel(oDeskDrawer, 4);
         reverse.loop(oDeskDrawer, fDeskDrawer);
         storeDeskDrStatus= CLOSING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -1121,8 +1179,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             set.priority(oCabinetDoor, 13);
             draw(oCabinetDoor);
           }
-          vDoorState = OPENING;
           end.of.loop(oCabinetDoor, fDoor);
+          vDoorState = OPENING;
+          [ play sound if walkman not active and no chimes
+          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            call(lgc.SetSound);
+            sound(s.OpenDrawer, soundDone);
+          }
         } else {
           print("Move closer.");
         }
@@ -1135,6 +1198,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ item check
       if (vDoorState == OPEN && mouseX > 129 && mouseX < 134 && mouseY > 120 && mouseY < 143) {
         if (!has("music sheet")) {
+          [ play sound if walkman not active and no chimes
+          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            call(lgc.SetSound);
+            sound(s.GetItem, soundDone);
+          }
           get("music sheet");
           print("You take the sheet from the cabinet.");
           [ + 3 points
@@ -1155,6 +1223,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         reset(fCheckClick);
         [ if open, ego must be close enough, so just close it without further checks
         reverse.loop(oCabinetDoor, fDoor);
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
+        }
         goto(doneclick);
       }
     }
@@ -1178,6 +1251,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           draw(oChestDrawer);
           end.of.loop(oChestDrawer, fChestDrawer);
           storeChestDrStatus = OPENING;
+          [ play sound if walkman not active and no chimes
+          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            call(lgc.SetSound);
+            sound(s.OpenDrawer, soundDone);
+          }
           [ if ego is too close, backup
           work1 = egoY;  [108,122 - 115,136 dx/dy=7/14=1/2
                          [101       108
@@ -1213,6 +1291,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         set.cel(oChestDrawer, 3);
         reverse.loop(oChestDrawer, fChestDrawer);
         storeChestDrStatus= CLOSING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -1295,6 +1378,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         set.cel(oChest, 0);
         end.of.loop(oChest, fChest);
         storeChestStatus= OPENING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
         if (!scoreChest) {
           set(scoreChest);
           work1 = 1;
@@ -1314,6 +1402,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ contents check 121,147 128,152
         if (storeChestStatus == OPEN && mouseX > 120 && mouseX < 129 && mouseY > 146 && mouseY < 166) {
           if (!has("scroll")) {
+            [ play sound if walkman not active and no chimes
+            if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+              call(lgc.SetSound);
+              sound(s.GetItem, soundDone);
+            }
             get("scroll");
             work1 = 3;
             call(lgc.ScoreHandler);
@@ -1327,6 +1420,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         set.cel(oChest, 3);
         reverse.loop(oChest, fChest);
         storeChestStatus= CLOSING;
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -1352,6 +1450,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             set.priority(oCoffin, 14);
             position(oCoffin, 28, 155);
             draw(oCoffin);
+            [ play sound if walkman not active and no chimes
+            if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+              call(lgc.SetSound);
+              sound(s.OpenCoffin, soundDone);
+            }
           }
           vCoffinState = OPENING;
           end.of.loop(oCoffin, fCoffin);
@@ -1366,7 +1469,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (mouseX > 27 && mouseX < 54 && mouseY > 136 && mouseY < 147) {
         [ if open, ego must be close enough, so just close it without further checks
         :closeCoffin
+        vCoffinState = CLOSING;
         reverse.loop(oCoffin, fCoffin);
+        [ play sound if walkman not active and no chimes
+        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          call(lgc.SetSound);
+          sound(s.CloseCoffin, soundDone);
+        }
         goto(doneclick);
       }
     }
@@ -1427,8 +1536,7 @@ if (fCoffin) {
 [ close coffin if ego moves away
 if ((vCoffinState == OPEN || vCoffinState == OPENING)) {
   if (!posn(ego, 24, 156, 54, 161)) {
-    vCoffinState = CLOSING;
-    reverse.loop(oCoffin, fCoffin);
+    goto(closeCoffin);
   }
 }
 

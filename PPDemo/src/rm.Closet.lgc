@@ -762,6 +762,12 @@ if (fDone && fallSeq == MOVE2WALL2) {
 
 if (fDone && fallSeq == FALLDOWN) {
   fallSeq = BREAKWALL;
+  [ drip could be a problem
+  if (playSound) {
+    stop.sound();
+    reset(soundDone);
+    reset(playSound);
+  }
   [ no walkman to worry about when wall breaks 
   work1 = 0;
   work2 = 100;  [ instrument 100
@@ -887,6 +893,12 @@ if (opendoor) {
     if (posn(ego, 97, 142, 106, 147)) {
       [ only play sound if walkman is not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
+        [ drip could be a problem
+        if (playSound) {
+          stop.sound();
+          reset(soundDone);
+          reset(playSound);
+        }
         call(lgc.SetSound);
         sound(s.DoorOpen, soundDone);
         set(playSound);
@@ -904,6 +916,12 @@ if (closedoor) {
       reverse.loop(door, fDoorDone);
       [ only play sound if walkman is not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
+        [ drip could be a problem
+        if (playSound) {
+          stop.sound();
+          reset(soundDone);
+          reset(playSound);
+        }
         call(lgc.SetSound);
         sound(s.DoorClose, soundDone);
         set(playSound);

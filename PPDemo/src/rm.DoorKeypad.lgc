@@ -111,6 +111,7 @@ if (newRoom) {
   if (currentTrack > 0 && currentTrack < 127) {
     currentTrack *= -1;
     stop.sound();
+    reset(musicDone);
   }
   [ 4channel, use FM
   set(4channelsound);
@@ -120,7 +121,9 @@ if (newRoom) {
   work1 = 0;
   work2 = 128;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-  
+  ++work1;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+
   [ display the picture on screen
   show.pic();
   [ use a finger cursor
@@ -341,7 +344,7 @@ if ((unlockdoor || controller(cRightClick))) {
   block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore palette
   block(SET.PALETTE, 0, &m10, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
-  new.room(rm.Hallway); [ ##LE001##
+  new.room(rm.Stairway); [ ##LE001##
 }
 
 return();

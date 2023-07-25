@@ -5,7 +5,7 @@
 [ 
 [
 [ ********************************************************************
-[ TODO: sound effects for tripping on rug, opening/closing picture, closing safe
+
 [ TODO: more said statements for office
 
 #define oSafe          o1
@@ -214,6 +214,12 @@ if (newRoom) {
   draw(ego);
   egoDir = STOPPED;
   
+  load.sound(s.GetItem);
+  load.sound(s.RugTrip);
+  load.sound(s.CloseSafe);
+  load.sound(s.OpenDrawer);
+  load.sound(s.CloseDrawer);
+  
   [ display the picture on screen
   show.pic();
   [ fade in
@@ -420,6 +426,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (posn(oFolder, ON.OBJ, 0, &mouseX, &mouseY)) {
       [ is ego close enough?
       if (obj.in.box(ego, 80, 138, 104, 151)) {
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.GetItem, soundDone);
+        }
         [ pick it up
         get("folder");
         erase(oFolder);
@@ -468,6 +479,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (mouseX > 77 && mouseX < 88 && mouseY > 103 && mouseY < 107) {
         [ is ego close enough?
         if (obj.in.box(ego, 73, 131, 97, 135)) {
+          [ play sound if walkman not active
+          if ((currentTrack == 0 || currentTrack > 128)) {
+            call(lgc.SetSound);
+            sound(s.GetItem, soundDone);
+          }
           [ get the memo
           get("memo");
           add.to.pic(vw.OfficeArt, 5, 0, 80, 107, 4, 15);
@@ -489,6 +505,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         if (officeDskDrStatus == OPEN1 && mouseY < 124) {
           [ clicking on top drawer item
           if (!has("Walkman")) {
+            [ play sound if walkman not active
+            if ((currentTrack == 0 || currentTrack > 128)) {
+              call(lgc.SetSound);
+              sound(s.GetItem, soundDone);
+            }
             get("Walkman");
             work1 = 2;
             call(lgc.ScoreHandler);
@@ -502,6 +523,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           if (officeDskDrStatus == OPEN2 && mouseY < 128) {
             [ clicking on bottom drawer item
             if (!has("post-it note")) {
+              [ play sound if walkman not active
+              if ((currentTrack == 0 || currentTrack > 128)) {
+                call(lgc.SetSound);
+                sound(s.GetItem, soundDone);
+              }
               get("post-it note");
               work1 = 3;
               call(lgc.ScoreHandler);
@@ -517,6 +543,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             set.cel(oDeskDrawer, 2);
             reverse.loop(oDeskDrawer, fDeskDrawer);
             officeDskDrStatus = CLOSING;
+            [ play sound if walkman not active
+            if ((currentTrack == 0 || currentTrack > 128)) {
+              call(lgc.SetSound);
+              sound(s.CloseDrawer, soundDone);
+            }
           }
         }
       } else {
@@ -536,6 +567,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oDeskDrawer);
         end.of.loop(oDeskDrawer, fDeskDrawer);
         officeDskDrStatus = OPENING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -553,6 +589,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oDeskDrawer);
         end.of.loop(oDeskDrawer, fDeskDrawer);
         officeDskDrStatus = OPENING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -565,11 +606,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
 
-        if (officeFileDrStatus == OPEN1 && mouseY < 113) {
+        if (officeFileDrStatus == OPEN1 && mouseY < 105) {
           goto(doneclick);
         }
-        if (officeFileDrStatus == OPEN2 && mouseY < 124) {
+        if (officeFileDrStatus == OPEN2 && mouseY < 114) {
           if (!has("notebook")) {
+            [ play sound if walkman not active
+            if ((currentTrack == 0 || currentTrack > 128)) {
+              call(lgc.SetSound);
+              sound(s.GetItem, soundDone);
+            }
             get("notebook");
             work1 = 3;
             call(lgc.ScoreHandler);
@@ -580,8 +626,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
           goto(doneclick);
         }
-        if (officeFileDrStatus == OPEN3 && mouseY < 131) {
+        if (officeFileDrStatus == OPEN3 && mouseY < 123) {
           if (!has("floppy disk")) {
+            [ play sound if walkman not active
+            if ((currentTrack == 0 || currentTrack > 128)) {
+              call(lgc.SetSound);
+              sound(s.GetItem, soundDone);
+            }
             get("floppy disk");
             work1 = 4;
             call(lgc.ScoreHandler);
@@ -596,6 +647,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         set.cel(oFileDrawer, 2);
         reverse.loop(oFileDrawer, fFileDrawer);
         officeFileDrStatus = CLOSING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -612,6 +668,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oFileDrawer);
         end.of.loop(oFileDrawer, fFileDrawer);
         officeFileDrStatus = OPENING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -629,6 +690,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oFileDrawer);
         end.of.loop(oFileDrawer, fFileDrawer);
         officeFileDrStatus = OPENING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -646,6 +712,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         draw(oFileDrawer);
         end.of.loop(oFileDrawer, fFileDrawer);
         officeFileDrStatus = OPENING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
       } else {
         print("Move closer.");
       }
@@ -662,9 +733,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       [ is ego close enough? 
       if (obj.in.box(ego, 38, 126, 65, 132)) {
-        reverse.loop(oPicture, fPicture);
-        pictureStatus = CLOSING;
-        erase(oSafe);
         [ if too close
         if (egoY < 130) {
           work1 = 130;
@@ -672,9 +740,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           set.loop(ego, 3);
           fix.loop(ego);
           move.obj.v(ego, egoX, work1, work2, fBackup);
-          reverse.loop(oPicture, fPicture);
-          pictureStatus = CLOSING;
-          erase(oSafe);
+        }
+        reverse.loop(oPicture, fPicture);
+        pictureStatus = CLOSING;
+        erase(oSafe);
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.CloseDrawer, soundDone);
         }
       } else {
         print("Move closer.");
@@ -689,6 +762,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 38, 126, 65, 132)) {
         end.of.loop(oPicture, fPicture);
         pictureStatus = OPENING;
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.OpenDrawer, soundDone);
+        }
         [ if too close
         if (egoY < 130) {
           work1 = 130;
@@ -696,8 +774,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           set.loop(ego, 3);
           fix.loop(ego);
           move.obj.v(ego, egoX, work1, work2, fBackup);
-          end.of.loop(oPicture, fPicture);
-          pictureStatus = OPENING;
         } 
       } else {
         print("Move closer.");
@@ -716,6 +792,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           set.cel(oSafe, 7);
           reverse.loop(oSafe, fSafe);
           safeStatus = CLOSING;
+          [ play sound if walkman not active
+          if ((currentTrack == 0 || currentTrack > 128)) {
+            call(lgc.SetSound);
+            sound(s.CloseSafe, soundDone);
+          }
           [ if too close
           if (egoY < 130) {
             work1 = 130;
@@ -723,8 +804,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             set.loop(ego, 3);
             fix.loop(ego);
             move.obj.v(ego, egoX, work1, work2, fBackup);
-            reverse.loop(oSafe, fSafe);
-            safeStatus = CLOSING;
           }
         } else {
           print("Move closer.");
@@ -736,6 +815,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (mouseX > 49 && mouseX < 56 && mouseY > 103 && mouseY < 115 && 
           safeStatus == OPEN) {
         if (!has("BaDASS manual")) {
+          [ play sound if walkman not active
+          if ((currentTrack == 0 || currentTrack > 128)) {
+            call(lgc.SetSound);
+            sound(s.GetItem, soundDone);
+          }
           get("BaDASS manual");
           print("You take the manual out of the safe.");
           set.loop(oSafe, 1);
@@ -906,12 +990,17 @@ if (!fOnTripLine && rugStatus == RUG_UP && egoHitSpecial && egoX < 100) {
     work1 -=2;
   }
   work1 *= -1; [ because trip loops are backwards!
-  work1 += 1; [ could 'bit.not' it...
+  work1 += 1;
   set.view(ego, vw.Tripping);
   set.loop.v(ego, work1);
   fix.loop(ego);
   program.control();
   tripCounter = 9;
+  [ play sound if walkman not active
+  if ((currentTrack == 0 || currentTrack > 128)) {
+    call(lgc.SetSound);
+    sound(s.RugTrip, soundDone);
+  }
 }
 
 [ check trip counter
@@ -945,7 +1034,7 @@ if (fDeskDrawer) {
   if (officeDskDrStatus == CLOSING) {
     erase(oDeskDrawer);
     officeDskDrStatus = CLOSED;
-  } else {
+        } else {
     get.posn(oDeskDrawer, work1, work2);
     if (work2 == 126) {
       officeDskDrStatus = OPEN1;

@@ -19,7 +19,6 @@
 
 [ ********************************************************************
 [ TODO: more said statements for lobby
-[ TODO: sound for picking up magazine
 
 [ **************************************
 [ LOCAL DEFINES
@@ -201,6 +200,7 @@ if (newRoom) {
   load.sound(s.Phone);
   load.sound(s.DoorOpen);
   load.sound(s.DoorClose);
+  load.sound(s.GetItem);
   
   [ if coming from hall after ego was kicked out
   if (!allowedPastLobby && previousRoom == rm.Hallway) {
@@ -462,6 +462,8 @@ if (gameRestored) {
 if (currentTrack > 0 && currentTrack < 128) {
   [ reset it
   currentTrack *= -1;
+  stop.sound();
+  reset(musicDone);
   if (warnWalkman) {
     print("You turn off the walkman as you enter the lobby to comply "
           "with the receptionist's instructions.");
@@ -2252,9 +2254,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
       distance(ego, oMagazine, work1);
       if (work1 < 20) {
+        [ play sound (walkman not active in lobby)
+        call(lgc.SetSound);
         print("You decide to pick up the old magazine.");
         get("magazine");
         erase(oMagazine);
+        sound(s.GetItem, soundDone);
         work1 = 3;
         call(lgc.ScoreHandler);
       } else {

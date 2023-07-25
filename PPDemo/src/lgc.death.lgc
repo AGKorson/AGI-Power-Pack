@@ -32,6 +32,10 @@ if (deathType < 254) {
   [ no more player control
   program.control();
   
+  [ freeze game clock (re-use s5 (volumelabel)
+  s5 = "%v13|2:%v12|2:%v11|2 ";
+  block(STR.FORMAT, &s5, &s5, 0); [ str.format(sINPUT, sRESULT)
+  
   [ change save button to restart
   set(noScript);
   load.view(vw.ButtonsUp);

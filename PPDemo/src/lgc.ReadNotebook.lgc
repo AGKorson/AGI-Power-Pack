@@ -7,8 +7,6 @@
 #define pageNum     v250
 #define pageImg     v251
 
-#define PAGES         5
-
 [ pause game clock while reading
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 
@@ -18,9 +16,8 @@ set(noScript);
 prevent.input();
 status.line.off();
 
-[ set colors
+[ save colors
 set.text.attribute(-1, 0);
-set.text.attribute(BLACK, WHITE);
 
 [ start with cover, which is page 1
 pageImg = pic.NotebookCover;
@@ -31,6 +28,11 @@ block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
 set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ add keyboard instructions
+set.text.attribute(DK_GRAY, BLACK);
+display(23, 35, "ESC = EXIT");
+display(23, 67, "RIGHT = >");
 
 [ hide objects while showing notebook
 block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
@@ -43,6 +45,7 @@ display(6, 34, "AMOS Meeting");
 display(7, 37, "Notes");
 display(8, 34, " 4/11/88 -");
 display(9, 34, " 8/15/89");
+
 [ fade back in
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
@@ -54,9 +57,17 @@ block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 if (!have.key()) {
   goto(waitforit);
 }
+
 [ ESC or right-click to exit
 if (lastChar == 27) {
   goto(close);
+}
+[ '<' for left, '>' for right
+if (lastChar == 60 && pageNum > 1) {
+  goto(pageleft);
+}
+if (lastChar == 62) {
+  goto(pageright);
 }
 
 [ left button down (can't check for controller
@@ -70,27 +81,34 @@ if (mouseBtn == 1) {
   }
   if ((work2 == 6 || work2 == 5)) {
     if (work2 == 6) {
-      [ page right
-      ++pageNum;
-      if (pageNum == PAGES) {
+      :pageright
+      if (pageNum == 4) {
         print.at("The last few pages are blank.", 1, 27, 35);
-        --pageNum;
         goto(waitforit);
-      } else {
-        pageImg = pic.NotebookPages;
+      }
+      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      ++pageNum;
+      pageImg = pic.NotebookPages;
+      if (pageNum == 2) {
+        [ show left help text
+        set.text.attribute(DK_GRAY, BLACK);
+        display(23, 3, "< = LEFT");
       }
     } else {
-      [ page left
+      :pageleft
+      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       --pageNum;
       if (pageNum == 1) {
         pageImg = pic.NotebookCover;
+        [ hide left text
+        set.text.attribute(WHITE, BLACK);
+        display(23, 3, "        ");
       } else {
         pageImg = pic.NotebookPages;
       }
     }
     load.pic(pageImg);
     draw.pic(pageImg);
-    block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
     show.pic();
     
     [ add text/images for current page
@@ -222,8 +240,16 @@ if (mouseBtn == 1) {
 goto(waitforit);
 
 :close
+[ score
+if (!scoreNotebook) {
+  set(scoreNotebook);
+  work1 = 2;
+  call(lgc.ScoreHandler);
+}
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ clear instruction line
+clear.lines(23, 23, BLACK);
 
 return();
 

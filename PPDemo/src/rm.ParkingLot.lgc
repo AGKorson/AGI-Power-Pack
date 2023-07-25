@@ -179,6 +179,8 @@ if (newRoom) {
   animate.obj(btnNo);
   set.view(btnYes, vw.ParkingLotArt);
   set.view(btnNo, vw.ParkingLotArt);
+  set.loop(btnYes, 0);
+  set.loop(btnNo, 0);
   ignore.objs(btnYes);
   ignore.objs(btnNo);
   ignore.blocks(btnYes);
@@ -241,7 +243,7 @@ set(forceAutoloop);
     egodir = STOPPED;
     draw(ego);
   }
-    
+  
   [ display the picture on screen
   show.pic();
   [ fade in
@@ -339,7 +341,7 @@ if (egoCarSeq) {
     if (currentTrack > 0 && currentTrack < 128) {
       currentTrack *= -1;
       stop.sound();
-      reset(playSound);
+      reset(musicDone);
     }
     [ play car-start sound, force 4-channel FM
     set(4channelsound);

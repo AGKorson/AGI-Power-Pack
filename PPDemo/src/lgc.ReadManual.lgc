@@ -7,8 +7,6 @@
 #define pageNum     v250
 #define pageImg     v251
 
-#define PAGES         7
-
 [ pause game clock while reading
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 
@@ -18,14 +16,8 @@ set(noScript);
 prevent.input();
 status.line.off();
 
-[ set colors
+[ save colors
 set.text.attribute(-1, 0);
-set.text.attribute(BLACK, WHITE);
-
-[[load.view(vw.ManualArt);
-[[[ ! IMPORTANT! since this is a called logic,
-[[[ anything loaded MUST be manually discarded 
-[[[ before returning!!
 
 [ start with cover, which is page 1
 pageImg = pic.ManualCover;
@@ -37,6 +29,11 @@ block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 cursoricon = C_DEFAULT;
 set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
 
+[ add keyboard instructions
+set.text.attribute(DK_GRAY, BLACK);
+display(23, 35, "ESC = EXIT");
+display(23, 67, "RIGHT = >");
+
 [ hide objects while showing manual
 block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
 load.pic(pageImg);
@@ -47,7 +44,8 @@ discard.pic(pageImg);
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
-[ mouse-clicks will set lastChar?
+[ mouse-clicks are converted to return/escape 
+[ by the have.key command)
 :waitforit
   lastChar = 0;
 if (!have.key()) {
@@ -57,6 +55,13 @@ if (!have.key()) {
 [ ESC or right-click to exit
 if (lastChar == 27) {
   goto(closemanual);
+}
+[ '<' for left, '>' for right
+if (lastChar == 60 && pageNum > 1) {
+  goto(pageleft);
+}
+if (lastChar == 62) {
+  goto(pageright);
 }
 
 [ left button down (can't check for controller
@@ -70,15 +75,14 @@ if (mouseBtn == 1) {
   }
   if ((work2 == 6 || work2 == 5)) {
     if (work2 == 6) {
-      [ page right
-      ++pageNum;
-      if (pageNum == PAGES) {
+      :pageright
+      if (pageNum == 6) {
         print("The rest of the manual is just a bunch of boring "
               "text. It's not worth your time to read it.");
-        --pageNum;
         [ redraw covered up text
         set.text.attribute(BLACK, WHITE);
         display( 9,  9, " Default Interface Port:");
+        display(13,  9, " Building Subsystem reset");
         display( 8, 44, "ating System that is comp-");
         display( 9, 44, "atible with one of these");
         display(10, 44, "standards:");
@@ -86,22 +90,32 @@ if (mouseBtn == 1) {
         display(12, 44, "  \x07 Sun OS version 4.4");
         display(13, 44, "  \x07 MSDOS Mainframe OS");
         goto(waitforit);
-      } else {
-        pageImg = pic.ManualPages;
+      }
+      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      ++pageNum;
+      pageImg = pic.ManualPages;
+      if (pageNum == 2) {
+        [ show left help text
+        set.text.attribute(DK_GRAY, BLACK);
+        display(23, 3, "< = LEFT");
       }
     } else {
-      [ page left
+      :pageleft
       --pageNum;
+      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       if (pageNum == 1) {
         pageImg = pic.ManualCover;
+        [ hide left text
+        set.text.attribute(WHITE, BLACK);
+        display(23, 3, "        ");
       } else {
         pageImg = pic.ManualPages;
       }
     }
     load.pic(pageImg);
     draw.pic(pageImg);
-    block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
     show.pic();
+    
     if (pageNum > 1) {
       [ add text/images for current page
       if (pageNum == 2) {
@@ -255,11 +269,17 @@ if (mouseBtn == 1) {
 goto(waitforit);
 
 :closemanual
+[ score
+if (!scoreManual) {
+  set(scoreManual);
+  work1 = 2;
+  call(lgc.ScoreHandler);
+}
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+[ clear instruction line
+clear.lines(23, 23, BLACK);
 
-[[[[ ! All resources must be manually discarded before returning
-[[[discard.view(vw.ManualArt);
 return();
 
 [ **************************************

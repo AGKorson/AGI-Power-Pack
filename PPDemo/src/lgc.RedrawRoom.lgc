@@ -11,6 +11,9 @@
 [
 [ ********************************************************************
 
+[ don't use scripting when redrawing
+set(noScript);
+
 [ restore the current room
 load.pic(currentRoom);
 draw.pic(currentRoom);
@@ -158,6 +161,7 @@ block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
 [ restore colors
 set.text.attribute(0, -1);
+
 [ turn scripting back on
 reset(noScript);
 [ and allow input
@@ -166,6 +170,9 @@ status.line.on();
 
 [ restart the clock
 block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+
+[ make sure no extraneous clicks after returning
+set(resetClicks);
 
 return();
 

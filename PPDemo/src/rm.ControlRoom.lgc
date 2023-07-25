@@ -6,7 +6,6 @@
 [
 [ ********************************************************************
 [ TODO: more said statements for control room
-[ TODO: sound effect for system failure
 
 #define showMOCC         f220
 #define showCAISOCC      f221
@@ -16,7 +15,6 @@
 #define showOFROCC       f225
 #define showERIDOCC      f226
 #define nearTerminal     f227
-
 
 [ **************************************
 [ FIRST CYCLE ONLY
@@ -58,7 +56,7 @@ if (newRoom) {
     add.to.pic(vw.CtrlRoomArt, 0, 5, 99, 120, 6, 15);
   } else {
     add.to.pic(vw.CtrlRoomArt, 1, 5, 99, 120, 6, 15);
-  }    
+  }
   
   [ if access system hasn't been reset, door is closed
   if (!resetBaDASS) {
@@ -86,6 +84,9 @@ if (newRoom) {
   [ add ego to the room
   draw(ego);
   
+  load.sound(s.GetItem);
+  load.sound(s.SystemFail);
+  
   [ make sure input is on
   accept.input();
   
@@ -99,7 +100,12 @@ if (newRoom) {
   
   [ if coming from stairwell, and access system not set, 
   if (previousRoom == rm.Stairway && !resetBaDASS) {
-    shake.screen(2);
+    [ play sound if walkman not active
+    if ((currentTrack == 0 || currentTrack > 128)) {
+      call(lgc.SetSound);
+      sound(s.SystemFail, soundDone);
+    }
+    shake.screen(1);
     work1 = 0;
     :flickerit
       block(FADE.OUT, 0, 2, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -276,11 +282,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         work1 = cp.Terminal;
         if (obj.in.room("floppy disk", work1)) {
-            print("You undo the door latch and remove the disk.");
-            reset(floppyInserted);
-            get("floppy disk");
-            work1 = 4;
-            call(lgc.ScoreHandler);
+          [ play sound if walkman not active
+          if ((currentTrack == 0 || currentTrack > 128)) {
+            call(lgc.SetSound);
+            sound(s.GetItem, soundDone);
+          }
+          print("You undo the door latch and remove the disk.");
+          reset(floppyInserted);
+          get("floppy disk");
+          work1 = 4;
+          call(lgc.ScoreHandler);
         } else {
           print("The disk drive is empty.");
         }
@@ -433,6 +444,11 @@ if ((said("remove", "disk") || said("remove", "disk", "drive") ||
   work1 = cp.Terminal;
   if (obj.in.room("floppy disk", work1)) {
     if (obj.in.box(ego, 64, 133, 104, 138)) {
+      [ play sound if walkman not active
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        call(lgc.SetSound);
+        sound(s.GetItem, soundDone);
+      }
       print("Ok.");
       reset(floppyInserted);
       get("floppy disk");
@@ -463,6 +479,8 @@ if (showMOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -473,6 +491,8 @@ if (showCAISOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -486,6 +506,8 @@ if (showESADOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -496,6 +518,8 @@ if (showICAPOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -506,6 +530,8 @@ if (showRANDOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -516,6 +542,8 @@ if (showOFROCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -526,6 +554,8 @@ if (showERIDOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
   }
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
@@ -538,7 +568,7 @@ if (egoHitSpecial && egoX > 100) {
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   [ fade out, then change room
   block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(rm.Storeroom);  [ ##LE004##
+  new.room(rm.StoreRoom);  [ ##LE004##
 }
 
 if (egoHitSpecial && egoX < 60) {

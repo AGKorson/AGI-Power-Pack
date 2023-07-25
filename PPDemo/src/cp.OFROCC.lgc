@@ -86,7 +86,7 @@ if (!enableOFROCC) {
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
-    new.room.v(previousRoom); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
@@ -101,7 +101,7 @@ if(newRoom) {
   [ if first time, score it
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 16); [ bit.and(BYVAL, VAR, MASK)
-  if (work1 == 16) {
+  if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 16); [ bit.or(BYVAL, VAR, MASK)
@@ -165,6 +165,8 @@ if(newRoom) {
   set.loop(oSlider, LP_SLIDER);
   set.cel(oSlider, 0);
   [ position depends on turbo mode and animation interval
+  [ (turbo mode is always set)
+  set(tmpTurbo);
   cursorX = animationInterval;
   if (tmpTurbo) {
     cursorX *= 2;
@@ -185,14 +187,8 @@ if(newRoom) {
   set.view(oCheck, vw.cp.OFROCC);
   set.loop(oCheck, LP_CHECK);
   position(oCheck, 5, 88);
-  [ cel depends on current turbo mode
-  if (turboMode) {
-    set(tmpTurbo);
-    set.cel(oCheck, 1);
-  } else {
-    reset(tmpTurbo);
-    set.cel(oCheck, 0);
-  }
+  [ cel starts enabled
+  set.cel(oCheck, 1);
   stop.cycling(oCheck);
   draw(oCheck);
   
@@ -607,16 +603,22 @@ if (btnAction == 0) {
 
 if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   if (btnAction == B_OK) {
-    [ keep current speed settings
-    print.at("Speed setting changed.", 5, 6, 31);
-  } else {
-    [ restore animation interval and turbomode
-    if (tmpTurbo) {
-      set(turboMode);
-    } else {
-      reset(turboMode);
+    [ save animation interval (but always stay in turbomode)
+    if (!tmpTurbo) {
+      work1 = 1;
+      cycle.time(TOGGLE.TURBO, work1);
+      animationInterval *= 3;
     }
+    call(lgc.SaveOptions);
+    print.at("Speed setting updated.", 3, 6, 31);
+  } else {
+    [ restore animation interval 
     animationInterval = tmpInterval;
+    [ always stay in turbo mode
+    if (!tmpTurbo) {
+      work1 = 1;
+      cycle.time(TOGGLE.TURBO, work1);
+    }
   }
   
   [ restore ego movement parameters
@@ -628,7 +630,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
   
   [ go back to previous room
-  new.room.v(previousRoom); 
+  new.room(rm.ControlRoom); [ ##LE002##
 }
 
 [ changing turbo mode

@@ -35,6 +35,7 @@
 
 [ ********************************************************************
 
+[**** BEGIN DEBUG CODE
 [:wait
 [if (!have.key()) {
 [  goto(wait);
@@ -42,6 +43,7 @@
 [print("char: %v19");
 [lastChar = 0;
 [goto(wait);
+[**** END DEBUG CODE
 
 [ **************************************
 [ LOCAL DEFINES
@@ -313,7 +315,7 @@ if (newRoom) {
     [ skip to next track
     ++currentTrack;
     [ if side is done
-    if ((currentTrack == 42 || currentTrack == 85)) {
+    if ((currentTrack == 43 || currentTrack == 85)) {
       [ stop the tape
       currentTrack = 0;
     }
@@ -323,6 +325,12 @@ if (newRoom) {
 [ **************************************
 [ EVERY CYCLE
 [ **************************************
+
+[ check for click-resets when coming from cutscenes
+if (resetClicks) {
+  reset(resetClicks);
+  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM)
+}
 
 [**** BEGIN DEBUG CODE
 if (controller(cLogInput)) {
@@ -397,21 +405,22 @@ if (!disableGameFunctions) {
         if (work1 >= 18) {
           [ set to max vol
           set(soundOn);
-          attenuation = 0;
+          work1 = 0;
         } else { [ 0-17
           if (work1 <= 2) {
             [ sound at minimum volume
-  [          reset(soundOn);
-            attenuation = 63;
+            work1 = 63;
           } else { [ 3-17
             set(soundOn);
             [ calculate new sound attenuations from clicked value
             work1 *= -1;
             work1 += 18;  [15-1
             work1 *= 4;
-            attenuation = work1;
           }
+        }
+        if (attenuation != work1) {
           [ update the config file
+          attenuation = work1;
           call(lgc.SaveOptions);
         }
       }
@@ -814,7 +823,7 @@ if (closetTimerDone) {
   reset(closetTimerDone);
   reset(closetopen);
   if (currentRoom > 6) {
-    print("%l90|8");
+    print("%l90|9");
     set(trapped);
   }
 }
@@ -865,13 +874,8 @@ if (musicDone) {
     set(noScript);
     block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     ++currentTrack;
-    if (cassetteSideB) {
-      work1 = 106;
-    } else {
-      work1 = 63;
-    }
     [ check if end of side is reached
-    if (currentTrack >= work1) {
+    if ((currentTrack == 43 || currentTrack == 85)) {
       currentTrack = 0;
     } else {
       [ make sure no sound effects are playing
@@ -879,8 +883,8 @@ if (musicDone) {
       [ play next track
       set(noScript);
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-      work1 = &musicDone;
       call(lgc.SetSound);
+      work1 = &musicDone;
       block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound.v(vSNDNUM, vDONEFLAG)
     }
     reset(noScript);
@@ -981,7 +985,7 @@ if (haveInput && !haveMatch && unknownWordNum > 0) {
   random(17, 19, rndNum);
   print.v(rndNum);
 }
-  
+
 [ finally, if there is input that hasn't 
 [ been recognized yet
 if (haveInput && !haveMatch) {

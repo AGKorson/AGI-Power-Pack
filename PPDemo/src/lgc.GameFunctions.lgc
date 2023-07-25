@@ -390,7 +390,7 @@ if (controller(cChooseItem)) {
       }
       [ PQ idea list
       if (selectedItem == 13) {
-[        call(lgc.PQList);
+        selectedItem += 100;
         call(lgc.ExamineItem);
         call(lgc.RedrawRoom);
       }
@@ -580,6 +580,7 @@ return();
 [ tape
 #message 8 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
             "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
+#message 9 "Uh oh. You suddenly get the feeling you forgot to do something important back in the closet."
 
 #message 11 gameAboutMsg
 #message 12 gameVersionMsg

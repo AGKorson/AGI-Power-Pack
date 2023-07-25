@@ -16,7 +16,12 @@ if (controller(cLeftClick)) {
         set(floppyInserted);
         work1 = cp.Terminal;
         put("floppy disk", work1);
-        work1 = -4;
+        [ first time awards bonus points
+        if (scoreFloppy) {
+          work1 = -4;
+        } else {
+          work1 = -2;
+        }
         call(lgc.ScoreHandler);
       } else {
         print("Move closer.");

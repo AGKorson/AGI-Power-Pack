@@ -18,9 +18,8 @@ set(noScript);
 prevent.input();
 status.line.off();
 
-[ set colors
+[ save colors
 set.text.attribute(-1, 0);
-set.text.attribute(BLACK, WHITE);
 
 load.view(vw.MagazineArt);
 [ ! IMPORTANT! since this is a called logic,
@@ -36,6 +35,11 @@ block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
 set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+
+[ add keyboard instructions
+set.text.attribute(DK_GRAY, BLACK);
+display(23, 35, "ESC = EXIT");
+display(23, 67, "RIGHT = >");
 
 [ hide objects while showing magazine
 block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
@@ -58,6 +62,13 @@ if (!have.key()) {
 if (lastChar == 27) {
   goto(closemag);
 }
+[ '<' for left, '>' for right
+if (lastChar == 60 && pageNum > 1) {
+  goto(pageleft);
+}
+if (lastChar == 62 && pageNum < 5) {
+  goto(pageright);
+}
 
 [ left button down (can't check for controller
 [ because normal AGI cycle is skipped)
@@ -70,30 +81,46 @@ if (mouseBtn == 1) {
   }
   if ((work2 == 6 || work2 == 5)) {
     if (work2 == 6) {
-      [ page right
+      :pageright
+      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       ++pageNum;
-      if (pageNum == PAGES) {
+      if (pageNum == 5) {
         pageImg = pic.MagazineEnd;
+        [ hide right help text
+        set.text.attribute(WHITE, BLACK);
+        display(23, 67, "         ");
       } else {
         pageImg = pic.MagazinePages;
+        if (pageNum == 2) {
+          [ show left help text
+          set.text.attribute(DK_GRAY, BLACK);
+          display(23, 3, "< = LEFT");
+        }
       }
     } else {
-      [ page left
+      :pageleft
+      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       --pageNum;
       if (pageNum == 1) {
         pageImg = pic.MagazineCover;
+        [ hide left text
+        set.text.attribute(WHITE, BLACK);
+        display(23, 3, "        ");
       } else {
         pageImg = pic.MagazinePages;
+        if (pageNum == 4) {
+          [ show right help tex
+          set.text.attribute(DK_GRAY, BLACK);
+          display(23, 67, "RIGHT = >");
+        }
       }
     }
     load.pic(pageImg);
     draw.pic(pageImg);
-    block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
     show.pic();
     if (pageNum > 1) {
       [ add text/images for current page
       if (pageNum == 2) {
-      [ display( 2,  9, "0123456789abcdefhgij0123456789");
         display( 3,  9, "      Table of Contents:");
         set.text.attribute(BLUE, WHITE);
         display( 6,  9, "  Sierra's Newest Games     3");
@@ -101,7 +128,6 @@ if (mouseBtn == 1) {
         display(10,  9, "  Interview with Roberta    6");
         display(12,  9, "  What exactly is a Modem?  7");
         display(14,  9, "  Heard it in the Hallway   8");
-      [ display( 2, 41, "0123456789abcdefhgij0123456789");
         set.text.attribute(LT_BLUE, WHITE);
         display( 3, 41, "   SIERRA'S NEWEST GAMES" );
         set.text.attribute(BLACK, WHITE);
@@ -126,8 +152,8 @@ if (mouseBtn == 1) {
         display(20, 56, "3");
       }
       if (pageNum == 3) {
+        [ add Ken's photo
         add.to.pic(vw.MagazineArt, 0, 0, 48, 58, 4, 4);
-      [ display( 2,  9, "0123456789abcdefhgij0123456789");
         set.text.attribute(LT_BLUE, WHITE);
         display( 3,  9, "President's");
         display( 4,  9, "Corner");
@@ -147,7 +173,6 @@ if (mouseBtn == 1) {
         display(17,  9, "focused on pushing new tech-");
         display(18,  9, "nologies to the limit. Multi-");
         display(19,  9, "media, as it applies to per-");
-      [ display( 2, 41, "0123456789abcdefhgij0123456789");
         display( 4, 41, "sonal computers is a great");
         display( 5, 41, "example of this. Phillips");
         display( 6, 41, "Corporation is introducing a");
@@ -168,7 +193,6 @@ if (mouseBtn == 1) {
         display(20, 56, "5");
       }
       if (pageNum == 4) {
-      [ display( 2,  9, "0123456789abcdefhgij0123456789");
         set.text.attribute(LT_BLUE, WHITE);
         display( 3,  9, "   INTERVIEW WITH ROBERTA");
         set.text.attribute(CYAN, WHITE);
@@ -189,7 +213,6 @@ if (mouseBtn == 1) {
         display(17,  9, "like a story than a quest, you");
         display(18,  9, "want to get to the end, and ");
         display(19,  9, "find out the truth.");
-      [ display( 2, 41, "0123456789abcdefhgij0123456789");
         set.text.attribute(LT_BLUE, WHITE);
         display( 3, 41, " WHAT EXACTY IS A MODEM?");
         set.text.attribute(BLACK, WHITE);
@@ -214,7 +237,6 @@ if (mouseBtn == 1) {
         display(20, 56, "7");
       }
       if (pageNum == 5) {
-      [ display( 2, 25, "0123456789abcdefhgij0123456789");
         set.text.attribute(LT_BLUE, WHITE);
         display( 3, 25, "   HEARD IT IN THE HALLWAY");
         set.text.attribute(BLACK, WHITE);
@@ -249,8 +271,8 @@ goto(waitforit);
 
 :closemag
 [ score
-if (!readMagazine) {
-  set(readMagazine);
+if (!scoreMagazine) {
+  set(scoreMagazine);
   work1 = 2;
   call(lgc.ScoreHandler);
 }

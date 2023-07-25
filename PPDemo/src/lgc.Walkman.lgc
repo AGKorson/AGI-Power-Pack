@@ -16,11 +16,13 @@
 #define   H_PLAY       11
 #define   H_COVER      12
 #define   H_INSIDE     13
-
 #define tmpCursor     v241
+#define counter1      v242
+#define counter2      v243
 
 #define coverClosed   f240
 #define mouseDown     f241
+#define flipCassette  f242
 
 [ stop the game clock while examining items
 block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
@@ -33,6 +35,9 @@ status.line.off();
 
 [ fade out until done loading
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+set.text.attribute(-1, 0);
+set.text.attribute(DK_GRAY, BLACK);
 
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
@@ -74,9 +79,25 @@ if ( currentTrack > 0 && currentTrack < 128) {
 block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
-lastChar = 0;
 :waitforit
+  lastChar = 0;
 
+  [ do nothing if flipping cassette
+  if (flipCassette) {
+    --counter2;
+    if (counter2 == 0) {
+      counter2 = 4;
+      --counter1;
+    }
+    
+    if (counter1 == 0) {
+      reset(flipCassette);
+      set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    } else {
+      goto(waitforit);
+    }
+  }
+  
   [ get button by priority color
   if (mouseY < 168) {
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
@@ -93,19 +114,19 @@ lastChar = 0;
         tmpCursor = C_DEFAULT;
       }
       if (work1 == H_FASTFWD) {
-        display(23, 32, " fast forward ");
+        display(23, 33, "fast forward");
         tmpCursor = C_USE;
       }
       if (work1 == H_REWIND) {
-        display(23, 32, "    rewind    ");
+        display(23, 36, "rewind");
         tmpCursor = C_USE;
       }
       if (work1 == H_STOP_EJ) {
-        display(23, 32, "  stop/eject  ");
+        display(23, 34, "stop/eject");
         tmpCursor = C_USE;
       }
       if (work1 == H_PLAY) {
-        display(23, 32, "     play     ");
+        display(23, 37, "play");
         tmpCursor = C_USE;
       }
       if (work1 == H_COVER) {
@@ -120,6 +141,7 @@ lastChar = 0;
         clear.lines(23, 23, BLACK);
         if (has("cassette tape")) {
           tmpCursor = C_TAPE;
+          display(23, 28, "(press SPACE to flip)");
         } else {
           if (cassetteLoaded) {
             tmpCursor = C_USE;
@@ -138,18 +160,13 @@ lastChar = 0;
 
   [ check for track end
   if (musicDone) {
+    reset(musicDone);
     [ discard current track
     block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     [ next track
     ++currentTrack;
-    if (cassetteSideB) {
-      if (currentTrack == 42) {
-        currentTrack = 0;
-      }
-    } else {
-      if (currentTrack == 85) {
-        currentTrack = 0;
-      }
+    if ((currentTrack == 43 || currentTrack == 85)) {
+      currentTrack = 0;
     }
     [ if another track is now active, play it
     if (currentTrack > 0) {
@@ -159,14 +176,49 @@ lastChar = 0;
     }
   }
   
-[ loop until button clicked or key pressed
-if (!have.key()) {
+[[ loop until button clicked or key pressed
+if ((mouseBtn != 0 || have.key())) {
+} else {
   goto(waitforit);
 }
+[if (!have.key() && mouseBtn == 0) {
+[  goto(waitforit);
+[}
 
-[ ESC or right-click to exit
 if (lastChar == 27) {
   goto(exit);
+}
+
+[ space to flip cassette
+[if (lastChar == 32 && has("cassette tape") && !coverClosed) {
+if (lastChar == 32 && cursoricon == C_TAPE) {
+  toggle(cassetteSideB);
+  [ adjust position
+  if (currentTrack == 0) {
+    [ move to beginning of new side
+    if (cassetteSideB) {
+      currentTrack = -43;
+    } else {
+      currentTrack = -1;
+    }
+  } else {
+    [ -1=-85(0); -2=-84; ... -41=-45; -42=-44; -43=-43(0)
+    [ 
+    [ new=-86-old
+    work1 = -86;
+    if ((work1 == -43 || work1 == -85)) {
+      work1 = 0;
+    }
+    work1 -= currentTrack;
+    currentTrack = work1;
+  }
+  [ show a wait cursor for a bit
+  set(flipCassette);
+  counter1 = 255;
+  counter2 = 3;
+  cursoricon = C_WAIT;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  goto(waitforit);
 }
 
 [ clear mouse flag when button is up
@@ -189,10 +241,10 @@ if (mouseBtn == 1 && !mouseDown) {
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
       [ advance to next track, based on side
-      [ 1 - 41 means playing side A
-      [ -1 to -41 means paused/stopped side A
-      [ 42 - 84 means playing side B
-      [ -42 to -84 means paused side B
+      [ 1 - 42 means playing side A
+      [ -1 to -42 means paused/stopped side A
+      [ 43 - 84 means playing side B
+      [ -43 to -84 means paused side B
       [ 0 means end of tape
       if (currentTrack > 0 && currentTrack < 127) {
         [ stop current track
@@ -200,14 +252,8 @@ if (mouseBtn == 1 && !mouseDown) {
         block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
         [ move to next track
         ++currentTrack;
-        if (cassetteSideB) {
-          if (currentTrack == 85) {
-            currentTrack = 0;
-          }
-        } else {
-          if (currentTrack == 42) {
-            currentTrack = 0;
-          }
+        if ((currentTrack == 43 || currentTrack == 85)) {
+          currentTrack = 0;
         }
         [ if another track is now active, play it
         if (currentTrack > 0) {
@@ -219,14 +265,8 @@ if (mouseBtn == 1 && !mouseDown) {
         if (currentTrack > 128) {
           [ advance but don't play
           --currentTrack;
-          if (cassetteSideB) {
-            if (currentTrack == -85) {
-              currentTrack = 0;
-            }
-          } else {
-            if (currentTrack == -42) {
-              currentTrack = 0;
-            }
+          if ((currentTrack == -43 || currentTrack == -85)) {
+            currentTrack = 0;
           }
         }
       }
@@ -238,10 +278,10 @@ if (mouseBtn == 1 && !mouseDown) {
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
       [ go back to previous track, based on side
-      [ 1 - 41 means playing side A
-      [ -1 to -41 means paused/stopped side A
-      [ 42 - 84 means playing side B
-      [ -42 to -84 means paused side B
+      [ 1 - 42 means playing side A
+      [ -1 to -42 means paused/stopped side A
+      [ 43 - 84 means playing side B
+      [ -43 to -84 means paused side B
       [ 0 means end of tape
       if (currentTrack > 0 && currentTrack < 127) {
         [ stop current track
@@ -250,8 +290,8 @@ if (mouseBtn == 1 && !mouseDown) {
         [ move to previous track
         --currentTrack;
         if (cassetteSideB) {
-          if (currentTrack == 41) {
-            currentTrack = 42;
+          if (currentTrack == 42) {
+            currentTrack = 43;
           }
         } else {
           if (currentTrack == 0) {
@@ -263,13 +303,22 @@ if (mouseBtn == 1 && !mouseDown) {
         work2 = &musicDone;
         block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
       } else {
-        if (currentTrack > 128) {
-          [ rewind but don't play
-          ++currentTrack;
+        [ paused - rewind but don't play
+        if (currentTrack == 0) {
+          [ at end; back up
           if (cassetteSideB) {
-            if (currentTrack == -41) {
-              currentTrack = -42;
-            }
+            currentTrack = -84;
+          } else {
+            currentTrack = -42;
+          }
+        } else {
+          [ rewind by moving closer to start
+          ++currentTrack;
+[          if (currentTrack == 0) {
+[            currentTrack = -1;
+[          }
+          if (currentTrack == -42) {
+            currentTrack = -43;
           }
         }
       }
@@ -279,10 +328,10 @@ if (mouseBtn == 1 && !mouseDown) {
   [ stop/eject
   if (work1 == 10) {
     if (currentTrack > 0 && currentTrack < 128) {
+      currentTrack *= -1;
       stop.sound();
       reset(musicDone);
       block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
-      currentTrack *= -1;
     } else {
       if (coverClosed) {
         reset(coverClosed);
@@ -294,6 +343,17 @@ if (mouseBtn == 1 && !mouseDown) {
         load.pic(work2);
         overlay.pic(work2);
         discard.pic(work2);
+        [ if loaded, add correct side marker
+        if (cassetteLoaded && !coverClosed) {
+          if (cassetteSideB) {
+            [ add a 'B'
+            s20 = "F000F3F75379B90A19111002FF";
+          } else {
+            [ add an 'A'
+            s20 = "F000F3F7537CBC3AF7527802FF";
+          }
+          block(PIC.DRAW, 0, &s20, 0); [ pic.draw(FILLSTYLE, sCMDS)
+        }
         show.pic();
       }
     }
@@ -350,6 +410,7 @@ if (mouseBtn == 1 && !mouseDown) {
       discard.pic(work2);
       show.pic();
       tmpCursor = C_TAPE;
+      display(23, 28, "(press SPACE to flip)");
     } else {
       if (has("cassette tape")) {
         work2 = ovl.Walkman4;
@@ -358,8 +419,17 @@ if (mouseBtn == 1 && !mouseDown) {
         load.pic(work2);
         overlay.pic(work2);
         discard.pic(work2);
+        if (cassetteSideB) {
+          [ add a 'B'
+          s20 = "F000F3F75379B90A19111002FF";
+        } else {
+          [ add an 'A'
+          s20 = "F000F3F7537CBC3AF7527802FF";
+        }
+        block(PIC.DRAW, 0, &s20, 0); [ pic.draw(FILLSTYLE, sCMDS)
         show.pic();
         tmpCursor = C_USE;
+        clear.lines(23, 23, BLACK);
       }
     }
   }
@@ -381,6 +451,12 @@ reset(noScript);
 
 [ fade out during the switch
 block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+
+[ clear the help text
+clear.lines(23, 24, BLACK);
+
+[ restore attributes
+set.text.attribute(0, -1);
 
 return();
 

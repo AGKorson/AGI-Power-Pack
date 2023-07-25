@@ -101,7 +101,7 @@ if (!enableICAPOCC) {
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
-    new.room.v(previousRoom); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
@@ -116,7 +116,7 @@ if(newRoom) {
   [ if first time, score it
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 4); [ bit.and(BYVAL, VAR, MASK)
-  if (work1 == 4) {
+  if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 4); [ bit.or(BYVAL, VAR, MASK)
@@ -989,10 +989,161 @@ if (btnAction == B_SET_COL) {
 }
 
 if (btnAction == B_RESTORE) {
-  [ TODO: restore default value for this color
-  [ (this returns to whatever it was edited to; NOT the default
-  [ AGI color; maybe rename this 'cancel edit'?
-  [ by forcing an index value refresh
+  [ restore default value for current color
+  if (colorindex == 0) {
+    [ BLACK
+    work1 = 90;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    editPal = "000000";
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 1) {
+    [ BLUE
+    work1 = 84;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 6;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "00002A";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 2) {
+    [ GREEN
+    work1 = 78;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 12;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "002A00";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 3) {
+    [ CYAN
+    work1 = 72;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 18;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "002A2A";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 4) {
+    [ RED
+    work1 = 66;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 24;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "2A0000";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 5) {
+    [ MAGENTA
+    work1 = 60;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 30;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "2A002A";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 6) {
+    [ BROWN
+    work1 = 54;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 36;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "2A1500";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 7) {
+    [ LT GRAY
+    work1 = 48;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 42;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "2A2A2A";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 8) {
+    [ DK GRAY
+    work1 = 42;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 48;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "151515";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 9) {
+    [ LT BLUE
+    work1 = 36;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 54;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "15153F";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 10) {
+    [ LT GREEN
+    work1 = 30;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 60;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "153F15";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 11) {
+    [ LT CYAN
+    work1 = 24;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 66;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "153F3F";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 12) {
+    [ LT RED
+    work1 = 18;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 72;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "3F1515";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 13) {
+    [ LT MAGENTA
+    work1 = 12;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 78;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "3F153F";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 14) {
+    [ YELLOW
+    work1 = 6;
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    work1 = 84;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "3F3F15";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+  }
+  if (colorindex == 15) {
+    [ WHITE
+    work1 = 90;
+    block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    strTemp = "3F3F3F";
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+  }
   colorindex = -1;
 }
 
@@ -1010,6 +1161,21 @@ if (btnAction == B_PREV_PAL) {
     load.pic(work1);
     draw.pic(work1);
     discard.pic(work1);
+    [ temporarily hide objects
+    if (cursormode) {
+      erase(oCursorL);
+      erase(oCursorR);
+      erase(oCursorT);
+      erase(oCursorB);
+    }
+    erase(optCursor);
+    erase(oSliderRed);
+    erase(oSliderGreen);
+    erase(oSliderBlue);
+    
+    [ clear input line
+    clear.lines(22, 22, BLACK);
+
     show.pic();
   
     [ fade in from black, 2msec fade value
@@ -1032,6 +1198,17 @@ if (btnAction == B_PREV_PAL) {
     draw.pic(currentRoom);
     discard.pic(currentRoom);
     show.pic();
+    [ restore objects
+    if (cursormode) {
+      draw(oCursorL);
+      draw(oCursorR);
+      draw(oCursorT);
+      draw(oCursorB);
+    }
+    draw(optCursor);
+    draw(oSliderRed);
+    draw(oSliderGreen);
+    draw(oSliderBlue);
     [ redraw button text by recursing
     set(refresh);
     call(cp.ICAPOCC);

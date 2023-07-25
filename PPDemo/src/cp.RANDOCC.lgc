@@ -88,7 +88,7 @@ if (!enableRANDOCC) {
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
-    new.room.v(previousRoom); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
@@ -103,7 +103,7 @@ if (newRoom) {
   [ if first time, score it
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 2); [ bit.and(BYVAL, VAR, MASK)
-  if (work1 == 2) {
+  if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 2); [ bit.or(BYVAL, VAR, MASK)
@@ -560,7 +560,7 @@ if (btnAction == B_OK) {
   msgBoxBorder = tmpBorder;
   [ make the change
   block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG);
-  print.at("Message box colors have been changed.", 5, 6, 31);
+  print.at("Message box colors have been updated.", 5, 6, 31);
   
   [ restore ego movement parameters
   egoX = egoPrevX;

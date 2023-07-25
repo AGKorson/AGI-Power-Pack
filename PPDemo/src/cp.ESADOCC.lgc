@@ -154,7 +154,7 @@ if(newRoom) {
   [ if first time, score it
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 8); [ bit.and(BYVAL, VAR, MASK)
-  if (work1 == 8) {
+  if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 8); [ bit.or(BYVAL, VAR, MASK)

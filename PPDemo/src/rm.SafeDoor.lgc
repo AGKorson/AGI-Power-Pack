@@ -5,6 +5,9 @@
 [ views for dial numbers take up A LOT of memory; need to split them
 [ into two views, and use memory-swap techniques to manage them
 [
+[ turn right for 1st num, left one full turn, then to 2nd
+[ then right to 3rd num
+[
 [ ********************************************************************
 
 #define oBlank1        o1
@@ -40,8 +43,7 @@
 #define spinRight     f224
 #define updateCombo   f225
 #define fOpening      f226
-#define tmp4channel   f227
-#define swapViews     f228
+#define swapViews     f227
 
 if (newRoom) {
   [ this is the first cycle through this room
@@ -89,94 +91,98 @@ if (newRoom) {
 
   [ center dial logo
   load.view(vw.SafeDial);
-  [ start with dial art for positions 0-19
-  load.view(vw.SafeNumbers1);
   
-  [ start at 0
-  [ TODO: initial start at random number
-  [ when coming back, start at previous number
-  currentNum = 0;
+  [ start at previous dial position
+  currentNum = comboNumber;
+
+  [ to initialize, use dial art for positions 0-19; the update
+  [ function will swap if necessary
+  load.view(vw.SafeNumbers1);
   viewNum = vw.SafeNumbers1;
   
   animate.obj(oNum00);
   set.view(oNum00, vw.SafeNumbers1);
-  set.loop.v(oNum00, currentNum);
+  set.loop(oNum00, 0);
   set.cel(oNum00, 0);
   stop.cycling(oNum00);
   set.priority(oNum00, 8);
   position(oNum00, 39, 38);
   ignore.objs(oNum00);
-  draw(oNum00);
 
   animate.obj(oNum05);
   set.view(oNum05, vw.SafeNumbers1);
-  set.loop.v(oNum05, currentNum);
+  set.loop(oNum05, 0);
   set.cel(oNum05, 1);
   stop.cycling(oNum05);
   set.priority(oNum05, 8);
   position(oNum05, 57, 54);
   ignore.objs(oNum05);
-  draw(oNum05);
   
   animate.obj(oNum10);
   set.view(oNum10, vw.SafeNumbers1);
-  set.loop.v(oNum10, currentNum);
+  set.loop(oNum10, 0);
   set.cel(oNum10, 2);
   stop.cycling(oNum10);
   set.priority(oNum10, 8);
   position(oNum10, 65, 95);
   ignore.objs(oNum10);
-  draw(oNum10);
   
   animate.obj(oNum15);
   set.view(oNum15, vw.SafeNumbers1);
-  set.loop.v(oNum15, currentNum);
+  set.loop(oNum15, 0);
   set.cel(oNum15, 3);
   stop.cycling(oNum15);
   set.priority(oNum15, 8);
   position(oNum15, 55, 137);
   ignore.objs(oNum15);
-  draw(oNum15);
   
   animate.obj(oNum20);
   set.view(oNum20, vw.SafeNumbers1);
-  set.loop.v(oNum20, currentNum);
+  set.loop(oNum20, 0);
   set.cel(oNum20, 4);
   stop.cycling(oNum20);
   set.priority(oNum20, 8);
   position(oNum20, 36, 147);
   ignore.objs(oNum20);
-  draw(oNum20);
   
   animate.obj(oNum25);
   set.view(oNum25, vw.SafeNumbers1);
-  set.loop.v(oNum25, currentNum);
+  set.loop(oNum25, 0);
   set.cel(oNum25, 5);
   stop.cycling(oNum25);
   set.priority(oNum25, 8);
   position(oNum25, 15, 134);
   ignore.objs(oNum25);
-  draw(oNum25);
   
   animate.obj(oNum30);
   set.view(oNum30, vw.SafeNumbers1);
-  set.loop.v(oNum30, currentNum);
+  set.loop(oNum30, 0);
   set.cel(oNum30, 6);
   stop.cycling(oNum30);
   set.priority(oNum30, 8);
   position(oNum30, 10, 96);
   ignore.objs(oNum30);
-  draw(oNum30);
   
   animate.obj(oNum35);
   set.view(oNum35, vw.SafeNumbers1);
-  set.loop.v(oNum35, currentNum);
+  set.loop(oNum35, 0);
   set.cel(oNum35, 7);
   stop.cycling(oNum35);
   set.priority(oNum35, 8);
   position(oNum35, 16, 58);
   ignore.objs(oNum35);
-  draw(oNum35);
+  
+  [ if at starting number is <20, need to force draw numbers
+  if (currentNum < 20) {
+    draw(oNum00);
+    draw(oNum05);
+    draw(oNum10);
+    draw(oNum15);
+    draw(oNum20);
+    draw(oNum25);
+    draw(oNum30);
+    draw(oNum35);
+  }
   
   animate.obj(oDialCenter);
   set.view(oDialCenter, vw.SafeDial);
@@ -202,33 +208,25 @@ if (newRoom) {
   position(oBlank2, 136, 167);
   draw(oBlank2);
   
-  [ initialize the dial
-  currentNum = 0;
-  tickCounter = 10;
+  [ select correct palette to show tick marks correctly
+  tickCounter = currentNum;
+  :loop1
+  if (tickCounter > 4) {
+    tickCounter -= 5;
+    goto(loop1);
+  }  
+  tickCounter += 10;
   work1 = 1;
   block(SET.PALETTE, 1, &tickCounter, &work1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   comboNum1 = -1;
   comboNum2 = -1;
   comboNum3 = -1;
-  [ turn right for 1st num, left one full turn, then to 2nd
-  [ then right to 3rd num
 
   [ display the picture on screen
   show.pic();
   
-[display(12, 60, "currentNum1: %v220 ");
-[display(13, 60, "combo1: %v221/%v225  ");
-[display(14, 60, "combo2: %v222/%v226  ");
-[display(15, 60, "combo3: %v223/%v227  ");
-
-  [ use hand cursor
-  cursoricon = C_USE; [cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-show.mem();
-  
-  return();
+  [ move numbers into initial positions
+  goto(updatenow);
 }
 
 if (fOpening) {
@@ -524,7 +522,8 @@ if (spinRight) {
 [ update numbers as the dial spins
 if (updateCombo) {
   sound(s.SafeDial, soundDone);
-  
+  :updatenow
+
   work1 = currentNum;
   [ check that correct view is set
   if (currentNum > 19) {
@@ -640,6 +639,9 @@ if (updateCombo) {
   [
   set.cel.v(oDialCenter, currentNum);
   work1 = 0;
+  if (newRoom) {
+    ++work1;
+  }
   block(SET.PALETTE, 1, &tickCounter, &work1); [ set.palette(BYVAR, PALETTE, LOADONLY)
   
   if (currentNum < 20) {
@@ -1133,10 +1135,23 @@ if (updateCombo) {
 }
 
 :checkexit
+[ if this is first time through the logic, need to show the room
+if (newRoom) {
+  [ force update (argument doesn't matter);
+  force.update(ego);
+  [ use hand cursor
+  cursoricon = C_USE; [cursormode;
+  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  [ fade in
+  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  return();
+}
 [ ESC or right-click to cancel;
 [ correct combo to open
 if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   :exit
+  [ save current dial position
+  comboNumber = currentNum;
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -1144,14 +1159,6 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
   [ restore default palette
   block(SET.PALETTE, 0, &m15, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
-  [ restore sound settings
-  if (!tmp4channel) {
-    reset(4channelsound);
-  }
-  if (useMIDI) {
-    [ 
-    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-  }
   [ reenable input
   accept.input();
   reset(disableGameFunctions);
@@ -1160,7 +1167,7 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   [ restore scripting
   reset(noScript);
   
-  new.room.v(previousRoom);
+  new.room(rm.Office); [ ##LE001##
 }
 
 [ add exit checks here (or use layout editor)

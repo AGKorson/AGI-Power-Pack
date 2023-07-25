@@ -394,9 +394,10 @@ if (gameRestarted) {
 set(debugging);
 set(enableTrace);
 
-[ set turbo mode
+[ set turbo mode (regular mode is never used in the demo)
 work1 = 1;
 cycle.time(TOGGLE.TURBO, work1); [   toggle.turbo(vMODE);
+set(turboMode);
 
 [ set mouse parameters
 set(enableDblClick);
@@ -484,6 +485,9 @@ set(firstLobbyVisit);
 
 [ casette starts on side A, first track, paused
 currentTrack = -1;
+
+[ start safe combo on a random number
+random(0, 39, comboNumber);
 
 return();
 

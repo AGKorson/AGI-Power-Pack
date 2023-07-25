@@ -14,7 +14,6 @@
 [  - hourglass
 [
 [ left click to set a pixel; right click to clear a pixel
-[ should be able to do drag operations pretty easily
 [
 [
 [
@@ -129,7 +128,7 @@ if (!enableERIDOCC) {
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
     block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
-    new.room.v(previousRoom); [ ##LE001##
+    new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
@@ -141,7 +140,7 @@ if (newRoom) {
   [ if first time, score it
   work1 = cpusage;
   block(BIT.AND, 0, &work1, 32); [ bit.and(BYVAL, VAR, MASK)
-  if (work1 == 32) {
+  if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
     block(BIT.OR, 0, &cpusage, 32); [ bit.or(BYVAL, VAR, MASK)
@@ -1164,6 +1163,9 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   block(STR.FORMAT, &sHotspot, &sHotspot, 0); [ str.format(sINPUT, sRESULT)
   block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
   work2 = work1;
+  [ discount leading space
+  --work2;
+  [ pad the string to be 4 chars long
   :checkLen
   if (work1 < 4) {
     block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)
@@ -1172,37 +1174,48 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   }
   work1 = &m24;
   display.v(tmpRow, tmpCol, work1);
-  [ adjust current column to length of text
+  [ adjust current column to end of text
   tmpCol += work2;
-  
+  ++tmpCol;
   [ allow user to press number keys, bkspc/enter/esc/minus;
-  [ up to three digits
-:getChar
+  [ up to two digits, 0-15
+  :getChar
   lastChar = 0;
   if (!have.key()) {
     goto(getChar);
   }
   [ check for number press
   if (lastChar > 47 && lastChar < 58) {
-    [ process a number press
-    [ current val *10, add newval
-    [ update display
+    [ is current value 0 or 1? (OK to add another digit)
     if (byteval < 2) {
-      if ((byteval > 0 || lastChar > 0)) {
+      [ if value is 1, OR pressing something OTHER THAN 0
+      if ((byteval > 0 || lastChar > 48)) {
+        [ if already a 1, limit next digit to 5
+        if (byteval == 1 && lastChar > 53) {
+          lastChar = 53;
+        }
+        [ convert the pressed char into a string
         block(BYTE2CHAR, &sByte, &lastChar, 0); [ byte2char(sRESULT, vCHAR)
+        [ if an actual zero is displayed (value of zero, len=1)
         if (byteval == 0 && work2 > 0) {
+          [ replace the zero with whatever is typed -
+          [ back up column, decrement length
           --tmpCol;
           --work2;
         }
+        [ display the char
         work1 = &m49;
         display.v(tmpRow, tmpCol, work1);
+        [ update cursorpos and length
         ++tmpCol;
         ++work2;
+        [ recalculate the value
         byteval *= 10;
         byteval += lastChar;
         byteval -= 48;
       } else {
-        [value=0 and char=0; ignore unless line is completely blank?
+        [value = 0 and char=0; ignore unless line is completely
+        [ blank (length =0)
         if (work2 == 0) {
           block(BYTE2CHAR, &sByte, &lastChar, 0); [ byte2char(sRESULT, vCHAR)
           work1 = &m49;
@@ -1374,6 +1387,8 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   set.text.attribute(BLACK, WHITE);
   work1 = &m24;
   tmpCol -= work2;
+  [ adjust backward to account for trailing space
+  --tmpCol;
   display.v(tmpRow, tmpCol, work1);
   set.text.attribute(0, -1);  
 }
@@ -1526,7 +1541,7 @@ return();
 #message 21 "%g20"
 #message 22 "%g"
 #message 23 "%v227"
-#message 24 "%s11"
+#message 24 "%s21"
 #message 25 "GRID"
 #message 26 "X:"
 #message 27 "Y:"
@@ -1551,4 +1566,4 @@ return();
 #message 46 "-"
 #message 47 "%v243"
 #message 48 "%v244"
-#message 49 "%s10"
+#message 49 "%s20"

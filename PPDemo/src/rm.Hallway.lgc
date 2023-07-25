@@ -469,6 +469,7 @@ if (opendoor) {
     print("The closet door is already open.");
   } else {
     if (posn(ego, 12, 129, 29, 148)) {
+    
       [ only play sound effects if walkman not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
         [ play door-open sound, using current sound settings
@@ -477,6 +478,11 @@ if (opendoor) {
         set(playSound);
       }
       end.of.loop(oClosetDoor, fDoorDone);
+      if (!scoreClosetDoor) {
+        set(scoreClosetDoor);
+        work1 = 1;
+        call(lgc.ScoreHandler);
+      }
     } else {
       print("You are not close enough.");
     }
@@ -494,11 +500,6 @@ if (closedoor) {
         set(playSound);
       }
       reverse.loop(oClosetDoor, fDoorDone);
-      if (!scoreClosetDoor) {
-        set(scoreClosetDoor);
-        work1 = 1;
-        call(lgc.ScoreHandler);
-      }
     } else {
       print("You are not close enough.");
     }
