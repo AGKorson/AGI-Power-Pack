@@ -149,7 +149,9 @@ if (newRoom)
 
 [ if ego is not allowed
 if (!allowedPastLobby) {
+  block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
   print("Excuse me sir! Only patients are allowed past the lobby. Please go back.");
+  block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
   goto(exit);
 }
 
@@ -214,20 +216,12 @@ if (arrestSeq > NOARREST) {
     move.obj(oSecurity, 159, 140, 1, fExamDoorDone);
     arrestSeq = SHUTDOOR;
   }
-  if (arrestSeq == SHUTDOOR && posn(ego, 63, 134, 63, 148)) {
+  if (arrestSeq == SHUTDOOR && posn(ego, 65, 134, 159, 148)) {
     [ nurse shuts door
     reverse.loop(oExamDoor, fExamDoorDone);
     normal.cycle(oNurse);
     arrestSeq = ESCORT2;
   }
-  
-  
-[**** BEGIN DEBUG CODE
-if ((arrestSeq == SHUTDOOR || arrestSeq == ESCORT2)) {
-  display(24, 0, "ego pos: (%v38, %v39)  egoedge: %v2   ");
-}
-[**** END DEBUG CODE
-
   if (arrestSeq == ESCORT2 && edgeEgoHit == RIGHT_EDGE) {
     [ done
     erase(ego);
@@ -239,13 +233,12 @@ if ((arrestSeq == SHUTDOOR || arrestSeq == ESCORT2)) {
     cursoricon = cursormode;
     set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
   }
+  if (soundDone && arrestSeq >= ESCORT1 && arrestSeq != ARRESTED) {
+    [ continue perp-walk sound
+    sound(s.PerpWalk, soundDone);
+    set(playSound);
+  }
   return();
-}
-
-if (soundDone && arrestSeq >= ESCORT1 && arrestSeq != ARRESTED) {
-  [ continue perp-walk sound
-  sound(s.PerpWalk, soundDone);
-  set(playSound);
 }
 
 [*****
@@ -406,7 +399,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (mouseX > 86 && mouseX < 100) {
         if (posn(ego, 80, 132, 100, 138)) {
           print("KNOCK KNOCK");
-          block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+          block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
           print.at("\"Occupied! I'll be out in a minute.\"",11, 46, 35);
           block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
           print("<sniff> Hmm, something tells you it might be more than a minute...");
@@ -546,6 +539,7 @@ if (fExamDoorDone) {
     goto(doneEDoorSeq);
   }
   if (examDoorSeq == NURSETURN) {
+    block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
     if (gExamCount < 4) {
       examDoorSeq = NURSETALK;
       if (gExamCount == 0) {
@@ -592,6 +586,7 @@ if (fExamDoorDone) {
       sound(s.CallCops, soundDone);
       set(playSound);
     }
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
     goto(doneEDoorSeq);
   }
   if (examDoorSeq == NURSETALK) {

@@ -346,7 +346,7 @@ if (titleSeq == TS_SCROLLCREDS) {
         creditstep = 0;
         set.loop(oLogo, CR_MUSIC);
         set.cel(oLogo, 0);
-        reposition.to(oLogo, 34, 162);
+        reposition.to(oLogo, 48, 162);
         goto(getkey);
       }
     }

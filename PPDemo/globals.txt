@@ -43,8 +43,9 @@
 #define cRightClick            c30 [ mouse right button click
 #define cRightDblClick         c31 [ mouse right button double click
 #define cDummy                 c32 [ menu separator - should always be disabled
-#define cLogInput              c33 [ temp debug item
-#define cShowClicks            c34 [ temp debug item
+#define cSkipIntro             c33
+#define cLogInput              c34 [ temp debug item
+#define cShowClicks            c35 [ temp debug item
 #define CUSTOM.INST           c252
 #define SET.INST              c253
 #define SET.SNDMODE           c254
@@ -119,6 +120,7 @@
 #define scoreNotebook          f85
 #define resetClicks            f86 [ used to clear click events between screen shifts
 #define initialRun             f87 [ set when game runs first time (no config file found)
+#define skipIntro              f88
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string

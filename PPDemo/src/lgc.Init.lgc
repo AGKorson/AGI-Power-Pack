@@ -23,6 +23,7 @@
 [ reuse s23 as another temporary string
 #define tmpString1 s23
  
+[ check for a game restart
 if (gameRestarted) {
   [ for a restart, there are a few things that need to be reset
   disable.item(cDummy);
@@ -147,21 +148,22 @@ if (gameRestarted) {
   [ check v18 to see if file was found
   if (errorParameter == 0) {
     [ file found - tmpString0 = sound/clock/speed
-    [ nine digits -
+    [ ten digits -
     [ 1-2-3 are sound settings
     [ 4-5 are sound attenuation
     [ 6-7 are clock settings
     [ 8-9 are animationInterval
-    [ confirm config string is 9 digits
+    [ 10 is skip intro flag
+    [ confirm config string is 10 digits
     block(STR.LEN, &tmpString0, &tmp0, 0); [ str.len(sINPUT, vRESULT)
-    if (tmp0 != 9) {
+    if (tmp0 != 10) {
       [ file is corrupt- load defaults
       goto(defaultfile);
     }
     [ first three digits for sound
     work1 = 3;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-    work1 = 6;
+    work1 = 7;
     block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     [ convert to number
     block(STR2BYTE, &tmpString1, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
@@ -191,13 +193,14 @@ if (gameRestarted) {
     [ next two digits are attenuation
     work1 = 2;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-    work1 = 4;
+    work1 = 5;
     block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     [ convert to number (4channel value)
     block(STR2BYTE, &tmpString1, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
     [ next two digits are clock options
     work1 = 2;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 3;
     block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     [ convert to number
     block(STR2BYTE, &tmpString1, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
@@ -212,8 +215,22 @@ if (gameRestarted) {
     } else {
       reset(realClock);
     }
-    [ speed is last two digits
-    block(STR2BYTE, &tmpString0, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+    [ next two digits are speed
+    work1 = 2;
+    block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 1;
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    [ convert speed to number
+    block(STR2BYTE, &tmpString1, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+    
+    [ last digit is skip intro flag
+    [ convert to number
+    block(STR2BYTE, &tmpString0, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
+    if (tmp0) {
+      set(skipIntro);
+    } else {
+      reset(skipIntro);
+    }
     
     [ second string is instrument indices
     tmp0 = 1;
@@ -327,6 +344,7 @@ if (gameRestarted) {
     set(4channelsound);
     set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
     set(useMIDI);
+    musicmode = MIDI_SOUND;
     work1 = 0;
     work2 = 0;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
@@ -338,12 +356,15 @@ if (gameRestarted) {
     [ set speed to normal (delay=2/20ths of a second)
     animationInterval = NORMAL_SPEED;
   
+    [ don't skip intro
+    reset(skipIntro);
+    
     [ save a default config file
     filename = "ppdemo.cfg";
     [ clear a temp string
     tmpString0 = "                                       ";
-    [ save default sound/clock/speed settings
-    tmpString0 = "111000006";
+    [ save default sound/clock/speed/intro settings
+    tmpString0 = "1110000060";
     work1 = &tmpString0;
     block(NEW.FILE, &filename, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
     [ save default instrument indices
@@ -375,10 +396,6 @@ if (gameRestarted) {
     
     [ first run of game
     set(initialRun);
-[
-[    [ use f20(forceAutoLoop) to force opening screen dialog (it's
-[    [ not used in this game for anything else)
-[    set(forceAutoLoop);
   }
   
   [ enable custom status bar (lgc.Statusbar)

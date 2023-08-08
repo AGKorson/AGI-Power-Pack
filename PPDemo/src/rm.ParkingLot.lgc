@@ -201,15 +201,11 @@ if (newRoom) {
   load.sound(s.CarStart);
   load.sound(s.CarStop);
   load.sound(s.Shock);
-[ ****BEGIN DEBUG CODE
-set(forceAutoloop);
-[ ****END DEBUG CODE  
-  [ if starting (coming from intro screen) and first game
-  if (previousRoom == rm.Title && forceAutoloop) {
+  
+  [ if starting (coming from intro screen) and not skipping
+  if (previousRoom == rm.Title && !skipIntro) {
     [ begin opening sequence dialog
     egoCarSeq = EC_ARRIVE;
-    [ reset forceAutoloop
-    reset(forceAutoloop);
   } else {
     [ enable menu/mouse input
     set(enableMenu);

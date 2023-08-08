@@ -1,0 +1,100 @@
+[ ********************************************************************
+[ 
+[ lgc.PowerPack
+[ 
+[ ********************************************************************
+
+[ confirm platform is PC
+if (machineType != PC) {
+  load.logics(lgc.Error);
+  print("%l97|33");
+  quit(1);
+}
+      
+[ confirm this is a version that can be patched
+call(lgc.Version2Check);
+if (!IntVersion) {
+  load.logics(lgc.Error);
+  print("%l97|34");
+  quit(1);
+}
+if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272)) {
+  [ these versions not supported
+  load.logics(lgc.Error);
+  print("%l97|35");
+  quit(1);
+}
+
+[ run the patch for the detected AGI version
+if (IntVersion == VERSION_2411) {
+  call(lgc.mod2411);
+  goto(continue);
+}
+if (IntVersion == VERSION_2425) {
+  call(lgc.mod2425);
+  goto(continue);
+}
+if (IntVersion == VERSION_2426) {
+  call(lgc.mod2426);
+  goto(continue);
+}
+if (IntVersion == VERSION_2435) {
+  call(lgc.mod2435);
+  goto(continue);
+}
+if (IntVersion == VERSION_2439) {
+  call(lgc.mod2439);
+  goto(continue);
+}
+if (IntVersion == VERSION_2440) {
+  call(lgc.mod2440);
+  goto(continue);
+}
+if (IntVersion == VERSION_2903) {
+  call(lgc.mod2903);
+  goto(continue);
+}
+if (IntVersion == VERSION_2911) {
+  call(lgc.mod2911);
+  goto(continue);
+}
+if (IntVersion == VERSION_2912) {
+  call(lgc.mod2912);
+  goto(continue);
+}
+if (IntVersion == VERSION_2915) {
+  call(lgc.mod2915);
+  goto(continue);
+}
+if (IntVersion == VERSION_2917) {
+  call(lgc.mod2917);
+  goto(continue);
+}
+if (IntVersion == VERSION_2936) {
+  call(lgc.mod2936);
+  goto(continue);
+}
+:continue
+
+[ confirm video, mouse and sound settings
+if (monitorType != EGA) {
+  load.logics(lgc.Error);
+  print("%l97|36");
+  quit(1);
+}
+if (!enableDblClick) {
+  load.logics(lgc.Error);
+  print("%l97|37");
+  quit(1);
+}
+if (numberOfVoices != 4) {
+  load.logics(lgc.Error);
+  print("%l97|38");
+  quit(1);
+}
+
+return();
+
+[*****
+[ messages         [  declared messages go here
+[*****
