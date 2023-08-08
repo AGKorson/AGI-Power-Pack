@@ -2,7 +2,6 @@
 [
 [ rm.Title: Opening/intro
 [
-[ TODO: need opening credit sound effects and theme song
 [ TODO: change credits to be clear about music source
 [
 [********************************************************************
@@ -10,7 +9,6 @@
 [ **************************************
 [ LOCAL DEFINES
 [ **************************************
-
 #define oLogo              o1
 #define oDrew              o2
 #define oCat               o3
@@ -39,18 +37,21 @@
   #define TS_FADEOUT_AG     6
   #define TS_FADEIN_WIN     7
   #define TS_PAUSE2         8
-  #define TS_FADEOUT_WIN    9
-  #define TS_ANIMATE_AGI   10
-  #define TS_MOVE_AGI      11
-  #define TS_EXPLODE       12
-  #define TS_EXPLODED      13
-  #define TS_FADEWHITE     14
-  #define TS_PPACK         15
-  #define TS_PP_SHIFT      16
-  #define TS_FADEOUT_PP    17
-  #define TS_FADEIN_SQ     18
-  #define TS_START_CREDITS 19
-  #define TS_SCROLLCREDS   20
+  #define TS_WIN_SOUND      9
+  #define TS_FADEOUT_WIN   10
+  #define TS_WAIT_AGI      11
+  #define TS_ANIMATE_AGI   12
+  #define TS_MOVE_AGI      13
+  #define TS_EXPLODE       14
+  #define TS_EXPLODED      15
+  #define TS_FADEWHITE     16
+  #define TS_PPACK         17
+  #define TS_PP_SHIFT      18
+  #define TS_FADEOUT_PP    19
+  #define TS_FADEIN_SQ     20
+  #define TS_START_CREDITS 21
+  #define TS_SCROLLCREDS   22
+  #define TS_FINISHED      23
 #define titleTimer        v222
 #define letterIndex       v223
 #define delaycounter      v224
@@ -65,8 +66,10 @@
   #define CR_MUSIC         5
   #define CR_SOUND         6
 #define creditstep        v228
+#define tmpSeconds        v229
 
 #define fLogoDone         f220
+#define themeMusicDone    f221
 
 if (newRoom) {
   [ start up sequence doesn't need to use scripts since it will 
@@ -82,6 +85,10 @@ if (newRoom) {
   program.control();
   
   [ no ego used in this room
+  
+  [ use a blank cursor so it doesn't get n the way but
+  [ clicks still work
+  set.key(0, &m6, mouse); [ set.cursor(BYVAR, MSGNUM);
   
   [ save speed value, to restore it later
   tmpSpeed = animationInterval;
@@ -137,11 +144,24 @@ if (newRoom) {
   [ fade in
   block(FADE.IN, 0, 20, 0); [ fade.in(BYVAR, DELAY, COLOR)
   
-  [ load the theme song
-  load.sound(m.PPDTheme);
-[[  [ and begin playing
-[[  [ (parameters are already set during initialization
-[[  sound(m.theme, musicDone);
+  [ load logo/theme music
+  load.sound(m.Fanfare);
+  load.sound(s.Salute);
+  load.sound(s.SafeDial);
+  load.sound(m.Theme);
+  load.sound(m.ExplodeAGI);
+  load.sound(s.Kaboom);
+  
+  [ set up mode and instruments for first stage
+  set(4channelsound);
+  reset(useMIDI);
+  set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  work1 = 0;
+  work2 = 128;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  work1 = 4;
+  work2 = 1;
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
 }
 
 [ one-time events
@@ -222,7 +242,7 @@ if (titleSeq == TS_SCROLLCREDS) {
     }
   }
   if (creditstep == 1) {
-    [ showing top two lines of 3-line credie
+    [ showing top two lines of 3-line credit
     [ showing both lines of 2-line credit
     if (creditline == CR_PPDESIGN) {
       if (work2 == 147) {
@@ -343,13 +363,15 @@ if (titleSeq == TS_SCROLLCREDS) {
     }
     if (creditline == CR_SOUND) {
       if (work2 == 12) {
-        [ restart with first credit line, at bottom
-        set.loop(oLogo, CR_PPDESIGN);
-        set.cel(oLogo, 0);
-        reposition.to(oLogo, 52, 162);
-        creditline = CR_PPDESIGN;
-        creditstep = 0;
-        goto(getkey);
+        [ all done
+        goto(continue);
+[        [ restart with first credit line, at bottom
+[        set.loop(oLogo, CR_PPDESIGN);
+[        set.cel(oLogo, 0);
+[        reposition.to(oLogo, 52, 162);
+[        creditline = CR_PPDESIGN;
+[        creditstep = 0;
+[        goto(getkey);
       }
     }
   }
@@ -393,15 +415,14 @@ if (titleSeq == TS_SCROLLCREDS) {
         reposition.to(oLogo, 46, 167);
       }
     }
-  }
-  goto(getkey);
+  }      
 }
 
 if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
-  [ display letters, one at a time
-  [ and fade them in at same time
+  [ display letters, one at a time and fade them in at same time
   ++delaycounter;
-  if (delaycounter == 1) {
+  if (delaycounter == 3) {
+    sound(s.SafeDial, soundDone);
     delaycounter = 0;
     work1 = 16;
     work2 = letterindex;
@@ -414,7 +435,7 @@ if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
     work3 = 27;
     work3 -= letterindex;
     if (letterindex == 27) {
-      titleTimer = 10;
+      titleTimer = 100;
     } else {
       [ strip off each letter as it gets added
       block(STR.RIGHT, &sText, &sText, &work3); [ strRight(sINPUT, sRESULT, vCOUNT)
@@ -426,7 +447,7 @@ if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
   [ display letters, one at a time
   [ and fade them in at same time
   ++delaycounter;
-  if (delaycounter == 1) {
+  if (delaycounter == 3) {
     delaycounter = 0;
     work1 = 16;
     work2 = letterindex;
@@ -448,7 +469,7 @@ if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
 
 if (titleSeq == TS_ANIMATE_AGI) {
   ++delaycounter;
-  if (delaycounter == 1) {
+  if (delaycounter == 10) {
     delaycounter = 0;
     --letterindex;
     [color1
@@ -544,7 +565,13 @@ if (titleSeq == TS_ANIMATE_AGI) {
   }
 }
 
-[if (titleSeq == TS_MOVE_AGI && titleTimer == 0) {
+if (titleSeq == TS_WAIT_AGI) {
+  if (elapsedSeconds == tmpSeconds) {
+    ++titleSeq;
+    delaycounter = 0;
+  }
+}
+
 if (titleSeq == TS_MOVE_AGI) {
   ++delaycounter;
   if (delaycounter == 4) {
@@ -611,13 +638,35 @@ if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
   }
 }
 
+if (themeMusicDone) {
+  reset(themeMusicDone);
+  if (titleSeq == TS_WIN_SOUND) {
+    titleTimer = 10;
+  } 
+}
+
 [ timer events
 if (titleTimer > 0) {
   --titleTimer;
   if (titleTimer == 0) {
     ++titleSeq;
+    
     if (titleSeq == TS_SALUTE) {
       end.of.loop(oDrew, fLogoDone);
+      [ play salute
+      set(4channelsound);
+      set(useMIDI);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      work1 = 0;
+      work2 = 73;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      ++work1;
+      work2 = 58;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 115;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(s.Salute, soundDone);
     }
     if (titleSeq == TS_SALUTE_WAIT) {
       reverse.loop(oDrew, fLogoDone);
@@ -629,6 +678,19 @@ if (titleTimer > 0) {
     if (titleSeq == TS_FADEOUT_AG) {
       [ fadeout
       block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      [ play WinAGI theme
+      set(4channelsound);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      work1 = 0;
+      work2 = 63;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 50;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 55;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(m.Fanfare, themeMusicDone);
       [ change to WinAGI logo
       erase(oLogo);
       erase(oDrew);
@@ -637,6 +699,7 @@ if (titleTimer > 0) {
       set.cel(oLogo, 0);
       position(oLogo, 63, 104);
       draw(oLogo);
+      stop.update(oLogo);
       clear.lines(16, 16, BLACK);
       [ fade in
       block(FADE.IN, 0, 40, 0); [ fade.in(BYVAR, DELAY, COLOR)
@@ -646,19 +709,34 @@ if (titleTimer > 0) {
       goto(getkey);
     }
     if (titleSeq == TS_PAUSE2) {
-      titleTimer = 45;
+      ++titleSeq;
       goto(getkey);
     }
     if (titleSeq == TS_FADEOUT_WIN) {
       [ fadeout
       block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      [ play explode-agi theme
+      set(4channelsound);
+      set(useMIDI);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      work1 = 0;
+      work2 = 4; [ electric piano 1
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      ++work1;
+      work2 = 49; [ string ensemble 1
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 61; [ french horn
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(m.ExplodeAGI, soundDone);
       erase(oLogo);
       clear.lines(16, 16, BLACK);
       set.text.attribute(WHITE, BLACK);
       display(11, 15, "A");
       display(12, 18, "G");
       display(13, 14, "I");
-      
+      [ display other letters in colors that will be
+      [ used for the fade effect
       set.text.attribute(1, 0);
       display(13, 15, "n");
       set.text.attribute(2, 0);
@@ -706,10 +784,28 @@ if (titleTimer > 0) {
       [ begin letter fade in process
       letterindex = 97;
       ++titleSeq;
-      delaycounter = 0;
+      tmpSeconds = elapsedSeconds;
+      tmpSeconds += 20;
+      if (tmpSeconds > 59) {
+        tmpSeconds -= 60;
+      }
       return();
     }
     if (titleSeq == TS_EXPLODE) {
+      [ play explosion sound
+      set(4channelsound);
+      set(useMIDI);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      work1 = 0;
+      work2 = 127; [ gunshot
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      ++work1;
+      work2 = 126; [ applause
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 122; [ seashore
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(s.Kaboom, soundDone);
       work1 = titleSeq;
       work1 += 26;
       :drawpic
@@ -728,13 +824,8 @@ if (titleTimer > 0) {
       [ fade out white
       block(FADE.OUT, 0, 1, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
       ++titleSeq;
-[      titleTimer = 1;
-[      goto(getkey);
     }
     if (titleSeq == TS_PPACK) {
-[block(FADE.IN, 0, 0, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
-[set(f10);trace.on();
-
       [ adjust palette to show text with no highlighting
       s14 = "000000";
       s15 = "2A0000";
@@ -765,10 +856,21 @@ if (titleTimer > 0) {
       [ fade in
       block(FADE.IN, 0, 20, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
       titleTimer = 45;
+      set(4channelsound);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      work1 = 0;
+      work2 = 25;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 31;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work1;
+      work2 = 39;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+     sound(m.Theme, themeMusicDone);
     }
     if (titleSeq == TS_START_CREDITS) {
       [ start cycling credits
-      discard.view(vw.Logos);
       load.view(vw.Credits);
       set.view(oLogo, vw.Credits);
       set.loop(oLogo, 0);
@@ -801,7 +903,8 @@ if (fLogoDone) {
 
 :getkey
 [ check for a keypress or joystick button
-if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
+if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) {
+  :continue
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
@@ -821,30 +924,30 @@ if ((have.key() || controller(cLeftClick) || controller(cMenu))) {
   new.room(rm.ParkingLot); [ ##LE001##
 }
 
-[ restart theme music if the intro screen is still showing
-[ and end was reached
-if (musicDone) {
-  [ reset the flag
-  reset(musicDone);
+[[ restart theme music if the intro screen is still showing
+[[ and end was reached
+[if (musicDone) {
+[  [ reset the flag
+[  reset(musicDone);
+[  
+[  [ start a timer to set a short delay before restarting music
+[  musicDelay = 1;
+[}
   
-  [ start a timer to set a short delay before restarting music
-  musicDelay = 1;
-}
-  
-[ if music interlude is active
-if (musicDelay  > 0) {
-  [ increment interlude delay counter
-  musicDelay += 1;
-  
-  [ after 36 cycles
-  if (musicDelay == 36) {
-    [ reset timer
-    musicDelay = 0;
-    
-[[    [ play it again sam
-[[    sound(m.theme, musicDone);
-  }
-}
+[[ if music interlude is active
+[if (musicDelay  > 0) {
+[  [ increment interlude delay counter
+[  musicDelay += 1;
+[  
+[  [ after 36 cycles
+[  if (musicDelay == 36) {
+[    [ reset timer
+[    musicDelay = 0;
+[    
+[[[    [ play it again sam
+[[[    sound(m.theme, musicDone);
+[  }
+[}
 
 return();
 
@@ -862,6 +965,9 @@ return();
 [ default palette
 #message 5 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
 
+[ blank mouse cursor
+#message 6 "0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+           "0000000000000000000000000000000000000000000000000000000000000000"
 
 [            |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
 [[palettes:  | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |

@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "7/25/2023 11:31:21 AM"
+   LastEdit = "8/8/2023 5:59:31 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H9DF6BF47
-   CRC32 = &H9DF6BF47
+   CompCRC32 = &HE55CBC68
+   CRC32 = &HE55CBC68
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -63,8 +63,8 @@
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
 
 [Logic91]
-   CompCRC32 = &H0
-   CRC32 = &HBE15CB28
+   CompCRC32 = &H7E230052
+   CRC32 = &H7E230052
    IsRoom = False
    ID = lgc.Init
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
@@ -156,15 +156,15 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &HE5B0B035
-   CompCRC32 = &H0
+   CRC32 = &H6934E9A9
+   CompCRC32 = &H6934E9A9
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
    CRC32 = &H6BB1120C
-   CompCRC32 = &H6BB1120C
+   CompCRC32 = &H0
    IsRoom = True
 
 [Logic3]
@@ -185,14 +185,14 @@
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
    CRC32 = &HD47B1F75
-   CompCRC32 = &HD47B1F75
+   CompCRC32 = &H0
    IsRoom = True
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
    CRC32 = &HAFF17F60
-   CompCRC32 = &HAFF17F60
+   CompCRC32 = &H0
    IsRoom = True
 
 [Logic6]
@@ -374,7 +374,7 @@
    ID = rm.SafeDoor
    Description = ""
    CRC32 = &H5D76F229
-   CompCRC32 = &H5D76F229
+   CompCRC32 = &H0
    IsRoom = True
 
 [Logic14]
@@ -395,7 +395,7 @@
    ID = lgc.SaveOptions
    Description = ""
    CRC32 = &HF4557CCB
-   CompCRC32 = &HF4557CCB
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic16]
@@ -423,7 +423,7 @@
    ID = lgc.RedrawRoom
    Description = ""
    CRC32 = &HC9E798BF
-   CompCRC32 = &HC9E798BF
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic20]
@@ -465,7 +465,7 @@
    ID = lgc.Walkman
    Description = ""
    CRC32 = &HEAD625A1
-   CompCRC32 = &HEAD625A1
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic35]
@@ -1021,23 +1021,6 @@
 
 [Sound8]
    ID = m.KQ2Track4
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound114]
-   ID = s.ButtonClick
    Description = ""
    Key = 0
    TPQN = 4
@@ -2982,6 +2965,108 @@
    Inst0 = 80
    Inst1 = 80
    Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound132]
+   ID = m.Fanfare
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 62
+   Inst1 = 50
+   Inst2 = 55
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound114]
+   ID = m.theme
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 25
+   Inst1 = 31
+   Inst2 = 63
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound133]
+   ID = s.Saluteold
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 50
+   Inst1 = 110
+   Inst2 = 68
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound134]
+   ID = s.Salute
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 73
+   Inst1 = 22
+   Inst2 = 115
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound135]
+   ID = m.ExplodeAGI
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 0
+   Inst1 = 48
+   Inst2 = 60
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound136]
+   ID = s.Kaboom
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 127
+   Inst1 = 126
+   Inst2 = 122
    Mute0 = False
    Mute1 = False
    Mute2 = False

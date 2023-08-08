@@ -118,6 +118,7 @@
 #define scoreManual            f84
 #define scoreNotebook          f85
 #define resetClicks            f86 [ used to clear click events between screen shifts
+#define initialRun             f87 [ set when game runs first time (no config file found)
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string

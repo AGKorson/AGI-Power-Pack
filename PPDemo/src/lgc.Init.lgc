@@ -304,6 +304,8 @@ if (gameRestarted) {
         }
       }
     }
+    [ not a first run
+    reset(initialRun);
   } else {
     [ reset v18
     errorParameter = 0;
@@ -370,9 +372,13 @@ if (gameRestarted) {
     if (work1 < 23) {
       goto(nextinst2);
     }
-    [ use f20(forceAutoLoop) to force opening screen dialog (it's
-    [ not used in this game for anything else)
-    set(forceAutoLoop);
+    
+    [ first run of game
+    set(initialRun);
+[
+[    [ use f20(forceAutoLoop) to force opening screen dialog (it's
+[    [ not used in this game for anything else)
+[    set(forceAutoLoop);
   }
   
   [ enable custom status bar (lgc.Statusbar)
