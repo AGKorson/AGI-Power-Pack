@@ -63,7 +63,7 @@ X       +3 pts:  getting scroll from chest
 X       +3 pts:  getting music sheet
 X       +4 pts:  getting 80s mix tape
 X       +4 pts:  playing mix tape in walkman
-MAX SCORE: 142
+MAX SCORE: 146
 
 INVENTORY: when 'examining', show typical view with description for all items; several items need additional text, and several items need a close up for 'examining'. Most items that are read need to be 'used' to read them.
   ITEM:           EXAMINE         USE
@@ -94,25 +94,24 @@ custom sounds:
   - s.Crumble1/2
   - s.ButtonClick
   - keypad tones
-
-s.TunnelDoor for coffin
+use s.TunnelDoor for coffin
 
 1. Intro/Opening Credits: Show animated AGI Guy Studio logo, then animated Power Pack logo. Fade out, then fade in Demo title page - "Sierra Quest - a Power Pack Demo game"
-    BACKGROUND: AGI Guy Studio and Power Pack done; need Sierra Quest background
-    ANIMATION ART: done (unless more needed for Sierra Quest title page)
-    SOUND: TBD
-    CODING: mostly done; need to finalize after finishing music and title page art
+    BACKGROUND: still working PowerPack screen; maybe jazz it up a bit mroe?
+    ANIMATION ART: done
+    SOUND: done
+    CODING: mostly done; need to finalize after finishing music/title page art
     DESIGNERS: 
         Power Pack programmed by: Andrew Korson
         Demo Game written and programmed by: Andrew Korson
         Background art by: Klownstein
         Animation art by: Klownstein
         Additional art by: Andrew Korson
-        Music and Sound effects by: Andrew Korson
+        Original Music by: Andrew Korson
         Additional sound by: doomlazer
 
 
-2. Ending Credits: TBD
+2. Ending Credits: skip? use help file instead for detailed credits?
     BACKGROUND: TBD
     ANIMATION ART: TBD
     SOUND: TBD
@@ -122,7 +121,7 @@ s.TunnelDoor for coffin
 3. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss. If a patient arrives in a batmobile and ego tries to touch it, it shocks and kills him. Touching the trees will get sap on ego's hands, which costs a point; he can wash in the sink in the closet to get the point back. Ego can get back in car; this ends game (winning condition is to have disk with PP source code.)
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: car sounds, door sound for entering building, shock sound
+    SOUND: done
     SCORING: -1 for touching trees; +1 for getting run over; +1 for getting shocked by batmobile; +5 for getting in car to end game; +20 if game ends with power pack source disk
     CODING: 'said' statements
 
@@ -145,7 +144,7 @@ s.TunnelDoor for coffin
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: open/close doors; knock on doors; getting arrested music (borrow from GR/PQ)
+    SOUND: done
     SCORING: +1 for getting arrested; +1 for opening closet door
     CODING: 'said' statements
 
@@ -153,7 +152,7 @@ s.TunnelDoor for coffin
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: open/close door 
+    SOUND: done 
     SCORING: +3 for closing closet door; +5 for making hole in wall; -1 each time for tripping over broom after hole is made; +2 for putting broom in corner; -3 for touching plunger; +1 first time washing hands; +1/+3 for washing hands after touching tree/plunger; +3 pts for fixing drip
     CODING: 'said' statements 
 
@@ -169,7 +168,7 @@ s.TunnelDoor for coffin
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: open/close door; light flicker/buzz
+    SOUND: done
     SCORING: n/a
     CODING: 'said' statements
 
@@ -209,7 +208,7 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
 
     BACKGROUND: done
     ANIMATION ART: done 
-    SOUND: system failure sound effect;
+    SOUND: done
     SCORING: +5 pts for each module successfully restored (30 pts total); +10 pts for restoring BaDASS; 4 pts for inserting drive; +6 for copying source files to floppy
     CODING: 'said' statements
 
@@ -217,7 +216,7 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
 
     BACKGROUND: done
     ANIMATION ART: done 
-    SOUND: safe open/close; picture swinging; drawers open/close
+    SOUND: done
     SCORING: 3 pts for getting memo from printer; 3 pts for getting password list; 2 pts for getting walkman; 2 pts for finding safe; 3 pts for getting BadASS code; 4 pts for getting floppy disk; 3 pts for getting notebook; 2 pts moving rug; 3 pts for getting folder with sound password
     CODING: 'said' statements
 
@@ -234,7 +233,7 @@ rewind backs up one track; fast-forward moves to next track.
 
     BACKGROUND: done
     ANIMATION ART: done 
-    SOUND: 'click' for buttons? 
+    SOUND: n/a 
     SCORING: n/a
     CODING: done
 
@@ -242,7 +241,7 @@ rewind backs up one track; fast-forward moves to next track.
 
     BACKGROUND: done
     ANIMATION art: done 
-    SOUND: coffin open/close; clock chimes (maybe westminster?); drawers open/close; chest open/close
+    SOUND: done
     SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in walkman
     CODING: 'said' statements 
 
