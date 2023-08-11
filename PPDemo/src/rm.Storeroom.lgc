@@ -390,7 +390,7 @@ if (vCheckSecond != elapsedSeconds) {
 if (fInCoffin) {
   reset(fInCoffin);
   if (vCoffinDeathSeq == 6) {
-    deathType = 3;
+    deathType = DT_COFFIN;
     ++vCoffinDeathSeq;
   }
 

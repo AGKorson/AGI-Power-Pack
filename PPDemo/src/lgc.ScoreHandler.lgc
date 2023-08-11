@@ -11,7 +11,7 @@
 [ max positive value is +250
 
 [ ignore if game is over
-if (deathType == 255) {
+if (deathType == DT_GAME_OVER) {
   return();
 }
 

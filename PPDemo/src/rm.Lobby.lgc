@@ -1971,7 +1971,7 @@ if (fSlipped) {
   print("Didn't you notice that wet spot???");
   set.loop(ego, 1);
   normal.cycle(ego);
-  deathType = 6;
+  deathType = DT_BROKE_LEG;
 }
 
 [ if ego has slipped, skip player input

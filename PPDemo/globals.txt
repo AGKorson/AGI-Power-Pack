@@ -160,6 +160,17 @@
 #define oldHours               v33 [ cached value of game hours (v13)
 #define oldDays                v34 [ cached value of game days (v14)
 #define deathType              v35 [ assign different values depending on how ego dies; then death handler can use it to provide custom messages
+#define DT_NOT_DEAD              0
+#define DT_RUNOVER               1
+#define DT_TRAPPED               2
+#define DT_COFFIN                3
+#define DT_ARRESTED              4
+#define DT_STUNNED               5
+#define DT_BROKE_LEG             6
+#define DT_STOLEN_CAR            7
+#define DT_DRIVE_AWAY           99
+#define DT_SEQ_DONE            254
+#define DT_GAME_OVER           255
 #define deathTimer             v36 [ used by death handler to time display of messages and restart
 #define clearStatusSeconds     v37 [ the seconds value currently displayed on status bar when showCoords is TRUE; when this value is different from game seconds, the clock is updated
 #define egoX                   v38 [ current ego X position

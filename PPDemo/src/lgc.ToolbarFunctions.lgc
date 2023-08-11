@@ -12,7 +12,7 @@ if (cursoricon == C_WAIT) {
 }
 
 [ if ego is dead, force the default cursor
-if (deathType > 0) {
+if (deathType) {
   if (cursormode != C_DEFAULT) {
     cursormode = C_DEFAULT;
     set(toggleBtn);

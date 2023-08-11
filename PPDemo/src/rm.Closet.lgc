@@ -165,7 +165,7 @@ if (newRoom) {
       set.loop(ego, 4);
       set.cel(ego, 0);
       set(fEgoDead);
-      deathType = 2;
+      deathType = DT_TRAPPED;
     } else {
       position(ego, 72, 141);
       [ uncrouch

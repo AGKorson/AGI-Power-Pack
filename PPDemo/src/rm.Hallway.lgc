@@ -226,7 +226,7 @@ if (arrestSeq > NOARREST) {
     [ done
     erase(ego);
     erase(oSecurity);
-    deathType = 4;
+    deathType = DT_ARRESTED;
     arrestSeq = ARRESTED;
     stop.sound();
     [ restore cursor

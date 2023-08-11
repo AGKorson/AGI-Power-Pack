@@ -354,7 +354,7 @@ if (!disableGameFunctions) {
     
     [ refresh dynamic menu items
     [ inventory menu item
-    if (deathType < 254) {
+    if (deathType < DT_SEQ_DONE) {
       if (cursormode == C_USE) {
         [ enable 'use item'
         enable.item(cChooseItem);
@@ -462,11 +462,11 @@ if (!disableGameFunctions) {
     [ speed menu not available when dead
     s23 = mnu_msgSpeed;
     block(STR.LEN, &s23, &work1, 0); [ str.len(sINPUT, vRESULT)
-    if (work1 == 0 && deathType != 254) {
+    if (work1 == 0 && deathType != DT_SEQ_DONE) {
       s23 = msgSpeed; [ "Speed"
       block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
     }
-    if (work1 !=0 && deathType == 254) {
+    if (work1 !=0 && deathType == DT_SEQ_DONE) {
       s23 = "";
       block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
     }
@@ -774,9 +774,9 @@ if (closetTimerDone) {
 }
 
 [ check for ego death (usually happens a lot in AGI games...)
-if (deathType > 0) {
+if (deathType) {
   [ if this is first cycle since ego died
-  if (deathType < 254) {
+  if (deathType < DT_SEQ_DONE) {
     [ disable most menu and keyboard shortcuts
     disable.item(cSave);
     disable.item(cPause);

@@ -14,17 +14,15 @@
 [ 6: slipped on wet spot in lobby
 [ 7: car stolen
 
-[ 99: ego driving away
+[ 99: ego driving away (check win/lose/score)
 [
 [ 254: death sequence complete
 [ 255: winning sequence complete
 [
 [ ********************************************************************
 
-[ TODO: add deathcount handler (count how many times/ways player dies)
-
 [ if message announcing death hasn't been displayed yet
-if (deathType < 254) { 
+if (deathType < DT_SEQ_DONE) { 
   [ re-allow input
   accept.input();
   [ clear the input line
@@ -42,66 +40,57 @@ if (deathType < 254) {
   add.to.pic(vw.ButtonsUp, 0, 8, 48, 16, 15, 4);
   discard.view(vw.ButtonsUp);
   reset(noScript);
-[  [ clear status lines
-[  clear.lines(23, 24, 0);
   
   [ start a timer to provide a delay after announcement
-  [ before player is shown second message
+  [ before player is shown final 'thx for playing' message
   deathTimer = 25;
 
-  [ WINNER!
-  if (deathType == 99) {
-    if (v220 == 0) {
-      [ not actually dead- game is over because ego left
-      print("You drive away, your visit to Sierra On-Line is over.");
-      [ set deathType to 'win'
-      deathType = 255;
-    } else {
-      [ delay the ending
-      return();
-    }
-  } else {
-    [ hit by a car
-    if (deathType == 1) {
-      print("Stepping in front of a moving vehicle turned out to be a bad idea.");
-      [ patients continue on their way
-      #define patientCar   o3
-      start.update(patientCar);
-    }
+  [ check deathtype to display initial death message
+  [ hit by a car
+  if (deathType == DT_RUNOVER) {
+    print("Stepping in front of a moving vehicle turned out to be a bad idea.");
+    [ patients continue on their way
+    #define patientCar   o3
+    start.update(patientCar);
+  }
+
+  [ trapped in the secret room
+  if (deathType == DT_TRAPPED) {
+    print("In secret rooms, no one can hear you scream. Looks like you'll be here awhile.");
+  }
   
-    [ trapped in the secret room
-    if (deathType == 2) {
-      print("In secret rooms, no one can hear you scream. Looks like you'll be here awhile.");
-    }
-    
-    [ stuck in the coffin
-    if (deathType == 3) {
-      print("Look on the bright side - at least you'll save money on your funeral costs.");
-    }
-    
-    [ escorted from the premises 
-    if (deathType == 4) {
-      print("Looks like your trip to Oakhurst will include a tour of the city jail!");
-    }
-    
-    [ stunned by bat-mobile security alarm
-    if (deathType == 5) {
-      print("Lesson learned - don't mess with the Dark Knight's ride.");
-    }
-    
-    [ slip on wet floor
-    if (deathType == 6) {
-      print("Looks like you broke your leg! At least you did it in a medical facility!");
-    }
-    
-    [ car stolen (left unlocked)
-    if (deathType == 7) {
-      print("Your car has been stolen! You should have locked your door. Now you'll need to thumb a ride back home. ");
-    }
-    
-    [ set deathType to 254 so this logic does not
-    [ display the death message again
-    deathType = 254;
+  [ stuck in the coffin
+  if (deathType == DT_COFFIN) {
+    print("Look on the bright side - at least you'll save money on your funeral costs.");
+  }
+  
+  [ escorted from the premises 
+  if (deathType == DT_ARRESTED) {
+    print("Looks like your trip to Oakhurst will include a tour of the city jail!");
+  }
+  
+  [ stunned by bat-mobile security alarm
+  if (deathType == DT_STUNNED) {
+    print("Lesson learned - don't mess with the Dark Knight's ride.");
+  }
+  
+  [ slip on wet floor
+  if (deathType == DT_BROKE_LEG) {
+    print("Looks like you broke your leg! At least you did it in a medical facility!");
+  }
+  
+  [ car stolen (left unlocked)
+  if (deathType == DT_STOLEN_CAR) {
+    print("Your car has been stolen! You should have locked your door. Now you'll need to thumb a ride back home. ");
+  }
+  
+  [ check for game over
+  if (deathType == DT_DRIVE_AWAY) {
+    [ set game over
+    deathType = DT_GAME_OVER;
+  } else {
+    [ death sequence is over
+    deathType = DT_SEQ_DONE;
   }
 }
 
@@ -112,7 +101,7 @@ if (deathTimer > 0) {
   
 [ after a delay, show ending message to player
 if (deathTimer == 1) {
-  if (deathType == 255) {
+  if (deathType == DT_GAME_OVER) {
     [ TODO: ending credits/music
     
     [ check for module resets

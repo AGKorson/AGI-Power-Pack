@@ -53,7 +53,7 @@ if (clockOn) {
     [ show game time elapsed
     set.text.attribute(BROWN, WHITE);
     if (deathType) {
-      [ show last time value
+      [ show last time value (use frozen value stored in s5)
       display(0, 58, "%s5");
     } else {
       [ update game time clock every second

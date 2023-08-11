@@ -218,7 +218,7 @@ if (newRoom) {
       if (work1 == 10) {
         [ it's gone!
         set(fEgoDead);
-        deathType = 7;
+        deathType = DT_STOLEN_CAR;
       }
     }
     if (!fEgoDead) {
@@ -376,7 +376,9 @@ if (egoCarSeq) {
     egoCarSeq = EC_IDLE;
     erase(egoCar);
     set(fEgoDead);
-    deathType = 99;
+    print("You drive away, your visit to Sierra On-Line is over.");
+    [ set deathType
+    deathType = DT_DRIVE_AWAY;
   }  
 }
 
@@ -828,7 +830,7 @@ if (!fEgoDead) {
 [ check for end of run-over death cycle
 if (fRunOver) {
   reset(fRunOver);
-  deathType = 1;
+  deathType = DT_RUNOVER;
   work1 = 1;
   cycle.time(ego, work1);
   accept.input();
@@ -839,7 +841,7 @@ if (fRunOver) {
 if (fElectrocuted && deathSeq == 6) {
   reset(fElectrocuted);
   ++deathSeq;
-  deathType = 5;
+  deathType = DT_STUNNED;
   accept.input();
   ignore.objs(oPatient);
 }
@@ -847,7 +849,7 @@ if (fElectrocuted && deathSeq == 6) {
 [ if dead, skip player input
 if (fEgoDead) {
   [ check for stolen car
-  if (deathType == 7) {
+  if (deathType == DT_STOLEN_CAR) {
     print("Hey! Where is your car???");
   ignore.objs(oPatient);
   }
