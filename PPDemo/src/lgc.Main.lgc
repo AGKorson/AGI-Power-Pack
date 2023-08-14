@@ -80,6 +80,12 @@ if (errorNumber > 0) {
   call(lgc.Error); 
 }
 
+[ help screens use ONLY their custom logics
+if (showHelp) {
+  call(lgc.GameHelp);
+  return();
+}
+
 [ **************************************
 [ GAME START
 [ **************************************

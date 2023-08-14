@@ -121,6 +121,7 @@
 #define resetClicks            f86 [ used to clear click events between screen shifts
 #define initialRun             f87 [ set when game runs first time (no config file found)
 #define skipIntro              f88
+#define showHelp               f89
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
@@ -308,3 +309,8 @@
 #define COMPARE_BINARY          m2
 #define TOGGLE.TURBO          o255
 #define FADECOUNT               25
+#define SCREEN.MODE             -1
+#define GRAFMODE                 0
+#define TEXTMODE                 1
+#define 40COL                    0
+#define 80COL                    1

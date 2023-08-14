@@ -21,12 +21,11 @@ if (currentRoom < 21 && currentRoom != 1) {
     [ to 4. DO NOT pass a value that sets priority to zero; the game
     [ will lock up if the entire priority screen is set to zero
     
-    [ now change to 80 column mode
-    configure.screen(-1, 0, 1);
+    [ change to graphics to 80 column mode
+    configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
+    set(column80);
     [ force fade back to black
     block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-      
-    set(column80);
   }
   
   
@@ -91,17 +90,17 @@ if (currentRoom > 20) {
       [ before switching mode, clear the picture
       work1 = 64;
       block(PIC.DRAW, -1, &work1, 0); [ pic.draw(FILLSTYLE, vCOLORPAIR)
-      configure.screen(-1, 0, 1);
+      configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
+      set(column80);
       [ force fade back to black
       block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-      set(column80);
     }
   } else {
     [ if loading any other control panel, use 40 col mode
     if (column80) {
       work1 = 64;
       block(PIC.DRAW, -1, &work1, 0); [ pic.draw(FILLSTYLE, vCOLORPAIR)
-      configure.screen(-1, 0, 0);
+      configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
       [ force fade back to black
       block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       reset(column80);

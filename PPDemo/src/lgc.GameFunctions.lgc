@@ -220,8 +220,11 @@ if ((controller(cRestart) ||
 }
 
 [ ask for help
-if ((controller(cHelp) || 
-     said("help"))) {
+if ((controller(cHelp) || said("help"))) {
+  [ show the main help screen
+  set(showHelp);
+  [ use local variable to initialize the help screen
+  set(f240);
   call(lgc.GameHelp);
 }
 

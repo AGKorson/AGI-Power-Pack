@@ -7,12 +7,11 @@
 [ ********************************************************************
 
 prevent.input();
-configure.screen(255, 1, 1);
-set.text.attribute(255, BLACK);
+configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
+set.text.attribute(-1, 0); [ push.attributes()
 set.text.attribute(BLACK, WHITE);
 clear.text.rect(1, 4, 24, 75, WHITE);
-display(1, 5, "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�"
-        "컴컴�");
+display(1, 5, "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커");
 display(5, 13, "To:   All Agi Mainframe OS Users");
 display(6, 13, "Subj: Password Management");
 display(8, 13, "1. As you know, the AMOS project has been developed ");
@@ -70,8 +69,10 @@ Label3:
 if (!have.key()) {
   goto(Label3);
 }
-set.text.attribute(BLACK, 255);
-configure.screen(255, 1, 0);
+set.text.attribute(0, -1); [ pop.attributes()
+[[ restore text screen to 40col
+[configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
+
 graphics();
 accept.input();
 return();

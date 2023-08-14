@@ -2,7 +2,6 @@
 [
 [ rm.Title: Opening/intro
 [
-[ TODO: change credits to be clear about music source
 [
 [********************************************************************
 
@@ -88,7 +87,7 @@ if (newRoom) {
   
   [ use a blank cursor so it doesn't get n the way but
   [ clicks still work
-  set.key(0, &m6, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(0, &m7, mouse); [ set.cursor(BYVAR, MSGNUM);
   
   [ save speed value, to restore it later
   tmpSpeed = animationInterval;
@@ -365,13 +364,6 @@ if (titleSeq == TS_SCROLLCREDS) {
       if (work2 == 12) {
         [ all done
         goto(continue);
-[        [ restart with first credit line, at bottom
-[        set.loop(oLogo, CR_PPDESIGN);
-[        set.cel(oLogo, 0);
-[        reposition.to(oLogo, 52, 162);
-[        creditline = CR_PPDESIGN;
-[        creditstep = 0;
-[        goto(getkey);
       }
     }
   }
@@ -617,21 +609,42 @@ if (titleSeq == TS_MOVE_AGI) {
 if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
   [delay
   ++delayCounter;
-  if (delayCounter == 3) {
+  if (delayCounter == 10) {
     delayCounter = 0;
-    [ adjust color 
     ++letterIndex;
-    if (letterIndex == 64) {
+    if (letterIndex == 52) {
       [ when fully shifted, begin timer
-      titleTimer = 45;
+      titleTimer = 5;
     } else {
-      [ adjust colors to make the shift
-      work1 = letterIndex;
-      work1 /= 3;
-      block(BYTE2HEX, &s16, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-      block(BYTE2HEX, &s19, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-      work1 += 42;
-      block(BYTE2HEX, &s18, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+      [ advance the color wave
+      v240 = v239;
+      v239 = v238;
+      v238 = v237;
+      v237 = v236;
+      v236 = v235;
+      v235 = v234;
+      v234 = v233;
+      v233 = v232;
+      v232 = v231;
+      v231 = v230;
+      [ increase up to max, then go back to start
+      if (letterIndex < 22) {
+        v230 += 3;
+      }
+      if (letterIndex > 21 && letterIndex < 43) {
+        v230 -= 3;
+      }
+      block(BYTE2HEX, &s13, &v230, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s14, &v231, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s15, &v232, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s16, &v233, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s17, &v234, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s18, &v235, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s19, &v236, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s20, &v237, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s21, &v238, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s22, &v239, 0); [ byte2hex(sRESULT, vINPUT)
+      block(BYTE2HEX, &s23, &v240, 0); [ byte2hex(sRESULT, vINPUT)
       [ set palette
       block(SET.PALETTE, 0, &m4, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
     }
@@ -826,25 +839,34 @@ if (titleTimer > 0) {
       ++titleSeq;
     }
     if (titleSeq == TS_PPACK) {
-      [ adjust palette to show text with no highlighting
-      s14 = "000000";
-      s15 = "2A0000";
-      block(SET.PALETTE, 0, &m4, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+    
+      [ set starting palette
+      block(SET.PALETTE, 0, &m5, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
       load.pic(currentRoom);
       draw.pic(currentRoom);
       discard.pic(currentRoom);
       show.pic();
-      [fade in
+      [ fade in
       block(FADE.IN, 0, 10, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
+      [ setup to do the color shift
       titleSeq = TS_PP_SHIFT;
       letterIndex = 0;
-      s14 = "%s16%s16%s16";
-      s15 = "%s18%s19%s19";
+      v230 = 0;
+      v231 = 0;
+      v232 = 0;
+      v233 = 0;
+      v234 = 0;
+      v235 = 0;
+      v236 = 0;
+      v237 = 0;
+      v238 = 0;
+      v239 = 0;
+      v240 = 0;
     }
     if (titleSeq == TS_FADEOUT_PP) {
       block(FADE.OUT, 0, 8, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
       [ restore palette
-      block(SET.PALETTE, 0, &m5, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, 0, &m6, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
       work1 = pic.Title;
       load.pic(work1);
       draw.pic(work1);
@@ -924,31 +946,6 @@ if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) 
   new.room(rm.ParkingLot); [ ##LE001##
 }
 
-[[ restart theme music if the intro screen is still showing
-[[ and end was reached
-[if (musicDone) {
-[  [ reset the flag
-[  reset(musicDone);
-[  
-[  [ start a timer to set a short delay before restarting music
-[  musicDelay = 1;
-[}
-  
-[[ if music interlude is active
-[if (musicDelay  > 0) {
-[  [ increment interlude delay counter
-[  musicDelay += 1;
-[  
-[  [ after 36 cycles
-[  if (musicDelay == 36) {
-[    [ reset timer
-[    musicDelay = 0;
-[    
-[[[    [ play it again sam
-[[[    sound(m.theme, musicDone);
-[  }
-[}
-
 return();
 
 [ **************************************
@@ -960,13 +957,14 @@ return();
 
 [           |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
 [palettes:  | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
-#message 4 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A%s14%%15153F003F15153F3F%s15%%3F153F3F3F153F3F3F"
- 
+#message 4 "000000%s13%%0000%s14%%0000%s15%%0000%s16%%0000%s17%%0000%s18%%0000%s19%%0000%s20%%0000%s21%%0000%s22%%0000%s23%%00003F15153F153F3F3F153F3F3F"
+#message 5 "0000000000000000000000000000000000000000000000000000000000000000000000003F15153F153F3F3F153F3F3F"
+
 [ default palette
-#message 5 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
+#message 6 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F003F15153F3F3F15153F153F3F3F153F3F3F"
 
 [ blank mouse cursor
-#message 6 "0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+#message 7 "0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
            "0000000000000000000000000000000000000000000000000000000000000000"
 
 [            |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
