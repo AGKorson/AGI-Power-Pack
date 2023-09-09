@@ -1,0 +1,152 @@
+[ ********************************************************************
+[
+[ lgc.HelpText1
+[
+[ displays help topics 13 - 17
+[
+[ ********************************************************************
+
+#define selectedTopic  v240
+#define prevItem       v241
+#define oldEgoDir      v242
+
+#define initScreen     f240
+#define moveSelection  f241
+
+#define topicTitle      s20
+
+[ select new item
+if (selectedTopic == 13) {
+  display(18, 4, "Shortcuts");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Shortcuts";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 45, "%s20");
+  display(4, 36, "-  Display the Help Screen");
+  display(5, 36, "-  Toggle sound on/off");
+  display(6, 36, "-  Echo line (copies previous input line)");
+  display(7, 36, "-  Examine item");
+  display(8, 36, "-  Save game to disk");
+  display(9, 36, "-  Toggle clock display on/off");
+  display(10, 36, "-  Restore game from disk");
+  display(11, 36, "-  Restart game");
+  display(12, 36, "-  Quit game");
+  display(13, 36, "-  Clear input line");
+  display(14, 36, "-  Echo line");
+  display(15, 36, "-  View Inventory");
+  display(16, 36, "-  Decrease volume");
+  display(17, 36, "-  Increase volume");
+  display(18, 36, "-  Activate menu");
+  display(19, 36, "-  Decrease animation speed");
+  display(20, 36, "-  Increase animation interval");
+  set.text.attribute(BLUE, LT_GRAY);
+  display(4, 32, "F1");
+  display(5, 25, "F2/Ctrl+S");
+  display(6, 32, "F3");
+  display(7, 32, "F4");
+  display(8, 32, "F5");
+  display(9, 32, "F6");
+  display(10, 32, "F7");
+  display(11, 32, "F9");
+  display(12, 29, "Alt+Z");
+  display(13, 28, "Ctrl+C");
+  display(14, 28, "Ctrl+E");
+  display(15, 24, "Ctrl+I/TAB");
+  display(16, 27, "'-' Key");
+  display(17, 27, "'+' Key");
+  display(18, 31, "ESC");
+  display(19, 25, "Ctrl+LEFT");
+  display(20, 24, "Ctrl+RIGHT");
+  return();
+}
+if (selectedTopic == 14) {
+  display(19, 4, "Status Bar");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Status Bar";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 45, "%s20");
+  display(4, 26, "The status bar shows the player's current score,");
+  display(5, 26, "game title, a clock and current sound volume.");
+  display(7, 26, "The clock can display the total elapsed game");
+  display(8, 26, "time or real time (i.e. the PC clock time). Use");
+  display(9, 26, "the Time menu to toggle between the two modes.");
+  display(11, 26, "Sound status and volume are indicated by the");
+  display(12, 26, "sound bar on the right of the status bar. The");
+  display(13, 26, "current sound level is indicated by the position");
+  display(14, 26, "of the '\x0E' character. When sound is disabled");
+  display(15, 26, "(off) the volume bar is gray. Clicking on the");
+  display(16, 26, "sound bar will enable sound (if currently");
+  display(17, 26, "disabled) and set the volume according to the");
+  display(18, 26, "position clicked.");
+  display(20, 26, "Clicking anywhere else on the status bar will");
+  display(21, 26, "display the game menu.");
+  return();
+}
+if (selectedTopic == 15) {
+  display(20, 4, "Tool Bar");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Tool Bar";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 46, "%s20");
+  display(4, 23, "The Toolbar lets you change the function of the mouse.");
+  display(5, 23, "Click on a button to select a function. Available");
+  display(6, 23, "functions include:");
+  display(8, 23, "DEFAULT: The mouse has no in-game function.");
+  display(10, 23, "QUIT/SAVE/RESTORE/RESTART: These don't chage the mouse");
+  display(11, 23, "function, they run the selected command. If ego dies,");
+  display(12, 23, "the SAVE button is replaced with the RESTART button.");
+  display(14, 23, "WALK: Enables 'point-and-click' movement. Right-");
+  display(15, 23, "clickking will cancel and stop ego.");
+  display(17, 23, "LOOK: Same as typing \"look at ...\" on the input line.");
+  display(19, 23, "TALK: Click on a character to start a conversation.");
+  display(21, 23, "USE: Lets you pick up or manipulate an item or object");
+  display(22, 23, "on the screen.");
+  return();
+}
+if (selectedTopic == 16) {
+  display(21, 4, "Viewing Items");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Viewing Items";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 43, "%s20");
+  display(7, 30, "When the cursor mode is WALK, TALK or");
+  display(8, 30, "LOOK, selecting an item on the inventory");
+  display(9, 30, "screen will display an image of the item");
+  display(10, 30, "and a description, similar to other AGI");
+  display(11, 30, "games.");
+  display(14, 30, "You should look closely at all items, as");
+  display(15, 30, "there may be clues that can help you");
+  display(16, 30, "advance in the game.");
+  return();
+}
+if (selectedTopic == 17) {
+  display(22, 4, "Using Items");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Using Items";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(5, 30, "When the cursor mode is USE, selecting");
+  display(6, 30, "an item on the inventory screen will");
+  display(7, 30, "either switch to an appropriate icon that");
+  display(8, 30, "will let you use that object on the");
+  display(9, 30, "screen, or it will 'use' the item in an");
+  display(10, 30, "an appropriate way.");
+  display(12, 30, "For example, if you LOOK at a book, you");
+  display(13, 30, "will see the cover, and a description of");
+  display(14, 30, "it. If you USE the book, you will be able");
+  display(15, 30, "to actually read the contents.");
+  display(17, 30, "You should experiment with USING all");
+  display(18, 30, "items you find to get as many clues as");
+  display(19, 30, "possible to help you finish the game.");
+  display(2, 44, "%s20");
+}
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

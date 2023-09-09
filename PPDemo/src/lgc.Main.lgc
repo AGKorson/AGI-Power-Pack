@@ -48,8 +48,6 @@
 [ **************************************
 [ LOCAL DEFINES
 [ **************************************
-#define rndNum                     v255
-
 #define mnu_msgUseItem              m1
 #define mnu_msgSndToggle            m2
 #define mnu_msgSoundPC              m3
@@ -225,8 +223,8 @@ if (newRoom) {
       currentRoom != rm.Closet && currentRoom != rm.SecretRoom) {
     [ start a fresh timer
     set(closetTimerStart);
-    timerMin = 0; [4;
-    timerSec = 20; [0;
+    timerMin = 4;
+    timerSec = 0;
     block(START.TIMER, &timerMin, &timerSec, &closetTimerDone); [ start.timer(vMINUTES, vSECONDS, fDONE)
   } else {
     if (closetTimerStart) {
@@ -779,6 +777,53 @@ if (closetTimerDone) {
   }
 }
 
+[ save clock values for comparison purposes
+oldSeconds = elapsedSeconds;
+[ minutes handled as part of patient clock check
+oldHours = elapsedHours;
+oldDays = elapsedDays;
+
+[ patient clock determines progression of patients
+[ who visit the facility
+if (elapsedMinutes != oldMinutes) {
+  oldMinutes = elapsedMinutes;
+  ++patientClock;
+  [ convert game time into 20 minute timer intervals
+  if (patientClock == 20) {
+    patientClock = 0;
+  }
+  [ update patient locations 
+  if (currentRoom != rm.Lobby) {
+    if (patientClock > 0 && patientClock < 6) {
+      patient2Loc = LOC_LOBBY;
+    } else {
+      if (patientClock > 5 && patientClock < 10) {
+        patient2Loc = LOC_EXAM;
+      } else {
+        patient2Loc = LOC_GONE;
+      }
+    }
+    if (patientClock > 4 && patientClock < 12) {
+      patient3Loc = LOC_LOBBY;
+    } else {
+      if (patientClock > 11 && patientClock < 15) {
+        patient3Loc = LOC_EXAM;
+      } else {
+        patient3Loc = LOC_GONE;
+      }
+    }
+    if (patientClock > 10 && patientClock < 16) {
+      patient4Loc = LOC_LOBBY;
+    } else {
+      if (patientClock > 15 && patientClock < 19) {
+        patient4Loc = LOC_EXAM;
+      } else {
+        patient4Loc = LOC_GONE;
+      }
+    }
+  }
+}
+
 [ check for ego death (usually happens a lot in AGI games...)
 if (deathType) {
   [ if this is first cycle since ego died
@@ -898,58 +943,6 @@ if (!disableGameFunctions) {
   call(lgc.ToolbarFunctions);
 }
 
-[ UNKNOWN WORD CHECK
-if (haveInput && !haveMatch && unknownWordNum > 0) {
-  reset(haveInput);
-  [copy word to a string
-  if (unknownWordNum == 1) {
-    word.to.string(unknownWord, w1);
-  }
-  if (unknownWordNum == 2) {
-    word.to.string(unknownWord, w2);
-  }
-  if (unknownWordNum == 3) {
-    word.to.string(unknownWord, w3);
-  }
-  if (unknownWordNum == 4) {
-    word.to.string(unknownWord, w4);
-  }
-  if (unknownWordNum == 5) {
-    word.to.string(unknownWord, w5);
-  }
-  if (unknownWordNum == 6) {
-    word.to.string(unknownWord, w6);
-  }
-  if (unknownWordNum == 7) {
-    word.to.string(unknownWord, w7);
-  }
-  if (unknownWordNum == 8) {
-    word.to.string(unknownWord, w8);
-  }
-  if (unknownWordNum == 9) {
-    word.to.string(unknownWord, w9);
-  }
-  if (unknownWordNum == 10) {
-    word.to.string(unknownWord, w10);
-  }
-  [choose a random unknown word response
-  random(&m38, &m40, rndNum);
-  print.v(rndNum);
-}
-
-[ finally, if there is input that hasn't 
-[ been recognized yet
-if (haveInput && !haveMatch) {
-  print("I don't understand your request.");
-  reset(haveInput);
-}
-
-[ save clock values for comparison purposes
-oldSeconds = elapsedSeconds;
-oldMinutes = elapsedMinutes;
-oldHours = elapsedHours;
-oldDays = elapsedDays;
-
 return();
 
 [ **************************************
@@ -1048,12 +1041,6 @@ return();
 #message 35 "%l90|6"
 #message 36 "%l90|7"
 #message 37 "%l90|8"
-
-[ unknown input messages
-#message 38 "I don't understand \"%s1\""
-#message 39 "\"%s1\" is not in my vocabulary."
-#message 40 "What is \"%s1\""
-
 
 [ debug menu items
 #message 41 "Log Input:      Off"

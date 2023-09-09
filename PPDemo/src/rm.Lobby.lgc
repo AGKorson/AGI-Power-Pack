@@ -18,7 +18,6 @@
 [ set up.
 
 [ ********************************************************************
-[ TODO: more said statements for lobby
 
 [ **************************************
 [ LOCAL DEFINES
@@ -63,13 +62,12 @@
 #define fEgoWaitTalk   f229
 #define fPatient1Talking      f230
 #define fEgoTalkReceptionist  f231
-#define fEgoTalkPatient       f232
-#define checktalk      f233
-#define fPatientAtDoor f234
-#define fTripping      f235
-#define fFalling       f236
-#define fSlipped       f237
-#define fPagesTurned   f238
+#define checktalk      f232
+#define fPatientAtDoor f233
+#define fTripping      f234
+#define fFalling       f235
+#define fSlipped       f236
+#define fPagesTurned   f237
 
 #define receptionistLoc v220
 #define   PHONE         1
@@ -98,8 +96,13 @@
 #define patient4Ctr    v236
 
 #define tmpSec         v237
-#define tmpMin         v238
-#define secondCtr      v239
+#define secondCtr      v238
+#define whosIn         v239 [ bitflag showing which actors are actually in the room
+                            [ bit0 = receptionist
+                            [ bit1 = patient1
+                            [ bit2 = patient2
+                            [ bit3 = patient3
+                            [ bit4 = patient4
 
 [ sequence actions for receptionist and patients
 #define   SKIP         -1
@@ -222,6 +225,8 @@ if (newRoom) {
     random(3, 5, receptionistTimer);
     receptionistTimer += elapsedSeconds;
     draw(oReceptionist);
+    [ receptionist is in the room
+    whosIn = 1;
   }
   if (receptionistTimer > 59) {
     receptionistTimer -= 60;
@@ -275,7 +280,6 @@ if (newRoom) {
   [ room is loaded; initial actions depend on 
   [ current timer point
   tmpSec = -1;
-  tmpMin = elapsedMinutes;
 
   [ patient 1 (always present)
   animate.obj(oPatient1);
@@ -295,6 +299,8 @@ if (newRoom) {
   if (patient1Timer > 59) {
     patient1Timer -= 60;
   }
+  [ patient1 is in the room
+  block(BIT.OR, 0, &whosIn, 2); [ bit.or(BYVAL, VAR, MASK)
   
   [ to save on memory, patient 2/3/4 views are
   [ only loaded when needed; need to turn off
@@ -323,6 +329,8 @@ if (newRoom) {
         patient2Timer -= 60;
       }
       draw(oPatient2);
+      [ patient2 is in the room
+      block(BIT.OR, 0, &whosIn, 4); [ bit.or(BYVAL, VAR, MASK)
     } else {
       position(oPatient2, 12, 92);
     }
@@ -350,6 +358,8 @@ if (newRoom) {
         patient3Timer -= 60;
       }
       draw(oPatient3);
+      [ patient3 is in the room
+      block(BIT.OR, 0, &whosIn, 8); [ bit.or(BYVAL, VAR, MASK)
     } else {
       position(oPatient3, 12, 92);
     }
@@ -377,6 +387,8 @@ if (newRoom) {
         patient4Timer -= 60;
       }
       draw(oPatient4);
+      [ patient4 is in the room
+      block(BIT.OR, 0, &whosIn, 16); [ bit.or(BYVAL, VAR, MASK)
     } else {
       position(oPatient4, 12, 92);
     }
@@ -432,9 +444,9 @@ if (newRoom) {
   [ restore cursor
   cursoricon = cursormode;
   set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-[  return();
 }
 
+[ check for restoring - need to reload correct views
 if (gameRestored) {
   set(noScript);
   [ patient 2
@@ -480,21 +492,18 @@ if (currentTrack > 0 && currentTrack < 128) {
 }
 
 [ check for one min timer
-if (firstLobbyVisit) {
+if (firstLobbyVisit && secondCtr < 60) {
   if (tmpSec != elapsedSeconds) {
     tmpSec = elapsedSeconds;
+[**** BEGIN DEBUG CODE
+[ debug code to track timer
+display(23, 68, "%v12|2:%v11|2 (%v237)  ");
+[**** END DEBUG CODE
     ++secondCtr;
-    if (secondCtr == 45) {
+    if (secondCtr == 60) {
 [    if (secondCtr == 10) {
       set(fOneMinute);
     }
-  }
-  
-} else {
-  [ debug code to track timer
-  if (tmpSec != elapsedSeconds) {
-    tmpSec = elapsedSeconds;
-    display(23, 68, "%v12|2:%v11|2 (%v82)  ");
   }
 }
 
@@ -654,6 +663,8 @@ if (fRDone) {
     [ move to second point on return path
     receptionistSeq = RTNHALL2;
     move.obj(oReceptionist, 60, 99, 1, fRDone);
+    [ receptionist is in the room
+    block(BIT.OR, 0, &whosIn, 1); [ bit.or(BYVAL, VAR, MASK)
     goto(doneRSeq);
   }
   [ if at second point of return-to-hall (or if standing up at phone station)
@@ -713,6 +724,8 @@ if (fRDone) {
     [ move to the third point
     receptionistSeq = MOVEHALL3;
     move.obj(oReceptionist, 16, 93, 1, fRDone);
+    [ no longer in the room
+    block(BIT.AND, 0, &whosIn, 254); [ bit.and(BYVAL, VAR, MASK)
     goto(doneRSeq);
   }
   [ if at third point of hall move, (out of view, to the left)
@@ -957,8 +970,7 @@ if (receptionistSeq == NEWLOCATION) {
       set.cel(oReceptionist, 6);
       reverse.loop(oReceptionist, fRDone);
     } else {
-      [ at desk or computer: move to next
-      [ location
+      [ at desk or computer: move to next location
       if (work1 == HALL) {
         receptionistSeq = MOVEHALL1;
         move.obj(oReceptionist, 60, 99, 1, fRDone);
@@ -1052,8 +1064,6 @@ if (patient1Timer != 255) {
       if (work1 == 4) {
         [ reset the one minute flag so it doesn't trigger again
         reset(fOneMinute);
-[        [ set flag so there will not be another request
-[        set(fAskToPee);
         [ patient1 stands up
         set.loop(oPatient1, LP_P_SIT);
         set.cel(oPatient1, 0);
@@ -1061,9 +1071,9 @@ if (patient1Timer != 255) {
         patient1Seq = STANDUP;
       } else {
         [ choose a new random sequence to read book or use phone
-        random(1, 3, work1);
+        random(1, 5, work1);
         [ use phone or read book
-        if (work1 == 1) {
+        if (work1 < 3) {
           patient1Seq = GETPHONE;
           set.loop(oPatient1, LP_P_GETPHONE);
         } else {
@@ -1210,6 +1220,8 @@ if (fP1Done) {
     patient1Seq = MOVEHALL3;
     set.loop(oPatient1, LP_MOVELEFT);
     move.obj(oPatient1, 12, 92, 1, fP1Done);
+    [ patient1 is out of the room
+    block(BIT.AND, 0, &whosIn, 253); [ bit.and(BYVAL, VAR, MASK)
     goto(p1SeqDone);
   }
   if (patient1Seq == MOVEHALL3) {
@@ -1226,6 +1238,8 @@ if (fP1Done) {
     patient1Seq = RTNHALL2;
     set.loop(oPatient1, LP_MOVEDOWN);
     move.obj(oPatient1, 86, 97, 1, fP1Done);
+    [ patient1 is back in the room
+    block(BIT.OR, 0, &whosIn, 2); [ bit.or(BYVAL, VAR, MASK)
     goto(p1SeqDone);
   }
   if (patient1Seq == RTNHALL2) {
@@ -1373,6 +1387,8 @@ if (fP2Done) {
     reset(fPatientAtDoor);
     set.loop(oPatient2, LP_MOVERIGHT);
     move.obj(oPatient2, 139, 133, 1, fP2Done);
+    [ patient2 is in the room
+    block(BIT.OR, 0, &whosIn, 4); [ bit.or(BYVAL, VAR, MASK)
     goto(p2SeqDone);
   }
   if (patient2Seq == MOVESEAT2) {
@@ -1413,10 +1429,14 @@ if (fP2Done) {
     goto(p2SeqDone);
   }
   if (patient2Seq == MOVEHALL2) {
+    [ patient is in hallway on way to exam
+    patient2Loc = LOC_EXAM;
     patient2Seq = MOVEHALL3;
     set.loop(oPatient2, LP_MOVELEFT);
     normal.cycle(oPatient2);
     move.obj(oPatient2, 12, 91, 1, fP2Done);
+    [ patient2 is out of the room
+    block(BIT.AND, 0, &whosIn, 251); [ bit.and(BYVAL, VAR, MASK)
     goto(p2SeqDone);
   }
   if (patient2Seq == MOVEHALL3) {
@@ -1427,6 +1447,8 @@ if (fP2Done) {
     patient2Seq = RTNHALL2;
     set.loop(oPatient2, LP_MOVEDOWN);
     move.obj(oPatient2, 86, 114, 1, fP2Done);
+    [ patient2 is back in the room
+    block(BIT.OR, 0, &whosIn, 4); [ bit.or(BYVAL, VAR, MASK)
     goto(p2SeqDone); 
   }
   if (patient2Seq == RTNHALL2) {
@@ -1441,6 +1463,8 @@ if (fP2Done) {
     set.loop(oPatient2, LP_MOVEDOWN);
     move.obj(oPatient2, 116, 167, 1, fP2Done);
     goto(p2SeqDone); 
+    [ patient2 is not in the room
+    block(BIT.AND, 0, &whosIn, 251); [ bit.and(BYVAL, VAR, MASK)
   }
   if (patient2Seq == RTNHALL4) {
     patient2Seq = IDLE;
@@ -1585,6 +1609,8 @@ if (fP3Done) {
     reset(fPatientAtDoor);
     set.loop(oPatient3, LP_MOVERIGHT);
     move.obj(oPatient3, 130, 112, 1, fP3Done);
+    [ patient3 is in the room
+    block(BIT.OR, 0, &whosIn, 8); [ bit.or(BYVAL, VAR, MASK)
     goto(p3SeqDone);
   }
   if (patient3Seq == MOVESEAT2) {
@@ -1629,6 +1655,8 @@ if (fP3Done) {
     set.loop(oPatient3, LP_MOVELEFT);
     normal.cycle(oPatient3);
     move.obj(oPatient3, 12, 91, 1, fP3Done);
+    [ patient3 is out of the room
+    block(BIT.AND, 0, &whosIn, 247); [ bit.and(BYVAL, VAR, MASK)
     goto(p3SeqDone);
   }
   if (patient3Seq == MOVEHALL3) {
@@ -1639,6 +1667,8 @@ if (fP3Done) {
     patient3Seq = RTNHALL2;
     set.loop(oPatient3, LP_MOVEDOWN);
     move.obj(oPatient3, 86, 114, 1, fP3Done);
+    [ patient3 is back in the room
+    block(BIT.OR, 0, &whosIn, 2); [ bit.or(BYVAL, VAR, MASK)
     goto(p3SeqDone); 
   }
   if (patient3Seq == RTNHALL2) {
@@ -1652,6 +1682,8 @@ if (fP3Done) {
     set(fPatientAtDoor);
     set.loop(oPatient3, LP_MOVEDOWN);
     move.obj(oPatient3, 116, 167, 1, fP3Done);
+    [ patient3 has left
+    block(BIT.AND, 0, &whosIn, 247); [ bit.and(BYVAL, VAR, MASK)
     goto(p3SeqDone); 
   }
   if (patient3Seq == RTNHALL4) {
@@ -1796,6 +1828,8 @@ if (fP4Done) {
     reset(fPatientAtDoor);
     set.loop(oPatient4, LP_MOVERIGHT);
     move.obj(oPatient4, 137, 127, 1, fP4Done);
+    [ patient4 is in the room
+    block(BIT.OR, 0, &whosIn, 16); [ bit.or(BYVAL, VAR, MASK)
     goto(p4SeqDone);
   }
   if (patient4Seq == MOVESEAT2) {
@@ -1846,6 +1880,8 @@ if (fP4Done) {
     set.loop(oPatient4, LP_MOVELEFT);
     normal.cycle(oPatient4);
     move.obj(oPatient4, 12, 91, 1, fP4Done);
+    [ patient4 is out of the room
+    block(BIT.AND, 0, &whosIn, 239); [ bit.and(BYVAL, VAR, MASK)
     goto(p4SeqDone);
   }
   if (patient4Seq == MOVEHALL3) {
@@ -1856,6 +1892,8 @@ if (fP4Done) {
     patient4Seq = RTNHALL2;
     set.loop(oPatient4, LP_MOVEDOWN);
     move.obj(oPatient4, 86, 114, 1, fP4Done);
+    [ patient4 is back in the room
+    block(BIT.OR, 0, &whosIn, 16); [ bit.or(BYVAL, VAR, MASK)
     goto(p4SeqDone); 
   }
   if (patient4Seq == RTNHALL2) {
@@ -1869,6 +1907,8 @@ if (fP4Done) {
     set(fPatientAtDoor);
     set.loop(oPatient4, LP_MOVEDOWN);
     move.obj(oPatient4, 116, 167, 1, fP4Done);
+    [ patient4 has left
+    block(BIT.AND, 0, &whosIn, 239); [ bit.and(BYVAL, VAR, MASK)
     goto(p4SeqDone); 
   }
   if (patient4Seq == RTNHALL4) {
@@ -1959,11 +1999,26 @@ if (fFalling) {
   work2 = 5;
   reposition(ego, work1, work2);
   end.of.loop(ego, fSlipped);
+  work1 = 2;
+  cycle.time(ego, work1);
   [ allow cycle at rest
   work1 = 0;
   set.upper.left(&ego, &work1);
   stop.motion(ego);
   draw(ego);
+  
+  [ play slip/fall sound
+  load.sound(s.SlipFall);
+  set(4channelsound);
+  set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+  [ use correct instrument
+  work3 = 0;
+  work2 = 70; [ bassoon
+  set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+  ++work3;
+  work2 = 116; [ taiko drum
+  set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+  sound(s.SlipFall, soundDone);
 }
 
 if (fSlipped) {
@@ -1984,8 +2039,7 @@ if (deathType) {
 [ **************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ place said tests here
-  
-  [ if ego is talking to receptionist or a patient, respond to input differently
+  [ if ego is talking to receptionist, respond to input differently
   if (fEgoTalkReceptionist) {
     block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
     if (said("use", "bathroom")) {
@@ -1996,34 +2050,245 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       set(allowedPastLobby);
       goto(resetmsg);
     } 
-    [ TODO: more responses for receptionist conversation
-    [ ask about sierra
-    [ ask name
+    [ ask name/what is your name
+    if ((said("who", "you") || said("what", "name"))) {
+      print.at("\"I'm Betty. What can I do for you?\"", 6, 6, 35);
+      goto(resetmsg);
+    }
     [ ask for appointment
+    if ((said("get", "appointment") || said("set", "appointment"))) {
+      print.at("\"I'm sorry, but we're booked solid until next month.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
     [ ask to see doctor/nurse
+    if ((said("see", "doctor") || said("get", "doctor") || said("tell me", "doctor") ||
+         said("see", "nurse") || said("get", "nurse") || said("tell me", "nurse"))) {
+      print.at("\"You need an appointment first.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
     [ ask about patients
-    [ ask about tasks- phone/papers/computers
-    [ magazine
-    [ wet floor, sign
+    if ((said("patient", "rol") || said("anyword", "patient", "rol") ||
+         said("anyword", "anyword", "patient", "rol"))) {
+      print.at("\"Patient information is strictly confidential. I can't give you any information about our patients..\"", 6, 6, 35);
+      goto(resetmsg);
+    }
+    [ ask about phone
+    if ((said("phone") || said("ask", "phone") || said("use", "phone"))) {
+      print.at("\"I use it to conduct clinic business. It is not available for patients' use.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
+    [ ask about papers
+    if ((said("paper") || said("ask", "paper") || said("give", "paper"))) {
+      print.at("\"Those are confidential patient records. Please don't touch them.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
+    [ ask about computer
+    if ((said("computer") || said("ask", "computer") || said("use", "computer"))) {
+      print.at("\"I use it to conduct clinic business. It is not available for patients' use.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
+    [ ask about magazine
+    if ((said("magazine") || said("ask", "magazine") || said("where", "magazine") || said("give", "magazine"))) {
+      print.at("\"Yes, we have some old magazines going way back. Try looking on the tables in the waiting area.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
+    [ ask about wet floor, sign
+    if ((said("floor") || said("ask", "floor") ||
+         said("wet", "floor") || said("ask", "wet", "floor") ||
+         said("sign") || said("ask", "sign"))) {
+      print.at("\"There's a wet spot on the floor by the sign. Please be careful.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
+    [ ask about sierra
+    if ((said("sierra") || said("ask", "sierra") ||
+         said("ask", "sierra", "memorabilia"))) {
+      print.at("\"I heard this building used to belong to a game company called Sierra. But I don't know anything about it.\"", 6, 6, 35);
+      goto(resetmsg);
+    }
     
-    print.at("\"I can't help you with that.\"", 6, 6, 35);
+    [ generic response if not handled yet
+    if (unknownWordNum == 0) {
+      print.at("\"I don't know what you mean. Can you rephrase your request?\"", 6, 6, 35);
+    } else {
+      print.at("\"I'm sorry, I don't understand what you're saying.\"", 6, 6, 35);
+    }
+    set(haveMatch);
     :resetmsg
     block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
     return();
   }
-  if (fEgoTalkPatient) {
-    [ TODO: add discussions with the patients
-    print("The patients have nothing to say to you.");
-    return();
-  }
-  [ if not talking to anyone
-  if (said("look")) {
-    print("This is the lobby. There is a desk and some chairs in the waiting area.");
+
+  if (said("talk")) {
+    print("Be more specific.");
   }
   if (said("talk", "receptionist")) {
-    [ same as talk-click
-    set(checktalk);
+    [ is receptionis here?
+    if (receptionistLoc < HALL) {
+      [ same as talk-click
+      set(checktalk);
+    } else {
+      print("The receptionist is not here.");
+    }
   }
+  
+[    patient1 is old lady (no name)      2
+[    patient2 is young lady (Ms. Cole)   4
+[    patient3 is old man (Mr. Lowe)      8
+[    patient4 is young man (Mr. Walls)  16
+  if (said("talk", "patient")) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 254); [ bit.and(BYVAL, VAR, MASK)
+    [ if no one near
+    if (work1 == 0) {
+      print("There is no one here.");
+    } else {
+      [ if only one
+      if ((work1 == 2 || work1 == 4 || work1 == 8 || work1 == 16)) {
+        if (work1 == 2) {
+          goto(talkpatient1);
+        }
+        if (work1 == 4) {
+          goto(talkpatient2);
+        }
+        if (work1 == 8) {
+          goto(talkpatient3);
+        }
+        goto(talkpatient4); 
+      } else {
+        print("Be more specific.");
+      }
+    }
+  }
+  if (said("talk", "woman")) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 6); [ bit.and(BYVAL, VAR, MASK)
+    if (work1 == 2) {
+      goto(talkpatient1);
+    } else {
+      if (work1 == 4) {
+        goto(talkpatient2);
+      } else {
+        print("Be more specific.");
+      }
+    }
+  }
+  if (said("talk", "man")) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 24); [ bit.and(BYVAL, VAR, MASK)
+    if (work1 == 8) {
+      goto(talkpatient3);
+    } else {
+      if (work1 == 16) {
+        goto(talkpatient4);
+      } else {
+        print("Be more specific.");
+      }
+    }
+  }
+  if (said("talk", "old", "woman")) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 2); [ bit.and(BYVAL, VAR, MASK)
+    if (work1 == 2) {
+      [ same as click on patient1
+      goto(talkpatient1);
+    } else {
+      print("The old lady isn't here.");
+    }
+  }
+  work2 = 0;
+  if (said("talk", "young", "woman")) {
+    work2 = 1;
+  }
+  if (said("talk", "cole")) {
+    work2 = 2;
+  }
+  if (work2 != 0) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 4); [ bit.and(BYVAL, VAR, MASK)
+    if (work1 == 4) {
+      [ same as click on patient2
+      goto(talkpatient2);
+    } else {
+      if (work2 == 1) {
+        print("The young lady isn't here.");
+      } else {
+        print("Ms. Cole isn't here.");
+      }
+    }
+  }
+  work2 = 0;
+  if (said("talk", "old", "man")) {
+    work2 = 1;
+  }
+  if (said("talk", "lowe")) {
+    work2 = 2;
+  }
+  if (work2 > 0) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 8); [ bit.and(BYVAL, VAR, MASK)
+    if (work1 == 8) {
+      [ same as click on patient3
+      goto(talkpatient3);
+    } else {
+      if (work2 == 1) {
+        print("The old man isn't here.");
+      } else {
+        print("Mr. Lowe isn't here.");
+      }
+    }
+  }
+  work2 = 0;
+  if (said("talk", "young", "man")) {
+    work2 = 1;
+  }
+  if (said("talk", "walls")) {
+    work2 = 2;
+  }
+  if (work2 > 0) {
+    work1 = whosIn;
+    block(BIT.AND, 0, &work1, 16); [ bit.and(BYVAL, VAR, MASK)
+    if (work1 == 16) {
+      [ same as click on patient4
+      goto(talkpatient4);
+    } else {
+      if (work2 == 1) {
+        print("The young man isn't here.");
+      } else {
+        print("Mr. Walls isn't here.");
+      }
+    }
+  }
+  
+[ TODO: more said statements for lobby
+  if (said("look")) {
+    print("This is the lobby. There is a desk and some chairs in the waiting area.");
+    [ is receptionist here?
+    if (receptionistLoc < HALL) {
+      print("The receptionist is busy working behind the desk.");
+    }
+    [ are any patients here?
+    work1 = 0;
+    if (patient1Loc == LOC_LOBBY) {
+      ++work1;
+    }
+    if (patient2Loc == LOC_LOBBY) {
+      ++work1;
+    }
+    if (patient3Loc == LOC_LOBBY) {
+      ++work1;
+    }
+    if (patient4Loc == LOC_LOBBY) {
+      ++work1;
+    }
+    if (work1 == 1) {
+      print("There is a patient in the waiting area.");
+    } else {
+      if (work1 > 1) {
+        print("There are some patients in the waiting area.");
+      }
+    }
+  }
+  
   if (said("use", "bathroom")) {
     print("Who are you talking to?");
   }
@@ -2054,12 +2319,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ patient 1
     if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
       if (elapsedMinutes < 10) {
-        [ if reading a book
-        if ((patient1Seq == 3 || patient1Seq == 32 || patient1Seq == 33)) {
+        [ if using phone
+        if ((patient1Seq == GETPHONE || patient1Seq == USEPHONE || patient1Seq == STOWPHONE)) {
           print("Looks like she's checking her phone. Or maybe playing a game.");
           goto(doneclick);
         }
-        if (patient1Seq > 33 && patient1Seq == 37) {        
+        [ if reading a book
+        if (patient1Seq > STOWPHONE && patient1Seq == TAPTOE) {        
           print("This patient is reading a book. It's nice to know that some "
                 "people can survive without constantly checking their cell phone.");
         }
@@ -2180,20 +2446,128 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       set(checktalk);
       goto(doneclick);
     }
+    [ patients
     if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
-      print("talk patient1");
+      :talkpatient1
+      distance(ego, oPatient1, work1);
+      if (work1 < 40) {
+        current.loop(oPatient1, work1);
+        [ 5:talking to receptionist
+        if (work1 == 5) {
+          print("She's talking with the receptionist. You shouldn't interrupt.");
+        } else {
+          block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
+          [ 0-3:walking OR idle
+          if ((work1 < 4 || patient1Seq == IDLE)) {
+            random(&m9, &m12, work1);
+          } else {
+            [ 4:get up/sit down
+            if (work1 == 4) {
+              work1 = &m13;
+            } else {
+              [ 6:get/stow phone
+              [ 7:using phone
+              if ((work1 == 6 || work1 == 7)) {
+                random(&m14, &m17, work1);
+              } else {
+                [ 8:get/stow book
+                [ 9:read book
+                random(&m18, &m21, work1);
+              }
+            }
+          }
+          print.at.v(work1, 6, 40, 35);
+          block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+        }
+      } else {
+        print("She can't hear you from here.");
+      }
     }
     if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
       [ determine which patient
       current.view(oPatient2, work1);
       if (work1 == vw.Patient2) {
-        print("talk patient2");
+        :talkpatient2
+        distance(ego, oPatient2, work1);
+        if (work1 < 40) {
+          block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
+          current.loop(oPatient2, work1);
+          [ 0-3: walking OR idle
+          if ((work1 < 4 || patient2Seq == IDLE)) {
+            random(&m22, &m25, work1);
+          } else {
+            [ 4:get up/sit down
+            if (work1 == 4) {
+              work1 = &m26;
+            } else {
+              [ 5:talk [is this ever used??]
+              [ 6:get/stow phone
+              [ 7:using phone
+              if ((work1 == 6 || work1 == 7)) {
+                random(&m27, &m30, work1);
+              } else {
+                [ 8:tap toe
+                random(&m31, &m34, work1);
+              }
+            }
+          }
+          print.at.v(work1, 6, 40, 35);
+          block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+        } else {
+          print("She can't hear you from here.");
+        }
       } else {
-        print("talk patient4");
+        :talkpatient4
+        distance(ego, oPatient4, work1);
+        if (work1 < 40) {
+          block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
+          current.loop(oPatient4, work1);
+          [ 0-3: walking OR idle
+          if ((work1 < 4 || patient4Seq == IDLE)) {
+            random(&m35, &m38, work1);
+          } else {
+            [ 4:get up/sit down
+            if (work1 == 4) {
+              work1 = &m39;
+            } else {
+              [ 5:talk [is this ever used??]
+              [ 6:get/stow phone
+              [ 7:using phone
+              random(&m40, &m43, work1);
+            }
+          }
+          print.at.v(work1, 6, 40, 35);
+          block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+        } else {
+          print("He can't hear you from here.");
+        }
       }
     }
     if (posn(oPatient3, ON.OBJ, 1, &mouseX, &mouseY)) {
-      print("talk patient3");
+      :talkpatient3
+      distance(ego, oPatient3, work1);
+      if (work1 < 40) {
+        block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
+        current.loop(oPatient3, work1);
+        [ 0-3: walking OR idle
+        if ((work1 < 4 || patient1Seq == IDLE)) {
+          random(&m44, &m47, work1);
+        } else {
+          [ 4:get up/sit down
+          if (work1 == 4) {
+            work1 = &m48;
+          } else {
+            [ 5:talk [is this ever used??]
+            [ 6:get/stow phone
+            [ 7:using phone
+            random(&m49, &m52, work1);
+          }
+        }
+        print.at.v(work1, 6, 40, 35);
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      } else {
+        print("He can't hear you from here.");
+      }
     }
     goto(doneclick);
   }
@@ -2289,11 +2663,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-[*****
-:exit              [  test for leaving the room
-[*****
-
-[ add exit checks here (or use layout editor)
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+:exit
 
 if (edgeEgoHit == TOP_EDGE) {
   [ only if allowed past (or if receptionist is in hallway)
@@ -2311,10 +2684,7 @@ if (edgeEgoHit == TOP_EDGE) {
     block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
     new.room(rm.Hallway);  [ ##LE001##
   } else {
-    work1 = LT_MAGENTA;
-    work2 = MAGENTA;
-    work3 = WHITE;
-    block(MSGBOX.COLOR.V, &work1, &work2, &work3); [ msgbox.color.v(vBORDER, vFG, vBG)
+    block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
     print.at("\"Excuse me sir, only patients are allowed past the lobby.\"", 6, 6, 35);
     block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
     set.loop(ego, 2);
@@ -2322,7 +2692,7 @@ if (edgeEgoHit == TOP_EDGE) {
     work2 = 1;
     reposition(ego, work1, work2);
     egoDir = STOPPED;
-    [ cancel clicktomove action
+    [ cancel click-to-move action
     set.dir(ego, egoDir);
   }
 }
@@ -2352,3 +2722,64 @@ return();
 #message 6 "%g25"
 #message 7 "%g26"
 #message 8 "%g27"
+[ patient 1 walking
+#message 9 "\"Hi there sonny! I can't talk right now.\""
+#message 10 "\"It seems like I've been here all day. Why do they make you wait so long?\""
+#message 11 "\"My son said he would pick me up at 2. I hope my appointment is finished by then.\""
+#message 12 "\"I hate using public restroom. But when you gotta go, you gotta go!\""
+[ patient 1 get up/sit down
+#message 13 "\"I should get a cane. My arthritis makes it hard to move.\""
+[ patient 1 get/stow phone, using phone
+#message 14 "\"I just love chatting with my grandchildren!\""
+#message 15 "\"I wish I knew how to change my ring tone. The default tone is so annoying.\""
+#message 16 "\"My friend Thelma posts the funniest pictures of her cats on Facebook!\""
+#message 17 "\"Why are these phones so dang complicated? Why, back in my day, phones had a simple rotary dial, and hung on the wall with a cord.\""
+[ patient 1 get/stow book, read book
+#message 18 "\"These large print editions are really easy on my old eyes.\""
+#message 19"\"Just a minute, let me finish this page.\""
+#message 20 "\"I just love this book. Anne McCaffery is my favorite author.\""
+#message 21 "\"That Masterharper Robinton sounds like a real hunk! I'd like to find a man like him!\""
+
+[ patient 2 walking
+#message 22 "\"The nurses here are usually very nice.\""
+#message 23 "\"I almost cancelled this appointment. My regular doctor isn't in today. But I really need this prescription filled.\""
+#message 24 "\"My boyfriend is taking me to dinner tonight to celebrate our four month anniversary.\""
+#message 25 "\"I can't remember if I locked my car. I hope nothing bad happens.\""
+[ patient 2 get up/sit down
+#message 26 "\These chairs are not very comfortable.\""
+[ patient 2 get/stow phone, using phone
+#message 27 "\"Don't bother me, I'm checking my social media feed.\""
+#message 28 "\"If I don't see the nurse soon, I'll have to reschedule my hair appointment.\""
+#message 29 "\"Well, what do you know? Bell bottom trousers are back in style!\""
+#message 30 "\"Siri, how can I get annoying losers to stop hitting on me?\""
+[ patient 2 tap toe
+#message 31 "\"How much longer is this going to take? I have a hair appointment in one hour.\""
+#message 32 "\"Is there anything more boring than sitting in a waiting room with a bunch of sick people?\""
+#message 33 "\"Hum-dee-dum-dee-dum-dee-dum ... Oh, I'm sorry, were you talking to me?\""
+#message 34 "\"I wonder why the magazines in waiting rooms are always several years old?\""
+
+[ patient 4 walking
+#message 35 "\"It sure is a beautiful day. I might head out to Yosemite after I'm done here.\""
+#message 36 "\"Did you hear about the bank robbery yesterday? I can't believe how crime has gotten so out of hand around here.\""
+#message 37 "\"Is that you Tom? Oh sorry. You look a lot like my old high school buddy Tom Perkins.\""
+#message 38 "\"This is my first appointment here. I hope they're better than the last clinic I visited.\""
+[ patient 4 get up/sit down
+#message 39 "\"If you're not five minutes early, you're ten minutes late!\""
+[ patient 4 get/stow phone, using phone
+#message 40 "\"My fantasy football team is kicking butt!\""
+#message 41 "\"Oops. I missed a call from my mom. I better text her right away.\""
+#message 42 "\"Can't talk right now. I have to finish this presentation for work.\""
+#message 43 "\"Hang on, I have to check my doorbell camera ... Dang it! My neighbor's dog is taking a crap on my front lawn!\""
+
+[ patient 3 walking
+#message 44 "\"My sciatica is killing me. What are you here for?\""
+#message 45 "\"What I wouldn't give to be 30 again.\""
+#message 46 "\I hope the pharmacy is open late today. I will have to stop by there after this appointment.\""
+#message 47 "\"I think I'll stop by at Lefty's for a drink later. It's for medicinal purposes you know.\""
+[ patient 3 get up/sit down
+#message 48 "\"I hate going to see the doctor. All he does is poke and prod.\""
+[ patient 3 get/stow phone, using phone
+#message 49 "\"My wife texted me to stop by the store after my appointment. I replied that I don't know how to read texts on my phone.\""
+#message 50 "\"I hope I'm here on the right day. I'm not sure my phone's calendar is up to date.\""
+#message 51 "\"I can't figure out this Wordle puzzle. Is 'WEGUP' a valid word?\""
+#message 52 "\"Just checking baseball scores. As long as the Yankees lose, it's a good day!\""

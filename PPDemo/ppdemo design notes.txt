@@ -4,7 +4,7 @@ General:
     TOOLBAR - done
     MENU - done
     STATUSBAR - done
-    HELP SCREEN - not started
+    HELP SCREEN - done
 
     SCORING SUMMARY:
 X       -1 pt:   touching trees
@@ -97,26 +97,25 @@ custom sounds:
 use s.TunnelDoor for coffin
 
 1. Intro/Opening Credits: Show animated AGI Guy Studio logo, then animated Power Pack logo. Fade out, then fade in Demo title page - "Sierra Quest - a Power Pack Demo game"
-    BACKGROUND: still working PowerPack screen; maybe jazz it up a bit mroe?
+    BACKGROUND: done
     ANIMATION ART: done
     SOUND: done
-    CODING: mostly done; need to finalize after finishing music/title page art
+    CODING: done
     DESIGNERS: 
         Power Pack programmed by: Andrew Korson
         Demo Game written and programmed by: Andrew Korson
         Background art by: Klownstein
         Animation art by: Klownstein
         Additional art by: Andrew Korson
-        Original Music by: Andrew Korson
+        Original music by: Andrew Korson
         Additional sound by: doomlazer
 
 
-2. Ending Credits: skip? use help file instead for detailed credits?
-    BACKGROUND: TBD
-    ANIMATION ART: TBD
-    SOUND: TBD
-    CODING: TBD   
-        Playtesters: TBD
+2. Ending Credits: canceled- added winning/losing music clips instead
+    BACKGROUND: n/a
+    ANIMATION ART: n/a
+    SOUND: done
+    CODING: done   
 
 3. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss. If a patient arrives in a batmobile and ego tries to touch it, it shocks and kills him. Touching the trees will get sap on ego's hands, which costs a point; he can wash in the sink in the closet to get the point back. Ego can get back in car; this ends game (winning condition is to have disk with PP source code.)
     BACKGROUND: done
@@ -127,9 +126,9 @@ use s.TunnelDoor for coffin
 
 4. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. One to three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If ego approaches, receptionist will stop work and speak to ego. If ego asks to use restroom, permission is granted to go into hallway. If ego tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will tell a patient to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Ego should take the magazine and read it. A cone/placard warns of wet/slippery floor to left of the screen. If ego tries to go past the cone, he slips, falls and dies.
 
-    BACKGROUND: posters/pictures on walls (sign next to hallway entrance will provide hint that ego needs permission to get past)
+    BACKGROUND: done
     ANIMATION ART: done
-    SOUND: door open/close; receptionist sounds (typing, phone ring, etc?), tripping
+    SOUND: done
     SCORING: +1 for slipping on wet floor; +5 for asking to use bathroom; +3 for getting magazine; +2 for reading it;
     CODING: 'said' statements
 
@@ -259,12 +258,12 @@ rewind backs up one track; fast-forward moves to next track.
     SCORING: n/a
     CODING: done
 
-12: Help Screen: use text screen. Left panel has topics; use cursor to select topics; right panel will display relevant information. May include a hint system, but not sure yet.
+12: Help Screen: use text screen. Left panel has topics; use cursor to select topics; right panel will display relevant information.
     BACKGROUND: n/a
     ANIMATION ART: n/a
-    SOUND: tbd
+    SOUND: n/a
     SCORING: n/a
-    CODING: not started
+    CODING: done
 
 Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version is shown, with no ability to interact. Once enabled, the panels are available. Usage info is available on main console using typical 'help file' command. Changes made by ego will be applied globally for rest of game.
 
@@ -275,7 +274,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     ANIMATION ART: done
     SOUND: button click
     SCORING: n/a
-    CODING: better testing sequence (choose room to test?)
+    CODING: done
 
 14. Electronic Synthesized Audio Data Options Control Console
    sound mode/instrument selection

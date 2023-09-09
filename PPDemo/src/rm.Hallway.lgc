@@ -598,9 +598,11 @@ if (fExamDoorDone) {
 }
 :doneEDoorSeq
 
-[*****
-:exit              [  test for leaving the room
-[*****
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+:exit
+
 if (egoHitSpecial) {
   if (closetopen) {
     [ show wait cursor

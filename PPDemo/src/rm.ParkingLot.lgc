@@ -369,7 +369,6 @@ if (egoCarSeq) {
     reset(fCarDone);
     [ stop sound
     stop.sound();
-    reset(soundDone);
     reset(playSound);
     [ ego is done; begin end-of-game sequence
     [ (using death handler)
@@ -851,7 +850,7 @@ if (fEgoDead) {
   [ check for stolen car
   if (deathType == DT_STOLEN_CAR) {
     print("Hey! Where is your car???");
-  ignore.objs(oPatient);
+    ignore.objs(oPatient);
   }
   return();
 }
@@ -877,7 +876,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   [ take/steal batmobile
   [ hit/punch/kick/kill anything- not allowed "unprovoked violence is never acceptable"
   [ climb anything - not allowed (in most rooms)
-  
+  [ talk/speak to person/patient
   
  [ place said tests here
   if (said("look")) {
@@ -1087,9 +1086,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (work1 <= 20) {
         [ coming or going?
         if (patientSeq > 100) {
-          print("\"Sorry, gotta run!\"");
+          random(9, 12, work1);
+          print.v(work1); [ m9 - m12
         } else {
-          print("\"Can't talk now, I'm late for my appointment.\"");
+          random(13, 16, work1);
+          print.v(work1); [ m13 - m16
         }
       } else {
         print("The person is too far away to hear you.");
@@ -1241,7 +1242,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
       distance(ego, oPatient, work1);
       if (work1 < 6) {
-        print("Get your ands off me, you big jerk!");
+        print("Get your hands off me, you big jerk!");
       } else {
         print("You are too far away to touch that person.");
       }
@@ -1354,9 +1355,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);
 }
 
-[*****
-:exit              [  test for leaving the room
-[*****
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+:exit
+
 if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
@@ -1381,3 +1384,13 @@ return();
 #message 6 "%g25"
 #message 7 "%g26"
 #message 8 "%g27"
+
+#message 9 "\"Sorry, gotta run!\""
+#message 10 "\"I'm headed to the pharmacy. I have to pick up my prescription.\""
+#message 11 "\"I can't believe the copays are so high here!\""
+#message 12 "\"Leave me alone. I'm not feeling well.\""
+
+#message 13 "\"Can't talk now, I'm late for my appointment.\""
+#message 14 "\"I hope the doctor can tell me how to get rid of this fungus!\""
+#message 15 "\"Can you believe this place used to be where the best computer games were developed in the 80s and 90s?\""
+#message 16 "\"My mother told me not to talk to strangers.\""

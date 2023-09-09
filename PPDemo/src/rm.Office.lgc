@@ -1082,11 +1082,10 @@ if (fFileDrawer) {
   }
 }
 
-[*****
-:exit              [  test for leaving the room
-[*****
-
-[ add exit checks here (or use layout editor)
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+:exit
 
 if (egoX > 100 && egoHitSpecial) {
   [ show wait cursor

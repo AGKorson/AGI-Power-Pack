@@ -20,6 +20,7 @@
 [ ********************************************************************
 
 #define entryDelay v240
+#define rndNum     v241
 
 #define tmpStr1    s20
 #define tmpStr2    s21
@@ -28,45 +29,6 @@
 [ put all non-input functions that are not
 [ room-specific here
 [ *************************************************
-
-[ convert game time into 20 minute timer intervals
-if (elapsedMinutes != oldMinutes) {
-  oldMinutes = elapsedMinutes;
-  ++patientClock;
-  if (patientClock == 20) {
-    patientClock = 0;
-  }
-  [ update patient locations 
-  if (currentRoom != rm.Lobby) {
-    if (patientClock > 0 && patientClock < 6) {
-      patient2Loc = LOC_LOBBY;
-    } else {
-      if (patientClock > 5 && patientClock < 10) {
-        patient2Loc = LOC_EXAM;
-      } else {
-        patient2Loc = LOC_GONE;
-      }
-    }
-    if (patientClock > 4 && patientClock < 12) {
-      patient3Loc = LOC_LOBBY;
-    } else {
-      if (patientClock > 11 && patientClock < 15) {
-        patient3Loc = LOC_EXAM;
-      } else {
-        patient3Loc = LOC_GONE;
-      }
-    }
-    if (patientClock > 10 && patientClock < 16) {
-      patient4Loc = LOC_LOBBY;
-    } else {
-      if (patientClock > 15 && patientClock < 19) {
-        patient4Loc = LOC_EXAM;
-      } else {
-        patient4Loc = LOC_GONE;
-      }
-    }
-  }
-}
 
 [ check for cancel click2move
 if (controller(cRightClick)) {
@@ -515,6 +477,11 @@ if (said("read", "scroll")) {
   }
 }
 
+[ wegup is not a word
+if (said("wegup")) {
+  print("That is not a valid word.");
+}
+
 [ if player says any dirty words
 if ((said("bad word", "rol") || 
      said("anyword", "bad word", "rol") || 
@@ -553,6 +520,52 @@ if ((said("use", "anyword") || said("use", "anyword", "rol"))) {
   print("Be more specific. What do you want me to do with it?");
 }
 
+[ UNKNOWN WORD CHECK
+if (haveInput && !haveMatch && unknownWordNum > 0) {
+  reset(haveInput);
+  [copy word to a string
+  if (unknownWordNum == 1) {
+    word.to.string(unknownWord, w1);
+  }
+  if (unknownWordNum == 2) {
+    word.to.string(unknownWord, w2);
+  }
+  if (unknownWordNum == 3) {
+    word.to.string(unknownWord, w3);
+  }
+  if (unknownWordNum == 4) {
+    word.to.string(unknownWord, w4);
+  }
+  if (unknownWordNum == 5) {
+    word.to.string(unknownWord, w5);
+  }
+  if (unknownWordNum == 6) {
+    word.to.string(unknownWord, w6);
+  }
+  if (unknownWordNum == 7) {
+    word.to.string(unknownWord, w7);
+  }
+  if (unknownWordNum == 8) {
+    word.to.string(unknownWord, w8);
+  }
+  if (unknownWordNum == 9) {
+    word.to.string(unknownWord, w9);
+  }
+  if (unknownWordNum == 10) {
+    word.to.string(unknownWord, w10);
+  }
+  [choose a random unknown word response
+  random(&m38, &m40, rndNum);
+  print.v(rndNum);
+}
+
+[ finally, if there is input that hasn't 
+[ been recognized yet
+if (haveInput && !haveMatch) {
+  print("I don't understand your request.");
+  reset(haveInput);
+}
+
 :done
 return();
 
@@ -587,3 +600,8 @@ return();
 
 #message 11 gameAboutMsg
 #message 12 gameVersionMsg
+
+[ unknown input messages
+#message 38 "I don't understand \"%s1\""
+#message 39 "\"%s1\" is not in my vocabulary."
+#message 40 "What is \"%s1\""

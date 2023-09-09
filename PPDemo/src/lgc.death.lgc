@@ -102,7 +102,6 @@ if (deathTimer > 0) {
 [ after a delay, show ending message to player
 if (deathTimer == 1) {
   if (deathType == DT_GAME_OVER) {
-    [ TODO: ending credits/music
     
     [ check for module resets
     work1 = 0;
@@ -126,6 +125,20 @@ if (deathTimer == 1) {
     }
     [ if player has floppy with source code, it's a win
     if (has("floppy disk") && (floppyfiles == 2 || floppyfiles == 3)) {
+    load.sound(m.Winner);
+    set(4channelsound);
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    [ use correct instrument
+    work3 = 0;
+    work2 = 73; [ flute
+    set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    ++work3;
+    work2 = 68; [ oboe
+    set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    ++work3;
+    work2 = 67; [ baritone sax
+    set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    sound(m.Winner, soundDone);
       print("Your vist to Oakhurst was a big success! You managed "
             "to find a copy of the source files for the AGI Power "
             "Pack.");
@@ -143,6 +156,21 @@ if (deathTimer == 1) {
         }
       }
     } else {
+      load.sound(m.Loser);
+      set(4channelsound);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      [ use correct instrument
+      work3 = 0;
+      work2 = 17; [ percussive organ
+      set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work3;
+      work2 = 17; [ percussive organ
+      set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work3;
+      work2 = 115; [ woodblock
+      set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(m.Loser, soundDone);
+      set(playSound);
       [ losing msg depends on score
       if (currentScore > 100) {
         print("You leave Oakhurst with a handful of souvenirs, but you "

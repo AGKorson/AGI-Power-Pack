@@ -1004,9 +1004,11 @@ if (fDoneWash) {
   }
 }
 
-[*****
-:exit              [  test for leaving the room
-[*****
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+:exit
+
 if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
   egoDir = STOPPED;
   set(crouch);

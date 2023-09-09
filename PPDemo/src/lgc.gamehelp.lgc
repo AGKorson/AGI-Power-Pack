@@ -5,22 +5,25 @@
 [ This screen also demonstrates the use of extended characters 
 [ in text mode.
 [
+[ Left panel has topics; use cursor to select topics; right panel will
+[ display relevant information.
+[
 [ ********************************************************************
 
-[ TODO: make a help screen
-[ Left panel has topics; use cursor to select topics; right panel will
-[ display relevant information. May include a hint system, but not 
-[sure yet.
-
-#define selectedItem   v240
+#define selectedTopic  v240
 #define prevItem       v241
 #define oldEgoDir      v242
 
 #define initScreen     f240
 #define moveSelection  f241
 
+#define topicTitle      s20
+
 if (initScreen) {
   reset(initScreen);
+  
+  [ pause game clock
+  block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
   
   [ egodir used to maneuver through menu items
   oldEgoDir = egoDir;
@@ -32,7 +35,7 @@ if (initScreen) {
   [ clear status line
   status.line.off();
   
-  [ start with lt gray bkgd
+  [ start with light gray background
   set.text.attribute(-1, 0); [ push.attributes()
   set.text.attribute(BLACK, LT_GRAY);
   
@@ -76,19 +79,19 @@ if (initScreen) {
   display(24, 0, "藩様様様様様様様様擁様様様様様様様様様様様様様様様様様様様様様様様様様様様様様夕");
   
   [ initial topic is 'About PPDemo'
-  selectedItem = 1;
+  selectedTopic = 1;
   prevItem = 0;
   set(moveSelection);
 }
 
 [ check for change in egoDir
 if (egoDir) {
-  if (egoDir == UP && selectedItem > 1) {
-    --selectedItem;
+  if (egoDir == UP && selectedTopic > 1) {
+    --selectedTopic;
     set(moveSelection);
   }
-  if (egoDir == DOWN && selectedItem < 17) {
-      ++selectedItem;
+  if (egoDir == DOWN && selectedTopic < 17) {
+      ++selectedTopic;
     set(moveSelection);
   }
   [ always reset dir
@@ -101,7 +104,7 @@ if (moveSelection) {
   [ reset the previous selection
   set.text.attribute(BLACK, LT_GRAY);
   if (prevItem == 1) {
-    display(3, 2, "About PPDemo");
+    display(3, 2, "About SQ:PPDemo");
     goto(resetprev);
   }
   if (prevItem == 2) {
@@ -109,7 +112,7 @@ if (moveSelection) {
     goto(resetprev);
   }
   if (prevItem == 3) {
-    display(6, 2, "Running PPDemo");
+    display(6, 2, "Running SQ:PPDemo");
     goto(resetprev);
   }
   if (prevItem == 4) {
@@ -168,235 +171,49 @@ if (moveSelection) {
     display(22, 4, "Using Items");
   }
   :resetprev
-  prevItem = selectedItem;
+  prevItem = selectedTopic;
   clear.text.rect(1, 20, 23, 78, LT_GRAY);
   
   [ select new item
   set.text.attribute(WHITE, BLUE);
-  if (selectedItem == 1) {
-    display(3, 2, "About PPDemo");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "About PPDemo";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 44, "%s20");
-    display(4, 31, "Version: 0.1");
-    display(4, 57, "09/01/2023");
-    display(6, 25, "The Power Pack Demo Game was written to showcase");
-    display(7, 25, "the features of the AGI Power Pack.");
-    display(9, 25, "The AGI Power Pack is a set of logics that modify");
-    display(10, 25, "the AGI engine, allowing new functionality such");
-    display(11, 25, "as mouse support, multichannel sound, and more.");
-    display(13, 25, "The Power Pack uses the original MSDOS AGI files;");
-    display(14, 25, "it doesn't require any special files. Because of");
-    display(15, 25, "the way the Power Pack modifies the AGI code");
-    display(16, 25, "within MSDOS memory, it will not run on modern");
-    display(17, 25, "interpreters such as NAGI or SCUMMVM.");
-    display(19, 25, "The demo game showcases the Power Pack with a");
-    display(20, 25, "short game where the player travels to Oakhurst");
-    display(21, 25, "California to visit the original Sierra head-");
-    display(22, 25, "quarters building, looking for souvenirs.");    
+  [ 1 - 4 in lgc.HelpText1
+  if (selectedTopic < 5) {
+    call(lgc.HelpText1);
     goto(getkey);
   }
-  if (selectedItem == 2) {
-    display(4, 4, "Credits");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Credits";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 46, "%s20");
-    display(3, 22, "Sierra Quest written");
-    display(3, 60, "Background Art");
-    display(4, 23, "and programmed by");
-    display(4, 66, "by");
-    display(7, 25, "Animation Art");
-    display(7, 60, "Additional Art");
-    display(8, 30, "by");
-    display(8, 65, "by");
-    display(11, 23, "Original Music and");
-    display(11, 59, "Additional Sound");
-    display(12, 24, "Sound Effects by");
-    display(12, 62, "Effects by");
-    display(14, 43, "AGI Power Pack");
-    display(15, 44, "programmed by");
-    display(19, 28, "Sierra Quest was designed and created in the");
-    display(20, 35, "WinAGI Game Development System");
-    set.text.attribute(BLUE, LT_GRAY);
-    display(5, 25, "Andrew Korson");
-    display(5, 62, "Klownstein");
-    display(9, 27, "Klownstein");
-    display(9, 61, "Andrew Korson");
-    display(13, 25, "Andrew Korson");
-    display(13, 63, "doomlazer");
-    display(16, 44, "Andrew Korson");
-    display(22, 24, "http://agiwiki.sierrahelp.com/index.php?title=WinAGI");
+  [ 5 - 8 in lgc.HelpText2
+  if (selectedTopic < 9) {
+    call(lgc.HelpText2);
     goto(getkey);
   }
-  if (selectedItem == 3) {
-    display(6, 2, "Running PPDemo");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Running PPDemo";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 43, "%s20");
-    [ how to load/run; file ops-save/load/
-    display(4, 25, "The Power Pack Demo game will only run in MSDOS on");
-    display(5, 25, "legacy PC system, or in a fully compatible MSDOS");
-    display(6, 25, "emulator such as DOSBox.");
-    display(8, 25, "The first time you play the game, the introduction");
-    display(9, 25, "is not optional; after that you can skip the");
-    display(10, 25, "introduction by pressing any key or mouse button.");
-    display(11, 25, "(See 'Skip Intro' topic.)");
-    display(13, 25, "You can save, restore or restart just like any AGI");
-    display(14, 25, "game, by typing the appropriate command in the");
-    display(15, 25, "text parser or using menu/toolbar options.");
-    display(17, 25, "Be sure to explore all areas thoroughly. The demo");
-    display(18, 25, "game is not long, but there are lots of puzzles to");
-    display(19, 25, "solve and lots of clues hidden in the rooms.");
-    set.text.attribute(BLUE, LT_GRAY);
-    display(11, 31, "Skip Intro");
+  [ 9 - 12 in lgc.HelpText1
+  if (selectedTopic < 13) {
+    call(lgc.HelpText3);
     goto(getkey);
   }
-  if (selectedItem == 4) {
-    display(8, 2, "Game Options");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Game Options";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 44, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 5) {
-    display(9, 4, "Sound");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Sound";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 47, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 6) {
-    display(10, 4, "Clock");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Clock";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 47, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 7) {
-    display(11, 4, "Speed");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Speed";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 47, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 8) {
-    display(12, 4, "Skip Intro");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Skip Intro";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 45, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 9) {
-    display(13, 4, "PPDEMO.CFG");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "PPDEMO.CFG";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 45, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 10) {
-    display(15, 2, "Interaction");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Interaction";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 44, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 11) {
-    display(16, 4, "Mouse");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Mouse";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 47, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 12) {
-    display(17, 4, "Parser");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Parser";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 47, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 13) {
-    display(18, 4, "Shortcuts");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Shortcuts";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 45, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 14) {
-    display(19, 4, "Status Bar");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Status Bar";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 45, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 15) {
-    display(20, 4, "Tool Bar");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Tool Bar";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 46, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 16) {
-    display(21, 4, "Viewing Items");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Viewing Items";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 43, "%s20");
-    goto(getkey);
-  }
-  if (selectedItem == 17) {
-    display(22, 4, "Using Items");
-    [ add details
-    set.text.attribute(BLACK, LT_GRAY);
-    s20 = "Using Items";
-    block(STR.UPPER, &s20, &s20, 0); [ str.upper(sINPUT, sRESULT)
-    display(2, 44, "%s20");
-  }
+  [ 13 - 17 in lgc.HelpText4
+  call(lgc.HelpText4);
 }            
 
 :getkey
-if (have.key()) {
+if ((have.key() || controller(cMenu))) {
   [ reset helpmode
   reset(showHelp);
+  
+  [ restore colors
+  [ (before statusline or stored values will be
+  [ overwritten)
+  set.text.attribute(0, -1); [ pop.attributes()
+  
   [ restore input and status line
   accept.input();
   status.line.on();
-  
+
   [ switch back to graphics display
   graphics();
 
-  [ restore colors
-  set.text.attribute(0, -1); [ pop.attributes()
+  [ restart game clock
+  block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 }
 return();
 

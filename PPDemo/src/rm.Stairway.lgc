@@ -339,11 +339,11 @@ if (fDoorDone) {
 }
 
 
-[*****
-:exit              [  test for leaving the room
-[*****
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
+:exit
 
-[ add exit checks here (or use layout editor)
 if (edgeEgoHit == RIGHT_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;

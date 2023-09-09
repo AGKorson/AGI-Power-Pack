@@ -6,14 +6,20 @@
 [
 [ ********************************************************************
 
+[ pause game clock
+block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+
 [ no input allowed while help screen is displayed
 prevent.input();
 
 [ clear status line
 status.line.off();
 
-[ switch to text screen
-text.screen();
+[ save attributes
+set.text.attribute(-1, 0); [ push.attributes()
+
+[ switch to text screen, 40col
+configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
 
 [ make sure keyboard buffer is clear
 lastChar = 0;
@@ -48,10 +54,12 @@ display(22, 0, "log         - logs error's into logfile");
 
 [ run a loop to wait for player to press any key
 WaitForKey:
-if (!have.key()) 
-  {
+if (!have.key()) {
   goto(WaitForKey);
-  }
+}
+
+[ restore colors
+set.text.attribute(0, -1); [ pop.attributes()
 
 [ restore input and status line
 accept.input();
@@ -60,8 +68,11 @@ status.line.on();
 [ switch back to graphics display
 graphics();
 
-[ restore colors
-set.text.attribute(WHITE, BLACK);
+[ restore attributes
+set.text.attribute(0, -1); [ pop.attributes()
+
+[ restart game clock
+block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
 
 return();
 

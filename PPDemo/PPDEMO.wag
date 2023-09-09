@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/13/2023 4:57:01 PM"
+   LastEdit = "8/29/2023 8:32:42 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,15 +49,15 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H475B26A3
-   CRC32 = &H475B26A3
+   CompCRC32 = &H0
+   CRC32 = &HACB633B1
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic90]
-   CompCRC32 = &HEBB01AEC
-   CRC32 = &HEBB01AEC
+   CompCRC32 = &HEAE553AD
+   CRC32 = &HEAE553AD
    ID = lgc.GameFunctions
    IsRoom = False
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
@@ -73,27 +73,20 @@
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
    CRC32 = &H86A9DB09
-   CompCRC32 = &H86A9DB09
-   IsRoom = False
-
-[Logic93]
-   ID = lgc.GameHelp
-   Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
-   CRC32 = &H2DA7D2C6
-   CompCRC32 = &H2DA7D2C6
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic94]
    ID = lgc.DebugHelp
    Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
-   CRC32 = &H976A2AED
-   CompCRC32 = &H976A2AED
+   CRC32 = &HAC2BA4C7
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H1A47BB8D
+   CRC32 = &H809BE721
    CompCRC32 = &H0
    IsRoom = False
 
@@ -163,63 +156,63 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &HB5D73317
+   CRC32 = &H72FBB11F
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &HBDFC0A88
-   CompCRC32 = &H0
+   CRC32 = &H7B8DF7A6
+   CompCRC32 = &HF32857B2
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &H9EC06FF0
+   CRC32 = &H7ECD369F
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &HD47B1F75
+   CRC32 = &HA4232548
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H4D26EC87
+   CRC32 = &HC56AFFAB
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
-   CRC32 = &H740EF346
+   CRC32 = &HCECA0724
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &HA468019
+   CRC32 = &HC5AA91E7
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H391E6C89
+   CRC32 = &HA3B93296
    CompCRC32 = &H0
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &HD38208A8
+   CRC32 = &HD2200FDC
    CompCRC32 = &H0
    IsRoom = True
 
@@ -359,7 +352,7 @@
 [Logic12]
    ID = rm.DoorKeypad
    Description = ""
-   CRC32 = &H2D39696B
+   CRC32 = &H8A2CDC37
    CompCRC32 = &H0
    IsRoom = True
 
@@ -381,14 +374,14 @@
    ID = txt.Memo
    Description = ""
    CRC32 = &HF1B2ACE4
-   CompCRC32 = &HF1B2ACE4
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic11]
    ID = lgc.ScoreHandler
    Description = ""
    CRC32 = &HC22A974A
-   CompCRC32 = &HC22A974A
+   CompCRC32 = &H0
    IsRoom = False
 
 [Logic15]
@@ -478,7 +471,42 @@
 [Logic89]
    ID = lgc.PowerPack
    Description = ""
-   CRC32 = &H780279B7
+   CRC32 = &H5CCD5BED
+   CompCRC32 = &H0
+   IsRoom = False
+
+[Logic43]
+   ID = lgc.HelpText1
+   Description = ""
+   CRC32 = &HEF8FE4BA
+   CompCRC32 = &H0
+   IsRoom = False
+
+[Logic44]
+   ID = lgc.HelpText2
+   Description = ""
+   CRC32 = &H1059D1BE
+   CompCRC32 = &H0
+   IsRoom = False
+
+[Logic45]
+   ID = lgc.HelpText3
+   Description = ""
+   CRC32 = &HF63A802B
+   CompCRC32 = &H0
+   IsRoom = False
+
+[Logic46]
+   ID = lgc.HelpText4
+   Description = ""
+   CRC32 = &HAC291BC3
+   CompCRC32 = &H0
+   IsRoom = False
+
+[Logic42]
+   ID = lgc.GameHelp
+   Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
+   CRC32 = &H296B625D
    CompCRC32 = &H0
    IsRoom = False
 [::END Logics::]
@@ -3088,9 +3116,26 @@
    Description = ""
    Key = 0
    TPQN = 4
-   Inst0 = 0
-   Inst1 = 0
-   Inst2 = 0
+   Inst0 = 73
+   Inst1 = 68
+   Inst2 = 67
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = True
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound138]
+   ID = s.SlipFall
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 70
+   Inst1 = 116
+   Inst2 = 81
    Mute0 = False
    Mute1 = False
    Mute2 = False
@@ -3099,6 +3144,23 @@
    Visible1 = True
    Visible2 = True
    Visible3 = True
+
+[Sound139]
+   ID = m.Loser
+   Description = ""
+   Key = 0
+   TPQN = 24
+   Inst0 = 17
+   Inst1 = 17
+   Inst2 = 115
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = False
 [::END Sounds::]
 
 [::BEGIN Views::]

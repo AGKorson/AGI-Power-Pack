@@ -1,0 +1,106 @@
+[ ********************************************************************
+[
+[ lgc.HelpText2
+[
+[ displays help topics 5 - 8
+[
+[ ********************************************************************
+
+#define selectedTopic  v240
+#define prevItem       v241
+#define oldEgoDir      v242
+
+#define initScreen     f240
+#define moveSelection  f241
+
+#define topicTitle      s20
+
+if (selectedTopic == 5) {
+  display(9, 4, "Sound");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Sound";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 47, "%s20");
+  display(4, 24, "The AGI Power Pack provides two additional modes");
+  display(5, 24, "for sound playback - FM synthesizer and MIDI. The");
+  display(6, 24, "MSDOS session must have a SoundBlaster compatible");
+  display(7, 24, "sound board and also general MIDI support or the");
+  display(8, 24, "Power Pack will not load. (DOSBox includes approp-");
+  display(9, 24, "riate emulators by default.) The demo game allows");
+  display(10, 24, "players to select any of these modes in addition");
+  display(11, 24, "to the original single channel PC speaker mode.");
+  display(13, 24, "FM synth and MIDI modes also have volume support,");
+  display(14, 24, "with 64 levels of sound volume instead of 16.");
+  display(16, 24, "When changing the sound output mode, not all sounds");
+  display(17, 24, "in the game will change; there are several sound");
+  display(18, 24, "effects that need specific settings to create the");
+  display(19, 24, "desired effects. Generally, all music and generic");
+  display(20, 24, "sound effects will change based on the selected");
+  display(21, 24, "mode, but specialty sounds will not.");
+  return();
+}
+if (selectedTopic == 6) {
+  display(10, 4, "Clock");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Clock";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 47, "%s20");
+  display(4, 24, "With the Power Pack, it is easy to access the");
+  display(5, 24, "internal PC clock. So the demo game includes the");
+  display(6, 24, "option of displaying the real time clock on the");
+  display(7, 24, "status bar instead of the game clock (how much");
+  display(8, 24, "total time has elapsed during game play).");
+  display(13, 24, "With the Power Pack, you can also temporarily");
+  display(14, 24, "pause the game clock. This is useful when dealing");
+  display(15, 24, "with game elements that are time dependent when");
+  display(16, 24, "players do things like call up help screens");
+  display(17, 24, "or view items and you don't want time to advance");
+  display(18, 24, "while they're doing it.");
+  return();
+}
+if (selectedTopic == 7) {
+  display(11, 4, "Speed");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Speed";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 47, "%s20");
+  display(4, 26, "The Power Pack lets you change the check inter-");
+  display(5, 26, "val to 60 times a second instead of original AGI");
+  display(6, 26, "20 times a second. This give players much more");
+  display(7, 26, "granularity when choosing a speed setting.");
+  display(9, 26, "On the Speed menu, you can select one of the");
+  display(10, 26, "preset values 'Slow', 'Normal', 'Fast' which");
+  display(11, 26, "are equialent to values in orignal AGI, or you");
+  display(12, 26, "bump the speed up or down 1/60 at a time using");
+  display(13, 26, "the 'Slower' and 'Faster' options.");
+  return();
+}
+if (selectedTopic == 8) {
+  display(12, 4, "Skip Intro");
+  [ add details
+  set.text.attribute(BLACK, LT_GRAY);
+  topicTitle = "Skip Intro";
+  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
+  display(2, 45, "%s20");
+  display(4, 26, "When 'Sierra Quest: Power Pack Demo' is started");
+  display(5, 26, "for the first time, the entire Introduction");
+  display(6, 26, "sequence is shown before the player is taken to");
+  display(7, 26, "the starting room in the game. You cannot opt");
+  display(8, 26, "out; you have to watch the entire introduction.");
+  display(10, 26, "On subsequent plays, you can skip the intro by");
+  display(11, 26, "pressing any key or clicking a mouse button.");
+  display(13, 26, "If you want to always skip the introduction when");
+  display(14, 26, "running the game, select the 'Skip Intro' menu");
+  display(15, 26, "item. When selected (indicated by '') the");
+  display(16, 26, "game will automatically go to the start screen");
+  display(17, 26, "every time you start it.");
+}
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

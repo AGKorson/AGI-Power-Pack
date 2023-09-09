@@ -95,6 +95,6 @@ if (numberOfVoices != 4) {
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************
