@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ cp.Terminal 
 [
@@ -14,8 +14,14 @@
 [ LOGOFF     MD         MKDIR      RD
 [ RMDIR      REN        RENAME     SUDO
 [ TYPE       VER        VOL
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define cursor_row    v240
 #define cursor_col    v241
 #define cursor_char   v242
@@ -85,7 +91,9 @@
 #define LEFTCOL        9
 #define RIGHTCOL      48
 
-[ room variable declarations
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ This room does not run the main agi loop; all input is handled
 [ and responded within this logic. So no need to check for newRoom
@@ -104,7 +112,7 @@ if (floppyInserted) {
 }
 
 [ check password to see if it's been changed
-set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE);
 sTemp2 = "Temp123!";
 if (compare.strings(sTemp2, kwpassword)) {
   set(defaultPW);
@@ -118,7 +126,7 @@ load.logics(lgc.TerminalFunctions);
 [ no mouse
 disable.item(mouse);
 
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ display picture
 show.pic();
@@ -131,7 +139,7 @@ display(22, 22, "Press <ESC> to return to control room");
 set.text.attribute(GREEN, BLACK);
 
 [ command input is not case sensitive
-set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE);
 :login
 [ display welcome text
 [ if not restarted, include a few glitches
@@ -165,7 +173,7 @@ input = "";
 
 [ if first time drawing welcome text, need to fade in
 if (newRoom) {
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   reset(newRoom);
 }
 
@@ -213,10 +221,10 @@ if (cursor_char == 1) {
 [ if ESC
 if (lastChar == 27) {
   [ restore default (inputline) attritubutes
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ fade out
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   
   [ clear return instruction row
   clear.lines(22, 22, BLACK);
@@ -437,13 +445,13 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(loggedon);
       }
       [ passwords are case sensitive
-      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE);
       if (!compare.strings(input, kwpassword)) {
         [ password is not valid
         reset(loggedon);
       }
       [ go back to case-insensitive compare
-      set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+      set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE);
       [ if valid continue
       if (loggedon) {
         output = "logged on as kw002";
@@ -472,7 +480,6 @@ if ((lastChar == 13 || lastChar == 10)) {
         [ get more input
         goto(getInput);
       } else {
-[print("id: '%s15', pw: '%s12'");
         inputmode = IM_USERID;
         output = "invalid userid and/or password";
         terminalfn = ADDLINE_LF;
@@ -488,7 +495,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     }
     
     [ passwords are case sensitive
-    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(mode);
+    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE);
     
     [ changing password
     if (PWfunction == PW_CHANGE) {
@@ -520,24 +527,24 @@ if ((lastChar == 13 || lastChar == 10)) {
       block(CHAR2BYTE, &sTemp2, &work2, 0); [ char2byte(sCHAR, vRESULT)
       [ must have at least one upper
       if (work2 > 64 && work2 < 91) {
-        block(BIT.OR, 0, &work3, 1); [ bit.or(BYVAL, VAR, MASK)
+        block(BIT.OR, BYNUM, &work3, 1); [ bit.or(FN_MODE, VAR, MASK)
       } else {
         [ must have at least one lower
         if (work2 > 96 && work2 < 123) {
-          block(BIT.OR, 0, &work3, 2); [ bit.or(BYVAL, VAR, MASK)
+          block(BIT.OR, BYNUM, &work3, 2); [ bit.or(FN_MODE, VAR, MASK)
         } else {
           [ must have at least one number
           if (work2 > 47 && work2 < 58) {
-            block(BIT.OR, 0, &work3, 4); [ bit.or(BYVAL, VAR, MASK)
+            block(BIT.OR, BYNUM, &work3, 4); [ bit.or(FN_MODE, VAR, MASK)
           } else {
             [ must have at least one special
-            block(BIT.OR, 0, &work3, 8); [ bit.or(BYVAL, VAR, MASK)
+            block(BIT.OR, BYNUM, &work3, 8); [ bit.or(FN_MODE, VAR, MASK)
           }
         }
       }
       --work1;
       if (work1 > 0) {
-        block(STR.RIGHT, &sTemp2, &sTemp2, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        block(STR.RIGHT, &sTemp2, &sTemp2, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         goto(nextchar);
       }
       [ if all criteria met
@@ -695,12 +702,13 @@ if ((lastChar == 13 || lastChar == 10)) {
     
     [ command input is case-insensitive
     :getCmdInput
-    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(mode);
+    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE);
     inputmode = IM_CMDLINE;
     [ get more input
     goto(getInput);
   }
   if (inputmode == IM_CMDLINE) {
+
     if (!resetMOCC) {
       [ add occasional error codes if not reset
       random(1, 10, work1);
@@ -711,7 +719,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         block(BYTE2HEX, &sTemp2, &work1, 0); [ byte2hex(sRESULT, vINPUT)
         random(0, 255, work1);
         block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-        block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+        block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ str.concat(sINPUT, sADD)
         output = "Invalid instruction at 78F4:%s17 in ";
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
@@ -727,7 +735,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     
     [ convert input to lower case, trim it,
     block(STR.LOWER, &input, &input, 0); [ str.upper(sINPUT, sRESULT)
-    work1 = 0;
+    work1 = TRIM_ALL;
     block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     [ then extract the command (first word)
     work1 = 32;
@@ -738,8 +746,8 @@ if ((lastChar == 13 || lastChar == 10)) {
       [ remove cmd from input, and trim it
       block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
       work1 -= work2;
-      block(STR.RIGHT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-      work1 = 0;
+      block(STR.RIGHT, &input, &input, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+      work1 = TRIM_ALL;
       block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     } else {
      block(STR.COPY, &input, &sCmd, 0); [ str.copy(sINPUT, sRESULT)
@@ -754,10 +762,12 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ commands starting with 'a'
     if (work1 == 97) {
       [ AMOS
-      if (!said("amos", "rol")) {
+      sTemp2 = "amos";
+      if (!compare.strings(sCmd, sTemp2)) {
         [ amos is only valid 'a' command
         goto(syntaxerror);
       }
+
       [ always fails until module is reset
       if (!resetMOCC) {
         goto (memerr);
@@ -767,6 +777,7 @@ if ((lastChar == 13 || lastChar == 10)) {
       [ load:
       [ stop:
       [ interface:
+      [ open:
       
       [ get subcmd
       work1 = 5;
@@ -776,8 +787,8 @@ if ((lastChar == 13 || lastChar == 10)) {
         [ strip off module
         block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
         work1 -= 5;
-        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-        work1 = 0;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+        work1 = TRIM_ALL;
         block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         sTemp2 = "badass";
@@ -842,8 +853,8 @@ if ((lastChar == 13 || lastChar == 10)) {
         [ strip off module
         block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
         work1 -= 5;
-        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-        work1 = 0;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+        work1 = TRIM_ALL;
         block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         [ check for one of the seven subsystems
@@ -957,8 +968,8 @@ if ((lastChar == 13 || lastChar == 10)) {
         [ strip off module
         block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
         work1 -= 5;
-        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-        work1 = 0;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+        work1 = TRIM_ALL;
         block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         sTemp2 = "badass";
@@ -1037,6 +1048,102 @@ if ((lastChar == 13 || lastChar == 10)) {
         }
       }
       
+      [ 'open'
+      sTemp2 = "open:";
+      if (compare.strings(sCmd, sTemp2)) {
+        [ strip off module
+        block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
+        work1 -= 5;
+        block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+        work1 = TRIM_ALL;
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        reset(validmodule);
+        [ check for one of the seven subsystems
+        sTemp2 = "badass";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ no interface to run
+          output = "no interface for BADASS module";
+          terminalfn = ADDLINE_LF;
+          call(lgc.TerminalFunctions);
+          goto(getInput);
+        }
+        sTemp2 = "caisocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ restore default (inputline) attritubutes
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+          [ fade out
+          block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+          [ clear return instruction row
+          clear.lines(22, 22, BLACK);
+          [ switch to caisocc module
+          new.room(cp.CAISOCC); [ ##LE002##
+        }
+        sTemp2 = "eridocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ restore default (inputline) attritubutes
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+          [ fade out
+          block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+          [ clear return instruction row
+          clear.lines(22, 22, BLACK);
+          [ switch to eridocc module
+          new.room(cp.ERIDOCC); [ ##LE003##
+        }
+        sTemp2 = "esadocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ restore default (inputline) attritubutes
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+          [ fade out
+          block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+          [ clear return instruction row
+          clear.lines(22, 22, BLACK);
+          [ switch to esadocc module
+          new.room(cp.ESADOCC); [ ##LE004##
+        }
+        sTemp2 = "icapocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ restore default (inputline) attritubutes
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+          [ fade out
+          block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+          [ clear return instruction row
+          clear.lines(22, 22, BLACK);
+          [ switch to esadocc module
+          new.room(cp.ESADOCC); [ ##LE005##
+        }
+        sTemp2 = "ofrocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ restore default (inputline) attritubutes
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+          [ fade out
+          block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+          [ clear return instruction row
+          clear.lines(22, 22, BLACK);
+          [ switch to ofrocc module
+          new.room(cp.OFROCC); [ ##LE006##
+        }
+        sTemp2 = "randocc";
+        if (compare.strings(sCmd, sTemp2)) {
+          [ restore default (inputline) attritubutes
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+          [ fade out
+          block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+          [ clear return instruction row
+          clear.lines(22, 22, BLACK);
+          [ switch to randocc module
+          new.room(cp.RANDOCC); [ ##LE007##
+        }
+        
+        [ invalid module
+        output = "syntax error - ";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        output = "unknown module: %s16";
+        terminalfn = ADDLINE_LF;
+        call(lgc.TerminalFunctions);
+        goto(getInput);
+      }
+      
       [ if nothing matches, it's a syntax error
       goto(syntaxerror);
     }
@@ -1061,12 +1168,12 @@ if ((lastChar == 13 || lastChar == 10)) {
         }
         [ strip off trailing '\' if one is there
         work1 = 1;
-        block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+        block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
         if (work1 == 92) {
           block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
           --work1;
-          block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+          block(STR.LEFT, &input, &input, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         }
         [ valid dir values from any dir:
         [ c:, c:\users, c:\users\kw002, a:
@@ -1260,8 +1367,8 @@ if ((lastChar == 13 || lastChar == 10)) {
           [ extract dest
           block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
           work1 -= work2;
-          block(STR.RIGHT, &input, &sTemp3, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
-          work1 = 0;
+          block(STR.RIGHT, &input, &sTemp3, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+          work1 = TRIM_ALL;
           block(STR.TRIM, &sTemp3, &sTemp3, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
           [ trim src
           block(STR.LEFT, &input, &input, &work2); [ str.left(sINPUT, sRESULT, vLEN)
@@ -1365,7 +1472,7 @@ if ((lastChar == 13 || lastChar == 10)) {
               output = "done";
               terminalfn = ADDLINE_LF;
               call(lgc.TerminalFunctions);
-              block(BIT.OR, 0, &floppyfiles, 1); [ bit.or(BYVAL, VAR, MASK)
+              block(BIT.OR, BYNUM, &floppyfiles, 1); [ bit.or(FN_MODE, VAR, MASK)
             }
             
             :chkzip
@@ -1414,7 +1521,7 @@ if ((lastChar == 13 || lastChar == 10)) {
               output = "done";
               terminalfn = ADDLINE_LF;
               call(lgc.TerminalFunctions);
-              block(BIT.OR, 0, &floppyfiles, 2); [ bit.or(BYVAL, VAR, MASK)
+              block(BIT.OR, BYNUM, &floppyfiles, 2); [ bit.or(FN_MODE, VAR, MASK)
             }
           } else {
             [ not a valid source
@@ -1460,12 +1567,12 @@ if ((lastChar == 13 || lastChar == 10)) {
         } else {
           [ strip off trailing '\' if one is there
           work1 = 1;
-          block(STR.RIGHT, &input, &sCmd, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+          block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
           block(CHAR2BYTE, &sCmd, &work1, 0); [ char2byte(sCHAR, vRESULT)
           if (work1 == 92) {
             block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
             --work1;
-            block(STR.LEFT, &input, &input, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+            block(STR.LEFT, &input, &input, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
           }
           vShowDir = -1;
           [ valid dir values from any dir:
@@ -1680,7 +1787,6 @@ if ((lastChar == 13 || lastChar == 10)) {
       [ HELP 
       sTemp2 = "help";
       if (compare.strings(sCmd, sTemp2)) {
-[      if (said("help")) {
         terminalfn = SHOW_HELP;
         call(lgc.TerminalFunctions);
         goto(getInput);
@@ -1692,7 +1798,8 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ commands that start with 'l'
     if (work1 == 108) {
       [ LOGOFF
-      if (said("logoff")) {
+      sTemp2 = "logoff";
+      if (compare.strings(sCmd, sTemp2)) {
         output = "signing off...";
         terminalfn = ADDLINE_LF;
         call(lgc.TerminalFunctions);
@@ -1721,7 +1828,7 @@ if ((lastChar == 13 || lastChar == 10)) {
       }
       sTemp2 = "md";
       if (compare.strings(sTemp2, sCmd)) {
-        [ same as mkdid
+        [ same as mkdir
         goto(mkdir);
       }
       [ no other 'm' commands
@@ -2009,7 +2116,7 @@ if (lastChar == 8) {
 } else {
   [ if any other char, add it to input
   block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
-  block(STR.CONCAT, &input, &char, 0); [ sINPUT, sADD);
+  block(STR.CONCAT, &input, &char, 0); [ str.concat(sINPUT, sADD);
   [ if in password mode, display an asterisk
   if (inputmode == IM_PASSWORD) {
     work1 = &m5;
@@ -2035,17 +2142,16 @@ goto(getKey);
 
 
 
-[*****
-:exit              [  test for leaving the room
-[*****
+[ **************************************
+[ CHECK FOR AN EXIT CONDITION
+[ **************************************
 
-[ add exit checks here (or use layout editor)
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "_"
 #message 2 " "
 #message 3 "%s13"

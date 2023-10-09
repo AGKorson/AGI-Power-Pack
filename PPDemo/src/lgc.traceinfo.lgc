@@ -1,19 +1,19 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.TraceInfo: Tracer Info
 [
 [ This logic includes the text of agi commands so the trace window
 [ will display the command text instead of just numbers.
 [
-[ ********************************************************************
+[*********************************************************************
 
 [ no commands; this logic does not get called
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "increment"
 #message 2 "decrement"
 #message 3 "assignn"

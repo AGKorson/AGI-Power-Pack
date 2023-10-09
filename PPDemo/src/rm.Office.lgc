@@ -1,15 +1,19 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.Office
 [
 [ 
 [
-[ ********************************************************************
+[*********************************************************************
 
-[ TODO: more said statements for office
+[ power pack support
+#include "powerpack.txt"
 
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oSafe          o1
-#define oPicture       o2
+#define oPainting      o2
 #define oDeskDrawer    o3
 #define oFileDrawer    o4
 #define oFolder        o5
@@ -25,12 +29,12 @@
 #define fOnTripLine   f221
 #define fDeskDrawer   f222
 #define fFileDrawer   f223
-#define fPicture      f224
+#define fPainting     f224
 #define fSafe         f225
 #define fBackup       f226
 #define fTripping     f227
 #define fWarnTrip     f228
-#define fTmp          f229
+#define tempflag      f229
 
 [ rug status
 #define RUG_DOWN     0
@@ -39,6 +43,9 @@
 #define RUG_LIFTING  3
 #define RUG_LOWERING 4
 
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
 if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
@@ -49,21 +56,21 @@ if (newRoom) {
   [ the horizon defines the upper limit of ego's movement
   set.horizon(1);
   
-  [ use a custom palette so the area behind picture can be shown 
+  [ add toolbar buttons
+  load.view(vw.ButtonsDown);
+  call(lgc.InitToolbar);
+  
+  [ use a custom palette so the area behind painting can be shown 
   [ to be a bit darker than rest of wall
   work1 = 66;
   block(STR.LEFT, &palette, &tmpPalette, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   tmpStr = "001E1E";
-  block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ str.concat(sINPUT, sADD)
   work1 = 24;
   block(STR.RIGHT, &palette, &tmpStr, &work1); [ strRight(sINPUT, sRESULT, vLEN)
-  block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ sINPUT, sADD)
-  block(SET.MSG, 0, &m9, &tmpPalette); [ set.msg(BYVAR, MSGOLD, STRNEW)
-  block(SET.PALETTE, 0, &m9, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
-  
-  [ add toolbar buttons
-  load.view(vw.ButtonsDown);
-  call(lgc.InitToolbar);
+  block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ str.concat(sINPUT, sADD)
+  block(SET.MSG, BYNUM, &m9, &tmpPalette); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+  block(SET.PALETTE, BYNUM, &m9, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   
   [ load view with this room's art
   load.view(vw.OfficeArt);
@@ -93,7 +100,7 @@ if (newRoom) {
   set.view(oRug, vw.OfficeArt);
   if (rugStatus == RUG_DOWN) {
     set.loop(oRug, 0);
-    set.cel(oRug, 0);
+      set.cel(oRug, 0);
   } else {
     if (rugStatus == RUG_UP) {
       set.loop(oRug, 0);
@@ -129,19 +136,19 @@ if (newRoom) {
     set.cel(oSafe, 0);
   }
   
-  [ picture
-  animate.obj(oPicture);
-  set.view(oPicture, vw.OfficeArt);
-  set.loop(oPicture, 4);
-  if (pictureStatus == OPEN) {
-    set.cel(oPicture, 7);
+  [ painting
+  animate.obj(oPainting);
+  set.view(oPainting, vw.OfficeArt);
+  set.loop(oPainting, 4);
+  if (paintingStatus == OPEN) {
+    set.cel(oPainting, 7);
     draw(oSafe);
   } else {
-    set.cel(oPicture, 0);
+    set.cel(oPainting, 0);
   }
-  stop.cycling(oPicture);
-  position(oPicture, 46, 119);
-  draw(oPicture);
+  stop.cycling(oPainting);
+  position(oPainting, 46, 119);
+  draw(oPainting);
   
   [ desk drawer
   animate.obj(oDeskDrawer);
@@ -172,7 +179,7 @@ if (newRoom) {
     draw(oDeskDrawer);
   }
   
-  [ file drawer
+  [ file cabinet drawer
   animate.obj(oFileDrawer);
   set.view(oFileDrawer, vw.OfficeArt);
   set.priority(oFileDrawer, 10);
@@ -223,23 +230,1208 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, 0); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   return();
 }
 
-[*****
-:handleInput       [ check for input from player
-[*****
-if (haveInput && !haveMatch && unknownWordNum == 0) {
-  [ place said tests here
-  if (said("look")) {
-    print("You see nothing of interest.");
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
+
+[*******************
+[ PAINTING
+[*******************
+[ ego backing up from painting
+if (fBackup) {
+  reset(fBackup);
+  release.loop(ego);
+}
+[ painting movement
+if (fPainting) {
+  reset(fPainting);
+  if (paintingStatus == OPENING) {
+    paintingStatus = OPEN;
+    if (!scorePainting) {
+      print("Look at that! There's a hidden safe behind the painting!");
+      set(scorePainting);
+      work1 = 2;
+      call(lgc.ScoreHandler);
+    }
+    draw(oSafe);
+  } else {
+    paintingStatus = CLOSED;
   }
 }
 
+[*******************
+[ SAFE
+[*******************
+[ safe door movement
+if (fSafe) {
+  reset(fSafe);
+  if (safeStatus == OPENING) {
+    safeStatus = OPEN;
+    if (!has("BaDASS manual")) {
+      set.loop(oSafe, 5);
+      set.cel(oSafe, 7);
+      force.update(oSafe);
+    }
+  } else {
+    safeStatus = CLOSED;
+  }
+}
+[ open the safe
+if (fOpenSafe) {
+  reset(fOpenSafe);
+  [ if too close
+  if (obj.in.box(ego, 38, 126, 65, 129)) {
+    work1 = 130;
+    work2 = 1;
+    set.loop(ego, 3);
+    fix.loop(ego);
+    move.obj.v(ego, egoX, work1, work2, fBackup);
+  }
+  end.of.loop(oSafe, fSafe);
+  safeStatus = OPENING;
+}
+
+[*******************
+[ RUG
+[*******************
+[ rug movement
+if (fMoveRug) {
+  reset(fMoveRug);
+  if (rugStatus == RUG_LIFTING) {
+    rugStatus = RUG_UP;
+    if (!findFolder && !has("folder")) {
+      set(findFolder);
+      print("You see a folder tucked under the corner of the rug!");
+      work1 = 2;
+      call(lgc.ScoreHandler);
+    }
+  } else {
+    if (has("folder")) {
+      rugStatus = RUG_FLAT;
+      set.loop(oRug, 5);
+      set.cel(oRug, 2);
+    } else {
+      rugStatus = RUG_DOWN;
+      erase(oFolder);
+    }
+  }
+}
+[ trip on rug
+if (!fOnTripLine && rugStatus == RUG_UP && egoHitSpecial && egoX < 100) {
+  set(fOnTripLine);
+  set(fTripping);
+  load.view(vw.Tripping);
+  current.loop(ego, work1);
+  tmpLoop = work1;
+  if (work1 > 1) {
+    work1 -=2;
+  }
+  work1 *= -1; [ because trip loops are backwards!
+  work1 += 1;
+  set.view(ego, vw.Tripping);
+  set.loop.v(ego, work1);
+  fix.loop(ego);
+  program.control();
+  tripCounter = 9;
+  [ play sound if walkman not active
+  if ((currentTrack == 0 || currentTrack > 128)) {
+    call(lgc.SetSound);
+    sound(s.RugTrip, soundDone);
+  }
+}
+[ check trip counter
+if (tripCounter) {
+  --tripCounter;
+  if (tripCounter == 0) {
+    set.view(ego, vw.Ego);
+    set.loop.v(ego, tmpLoop);
+    release.loop(ego);
+    player.control();
+    if (!fWarnTrip) {
+      set(fWarnTrip);
+      print("You tripped on the carpet! Good thing you didn't fall "
+            "and break your neck.");
+    }
+    work1 = -1;
+    call(lgc.ScoreHandler);
+  }
+}
+[ if fOnTripLine set, AND not on rug, reset fOnTripLine
+if (fOnTripLine) {
+  if (!egoHitSpecial) {
+    reset(fOnTripLine);
+  }
+}
+
+[*******************
+[ DRAWERS
+[*******************
+[ desk drawer
+if (fDeskDrawer) {
+  reset(fDeskDrawer);
+  if (officeDskDrStatus == CLOSING) {
+    erase(oDeskDrawer);
+    officeDskDrStatus = CLOSED;
+        } else {
+    get.posn(oDeskDrawer, work1, work2);
+    if (work2 == 126) {
+      officeDskDrStatus = OPEN1;
+      if (!has("Walkman")) {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 4);
+        force.update(oDeskDrawer);
+      }
+    } else {
+      officeDskDrStatus = OPEN2;
+      if (!has("post-it note")) {
+        set.loop(oDeskDrawer, 5);
+        set.cel(oDeskDrawer, 3);
+        force.update(oDeskDrawer);
+      }
+    }
+  }
+}
+[ file cabinet drawer
+if (fFileDrawer) {
+  reset(fFileDrawer);
+  if (officeFileDrStatus == CLOSING) {
+    erase(oFileDrawer);
+    officeFileDrStatus = CLOSED;
+  } else {
+    get.posn(oFileDrawer, work1, work2);
+    if (work2 == 112) {
+      officeFileDrStatus = OPEN1;
+    } else {
+      if (work2 == 121) {
+        officeFileDrStatus = OPEN2;
+        if (!has("notebook")) {
+          set.loop(oFileDrawer, 5);
+          set.cel(oFileDrawer, 5);
+          force.update(oFileDrawer);
+        }
+      } else {
+        officeFileDrStatus = OPEN3;
+        if (!has("floppy disk")) {
+          set.loop(oFileDrawer, 5);
+          set.cel(oFileDrawer, 6);
+          force.update(oFileDrawer);
+        }
+      }
+    }
+  }
+}
+
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+if (haveInput && !haveMatch && unknownWordNum == 0) {
+  if (said("look")) {
+    print("This office hasn't been used in a long time. There is a "
+          "desk and file cabinet, but no chair. It was probably used "
+          "by the control room operator.");
+  }
+  if (said("look", "floor")) {
+    print("There is a thin layer of dust on the plain floor. You can "
+          "see your footprints in the dust. It looks like you've been "
+          "the only one in here in a very long time. There is a small "
+          "rug in the center of the room.");
+  }
+  if (said("look", "ceiling")) {
+    print("The ceiling tiles in the drop-down ceiling are plain and "
+          "dull. The fluorescent lights provide adequate lighting for "
+          "typical office work.");
+  }
+  if (said("look", "walls")) {
+    print("The walls are mostly bare. There is a large painting on "
+          "the wall next to the desk.");
+    [ if painting is open, say a little more
+    if (paintingStatus == OPEN) {
+      print("The painting is hinged on the right side. Behind "
+            "it you see a wall safe.");
+    }
+  }
+  if (said("look", "desk")) {
+    print("The plain metal desk is old and worn. It has two drawers.");
+  }
+  if (said("look", "in", "desk")) {
+    print("The desk has two drawers that you can look at more closely if you want.");
+  }
+  if (said("look", "under", "desk")) {
+    [ is ego close enough?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      print("There is nothing under the desk.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("climb", "desk")) {
+    [ is ego close enough?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      print("There is not enough room on the desk for you to climb it.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("move", "desk")) {
+    print("The desk is too heavy for you to move.");
+  }
+  
+  if (said("look", "file cabinet")) {
+    print("A large 3-drawer filing cabinet is in the corner.");
+  }
+  if (said("look", "in", "file cabinet")) {
+    print("The file cabinet has three drawers that you can look at more closely if you want.");
+  }
+  if (said("move", "file cabinet")) {
+    print("The file cabinet is too heavy for you to move.");
+  }
+
+  if ((said("look", "drawer") || 
+       said("look", "in", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if ((officeDskDrStatus == OPEN1 || officeDskDrStatus == OPEN2)) {
+        goto(lookdeskdrawer);
+      } else {
+        print("Neither desk drawer is open.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if ((officeFileDrStatus == OPEN1 || officeFileDrStatus == OPEN2 || 
+             officeFileDrStatus == OPEN3)) {
+          goto(lookfilecabdrawer);
+        } else {
+          print("There are no open drawers in the file cabinet.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }      
+  }
+  if ((said("look", "top", "drawer") || 
+       said("look", "in", "top", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN1) {
+        goto(lookdeskdrawer);
+      } else {
+        print("The top desk drawer is not open.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if (officeFileDrStatus == OPEN1) {
+          goto(lookfilecabdrawer);
+        } else {
+          print("The top file cabinet drawer is not open.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }      
+  }
+  if ((said("look", "middle", "drawer") || 
+       said("look", "in", "middle", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN2) {
+        goto(lookfilecabdrawer);
+      } else {
+        print("The middle file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("look", "bottom", "drawer") || 
+       said("look", "in", "bottom", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN2) {
+        goto(lookdeskdrawer);
+      } else {
+        print("The bottom desk drawer is not open.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if (officeFileDrStatus == OPEN3) {
+          goto(lookfilecabdrawer);
+        } else {
+          print("The bottom file cabinet drawer is not open.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }      
+  }
+  if ((said("look", "desk", "drawer") || 
+       said("look", "in", "desk", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if ((officeDskDrStatus == OPEN1 || officeDskDrStatus == OPEN2)) {
+        goto(lookdeskdrawer);
+      } else {
+        print("Neither desk drawer is open.");
+      }
+    } else {
+      print("Move closer.");
+    }      
+  }
+  if ((said("look", "top", "desk", "drawer") || 
+       said("look", "desk", "top", "drawer") || 
+       said("look", "in", "top", "desk", "drawer") || 
+       said("look", "in", "desk", "top", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN1) {
+        goto(lookdeskdrawer);
+      } else {
+        print("The top desk drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }      
+  }
+  if ((said("look", "bottom", "desk", "drawer") || 
+       said("look", "desk", "bottom", "drawer") || 
+       said("look", "in", "bottom", "desk", "drawer") || 
+       said("look", "in", "desk", "bottom", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN2) {
+        goto(lookdeskdrawer);
+      } else {
+        print("The bottom desk drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }      
+  }
+  if ((said("look", "file cabinet", "drawer") ||
+       said("look", "in", "file cabinet", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if ((officeFileDrStatus == OPEN1 || officeFileDrStatus == OPEN2 || 
+           officeFileDrStatus == OPEN3)) {
+        goto(lookfilecabdrawer);
+      } else {
+        print("There are no open drawers in the file cabinet.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("look", "top", "file cabinet", "drawer") || 
+       said("look", "file cabinet", "top", "drawer") || 
+       said("look", "in", "top", "file cabinet", "drawer") || 
+       said("look", "in", "file cabinet", "top", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN1) {
+        goto(lookfilecabdrawer);
+      } else {
+        print("The top file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("look", "bottom", "file cabinet", "drawer") || 
+       said("look", "file cabinet", "bottom", "drawer") || 
+       said("look", "in", "bottom", "file cabinet", "drawer") || 
+       said("look", "in", "file cabinet", "bottom", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN3) {
+        goto(lookfilecabdrawer);
+      } else {
+        print("The bottom file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("look", "middle", "file cabinet", "drawer") || 
+       said("look", "file cabinet", "middle", "drawer") || 
+       said("look", "in", "middle", "file cabinet", "drawer") || 
+       said("look", "in", "file cabinet", "middle", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN2) {
+        goto(lookfilecabdrawer);
+      } else {
+        print("The middle file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+       
+  if (said("open", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      print("Which drawer?");
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        print("Wich drawer?");
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if (said("open", "top", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == CLOSED) {
+        goto(opendesktop);
+      } else {
+        print("It's not safe to open more than one drawer at a time.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if (officeFileDrStatus == CLOSED) {
+          goto(openfiletop);
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }    
+  }
+  if (said("open", "middle", "drawer")) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == CLOSED) {
+        goto(openfiletop);
+      } else {
+        print("It's not safe to open more than one drawer at a time.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("open", "bottom", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == CLOSED) {
+        goto(opendeskbtm);
+      } else {
+        print("It's not safe to open more than one drawer at a time.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if (officeFileDrStatus == CLOSED) {
+          goto(openfilebtm);
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      } else {
+        print("Move closer.");
+      }    
+    }
+  }
+  if (said("open", "desk", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == CLOSED) {
+        print("Which drawer?");
+      } else {
+        print("It's not safe to open more than one drawer at a time.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("open", "top", "desk", "drawer") || 
+       said("open", "desk", "top", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == CLOSED) {
+        goto(opendesktop);
+      } else {
+        if (officeDskDrStatus == OPEN1) {
+          print("It's already open.");
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("open", "bottom", "desk", "drawer") || 
+       said("open", "desk", "bottom", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == CLOSED) {
+        goto(opendesktop);
+      } else {
+        if (officeDskDrStatus == OPEN2) {
+          print("It's already open.");
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+       
+  if (said("open", "file cabinet", "drawer")) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == CLOSED) {
+        print("Which drawer?");
+      } else {
+        print("It's not safe to open more than one drawer at a time.");
+      }
+    }
+  }
+  if ((said("open", "top", "file cabinet", "drawer") || 
+       said("open", "file cabinet", "top", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == CLOSED) {
+        goto(openfiletop);
+      } else {
+        if (officeFileDrStatus == OPEN1) {
+          print("It's already open.");
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      }
+    }
+  }
+  if ((said("open", "bottom", "file cabinet", "drawer") || 
+       said("open", "file cabinet", "bottom", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == CLOSED) {
+        goto(openfilebtm);
+      } else {
+        if (officeFileDrStatus == OPEN3) {
+          print("It's already open.");
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      }
+    }
+  }
+  if ((said("open", "middle", "file cabinet", "drawer") || 
+       said("open", "file cabinet", "middle", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == CLOSED) {
+        goto(openfilemid);
+      } else {
+        if (officeFileDrStatus == OPEN2) {
+          print("It's already open.");
+        } else {
+          print("It's not safe to open more than one drawer at a time.");
+        }
+      }
+    }
+  }
+       
+  if (said("close", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if ((officeDskDrStatus == OPEN1 || officeDskDrStatus == OPEN2)) {
+        goto(closedeskdrawer);
+      } else {
+        print("Neither desk drawer is open.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if ((officeFileDrStatus == OPEN1 || officeFileDrStatus == OPEN2 || 
+             officeFileDrStatus == OPEN3)) {
+          goto(closefiledrawer);
+        } else {
+          print("There are no open drawers in the file cabinet.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if (said("close", "top", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN1) {
+        goto(closedeskdrawer);
+      } else {
+        print("The top desk drawer is not open.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if (officeFileDrStatus == OPEN1) {
+          goto(closefiledrawer);
+        } else {
+          print("The top file cabinet drawer is not open.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if (said("close", "middle", "drawer")) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN2) {
+        goto(closefiledrawer);
+      } else {
+        print("The middle file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("close", "bottom", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN2) {
+        goto(closedeskdrawer);
+      } else {
+        print("The bottom desk drawer is not open.");
+      }
+    } else {
+      [ close to file cabinet?
+      if (obj.in.box(ego, 82, 129, 105, 133)) {
+        if (officeFileDrStatus == OPEN3) {
+          goto(closefiledrawer);
+        } else {
+          print("The bottom file cabinet drawer is not open.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if (said("close", "desk", "drawer")) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if ((officeDskDrStatus == OPEN1 || officeDskDrStatus == OPEN2)) {
+        goto(closedeskdrawer);
+      } else {
+        print("Neither desk drawer is open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("close", "top", "desk", "drawer") || 
+       said("close", "desk", "top", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN1) {
+        goto(closedeskdrawer);
+      } else {
+        print("The top desk drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("close", "bottom", "desk", "drawer") || 
+       said("close", "desk", "bottom", "drawer"))) {
+    [ close to desk?
+    if (obj.in.box(ego, 74, 131, 101, 136)) {
+      if (officeDskDrStatus == OPEN2) {
+        goto(closedeskdrawer);
+      } else {
+        print("The bottom desk drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+
+  if (said("close", "file cabinet", "drawer")) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if ((officeFileDrStatus == OPEN1 || officeFileDrStatus == OPEN2 || 
+           officeFileDrStatus == OPEN3)) {
+        goto(closefiledrawer);
+      } else {
+        print("There are no open drawers in the file cabinet.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("close", "top", "file cabinet", "drawer") || 
+       said("close", "file cabinet", "top", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN1) {
+        goto(closefiledrawer);
+      } else {
+        print("The top file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("close", "middle", "file cabinet", "drawer") || 
+       said("close", "file cabinet", "middle", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN2) {
+        goto(closefiledrawer);
+      } else {
+        print("The middle file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("close", "bottom", "file cabinet", "drawer") || 
+       said("close", "file cabinet", "bottom", "drawer"))) {
+    [ close to file cabinet?
+    if (obj.in.box(ego, 82, 129, 105, 133)) {
+      if (officeFileDrStatus == OPEN3) {
+        goto(closefiledrawer);
+      } else {
+        print("The bottom file cabinet drawer is not open.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  
+  if (said("look", "walkman")) {
+    if (has("Walkman")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (obj.in.box(ego, 74, 131, 101, 136) && officeDskDrStatus == OPEN1) {
+          print("There is an old Sony Walkman cassette player in "
+                "the top desk drawer.");
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  if (said("get", "walkman")) {
+    if (has("Walkman")) {
+      print("You already have it.");
+    } else {
+      if (obj.in.box(ego, 74, 131, 101, 136) && officeDskDrStatus == OPEN1) {
+        goto(getwalkman);
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  
+  if (said("look", "post it")) {
+    if (has("Walkman")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (obj.in.box(ego, 74, 131, 101, 136) && officeDskDrStatus == OPEN1) {
+        print("There is an old Sony Walkman cassette player in "
+              "the top desk drawer.");
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  if (said("get", "post it")) {
+    if (has("post-it note")) {
+      print("You already have it.");
+    } else {
+      if (obj.in.box(ego, 74, 131, 101, 136) && officeDskDrStatus == OPEN2) {
+        goto(getnote);
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  
+  if (said("look", "notebook")) {
+    if (has("notebook")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN2) {
+        print("There is a notebook in the middle file cabinet drawer.");
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  if (said("get", "notebook")) {
+    if (has("notebook")) {
+      print("You already have it.");
+    } else {
+      if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN2) {
+        goto(getnotebook);
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  if (said("look", "disk")) {
+    if (has("floppy disk")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN3) {
+        print("There is a box of floppy disks in the bottom file cabinet drawer.");
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  if (said("get", "disk")) {
+    if (has("floppy disk")) {
+      print("You already have it.");
+    } else {
+      if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN3) {
+        goto(getdisk);
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  
+  if (said("look", "computer")) {
+    print("There is an old IBM PC sitting on the desk, with a "
+          "keyboard. No mouse. It is powered down.");
+  }
+  if ((said("use", "computer") || said("turn on", "computer") || 
+       said("turn", "computer", "on"))) {
+    if (obj.in.box(ego, 64, 131, 86, 135)) {
+      print("The computer is not working. It looks like the hard "
+            "drive and power supply have been removed a long time "
+            "ago.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "monitor")) {
+    print("The monitor is an old VGA display. Probably state of the art back in the 80s and 90s.");
+  }
+  if ((said("turn on", "monitor") || said("turn", "monitor", "on"))) {
+    if (obj.in.box(ego, 64, 131, 86, 135)) {
+      print("The monitor doesn't have a power cord. It won't turn on.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "printer")) {
+    print("An old dot matrix printer sits next to the computer.");
+    if (!has("memo")) {
+      print("The output spool still has a piece of paper in it.");
+    }
+  }
+  if ((said("turn on", "printer") || said("turn", "printer", "on") || 
+       said("power up", "printer"))) {
+    if (obj.in.box(ego, 73, 131, 97, 135)) {
+      print("Pressing the power button doesn't do anything. The printer must be broken.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("look", "paper") || said("look", "memo"))) {
+    if (has("memo")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (obj.in.box(ego, 73, 131, 97, 135)) {
+        print("The document on the printer output spool looks like an office memo.");
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if ((said("read", "paper") || said("read", "memo"))) {
+    if (has("memo")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (obj.in.box(ego, 73, 131, 97, 135)) {
+        print("If you want to read it, you should take it off the printer.");
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if ((said("get", "paper") || said("get", "memo"))) {
+    if (has("memo")) {
+      print("You already have it.");
+    } else {
+      if (obj.in.box(ego, 73, 131, 97, 135)) {
+        goto(getmemo);
+      }
+    }
+  }
+  if (said("look", "keyboard")) {
+    print("The keyboard is on the desk next to the computer.");
+  }
+  if (said("get", "keyboard")) {
+    if (obj.in.box(ego, 64, 131, 86, 135)) {
+      print("You don't need a keyboard, especially one that isn't compatible with modern computers.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  
+  if (said("look", "rug")) {
+    goto(lookrug);
+  }
+  if (said("look", "under", "rug")) {
+    if (rugStatus == RUG_UP) {
+      if (!has("folder")) {
+        if (obj.in.box(ego, 80, 138, 104, 151)) {
+          print("There is a folder tucked under the corner of the rug.");
+        } else {
+          print("It looks like there's something under this corner "
+                "of the rug.");
+        }
+      } else {
+        print("There is nothing under the rug corner.");
+      }
+    } else {
+      print("Without lifting the corner, you can't see under "
+            "the rug.");
+    }
+  }
+  if ((said("move", "rug") || said("lift", "rug"))) {
+    [ ego has to be close to the rug corner
+    if (obj.in.box(ego, 80, 138, 104, 151)) {
+      [ but not too close
+      if (obj.in.box(ego, 83, 141, 101, 148)) {
+        print("You can't move the rug corner if you're standing on it.");
+      } else {
+        if (rugStatus == RUG_UP) {
+          print("The rug corner is already up.");
+        } else {
+          [ raise it
+          rugStatus = RUG_LIFTING;
+          set.loop(oRug, 0);
+          set.cel(oRug, 0);
+          end.of.loop(oRug, fMoveRug);
+          if (!has("folder")) {
+            draw(oFolder);
+          }
+        }
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("replace", "rug") || said("restore", "rug") || 
+       said("lower", "rug"))) {
+    [ ego has to be close to the rug corner
+    if (obj.in.box(ego, 80, 138, 104, 151)) {
+      [ but not too close
+      if (obj.in.box(ego, 83, 141, 101, 148)) {
+        print("You can't move the rug corner if you're standing on it.");
+      } else {
+        if (rugStatus == RUG_UP) {
+          [ lower the rug
+          rugStatus = RUG_LOWERING;
+          reverse.loop(oRug, fMoveRug);
+        } else {
+          print("The rug corner is already down.");
+        }
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "folder")) {
+    if (has("folder")) {
+      [ let game functions handle it
+      reset(haveMatch);
+    } else {
+      if (rugStatus == RUG_UP && obj.in.box(ego, 80, 138, 104, 151)) {
+        print("The folder is tucked under the corner of the rug.");
+      } else {
+        print("You can't see it from here.");
+      }
+    }
+  }
+  if (said("get", "folder")) {
+    if (has("folder")) {
+        print("You already have it.");
+    } else {
+      if (rugStatus == RUG_UP && obj.in.box(ego, 80, 138, 104, 151)) {
+        goto(getfolder);
+      } else {
+        print("You can't see it from here.");
+      }
+    }
+  }
+  
+  if (said("look", "painting")) {
+    goto(lookpainting);
+  }
+  if (said("get", "painting")) {
+    print("The painting is much to big for you to carry around.");
+  }
+  if (said("look", "behind", "painting")) {
+    if (paintingStatus == OPEN) {
+      print("There is a wall safe behind the painting.");
+    } else {
+      print("How can you, with the painting up against the wall?");
+    }
+  }
+  if ((said("move", "painting") || said("open", "painting"))) {
+    if (paintingStatus == OPEN) {
+      goto(openpainting);
+    } else {
+      print("The painting is already moved away from the wall.");
+    }
+  }
+  if (said("close", "painting")) {
+    goto(closepainting);
+  }
+    
+  if (said("look", "safe")) {
+    if (paintingStatus == OPEN) {
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        goto(looksafe);
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      print("What safe?");
+    }
+  }
+  if (said("look", "in", "safe")) {
+    if (paintingStatus == OPEN) {
+      if (safeStatus == OPEN) {
+        if (obj.in.box(ego, 38, 126, 65, 132)) {
+          if (!has("BaDASS manual")) {
+            print("The safe contains a thin paper back binder.");
+          } else {
+            print("The safe is empty.");
+          }
+        } else {
+          print("Move closer.");
+        }
+      } else {
+        print("The safe is closed.");
+      }
+    } else {
+      print("What safe?");
+    }
+  }
+  if ((said("open", "safe") || said("unlock", "safe"))) {
+    if (paintingStatus == OPEN) {
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        if (safeStatus == OPEN) {
+          print("It is already open.");
+        } else {
+          goto(unlocksafe);
+        }
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      print("What safe?");
+    }
+  }
+  if ((said("close", "safe") || said("lock", "safe"))) {
+    if (paintingStatus == OPEN) {
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        if (safeStatus == OPEN) {
+          goto(closesafe);
+        } else {
+          print("It is already shut.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      print("What safe?");
+    }
+  }
+  if ((said("break", "safe") || said("break", "open", "safe"))) {
+    if (paintingStatus == OPEN) {
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        if (safeStatus == OPEN) {
+          print("No need, it's already open.");
+        } else {
+          print("Are you kidding? That thing is a Masterlock Model XN-4000. "
+                "Practically unbreakable.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      [ let game fuctions logic handle it
+      reset(haveMatch);
+    }
+  }
+  if (said("crack", "safe")) {
+    if (paintingStatus == OPEN) {
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        if (safeStatus == OPEN) {
+          print("No need, it's already open.");
+        } else {
+          print("If you had any safecracking skills, that just might work...");
+          print("But you don't.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      [ let game fuctions logic handle it
+      reset(haveMatch);
+    }
+  }
+  if (said("look", "manual")) {
+    if (has("BaDASS manual")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      if (safeStatus == OPEN) {
+        if (obj.in.box(ego, 38, 126, 65, 132)) {
+          print("In the safe you see what looks like an old computer manual.");
+        } else {
+          print("Move closer.");
+        }
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  if (said("get", "manual")) {
+    if (has("BaDASS manual")) {
+      print("You already have it.");
+    } else {
+      if (safeStatus == OPEN) {
+        goto(getmanual);
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+
+}
+
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -253,14 +1445,15 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ look
   if (cursormode == C_LOOK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
-      print("You see you.");
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      print("This is you.");
       goto(doneclick);
     }
     
-    [ picture on wall
-    if (posn(oPicture, ON.OBJ, 1, &mouseX, &mouseY)) {
-      if (pictureStatus == OPEN) {
+    [ painting on wall
+    if (posn(oPainting, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookpainting
+      if (paintingStatus == OPEN) {
         print("The painting is hinged on the right side. "
               "Behind it you see a wall safe.");
       } else {
@@ -270,12 +1463,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }   
     
-    [ safe behind picture, only if picture is open
-    if (posn(oSafe, ON.OBJ, 1, &mouseX, &mouseY) && 
-        pictureStatus == OPEN) {
+    [ safe behind painting, only if painting is open
+    if (posn(oSafe, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY) && 
+        paintingStatus == OPEN) {
+      :looksafe
       if (safeStatus == OPEN) {
         if (!has("BaDASS manual")) {
-          print("The safe contains a thin paper back binder.");
+        print("In the safe you see what looks like an old computer manual.");
         } else {
           print("The safe is empty.");
         }
@@ -286,14 +1480,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ computer/keyboard
-    reset(fTmp);
+    reset(tempflag);
     if (mouseX > 66 && mouseX < 77 && mouseY > 92 && mouseY < 116) {
-      set(fTmp);
+      set(tempflag);
     }
     if (mouseX > 69 && mouseX < 80 && mouseY > 114 && mouseY < 120) {
-      set(fTmp);
+      set(tempflag);
     }
-    if (fTmp) {
+    if (tempflag) {
       print("There is an old IBM PC sitting on the desk, with a "
             "keyboard. No mouse. It is powered down.");
       goto(doneclick);
@@ -309,7 +1503,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ desk drawer
-    if (posn(oDeskDrawer, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oDeskDrawer, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookdeskdrawer
       if (officeDskDrStatus == OPEN1) {
         if (!has("Walkman")) {
           print("There is an old Sony Walkman cassette player in "
@@ -332,23 +1527,25 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
           
-    [ file drawer
-    if (posn(oFileDrawer, ON.OBJ, 1, &mouseX, &mouseY)) {
+    [ file cabinet drawer
+    if (posn(oFileDrawer, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookfilecabdrawer
       if (officeFileDrStatus == OPEN2) {
         if (!has("notebook")) {
-          print("There is a notebook in this file drawer.");
+          print("There is a notebook in this file cabinet drawer.");
         } else {
-          print("The file drawer is empty.");
+          print("The file cabinet drawer is empty.");
         }
       } else {
         if (officeFileDrStatus == OPEN3) {
           if (!has("floppy disk")) {
-            print("There is a box of floppy disks in this file drawer.");
+            print("There is a box of floppy disks in this file cabinet drawer.");
           } else {
-            print("The file drawer is empty.");
+            print("The file cabinet drawer is empty.");
           }
         } else {
-          print("The file drawer is empty");
+          [ if not 2 or 2, must be drawer 1
+          print("The file cabinet drawer is empty");
         }
       }   
       goto(doneclick);
@@ -367,7 +1564,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ folder
-    if (posn(oFolder, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oFolder, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("There is a folder tucked under the corner of the rug.");
       goto(doneclick);
     }
@@ -378,6 +1575,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       work1 /= 16;
       if (work1 != 4) {
+        :lookrug
         print("A small throw rug is in the center of the room. The "
               "rug looks worn and dirty.");
         if (rugStatus == RUG_UP) {
@@ -396,6 +1594,50 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     
+    [ floor
+    if (mouseX > 31 && mouseX < 128 && mouseY > 124 && mouseY < 155) {
+      [ walls are cyan- ignore them
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      [ ignore priority
+      block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
+      if (work1 != CYAN) {
+        print("There is a thin layer of dust on the plain floor. You can "
+              "see your footprints in the dust. It looks like you've been "
+              "the only one in here in a very long time. There is a small "
+              "rug in the center of the room.");
+        goto(doneclick);
+      }
+    }
+    
+    [ ceiling
+    if (mouseX > 31 && mouseX < 128 && mouseY > 63 && mouseY < 73) {
+      [ walls are cyan- ignore them
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      [ ignore priority
+      block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
+      if (work1 != CYAN) {
+        print("The ceiling tiles in the drop-down ceiling are plain and "
+              "dull. The fluorescent lights provide adequate lighting for "
+              "typical office work.");
+        goto(doneclick);
+      }
+    }
+    
+    [ walls
+    if (mouseX > 31 && mouseX < 128 && mouseY > 63 && mouseY < 150) {
+      [ ignore priority
+      block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
+      if (work1 == CYAN) {
+        print("The walls are mostly bare. There is a large painting on "
+              "the wall next to the desk.");
+        [ if painting is open, say a little more
+        if (paintingStatus == OPEN) {
+          print("The painting is hinged on the right side. "
+                "Behind it you see a wall safe.");
+        }
+        goto(doneclick);
+      }
+    }
     [ anything else is the generic room look
     print("This office hasn't been used in a long time. There is a "
           "desk and file cabinet, but no chair. It was probably used "
@@ -406,7 +1648,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ talk
   if (cursormode == C_TALK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You have nothing to say.");
     } else {
       print("There is no one here to talk to.");
@@ -417,13 +1659,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ use
   if (cursormode == C_USE) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Not even when you're alone.");
       goto(doneclick);
     }
     
     [ folder
-    if (posn(oFolder, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oFolder, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       [ is ego close enough?
       if (obj.in.box(ego, 80, 138, 104, 151)) {
         [ play sound if walkman not active
@@ -431,6 +1673,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           call(lgc.SetSound);
           sound(s.GetItem, soundDone);
         }
+        :getfolder
         [ pick it up
         get("folder");
         erase(oFolder);
@@ -479,6 +1722,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (mouseX > 77 && mouseX < 88 && mouseY > 103 && mouseY < 107) {
         [ is ego close enough?
         if (obj.in.box(ego, 73, 131, 97, 135)) {
+          :getmemo
           [ play sound if walkman not active
           if ((currentTrack == 0 || currentTrack > 128)) {
             call(lgc.SetSound);
@@ -498,23 +1742,21 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ on desk drawer, and open
-    if (posn(oDeskDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
+    if (posn(oDeskDrawer, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY) && 
         officeDskDrStatus != CLOSING) {
       [ is ego close enough?
       if (obj.in.box(ego, 74, 131, 101, 136)) {
         if (officeDskDrStatus == OPEN1 && mouseY < 124) {
           [ clicking on top drawer item
           if (!has("Walkman")) {
-            [ play sound if walkman not active
-            if ((currentTrack == 0 || currentTrack > 128)) {
-              call(lgc.SetSound);
-              sound(s.GetItem, soundDone);
-            }
+            :getwalkman
+            [ play sound (walkman not active if not picked up)
+            call(lgc.SetSound);
+            sound(s.GetItem, soundDone);
             get("Walkman");
             work1 = 2;
             call(lgc.ScoreHandler);
-            print("You decide to take the Walkman before closing "
-                  "the drawer.");
+            print("You take the Walkman out of the drawer.");
             set.loop(oDeskDrawer, 2);
             set.cel(oDeskDrawer, 2);
             force.update(oDeskDrawer);      
@@ -523,6 +1765,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           if (officeDskDrStatus == OPEN2 && mouseY < 128) {
             [ clicking on bottom drawer item
             if (!has("post-it note")) {
+              :getnote
               [ play sound if walkman not active
               if ((currentTrack == 0 || currentTrack > 128)) {
                 call(lgc.SetSound);
@@ -538,6 +1781,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               force.update(oDeskDrawer);      
             }
           } else {
+            :closedeskdrawer
             [ clicking on drawer
             set.loop(oDeskDrawer, 2);
             set.cel(oDeskDrawer, 2);
@@ -561,6 +1805,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         officeDskDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 74, 131, 101, 136)) {
+        :opendesktop
         position(oDeskDrawer, 84, 126);
         set.loop(oDeskDrawer, 2);
         set.cel(oDeskDrawer, 0);
@@ -583,6 +1828,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         officeDskDrStatus == CLOSED) {
       [ is ego close enough
       if (obj.in.box(ego, 74, 131, 101, 136)) {
+        :opendeskbtm
         position(oDeskDrawer, 84, 130);
         set.loop(oDeskDrawer, 2);
         set.cel(oDeskDrawer, 0);
@@ -600,17 +1846,17 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ on file drawer, and open
-    if (posn(oFileDrawer, ON.OBJ, 0, &mouseX, &mouseY) && 
+    [ on file cabinet drawer, and open
+    if (posn(oFileDrawer, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY) && 
         officeFileDrStatus != CLOSING) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
-
         if (officeFileDrStatus == OPEN1 && mouseY < 105) {
           goto(doneclick);
         }
         if (officeFileDrStatus == OPEN2 && mouseY < 114) {
           if (!has("notebook")) {
+            :getnotebook
             [ play sound if walkman not active
             if ((currentTrack == 0 || currentTrack > 128)) {
               call(lgc.SetSound);
@@ -628,6 +1874,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         }
         if (officeFileDrStatus == OPEN3 && mouseY < 123) {
           if (!has("floppy disk")) {
+            :getdisk
             [ play sound if walkman not active
             if ((currentTrack == 0 || currentTrack > 128)) {
               call(lgc.SetSound);
@@ -643,6 +1890,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
           goto(doneclick);
         }
+        :closefiledrawer
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
         reverse.loop(oFileDrawer, fFileDrawer);
@@ -657,11 +1905,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       goto(doneclick);
     }
-    [ top file drawer, closed
+    [ top file cabinet drawer, closed
     if (mouseX > 91 && mouseX < 101 && mouseY > 99 && mouseY < 109 &&
         officeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
+        :openfiletop
         position(oFileDrawer, 93, 112);
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 0);
@@ -679,11 +1928,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
       
-    [ middle file drawer, closed
+    [ middle file cabinet drawer, closed
     if (mouseX > 91 && mouseX < 101 && mouseY > 108 && mouseY < 118 &&
         officeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
+        :openfilemid
         position(oFileDrawer, 93, 121);
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 0);
@@ -701,11 +1951,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
       
-    [ bottom file drawer, closed
+    [ bottom file cabinet drawer, closed
     if (mouseX > 92 && mouseX < 101 && mouseY > 117 && mouseY < 127 &&
         officeFileDrStatus == CLOSED) {
       [ is ego close enough?
       if (obj.in.box(ego, 82, 129, 105, 133)) {
+        :openfilebtm
         position(oFileDrawer, 93, 130);
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 0);
@@ -723,12 +1974,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ picture, open
+    [ painting, open
     if (mouseX > 59 && mouseX < 66 && mouseY > 87 && mouseY < 118 && 
-        pictureStatus == OPEN) {
+        paintingStatus == OPEN) {
+      :closepainting
       [ can't if safe is still open
       if (safeStatus != CLOSED) {
-        print("The picture won't close with the safe open.");
+        print("The painting won't close with the safe open.");
         goto(doneclick);
       }
       [ is ego close enough? 
@@ -736,13 +1988,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ if too close
         if (egoY < 130) {
           work1 = 130;
-          work2 = 1;
+          work2 = 1; 
           set.loop(ego, 3);
           fix.loop(ego);
           move.obj.v(ego, egoX, work1, work2, fBackup);
         }
-        reverse.loop(oPicture, fPicture);
-        pictureStatus = CLOSING;
+        reverse.loop(oPainting, fPainting);
+        paintingStatus = CLOSING;
         erase(oSafe);
         [ play sound if walkman not active
         if ((currentTrack == 0 || currentTrack > 128)) {
@@ -755,13 +2007,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ picture, closed
+    [ painting, closed
     if (mouseX > 45 && mouseX < 61 && mouseY > 87 && mouseY < 116 && 
-        pictureStatus == CLOSED) {
+        paintingStatus == CLOSED) {
+      :openpainting
       [ is ego close enough? 
       if (obj.in.box(ego, 38, 126, 65, 132)) {
-        end.of.loop(oPicture, fPicture);
-        pictureStatus = OPENING;
+        end.of.loop(oPainting, fPainting);
+        paintingStatus = OPENING;
         [ play sound if walkman not active
         if ((currentTrack == 0 || currentTrack > 128)) {
           call(lgc.SetSound);
@@ -781,11 +2034,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    [ safe only accessible if picture is open
-    if (pictureStatus == OPEN) {      
+    [ safe only accessible if painting is open
+    if (paintingStatus == OPEN) {      
       [ safe door, open
       if (mouseX > 44 && mouseX < 50 && mouseY > 106 && mouseY < 120 && 
           safeStatus == OPEN) {
+        :closesafe
         [ is ego close enough? 
         if (obj.in.box(ego, 38, 126, 65, 132)) {
           set.loop(oSafe, 1);
@@ -815,18 +2069,24 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (mouseX > 49 && mouseX < 56 && mouseY > 103 && mouseY < 115 && 
           safeStatus == OPEN) {
         if (!has("BaDASS manual")) {
-          [ play sound if walkman not active
-          if ((currentTrack == 0 || currentTrack > 128)) {
-            call(lgc.SetSound);
-            sound(s.GetItem, soundDone);
+          :getmanual
+          [ is ego close enough? 
+          if (obj.in.box(ego, 38, 126, 65, 132)) {
+            [ play sound if walkman not active
+            if ((currentTrack == 0 || currentTrack > 128)) {
+              call(lgc.SetSound);
+              sound(s.GetItem, soundDone);
+            }
+            get("BaDASS manual");
+            print("You take the manual out of the safe.");
+            set.loop(oSafe, 1);
+            set.cel(oSafe, 7);
+            force.update(oSafe);
+            work1 = 3;
+            call(lgc.ScoreHandler);
+          } else {
+            print("Move closer.");
           }
-          get("BaDASS manual");
-          print("You take the manual out of the safe.");
-          set.loop(oSafe, 1);
-          set.cel(oSafe, 7);
-          force.update(oSafe);
-          work1 = 3;
-          call(lgc.ScoreHandler);
         }
         goto(doneclick);
       }
@@ -837,11 +2097,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           safeStatus == CLOSED) {
         [ is ego close enough? 
         if (obj.in.box(ego, 38, 126, 65, 132)) {
+          :unlocksafe
           [ show wait cursor
           cursoricon = C_WAIT;
-          set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
           [ fade out, then display access panel
-          block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+          block(FADE.OUT, BYNUM, 10, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
           new.room(rm.SafeDoor);  [ ##LE002##
         } else {
           print("Move closer.");
@@ -851,14 +2112,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ computer/keyboard
-    reset(fTmp);
+    reset(tempflag);
     if (mouseX > 66 && mouseX < 77 && mouseY > 92 && mouseY < 116) {
-      set(fTmp);
+      set(tempflag);
     }
     if (mouseX > 69 && mouseX < 80 && mouseY > 114 && mouseY < 127) {
-      set(fTmp);
+      set(tempflag);
     }
-    if (fTmp) {
+    if (tempflag) {
       [ is ego close enough?
       if (obj.in.box(ego, 64, 131, 86, 135)) {
         print("The computer is not working. It looks like the hard "
@@ -897,212 +2158,30 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   :doneclick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
-[ ego backing up from picture
-if (fBackup) {
-  reset(fBackup);
-  release.loop(ego);
-}
-
-[ picture movement
-if (fPicture) {
-  reset(fPicture);
-  if (pictureStatus == OPENING) {
-    pictureStatus = OPEN;
-    if (!scorePicture) {
-      set(scorePicture);
-      work1 = 2;
-      call(lgc.ScoreHandler);
-    }
-    draw(oSafe);
-  } else {
-    pictureStatus = CLOSED;
-  }
-}
-
-[ safe door movement
-if (fSafe) {
-  reset(fSafe);
-  if (safeStatus == OPENING) {
-    safeStatus = OPEN;
-    if (!has("BaDASS manual")) {
-      set.loop(oSafe, 5);
-      set.cel(oSafe, 7);
-      force.update(oSafe);
-    }
-  } else {
-    safeStatus = CLOSED;
-  }
-}
-
-[ open the safe
-if (fOpenSafe) {
-  reset(fOpenSafe);
-  [ if too close
-  if (obj.in.box(ego, 38, 126, 65, 129)) {
-    work1 = 130;
-    work2 = 1;
-    set.loop(ego, 3);
-    fix.loop(ego);
-    move.obj.v(ego, egoX, work1, work2, fBackup);
-  }
-  end.of.loop(oSafe, fSafe);
-  safeStatus = OPENING;
-}
-
-[ rug movement
-if (fMoveRug) {
-  reset(fMoveRug);
-  if (rugStatus == RUG_LIFTING) {
-    rugStatus = RUG_UP;
-    if (!findFolder && !has("folder")) {
-      set(findFolder);
-      print("You see a folder tucked under the corner of the rug!");
-      work1 = 2;
-      call(lgc.ScoreHandler);
-    }
-  } else {
-    if (has("folder")) {
-      rugStatus = RUG_FLAT;
-      set.loop(oRug, 5);
-      set.cel(oRug, 2);
-    } else {
-      rugStatus = RUG_DOWN;
-      erase(oFolder);
-    }
-  }
-}
-
-[ trip on rug
-if (!fOnTripLine && rugStatus == RUG_UP && egoHitSpecial && egoX < 100) {
-  set(fOnTripLine);
-  set(fTripping);
-  load.view(vw.Tripping);
-  current.loop(ego, work1);
-  tmpLoop = work1;
-  if (work1 > 1) {
-    work1 -=2;
-  }
-  work1 *= -1; [ because trip loops are backwards!
-  work1 += 1;
-  set.view(ego, vw.Tripping);
-  set.loop.v(ego, work1);
-  fix.loop(ego);
-  program.control();
-  tripCounter = 9;
-  [ play sound if walkman not active
-  if ((currentTrack == 0 || currentTrack > 128)) {
-    call(lgc.SetSound);
-    sound(s.RugTrip, soundDone);
-  }
-}
-
-[ check trip counter
-if (tripCounter) {
-  --tripCounter;
-  if (tripCounter == 0) {
-    set.view(ego, vw.Ego);
-    set.loop.v(ego, tmpLoop);
-    release.loop(ego);
-    player.control();
-    if (!fWarnTrip) {
-      set(fWarnTrip);
-      print("You tripped on the carpet! Good thing you didn't fall "
-            "and break your neck.");
-    }
-    work1 = -1;
-    call(lgc.ScoreHandler);
-  }
-}
-
-[ if fOnTripLine set, AND not on rug, reset fOnTripLine
-if (fOnTripLine) {
-  if (!egoHitSpecial) {
-    reset(fOnTripLine);
-  }
-}
-
-[ drawer movement
-if (fDeskDrawer) {
-  reset(fDeskDrawer);
-  if (officeDskDrStatus == CLOSING) {
-    erase(oDeskDrawer);
-    officeDskDrStatus = CLOSED;
-        } else {
-    get.posn(oDeskDrawer, work1, work2);
-    if (work2 == 126) {
-      officeDskDrStatus = OPEN1;
-      if (!has("Walkman")) {
-        set.loop(oDeskDrawer, 5);
-        set.cel(oDeskDrawer, 4);
-        force.update(oDeskDrawer);
-      }
-    } else {
-      officeDskDrStatus = OPEN2;
-      if (!has("post-it note")) {
-        set.loop(oDeskDrawer, 5);
-        set.cel(oDeskDrawer, 3);
-        force.update(oDeskDrawer);
-      }
-    }
-  }
-}
-if (fFileDrawer) {
-  reset(fFileDrawer);
-  if (officeFileDrStatus == CLOSING) {
-    erase(oFileDrawer);
-    officeFileDrStatus = CLOSED;
-  } else {
-    get.posn(oFileDrawer, work1, work2);
-    if (work2 == 112) {
-      officeFileDrStatus = OPEN1;
-    } else {
-      if (work2 == 121) {
-        officeFileDrStatus = OPEN2;
-        if (!has("notebook")) {
-          set.loop(oFileDrawer, 5);
-          set.cel(oFileDrawer, 5);
-          force.update(oFileDrawer);
-        }
-      } else {
-        officeFileDrStatus = OPEN3;
-        if (!has("floppy disk")) {
-          set.loop(oFileDrawer, 5);
-          set.cel(oFileDrawer, 6);
-          force.update(oFileDrawer);
-        }
-      }
-    }
-  }
-}
-
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 if (egoX > 100 && egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ restore normal palette
-  block(SET.PALETTE, 0, &m10, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  block(SET.PALETTE, BYNUM, &m10, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   new.room(rm.ControlRoom);  [ ##LE001##
 }
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

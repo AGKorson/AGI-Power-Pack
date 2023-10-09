@@ -1,0 +1,389 @@
+#
+# WinAGI Snippets for PowerPack
+#
+# control codes:
+#   %n = new line
+#   %q = '"'
+#   %t = tab (based on current tab setting)
+#   %% = '%'
+#   %1, %2, etc snippet argument value
+
+[Snippet]
+   Name = auto.cycle
+   Value = "set.upper.left(%1, %2);  [ auto.cycle(oSOBJ, vMODE)"
+   ArgTips = "obj SOBJ, var vMODE"
+
+[Snippet]
+   Name = bit.and
+   Value = "block(BIT.AND, %1, %2, %3); [ bit.and(FN_MODE, VAR, MASK)"
+   ArgTips = "byt FN_MODE, var vA, bov MASK"
+
+[Snippet]
+   Name = bit.not
+   Value = "block(BIT.NOT, 0, %1, 0); [ bit.not(VAR)"
+   ArgTips = "var vA"
+
+[Snippet]
+   Name = bit.or
+   Value = "block(BIT.OR, %1, %2, %3); [ bit.or(FN_MODE, VAR, MASK)"
+   ArgTips = "byt FN_MODE, var vA, bov MASK"
+
+[Snippet]
+   Name = bit.shl
+   Value = "block(BIT.SHL %1, %2, %3); [ bit.shl(FN_MODE, VAR, SHIFT)"
+   ArgTips = "byt FN_MODE, var vA, bov SHIFT"
+
+[Snippet]
+   Name = bit.shr
+   Value = "block(BIT.SHR, %1, %2, %3); [ bit.shr(FN_MODE, VAR, SHIFT)"
+   ArgTips = "byt FN_MODE, var vA, bov SHIFT"
+
+[Snippet]
+   Name = bit.xor
+   Value = "block(BIT.XOR, %1, %2, %3); [ bit.xor(FN_MODE, VAR, MASK)"
+   ArgTips = "byt FN_MODE, var vA, bov MASK"
+
+[Snippet]
+   Name = byte2char
+   Value = "block(BYTE2CHAR, %1, %2, 0); [ byte2char(sRESULT, vCHAR)"
+   ArgTips = "str sRESULT, var vCHAR"
+
+[Snippet]
+   Name = byte2hex
+   Value = "block(BYTE2HEX, %1, %2, 0); [ byte2hex(sRESULT, vINPUT)"
+   ArgTips = "str sRESULT, var vINPUT"
+
+[Snippet]
+   Name = cancel.click2move
+   Value = "%1 = 0;%nset.dir(ego, %1); [ cancel.click2move"
+   ArgTips = "var TEMPVAR"
+
+[Snippet]
+   Name = char2byte
+   Value = "block(CHAR2BYTE, %1, %2, 0); [ char2byte(sCHAR, vRESULT)"
+   ArgTips = "str sCHAR, var vRESULT"
+
+[Snippet]
+   Name = clear.controller
+   Value = "set.key(CLR.CTRL, CLR.CTRL, %1); [ clear.controller(cNUM)"
+   ArgTips = "ctl cNUM"
+
+[Snippet]
+   Name = configure.mouse
+   Value = "block(CONFIGURE.MOUSE, %1, %2, %3); [ configure.mouse(XVAR, YVAR, BTNVAR)"
+   ArgTips = "byt XVAR, byt YVAR, byt BTNVAR"
+
+[Snippet]
+   Name = current.input
+   Value = "get.string(%1, m1, CURRENT.INPUT, 0, 0); [ current.input(sRESULT)"
+   ArgTips = "str sRESULT"
+
+[Snippet]
+   Name = custom.inst
+   Value = "set.key(%1, %2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)"
+   ArgTips = "var vCHANNEL, var vENVDATASTR"
+
+[Snippet]
+   Name = delay.time
+   Value = "cycle.time(o254, %1); [ delay.time(vCOUNT)"
+   ArgTips = "var vCOUNT (in milliseconds)"
+
+[Snippet]
+   Name = delete.file
+   Value = "block(DELETE.FILE, %1, 0, 0); [ delete.file(sFILENAME)"
+   ArgTips = "str sFILENAME"
+
+[Snippet]
+   Name = disable.4chan
+   Value = "reset(4channelsound); [ disable.4chan()"
+
+[Snippet]
+   Name = disable.click2move
+   Value = "reset(click2move); [ disable.click2move"
+
+[Snippet]
+   Name = disable.custom.status
+   Value = "set.cursor.char(%q %q); [ disable.custom.status()"
+
+[Snippet]
+   Name = discard.sound.v
+   Value = "block(SND.V.FN, DISCARD.SOUND.V, %1, 0); [ discard.sound.v(vSNDNUM)"
+   ArgTips = "var vSNDNUM"
+
+[Snippet]
+   Name = enable.4chan
+   Value = "set(4channelsound); [ enable.4chan()"
+
+[Snippet]
+   Name = enable.click2move
+   Value = "set(click2move); [ enable.click2move"
+
+[Snippet]
+   Name = enable.custom.status
+   Value = "set.cursor.char(%1); [ enable.custom.status(mSTATUS_DATA)"
+   ArgTips = "msg mSTATUS_DATA"
+
+[Snippet]
+   Name = fade.in
+   Value = "block(FADE.IN, %1, %2, %3); [ fade.in(FN_MODE, DELAY, COLOR)"
+   ArgTips = "byt FN_MODE, bov DELAY, bov COLOR"
+
+[Snippet]
+   Name = fade.out
+   Value = "block(FADE.OUT, %1, %2, %3); [ fade.out(FN_MODE, DELAY, COLOR)"
+   ArgTips = "byt FN_MODE, bov DELAY, bov COLOR"
+
+[Snippet]
+   Name = get.date
+   Value = "block(GET.DATE, %1, %2, %3); [ get.date(vYEAR, vMONTH, vDAY)"
+   ArgTips = "var vYEAR, var vMONTH, var vDAY"
+
+[Snippet]
+   Name = get.dayofweek
+   Value = "block(GET.DAYOFWEEK, %1, 0, 0); [ get.dayofweek(vDOW)"
+   ArgTips = "var vDOW"
+
+[Snippet]
+   Name = get.pixel
+   Value = "block(GET.PIXEL, %1, %2, %3); [ get.pixel(vX, vY, vRESULT)"
+   ArgTips = "var vX, var vY, var vRESULT"
+
+[Snippet]
+   Name = get.shiftstate
+   Value = "block(GET.SHIFTSTATE, %1, 0, 0); [ get.shiftstate(vSTATE)"
+   ArgTips = "var vSTATE"
+
+[Snippet]
+   Name = get.time
+   Value = "block(GET.TIME, %1, %2, %3); [ get.time(vHOUR, vMINUTE, vSECOND)"
+
+[Snippet]
+   Name = hex2byte
+   Value = "block(HEX2BYTE, %1, %2, 0); [ hex2byte(sINPUT, vRESULT)"
+   ArgTips = "str sINPUT, var vRESULT"
+
+[Snippet]
+   Name = hide.mouse
+   Value = "disable.item(mouse);"
+
+[Snippet]
+   Name = hide.objs
+   Value = "block(HIDE.OBJS, %1, 0, 0); [ hide.objs(MODE)"
+   ArgTips = "byt MODE (0=show; 1=hide)"
+
+[Snippet]
+   Name = item.count
+   Value = "block(ITEM.COUNT, %1, %2, 0); [ item.count(vLOCATION, vRESULT)"
+   ArgTips = "var vLOCATION, var vRESULT"
+
+[Snippet]
+   Name = load.sound.v
+   Value = "block(SND.V.FN, LOAD.SOUND.V, %1, 0); [ load.sound.v(vSNDNUM)"
+   ArgTips = "var vSNDNUM"
+
+[Snippet]
+   Name = msgbox.color
+   Value = "block(MSGBOX.COLOR, %1, %2, %3); [ msgbox.color(BORDER, FG, BG)"
+   ArgTips = "var BORDER, var FG, var BG"
+
+[Snippet]
+   Name = msgbox.color.v
+   Value = "block(MSGBOX.COLOR.V, %1, %2, %3); [ msgbox.color.v(vBORDER, vFG, vBG)"
+   ArgTips = "var vBORDER, var vFG, var vBG"
+
+[Snippet]
+   Name = new.file
+   Value = "block(NEW.FILE, %1, %2, %3); [ new.file(sFILENAME, vSTART, vEND)"
+   ArgTips = "str sFILENAME, var vSTART, var vEND"
+
+[Snippet]
+   Name = on.obj
+   Value = "posn(%1, -1, %2, %3, %4)"
+   ArgTips = "obj oOBJNUM, byt MODE, var vX, var vY (0=frame, 1=visible)"
+
+[Snippet]
+   Name = pause.clock
+   Value = "block(PAUSE.CLOCK, %1, 0, 0); [ pause.clock(MODE)"
+   ArgTips = "byt MODE (0=restart; 1=pause)"
+
+[Snippet]
+   Name = pic.clear
+   Value = "block(PIC.CLEAR, -1, %1, 0); [ pic.clear(vCOLORS)"
+   ArgTips = "var vCOLORS"
+
+[Snippet]
+   Name = pic.draw
+   Value = "block(PIC.DRAW, %1, %2, 0); [ pic.draw(FILLSTYLE, sCMDS)"
+   ArgTips = "byt FILLSTYLE, str sCMDS"
+
+[Snippet]
+   Name = pop.attributes
+   Value = "set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()"
+
+[Snippet]
+   Name = previous.input
+   Value = "get.string(%1, m1, PREVIOUS.INPUT, 0, 0); [ previous.input(sRESULT)"
+   ArgTips = "str sRESULT"
+
+[Snippet]
+   Name = push.attributes
+   Value = "set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()"
+
+[Snippet]
+   Name = read.string
+   Value = "block(READ.STRING, %1, %2, %3); [ read.string(sFILENAME, vINDEX, vSTRIN)"
+   ArgTips = "str sFILENAME, var vINDEX, var vSTRIN"
+
+[Snippet]
+   Name = save.string
+   Value = "block(SAVE.STRING, %1, %2, %3); [ save.string(sFILENAME, vINDEX, vSTROUT)"
+   ArgTips = "str sFILENAME, var vINDEX, var vSTROUT"
+
+[Snippet]
+   Name = screen.mode
+   Value = "configure.screen(SCREEN.MODE, %1, %2); [ screen.mode(MODE, WIDTH)"
+   ArgTips = "byt MODE (0=graphics; 1=text), byt WIDTH (0=40col; 1=80col)"
+
+[Snippet]
+   Name = set.cmpmode
+   Value = "set.string(SET.CMPMODE, %1); [ set.cmpmode(MODE)"
+   ArgTips = "byt MODE (0=AGI; 1=TEXT; 2=BINARY)"
+
+[Snippet]
+   Name = set.cursor
+   Value = "set.key(%1, %2, mouse); [ set.cursor(FN_MODE, MSGNUM)"
+   ArgTips = "byt FN_MODE, bov MSGNUM"
+
+[Snippet]
+   Name = set.input
+   Value = "set.string(SET.INPUT, %1); [ set.input(mINPUT)"
+   ArgTips = "msg mINPUT"
+
+[Snippet]
+   Name = set.click2move.mode
+   Value = "step.size(ego, %1); [ set.click2move.mode(vMODE)"
+   ArgTips = "var vMODE (-1=DIRECT, -2=AGI)"
+
+[Snippet]
+   Name = set.inst
+   Value = "set.key(%1, %2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)"
+   ArgTips = "var vCHANNEL, vINSTRUMENT"
+
+[Snippet]
+   Name = set.item
+   Value = "block(SET.ITEM, %1, %2, %3); [ set.item(FN_MODE, ITEM, STRNEW)"
+   ArgTips = "byt FN_MODE, iov ITEMOLD, sov STRNEW"
+
+[Snippet]
+   Name = set.msg
+   Value = "block(SET.MSG, %1, %2, %3); [ set.msg(FN_MODE, MSGOLD, STRNEW)"
+   ArgTips = "byt FN_MODE, mov MSGOLD, sov STRNEW"
+
+[Snippet]
+   Name = set.palette
+   Value = "block(SET.PALETTE, %1, %2, %3); [ set.palette(FN_MODE, PALETTE, LOADONLY)"
+   ArgTips = "byt FN_MODE, bov PALETTE, bov LOADONLY"
+
+[Snippet]
+   Name = set.sndmode
+   Value = "set.key(%1, 0, SET.SNDMODE); [ set.sndmode(MODE)"
+   ArgTips = "byt MODE (0=FMsynth; 1=MIDI)"
+
+[Snippet]
+   Name = set.string.v
+   Value = "block(SET.STRING.V, %1, %2, 0); [ set.string.v(vSTR, vMSG)"
+   ArgTips = "var vSTRNUM, var vMSG"
+
+[Snippet]
+   Name = set.text.attr.v
+   Value = "toggle.monitor(); [ set.text.attr.v(vFG, vBG)%nset.text.attribute(%1, %2);"
+   ArgTips = "var vFG, var vBG"
+
+[Snippet]
+   Name = show.mouse
+   Value = "enable.item(mouse);
+
+[Snippet]
+   Name = sound.v
+   Value = "block(SND.V.FN, SOUND.V, %1, %2); [ sound.v(vSNDNUM, vDONEFLAG)"
+   ArgTips = "var vSNDNUM, var vDONEFLAG"
+
+[Snippet]
+   Name = start.timer
+   Value = "block(START.TIMER, %1, %2, %3); [ start.timer(vMINUTES, vSECONDS, fDONE)"
+   ArgTips = "var vMINUTES, var vSECONDS, flg fDONE"
+
+[Snippet]
+   Name = str.concat
+   Value = "block(STR.CONCAT, %1, %2, 0); [ str.concat(sINPUT, sADD)"
+   ArgTips = "str sINPUT, str sADD"
+
+[Snippet]
+   Name = str.copy
+   Value = "block(STR.COPY, %1, %2, 0); [ str.copy(sINPUT, sRESULT)"
+   ArgTips = "str sINPUT, str sRESULT"
+
+[Snippet]
+   Name = str.format
+   Value = "block(STR.FORMAT, %1, %2, 0); [ str.format(sINPUT, sRESULT)"
+   ArgTips = "str sINPUT, str sRESULT"
+
+[Snippet]
+   Name = str.instr
+   Value = "block(INSTR, %1, %2, %3); [ str.instr(sINPUT, vCHAR, vPOS)"
+   ArgTips = "str sINPUT, vCHAR, vPOS"
+
+[Snippet]
+   Name = str.left
+   Value = "block(STR.LEFT, %1, %2, %3); [ str.left(sINPUT, sRESULT, vLEN)"
+   ArgTips = "str sINPUT, str sRESULT, var vCOUNT"
+
+[Snippet]
+   Name = str.len
+   Value = "block(STR.LEN, %1, %2, 0); [ str.len(sINPUT, vRESULT)"
+   ArgTips = "str sINPUT, var vRESULT"
+
+[Snippet]
+   Name = str.lower
+   Value = "block(STR.LOWER, %1, %2, 0); [ str.lower(sINPUT, sRESULT)"
+   ArgTips = "str sINPUT, str sRESULT"
+
+[Snippet]
+   Name = str.mid
+   Value = "block(STR.MID, %1, %2, %3); [ str.mid(sINPUT, vPOS, vLEN)"
+   ArgTips = "str sINPUT, var vPOS, var vCOUNT"
+
+[Snippet]
+   Name = str.right
+   Value = "block(STR.RIGHT, %1, %2, %3); [ str.right(sINPUT, sRESULT, vCOUNT)"
+   ArgTips = "str sINPUT, str sRESULT, var vCOUNT"
+
+[Snippet]
+   Name = str.trim
+   Value = "block(STR.TRIM, %1, %2, %3); [ strTrim(sINPUT, sRESULT, vMODE)"
+   ArgTips = "str sINPUT, str sRESULT, var vMODE (0=trim; 1=ltrim; 2=rtrim; 3=AGItrim)"
+
+[Snippet]
+   Name = str.upper
+   Value = "block(STR.UPPER, %1, %2, 0); [ str.upper(sINPUT, sRESULT)"
+   ArgTips = "str sINPUT, str sRESULT"
+
+[Snippet]
+   Name = str2byte
+   Value = "block(STR2BYTE, %1, %2, 0); [ str2byte(sINPUT, vRESULT)"
+   ArgTips = "str sINPUT, var vRESULT"
+
+[Snippet]
+   Name = toggle.timer
+   Value = "block(TOGGLE.TIMER, %1, 0, 0); [ toggle.timer(STATE)"
+   ArgTips = "byt STATE (0=STOP, 1=START)"
+
+[Snippet]
+   Name = toggle.turbo
+   Value = "cycle.time(TOGGLE.TURBO, %1); [   toggle.turbo(vMODE)"
+   ArgTips = "var vMODE"
+
+[Snippet]
+   Name = trace.h.posn
+   Value = "trace.info(TRACE.H.POSN, %1, %2); [ trace.h.posn(LEFT, WIDTH)"
+   ArgTips = "byt LEFT, byt WIDTH"

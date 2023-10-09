@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.Death: Death handler
 [
@@ -19,7 +19,19 @@
 [ 254: death sequence complete
 [ 255: winning sequence complete
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ if message announcing death hasn't been displayed yet
 if (deathType < DT_SEQ_DONE) { 
@@ -242,9 +254,9 @@ if (haveInput && !haveMatch) {
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "You are now dead."
 #message 2 "Thank you for playing this game. Better luck next time!"
 #message 3 "You are dead! You can only restore, restart, quit the game or view your inventory."

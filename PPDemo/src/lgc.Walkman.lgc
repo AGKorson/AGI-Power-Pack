@@ -1,12 +1,18 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.Walkman
 [ 
 [ close up of the walkman; player can press start/pause,
 [ rewind, fast forward and eject
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define helpText      v240
 #define   H_BLANK       4
 #define   H_EXIT        7
@@ -24,8 +30,12 @@
 #define mouseDown     f241
 #define flipCassette  f242
 
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 [ stop the game clock while examining items
-block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ no script entries for this sequence
 set(noScript);
@@ -34,18 +44,18 @@ prevent.input();
 status.line.off();
 
 [ fade out until done loading
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 set.text.attribute(DK_GRAY, BLACK);
 
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
 tmpCursor = C_DEFAULT;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 
 [ hide objects while showing manual
-block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE);
 
 [ display correct walkman picture
 work1 = pic.Walkman;
@@ -72,11 +82,11 @@ call(lgc.SetSound);
 if ( currentTrack > 0 && currentTrack < 128) {
   block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
   work1 = &musicDone;
-  block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+  block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
 }
 
 [ fade back in
-block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
 :waitforit
@@ -92,7 +102,7 @@ block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
     
     if (counter1 == 0) {
       reset(flipCassette);
-      set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+      set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
     } else {
       goto(waitforit);
     }
@@ -155,7 +165,7 @@ block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
   
   if (tmpCursor != cursoricon) {
     cursoricon = tmpCursor;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   }
 
   [ check for track end
@@ -172,7 +182,7 @@ block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
     if (currentTrack > 0) {
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       work2 = &musicDone;
-      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
     }
   }
   
@@ -217,7 +227,7 @@ if (lastChar == 32 && cursoricon == C_TAPE) {
   counter1 = 255;
   counter2 = 3;
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   goto(waitforit);
 }
 
@@ -259,7 +269,7 @@ if (mouseBtn == 1 && !mouseDown) {
         if (currentTrack > 0) {
           block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
           work2 = &musicDone;
-          block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+          block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
         }
       } else {
         if (currentTrack > 128) {
@@ -301,7 +311,7 @@ if (mouseBtn == 1 && !mouseDown) {
         [ play active track
         block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
         work2 = &musicDone;
-        block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+        block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
       } else {
         [ paused - rewind but don't play
         if (currentTrack == 0) {
@@ -352,7 +362,7 @@ if (mouseBtn == 1 && !mouseDown) {
             [ add an 'A'
             s20 = "F000F3F7537CBC3AF7527802FF";
           }
-          block(PIC.DRAW, 0, &s20, 0); [ pic.draw(FILLSTYLE, sCMDS)
+          block(PIC.DRAW, AGI_FILL, &s20, 0); [ pic.draw(FILLSTYLE, sCMDS)
         }
         show.pic();
       }
@@ -379,7 +389,7 @@ if (mouseBtn == 1 && !mouseDown) {
       [ now begin playing current track
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       work2 = &musicDone;
-      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
     }
   }
   
@@ -426,7 +436,7 @@ if (mouseBtn == 1 && !mouseDown) {
           [ add an 'A'
           s20 = "F000F3F7537CBC3AF7527802FF";
         }
-        block(PIC.DRAW, 0, &s20, 0); [ pic.draw(FILLSTYLE, sCMDS)
+        block(PIC.DRAW, AGI_FILL, &s20, 0); [ pic.draw(FILLSTYLE, sCMDS)
         show.pic();
         tmpCursor = C_USE;
         clear.lines(23, 23, BLACK);
@@ -450,19 +460,19 @@ if (currentTrack > 0 && currentTrack < 128) {
 reset(noScript);
 
 [ fade out during the switch
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 
 [ clear the help text
 clear.lines(23, 24, BLACK);
 
 [ restore attributes
-set.text.attribute(0, -1);
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

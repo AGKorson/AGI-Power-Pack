@@ -1,11 +1,17 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.DoorKeypad
 [
 [ digit1 is ones, digit2 is tens, etc 
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oDigit1           o1
 #define oDigit2           o2
 #define oDigit3           o3
@@ -31,6 +37,9 @@
 #define sFillCommand    s12
 #define sFillColor      s13
 
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
 if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
@@ -98,7 +107,7 @@ if (newRoom) {
   pressButton = -1;
   
   [ use a palette with a much darker 'dark gray'
-  block(SET.PALETTE, 0, &m9, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &m9, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
   
   [ button sounds
   work1 = s.Tone0;
@@ -131,11 +140,15 @@ if (newRoom) {
   show.pic();
   [ use a finger cursor
   cursoricon = -1; [cursormode;
-  set.key(0, &m11, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYNUM, &m11, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   return();
 }
+
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 
 [ check for indicator timer
 if (indicatorTimer) {
@@ -224,7 +237,7 @@ if (mouseBtn == 1) {
         sFillCommand = "F0%s13F86285FF";
       }
       sFillColor = "0F";
-      block(PIC.DRAW, 1, &sFillCommand, 0); [ pic.draw(FILLSTYLE, sCMDS)
+      block(PIC.DRAW, COLOR_FILL, &sFillCommand, 0); [ pic.draw(FILLSTYLE, sCMDS)
       
       [ check for pound sign (enter)
       if (pressButton == 11) {
@@ -259,7 +272,7 @@ if (mouseBtn == 1) {
         work1 = pressButton;
         work1 += s.Tone0;
         work2 = &soundDone;
-        block(SND.V.FN, PLAY.SOUND.V, &work1, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+        block(SND.V.FN, SOUND.V, &work1, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
       }
     } else {
       [ no button
@@ -270,7 +283,7 @@ if (mouseBtn == 1) {
   if (pressButton != -1) {
     [ unpress button
     sFillColor = "08";
-    block(PIC.DRAW, 1, &sFillCommand, 0); [ pic.draw(FILLSTYLE, sCMDS)
+    block(PIC.DRAW, COLOR_FILL, &sFillCommand, 0); [ pic.draw(FILLSTYLE, sCMDS)
     pressButton = -1;
     
     [ respond to pound sign/asterisk clicks
@@ -315,9 +328,9 @@ if (mouseBtn == 1) {
   }
 }
 
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 [ when correct code is entered, unlock the door and return
@@ -343,19 +356,19 @@ if ((unlockdoor || controller(cRightClick))) {
   reset(disableGameFunctions);
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out to black (faster than room fade)
-  block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, 10, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ restore palette
-  block(SET.PALETTE, 0, &m10, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &m10, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
   new.room(rm.Stairway); [ ##LE001##
 }
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

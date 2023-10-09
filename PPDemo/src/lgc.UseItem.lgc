@@ -1,15 +1,28 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.UseItem
 [
 [ when in 'use-item' mode, this logic 
 [ handles the user's input (click)
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ check for mouse clicks
 if (controller(cLeftClick)) {
-  if (selectedItem == 2) {
+  [ floppy disk
+  if (selectedItem == &i2) {
     if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         print("You insert the disk and flip the latch to secure it.");
@@ -46,6 +59,6 @@ if (controller(cRightClick)) {
   
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************

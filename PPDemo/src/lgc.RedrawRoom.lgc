@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.RedrawRoom
 [ 
@@ -9,7 +9,19 @@
 [ Views don't need to be loaded, since they are already
 [ loaded by the room that called this function
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ don't use scripting when redrawing
 set(noScript);
@@ -55,7 +67,7 @@ if (currentRoom == rm.ParkingLot) {
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 2
   tmpLoop = car0car1;
-  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  block(BIT.AND, BYNUM, &tmpLoop, 15); [ bit.and(FN_MODE, VAR, MASK)
   tmpX = 92;
   tmpY = 154;
   tmpPri = 14;
@@ -70,7 +82,7 @@ if (currentRoom == rm.ParkingLot) {
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 4
   tmpLoop = car2car3;
-  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  block(BIT.AND, BYNUM, &tmpLoop, 15); [ bit.and(FN_MODE, VAR, MASK)
   tmpLoop += 19;
   tmpX = 46;
   tmpY = 155;
@@ -151,16 +163,16 @@ if (currentRoom == rm.Office) {
 
 [ restore cursor
 cursoricon = cursormode;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 
 [ redisplay objects
-block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE);
+block(HIDE.OBJS, SHOW_OBJS, 0, 0); [ hide.objs(MODE);
 show.pic();
 [ now fade in 
-block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 
 [ restore colors
-set.text.attribute(0, -1);
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 [ turn scripting back on
 reset(noScript);
@@ -169,16 +181,16 @@ accept.input();
 status.line.on();
 
 [ restart the clock
-block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, START_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ make sure no extraneous clicks after returning
 set(resetClicks);
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

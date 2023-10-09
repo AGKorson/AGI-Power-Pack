@@ -46,15 +46,7 @@
 #define cSkipIntro             c33
 #define cLogInput              c34 [ temp debug item
 #define cShowClicks            c35 [ temp debug item
-#define CUSTOM.INST           c252
-#define SET.INST              c253
-#define SET.SNDMODE           c254
-#define FM_MODE                  0
-#define MIDI_MODE                1
-#define mouse                 c255
-#define click2move             f17 [ when true, left click moves ego
-#define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
-#define useMIDI                f19 [ when true, four channel mode uses MIDI hardware, not FMSynth
+#define useMIDI                f19  [ local flag to track whether 4channel mode is FM or MIDI
 #define touchTrees             f21
 #define handsWashed            f22
 #define tbBtnDown              f23 [ set when mouse down occurs on toolbar button
@@ -106,7 +98,7 @@
 #define scoreMagazine          f71
 #define firstWash              f72
 #define carLocked              f73
-#define scorePicture           f74
+#define scorePainting          f74
 #define scoreSafe              f75
 #define scorePillow            f76
 #define scoreChest             f77
@@ -136,26 +128,6 @@
 #define mouseX                 v27
 #define mouseY                 v28
 #define mouseBtn               v29
-#define IntVersion             v30
-#define VERSION_2089             1
-#define VERSION_2272             2
-#define VERSION_2411             3
-#define VERSION_2425             4
-#define VERSION_2426             5
-#define VERSION_2435             6
-#define VERSION_2439             7
-#define VERSION_2440             8
-#define VERSION_2903             9
-#define VERSION_2911            10
-#define VERSION_2912            11
-#define VERSION_2915            12
-#define VERSION_2917            13
-#define VERSION_2936            14
-#define VERSION_3002086         15
-#define VERSION_3002098         16
-#define VERSION_3002102         17
-#define VERSION_3002107         18
-#define VERSION_3002149         19
 #define oldSeconds             v31 [ cached value of game seconds (v11)
 #define oldMinutes             v32 [ cached value of game minutes (v12)
 #define oldHours               v33 [ cached value of game hours (v13)
@@ -182,7 +154,7 @@
 #define msgBoxBG               v43
 #define msgBoxFG               v44
 #define msgBoxBorder           v45
-#define work1                  v46 [ this is a globally available flag that can be used for counting or any other temporary purpose
+#define work1                  v46 [ this is a globally available variable that can be used for counting or any other temporary purpose
 #define work2                  v47
 #define work3                  v48
 #define egoCycleTime           v59 [ current ego cycle time
@@ -222,16 +194,16 @@
 #define patient2Loc            v85
 #define patient3Loc            v86
 #define patient4Loc            v87
-#define LOC_LOBBY                1
-#define LOC_EXAM                 2
-#define LOC_GONE                 3
+#define LOC_LOBBY                1 [ patient is in lobby, waiting
+#define LOC_EXAM                 2 [ patient is going to/at exam
+#define LOC_GONE                 3 [ patient is done exam and/or gone
 #define safeStatus             v88
-#define pictureStatus          v89
+#define paintingStatus         v89
 #define officeDskDrStatus      v90
 #define officeFileDrStatus     v91
 #define storeDeskDrStatus      v92
 #define storeFileDrStatus      v93
-#define storeChestDrStatus     v94
+#define storeBureauDrStatus    v94
 #define storeChestStatus       v95
 #define CLOSED                   0
 #define OPEN                     1
@@ -248,69 +220,4 @@
 #define FM_SOUND                 1
 #define MIDI_SOUND               2
 #define comboNumber           v100 [ last position of combination lock
-#define MSGBOX.COLOR.V          -1
-#define MSGBOX.COLOR            -2
-#define CONFIGURE.MOUSE         -3
-#define STR.LEN                 -4
-#define STR.COPY                -5
-#define STR.CONCAT              -6
-#define STR.LEFT                -7
-#define STR.RIGHT               -8
-#define STR.MID                 -9
-#define STR.TRIM               -10
-#define INSTR                  -11
-#define STR.FORMAT             -12
-#define STR2BYTE               -13
-#define HEX2BYTE               -14
-#define BYTE2HEX               -15
-#define STR.UPPER              -16
-#define STR.LOWER              -17
-#define BYTE2CHAR              -18
-#define CHAR2BYTE              -19
-#define SET.STRING.V           -20
-#define SET.PALETTE            -21
-#define FADE.IN                -22
-#define FADE.OUT               -23
-#define SET.MSG                -24
-#define SET.ITEM               -25
-#define ITEM.COUNT             -26
-#define PIC.DRAW               -27
-#define PIC.CLEAR              -27
-#define GET.PIXEL              -28
-#define START.TIMER            -29
-#define TOGGLE.TIMER           -30
-#define BIT.AND                -31
-#define BIT.OR                 -32
-#define BIT.XOR                -33
-#define BIT.NOT                -34
-#define BIT.SHL                -35
-#define BIT.SHR                -36
-#define GET.DATE               -37
-#define GET.TIME               -38
-#define GET.DAYOFWEEK          -39
-#define NEW.FILE               -40
-#define SAVE.STRING            -41
-#define READ.STRING            -42
-#define DELETE.FILE            -43
-#define GET.SHIFTSTATE         -44
-#define MUL                    -45
-#define DIV                    -46
-#define HIDE.OBJS              -47
-#define PAUSE.CLOCK            -48
-#define SND.V.FN               -49
-#define LOAD.SOUND.V             0
-#define PLAY.SOUND.V             1
-#define DISCARD.SOUND.V          2
-#define ON.OBJ                  -1
-#define SET.INPUT             s255
-#define SET.CMPMODE           s254
-#define COMPARE_AGI             m0
-#define COMPARE_TEXT            m1
-#define COMPARE_BINARY          m2
-#define TOGGLE.TURBO          o255
 #define FADECOUNT               25
-#define SCREEN.MODE             -1
-#define GRAFMODE                 0
-#define TEXTMODE                 1
-#define 40COL                    0
-#define 80COL                    1

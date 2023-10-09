@@ -1,11 +1,22 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.Error: Error Handler
 [
 [ When AGI traps an error, this logic will display information
 [ on the error and then quit AGI.
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ print the error
 print.v(errorNumber);
@@ -14,7 +25,7 @@ print.v(errorNumber);
 s12 = "Error: %v17 - %m";
 s13 = "%v17";
 block(STR.FORMAT, &s13, &s13, 0); [ str.format(sINPUT, sRESULT)
-block(STR.CONCAT, &s12, &s13, 0); [ sINPUT, sADD)
+block(STR.CONCAT, &s12, &s13, 0); [ str.concat(sINPUT, sADD)
 block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
 [ strip off the 'press esc...' line
 block(STR.LEN, &s12, &work1, 0); [ str.len(sINPUT, vRESULT)
@@ -27,9 +38,9 @@ log("%s12");
 quit(1);
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "discard.view(%v18):%m30"
 #message 2 "set.view(o%v18,_):%m26"
 #message 3 "set.view(_,%v18):%m30"

@@ -1,12 +1,18 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ rm.ControlRoom
 [ 
-[ An example room with several exits.
+[ The control room has the main consoles that display the six 
+[ power pack modules.
 [
-[ ********************************************************************
-[ TODO: more said statements for control room
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define showMOCC         f220
 #define showCAISOCC      f221
 #define showRANDOCC      f222
@@ -16,16 +22,22 @@
 #define showERIDOCC      f226
 #define nearTerminal     f227
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
+[***************************************
 if (newRoom) {
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);
 
-  [ add room-specific initialization here
+  [ the horizon defines the upper limit of ego's movement
+  set.horizon(120);
+  
+  [ add toolbar buttons
+  load.view(vw.ButtonsDown);
+  call(lgc.InitToolbar);
+  
   load.view(vw.CtrlRoomArt);
   if (enableCAISOCC) {
     add.to.pic(vw.CtrlRoomArt, 0, 0, 35, 78, 11, 15);
@@ -64,13 +76,6 @@ if (newRoom) {
     block(71, 165, 90, 167);
   }
   
-  [ default horizion is 36; adjust it as needed
-  set.horizon(120);
-  
-  [ add toolbar buttons
-  load.view(vw.ButtonsDown);
-  call(lgc.InitToolbar);
-  
   if (previousRoom == rm.Office) {
     position(ego, 15, 149);
   }
@@ -93,10 +98,10 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   
   [ if coming from stairwell, and access system not set, 
   if (previousRoom == rm.Stairway && !resetBaDASS) {
@@ -108,10 +113,10 @@ if (newRoom) {
     shake.screen(1);
     work1 = 0;
     :flickerit
-      block(FADE.OUT, 0, 2, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-      block(FADE.IN, 0, 1, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
-      block(FADE.OUT, 0, 2, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
-      block(FADE.IN, 0, 1, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 2, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+      block(FADE.IN, BYNUM, 1, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 2, WHITE); [ fade.out(FN_MODE, DELAY, COLOR)
+      block(FADE.IN, BYNUM, 1, WHITE); [ fade.in(FN_MODE, DELAY, COLOR)
       ++work1;
     if (work1 < 3) {
       goto(flickerit);
@@ -122,10 +127,166 @@ if (newRoom) {
   return();
 }
 
-[ **************************************
-[ EVERY CYCLE
-[ **************************************
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 
+
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+if (haveInput && !haveMatch && unknownWordNum == 0) {
+[ TODO: more said statements for control room
+[ look
+  if (said("look")) {
+    print("This is the Power Pack control room.");
+  }
+  
+  if (said("look", "door")) {
+    if (resetBaDASS) {
+     print("The door is open now that the access control system "
+           "has been reset.");
+    } else {
+      print("The sturdy door to the control room is shut tight. The "
+            "access control system doesn't appear to be working.");
+    }
+  }
+  if (said("open", "door")) {
+    if (resetBaDASS) {
+      print("The door is already open.");
+    } else {
+      print("The electronic lock on the door has failed. You can't open "
+            "the door.");
+    }
+  }
+  if (said("close", "door")) {
+    if (resetBadASS) {
+      print("There is no need to close the door. It will close automatically "
+            "when you leave.");
+    } else {
+      print("The door is already closed.");
+    }
+  }
+  if (said("unlock", "door")) {
+    if (resetBadASS) {
+      print("The door is open, so there is no need to unlock it.");
+    } else {
+      print("The lock is controlled by the electronic access control "
+            "system. The system is currently not working.");
+    }
+  }
+  if ((said("break", "down", "door") || said("smash", "door") || 
+       said("hit", "door"))) {
+    if (resetBadASS) {
+  }
+  if (said("kick", "door")) {
+    if (resetBadASS) {
+      print("The door is open. Why bother kicking it?");
+    } else {
+      print("You'll break your foot before doing any damage to this "
+            "sturdy door.");
+    }
+  }
+  if (said("look", "wall")) {}
+  if (said("look", "floor")) {}
+  if (said("look", "ceiling")) {}
+  if (said("look", "light")) {}
+  if (said("turn", "on", "light")) {}
+  if (said("turn", "off", "light")) {}
+  if (said("get", "light")) {}
+  if (said("look", "keyboard")) {}
+  if (said("look", "mouse")) {}
+  if (said("get", "keyboard")) {}
+  if (said("get", "mouse")) {}
+  if (said("look", "screen")) {}
+  if ((said("use", "keyboard") || said("type", "keyboard"))) {}
+  if (said("use", "mouse")) {}
+  
+  [ insert floppy
+  if ((said("put", "disk", "in", "slot") || 
+       said("put", "disk", "in", "console") || 
+       said("put", "disk", "in", "drive") || said("insert", "disk") || 
+       said("insert", "disk", "drive"))) {
+    if (has("floppy disk")) {
+      if (obj.in.box(ego, 64, 133, 104, 138)) {
+        print("You insert the disk and flip the latch to secure it.");
+        set(floppyInserted);
+        work1 = cp.Terminal;
+        put("floppy disk", work1);
+        [ first time awards bonus points
+        if (scoreFloppy) {
+          work1 = -4;
+        } else {
+          work1 = -2;
+        }
+        call(lgc.ScoreHandler);
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      print("What disk?");
+    }
+  }
+  [ remove/take floppy
+  if ((said(said("eject", "disk") || "get", "disk") || 
+       said("get", "disk", "console") || said("get", "disk", "drive") ||
+       said("remove", "disk") || said("remove", "disk", "console") || 
+       said("remove", "disk", "drive")
+       )) {
+    work1 = cp.Terminal;
+    if (obj.in.room("floppy disk", work1)) {
+      if (obj.in.box(ego, 64, 133, 104, 138)) {
+        [ play sound if walkman not active
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          call(lgc.SetSound);
+          sound(s.GetItem, soundDone);
+        }
+        print("Ok.");
+        reset(floppyInserted);
+        get("floppy disk");
+        work1 = 4;
+        call(lgc.ScoreHandler);
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      if (has("floppy disk")) {
+        print("You already have the disk.");
+      } else {
+        print("What disk?");
+      }
+    }
+  }
+  if (said("look", "console")) {}
+  if (said("look", "CAISOCC")) {}
+  if (said("look", "ERIDOCC")) {}
+  if (said("look", "ESADOCC")) {}
+  if (said("look", "ICAPOCC")) {}
+  if (said("look", "OFROCC")) {}
+  if (said("look", "RANDOCC")) {}
+  if ((said("look", "MOCC") || said("look", "AMOS"))) {}
+  if (said("log", "on")) {}
+  if ((said("log", "on", "console") || said("use", "console") || 
+       said("log", "on", "computer") || said("use", "computer"))) {}
+  if ((said("log", "on", "CAISOCC") || said("use", "CAISOCC"))) {}
+  if ((said("log", "on", "ERIDOCC") || said("use", "ERIDOCC"))) {}
+  if ((said("log", "on", "ESADOCC") || said("use", "ESADOCC"))) {}
+  if ((said("log", "on", "ICAPOCC") || said("use", "ICAPOCC"))) {}
+  if ((said("log", "on", "OFROCC") || said("use", "OFROCC"))) {}
+  if ((said("log", "on", "RANDOCC") || said("use", "RANDOCC"))) {}
+  if ((said("log", "on", "MOCC") || said("use", "MOCC"))) {}
+  if ((said("turn", "off", "computer") || said("turn", "off", "console") || 
+       said("turn", "off", "anyword", "console"))) {}
+  if (said("climb", "on", "console")) {}
+  if ((said("hack", "computer") || said("hack", "console") || said("hack", "MOCC") || 
+       said("hack", "CAISOCC") || said("ERIDOCC") ||
+       said("hack", "ESADOCC") || said("ICAPOCC") ||
+       said("hack", "OFROCC") || said("RANDOCC"))) {}
+}
+
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -140,7 +301,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ look
   if (cursormode == C_LOOK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You see you.");
       goto(doneclick);
     }
@@ -148,11 +309,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ doorway to stairwell 71, 159, 90, 167
     if (mouseX > 70 && mouseX < 91 && mouseY > 158 && mouseY < 168) {
       [ check for door open/close
+      :lookdoor
       if (resetBaDASS) {
-        [ door is open
-        print("The door to the stairwell is open.");
+       print("The door to the stairwell is open now that the access "
+             "control system has been reset.");
       } else {
-        print("The door to the stairwell is shut.");
+        print("The heavy metal door is shut tight. The "
+              "access control system doesn't appear to be working.");
       }
       goto(doneclick);
     }
@@ -246,7 +409,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ main console 31, 46, 128, 131
-    if(mouseX > 30 && mouseX < 129 && mouseY > 45 && mouseY < 132) {
+    if (mouseX > 30 && mouseX < 129 && mouseY > 45 && mouseY < 132) {
       print("This massive computer control console takes up most of the "
             "room. There is a central terminal station, and six auxillary "
             "display panels.");
@@ -261,7 +424,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ talk
   if (cursormode == C_TALK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You have nothing to say.");
     } else {
       print("There is no one here to talk to.");
@@ -272,7 +435,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ use
   if (cursormode == C_USE) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Not even when you're alone.");
       goto(doneclick);
     }
@@ -379,102 +542,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
 
   :doneclick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-[ **************************************
-[ PROCESS PLAYER INPUT
-[ **************************************
-
-[ if player hasn't provided input or if match already found, no need
-[ to do said tests
-if ((!haveInput || haveMatch)) {
-  goto(done);
-}
-  
-[ look
-if (said("look")) {
-  print("This is the Power Pack control room.");
-}
-
-if (said("open", "door")) {
-  if (resetBaDASS) {
-    print("The door is already open.");
-  } else {
-    print("The electronic lock on the door has failed. You can't open "
-          "the door.");
-  }
-}
-
-if (said("close", "door")) {
-  if (resetBadASS) {
-    print("There is no need to close the door. It will close automatically "
-          "when you leave.");
-  } else {
-    print("The door is already closed.");
-  }
-}
-
-[ insert floppy
-if ((said("insert", "disk") || said("insert", "disk", "drive"))) {
-  if (has("floppy disk")) {
-    if (obj.in.box(ego, 64, 133, 104, 138)) {
-      print("Ok.");
-      set(floppyInserted);
-      work1 = cp.Terminal;
-      put("floppy disk", work1);
-      [ first time awards bonus points
-      if (scoreFloppy) {
-        work1 = -4;
-      } else {
-        work1 = -2;
-      }
-      call(lgc.ScoreHandler);
-    } else {
-      print("Move closer.");
-    }
-  } else {
-    print("What disk?");
-  }
-}
-
-[ remove/take floppy
-if ((said("remove", "disk") || said("remove", "disk", "drive") ||
-     said("get", "disk") || said("get", "disk", "drive"))) {
-  work1 = cp.Terminal;
-  if (obj.in.room("floppy disk", work1)) {
-    if (obj.in.box(ego, 64, 133, 104, 138)) {
-      [ play sound if walkman not active
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        call(lgc.SetSound);
-        sound(s.GetItem, soundDone);
-      }
-      print("Ok.");
-      reset(floppyInserted);
-      get("floppy disk");
-      work1 = 4;
-      call(lgc.ScoreHandler);
-    } else {
-      print("Move closer.");
-    }
-  } else {
-    if (has("floppy disk")) {
-      print("You already have the disk.");
-    } else {
-      print("What disk?");
-    }
-  }
-}
-:done
-
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
-[if (showPaint)) {
-[  [ fade out, then change room
-[  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-[  new.room(cp.Paint);  [ ##LE001##
-[}
+[***************************************
+:exit
 
 if (showMOCC) {  
   [ stop walkman
@@ -484,7 +558,7 @@ if (showMOCC) {
     reset(musicDone);
   }
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(cp.Terminal);  [ ##LE005##
 }
 
@@ -496,13 +570,25 @@ if (showCAISOCC) {
     reset(musicDone);
   }
   [ fade out
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ use default cursor
-  set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ then change room
   new.room(cp.CAISOCC);  [ ##LE002##
 }
   
+if (showERIDOCC) {
+  [ stop walkman
+  if (currentTrack > 0 && currentTrack < 128) {
+    currentTrack *= -1;
+    stop.sound();
+    reset(musicDone);
+  }
+  [ fade out, then change room
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+  new.room(cp.ERIDOCC);  [ ##LE012##
+}
+
 if (showESADOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
@@ -511,7 +597,7 @@ if (showESADOCC) {
     reset(musicDone);
   }
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(cp.ESADOCC);  [ ##LE008##
 }
 
@@ -523,20 +609,8 @@ if (showICAPOCC) {
     reset(musicDone);
   }
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(cp.ICAPOCC);  [ ##LE009##
-}
-
-if (showRANDOCC) {
-  [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
-    stop.sound();
-    reset(musicDone);
-  }
-  [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.RANDOCC);  [ ##LE010##
 }
 
 if (showOFROCC) {
@@ -547,11 +621,11 @@ if (showOFROCC) {
     reset(musicDone);
   }
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(cp.OFROCC);  [ ##LE011##
 }
 
-if (showERIDOCC) {
+if (showRANDOCC) {
   [ stop walkman
   if (currentTrack > 0 && currentTrack < 128) {
     currentTrack *= -1;
@@ -559,25 +633,25 @@ if (showERIDOCC) {
     reset(musicDone);
   }
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-  new.room(cp.ERIDOCC);  [ ##LE012##
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+  new.room(cp.RANDOCC);  [ ##LE010##
 }
 
 if (egoHitSpecial && egoX > 100) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.StoreRoom);  [ ##LE004##
 }
 
 if (egoHitSpecial && egoX < 60) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.Office);  [ ##LE003##
 }
 
@@ -585,17 +659,17 @@ if (egoHitSpecial && egoX < 60) {
 if (edgeEgoHit == BOTTOM_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.Stairway); [ ##LE007##
 }
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

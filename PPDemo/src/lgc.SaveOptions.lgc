@@ -1,10 +1,10 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.SaveOptions
 [
 [ saves sound mode, clock mode, speed and custom instrument
 [ values to the ppdemo.cfg settings file
-
+[
 [ first string is sound/clock/speed:
 [   ten characters long:
 [   abcdefghi
@@ -29,8 +29,14 @@
 [
 [ strings three-seven are the custom FM instrument strings
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define tmp0    v240
 #define tmp1    v241
 #define tmp2    v242
@@ -38,6 +44,10 @@
 #define tmpStr1   s21
 #define tmpStr2   s22
 #define filename  s23
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ set filename
 filename = "ppdemo.cfg";
@@ -95,7 +105,7 @@ block(STR.FORMAT, &tmpStr1, &tmpStr2, 0); [ str.format(sINPUT, sRESULT)
 tmpStr1 = "%v68|3%v69|3%v70|3";
 block(STR.FORMAT, &tmpStr1, &tmpStr1, 0); [ str.format(sINPUT, sRESULT)
 [ add MIDI to FM values
-block(STR.CONCAT, &tmpStr2, &tmpStr1, 0); [ sINPUT, sADD)
+block(STR.CONCAT, &tmpStr2, &tmpStr1, 0); [ str.concat(sINPUT, sADD)
 [ save output string to file
 work1 = 1;
 work2 = &tmpStr2;
@@ -116,6 +126,6 @@ if (work1 < 7) {
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************

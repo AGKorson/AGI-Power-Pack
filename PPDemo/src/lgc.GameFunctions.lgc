@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.GameFunctions: Game-specific functions
 [
@@ -17,18 +17,23 @@
 [ (although these may require some modification for your game). Also,
 [ this makes logic 0 easier to manage.
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define entryDelay v240
 #define rndNum     v241
 
 #define tmpStr1    s20
 #define tmpStr2    s21
 
-[ *************************************************
-[ put all non-input functions that are not
-[ room-specific here
-[ *************************************************
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ check for cancel click2move
 if (controller(cRightClick)) {
@@ -46,19 +51,18 @@ if (newRoom) {
     set(noScript);
     block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
     work1 = &musicDone;
-    block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+    block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
     reset(noScript);
   }
 }
 
-[ **************************************
+[***************************************
 [ PROCESS PLAYER INPUT
-[ **************************************
-
+[***************************************
 [ check for cussing
 work1 = 0;
 :loop1
-get.string(tmpStr1, m1, -1, 0, 0);
+get.string(tmpStr1, m1, CURRENT.INPUT, 0, 0);
 work2 = 70; ['F'
 [ pass starting pos via vRESULT
 work3 = work1;
@@ -120,7 +124,7 @@ if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
   }
 }
 
-[ if debug mode is requested
+[**** BEGIN DEBUG CODE
 if (said("debug")) {
   [ if not in debug mode yet
   if (!debugging) {
@@ -134,6 +138,7 @@ if (said("debug")) {
     load.logics(lgc.Debug);
   }
 }
+[**** END DEBUG CODE
 
 [ save game
 if ((controller(cSave) || 
@@ -310,7 +315,7 @@ if (controller(cChooseItem)) {
             set(noScript);
             block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
             work1 = &musicDone;
-            block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+            block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
             reset(noScript);
           }
         }
@@ -410,168 +415,193 @@ if ((controller(cQuit) ||
 }
 
 [ if player hasn't provided input or if match already found, no need
-[ to do rest of said tests
-if ((!haveInput || haveMatch)) {
-  goto(done);
-}
-  
-[ put all generic said tests (those that apply in all rooms) here
-[ read magazine
-if (said("read", "magazine")) {
-  if (has("magazine")) {
-    :readmag
-    call(lgc.ReadMagazine);
-    call(lgc.RedrawRoom);
-  } else {
-    print("You don't have it.");
-  }
-}
-[ read memo
-if (said("read", "memo")) {
-  if (has("memo")) {
-    :readMemo
-    call(txt.Memo);
-  } else {
-    print("You don't have it.");
-  }
-}
-[ read manual
-if (said("read", "manual")) {
-  if (has("BaDASS manual")) {
-    :readManual
-    call(lgc.ReadManual);
-    call(lgc.RedrawRoom);
-  } else {
-    print("You don't have it.");
-  }
-}
-[ read notebook
-if (said("read", "notebook")) {
-  if (has("notebook")) {
-    :readNotebook
-    call(lgc.ReadNotebook);
-    call(lgc.RedrawRoom);
-  } else {
-    print("You don't have it.");
-  }
-}
-[ look inside folder
-if ((said("look", "in", "folder") ||
-     said("read", "folder"))) {
-  if (has("folder")) {
-    selectedItem = 110;
-    call(lgc.ExamineItem);
-    call(lgc.RedrawRoom);
-  } else {
-    print("You don't have it.");
-  }
-}
-[ read scroll
-if (said("read", "scroll")) {
-  if (has("scroll")) {
-    :readScroll
-    call(lgc.ReadScroll);
-    call(lgc.RedrawRoom);
-  } else {
-    print("You don't have it.");
-  }
-}
-
-[ wegup is not a word
-if (said("wegup")) {
-  print("That is not a valid word.");
-}
-
-[ if player says any dirty words
-if ((said("bad word", "rol") || 
-     said("anyword", "bad word", "rol") || 
-     said("anyword", "anyword", "bad word", "rol") || 
-     said("anyword", "anyword", "anyword", "bad word", "rol") || 
-     said("anyword", "anyword", "anyword", "anyword", "bad word", "rol") || 
-     said("anyword", "anyword", "anyword", "anyword", "anyword", "bad word", "rol"))) {
-  ++badWordCount;
-  if (badWordCount == 1) {
-    [ first warning
-    print("I am going to tell on you!");
-  }
-  if (badWordCount == 2) {
-    [second warning
-    print("Don't say anymore words like that!");
-  }
-  if (badWordCount == 3) {
-    [ no more warnings
-    print("Don't say I didn't warn you.");
-    quit(1);
-  }
-}
-
-[ look anything
-if ((said("look", "anyword") || said("look", "anyword", "rol"))) {
-  print("What? Where?");
-}
-
-[ get anything
-if ((said("get", "anyword") || said("get", "anyword", "rol"))) {
-  print("You can't get that here.");
-}
-
-[ use anything
-if ((said("use", "anyword") || said("use", "anyword", "rol"))) {
-  print("Be more specific. What do you want me to do with it?");
-}
-
-[ UNKNOWN WORD CHECK
-if (haveInput && !haveMatch && unknownWordNum > 0) {
-  reset(haveInput);
-  [copy word to a string
-  if (unknownWordNum == 1) {
-    word.to.string(unknownWord, w1);
-  }
-  if (unknownWordNum == 2) {
-    word.to.string(unknownWord, w2);
-  }
-  if (unknownWordNum == 3) {
-    word.to.string(unknownWord, w3);
-  }
-  if (unknownWordNum == 4) {
-    word.to.string(unknownWord, w4);
-  }
-  if (unknownWordNum == 5) {
-    word.to.string(unknownWord, w5);
-  }
-  if (unknownWordNum == 6) {
-    word.to.string(unknownWord, w6);
-  }
-  if (unknownWordNum == 7) {
-    word.to.string(unknownWord, w7);
-  }
-  if (unknownWordNum == 8) {
-    word.to.string(unknownWord, w8);
-  }
-  if (unknownWordNum == 9) {
-    word.to.string(unknownWord, w9);
-  }
-  if (unknownWordNum == 10) {
-    word.to.string(unknownWord, w10);
-  }
-  [choose a random unknown word response
-  random(&m38, &m40, rndNum);
-  print.v(rndNum);
-}
-
-[ finally, if there is input that hasn't 
-[ been recognized yet
+[ to do rest of said tests (including unknown words)
 if (haveInput && !haveMatch) {
-  print("I don't understand your request.");
-  reset(haveInput);
+  [ read magazine
+  if (said("read", "magazine")) {
+    if (has("magazine")) {
+      :readmag
+      call(lgc.ReadMagazine);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ read memo
+  if (said("read", "memo")) {
+    if (has("memo")) {
+      :readMemo
+      call(txt.Memo);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ read manual
+  if (said("read", "manual")) {
+    if (has("BaDASS manual")) {
+      :readManual
+      call(lgc.ReadManual);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ read notebook
+  if (said("read", "notebook")) {
+    if (has("notebook")) {
+      :readNotebook
+      call(lgc.ReadNotebook);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look inside folder
+  if ((said("look", "in", "folder") ||
+       said("read", "folder"))) {
+    if (has("folder")) {
+      selectedItem = 110;
+      call(lgc.ExamineItem);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ read scroll
+  if (said("read", "scroll")) {
+    if (has("scroll")) {
+      :readScroll
+      call(lgc.ReadScroll);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
+  [ look drew
+  if (said("look", "drew")) {
+    print("Yes, Drew is a very handsome fellow. Easy on the eyes.");
+  }
+  
+  [ wegup is not a word
+  if (said("wegup")) {
+    print("That is not a valid word.");
+  }
+  
+  [ if player says any dirty words
+  if ((said("bad word", "rol") || 
+       said("anyword", "bad word", "rol") || 
+       said("anyword", "anyword", "bad word", "rol") || 
+       said("anyword", "anyword", "anyword", "bad word", "rol") || 
+       said("anyword", "anyword", "anyword", "anyword", "bad word", "rol") || 
+       said("anyword", "anyword", "anyword", "anyword", "anyword", "bad word", "rol"))) {
+    ++badWordCount;
+    if (badWordCount == 1) {
+      [ first warning
+      print("I am going to tell on you!");
+    }
+    if (badWordCount == 2) {
+      [second warning
+      print("Don't say anymore words like that!");
+    }
+    if (badWordCount == 3) {
+      [ no more warnings
+      print("Don't say I didn't warn you.");
+      quit(1);
+    }
+  }
+  
+  [ hit/punch/kill/shoot/kick anything
+  if ((said("hit", "rol") || said("kick", "rol"))) {
+    print("Unprovoked violence is never acceptable.");
+  }
+  
+  [ climb anything - not allowed (in most rooms)
+  if (said("climb", "rol")) {
+    print("There is no need to cimb anything.");
+  }
+  
+  [ look anything
+  if (said("look", "rol")) {
+    print("What? Where?");
+  }
+  
+  [ get anything
+  if (said("get", "rol")) {
+    print("You can't get that here.");
+  }
+  
+  [ use anything
+  if (said("use", "rol")) {
+    print("Be more specific. What do you want me to do with it?");
+  }
+  [ TODO: more generic said statments
+  if (said("move", "anyword", "rol")) {}
+  if ((said("push", "anyword", "rol") || said("pull", "anyword", "rol"))) {}
+  if ((said("look", "ego") || said("look", "drew"))) {}
+  if (said("look", "pocket")) {}
+  if (said("climb", "up", "anyword", "rol")) {}
+  if (said("climb", "in", "anyword", "rol")) {}
+  if (said("get", "in", "anyword", "rol")) {}
+  if (said("where", "is", "anyword", "rol")) {}
+  if (said("who", "is", "anyword", "rol")) {}
+  if (said("what", "is", "anyword", "rol")) {}
+  if (said("jump")) {}
+  if (said("jump", "rol")) {}
+  if (said("drop", "anyword", "rol")) {}
+  if (said("kick", "bucket")) {}
+  
+  [ UNKNOWN WORD CHECK
+  if (unknownWordNum > 0) {
+    set(haveMatch);
+    [copy word to a string
+    if (unknownWordNum == 1) {
+      word.to.string(unknownWord, w1);
+    }
+    if (unknownWordNum == 2) {
+      word.to.string(unknownWord, w2);
+    }
+    if (unknownWordNum == 3) {
+      word.to.string(unknownWord, w3);
+    }
+    if (unknownWordNum == 4) {
+      word.to.string(unknownWord, w4);
+    }
+    if (unknownWordNum == 5) {
+      word.to.string(unknownWord, w5);
+    }
+    if (unknownWordNum == 6) {
+      word.to.string(unknownWord, w6);
+    }
+    if (unknownWordNum == 7) {
+      word.to.string(unknownWord, w7);
+    }
+    if (unknownWordNum == 8) {
+      word.to.string(unknownWord, w8);
+    }
+    if (unknownWordNum == 9) {
+      word.to.string(unknownWord, w9);
+    }
+    if (unknownWordNum == 10) {
+      word.to.string(unknownWord, w10);
+    }
+    [choose a random unknown word response
+    random(&m38, &m40, rndNum);
+    print.v(rndNum);
+  }
+  
+  [ finally, if there is input that still hasn't been recognized
+  if (!haveMatch) {
+    print("I don't understand your request.");
+    reset(haveInput);
+  }
 }
 
-:done
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 [ default cursors
 #message 1 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"

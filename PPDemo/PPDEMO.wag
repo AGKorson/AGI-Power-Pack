@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "8/29/2023 8:32:42 PM"
+   LastEdit = "10/8/2023 11:04:34 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,465 +49,465 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H0
-   CRC32 = &HACB633B1
+   CompCRC32 = &HD95F2129
+   CRC32 = &HD95F2129
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
-[Logic90]
-   CompCRC32 = &HEAE553AD
-   CRC32 = &HEAE553AD
-   ID = lgc.GameFunctions
-   IsRoom = False
-   Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-
-[Logic91]
-   CompCRC32 = &H0
-   CRC32 = &H4B14EBBA
-   IsRoom = False
-   ID = lgc.Init
-   Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
-
-[Logic92]
-   ID = lgc.RoomInit
-   Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H86A9DB09
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic94]
-   ID = lgc.DebugHelp
-   Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
-   CRC32 = &HAC2BA4C7
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic95]
-   ID = lgc.Death
-   Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H809BE721
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic96]
-   ID = lgc.TraceInfo
-   Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
-   CRC32 = &H222AF841
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic21]
-   ID = cp.Terminal
-   Description = ""
-   CRC32 = &HD597B30D
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic23]
-   ID = cp.RANDOCC
-   Description = ""
-   CRC32 = &H45D3DCF8
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic24]
-   ID = cp.ICAPOCC
-   Description = ""
-   CRC32 = &HF83A08CD
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic25]
-   ID = cp.ESADOCC
-   Description = ""
-   CRC32 = &HED8DDD5B
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic22]
-   ID = cp.CAISOCC
-   Description = ""
-   CRC32 = &H469EC4CA
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic26]
-   ID = cp.OFROCC
-   Description = ""
-   CRC32 = &H79488570
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic27]
-   ID = cp.ERIDOCC
-   Description = ""
-   CRC32 = &HB1007151
-   CompCRC32 = &H0
-   IsRoom = True
-
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &HE2A812A8
-   CompCRC32 = &H0
+   CRC32 = &H92B434C5
+   CompCRC32 = &H92B434C5
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H72FBB11F
-   CompCRC32 = &H0
+   CRC32 = &H5BF77035
+   CompCRC32 = &H5BF77035
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H7B8DF7A6
-   CompCRC32 = &HF32857B2
+   CRC32 = &H9B68ADD4
+   CompCRC32 = &H9B68ADD4
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &H7ECD369F
-   CompCRC32 = &H0
+   CRC32 = &H591DDABD
+   CompCRC32 = &H591DDABD
    IsRoom = True
 
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &HA4232548
-   CompCRC32 = &H0
+   CRC32 = &H8A689208
+   CompCRC32 = &HBAFA73F0
    IsRoom = True
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &HC56AFFAB
-   CompCRC32 = &H0
+   CRC32 = &HB2587737
+   CompCRC32 = &HB2587737
    IsRoom = True
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
-   CRC32 = &HCECA0724
-   CompCRC32 = &H0
+   CRC32 = &H1780FD80
+   CompCRC32 = &H1780FD80
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &HC5AA91E7
-   CompCRC32 = &H0
+   CRC32 = &HF9E6A9DE
+   CompCRC32 = &HF9E6A9DE
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HA3B93296
-   CompCRC32 = &H0
+   CRC32 = &HED97C15F
+   CompCRC32 = &HED97C15F
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &HD2200FDC
-   CompCRC32 = &H0
+   CRC32 = &H5B2DEAB
+   CompCRC32 = &H5B2DEAB
    IsRoom = True
-
-[Logic102]
-   ID = lgc.mod2411
-   Description = ""
-   CRC32 = &HEBD3ACC1
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic103]
-   ID = lgc.mod2425
-   Description = ""
-   CRC32 = &HEFF20B5B
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic104]
-   ID = lgc.mod2426
-   Description = ""
-   CRC32 = &H8C46848B
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic105]
-   ID = lgc.mod2435
-   Description = ""
-   CRC32 = &H5535B429
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic106]
-   ID = lgc.mod2439
-   Description = ""
-   CRC32 = &H6A6DC6F5
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic107]
-   ID = lgc.mod2440
-   Description = ""
-   CRC32 = &H135F1712
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic108]
-   ID = lgc.mod2903
-   Description = ""
-   CRC32 = &HEDD97363
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic109]
-   ID = lgc.mod2911
-   Description = ""
-   CRC32 = &HE232A566
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic110]
-   ID = lgc.mod2912
-   Description = ""
-   CRC32 = &H96165C53
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic111]
-   ID = lgc.mod2915
-   Description = ""
-   CRC32 = &H88146BBC
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic112]
-   ID = lgc.mod2917
-   Description = ""
-   CRC32 = &H5E69C7A3
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic113]
-   ID = lgc.mod2936
-   Description = ""
-   CRC32 = &H813EDCA2
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic97]
-   ID = lgc.Error
-   Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
-   CRC32 = &H9B7D2BBB
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic98]
-   ID = lgc.Debug
-   Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
-   CRC32 = &H6C777A4D
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic99]
-   ID = lgc.Version2Check
-   Description = ""
-   CRC32 = &H16E1334F
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic29]
-   ID = lgc.Statusbar
-   Description = "custom status bar"
-   CRC32 = &H3E008E9D
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic30]
-   ID = lgc.InitToolbar
-   Description = ""
-   CRC32 = &HE83952CC
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic31]
-   ID = lgc.ToolbarFunctions
-   Description = ""
-   CRC32 = &H7C7BF598
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic32]
-   ID = lgc.TerminalFunctions
-   Description = ""
-   CRC32 = &HB774F47
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic12]
-   ID = rm.DoorKeypad
-   Description = ""
-   CRC32 = &H8A2CDC37
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic33]
-   ID = lgc.ReadMagazine
-   Description = ""
-   CRC32 = &H4EB73989
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic13]
-   ID = rm.SafeDoor
-   Description = ""
-   CRC32 = &H5D76F229
-   CompCRC32 = &H0
-   IsRoom = True
-
-[Logic14]
-   ID = txt.Memo
-   Description = ""
-   CRC32 = &HF1B2ACE4
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic11]
-   ID = lgc.ScoreHandler
-   Description = ""
-   CRC32 = &HC22A974A
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic15]
-   ID = lgc.SaveOptions
-   Description = ""
-   CRC32 = &HB9FDF23A
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic16]
-   ID = lgc.CacheOptions
-   Description = ""
-   CRC32 = &HA28713ED
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic17]
-   ID = lgc.ExamineItem
-   Description = ""
-   CRC32 = &H4F472058
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic18]
-   ID = lgc.ReadManual
-   Description = ""
-   CRC32 = &HA152B3D0
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic19]
-   ID = lgc.RedrawRoom
-   Description = ""
-   CRC32 = &HC9E798BF
-   CompCRC32 = &H0
-   IsRoom = False
 
 [Logic20]
    ID = lgc.ReadScroll
    Description = ""
-   CRC32 = &H58853120
-   CompCRC32 = &H0
+   CRC32 = &HB89F68F
+   CompCRC32 = &HB89F68F
+   IsRoom = False
+
+[Logic11]
+   ID = cp.Terminal
+   Description = ""
+   CRC32 = &HA96ABC91
+   CompCRC32 = &HA96ABC91
+   IsRoom = True
+
+[Logic12]
+   ID = cp.CAISOCC
+   Description = ""
+   CRC32 = &H585C71E0
+   CompCRC32 = &H585C71E0
+   IsRoom = True
+
+[Logic13]
+   ID = cp.ERIDOCC
+   Description = ""
+   CRC32 = &H5ED49768
+   CompCRC32 = &H5ED49768
+   IsRoom = True
+
+[Logic14]
+   ID = cp.ESADOCC
+   Description = ""
+   CRC32 = &HED44327B
+   CompCRC32 = &HED44327B
+   IsRoom = True
+
+[Logic15]
+   ID = cp.ICAPOCC
+   Description = ""
+   CRC32 = &HF9E0C665
+   CompCRC32 = &HF9E0C665
+   IsRoom = True
+
+[Logic16]
+   ID = cp.OFROCC
+   Description = ""
+   CRC32 = &H169DD51C
+   CompCRC32 = &H169DD51C
+   IsRoom = True
+
+[Logic17]
+   ID = cp.RANDOCC
+   Description = ""
+   CRC32 = &HE1D332BF
+   CompCRC32 = &HE1D332BF
+   IsRoom = True
+
+[Logic18]
+   ID = rm.DoorKeypad
+   Description = ""
+   CRC32 = &H54A05FC3
+   CompCRC32 = &H54A05FC3
+   IsRoom = True
+
+[Logic19]
+   ID = rm.SafeDoor
+   Description = ""
+   CRC32 = &HE9437073
+   CompCRC32 = &HE9437073
+   IsRoom = True
+
+[Logic21]
+   ID = lgc.ReadNotebook
+   Description = ""
+   CRC32 = &H7C24ABD1
+   CompCRC32 = &H7C24ABD1
+   IsRoom = False
+
+[Logic22]
+   ID = lgc.ReadMagazine
+   Description = ""
+   CRC32 = &H64D01914
+   CompCRC32 = &H64D01914
+   IsRoom = False
+
+[Logic23]
+   ID = lgc.ReadManual
+   Description = ""
+   CRC32 = &H1B556658
+   CompCRC32 = &H1B556658
+   IsRoom = False
+
+[Logic24]
+   ID = lgc.Podium
+   Description = ""
+   CRC32 = &H98CF15AD
+   CompCRC32 = &H98CF15AD
+   IsRoom = False
+
+[Logic25]
+   ID = lgc.Pillow
+   Description = ""
+   CRC32 = &H48D879B6
+   CompCRC32 = &H48D879B6
+   IsRoom = False
+
+[Logic26]
+   ID = lgc.Walkman
+   Description = ""
+   CRC32 = &H61B87EFF
+   CompCRC32 = &H61B87EFF
+   IsRoom = False
+
+[Logic27]
+   ID = lgc.Statusbar
+   Description = "custom status bar"
+   CRC32 = &H5F09A499
+   CompCRC32 = &H5F09A499
    IsRoom = False
 
 [Logic28]
-   ID = lgc.ReadNotebook
+   ID = lgc.InitToolbar
    Description = ""
-   CRC32 = &HD969FD7
-   CompCRC32 = &H0
+   CRC32 = &H6D63BB30
+   CompCRC32 = &H6D63BB30
+   IsRoom = False
+
+[Logic29]
+   ID = lgc.ToolbarFunctions
+   Description = ""
+   CRC32 = &HFA33ECF3
+   CompCRC32 = &HFA33ECF3
+   IsRoom = False
+
+[Logic30]
+   ID = lgc.TerminalFunctions
+   Description = ""
+   CRC32 = &HDA7C3DA7
+   CompCRC32 = &HDA7C3DA7
+   IsRoom = False
+
+[Logic31]
+   ID = lgc.UseItem
+   Description = ""
+   CRC32 = &H466838DB
+   CompCRC32 = &H466838DB
+   IsRoom = False
+
+[Logic32]
+   ID = lgc.ExamineItem
+   Description = ""
+   CRC32 = &H2340E9E0
+   CompCRC32 = &H2340E9E0
+   IsRoom = False
+
+[Logic33]
+   ID = lgc.ScoreHandler
+   Description = ""
+   CRC32 = &H4DAA38
+   CompCRC32 = &H4DAA38
    IsRoom = False
 
 [Logic34]
-   ID = lgc.Podium
-   Description = ""
-   CRC32 = &H6C278278
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic36]
-   ID = lgc.Pillow
-   Description = ""
-   CRC32 = &H80B0BBD7
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic37]
-   ID = lgc.UseItem
-   Description = ""
-   CRC32 = &HA6B4DDF6
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic38]
-   ID = lgc.Walkman
-   Description = ""
-   CRC32 = &HEAD625A1
-   CompCRC32 = &H0
+   ID = lgc.SetSound
+   Description = "handles setting the sound parameters to correct values before music or sounds get played"
+   CRC32 = &HC31B2001
+   CompCRC32 = &HC31B2001
    IsRoom = False
 
 [Logic35]
-   ID = lgc.SetSound
-   Description = "handles setting the sound parameters to correct values before music or sounds get played"
-   CRC32 = &H8EE5A4D5
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic89]
-   ID = lgc.PowerPack
+   ID = lgc.SaveOptions
    Description = ""
-   CRC32 = &H5CCD5BED
-   CompCRC32 = &H0
+   CRC32 = &HCB459041
+   CompCRC32 = &HCB459041
    IsRoom = False
 
-[Logic43]
+[Logic36]
+   ID = lgc.CacheOptions
+   Description = ""
+   CRC32 = &HB6C1078E
+   CompCRC32 = &HB6C1078E
+   IsRoom = False
+
+[Logic37]
+   ID = lgc.GameHelp
+   Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
+   CRC32 = &H909296F6
+   CompCRC32 = &H909296F6
+   IsRoom = False
+
+[Logic38]
    ID = lgc.HelpText1
    Description = ""
-   CRC32 = &HEF8FE4BA
-   CompCRC32 = &H0
+   CRC32 = &H3DDBCB8E
+   CompCRC32 = &H3DDBCB8E
    IsRoom = False
 
-[Logic44]
+[Logic39]
    ID = lgc.HelpText2
    Description = ""
-   CRC32 = &H1059D1BE
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic45]
-   ID = lgc.HelpText3
-   Description = ""
-   CRC32 = &HF63A802B
-   CompCRC32 = &H0
-   IsRoom = False
-
-[Logic46]
-   ID = lgc.HelpText4
-   Description = ""
-   CRC32 = &HAC291BC3
-   CompCRC32 = &H0
+   CRC32 = &H3BB7786B
+   CompCRC32 = &H3BB7786B
    IsRoom = False
 
 [Logic42]
-   ID = lgc.GameHelp
-   Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
-   CRC32 = &H296B625D
-   CompCRC32 = &H0
+   ID = txt.Memo
+   Description = ""
+   CRC32 = &HC9D1396B
+   CompCRC32 = &HC9D1396B
+   IsRoom = False
+
+[Logic40]
+   ID = lgc.HelpText3
+   Description = ""
+   CRC32 = &H68F0A50E
+   CompCRC32 = &H68F0A50E
+   IsRoom = False
+
+[Logic41]
+   ID = lgc.HelpText4
+   Description = ""
+   CRC32 = &H8EC1B4D7
+   CompCRC32 = &H8EC1B4D7
+   IsRoom = False
+
+[Logic53]
+   ID = lgc.RedrawRoom
+   Description = ""
+   CRC32 = &H83F1D6EF
+   CompCRC32 = &H83F1D6EF
+   IsRoom = False
+
+[Logic50]
+   ID = lgc.GameFunctions
+   Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
+   CRC32 = &HC3811CB1
+   CompCRC32 = &HC3811CB1
+   IsRoom = False
+
+[Logic51]
+   ID = lgc.Init
+   Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
+   CRC32 = &H17F87432
+   CompCRC32 = &H17F87432
+   IsRoom = False
+
+[Logic52]
+   ID = lgc.RoomInit
+   Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
+   CRC32 = &H9F7A0675
+   CompCRC32 = &H9F7A0675
+   IsRoom = False
+
+[Logic54]
+   ID = lgc.Death
+   Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
+   CRC32 = &H38996D58
+   CompCRC32 = &H38996D58
+   IsRoom = False
+
+[Logic55]
+   ID = lgc.Error
+   Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
+   CRC32 = &HC883F208
+   CompCRC32 = &HC883F208
+   IsRoom = False
+
+[Logic56]
+   ID = lgc.Debug
+   Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
+   CRC32 = &HBE0FA8F
+   CompCRC32 = &HBE0FA8F
+   IsRoom = False
+
+[Logic57]
+   ID = lgc.DebugHelp
+   Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
+   CRC32 = &HBA1F1E05
+   CompCRC32 = &HBA1F1E05
+   IsRoom = False
+
+[Logic58]
+   ID = lgc.TraceInfo
+   Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
+   CRC32 = &HE1DD84F8
+   CompCRC32 = &HE1DD84F8
+   IsRoom = False
+
+[Logic60]
+   ID = lgc.PowerPack
+   Description = ""
+   CRC32 = &H57292174
+   CompCRC32 = &H57292174
+   IsRoom = False
+
+[Logic61]
+   ID = lgc.Version2Check
+   Description = ""
+   CRC32 = &H7BC29213
+   CompCRC32 = &H7BC29213
+   IsRoom = False
+
+[Logic62]
+   ID = lgc.mod2411
+   Description = ""
+   CRC32 = &H442DF533
+   CompCRC32 = &H442DF533
+   IsRoom = False
+
+[Logic63]
+   ID = lgc.mod2425
+   Description = ""
+   CRC32 = &H20DDED48
+   CompCRC32 = &H20DDED48
+   IsRoom = False
+
+[Logic64]
+   ID = lgc.mod2426
+   Description = ""
+   CRC32 = &HA0EF8EDE
+   CompCRC32 = &HA0EF8EDE
+   IsRoom = False
+
+[Logic65]
+   ID = lgc.mod2435
+   Description = ""
+   CRC32 = &HF5C4A7F3
+   CompCRC32 = &HF5C4A7F3
+   IsRoom = False
+
+[Logic66]
+   ID = lgc.mod2439
+   Description = ""
+   CRC32 = &H29DFCB58
+   CompCRC32 = &H29DFCB58
+   IsRoom = False
+
+[Logic67]
+   ID = lgc.mod2440
+   Description = ""
+   CRC32 = &H27CEAA19
+   CompCRC32 = &H27CEAA19
+   IsRoom = False
+
+[Logic68]
+   ID = lgc.mod2903
+   Description = ""
+   CRC32 = &HEF9A66D5
+   CompCRC32 = &HEF9A66D5
+   IsRoom = False
+
+[Logic69]
+   ID = lgc.mod2911
+   Description = ""
+   CRC32 = &HCA5D641D
+   CompCRC32 = &HCA5D641D
+   IsRoom = False
+
+[Logic70]
+   ID = lgc.mod2912
+   Description = ""
+   CRC32 = &H7F8A7F4
+   CompCRC32 = &H7F8A7F4
+   IsRoom = False
+
+[Logic71]
+   ID = lgc.mod2915
+   Description = ""
+   CRC32 = &H839A99C3
+   CompCRC32 = &H839A99C3
+   IsRoom = False
+
+[Logic72]
+   ID = lgc.mod2917
+   Description = ""
+   CRC32 = &H68582F
+   CompCRC32 = &H68582F
+   IsRoom = False
+
+[Logic73]
+   ID = lgc.mod2936
+   Description = ""
+   CRC32 = &H5E1A084B
+   CompCRC32 = &H5E1A084B
    IsRoom = False
 [::END Logics::]
 
@@ -524,46 +524,6 @@
 
 [Picture8]
    ID = pic.ControlRoom
-   Description = ""
-   BkgdImg = ""
-
-[Picture21]
-   ID = pic.cp.Terminal
-   BkgdImg = ""
-   Description = ""
-
-[Picture23]
-   ID = pic.cp.RANDOCC
-   BkgdImg = ""
-   Description = ""
-
-[Picture24]
-   ID = pic.cp.ICAPOCC
-   BkgdImg = ""
-   Description = ""
-
-[Picture25]
-   ID = pic.cp.ESADOCC
-   Description = ""
-   BkgdImg = ""
-
-[Picture22]
-   ID = pic.cp.CAISOCC
-   Description = ""
-   BkgdImg = ""
-
-[Picture26]
-   ID = pic.cp.OFROCC
-   Description = ""
-   BkgdImg = ""
-
-[Picture27]
-   ID = pic.cp.ERIDOCC
-   Description = ""
-   BkgdImg = ""
-
-[Picture1]
-   ID = pic.PowerPackLogo
    Description = ""
    BkgdImg = ""
 
@@ -601,162 +561,139 @@
    BkgdPosn = ""
    BkgdSize = ""
 
-[Picture13]
-   ID = pic.SafeDoor
-   Description = ""
-   BkgdImg = "support\19-20 ghosts.bmp"
-   BkgdShow = True
-   BkgdTrans = 127
-   BkgdPosn = 0|0|0|0
-   BkgdSize = 320|168|2562|1343
-
-[Picture14]
-   ID = pic.MagazineCover
-   BkgdImg = ""
-   Description = ""
-
-[Picture15]
-   ID = pic.MagazinePages
-   BkgdImg = ""
-   Description = ""
-
-[Picture16]
-   ID = pic.MagazineEnd
-   BkgdImg = ""
-   Description = ""
-
-[Picture12]
-   ID = pic.DoorKeypad
-   Description = ""
-   BkgdImg = ""
-
-[Picture20]
-   ID = pic.cp.Error
-   Description = ""
-   BkgdImg = ""
-
-[Picture11]
-   ID = pic.ComboList
-   Description = ""
-   BkgdImg = ""
-
-[Picture17]
-   ID = pic.FolderInterior
-   Description = ""
-   BkgdImg = ""
-
-[Picture18]
-   ID = pic.MusicSheet
-   Description = ""
-   BkgdImg = ""
-   BkgdShow = ""
-   BkgdTrans = ""
-   BkgdPosn = ""
-   BkgdSize = ""
-
-[Picture19]
-   ID = pic.ManualCover
-   Description = ""
-   BkgdImg = ""
-
-[Picture29]
-   ID = pic.ManualPages
-   Description = ""
-   BkgdImg = ""
-
-[Picture31]
-   ID = pic.Scroll
-   Description = ""
-   BkgdImg = "PPDemo Art\scroll.jpg"
-   BkgdShow = False
-   BkgdTrans = 127
-   BkgdPosn = 0|2|3|0
-   BkgdSize = 319|166|957|498
-
-[Picture32]
-   ID = pic.NotebookCover
-   Description = ""
-   BkgdImg = ""
-
-[Picture33]
-   ID = pic.NotebookPages
-   Description = ""
-   BkgdImg = ""
-
-[Picture34]
-   ID = pic.PodiumTopPaper
-   Description = ""
-   BkgdImg = ""
-
-[Picture35]
-   ID = pic.PodiumTopClear
-   Description = ""
-   BkgdImg = "src\woodgrain.jpg"
-   BkgdShow = False
-   BkgdTrans = 204
-   BkgdPosn = 0|33|3|0
-   BkgdSize = 319|120|957|504
-
 [Picture36]
    ID = pic.PQList
    Description = ""
    BkgdImg = ""
 
-[Picture37]
-   ID = pic.Pillow
+[Picture11]
+   ID = pic.cp.Terminal
    Description = ""
-   BkgdImg = src\pillow.jpg
-   BkgdShow = False
+   BkgdImg = ""
+
+[Picture12]
+   ID = pic.cp.CAISOCC
+   Description = ""
+   BkgdImg = ""
+
+[Picture13]
+   ID = pic.cp.ERIDOCC
+   Description = ""
+   BkgdImg = ""
+
+[Picture14]
+   ID = pic.cp.ESADOCC
+   Description = ""
+   BkgdImg = ""
+
+[Picture15]
+   ID = pic.cp.ICAPOCC
+   Description = ""
+   BkgdImg = ""
+
+[Picture16]
+   ID = pic.cp.OFROCC
+   Description = ""
+   BkgdImg = ""
+
+[Picture17]
+   ID = pic.cp.RANDOCC
+   Description = ""
+   BkgdImg = ""
+
+[Picture18]
+   ID = pic.DoorKeypad
+   Description = ""
+   BkgdImg = ""
+
+[Picture19]
+   ID = pic.SafeDoor
+   Description = ""
+   BkgdImg = "support\19-20 ghosts.bmp"
    BkgdTrans = 127
    BkgdPosn = 0|0|0|0
-   BkgdSize = 320|168|1600|840
+   BkgdSize = 320|168|2562|1343
+   BkgdShow = False
 
-[Picture38]
-   ID = pic.Explode1
+[Picture20]
+   ID = pic.Scroll
+   Description = ""
+   BkgdImg = "PPDemo Art\scroll.jpg"
+   BkgdTrans = 127
+   BkgdPosn = 0|2|3|0
+   BkgdSize = 319|166|957|498
+   BkgdShow = False
+
+[Picture21]
+   ID = pic.NotebookCover
    Description = ""
    BkgdImg = ""
 
-[Picture39]
-   ID = pic.Explode2
+[Picture22]
+   ID = pic.NotebookPages
    Description = ""
    BkgdImg = ""
 
-[Picture40]
-   ID = pic.Explode3
+[Picture23]
+   ID = pic.MagazineCover
    Description = ""
    BkgdImg = ""
 
-[Picture41]
-   ID = pic.Explode4
+[Picture24]
+   ID = pic.MagazinePages
    Description = ""
    BkgdImg = ""
 
-[Picture42]
-   ID = pic.Explode5
+[Picture25]
+   ID = pic.MagazineEnd
    Description = ""
    BkgdImg = ""
 
-[Picture50]
+[Picture26]
+   ID = pic.ManualCover
+   Description = ""
+   BkgdImg = ""
+
+[Picture27]
+   ID = pic.ManualPages
+   Description = ""
+   BkgdImg = ""
+
+[Picture28]
+   ID = pic.PodiumTopPaper
+   Description = ""
+   BkgdImg = ""
+
+[Picture29]
+   ID = pic.PodiumTopClear
+   Description = ""
+   BkgdImg = src\woodgrain.jpg
+   BkgdTrans = 204
+   BkgdPosn = 0|33|3|0
+   BkgdSize = 319|120|957|504
+   BkgdShow = False
+
+[Picture35]
    ID = ovl.Walkman4
    Description = ""
    BkgdImg = ""
 
-[Picture49]
+[Picture34]
    ID = ovl.Walkman3
    Description = ""
    BkgdImg = ""
 
-[Picture48]
+[Picture33]
    ID = ovl.Walkman2
    Description = ""
    BkgdImg = ""
 
-[Picture47]
+[Picture32]
    ID = ovl.Walkman1
    Description = ""
    BkgdImg = ""
 
-[Picture46]
+[Picture31]
    ID = pic.Walkman
    Description = ""
    BkgdImg = "support\PPDemo Art\walkman.bmp"
@@ -765,40 +702,82 @@
    BkgdSize = 303|167|2727|1503
    BkgdShow = False
 
-[Picture45]
+[Picture30]
+   ID = pic.Pillow
+   Description = ""
+   BkgdImg = src\pillow.jpg
+   BkgdTrans = 127
+   BkgdPosn = 0|0|0|0
+   BkgdSize = 320|168|1600|840
+   BkgdShow = False
+
+[Picture37]
+   ID = pic.FolderInterior
+   Description = ""
+   BkgdImg = ""
+
+[Picture38]
+   ID = pic.MusicSheet
+   Description = ""
+   BkgdImg = ""
+
+[Picture39]
+   ID = pic.ComboList
+   Description = ""
+   BkgdImg = ""
+
+[Picture40]
+   ID = pic.PowerPackLogo
+   Description = ""
+   BkgdImg = ""
+
+[Picture1]
    ID = pic.Title
    Description = ""
    BkgdImg = ""
 
+[Picture41]
+   ID = pic.Explode1
+   Description = ""
+   BkgdImg = ""
+
+[Picture42]
+   ID = pic.Explode2
+   Description = ""
+   BkgdImg = ""
+
 [Picture43]
-   ID = pic.Explode6
+   ID = pic.Explode3
    Description = ""
    BkgdImg = ""
 
 [Picture44]
+   ID = pic.Explode4
+   Description = ""
+   BkgdImg = ""
+
+[Picture45]
+   ID = pic.Explode5
+   Description = ""
+   BkgdImg = ""
+
+[Picture46]
+   ID = pic.Explode6
+   Description = ""
+   BkgdImg = ""
+
+[Picture47]
    ID = pic.Explode7
+   Description = ""
+   BkgdImg = ""
+
+[Picture48]
+   ID = pic.cp.Error
    Description = ""
    BkgdImg = ""
 [::END Pictures::]
 
 [::BEGIN Sounds::]
-[Sound0]
-   ID = m.PPDTheme
-   Description = "A theme song that can be played while title screen is shown."
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = False
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound106]
    ID = s.DoorOpen
    Description = "A simple sound effect for an automatic closing door."
@@ -3043,23 +3022,6 @@
    Visible2 = True
    Visible3 = True
 
-[Sound133]
-   ID = s.Saluteold
-   Description = ""
-   Key = 0
-   TPQN = 16
-   Inst0 = 50
-   Inst1 = 110
-   Inst2 = 68
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-
 [Sound134]
    ID = s.Salute
    Description = ""
@@ -3164,56 +3126,8 @@
 [::END Sounds::]
 
 [::BEGIN Views::]
-[View9]
-   ID = vw.cp.ERIDOCC
-   Description = ""
-
-[View10]
-   ID = vw.cp.OFROCC
-   Description = ""
-
-[View11]
-   ID = vw.cp.ESADOCC
-   Description = ""
-
 [View12]
    ID = vw.cp.CAISOCC
-   Description = ""
-
-[View13]
-   ID = vw.ButtonsUp
-   Description = ""
-
-[View14]
-   ID = vw.ClosetArt
-   Description = ""
-
-[View40]
-   ID = vw.MsgBoxColors
-   Description = ""
-
-[View41]
-   ID = vw.EgoDead
-   Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
-
-[View2]
-   ID = vw.SmallPerson1
-   Description = ""
-
-[View3]
-   ID = vw.SmallPerson2
-   Description = ""
-
-[View17]
-   ID = vw.StairwayArt
-   Description = ""
-
-[View15]
-   ID = vw.StorageRoomArt
-   Description = ""
-
-[View16]
-   ID = vw.Cars
    Description = ""
 
 [View0]
@@ -3224,56 +3138,12 @@
    ID = vw.ParkedCars
    Description = ""
 
-[View1]
-   ID = vw.EgoSmall
-   Description = ""
-
-[View4]
-   ID = vw.SmallPerson3
-   Description = ""
-
-[View18]
-   ID = vw.HallwayArt
-   Description = ""
-
-[View20]
-   ID = vw.cp.RANDOCC
-   Description = ""
-
-[View5]
-   ID = vw.SmallPerson4
-   Description = ""
-
-[View6]
-   ID = vw.SmallPerson5
-   Description = ""
-
-[View22]
-   ID = vw.Tripping
-   Description = ""
-
-[View21]
-   ID = vw.OfficeArt
-   Description = ""
-
 [View23]
    ID = vw.Patient1
    Description = ""
 
 [View24]
    ID = vw.Patient2
-   Description = ""
-
-[View28]
-   ID = vw.Nurse
-   Description = ""
-
-[View30]
-   ID = vw.ReceptionistAct
-   Description = ""
-
-[View31]
-   ID = vw.ParkingLotArt
    Description = ""
 
 [View25]
@@ -3284,28 +3154,8 @@
    ID = vw.Patient4
    Description = ""
 
-[View29]
-   ID = vw.ReceptionistWalk
-   Description = ""
-
 [View27]
    ID = vw.Security
-   Description = ""
-
-[View34]
-   ID = vw.EgoArrest
-   Description = ""
-
-[View35]
-   ID = vw.EgoSlip
-   Description = ""
-
-[View36]
-   ID = vw.MagazineArt
-   Description = ""
-
-[View37]
-   ID = vw.PINPad
    Description = ""
 
 [View104]
@@ -3356,75 +3206,179 @@
    ID = vw.inv.MusicSheet
    Description = ""
 
-[View32]
-   ID = vw.CtrlRoomArt
-   Description = ""
-
-[View39]
-   ID = vw.EgoCoffin
-   Description = ""
-
-[View38]
-   ID = vw.SafeHandle
-   Description = ""
-
-[View42]
-   ID = vw.SafeDial
-   Description = ""
-
-[View43]
-   ID = vw.EgoWashingHands
-   Description = ""
-
-[View44]
-   ID = vw.TerminalArt
-   Description = ""
-
-[View45]
-   ID = vw.ManualArt
-   Description = ""
-
-[View46]
-   ID = vw.Logos
-   Description = ""
-
-[View47]
-   ID = vw.IntroBanners
-   Description = ""
-
-[View48]
-   ID = vw.Credits
-   Description = ""
-
-[View49]
-   ID = vw.ButtonsDown
-   Description = ""
-
 [View113]
    ID = vw.InvPQList
    Description = ""
 
-[View52]
-   ID = vw.SafeNumbers2
+[View2]
+   ID = vw.ParkingLotArt
    Description = ""
 
-[View51]
-   ID = vw.SafeNumbers1
+[View1]
+   ID = vw.Logos
    Description = ""
 
-[View54]
+[View3]
    ID = vw.LobbyArt
    Description = ""
 
-[View55]
-   ID = vw.cp.ICAPOCC
+[View4]
+   ID = vw.HallwayArt
+   Description = ""
+
+[View5]
+   ID = vw.ClosetArt
    Description = ""
 
 [View7]
-   ID = vw.SmallPerson6
+   ID = vw.StairwayArt
    Description = ""
 
 [View8]
+   ID = vw.CtrlRoomArt
+   Description = ""
+
+[View9]
+   ID = vw.OfficeArt
+   Description = ""
+
+[View10]
+   ID = vw.StoreRoomArt
+   Description = ""
+
+[View13]
+   ID = vw.cp.ERIDOCC
+   Description = ""
+
+[View14]
+   ID = vw.cp.ESADOCC
+   Description = ""
+
+[View15]
+   ID = vw.cp.ICAPOCC
+   Description = ""
+
+[View16]
+   ID = vw.cp.OFROCC
+   Description = ""
+
+[View17]
+   ID = vw.cp.RANDOCC
+   Description = ""
+
+[View18]
+   ID = vw.Cars
+   Description = ""
+
+[View11]
+   ID = vw.TerminalArt
+   Description = ""
+
+[View20]
+   ID = vw.ReceptionistWalk
+   Description = ""
+
+[View21]
+   ID = vw.ReceptionistAct
+   Description = ""
+
+[View22]
+   ID = vw.Nurse
+   Description = ""
+
+[View28]
+   ID = vw.EgoSmall
+   Description = ""
+
+[View29]
+   ID = vw.EgoSlip
+   Description = ""
+
+[View30]
+   ID = vw.EgoArrest
+   Description = ""
+
+[View31]
+   ID = vw.EgoDead
+   Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
+
+[View32]
+   ID = vw.EgoCoffin
+   Description = ""
+
+[View33]
+   ID = vw.Tripping
+   Description = ""
+
+[View34]
+   ID = vw.EgoWashingHands
+   Description = ""
+
+[View35]
+   ID = vw.MagazineArt
+   Description = ""
+
+[View36]
+   ID = vw.PINPad
+   Description = ""
+
+[View37]
+   ID = vw.SafeNumbers1
+   Description = ""
+
+[View39]
+   ID = vw.SafeHandle
+   Description = ""
+
+[View38]
+   ID = vw.SafeNumbers2
+   Description = ""
+
+[View40]
+   ID = vw.SafeDial
+   Description = ""
+
+[View41]
+   ID = vw.ButtonsDown
+   Description = ""
+
+[View42]
+   ID = vw.ButtonsUp
+   Description = ""
+
+[View43]
+   ID = vw.MsgBoxColors
+   Description = ""
+
+[View44]
+   ID = vw.Credits
+   Description = ""
+
+[View54]
+   ID = vw.SmallPerson4
+   Description = ""
+
+[View53]
+   ID = vw.SmallPerson3
+   Description = ""
+
+[View51]
+   ID = vw.SmallPerson1
+   Description = ""
+
+[View52]
+   ID = vw.SmallPerson2
+   Description = ""
+
+[View55]
+   ID = vw.SmallPerson5
+   Description = ""
+
+[View56]
+   ID = vw.SmallPerson6
+   Description = ""
+
+[View57]
    ID = vw.SmallPerson7
    Description = ""
 [::END Views::]

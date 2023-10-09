@@ -5,9 +5,12 @@
 [
 [********************************************************************
 
-[ **************************************
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define oLogo              o1
 #define oDrew              o2
 #define oCat               o3
@@ -70,6 +73,9 @@
 #define fLogoDone         f220
 #define themeMusicDone    f221
 
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
 if (newRoom) {
   [ start up sequence doesn't need to use scripts since it will 
   [ never be part of a game restore
@@ -78,16 +84,16 @@ if (newRoom) {
   [ since this is the first room in the game, there is no
   [ previous room that faded out; so force a fade.out
   [ (with zero delay) so this room can then be faded back in
-  block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, 0, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   
   [ disable player control
   program.control();
   
   [ no ego used in this room
   
-  [ use a blank cursor so it doesn't get n the way but
+  [ use a blank cursor so it doesn't get in the way but
   [ clicks still work
-  set.key(0, &m7, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYNUM, &m7, mouse); [ set.cursor(FN_MODE, MSGNUM);
   
   [ save speed value, to restore it later
   tmpSpeed = animationInterval;
@@ -133,7 +139,7 @@ if (newRoom) {
   [ show the picture on screen
   show.pic();
   [ save text colors
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   sText = "AGI GUY Studios presents...";
   draw(oLogo);
   draw(oDrew);
@@ -141,7 +147,7 @@ if (newRoom) {
   
   [ begin by displaying text and fading in
   [ fade in
-  block(FADE.IN, 0, 20, 0); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, 20, 0); [ fade.in(FN_MODE, DELAY, COLOR)
   
   [ load logo/theme music
   load.sound(m.Fanfare);
@@ -162,6 +168,10 @@ if (newRoom) {
   work2 = 1;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
 }
+
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 
 [ one-time events
 if (titleSeq == TS_SCROLLCREDS) {
@@ -430,7 +440,7 @@ if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
       titleTimer = 100;
     } else {
       [ strip off each letter as it gets added
-      block(STR.RIGHT, &sText, &sText, &work3); [ strRight(sINPUT, sRESULT, vCOUNT)
+      block(STR.RIGHT, &sText, &sText, &work3); [ str.right(sINPUT, sRESULT, vCOUNT)
     }
   }
 }
@@ -454,7 +464,7 @@ if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
     if (letterindex == 20) {
       titleTimer = 10;
     } else {
-      block(STR.RIGHT, &sText, &sText, &work3); [ strRight(sINPUT, sRESULT, vCOUNT)
+      block(STR.RIGHT, &sText, &sText, &work3); [ str.right(sINPUT, sRESULT, vCOUNT)
     }
   }
 }
@@ -543,13 +553,13 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor9, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor9, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    block(SET.PALETTE, 0, &m3, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+    block(SET.PALETTE, BYNUM, &m3, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
     
     if (letterindex == 0) {
       clear.text.rect(11, 16, 11, 23, BLACK);
       clear.text.rect(12, 19, 12, 21, BLACK);
       clear.text.rect(13, 15, 13, 24, BLACK);
-      block(SET.PALETTE, 0, &m1, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, BYNUM, &m1, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       set.text.attribute(WHITE, BLACK);
       ++titleSeq;
       delaycounter = 0;
@@ -646,7 +656,7 @@ if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
       block(BYTE2HEX, &s22, &v239, 0); [ byte2hex(sRESULT, vINPUT)
       block(BYTE2HEX, &s23, &v240, 0); [ byte2hex(sRESULT, vINPUT)
       [ set palette
-      block(SET.PALETTE, 0, &m4, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, BYNUM, &m4, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
     }
   }
 }
@@ -690,7 +700,7 @@ if (titleTimer > 0) {
     }
     if (titleSeq == TS_FADEOUT_AG) {
       [ fadeout
-      block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 25, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       [ play WinAGI theme
       set(4channelsound);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -715,7 +725,7 @@ if (titleTimer > 0) {
       stop.update(oLogo);
       clear.lines(16, 16, BLACK);
       [ fade in
-      block(FADE.IN, 0, 40, 0); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.IN, BYNUM, 40, 0); [ fade.in(FN_MODE, DELAY, COLOR)
       sText = "A WinAGI creation...";
       letterindex = 0;
       ++titleSeq;
@@ -727,7 +737,7 @@ if (titleTimer > 0) {
     }
     if (titleSeq == TS_FADEOUT_WIN) {
       [ fadeout
-      block(FADE.OUT, 0, 25, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 25, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       [ play explode-agi theme
       set(4channelsound);
       set(useMIDI);
@@ -791,9 +801,9 @@ if (titleTimer > 0) {
       sColor8 = "3f3f3f";
       sColor9 = "3f3f3f";
       sColor10 = "3f3f3f";
-      block(SET.PALETTE, 0, &m3, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, BYNUM, &m3, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       [ fade in (no delay)
-      block(FADE.IN, 0, 0, 0); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.IN, BYNUM, 0, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
       [ begin letter fade in process
       letterindex = 97;
       ++titleSeq;
@@ -835,19 +845,19 @@ if (titleTimer > 0) {
     }
     if (titleSeq == TS_FADEWHITE) {
       [ fade out white
-      block(FADE.OUT, 0, 1, WHITE); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 1, WHITE); [ fade.out(FN_MODE, DELAY, COLOR)
       ++titleSeq;
     }
     if (titleSeq == TS_PPACK) {
     
       [ set starting palette
-      block(SET.PALETTE, 0, &m5, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, BYNUM, &m5, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       load.pic(currentRoom);
       draw.pic(currentRoom);
       discard.pic(currentRoom);
       show.pic();
       [ fade in
-      block(FADE.IN, 0, 10, WHITE); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.IN, BYNUM, 10, WHITE); [ fade.in(FN_MODE, DELAY, COLOR)
       [ setup to do the color shift
       titleSeq = TS_PP_SHIFT;
       letterIndex = 0;
@@ -864,9 +874,9 @@ if (titleTimer > 0) {
       v240 = 0;
     }
     if (titleSeq == TS_FADEOUT_PP) {
-      block(FADE.OUT, 0, 8, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 8, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       [ restore palette
-      block(SET.PALETTE, 0, &m6, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, BYNUM, &m6, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       work1 = pic.Title;
       load.pic(work1);
       draw.pic(work1);
@@ -876,7 +886,7 @@ if (titleTimer > 0) {
     }
     if (titleSeq == TS_FADEIN_SQ) {
       [ fade in
-      block(FADE.IN, 0, 20, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+      block(FADE.IN, BYNUM, 20, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
       titleTimer = 45;
       set(4channelsound);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -929,11 +939,11 @@ if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) 
   :continue
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out to black
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ restore palette
-  block(SET.PALETTE, 0, &m1, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+  block(SET.PALETTE, BYNUM, &m1, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   [ enable game functions for rest of game
   reset(disableGameFunctions);
   [ restore default speed
@@ -941,16 +951,16 @@ if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) 
   [ allow scripting
   reset(noScript);
   [ restore colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   [ begin game in starting room
   new.room(rm.ParkingLot); [ ##LE001##
 }
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%s2"
 #message 2 "%s13"
 #message 3 "000000%s14%s15%s16%s17%s18%s19%s20%s21%s22%%003F15153F3F3F15153F153F3F3F153F3F3F"

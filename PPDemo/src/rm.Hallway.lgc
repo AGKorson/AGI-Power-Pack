@@ -1,27 +1,26 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.Hallway
 [
 [ 
 [
-[ ********************************************************************
-[ TODO: more said statements for hallway
+[*********************************************************************
 
-[ **************************************
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define oClosetDoor    o1
 #define oExamDoor      o2
 #define oReceptionist  o3
 #define oNurse         o4
 #define oSecurity      o3 [ receptionist and security guard never on screen at same time
 
-#define opendoor       f220
-#define closedoor      f221
-#define fDoorDone      f222
-#define clickOn        f223
-#define openExamDoor   f224
-#define fExamDoorDone  f225
+#define fDoorDone      f220
+#define clickOn        f221
+#define examDoorDone   f222
 
 #define examDoorSeq    v220
 #define    SHUT         0
@@ -43,10 +42,10 @@
 #define    ARRESTED     9
 #define arrestCounter  v223
 
-
-if (newRoom)
-  {
-  [ this is the first cycle through this room
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
+if (newRoom) {
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
@@ -54,6 +53,10 @@ if (newRoom)
   
   [ the horizon defines the upper limit of ego's movement
   set.horizon(0);
+  
+  [ add toolbar buttons
+  load.view(vw.ButtonsDown);
+  call(lgc.InitToolbar);
   
   [ art work used in room
   load.view(vw.HallwayArt);
@@ -108,10 +111,6 @@ if (newRoom)
   position(oNurse, 49, 131);
   [don't draw yet
   
-  [ add toolbar buttons
-  load.view(vw.ButtonsDown);
-  call(lgc.InitToolbar);
-  
   [ ego  
   if (previousRoom == rm.Closet) {
     position(ego, 22, 141);
@@ -140,12 +139,15 @@ if (newRoom)
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-[  return();
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 }
+
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 
 [ if ego is not allowed
 if (!allowedPastLobby) {
@@ -163,26 +165,25 @@ if (arrestSeq > NOARREST) {
     load.view(vw.Security);
     set.view(oSecurity, vw.Security);
     position(oSecurity, 153, 140);
-    [ set autocycle
-    work1 = 1;
-    set.upper.left(&oSecurity, &work1);
+    work1 = AUTO_CYCLE;
+    set.upper.left(&oSecurity, &work1); [ auto.cycle(oSOBJ, vMODE)
     draw(oSecurity);
     get.posn(ego, work1, work2);
     work2 += 2;
     work3 = 1;
-    move.obj.v(oSecurity, work1, work2, work3, fExamDoorDone);
+    move.obj.v(oSecurity, work1, work2, work3, examDoorDone);
     arrestSeq = GOTOEGO;
   }
-  if (arrestSeq == GOTOEGO && fExamDoorDone) {
+  if (arrestSeq == GOTOEGO && examDoorDone) {
     [ turn to ego
     get.posn(ego, work1, work2);
     ++work2;
     work3 = 1;
-    move.obj.v(oSecurity, work1, work2, work3, fExamDoorDone);
+    move.obj.v(oSecurity, work1, work2, work3, examDoorDone);
     work1 = egoX;
     arrestSeq = TURNTOEGO;
   }
-  if (arrestSeq == TURNTOEGO && fExamDoorDone) {
+  if (arrestSeq == TURNTOEGO && examDoorDone) {
     [ 'handcuff' ego
     arrestSeq = CUFFEGO;
     arrestCounter = 15;
@@ -206,19 +207,19 @@ if (arrestSeq > NOARREST) {
     work2 = egoY;
     work1 += 7;
     work3 = 1;
-    move.obj.v(ego, work1, work2, work3, fExamDoorDone);
+    move.obj.v(ego, work1, work2, work3, examDoorDone);
     set.loop(oSecurity, 0);
     arrestSeq = ESCORT1;
   }
-  if (arrestSeq == ESCORT1 && fExamDoorDone) {
+  if (arrestSeq == ESCORT1 && examDoorDone) {
     [ cop escorts ego off screen
-    move.obj(ego, 159, 138, 1, fExamDoorDone);
-    move.obj(oSecurity, 159, 140, 1, fExamDoorDone);
+    move.obj(ego, 159, 138, 1, examDoorDone);
+    move.obj(oSecurity, 159, 140, 1, examDoorDone);
     arrestSeq = SHUTDOOR;
   }
   if (arrestSeq == SHUTDOOR && posn(ego, 65, 134, 159, 148)) {
     [ nurse shuts door
-    reverse.loop(oExamDoor, fExamDoorDone);
+    reverse.loop(oExamDoor, examDoorDone);
     normal.cycle(oNurse);
     arrestSeq = ESCORT2;
   }
@@ -231,7 +232,7 @@ if (arrestSeq > NOARREST) {
     stop.sound();
     [ restore cursor
     cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   }
   if (soundDone && arrestSeq >= ESCORT1 && arrestSeq != ARRESTED) {
     [ continue perp-walk sound
@@ -241,23 +242,538 @@ if (arrestSeq > NOARREST) {
   return();
 }
 
-[*****
-:handleInput       [ check for input from player
-[*****
-if (haveInput && !haveMatch && unknownWordNum == 0) {
-  [ place said tests here
-  if (said("look")) {
-    print("There are several doors in this hallway.");
-  }
-
-  if ((said("open", "closet", "door") || said("open", "door"))) {
-    set(opendoor);
-  }
-  if ((said("close", "closet", "door") || said("close", "door"))) {
-    set(closedoor);
+[*******************
+[ CLOSET DOOR
+[*******************
+if (fDoorDone) {
+  reset(fDoorDone);
+  if (closetopen) {
+    reset(closetopen);
+  } else {
+    set(closetopen);
   }
 }
+    
+[*******************
+[ EXAM ROOM DOOR
+[*******************
+if (examDoorDone) {
+  reset(examDoorDone);
+  if (examDoorSeq == OPENED) {
+    [ nurse turns around
+    examDoorSeq = NURSETURN;
+    reverse.loop(oNurse, examDoorDone);
+    goto(doneEDoorSeq);
+  }
+  if (examDoorSeq == NURSETURN) {
+    block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+    if (gExamCount < 4) {
+      examDoorSeq = NURSETALK;
+      if (gExamCount == 0) {
+        print("I'm sorry, I'm conducting a patient exam right now, you can't come in.");
+      }
+      if (gExamCount == 1) {
+        print("Hey! Close that door, I'm in the middle of a patient exam!");
+      }
+      if (gExamCount == 2) {
+        print("I said close that door! You can't come in here!");
+      }
+      if (gExamCount == 3) {
+        print("Please stop interrupting me, or I will call security!");
+      }
+      ++gExamCount;
+      [ nurse closes the door
+      reverse.loop(oExamDoor, examDoorDone);
+      normal.cycle(oNurse);
+      [ only play sound effects if walkman not in use
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        [ play door-close sound, using current sound settings
+        call(lgc.SetSound);
+        sound(s.DoorClose, soundDone);
+        set(playSound);
+      }
+    } else {
+      print("I asked you to stop interrupting!! Security!!!");
+      prevent.input();
+      program.control();
+      [ switch to wait cursor
+      [ show wait cursor
+      cursoricon = C_WAIT;
+      set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+      set(disableGameFunctions);
+      arrestSeq = COPARRIVES;
+      [ if walkman in use, stop it
+      if (currentTrack >0 && currentTrack < 128) {
+        currentTrack *= -1;
+        stop.sound();
+        reset(playSound);
+      }
+      [ play call-cops music, using current sound settings
+      call(lgc.SetSound);
+      sound(s.CallCops, soundDone);
+      set(playSound);
+    }
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+    goto(doneEDoorSeq);
+  }
+  if (examDoorSeq == NURSETALK) {
+    accept.input();
+    player.control();
+    erase(oNurse);
+    examDoorSeq = SHUT;
+  }
+}
+:doneEDoorSeq
+
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+if (haveInput && !haveMatch && unknownWordNum == 0) {
+  if (said("look")) {
+    print("The floors and walls of this hallway are clean and bright, as you would expect in a medical facility.");
+    print("There several doors leading to other rooms.");
+  }
+   
+  if (said("look", "door")) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      print("The closet door at the end of the hall has a sign on it that "
+            "says \"Please keep this door closed.\"");
+    } else {
+      [ near exam door?
+      if (posn(ego, 40, 132, 60, 138)) {
+        print("This door leads to one of the exam rooms.");
+      } else {
+        [ near bathroom?
+        if (posn(ego, 80, 132, 100, 138)) {
+          print("This is the door to the restroom.");
+        } else {
+          [ near office?
+          if (posn(ego, 120, 132, 140, 138)) {
+            print("It looks like a typical office door.");
+          } else {
+            print("There are several doors along the wall, and a closet door at the end of the hallway.");
+          }
+        }
+      }
+    }
+  }
+  if (said("open", "door")) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        goto(openclosetdoor);
+      }
+    } else {
+      [ near exam door?
+      if (posn(ego, 40, 132, 60, 138)) {
+        goto(openexamdoor);
+      } else {
+        [ near bathroom?
+        if (posn(ego, 80, 132, 100, 138)) {
+          print("The door is locked. The room must be occupied.");
+        } else {
+          [ near office?
+          if (posn(ego, 120, 132, 140, 138)) {
+            print("The office door is locked.");
+          } else {
+            print("Move closer.");
+          }
+        }
+      }
+    }
+  }
+  if (said("close", "door")) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        goto(closeclosetdoor);
+      } else {
+        print("The closet door is already closed.");
+      }
+    } else {
+      [ near exam door, bathroom, office?
+      if (posn(ego, 40, 132, 60, 138)) {
+         print("The exam room door is already closed.");
+      } else {
+       if (posn(ego, 80, 132, 100, 138)) {
+          print("The bathroom door is already closed.");
+        } else {
+          if (posn(ego, 120, 132, 140, 138)) {
+            print("The office door is already closed.");
+          } else {
+            print("Move closer.");
+          }
+        }
+      }
+    }
+  }
+  if (said("unlock", "door")) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        print("The door is not locked.");
+      }
+    } else {
+      [ near exam door?
+      if (posn(ego, 40, 132, 60, 138)) {
+        print("The door is not locked.");
+      } else {
+        [ near bathroom?
+        if (posn(ego, 80, 132, 100, 138)) {
+          print("It's locked from the inside; someone must be in there.");
+        } else {
+          [ near office?
+          if (posn(ego, 120, 132, 140, 138)) {
+            print("You don't have a key to unlock this door.");
+          } else {
+            print("Move closer.");
+          }
+        }
+      }
+    }
+  }
+  if (said("knock", "on", "door")) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        print("KNOCK! KNOCK!");
+        print("There is no answer.");
+      }
+    } else {
+      [ near exam door?
+      if (posn(ego, 40, 132, 60, 138)) {
+        print("KNOCK! KNOCK!");
+        block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+        print.at("\"I'm conducting an exam. Please keep out.\"", 8, 13, 30);
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      } else {
+        [ near bathroom?
+        if (posn(ego, 80, 132, 100, 138)) {
+          goto(knockbathroom);
+        } else {
+          [ near office?
+          if (posn(ego, 120, 132, 140, 138)) {
+            goto(knockoffice);
+          } else {
+            print("Move closer.");
+          }
+        }
+      }
+    }
+  }
+  if ((said("hit", "door") || said("break", "down", "door"))) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        print("There is no need to break down the door. Just open it.");
+      }
+    } else {
+      [ near exam door?
+      if (posn(ego, 40, 132, 60, 138)) {
+        print("You don't need to break down the door.");
+      } else {
+        [ near bathroom?
+        if (posn(ego, 80, 132, 100, 138)) {
+          print("Why would you do that when someone is in there?");
+        } else {
+          [ near office?
+          if (posn(ego, 120, 132, 140, 138)) {
+            print("You don't need to break down the door.");
+          } else {
+            print("Move closer.");
+          }
+        }
+      }
+    }
+  }
   
+  if (said("look", "closet", "door")) {
+    print("The closet door at the end of the hall has a sign on it that "
+          "says \"Please keep this door closed.\"");
+  }
+  if (said("open", "closet", "door")) {
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        goto(openclosetdoor);
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("close", "closet", "door")) {
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        goto(closeclosetdoor);
+      } else {
+        print("The closet door is already closed.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("unlock", "closet", "door")) {
+    if (posn(ego, 12, 129, 29, 148)) {
+      print("The door is not locked.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("knock", "on", "closet", "door")) {
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        print("KNOCK! KNOCK!");
+        print("There is no answer.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("hit", "closet", "door") || said("break", "down", "closet", "door"))) {
+    if (posn(ego, 12, 129, 29, 148)) {
+      if (closetopen) {
+        print("The closet door is already open.");
+      } else {
+        print("There is no need to break down the door. Just open it.");
+      }
+    } else {
+      print("Move closer.");
+    }
+  }
+
+  if (said("look", "exam", "door")) {
+    if (posn(ego, 40, 132, 60, 138)) {
+      print("This door leads to one of the exam rooms.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("open", "exam", "door")) {
+    if (posn(ego, 40, 132, 60, 138)) {
+      goto(openexamdoor);
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("close", "exam", "door")) {
+    if (posn(ego, 40, 132, 60, 138)) {
+      print("The exam room door is already closed.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("unlock", "exam", "door")) {
+    if (posn(ego, 40, 132, 60, 138)) {
+      print("The door is not locked.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("knock", "on", "exam", "door")) {
+    if (posn(ego, 40, 132, 60, 138)) {
+      print("KNOCK! KNOCK!");
+      block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+      print.at("\"I'm conducting an exam. Please keep out.\"", 8, 13, 30);
+      block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("hit", "exam", "door") || said("break", "down", "exam", "door"))) {
+    if (posn(ego, 40, 132, 60, 138)) {
+      print("You don't need to break down the door.");
+    } else {
+      print("Move closer.");
+    }
+  }
+
+  if (said("look", "bathroom", "door")) {
+    if (posn(ego, 80, 132, 100, 138)) {
+      print("This is the door to the restroom.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("open", "bathroom", "door")) {
+    if (posn(ego, 80, 132, 100, 138)) {
+      print("The door is locked. The room must be occupied.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("close", "bathroom", "door")) {
+   if (posn(ego, 80, 132, 100, 138)) {
+      print("The bathroom door is already closed.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("unlock", "bathroom", "door")) {
+    if (posn(ego, 80, 132, 100, 138)) {
+      print("It's locked from the inside; someone must be in there.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("knock", "on", "bathroom", "door")) {
+    if (posn(ego, 80, 132, 100, 138)) {
+      goto(knockbathroom);
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("hit", "bathroom", "door") || said("break", "down", "bathroom", "door"))) {
+    if (posn(ego, 80, 132, 100, 138)) {
+      print("Why would you do that when someone is in there?");
+    } else {
+      print("Move closer.");
+    }
+  }
+
+  if (said("look", "office", "door")) {
+    if (posn(ego, 120, 132, 140, 138)) {
+      print("It looks like a typical office door.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("open", "office", "door")) {
+    if (posn(ego, 120, 132, 140, 138)) {
+      print("The office door is locked.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("close", "office", "door")) {
+    if (posn(ego, 120, 132, 140, 138)) {
+      print("The office door is already closed.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("unlock", "office", "door")) {
+    if (posn(ego, 120, 132, 140, 138)) {
+      print("You don't have a key to unlock this door.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("knock", "on", "office", "door")) {
+    if (posn(ego, 120, 132, 140, 138)) {
+      goto(knockoffice);
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("hit", "office", "door") || said("break", "down", "office", "door"))) {
+    if (posn(ego, 120, 132, 140, 138)) {
+      print("You don't need to break down the door.");
+    } else {
+      print("Move closer.");
+    }
+  }
+
+  if (said("go", "in", "closet")) {
+    print("If you want to enter the closet, then just do it.");
+  }
+  if (said("look", "transom")) {
+    print("Above each door is a transom that allows light to filter "
+          "into the hallway from the room.");
+  }
+  if (said("climb", "transom")) {
+    print("How would you do that? The transoms are high above the doors!");
+  }
+  if ((said("talk", "nurse") || said("look", "nurse"))) {
+    print("The nurse is not in the hallway. She's in the exam room.");
+  }
+  if ((said("look", "receptionist") || said("talk", "receptionist"))) {
+    print("The receptionist is not in the hallway.");
+  }
+  if ((said("look", "floor") || said("look", "ceiling") ||
+       said("look", "wall"))) {
+    print("The ceiling, floors and walls of this hallway are clean and bright, as you would expect in a medical facility.");
+    print("There several doors leading to other rooms.");
+  }
+  if ((said("look", "door", "sign") || said("look", "sign") ||
+       said("read", "door", "sign") || said("read", "sign"))) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      print("The closet door at the end of the hall has a sign on it that "
+            "says \"Please keep this door closed.\"");
+    } else {
+      [ near exam door?
+      if (posn(ego, 40, 132, 60, 138)) {
+        print("The door sign says \"Exam Room 1\"");
+      } else {
+        [ near bathroom?
+        if (posn(ego, 80, 132, 100, 138)) {
+          print("The door sign indicates this is a unisex bathroom.");
+        } else {
+          [ near office?
+          if (posn(ego, 120, 132, 140, 138)) {
+            print("The name plate for this office says \"Dr. Brane, MD\"");
+          } else {
+            print("The hallway doors have signs next to them, indicating "
+                  "their purpose. There is also a sign attached to the "
+                  "closet door.");
+          }
+        }
+      }
+    }
+  }
+  if (said("look", "name plate")) {
+    [ near office?
+    if (posn(ego, 120, 132, 140, 138)) {
+      print("The name plate for this office says \"Dr. Brane, MD\"");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("look", "note") || said("look", "note", "on", "door") ||
+       said("read", "note") || said("read", "note", "on", "door"))) {
+    [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      print("The closet door at the end of the hall has a sign on it that "
+            "says \"Please keep this door closed.\"");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("get", "note") || said("get", "note", "on", "door") ||
+       said("get", "sign") || said("get", "sign", "on", "door"))) {
+     [ near closet?
+    if (posn(ego, 12, 129, 29, 148)) {
+      print("The sign is firmly attached to the door. You can't remove it.");
+    } else {
+      print("Move closer.");
+    }
+ }
+  if (said("look", "vent")) {
+    print("This vent duct provides a nice stream of cool air to "
+          "help keep the building comfortable.");
+  }
+  if ((said("sniff") || said("sniff", "air"))) {
+    print("<sniff>");
+    print("Hmm, there is definitely an odor wafting out of the "
+          "transom above the bathroom.");
+  }
+}
+
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -272,7 +788,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ look
   if (cursormode == C_LOOK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You see you.");
       goto(doneclick);
     }
@@ -286,7 +802,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ doors
     if (mouseX > 17 && mouseX < 25 && mouseY > 100 && mouseY < 141) {
-      print("This is a closet door. It has a sign on it that says \"Please keep this door closed.\"");
+      print("This is a closet door. It has a sign on it that says "
+            "\"Please keep this door closed.\"");
       goto(doneclick);
     }
     if (mouseY > 99 && mouseY < 133) {
@@ -346,7 +863,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ nothing specific
-    print("The floors and walls of this hallway are clean and bright, as you would expect in a medical facility.");
+    print("The ceiling, floors and walls of this hallway are clean and bright, as you would expect in a medical facility.");
     print("There several doors leading to other rooms.");
     goto(doneclick);
   }
@@ -354,7 +871,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ talk
   if (cursormode == C_TALK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You have nothing to say.");
     } else {
       print("There is no one here to talk to.");
@@ -365,18 +882,39 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ use
   if (cursormode == C_USE) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Someone might see you.");
       goto(doneclick);
     }
     
     [ closet door
-    if (posn(oClosetDoor, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oClosetDoor, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       if (posn(ego, 12, 129, 29, 148)) {
         if (closetopen) {
-          set(closedoor);
+          :closeclosetdoor
+          [ only play sound effects if walkman not in use
+          if ((currentTrack == 0 || currentTrack > 128)) {
+            [ play door-open sound, using current sound settings
+            call(lgc.SetSound);
+            sound(s.DoorClose, soundDone);
+            set(playSound);
+          }
+          reverse.loop(oClosetDoor, fDoorDone);
         } else {
-          set(opendoor);
+          :openclosetdoor
+          [ only play sound effects if walkman not in use
+          if ((currentTrack == 0 || currentTrack > 128)) {
+            [ play door-open sound, using current sound settings
+            call(lgc.SetSound);
+            sound(s.DoorOpen, soundDone);
+            set(playSound);
+          }
+          end.of.loop(oClosetDoor, fDoorDone);
+          if (!scoreClosetDoor) {
+            set(scoreClosetDoor);
+            work1 = 1;
+            call(lgc.ScoreHandler);
+          }
         }
       } else {
         print("Move closer.");
@@ -385,12 +923,27 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
       
     [ exam room door
-    if (posn(oExamDoor, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oExamDoor, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       if (posn(ego, 40, 132, 60, 138)) {
-        set(openExamDoor);
+        :openexamdoor
+        [ only play sound effects if walkman not in use
+        if ((currentTrack == 0 || currentTrack > 128)) {
+          [ play open-door sound, using current sound settings
+          call(lgc.SetSound);
+          sound(s.DoorOpen, soundDone);
+          set(playSound);
+        }
+        examDoorSeq = OPENED;
+        end.of.loop(oExamDoor, examDoorDone);
+        set.cel(oNurse, 8);
+        stop.cycling(oNurse);
+        draw(oNurse);
+        prevent.input();
+        program.control();
       } else {
         print("Move closer.");
       }
+      goto(doneclick);
     }
 
     [ other doors
@@ -398,6 +951,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ bathroom door
       if (mouseX > 86 && mouseX < 100) {
         if (posn(ego, 80, 132, 100, 138)) {
+          :knockbathroom
           print("KNOCK KNOCK");
           block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
           print.at("\"Occupied! I'll be out in a minute.\"",11, 46, 35);
@@ -411,6 +965,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       [ office door
       if (mouseX > 126 && mouseX < 140) {
         if (posn(ego, 120, 132, 140, 138)) {
+          :knockoffice
           print("KNOCK KNOCK");
           print("No answer. And the door is locked. Dr. Brane must be at his castle today.");
         } else {
@@ -446,170 +1001,21 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   :doneclick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-
-[**************************************************************
-[ CLOSET DOOR
-[**************************************************************
-if (opendoor) {
-  reset(opendoor);
-  if (closetopen) {
-    print("The closet door is already open.");
-  } else {
-    if (posn(ego, 12, 129, 29, 148)) {
-    
-      [ only play sound effects if walkman not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        [ play door-open sound, using current sound settings
-        call(lgc.SetSound);
-        sound(s.DoorOpen, soundDone);
-        set(playSound);
-      }
-      end.of.loop(oClosetDoor, fDoorDone);
-      if (!scoreClosetDoor) {
-        set(scoreClosetDoor);
-        work1 = 1;
-        call(lgc.ScoreHandler);
-      }
-    } else {
-      print("You are not close enough.");
-    }
-  }
-}
-if (closedoor) {
-  reset(closedoor);
-  if (closetopen) {
-    if (posn(ego, 12, 129, 29, 148)) {
-      [ only play sound effects if walkman not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        [ play door-open sound, using current sound settings
-        call(lgc.SetSound);
-        sound(s.DoorClose, soundDone);
-        set(playSound);
-      }
-      reverse.loop(oClosetDoor, fDoorDone);
-    } else {
-      print("You are not close enough.");
-    }
-  } else {
-    print("The closet door is already closed.");
-  }
-}
-if (fDoorDone) {
-  reset(fDoorDone);
-  if (closetopen) {
-    reset(closetopen);
-  } else {
-    set(closetopen);
-  }
-}
-    
-[**************************************************************
-[ EXAM ROOM DOOR
-[**************************************************************
-if (openExamDoor) {
-  [ only play sound effects if walkman not in use
-  if ((currentTrack == 0 || currentTrack > 128)) {
-    [ play open-door sound, using current sound settings
-    call(lgc.SetSound);
-    sound(s.DoorOpen, soundDone);
-    set(playSound);
-  }
-  reset(openExamDoor);
-  examDoorSeq = OPENED;
-  end.of.loop(oExamDoor, fExamDoorDone);
-  set.cel(oNurse, 8);
-  stop.cycling(oNurse);
-  draw(oNurse);
-  prevent.input();
-  program.control();
-}
-
-if (fExamDoorDone) {
-  reset(fExamDoorDone);
-  if (examDoorSeq == OPENED) {
-    [ nurse turns around
-    examDoorSeq = NURSETURN;
-    reverse.loop(oNurse, fExamDoorDone);
-    goto(doneEDoorSeq);
-  }
-  if (examDoorSeq == NURSETURN) {
-    block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
-    if (gExamCount < 4) {
-      examDoorSeq = NURSETALK;
-      if (gExamCount == 0) {
-        print("I'm sorry, I'm conducting a patient exam right now, you can't come in.");
-      }
-      if (gExamCount == 1) {
-        print("Hey! Close that door, I'm in the middle of a patient exam!");
-      }
-      if (gExamCount == 2) {
-        print("I said close that door! You can't come in here!");
-      }
-      if (gExamCount == 3) {
-        print("Please stop interrupting me, or I will call security!");
-      }
-      ++gExamCount;
-      [ nurse closes the door
-      reverse.loop(oExamDoor, fExamDoorDone);
-      normal.cycle(oNurse);
-      [ only play sound effects if walkman not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        [ play door-close sound, using current sound settings
-        call(lgc.SetSound);
-        sound(s.DoorClose, soundDone);
-        set(playSound);
-      }
-    } else {
-      print("I asked you to stop interrupting!! Security!!!");
-      prevent.input();
-      program.control();
-      [ switch to wait cursor
-      [ show wait cursor
-      cursoricon = C_WAIT;
-      set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-      set(disableGameFunctions);
-      arrestSeq = COPARRIVES;
-      [ if walkman in use, stop it
-      if (currentTrack >0 && currentTrack < 128) {
-        currentTrack *= -1;
-        stop.sound();
-        reset(playSound);
-      }
-      [ play call-cops music, using current sound settings
-      call(lgc.SetSound);
-      sound(s.CallCops, soundDone);
-      set(playSound);
-    }
-    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-    goto(doneEDoorSeq);
-  }
-  if (examDoorSeq == NURSETALK) {
-    accept.input();
-    player.control();
-    erase(oNurse);
-    examDoorSeq = SHUT;
-  }
-}
-:doneEDoorSeq
-
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 if (egoHitSpecial) {
   if (closetopen) {
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
     [ fade out, then change room
-    block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.Closet);  [ ##LE002##
   } else {
     [ don't let ego go through the door
@@ -621,16 +1027,16 @@ if (egoHitSpecial) {
 if ((edgeEgoHit == RIGHT_EDGE || !allowedPastLobby)) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.Lobby);  [ ##LE001##
 }
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

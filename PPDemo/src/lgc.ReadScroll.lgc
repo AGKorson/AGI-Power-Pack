@@ -1,11 +1,23 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.ReadScroll
 [ 
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ pause game clock while reading
-block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ no script entries for this sequence
 set(noScript);
@@ -14,13 +26,13 @@ prevent.input();
 status.line.off();
 
 [ set colors
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ fade out until done loading cover
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 
 [ hide objects while showing manual
 block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
@@ -28,7 +40,7 @@ block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
 work1 = 64;
 block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
 [ use custom palette
-block(SET.PALETTE, 0, &m9, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+block(SET.PALETTE, BYNUM, &m9, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
 
 work1 = pic.Scroll;
 load.pic(work1);
@@ -89,7 +101,7 @@ display(13, 66, "!");
 display(15, 38, "VI");
 
 [ fade back in
-block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
 lastChar = 0;
@@ -101,20 +113,20 @@ if (!have.key()) {
 
 :closemanual
 [ pop colors
-set.text.attribute(0, -1);
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 [ fade out during the switch
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 [ clear sreen before palette change
 work1 = 64;
 block(PIC.CLEAR, -1, &work1, 0); [ pic.clear(vCOLORS)
 [ restore palette
-block(SET.PALETTE, 0, &m10, 1); [ set.palette(BYVAR, PALETTE, LOADONLY)
+block(SET.PALETTE, BYNUM, &m10, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

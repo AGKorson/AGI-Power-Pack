@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.TerminalFunctions
 [ 
@@ -9,8 +9,14 @@
 [ LOGOFF     MD         MKDIR      RD
 [ RMDIR      REN        RENAME     SUDO
 [ TYPE       VER        VOL
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define cursor_row    v240
 #define cursor_col    v241
 #define cursor_char   v242
@@ -74,6 +80,10 @@
 #define BTMROW        18
 #define LEFTCOL        9
 #define RIGHTCOL      48
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ linefeed
 :addlinefeed
@@ -448,7 +458,7 @@ if (terminalfn == FORMAT_A) {
         }
         ++work2;
         block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
-        block(STR.CONCAT, &floppylabel, &char, 0); [ sINPUT, sADD);
+        block(STR.CONCAT, &floppylabel, &char, 0); [ str.concat(sINPUT, sADD);
         work1 = &charmsg;
         display.v(cursor_row, cursor_col, work1);
         
@@ -474,15 +484,15 @@ if (terminalfn == FORMAT_A) {
   block(BYTE2HEX, &sTemp2, &work1, 0); [ byte2hex(sRESULT, vINPUT)
   random(0, 255, work1);
   block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ str.concat(sINPUT, sADD)
   sTemp3 = "-";
-  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ str.concat(sINPUT, sADD)
   random(0, 255, work1);
   block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ str.concat(sINPUT, sADD)
   random(0, 255, work1);
   block(BYTE2HEX, &sTemp3, &work1, 0); [ byte2hex(sRESULT, vINPUT)
-  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sTemp2, &sTemp3, 0); [ str.concat(sINPUT, sADD)
   block(STR.UPPER, &sTemp2, &sTemp2, 0); [ str.upper(sINPUT, sRESULT)
   output = "Volume Serial Number is %s17";
   terminalfn = ADDLINE_LF;
@@ -524,7 +534,6 @@ if (terminalfn == SHOW_HELP) {
   sTemp2 = "";
   if (compare.strings(input, sTemp2)) {
     [ no argument - show list of commands
-    :showhelp
     output = "valid commands:";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
@@ -694,6 +703,11 @@ if (terminalfn == SHOW_HELP) {
       output = "        is started";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
+      
+      output = "  open: opens a subsystem on dedicated";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
+      output = "        monitor";
       return();
     }
     sTemp2 = "CLS";
@@ -1134,9 +1148,9 @@ if (terminalfn == SHOW_HELP) {
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "_"
 #message 2 " "
 #message 3 "%s13"

@@ -10,6 +10,18 @@
 [ max negative value is -250  
 [ max positive value is +250
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 [ ignore if game is over
 if (deathType == DT_GAME_OVER) {
   return();
@@ -52,6 +64,6 @@ if (negativeScore) {
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************

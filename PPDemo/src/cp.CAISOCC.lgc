@@ -1,12 +1,18 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ cp.CAISOCC
 [
 [ Custom Acoustic Instrument Setting Options Control Console
 [ CAISOCC
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -145,7 +151,10 @@
 #define sTemp         s14 [ s15
 #define sTemp2        s16
 
-[if this control panel is not enabled show error screen
+[***************************************
+[ ERROR CHECK
+[***************************************
+[ if this control panel is not enabled show error screen
 if (!enableCAISOCC) {
   if (newRoom) {
     work1 = pic.cp.Error;
@@ -153,36 +162,36 @@ if (!enableCAISOCC) {
     draw.pic(work1);
     discard.pic(work1);
     show.pic();
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
-    set.text.attribute(0, -1);
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
-if(newRoom) {
+[***************************************
+if (newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
   
   [ if first time, score it
   work1 = cpusage;
-  block(BIT.AND, 0, &work1, 1); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 1); [ bit.and(FN_MODE, VAR, MASK)
   if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
-    block(BIT.OR, 0, &cpusage, 1); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &cpusage, 1); [ bit.or(FN_MODE, VAR, MASK)
   }
   
   [ load, draw and discard the picture resource for the current room
@@ -292,7 +301,7 @@ if(newRoom) {
     sTemp = "%s";
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
     block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYVAR, &work3, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     ++work1;
     ++work2;
     ++work3;
@@ -307,7 +316,7 @@ if(newRoom) {
   clear.lines(22, 22, LT_GRAY);
   
   [ add labels
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(WHITE, LT_GRAY);
   display(5, 37, "Modulator");
   display(5, 63, "Carrier");
@@ -357,7 +366,7 @@ if(newRoom) {
   display(3, 71, "Reset");
   
   [ pop colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ default to first custom instrument
   selinst = 1;
@@ -376,13 +385,17 @@ if(newRoom) {
   set(loadinst);
   
   [ remember to fade in to be able to see the screen again
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
 }
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ check for forced screen update
 if (update) {
   [ redraw the list box
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ instrument choices
   work1 = 11;
@@ -409,7 +422,7 @@ if (update) {
   if (work1 < 16) {
     goto(Loop2);
   }
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ always reset
   reset(update); 
@@ -461,7 +474,7 @@ if (dropmode == DROPDOWN) {
   draw(oCursorR);
   
   [ add arrows
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, LT_GRAY);
   tmpRow = 10;
   tmpCol = 24;
@@ -470,7 +483,7 @@ if (dropmode == DROPDOWN) {
   tmpRow += 6;
   work3 = &m144;
   display.v(tmpRow, tmpCol, work3);
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ show scrollbar background
   cursorX = 48;
@@ -480,14 +493,14 @@ if (dropmode == DROPDOWN) {
   draw(oScrlBkgd);
   
   [ buttons are disabled while dropdown has focus
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(LT_GRAY, WHITE);
   display(18, 6, "Done");
   display(18, 19, "Test");
   display(3, 60, "Save");
   display(3, 71, "Reset");
   display(20, 6, "Copy Instrument...");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ begin choosing
   dropmode = CHOOSING;
@@ -711,7 +724,7 @@ if (redrawList) {
   
   [ use a loop to draw the instrument text
   cursorX = 0;
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   :PrintInst
     if (cursorX == listrow) {
       set.text.attribute(WHITE, BLACK);
@@ -733,7 +746,7 @@ if (redrawList) {
   if (cursorX < 7) {
     goto(PrintInst);
   }
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ position the scrollbar box
   cursorX = 48;
@@ -799,7 +812,7 @@ if (dropmode == DROPUP) {
     tmpVal = &sTemp;
     work1 = selinst;
     work1 += 131;
-    block(SET.MSG, 1, &work1, &tmpVal); [ set.msg(BYVAL, MSGOLD, STRNEW);
+    block(SET.MSG, BYVAR, &work1, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW);
     [ mark it as dirty
     set(instDirty);
     [ redraw instrument
@@ -810,7 +823,7 @@ if (dropmode == DROPUP) {
   set(update);
   
   [ re-enable buttons
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
   display(18, 6, "Done");
   display(18, 19, "Test");
@@ -823,7 +836,7 @@ if (dropmode == DROPUP) {
   }
   display(3, 60, "Save");
   display(3, 71, "Reset");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 [ if showing dropbox, don't process other cursor statements
@@ -855,7 +868,7 @@ if (loadinst) {
   [  10 = 1.5 dB/8ve; 01 = -3 db/8ve; 11 = -6 dB/8ve
   [  "causes output levels to decrease as the frequency rises"
   [ I don't think they're related at all
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ if copying an instrument show all fields as 'edited'
   if (selectItem) {
@@ -880,7 +893,7 @@ if (loadinst) {
   tmpRow = 6;
   tmpCol = 32;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 127); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 127); [ bit.and(FN_MODE, VAR, MASK)
   [ mod Vibrato
   if (work1 > 63) {
     work2 = &m138;
@@ -891,7 +904,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 63); [ bit.and(FN_MODE, VAR, MASK)
   [ mod Sustain
   if (work1 > 31) {
     work2 = &m138;
@@ -902,7 +915,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 31); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 31); [ bit.and(FN_MODE, VAR, MASK)
   [ mod keyb scaling
   if (work1 > 15) {
     work2 = &m138;
@@ -921,7 +934,7 @@ if (loadinst) {
     set.text.attribute(WHITE, BLUE);
   }
   [ freq mult
-  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
   modFreqMult = work1;
   tmpRow = 11;
   tmpCol += 14;
@@ -937,10 +950,10 @@ if (loadinst) {
   work1 = 6;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ KSL
-  block(BIT.AND, 0, &work1, 192); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 192); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 64;
   modKSL = work1;
   ++tmpRow;
@@ -948,7 +961,7 @@ if (loadinst) {
   display.v(tmpRow, tmpCol, work2);
   [ output level
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 63); [ bit.and(FN_MODE, VAR, MASK)
   modLevel = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -963,10 +976,10 @@ if (loadinst) {
   work1 = 10;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ attack
-  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 240); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 16;
   modAttack = work1;
   ++tmpRow;
@@ -978,7 +991,7 @@ if (loadinst) {
   display.v(tmpRow, tmpCol, work2);
   [ decay
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
   modDecay = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -993,10 +1006,10 @@ if (loadinst) {
   work1 = 14;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ sustainlvl
-  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 240); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 16;
   modSusLvl = work1;
   ++tmpRow;
@@ -1008,7 +1021,7 @@ if (loadinst) {
   display.v(tmpRow, tmpCol, work2);
   [ release rate
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
   modRelease = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1023,10 +1036,10 @@ if (loadinst) {
   work1 = 18;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ wave form
-  block(BIT.AND, 0, &work1, 3); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 3); [ bit.and(FN_MODE, VAR, MASK)
   modWaveForm = work1;
   ++tmpRow;
   work2 = &m140;
@@ -1044,7 +1057,7 @@ if (loadinst) {
   work1 = 4;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ car Tremolo
   if (work1 > 127) {
@@ -1057,7 +1070,7 @@ if (loadinst) {
   tmpRow = 6;
   tmpCol = 57;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 127); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 127); [ bit.and(FN_MODE, VAR, MASK)
   [ car Vibrato
   if (work1 > 63) {
     work2 = &m138;
@@ -1068,7 +1081,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 63); [ bit.and(FN_MODE, VAR, MASK)
   [ car Sustain
   if (work1 > 31) {
     work2 = &m138;
@@ -1079,7 +1092,7 @@ if (loadinst) {
   }
   ++tmpRow;
   display.v(tmpRow, tmpCol, work2);
-  block(BIT.AND, 0, &work1, 31); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 31); [ bit.and(FN_MODE, VAR, MASK)
   [ car keyb scaling
   if (work1 > 15) {
     work2 = &m138;
@@ -1099,7 +1112,7 @@ if (loadinst) {
   }
   
   [ freq mult
-  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
   carFreqMult = work1;
   tmpRow = 11;
   tmpCol = 71;
@@ -1115,10 +1128,10 @@ if (loadinst) {
   work1 = 8;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ KSL
-  block(BIT.AND, 0, &work1, 192); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 192); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 64;
   carKSL = work1;
   ++tmpRow;
@@ -1126,7 +1139,7 @@ if (loadinst) {
   display.v(tmpRow, tmpCol, work2);
   [ output level
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 63); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 63); [ bit.and(FN_MODE, VAR, MASK)
   carLevel = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1141,10 +1154,10 @@ if (loadinst) {
   work1 = 12;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ attack
-  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 240); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 16;
   carAttack = work1;
   ++tmpRow;
@@ -1156,7 +1169,7 @@ if (loadinst) {
   display.v(tmpRow, tmpCol, work2);
   [ decay
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
   carDecay = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1171,10 +1184,10 @@ if (loadinst) {
   work1 = 16;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ sustainlvl
-  block(BIT.AND, 0, &work1, 240); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 240); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 16;
   carSusLvl = work1;
   ++tmpRow;
@@ -1186,7 +1199,7 @@ if (loadinst) {
   display.v(tmpRow, tmpCol, work2);
   [ release rate
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 15); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 15); [ bit.and(FN_MODE, VAR, MASK)
   carRelease = work1;
   ++tmpRow;
   if (work1 < 10) {
@@ -1201,10 +1214,10 @@ if (loadinst) {
   work1 = 20;
   block(STR.LEFT, &strInst, &strByte, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.RIGHT, &strByte, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strByte, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ wave form
-  block(BIT.AND, 0, &work1, 3); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 3); [ bit.and(FN_MODE, VAR, MASK)
   carWaveForm = work1;
   ++tmpRow;
   work2 = &m140;
@@ -1214,10 +1227,10 @@ if (loadinst) {
   [              bit:    7   6   5   4   3   2   1   0
   [ byte 11:           | 0   0   0   0 | feedback |con|
   work1 = 2;
-  block(STR.RIGHT, &strInst, &strByte, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+  block(STR.RIGHT, &strInst, &strByte, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   [ feedback
-  block(BIT.AND, 0, &work1, 14); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 14); [ bit.and(FN_MODE, VAR, MASK)
   work1 /= 2;
   feedback = work1;
   tmpRow = 20;
@@ -1232,7 +1245,7 @@ if (loadinst) {
     set.text.attribute(WHITE, CYAN);
   }
   block(HEX2BYTE, &strByte, &work1, 0); [ hex2byte(sINPUT, vRESULT)
-  block(BIT.AND, 0, &work1, 1); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 1); [ bit.and(FN_MODE, VAR, MASK)
   tmpCol = 57;
   if (work1 > 0) {
     work2 = &m138;
@@ -1243,11 +1256,11 @@ if (loadinst) {
   }
   display.v(tmpRow, tmpCol, work2);
   
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   reset(loadinst);
   [ if copying, instrument has changed
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   if (selectItem) {
     set.text.attribute(BLACK, WHITE);
     set(instdirty);
@@ -1257,7 +1270,7 @@ if (loadinst) {
   }
   display(3, 60, "Save");
   display(3, 71, "Reset");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   reset(selectItem);
 }
 
@@ -1798,10 +1811,10 @@ if (cursorpos != newpos) {
     }
     tmpRow = 22;
     tmpCol = 5;
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(BLACK, LT_GRAY);
     display.v(tmpRow, tmpCol, work1);   
-    set.text.attribute(0, -1);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   }
   
 } [ end if (cursorpos != newpos)
@@ -1826,9 +1839,9 @@ if (btnAction > 0) {
 
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(0, &m160, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYNUM, &m160, mouse); [ set.cursor(FN_MODE, MSGNUM);
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     
     [ go back to control room
     new.room(rm.ControlRoom); [ ##LE002##
@@ -1935,11 +1948,11 @@ if (btnAction > 0) {
     work3 = 131;
     work3 += selinst;
     tmpVal = &sTemp;
-    block(STR.COPY, &strInst, &sTemp, 0); [ str.copy(sFROM, sTO);
+    block(STR.COPY, &strInst, &sTemp, 0); [ str.copy(sINPUT, sRESULT);
     strByte = "Custom Inst %v221       ";
     block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
     block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
-    block(SET.MSG, 1, &work3, &tmpVal); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYVAR, &work3, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     
     [ save it
     if (selinst == 1) {
@@ -1966,11 +1979,11 @@ if (btnAction > 0) {
 
     [ reset dirty flag
     reset(instDirty);
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(LT_GRAY, WHITE);
     display(3, 60, "Save");
     display(3, 71, "Reset");
-    set.text.attribute(0, -1);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     
     [ force reload to reset edit status
     set(loadinst);
@@ -1978,7 +1991,7 @@ if (btnAction > 0) {
    
   [ Test button
   if (btnAction == B_TEST) {
-    block(SET.MSG, 0, &m142, &strInst); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &m142, &strInst); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     work1 = 0;
     work2 = &strInst;
     set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
@@ -1987,10 +2000,10 @@ if (btnAction > 0) {
 [sound(s.Tone0, soundDone);
     set(sndTest);
     [ update button test
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(BLACK, WHITE);
     display(18, 19, "Stop");
-    set.text.attribute(0, -1);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   }
   
   [ Stop button
@@ -2012,10 +2025,10 @@ if (btnAction > 0) {
 if (soundDone) {
   reset(soundDone);
   reset(sndTest);
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
   display(18, 19, "Test");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 [ check for key press in a text box or check box
@@ -2025,7 +2038,7 @@ if (cursorpos > CP_TEST) {
     if ((lastChar == 32 || toggleCheck)) {
       if (!inTextBox) {
       [ push colors
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, LT_CYAN);
         if (cursorpos < CP_M_FREQ) {
           [ toggle modulator flag f230-f233
@@ -2072,7 +2085,7 @@ if (cursorpos > CP_TEST) {
         display(3, 60, "Save");
         display(3, 71, "Reset");
         [ pop colors
-        set.text.attribute(0, -1);
+        set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
       }
     }
     
@@ -2131,7 +2144,7 @@ if (cursorpos > CP_TEST) {
       if (cursorpos == CP_FDBACK) {
         ++tmpRow;
       }
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(YELLOW, BLUE); [BLACK, LT_BLUE);
       tmpVal = &m140;
       if (work1 > 9) {
@@ -2143,7 +2156,7 @@ if (cursorpos > CP_TEST) {
       set.text.attribute(BLACK, WHITE);
       display(3, 60, "Save");
       display(3, 71, "Reset");
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     }
     reset(toggleCheck);
   }
@@ -2152,9 +2165,9 @@ if (cursorpos > CP_TEST) {
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 [ actual channel values start at zero, but because
 [ messages have to start at zero, they get a '+1' offset
 #message 1 "02023000F1F58404000000Acoust. Grand Piano "

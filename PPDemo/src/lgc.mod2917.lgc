@@ -202,6 +202,8 @@
 [
 [******************************************************************************
 
+[ power pack defines file
+#include "powerpack.txt"
 
 [******************************************************************************
 [ these strings are used in several of the patches; instead of using a 
@@ -958,7 +960,7 @@ if (said(1, NULLMSG, 7639, 0)){} [ DS:1DD7
 [   disable.item(c255);
 [
 [   [ to load a cursor:
-[   set.key(BYVAR, mCURSOR*, c255);
+[   set.key(FN_MODE, mCURSOR*, c255);
 [
 [   [ to change mouse variables:
 [   block(-3, XVAR, YVAR, BVAR);
@@ -2036,7 +2038,7 @@ if (said(3, 153, 3372)){} [ 0D2C
 [  *** The compiler expects numbers for all arguments so pass variables and 
 [      flags as numbers, without the 'v' or 'f' prefix
 [
-[ **** This argument is ignored, so it can be any value
+[***** This argument is ignored, so it can be any value
 [
 [ LIMITATIONS/CONSIDERATIONS: The turbo mode runs game cycles three times 
 [ faster than normal. So if animationInterval (v10) is 1 in normal mode, 
@@ -2742,13 +2744,13 @@ if (said(1, 201, 6530)){} [ 1982
 [
 [ SYNTAX: 
 [   [ to change the palette
-[   block(-21, BYVAR, PALETTE, LOADONLY);
+[   block(-21, FN_MODE, PALETTE, LOADONLY);
 [
 [   [ to fade screen in from blank 
-[   block(-22, BYVAR, DELAY, COLOR); 
+[   block(-22, FN_MODE, DELAY, COLOR); 
 [
 [   [ to fade screen out to blank
-[   block(-23, BYVAR, DELAY, COLOR);
+[   block(-23, FN_MODE, DELAY, COLOR);
 [
 [ LIMITATIONS/CONSIDERATIONS: To change the current display palette, use the 
 [ block command with -19 as the first argument. PALETTE is a message that 
@@ -2777,7 +2779,7 @@ if (said(1, 201, 6530)){} [ 1982
 [ out command, there is a matching fade in command to restore the screen. 
 [
 [ By default, arguments are passed as numbers. If you want to pass them by 
-[ variable, use a numeric value of 1 for BYVAR; the other two arguments in all 
+[ variable, use a numeric value of 1 for FN_MODE; the other two arguments in all 
 [ commands will then be passed by variable.
 [
 [ The Power Pack Demo game contains many examples and more detailed 
@@ -2848,7 +2850,7 @@ if (said(614, 202, 52024)){} [ CB38
 [ when the assigned messages changes.
 [
 [ SYNTAX:
-[   block(-24, BYVAR, MSGOLD*, STRNEW*);
+[   block(-24, FN_MODE, MSGOLD*, STRNEW*);
 [
 [    * The compiler expects numbers for all arguments so pass messages, strings
 [      and variables as numbers, without the 'm', 's' or 'v' prefix
@@ -2865,7 +2867,7 @@ if (said(614, 202, 52024)){} [ CB38
 [ explanations on how to manage message changes.
 [
 [ By default, MSGOLD and STRNEW are passed as numbers, i.e. 'm1', 's2'. To pass
-[ by variable, use a numeric value of 1 for BYVAR; the other two arguments 
+[ by variable, use a numeric value of 1 for FN_MODE; the other two arguments 
 [ will then be passed by variable.
 [
 [ One of the primary benefits of changing messages is the ability to create 
@@ -2909,7 +2911,7 @@ if (said(26, 206, 19693)){} [ 4CED
 [ to a string value.
 [
 [ SYNTAX:
-[   block(-25, BYVAR, ITEM*, STRNEW*);
+[   block(-25, FN_MODE, ITEM*, STRNEW*);
 [
 [    * The compiler expects numbers for all arguments so pass messages, strings
 [      and variables as numbers, without the 'i', 's' or 'v' prefix
@@ -2923,7 +2925,7 @@ if (said(26, 206, 19693)){} [ 4CED
 [ how to manage item changes.
 [
 [ By default, ITEM and STRNEW are passed as numbers, i.e. 'i1', 's2'. To pass 
-[ by variable, use a numeric value of 1 for BYVAR; the other two arguments 
+[ by variable, use a numeric value of 1 for FN_MODE; the other two arguments 
 [ will then be passed by variable.
 [
 [ PATCH CODE:
@@ -3083,22 +3085,22 @@ if (said(41, 211, 53156)){} [ CFA4
 [
 [ SYNTAX:
 [   [ BIT_AND
-[   block(-31, BYVAR, vNUM*, AMOUNT); 
+[   block(-31, FN_MODE, vNUM*, AMOUNT); 
 [
 [   [ BIT_OR
-[   block(-32, BYVAR, vNUM*, AMOUNT);
+[   block(-32, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ BIT_XOR
-[   block(-33, BYVAR, vNUM*, AMOUNT);
+[   block(-33, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ BIT_NOT
 [   block(-34, ANY**, vNUM*, ANY**);
 [
 [   [ BIT_SHL
-[   block(-35, BYVAR, vNUM*, AMOUNT);
+[   block(-35, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ BIT_SHR
-[   block(-36, BYVAR, vNUM*, AMOUNT);
+[   block(-36, FN_MODE, vNUM*, AMOUNT);
 [
 [    * The compiler expects numbers for all arguments so pass variables as
 [      numbers, without the 'v' prefix
@@ -3106,7 +3108,7 @@ if (said(41, 211, 53156)){} [ CFA4
 [   ** This argument is ignored, so it can be any value
 [
 [ LIMITATIONS/CONSIDERATIONS: The value passed as AMOUNT is bit-operated into
-[ variable vNUM. If the BYVAR argument is non-zero, then AMOUNT is treated as
+[ variable vNUM. If the FN_MODE argument is non-zero, then AMOUNT is treated as
 [ a variable, and its value is used in the bit-operations on vNUM.
 [
 [ PATCH CODE:
@@ -3606,16 +3608,16 @@ if (said(3, 226, 2246)){} [ 08C6
 [
 [ SYNTAX:
 [   [ MUL.N/V
-[   block(-45, BYVAR, vNUM*, AMOUNT);
+[   block(-45, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ DIV.N/V
-[   block(-46, BYVAR, vNUM*, AMOUNT);
+[   block(-46, FN_MODE, vNUM*, AMOUNT);
 [
 [    * The compiler expects numbers for all arguments so pass variables as
 [      numbers, without the 'v' prefix
 [
 [ LIMITATIONS/CONSIDERATIONS: The value passed as AMOUNT is multiplied/divided 
-[ into variable vNUM. If the BYVAR argument is non-zero, then AMOUNT is  
+[ into variable vNUM. If the FN_MODE argument is non-zero, then AMOUNT is  
 [ treated a variable, and its value is used in the operation on vNUM.
 [
 [ Do NOT divide by zero. It will crash AGI. 
@@ -3952,7 +3954,7 @@ stop.sound();
 return();
 
 
-[ **************************************
+[***************************************
 [ MESSAGES
-[ **************************************
+[***************************************
 [ for easier reference, messages are declared as they are used

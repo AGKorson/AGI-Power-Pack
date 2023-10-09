@@ -1,0 +1,219 @@
+[ 
+[ AGI Power Pack Defines
+[
+[ This list of defines includes values for all AGI Power Pack functions
+[ making it easier to implement them. See the Power Pack logic for details
+[ on each function, including syntax, limitations and considerations
+[
+[ The defines in this list are also compatible with the snippets that 
+[ can be found in pp_snippets.txt. Import them into your WinAGI GDS 
+[ snippets.txt file to use them.
+[ 
+[**********************************************************************
+[ Interpreter versions
+[    The detection function in lgc.PowerPack  and lgc.VersionCheck use 
+[    this variable to determine which power pack modification logic to 
+[    run.
+[**********************************************************************
+#define IntVersion             v30
+#define VERSION_2089             1
+#define VERSION_2272             2
+#define VERSION_2411             3
+#define VERSION_2425             4
+#define VERSION_2426             5
+#define VERSION_2435             6
+#define VERSION_2439             7
+#define VERSION_2440             8
+#define VERSION_2903             9
+#define VERSION_2911            10
+#define VERSION_2912            11
+#define VERSION_2915            12
+#define VERSION_2917            13
+#define VERSION_2936            14
+#define VERSION_3002086         15
+#define VERSION_3002098         16
+#define VERSION_3002102         17
+#define VERSION_3002107         18
+#define VERSION_3002149         19
+
+[***********************************
+[ additional reserved data elements:
+[***********************************
+#define click2move             f17  [ when true, left click moves ego
+#define 4channelsound          f18  [ when true, use four channel sound instead of PC speaker
+
+[*************************
+[ function mode constants:
+[*************************
+#define BYNUM                    0
+#define BYVAR                    1
+
+[****************************
+[ mouse and cursor functions:
+[****************************
+#define mouse                 c255
+[ show mouse:       enable.item(mouse);
+[ hide mouse:       disable.item(mouse);
+[ set the cursor:   set.key(FN_MODE, mCURSOR, mouse);
+
+[**************************************
+[ BLOCK command new function constants:
+[**************************************
+#define MSGBOX.COLOR.V          -1  [ block(MSGBOX.COLOR.V, vBORDER, vFG, vBG); 
+#define MSGBOX.COLOR            -2  [ block(MSGBOX.COLOR, BORDER, FG, BG);
+#define CONFIGURE.MOUSE         -3  [ block(CONFIGURE.MOUSE, XVAR, YVAR, BTNVAR);
+#define STR.LEN                 -4  [ block(STR.LEN, sINPUT, vRESULT, 0); 
+#define STR.COPY                -5  [ block(STR.COPY, sINPUT, sRESULT, 0);
+#define STR.CONCAT              -6  [ block(STR.CONCAT, sINPUT, sADD, 0);
+#define STR.LEFT                -7  [ block(STR.LEFT, sINPUT, sRESULT, vCOUNT);
+#define STR.RIGHT               -8  [ block(STR.RIGHT, sINPUT, sRESULT, vCOUNT);
+#define STR.MID                 -9  [ block(STR.MID, sINPUT, vPOS, vLEN);
+#define STR.TRIM               -10  [ block(STR.TRIM, sINPUT, sRESULT, vMODE);
+[ str.trim mode constants:
+    #define TRIM_ALL             0
+    #define TRIM_LEFT            1
+    #define TRIM_RIGHT           2
+    #define TRIM_AGI             3
+#define INSTR                  -11  [ block(INSTR, sINPUT, vCHAR, vPOS);
+#define STR.FORMAT             -12  [ block(STR.FORMAT, sINPUT, sRESULT, 0);
+#define STR2BYTE               -13  [ block(STR2BYTE, sINPUT, vRESULT, 0);
+#define HEX2BYTE               -14  [ block(HEX2BYTE, sINPUT, vRESULT, 0);
+#define BYTE2HEX               -15  [ block(BYTE2HEX, sRESULT, vINPUT, 0);
+#define STR.UPPER              -16  [ block(STR.UPPER, sINPUT, sRESULT, 0);
+#define STR.LOWER              -17  [ block(STR.LOWER, sINPUT, sRESULT, 0);
+#define BYTE2CHAR              -18  [ block(BYTE2CHAR, sRESULT, vCHAR, 0);
+#define CHAR2BYTE              -19  [ block(CHAR2BYTE, sCHAR, vRESULT, 0);
+#define SET.STRING.V           -20  [ block(SET.STRING.V, vSTR, vMSG, 0);
+#define SET.PALETTE            -21  [ block(SET.PALETTE, FN_MODE, PALETTE, LOADONLY);
+#define FADE.IN                -22  [ block(FADE.IN, FN_MODE, DELAY, COLOR);
+#define FADE.OUT               -23  [ block(FADE.OUT, FN_MODE, DELAY, COLOR);
+#define SET.MSG                -24  [ block(SET.MSG, FN_MODE, MSGOLD, STRNEW);
+#define SET.ITEM               -25  [ block(SET.ITEM, FN_MODE, ITEM, STRNEW);
+#define ITEM.COUNT             -26  [ block(ITEM.COUNT, vLOCATION, vRESULT, 0);
+#define PIC.DRAW               -27  [ block(PIC.DRAW, FILLSTYLE, sCMDS, 0);
+[ pic.draw fillstyle constants:
+    #define AGI_FILL             0
+    #define COLOR_FILL           1
+#define PIC.CLEAR              -27  [ block(PIC.CLEAR, FILLSTYLE, vCOLORPAIR, 0);
+[ pic.clear fillstyle constant:
+    #define CLEAR_SCREEN        -1
+#define GET.PIXEL              -28  [ block(GET.PIXEL, vX, vY, vRESULT);
+#define START.TIMER            -29  [ block(START.TIMER, vMINUTES, vSECONDS, fDONE);
+#define TOGGLE.TIMER           -30  [ block(TOGGLE.TIMER, STATE, 0, 0);
+[ toggle.timer mode constants:
+    #define STOP_TIMER           0
+    #define START_TIMER          1
+#define BIT.AND                -31  [ block(BIT.AND, FN_MODE, VAR, MASK);
+#define BIT.OR                 -32  [ block(BIT.OR, FN_MODE, VAR, MASK);
+#define BIT.XOR                -33  [ block(BIT.XOR, FN_MODE, VAR, MASK);
+#define BIT.NOT                -34  [ block(BIT.NOT, VAR);
+#define BIT.SHL                -35  [ block(BIT.SHL, FN_MODE, VAR, SHIFT);
+#define BIT.SHR                -36  [ block(BIT.SHR, FN_MODE, VAR, SHIFT);
+#define GET.DATE               -37  [ block(GET.DATE, vYEAR, vMONTH, vDAY);
+#define GET.TIME               -38  [ block(GET.TIME, vHOUR, vMINUTE, vSECOND);
+#define GET.DAYOFWEEK          -39  [ block(GET.DAYOFWEEK, vDOW, 0, 0);
+#define NEW.FILE               -40  [ block(NEW.FILE, sFILENAME, vSTART, vEND);
+#define SAVE.STRING            -41  [ block(SAVE.STRING, sFILENAME, vINDEX, vSTROUT);
+#define READ.STRING            -42  [ block(READ.STRING, sFILENAME, vINDEX, vSTRIN);
+#define DELETE.FILE            -43  [ block(DELETE.FILE, sFILENAME, 0, 0);
+#define GET.SHIFTSTATE         -44  [ block(GET.SHIFTSTATE, vSTATE, 0, 0);
+#define MUL                    -45  [ block(MUL, FN_MODE, VAR1, VAR2);
+#define DIV                    -46  [ block(DIV, FN_MODE, VAR1, VAR2);
+#define HIDE.OBJS              -47  [ block(HIDE.OBJS, MODE, 0, 0);
+[ hide.objs mode constants:
+    #define SHOW_OBJS            0
+    #define HIDE_OBJS            1
+#define PAUSE.CLOCK            -48  [ block(PAUSE.CLOCK, MODE, 0, 0);
+[ pause.clock mode constants:
+    #define START_CLOCK          0
+    #define PAUSE_CLOCK          1
+#define SND.V.FN               -49  [ block(SND.V.FN, FNTYPE, VAR1, VAR2);
+[ sound-by-variable function types:
+    #define LOAD.SOUND.V         0  [ block(SND.V.FN, LOAD.SOUND.V, vSNDNUM, 0);
+    #define SOUND.V         1  [ block(SND.V.FN, SOUND.V, vSNDNUM, vDONEFLAG);
+    #define DISCARD.SOUND.V      2  [ block(SND.V.FN, DISCARD.SOUND.V, vSNDNUM, 0);
+
+[************************************************
+[ CONFIGURE.SCREEN command new function constant:
+[************************************************
+#define SCREEN.MODE             -1  [ configure.screen(SCREEN.MODE, MODE, WIDTH);
+[ screen mode constants:
+    #define GRAFMODE             0
+    #define TEXTMODE             1
+[ screen width constants:
+    #define 40COL                0
+    #define 80COL                1
+
+[*******************************************
+[ CYCLE.TIME command new function constants:
+[*******************************************
+#define TOGGLE.TURBO          o255  [ cycle.time(TOGGLE.TURBO, vMODE);
+[ turbo mode constants:
+    #define NORMAL_SPEED         0
+    #define TURBO_SPEED          1
+#define DELAY.TIME            o254  [ cycle.time(DELAY.TIME, vCOUNT);
+
+[*******************************************
+[ GET.STRING command new function constants:
+[*******************************************
+#define CURRENT.INPUT           -1 [ get.string(sRESULT, m1, CURRENT.INPUT, 0, 0);
+#define PREVIOUS.INPUT          -2 [ get.string(sRESULT, m1, PREVIOUS.INPUT, 0, 0);
+
+[************************************
+[ POSN command new function constant:
+[************************************
+#define ON.OBJ                  -1  [ posn(oNUM, ON.OBJ, MODE, vX, vY)
+[ on.obj mode constants:
+    #define OBJ_FRAME            0
+    #define OBJ_VISIBLE          1
+
+[****************************************
+[ SET.KEY command new function constants:
+[****************************************
+#define CLR.CTRL                -1  [ set.key(CLR.CTRL, CLR_.TRL, cNUM);
+#define CUSTOM.INST           c252  [ set.key(vCHANNEL, vENVDATASTR, CUSTOM.INST);
+#define SET.INST              c253  [ set.key(vCHANNEL, vINSTRUMENT, SET.INST);
+#define SET.SNDMODE           c254  [ set.key(MODE, 0, SET.SNDMODE);
+[ set.sound mode constants:
+    #define FM_MODE              0
+    #define MIDI_MODE            1
+
+[*******************************************
+[ SET.STRING command new function constants:
+[*******************************************
+#define SET.INPUT             s255 [ set.string(SET.INPUT, mINPUT);
+#define SET.CMPMODE           s254 [ set.string(SET.CMPMODE, MODE);
+[ compare mode constants:
+    #define COMPARE_AGI         m0
+    #define COMPARE_TEXT        m1
+    #define COMPARE_BINARY      m2
+
+[***************************************************
+[ SET.TEXT.ATTRIBUTE command new function constants:
+[***************************************************
+#define PUSH.ATTRIBUTES         -1
+#define POP.ATTRIBUTES          -1
+[ to push:                          [ set.text.attribute(PUSH.ATTRIBUTES, 0);
+[ to pop:                           [ set.text.attribute(0, POP.ATTRIBUTES);
+[
+[ to set attributes by var:         [toggle.screen();
+[                                   [set.text.attribute(vFG, vBG);
+
+[***********************************************
+[ SET.UPPER.LEFT command new function constants:
+[***********************************************
+[ auto.cycle                        [ set.upper.left(sOBJ, vMODE);
+#define CYCLE_AT_REST            0
+#define AUTO_CYCLE               1
+
+[******************************************
+[ STEP.SIZE command new function constants:
+[******************************************
+#define MOVE_DIRECT             -1
+#define MOVE_AGI                -2
+[ to set new mode:                  [ step.size(ego, vMODE);
+
+[*******************************************
+[ TRACE.INFO command new function constants:
+[*******************************************
+#define TRACE.H.POSN             0  [ trace.info(TRACE.H.POSN, LEFT, WIDTH);

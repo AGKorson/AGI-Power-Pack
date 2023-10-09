@@ -1,14 +1,17 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ txt.Memo
 [
 [ displays the contents of the office memo, using the text screen
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
 
 prevent.input();
 configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
-set.text.attribute(-1, 0); [ push.attributes()
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 set.text.attribute(BLACK, WHITE);
 clear.text.rect(1, 4, 24, 75, WHITE);
 display(1, 5, "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커");
@@ -69,7 +72,7 @@ Label3:
 if (!have.key()) {
   goto(Label3);
 }
-set.text.attribute(0, -1); [ pop.attributes()
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 [[ restore text screen to 40col
 [configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
 

@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ cp.ERIDOCC
 [
@@ -17,8 +17,14 @@
 [
 [
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -109,7 +115,10 @@
 #define sBadChars     s22
 #define sTempFile     s23
 
-[if this control panel is not enabled show error screen
+[***************************************
+[ ERROR CHECK
+[***************************************
+[ if this control panel is not enabled show error screen
 if (!enableERIDOCC) {
   if (newRoom) {
     work1 = pic.cp.Error;
@@ -117,33 +126,33 @@ if (!enableERIDOCC) {
     draw.pic(work1);
     discard.pic(work1);
     show.pic();
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
-    set.text.attribute(0, -1);
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
+[***************************************
 if (newRoom) {
   [ if first time, score it
   work1 = cpusage;
-  block(BIT.AND, 0, &work1, 32); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 32); [ bit.and(FN_MODE, VAR, MASK)
   if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
-    block(BIT.OR, 0, &cpusage, 32); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &cpusage, 32); [ bit.or(FN_MODE, VAR, MASK)
   }
   
   load.pic(currentRoom);
@@ -251,6 +260,10 @@ if (newRoom) {
   vMgn = 4;
 }
 
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 [ check for preview mode
 if (prevcursor) {
   if ((controller(cLeftClick) || have.key())) {
@@ -269,7 +282,7 @@ if (prevcursor) {
 [ if room is being drawn or redrawn, need to add text
 if ((newRoom || refresh)) {
   [ push display colors
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ add button text
   set.text.attribute(BLACK, WHITE);
@@ -298,7 +311,7 @@ if ((newRoom || refresh)) {
   [ default cursor starts
   display(4, 24, "default");
   [ pop display colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   if (newroom) {
     [ force cursor update
@@ -510,11 +523,11 @@ if (cursormode) {
       [ if moving FROM grid to some other button
       if (cursorpos == CP_GRID && newpos != CP_GRID) {
         [ remove coordinates display
-        set.text.attribute(-1, 0);
+        set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
         set.text.attribute(BLACK, LT_GRAY);
         display(16, 12, "  ");
         display(17, 12, "  ");
-        set.text.attribute(0, -1);
+        set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
       }
       
       [ update the position
@@ -647,7 +660,7 @@ if (cursormode) {
       reposition.to.v(gridcursor, tmpX, tmpY);
       
       [ update coordinate display
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, LT_GRAY);
       if (gridX < 10) {
         display(16, 12, " %v222");
@@ -659,7 +672,7 @@ if (cursormode) {
       } else {
         display(17, 12, "%v223");
       }
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     }
   }
   
@@ -752,14 +765,14 @@ if (cursormode) {
     else {
       sTemp = "%g20";
       [ also remove coordinates display
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, LT_GRAY);
       display(16, 12, "  ");
       display(17, 12, "  ");
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     }
     [ change the cursor
-    set.key(0, &m2, mouse); [ load.cursor(BYVAR, mCURSOR);
+    set.key(BYNUM, &m2, mouse); [ set.cursor(FN_MODE, mCURSOR);
   }
   
   [ if on grid, determine gridx/gridy/gridmode
@@ -780,9 +793,9 @@ if (cursormode) {
     tmpX -= 57;
     tmpX /= 3;
     [ if different from current x/y
-    if((tmpX != gridX || tmpY != gridY)) {
+    if ((tmpX != gridX || tmpY != gridY)) {
       [ update coordinate display
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, LT_GRAY);
       if (tmpX < 10) {
         display(16, 12, " %v225");
@@ -794,7 +807,7 @@ if (cursormode) {
       } else {
         display(17, 12, "%v226");
       }
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     }
     gridX = tmpX;
     gridY = tmpY;
@@ -921,14 +934,14 @@ if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
   work1 = 126;
   work1 -= strctr;
   [ copy right portion of updated cursor to sTemp
-  block(STR.RIGHT, &sCursor, &sTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  block(STR.RIGHT, &sCursor, &sTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   [ add offsets for hotspot(4) and the target byte(2)
   strctr += 6;
   [ strip off the right portion
   block(STR.LEFT, &sCursor, &sCursor, &strctr); [ str.left(sINPUT, sRESULT, vLEN)
   [ save the byte of interest to a temp string
   work1 = 2;
-  block(STR.RIGHT, &sCursor, &sByte, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  block(STR.RIGHT, &sCursor, &sByte, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   [ convert the hex string to a number
   block(HEX2BYTE, &sByte, &work2, 0); [ hex2byte(sINPUT, vRESULT)
   [ then remove that byte
@@ -937,7 +950,7 @@ if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
   
   [ setup the bitmask
   work1 = 1;
-  block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)
+  block(BIT.SHL, BYVAR, &work1, &bitctr); [ bit.shl(FN_MODE, VAR, SHIFT)
   [ convert gridx/y to screen coordinates for add.to.pic
   tmpX = gridX;
   tmpX *= 3;
@@ -953,7 +966,7 @@ if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
   if (btnAction == B_SETGRID) {
     [ set the desired bit in designated byte
     [ combine it with current byte
-    block(BIT.OR, 1, &work2, &work1); [ bit.OR(BYVAL, VAR, AMOUNT)
+    block(BIT.OR, BYVAR, &work2, &work1); [ bit.OR(FN_MODE, VAR, MASK)
     [ set cel to add new block to the grid
     vCel = 0;
   } else {
@@ -961,7 +974,7 @@ if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
     [ invert the mask
     block(BIT.NOT, 0, &work1, 0); [ bit.not(VAR);
     [ combine it with current byte
-    block(BIT.AND, 1, &work2, &work1); [ bit.and(BYVAL, VAR, AMOUNT)
+    block(BIT.AND, BYVAR, &work2, &work1); [ bit.and(FN_MODE, VAR, MASK)
     [ set cel to add new block to the grid
     vCel = 2;
   }
@@ -971,8 +984,8 @@ if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
   }
   [ rebuild the string
   block(BYTE2HEX, &sByte, &work2, 0); [ byte2hex(sRESULT, vINPUT)
-  block(STR.CONCAT, &sCursor, &sByte, 0); [ sINPUT, sADD)
-  block(STR.CONCAT, &sCursor, &sTemp, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sCursor, &sByte, 0); [ str.concat(sINPUT, sADD)
+  block(STR.CONCAT, &sCursor, &sTemp, 0); [ str.concat(sINPUT, sADD)
   
   [ update grid
   add.to.pic.v(vView, vLoop, vCel, tmpX, tmpY, vPri, vMgn);
@@ -991,7 +1004,7 @@ if (btnAction == B_EXIT) {
   reset(noScript);
   
   [ fade out 
-  block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
   
   [ go back to previous room
   new.room.v(previousRoom); 
@@ -1001,7 +1014,7 @@ if (btnAction == B_PREVIEW) {
   [ change current cursor, wait for any mouse press
   set(prevcursor);
   sTemp = "%s16";
-  set.key(0, &m2, mouse); [ load.cursor(BYVAR, mCURSOR);
+  set.key(BYNUM, &m2, mouse); [ set.cursor(FN_MODE, mCURSOR);
   [ if in text mode, temporarily enable the mouse
   if (cursormode) {
     enable.item(mouse);
@@ -1029,9 +1042,10 @@ if (btnAction == B_EXPORT) {
   sTemp = "%m";
   s13 = "%v46";
   block(STR.FORMAT, &s13, &s13, 0); [ str.format(sINPUT, sRESULT)
-  block(STR.CONCAT, &sTemp, &s13, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sTemp, &s13, 0); [ str.concat(sINPUT, sADD)
   block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
-  block(STR.TRIM, &sTemp, &sTemp, 0); [ strTrim(sINPUT, sRESULT, MODE)
+  work1 = TRIM_ALL;
+  block(STR.TRIM, &sTemp, &sTemp, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
   
   [ get a filename (limit to 12 characters (8.3 format))
   :getfile
@@ -1074,7 +1088,7 @@ if (btnAction == B_EXPORT) {
   sBadChars = "\\/:*?\"<>|";
   block(STR.COPY, &sFilename, &sTempFile, 0); [ str.copy(sINPUT, sRESULT)
   :checkname
-    block(STR.RIGHT, &sTempFile, &sTempFile, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &sTempFile, &sTempFile, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     [ get 1st char value
     block(CHAR2BYTE, &sTempFile, &work2, 0); [ char2byte(sCHAR, vRESULT)
     work3 = 0;
@@ -1124,7 +1138,7 @@ if (btnAction == B_IDX_DN) {
   set.text.attribute(BLACK, LT_GRAY);
   display.v(tmpX, tmpY, work1);
   [ pop display colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 if (btnAction == B_IDX_UP) {
@@ -1136,14 +1150,14 @@ if (btnAction == B_IDX_UP) {
   set.text.attribute(BLACK, LT_GRAY);
   display.v(tmpX, tmpY, work1);
   [ pop display colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 [ textboxes
 if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
 
   [ invert the current value to indicate it is selected
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(WHITE, BLACK);
   tmpRow = 20;
   tmpCol = 22;
@@ -1168,7 +1182,7 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   [ pad the string to be 4 chars long
   :checkLen
   if (work1 < 4) {
-    block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &sHotspot, &sByte, 0); [ str.concat(sINPUT, sADD)
     block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
     goto(checkLen);
   }
@@ -1257,7 +1271,7 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
         block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
         :checkLen2
         if (work1 < 4) {
-          block(STR.CONCAT, &sHotspot, &sByte, 0); [ sINPUT, sADD)
+          block(STR.CONCAT, &sHotspot, &sByte, 0); [ str.concat(sINPUT, sADD)
           block(STR.LEN, &sHotspot, &work1, 0); [ str.len(sINPUT, vRESULT)
           goto(checkLen2);
         }
@@ -1287,9 +1301,9 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   
           [ setup the bitmask
           work1 = 1;
-          block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)
+          block(BIT.SHL, BYVAR, &work1, &bitctr); [ bit.shl(FN_MODE, VAR, SHIFT)
           [ apply bitmask to byte of interest
-          block(BIT.AND, 1, &work3, &work1); [ bit.and(BYVAL, VAR, AMOUNT)
+          block(BIT.AND, BYVAR, &work3, &work1); [ bit.and(FN_MODE, VAR, MASK)
           
           [ convert hotx/y to screen coordinates for add.to.pic
           tmpX = hotXraw;
@@ -1320,11 +1334,11 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
           [ rebuild the cursor string
           block(BYTE2HEX, &sByte, &hotXraw, 0); [ byte2hex(sRESULT, vINPUT)
           block(BYTE2HEX, &sTemp, &hotYraw, 0); [ byte2hex(sRESULT, vINPUT)
-          block(STR.CONCAT, &sByte, &sTemp, 0); [ sINPUT, sADD)
+          block(STR.CONCAT, &sByte, &sTemp, 0); [ str.concat(sINPUT, sADD)
           work1 = 128;
-          block(STR.RIGHT, &sCursor, &sTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+          block(STR.RIGHT, &sCursor, &sTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN)
           block(STR.COPY, &sByte, &sCursor, 0); [ str.copy(sINPUT, sRESULT)
-          block(STR.CONCAT, &sCursor, &sTemp, 0); [ sINPUT, sADD)
+          block(STR.CONCAT, &sCursor, &sTemp, 0); [ str.concat(sINPUT, sADD)
 
           [ add mark for new hotspot:
           [ convert hot x/y into byte offset/bit offset
@@ -1348,9 +1362,9 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   
           [ setup the bitmask
           work1 = 1;
-          block(BIT.SHL, 1, &work1, &bitctr); [ bit.shl(BYVAL, VAR, AMOUNT)
+          block(BIT.SHL, BYVAR, &work1, &bitctr); [ bit.shl(FN_MODE, VAR, SHIFT)
           [ apply bitmask to byte of interest
-          block(BIT.AND, 1, &work3, &work1); [ bit.and(BYVAL, VAR, AMOUNT)
+          block(BIT.AND, BYVAR, &work3, &work1); [ bit.and(FN_MODE, VAR, MASK)
           
           [ convert hotx/y to screen coordinates for add.to.pic
           tmpX = hotXraw;
@@ -1390,7 +1404,7 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   [ adjust backward to account for trailing space
   --tmpCol;
   display.v(tmpRow, tmpCol, work1);
-  set.text.attribute(0, -1);  
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 [ always reset button action
@@ -1405,17 +1419,17 @@ if (newIndex != cIndex) {
   sCursor = "%g";
   s17 = "%v227";
   block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
-  block(STR.CONCAT, &sCursor, &s17, 0); [ sINPUT, sADD)
+  block(STR.CONCAT, &sCursor, &s17, 0); [ str.concat(sINPUT, sADD)
   block(STR.FORMAT, &sCursor, &sCursor, 0); [ str.format(sINPUT, sRESULT)
   [ extract out hotspot coordinates
   work1 = 4;
   block(STR.LEFT, &sCursor, &sHotspot, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   block(HEX2BYTE, &sHotspot, &hotX, 0); [ hex2byte(sINPUT, vRESULT)
   work1 = 2;
-  block(STR.RIGHT, &sHotspot, &sHotspot, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  block(STR.RIGHT, &sHotspot, &sHotspot, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   block(HEX2BYTE, &sHotspot, &hotY, 0); [ hex2byte(sINPUT, vRESULT)
   [ update hotspot coordinate display
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
   if (hotX > 15) {
     [ limit to 15
@@ -1430,7 +1444,7 @@ if (newIndex != cIndex) {
   }
   hotYraw = hotY;
   display(20, 32, " %v244 ");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   [ convert to grid offsets
   [ to be able to compare when adding cels
   hotX *= 3;
@@ -1443,7 +1457,7 @@ if (newIndex != cIndex) {
   tmpY = 44;
   reset(maskgrid);
 :nextbyte
-  block(STR.RIGHT, &sCursor, &sTemp, &strctr); [ strRight(sINPUT, sRESULT, vLEN)
+  block(STR.RIGHT, &sCursor, &sTemp, &strctr); [ str.right(sINPUT, sRESULT, vLEN)
   [ get the next byte value
   block(HEX2BYTE, &sTemp, &byteval, 0); [ hex2byte(sINPUT, vRESULT)
   
@@ -1470,7 +1484,7 @@ if (newIndex != cIndex) {
   bitctr = 128;
 :nextbit
   work1 = byteval;
-  block(BIT.AND, 1, &work1, &bitctr); [ bit.and(BYVAL, VAR, AMOUNT)
+  block(BIT.AND, BYVAR, &work1, &bitctr); [ bit.and(FN_MODE, VAR, MASK)
   
   if (work1) {
     [ draw a block
@@ -1508,16 +1522,16 @@ if (newIndex != cIndex) {
   
   if (newroom) {
     [ remember to fade in to be able to see the screen again
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
   }
 }
 
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "07077FFE3FFC3FFC3FFC3FFC3FFC01808001800101803FFC3FFC3FFC3FFC3FFC7FFE00008001800180018001800180017E7E7E7E8001800180018001800180010000"
 #message 2 "%s12"
 #message 3 "Preview"

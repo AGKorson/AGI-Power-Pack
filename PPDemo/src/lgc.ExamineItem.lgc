@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.ExamineItem
 [ 
@@ -6,13 +6,25 @@
 [ selectedItem variable has index (offset by 100) of 
 [ desired item
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ stop the game clock while examining items
-block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ fade out current picture
-block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 
 [ no script entries for this sequence
 set(noScript);
@@ -21,11 +33,11 @@ prevent.input();
 status.line.off();
 
 [ save current colors
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 
 [ draw the picture for selected item
 if (selectedItem == 107) {
@@ -45,19 +57,19 @@ draw.pic(work1);
 discard.pic(work1);
 
 [ hide objects while showing items
-block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
+block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE)
 show.pic();
 
 [ some items need text added
 if (selectedItem == 110) {
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(RED, WHITE);
   display(6, 47, "Drew, don't");
   display(7, 47, "forget to");
   display(8, 47, "change the");
   display(9, 47, "reset code to");
   display(10, 47, "Snd4chan$");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 if (selectedItem == 113) {
   [ add text after drawing the picture
@@ -95,7 +107,7 @@ if (selectedItem == 113) {
 }
 
 [ fade in
-block(FADE.IN, 0, FADECOUNT, 0); [ fade.in(BYVAR, DELAY, COLOR)
+block(FADE.IN, BYNUM, FADECOUNT, 0); [ fade.in(FN_MODE, DELAY, COLOR)
 lastChar = 0;
 :waitforit
 if (!have.key()) {
@@ -103,13 +115,13 @@ if (!have.key()) {
 }
 
 [ fade out
-block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

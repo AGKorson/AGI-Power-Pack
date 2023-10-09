@@ -1,13 +1,25 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.DebugHelp: Debug mode help screen
 [
 [ Displays a help screen with typical debug mode commands.
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ pause game clock
-block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ no input allowed while help screen is displayed
 prevent.input();
@@ -16,7 +28,7 @@ prevent.input();
 status.line.off();
 
 [ save attributes
-set.text.attribute(-1, 0); [ push.attributes()
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ switch to text screen, 40col
 configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
@@ -59,7 +71,7 @@ if (!have.key()) {
 }
 
 [ restore colors
-set.text.attribute(0, -1); [ pop.attributes()
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 [ restore input and status line
 accept.input();
@@ -69,16 +81,16 @@ status.line.on();
 graphics();
 
 [ restore attributes
-set.text.attribute(0, -1); [ pop.attributes()
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 [ restart game clock
-block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, START_CLOCK, 0, 0); [ pause.clock(MODE)
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "DEBUG MODE HELP             "
 #message 2 "trace on    - enables tracing          "
 #message 3 "              (SCROlL LOCK to activate)"

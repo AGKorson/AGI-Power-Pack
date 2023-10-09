@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.Statusbar
 [ 
@@ -8,10 +8,22 @@
 [01234567890123456789012345678901234567890123456789012345678901234567890123456789]
 [ Score: xxx of yyy       AGI Power Pack Demo Game         hh:mm AM   |ssssssss| ]
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ save colors
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ score
 set.text.attribute(BLUE, WHITE);
@@ -60,7 +72,7 @@ if (clockOn) {
       display(0, 58, "%v13|2:%v12|2:%v11|2 ");
     }
     [ restore default colors
-    set.text.attribute(0, -1);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   }
   [display(0, 66, "     ");
   clear.text.rect(0, 66, 0, 68, WHITE);
@@ -114,10 +126,10 @@ if (soundOn) {
 display(0, 69, "%s23");
 
 [ restore default colors
-set.text.attribute(0, -1);
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************

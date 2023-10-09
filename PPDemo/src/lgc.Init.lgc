@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.Init: Initialization
 [
@@ -7,8 +7,14 @@
 [ see the 'Keyboard Controller' topic in the Help file for details on
 [ key assignments.
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define tmp0      v220
 #define tmp1      v221
 #define tmp2      v222
@@ -23,6 +29,10 @@
 [ reuse s23 as another temporary string
 #define tmpString1 s23
  
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 [ check for a game restart
 if (gameRestarted) {
   [ for a restart, there are a few things that need to be reset
@@ -107,7 +117,7 @@ if (gameRestarted) {
   
   trace.info(lgc.traceinfo, 3, 10);  [ sets up the command tracer; you should
                                      [ delete this before releasing your game
-  
+  [ assign controller shortcut keys
   set.key(0, 59, cHelp);             [ F1 - Help
   set.key(0, 60, cToggleSound);      [ F2 - Sound on/off
   set.key(0, 61, cEchoLine);         [ F3 - Echo line
@@ -139,6 +149,10 @@ if (gameRestarted) {
   [ assign input prompt and cursor character
   set.string(inputPrompt, ">");
   set.cursor.char(cursor);
+  
+  [ default mouse variables are sufficient, but you can change them if 
+  [ desired:
+  [block(CONFIGURE.MOUSE, &mX, &mY, &mBtn); [ configure.mouse(XVAR, YVAR, BTNVAR)
   
   [ check for configuration file
   filename = "ppdemo.cfg";
@@ -342,8 +356,8 @@ if (gameRestarted) {
     custInst4 = "22242100C0C00C0C000000";
     [ enable MIDI, and set desired instruments
     set(4channelsound);
-    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
     set(useMIDI);
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
     musicmode = MIDI_SOUND;
     work1 = 0;
     work2 = 0;
@@ -418,7 +432,7 @@ set(debugging);
 set(enableTrace);
 
 [ set turbo mode (regular mode is never used in the demo)
-work1 = 1;
+work1 = TURBO_SPEED;
 cycle.time(TOGGLE.TURBO, work1); [   toggle.turbo(vMODE);
 set(turboMode);
 
@@ -514,9 +528,9 @@ random(0, 39, comboNumber);
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 ">"
 #message 2 cursor
 #message 3 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"

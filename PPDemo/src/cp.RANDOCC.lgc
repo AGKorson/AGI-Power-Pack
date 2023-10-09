@@ -1,12 +1,18 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ cp.RANDOCC
 [
 [ Rectangular Alpha-Numeric Display Options Control Console
 [ RANDOCC
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -69,7 +75,10 @@
 #define hexBG        s14
 #define hexBD        s15
 
-[if this control panel is not enabled show error screen
+[***************************************
+[ ERROR CHECK
+[***************************************
+[ if this control panel is not enabled show error screen
 if (!enableRANDOCC) {
   if (newRoom) {
     work1 = pic.cp.Error;
@@ -77,36 +86,36 @@ if (!enableRANDOCC) {
     draw.pic(work1);
     discard.pic(work1);
     show.pic();
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
-    set.text.attribute(0, -1);
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
+[***************************************
 if (newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
   
   [ if first time, score it
   work1 = cpusage;
-  block(BIT.AND, 0, &work1, 2); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 2); [ bit.and(FN_MODE, VAR, MASK)
   if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
-    block(BIT.OR, 0, &cpusage, 2); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &cpusage, 2); [ bit.or(FN_MODE, VAR, MASK)
   }
   
   [ load, draw and discard the picture resource for the current room
@@ -198,10 +207,9 @@ if (newRoom) {
   goto(checkupdate);
 }
 
-
-[ **************************************
-[ EVERY CYCLE
-[ **************************************
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ is cursor in text mode?
 if (cursormode) {
@@ -559,7 +567,7 @@ if (btnAction == B_OK) {
   msgBoxFG = tmpFG;
   msgBoxBorder = tmpBorder;
   [ make the change
-  block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG);
+  block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
   print.at("Message box colors have been updated.", 5, 6, 31);
   
   [ restore ego movement parameters
@@ -568,7 +576,7 @@ if (btnAction == B_OK) {
   egoDir = egoPrevDir;
   
   [ fade out 
-  block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
   [ go back to previous room
   new.room.v(previousRoom); 
 }
@@ -580,7 +588,7 @@ if (btnAction == B_CANCEL) {
   egoDir = egoPrevDir;
   
   [ fade out 
-  block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
   [ just go back to previous room
   new.room.v(previousRoom);
 }
@@ -651,7 +659,7 @@ if (update) {
     block(BYTE2HEX, &hexBG, &tmpBG, 0); [ byte2Hex(sRESULT, vINPUT); 
     block(BYTE2HEX, &hexBD, &tmpBorder, 0); [ byte2Hex(sRESULT, vINPUT);
     [ now execute the picdraw function (enable paintover)
-    block(PIC.DRAW, 1, &sTemp, 0); [ pic.draw(FILLSTYLE, sCMDS);
+    block(PIC.DRAW, COLOR_FILL, &sTemp, 0); [ pic.draw(FILLSTYLE, sCMDS);
   
     [ the draw function clears all text from the screen
     
@@ -662,10 +670,10 @@ if (update) {
   }
   
   [ push display colors
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ attributes by var
-  toggle.monitor();
+  toggle.monitor(); [ set.text.attr.v(vFG, vBG)
   set.text.attribute(&tmpFG, &tmpBG);
   [ add test message text
   display(6, 8, "This is a test message.");
@@ -687,7 +695,7 @@ if (update) {
     palFG = WHITE;
   }
   [ attributes by var
-  toggle.monitor();
+  toggle.monitor(); [ set.text.attr.v(vFG, vBG)
   set.text.attribute(&palFG, &palBG);
   display.v(cRow, cCol, cInit);
   
@@ -708,7 +716,7 @@ if (update) {
       palFG = WHITE;
     }
     [ attributes by var
-    toggle.monitor();
+    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
     set.text.attribute(&palFG, &palBG);
     display.v(cRow, cCol, cInit);
   } else {
@@ -727,7 +735,7 @@ if (update) {
       palFG = WHITE;
     }
     [ attributes by var
-    toggle.monitor();
+    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
     set.text.attribute(&palFG, &palBG);
     display.v(cRow, cCol, cInit);
   
@@ -745,7 +753,7 @@ if (update) {
       palFG = WHITE;
     }
     [ attributes by var
-    toggle.monitor();
+    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
     set.text.attribute(&palFG, &palBG);
     display.v(cRow, cCol, cInit);
     
@@ -766,10 +774,10 @@ if (update) {
   }
   
   [ pop display colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   if (newroom) {
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   }
 }
 
@@ -777,9 +785,9 @@ if (update) {
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "BG"
 #message 2 "FG"
 #message 3 "Bd"

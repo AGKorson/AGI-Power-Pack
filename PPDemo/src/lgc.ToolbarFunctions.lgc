@@ -1,10 +1,20 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.ToolbarFunctions
 [ 
-[ ********************************************************************
+[*********************************************************************
 
-#define toggleBtn    f240
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+#define toggleBtn        f240
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ if wait cursor is active, do nothing
 if (cursoricon == C_WAIT) {
@@ -25,7 +35,7 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
   if (cursormode != cursoricon) {
     [ change it
     cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   }
   [ reenable click2move if in walk mode
   if (cursormode == C_WALK) {
@@ -36,7 +46,7 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
   if (cursoricon != C_DEFAULT) {
     [ change it
     cursoricon = C_DEFAULT;
-    set.key(0, &m1, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM);
     [ disable click2move
     reset(click2move);
   }
@@ -213,9 +223,9 @@ if (mouseBtn != 1) {
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

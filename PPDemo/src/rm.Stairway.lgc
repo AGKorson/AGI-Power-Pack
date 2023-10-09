@@ -1,12 +1,17 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.Stairway
 [
 [ 
 [
-[ ********************************************************************
-[ TODO: more said statements in stairway
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define lightshadow   o1
 #define door          o2
 
@@ -18,9 +23,10 @@
 #define doorUnlocked f222
 #define lightOn      f223
 
-
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
 if (newRoom) {
-  [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
@@ -28,6 +34,10 @@ if (newRoom) {
   
   [ the horizon defines the upper limit of ego's movement
   set.horizon(0);
+  
+  [ add toolbar buttons
+  load.view(vw.ButtonsDown);
+  call(lgc.InitToolbar);
   
   load.view(vw.StairwayArt);
   
@@ -95,19 +105,19 @@ if (newRoom) {
   egoDir = STOPPED;
   draw(ego);
   
-  [ add toolbar buttons
-  load.view(vw.ButtonsDown);
-  call(lgc.InitToolbar);
-  
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   return();
 }
+
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 
 [ if by door, and it's open, allow ego to cross over
 if (egoX < 44 && fDoorOpen) {
@@ -151,11 +161,33 @@ if (flickerTime > 0) {
   }
 }
  
-[*****
-:handleInput       [ check for input from player
-[*****
+if (doorSeq == 1) {
+  [ open the door
+  doorSeq = 3;
+  end.of.loop(door, fDoorDone);
+}
+if (doorSeq == 2) {
+  [ close the door
+  doorSeq = 4;
+  reverse.loop(door, fDoorDone);
+  observe.blocks(ego);
+  reset(fDoorOpen);
+}
+
+if (fDoorDone) {
+  reset(fDoorDone);
+  if (doorSeq == 3) {
+    ignore.blocks(ego);
+    set(fDoorOpen);
+  }
+  doorSeq = 0;
+}
+
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
-  [ place said tests here
+[ TODO: more said statements for stairway room
   if (said("look")) {
     print("You see nothing of interest.");
   }
@@ -178,8 +210,27 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       print("you are not close enough.");
     }
   }
+  if (said("look", "stairs")) {}
+  if (said("look", "wall")) {}
+  if (said("look", "cracks")) {}
+  if (said("look", "floor")) {}
+  if (said("look", "ceiling")) {}
+  if (said("look", "light")) {}
+  if (said("look", "door")) {}
+  if (said("unlock", "door")) {}
+  if ((said("break", "down", "door") || said("smash", "door") || said("hit", "door"))) {}
+  if (said("look", "keypad")) {}
+  if (said("use", "keypad")) {}
+  if ((said("hit", "keypad") || said("break", "keypad"))) {}
+  if (said("hack", "keypad")) {}
+  if (said("get", "light")) {}
+  if (said("turn", "on", "light")) {}
+  if (said("turn", "off", "light")) {}
 }
   
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -194,7 +245,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ look
   if (cursormode == C_LOOK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You see you.");
       goto(doneclick);
     }
@@ -243,16 +294,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       goto(doneclick);
     }
-    
-[    [ nothing specific
-[    print("black space");
-[    goto(doneclick);
   }
   
   [ talk
   if (cursormode == C_TALK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You have nothing to say.");
     } else {
       print("There is no one here to talk to.");
@@ -263,7 +310,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ use
   if (cursormode == C_USE) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Not even when you're alone.");
       goto(doneclick);
     }
@@ -297,9 +344,9 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         } else {
           [ show wait cursor
           cursoricon = C_WAIT;
-          set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
           [ fade out, then display access panel
-          block(FADE.OUT, 0, 10, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+          block(FADE.OUT, BYNUM, 10, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
           new.room(rm.DoorKeypad); [ ##LE001##
         }
       } else {
@@ -310,62 +357,36 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   :doneclick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
 }
   
-[*****
-:noInput           [  all non-input related code goes here 
-[*****
-if (doorSeq == 1) {
-  [ open the door
-  doorSeq = 3;
-  end.of.loop(door, fDoorDone);
-}
-if (doorSeq == 2) {
-  [ close the door
-  doorSeq = 4;
-  reverse.loop(door, fDoorDone);
-  observe.blocks(ego);
-  reset(fDoorOpen);
-}
-
-if (fDoorDone) {
-  reset(fDoorDone);
-  if (doorSeq == 3) {
-    ignore.blocks(ego);
-    set(fDoorOpen);
-  }
-  doorSeq = 0;
-}
-
-
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 if (edgeEgoHit == RIGHT_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.SecretRoom); [ ##LE002##
 }
 
 if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.ControlRoom); [ ##LE003##
 }
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

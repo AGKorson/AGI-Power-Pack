@@ -1,14 +1,24 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.ReadManual
 [ 
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define pageNum     v250
 #define pageImg     v251
 
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 [ pause game clock while reading
-block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ no script entries for this sequence
 set(noScript);
@@ -17,17 +27,17 @@ prevent.input();
 status.line.off();
 
 [ save colors
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ start with cover, which is page 1
 pageImg = pic.ManualCover;
 pageNum = 1;
 
 [ fade out until done loading cover
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 
 [ add keyboard instructions
 set.text.attribute(DK_GRAY, BLACK);
@@ -35,13 +45,13 @@ display(23, 35, "ESC = EXIT");
 display(23, 67, "RIGHT = >");
 
 [ hide objects while showing manual
-block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE);
 load.pic(pageImg);
 draw.pic(pageImg);
 show.pic();
 discard.pic(pageImg);
 [ fade back in
-block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
 [ mouse-clicks are converted to return/escape 
@@ -91,7 +101,7 @@ if (mouseBtn == 1) {
         display(13, 44, "  \x07 MSDOS Mainframe OS");
         goto(waitforit);
       }
-      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 1, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       ++pageNum;
       pageImg = pic.ManualPages;
       if (pageNum == 2) {
@@ -102,7 +112,7 @@ if (mouseBtn == 1) {
     } else {
       :pageleft
       --pageNum;
-      block(FADE.OUT, 0, 1, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 1, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       if (pageNum == 1) {
         pageImg = pic.ManualCover;
         [ hide left text
@@ -261,7 +271,7 @@ if (mouseBtn == 1) {
         display(20, 56, "5");
       }
     }
-    block(FADE.IN, 0, 1, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+    block(FADE.IN, BYNUM, 1, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     discard.pic(pageImg);
   }
 }
@@ -276,15 +286,15 @@ if (!scoreManual) {
   call(lgc.ScoreHandler);
 }
 [ fade out during the switch
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 [ clear instruction line
 clear.lines(23, 23, BLACK);
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

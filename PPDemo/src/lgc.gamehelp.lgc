@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.GameHelp: Help Screen
 [
@@ -8,8 +8,14 @@
 [ Left panel has topics; use cursor to select topics; right panel will
 [ display relevant information.
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define selectedTopic  v240
 #define prevItem       v241
 #define oldEgoDir      v242
@@ -19,11 +25,15 @@
 
 #define topicTitle      s20
 
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 if (initScreen) {
   reset(initScreen);
   
   [ pause game clock
-  block(PAUSE.CLOCK, 0, 0, 0); [ pause.clock(MODE)
+  block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
   
   [ egodir used to maneuver through menu items
   oldEgoDir = egoDir;
@@ -36,7 +46,7 @@ if (initScreen) {
   status.line.off();
   
   [ start with light gray background
-  set.text.attribute(-1, 0); [ push.attributes()
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, LT_GRAY);
   
   [ switch to text screen to 80 col mode
@@ -203,7 +213,7 @@ if ((have.key() || controller(cMenu))) {
   [ restore colors
   [ (before statusline or stored values will be
   [ overwritten)
-  set.text.attribute(0, -1); [ pop.attributes()
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ restore input and status line
   accept.input();
@@ -213,11 +223,11 @@ if ((have.key() || controller(cMenu))) {
   graphics();
 
   [ restart game clock
-  block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+  block(PAUSE.CLOCK, START_CLOCK, 0, 0); [ pause.clock(MODE)
 }
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "º"

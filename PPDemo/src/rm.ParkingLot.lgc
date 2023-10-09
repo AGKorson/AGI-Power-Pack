@@ -1,14 +1,17 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.ParkingLot
 [
 [ 
 [
-[ ********************************************************************
+[*********************************************************************
 
-[ **************************************
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define egoCar        o1
 #define oPatient      o2
 #define oPatientCar   o3
@@ -69,14 +72,14 @@
 #define fSkip1       f227
 #define fElectrocuted  f228
 #define fCarSound     f229
+#define patientVisible f230
 
 #define CAR_INSTRUMENT   41  [ 41 = viola
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
+[***************************************
 if (newRoom) {
-  [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
@@ -112,7 +115,7 @@ if (newRoom) {
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 2
   tmpLoop = car0car1;
-  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  block(BIT.AND, BYNUM, &tmpLoop, 15); [ bit.and(FN_MODE, VAR, MASK)
   tmpX = 92;
   tmpY = 154;
   tmpPri = 14;
@@ -127,7 +130,7 @@ if (newRoom) {
   add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
   [ parking spot 4
   tmpLoop = car2car3;
-  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  block(BIT.AND, BYNUM, &tmpLoop, 15); [ bit.and(FN_MODE, VAR, MASK)
   tmpLoop += 19;
   tmpX = 46;
   tmpY = 155;
@@ -144,7 +147,7 @@ if (newRoom) {
   [ ego's car
   animate.obj(egoCar);
   tmpLoop = car4car5;
-  block(BIT.AND, 0, &tmpLoop, 15); [ bit.and(BYVAL, VAR, AMOUNT)
+  block(BIT.AND, BYNUM, &tmpLoop, 15); [ bit.and(FN_MODE, VAR, MASK)
   set.view(egoCar, vw.Cars);
   set.loop.v(egoCar, tmpLoop);
   ignore.blocks(egoCar);
@@ -243,19 +246,23 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, 25, 0); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, 25, 0); [ fade.in(FN_MODE, DELAY, COLOR)
   
   [ if not showing opening dialog
   if (egoCarSeq == EC_IDLE) {
     [ restore cursor
     cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   }
 }
 
-[ **************************************
-[  NON-INPUT CODE 
-[ **************************************
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
+
+[*******************
+[ DREW'S CAR
+[*******************
 if (egoCarSeq) {
   [ ego arrives
   if (egoCarSeq == EC_ARRIVE) {
@@ -273,7 +280,7 @@ if (egoCarSeq) {
     move.obj(egoCar, 40, 143, 1, fCarDone);
     [ restore cursor for message
     cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
     print("At long last, you finally made it to Oakhurst, "
           "California to visit the original Sierra On-Line headquarters "
           "building.");
@@ -281,7 +288,7 @@ if (egoCarSeq) {
           "pull into the parking lot.");
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
     [ play car-running sound, force 4-channel FM
     set(4channelsound);
     set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -313,7 +320,7 @@ if (egoCarSeq) {
     draw(ego);
     [ restore cursor for message
     cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
     print("The building is now a medical office. There aren't too many "
           "cars in the parking lot. So you decide to go inside and "
           "take a look around.");
@@ -384,7 +391,7 @@ if (egoCarSeq) {
 [ timing bug with controllers
 if (fSkip1) {
   reset(fSkip1);
-  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM);  
 }
 
 [ parked cars in rightside parking lot don't quite align with priority bands
@@ -399,6 +406,9 @@ if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
   }
 }
 
+[*******************
+[ PATIENTS
+[*******************
 [ check for random patient arriving or leaving
 if (patientTimer == 0) {
   [ reset the timer
@@ -416,6 +426,7 @@ if (patientTimer == 0) {
       patientSeq = P1_WALK_C;
     }
     draw(oPatient);
+    set(patientVisible);
   } else {
     [ time for patient to arrive
     random(0, 1, work1);
@@ -452,7 +463,7 @@ if (patientTimer == 0) {
     }
     
     [ choose a random patient
-    random(2, 8, work1);
+    random(vw.SmallPerson1, vw.SmallPerson7, work1);
     set.view.v(oPatient, work1);
   }
 } else {
@@ -461,7 +472,6 @@ if (patientTimer == 0) {
     --patientTimer;
   }
 }
-
 if (fPatientDone) {
   [ patient/path 2
   if (patientSeq == P2_DRIVE_F) {
@@ -483,6 +493,7 @@ if (fPatientDone) {
   if (patientSeq == P2_WALK_E) {
     [ patient gets in car
     erase(oPatient);
+    reset(patientVisible);
     [ start car
     reset(fPatientDone);
     patientSeq = P2_START; 
@@ -514,6 +525,7 @@ if (fPatientDone) {
   if (patientSeq == P2_WALK_B) {
     [ patient enters building
     erase(oPatient);
+    reset(patientVisible);
     patientSeq = IDLE;
     set(fPatientHere);
     reset(fPatientDone);
@@ -587,6 +599,7 @@ if (fPatientDone) {
   if (patientSeq == P1_WALK_E) {
     [ patient gets in car
     erase(oPatient);
+    reset(patientVisible);
     [ start car
     reset(fPatientDone);
     patientSeq = P1_START; 
@@ -618,6 +631,7 @@ if (fPatientDone) {
   if (patientSeq == P1_WALK_B) {
     [ patient enters building
     erase(oPatient);
+    reset(patientVisible);
     patientSeq = IDLE;
     set(fPatientHere);
     reset(fPatientDone);
@@ -678,6 +692,7 @@ if (soundDone) {
     [ patient walks to first point
     position(oPatient, 25, 140);
     draw(oPatient);
+    set(patientVisible);
     move.obj(oPatient, 55, 125, 1, fPatientDone);
     patientSeq = P1_WALK_A;
     goto(checkdeath);
@@ -706,6 +721,7 @@ if (soundDone) {
     [ patient walks to first point
     position(oPatient, 88, 142);
     draw(oPatient);
+    set(patientVisible);
     move.obj(oPatient, 72, 142, 1, fPatientDone);
     patientSeq = P2_WALK_A;
     goto(checkdeath);
@@ -752,9 +768,8 @@ if (!fEgoDead) {
       egoDir = STOPPED;
       program.control();
       prevent.input();
-      [ turn off auto-cycle to allow cycle-at-rest
-      work1 = 0;
-      set.upper.left(&ego, &work1);
+      work1 = CYCLE_AT_REST;
+      set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
       work1 = 2;
       cycle.time(ego, work1);
       end.of.loop(ego, fRunOver);
@@ -773,9 +788,8 @@ if (!fEgoDead) {
        set.loop(ego, 1);
       }
       set.cel(ego, 0);
-      [ allow cycle at rest
-      work1 = 0;
-      set.upper.left(&ego, &work1);
+      work1 = CYCLE_AT_REST;
+      set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
       end.of.loop(ego, fElectrocuted);
       [ only play sound effects if walkman not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
@@ -855,30 +869,104 @@ if (fEgoDead) {
   return();
 }
 
-[ **************************************
+[***************************************
 [ PROCESS PLAYER INPUT
-[ **************************************
+[***************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
-[ TODO: more said statements for parking lot
   [ look sky
-  [ look mountain
+  if (said("look", "sky")) {
+    print("A few white clouds can be seen in the beautiful blue sky.");
+  }
+  [ look mountain/forest
+  if ((said("look", "mountain") || said("look", "forest"))) {
+    print("The forest and mountain are beautiful to look at.");
+  }
+  [ look trees
+  if (said("look", "tree")) {
+    print("Giant evergreen trees surround the parking lot.");
+  }
   [ look building
+  if ((said("look", "building") || said("look", "sierra"))) {
+    print("The building looks almost the same as it did thirty years ago.");
+  }
   [ look car
+  if (said("look", "car")) {
+    print("There are several cars in the parking lot, including your own.");
+  }
   [ look patient
-  [ look tree/bushes
+  if ((said("look", "patient") || said("look", "person") ||
+       said("look", "man") || said("look", "woman"))) {
+    if (patientVisible) {
+      [ coming or going?
+      if (patientSeq > 100) {
+        print("This person is leaving.");
+      } else {
+        print("This person must have an appointment. They seem to be in a hurry.");
+      }
+    } else {
+      print("There is no one here but you.");
+    }
+  }
+  [ look bushes/lawn
+  if ((said("look", "bush") || said("look", "grass"))) {
+    print("The lawn and shrubbery is well maintained.");
+  }
   [ look parking lot
-  [ look sidewalk/lawn
-  [ look door
-  [ open door
-  [ get in car, enter car
-  [ drive away, leave, go home
-  [ take car, steal car, 
-  [ take/steal batmobile
-  [ hit/punch/kick/kill anything- not allowed "unprovoked violence is never acceptable"
-  [ climb anything - not allowed (in most rooms)
-  [ talk/speak to person/patient
+  if (said("look", "parking lot")) {
+    print("It's a parking lot. What else do you want me to say?");
+  }
+  [ look sidewalk
+  if (said("look", "sidewalk")) {
+    print("The sidewak on the side of the building leads to the back entrance, but that door is always locked.");
+  }
+  [ look window
+  if (said("look", "window")) {
+    print("Sunlight glare on the windows makes it difficult to see inside.");
+  }
+  [ take car, steal car/batmobile
+  if ((said("steal", "car") || said("get", "car"))) {
+    distance(ego, oPatientCar, work1);
+    if (work1 < 14) {
+      current.loop(oPatientCar, work1);
+      if (work1 == 18) {
+        [ bad idea, trying to steal the batmobile
+        goto(stealbatmobile);
+      }
+      [ stealing isn't nice
+      print("Not a good idea. You'll end up in jail. Besides that, it just isn't nice.");
+    } else {
+      print("Which car are you trying to steal?");
+    }
+  }
+
+  [ get tree/bush/branch
+  if ((said("get", "tree") || said("get", "bush"))) {
+    print("The trees and bushes are covered in sap. You should probably wash your hands when you get a chance.");
+    reset(handsWashed);
+    if (!touchTrees) {
+      set(touchTrees);
+      [ lose 1 point
+      work1 = -1;
+      call(lgc.ScoreHandler);
+    }
+  }
   
- [ place said tests here
+  [ drive away, leave, go home
+  if ((said("get in", "car") || said("go", "home") || 
+       said("leave"))) {
+    goto(entercar);
+  }
+  [ talk/speak to person/patient
+  if ((said("talk", "patient") || said("talk", "person") || 
+       said("talk", "man") || said("talk", "woman"))) {
+    distance(ego, oPatient, work1);
+    if (work1 == 255) {
+      print("There is no one here.");
+    } else {
+      goto(talkpatient);
+    }
+  }
+  
   if (said("look")) {
     print("You are in the Sierra building parking lot.");
   }
@@ -897,7 +985,12 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       call(lgc.ScoreHandler);
     }
   }
-  
+  if (said("look", "door")) {
+    print("There is an automatic door at the entrance to the clinic.");
+  }
+  if (said("open", "door")) {
+    print("The door opens automatically when you approach it.");
+  } 
   if (said("lock", "car")) {
     [ if already locked
     if (carLocked) {
@@ -926,6 +1019,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
 }
 
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -941,13 +1037,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ check for objects first
     
     [ ego
-    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("Yes, Drew is a handsome fellow. Easy on the eyes.");
       goto(doneclick);
     }
     
     [ ego car
-    if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(egoCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       current.loop(egoCar, work1);
       if (work1 > 18) {
         work1 -= 19;
@@ -973,7 +1069,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient
-    if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       [ coming or going?
       if (patientSeq > 100) {
         print("This person is leaving.");
@@ -984,7 +1080,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient car
-    if (posn(oPatientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatientCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       current.loop(oPatientCar, work1);
       if (work1 > 18) {
         work1 -= 19;
@@ -1026,7 +1122,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
       set(fClickOn);
     }
-    if(fClickOn) {
+    if (fClickOn) {
       print("There are a several cars in the parking lot. Only one is yours. This is not the one.");
       goto(doneclick);
     }
@@ -1069,20 +1165,21 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ same as 'talk to'
 
     [ ego
-    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("You have nothing to say to yourself.");
       goto(doneclick);
     }
     
     [ ego car
-    if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(egoCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("Your car has nothing to say.");
       goto(doneclick);
     }
     
     [ patient
-    if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       distance(ego, oPatient, work1);
+      :talkpatient
       if (work1 <= 20) {
         [ coming or going?
         if (patientSeq > 100) {
@@ -1100,7 +1197,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient car
-    if (posn(oPatientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatientCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       [ if patient is driving
       if (patientSeq > 200) {
         print("The person in the car can't hear you.");
@@ -1127,7 +1224,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
       set(fClickOn);
     }
-    if(fClickOn) {
+    if (fClickOn) {
       print("There is no one in the car to talk to.");
       goto(doneclick);
     }
@@ -1139,13 +1236,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   if (cursormode == C_USE) {
     [ same as 'use item'
     [ ego
-    if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("Please don't touch yourself in public. There may be children watching.");
       goto(doneclick);
     }
 
     [ ego car
-    if (posn(egoCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(egoCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       :entercar
       if (posn(ego, 39, 132, 56, 146)) {
         if (carLocked) {
@@ -1160,22 +1257,22 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ need to force update so the buttons get drawn right now
         force.update(btnYes);
         [ add button text
-        set.text.attribute(-1, 0);
+        set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
         set.text.attribute(BLACK, WHITE);
         display(12, 33, "Yes");
         display(12, 43, "No");
-        set.text.attribute(0, -1);
+        set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
         [ change to default cursor (it will change back 
         [ after dialog box is dismissed)
         if (cursoricon != C_DEFAULT) {
           [ change it
           cursoricon = C_DEFAULT;
-          set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
           [ disable click2move
           reset(click2move);
         }
         [ clear input and controller before starting wait loop
-        set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);  
+        set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM);  
         lastChar = 0;
         work1 = 0;
         :wait
@@ -1185,10 +1282,10 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ if left button was pressed, check buttons
         if (mouseBtn == 1) {
           lastChar = 0;
-          if (posn(btnYes, ON.OBJ, 0, &mouseX, &mouseY)) {
+          if (posn(btnYes, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
             work1 = 1;
           } else {
-            if (posn(btnNo, ON.OBJ, 0, &mouseX, &mouseY)) {
+            if (posn(btnNo, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
               work1 = 2;
             }
           }
@@ -1239,7 +1336,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient
-    if (posn(oPatient, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatient, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       distance(ego, oPatient, work1);
       if (work1 < 6) {
         print("Get your hands off me, you big jerk!");
@@ -1250,7 +1347,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient car
-    if (posn(oPatientCar, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(oPatientCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       [ is car moving?
       if (patientSeq > 200) {
         print("It's not a good idea to touch a moving vehicle.");
@@ -1273,6 +1370,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
                 if (work1 == 17) {
                   print("This sportcar is really neat, but that's no reason to steal it.");
                 } else {
+                  :stealbatmobile
                   prevent.input();
                   program.control();
                   stop.motion(ego);
@@ -1305,7 +1403,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
       set(fClickOn);
     }
-    if(fClickOn) {
+    if (fClickOn) {
       print("There's nothing you can do with this car.");
       goto(doneclick);
     }
@@ -1352,20 +1450,20 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
   }
   :doneClick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM);
 }
 
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ move to lobby
   new.room(rm.Lobby);  [ ##LE001##
 }
@@ -1373,9 +1471,9 @@ if (egoHitSpecial) {
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

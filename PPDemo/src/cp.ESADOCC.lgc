@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ cp.ESADOCC
 [
@@ -10,8 +10,14 @@
 [ test button - play a short song
 [
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -120,7 +126,10 @@
 #define redrawList   f224
 #define sliding      f225
 
-[if this control panel is not enabled show error screen
+[***************************************
+[ ERROR CHECK
+[***************************************
+[ if this control panel is not enabled show error screen
 if (!enableESADOCC) {
   if (newRoom) {
     work1 = pic.cp.Error;
@@ -128,36 +137,36 @@ if (!enableESADOCC) {
     draw.pic(work1);
     discard.pic(work1);
     show.pic();
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
-    set.text.attribute(0, -1);
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
-if(newRoom) {
+[***************************************
+if (newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
   
   [ if first time, score it
   work1 = cpusage;
-  block(BIT.AND, 0, &work1, 8); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 8); [ bit.and(FN_MODE, VAR, MASK)
   if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
-    block(BIT.OR, 0, &cpusage, 8); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &cpusage, 8); [ bit.or(FN_MODE, VAR, MASK)
   }
   
   [ load, draw and discard the picture resource for the current room
@@ -171,7 +180,7 @@ if(newRoom) {
   set.horizon(0);
   
   [ load the test sounds
-  load.sound(m.PPDTheme);
+  load.sound(m.KQ1Track1);
   load.sound(s.InstTest);
   load.sound(s.NoiseTest1);
   load.sound(s.NoiseTest2);
@@ -315,7 +324,7 @@ if(newRoom) {
   clear.lines(22, 22, LT_GRAY);
   
   [ add label text
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, LT_GRAY);
   display(6, 5, "Mode");
   display(8, 4, "Ms");
@@ -337,12 +346,12 @@ if(newRoom) {
   set(update);
   
   [ remember to fade in to be able to see the screen again
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
 }
 
-[ **************************************
-[ EVERY CYCLE
-[ **************************************
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 if (update) {
   [ set text color based on mode
   if (4channelsound) {
@@ -352,7 +361,7 @@ if (update) {
   }
   cursorX = WHITE;
   [ colors byvar
-  toggle.monitor();
+  toggle.monitor(); [ set.text.attr.v(vFG, vBG)
   set.text.attribute(&work1, &cursorX);
   display(6, 16, "\x0E");
   display(9, 16, "\x0E");
@@ -404,7 +413,7 @@ if (update) {
   }
   display(22, 26, "Volume");
   
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   reset(update);
   
@@ -468,7 +477,7 @@ if (dropmode == DROPDOWN) {
   
   [ use a loop to draw the instrument text
   cursorX = 0;
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   :PrintInst
     if (work3 == selinst) {
       set.text.attribute(WHITE, BLACK);
@@ -555,7 +564,7 @@ if (dropmode == DROPDOWN) {
     set(redrawlist);
   }
   
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ begin choosing
   dropmode = CHOOSING;
@@ -651,7 +660,7 @@ if (dropmode == CHOOSING) {
         [ deselect old
         cursorY = selrow;
         cursorX = 19;
-        set.text.attribute(-1, 0);
+        set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
         set.text.attribute(BLACK, WHITE);
         display.v(cursorY, cursorX, selinst);
         
@@ -665,7 +674,7 @@ if (dropmode == CHOOSING) {
         cursorX = 19;
         set.text.attribute(WHITE, BLACK);
         display.v(cursorY, cursorX, selinst);
-        set.text.attribute(0, -1);
+        set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
       }
     }
       
@@ -829,7 +838,7 @@ if (redrawList) {
   work2 = 19;
   work3 = offsetinst;
   
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   :redrawloop
     if (work3 == selinst) {
       set.text.attribute(WHITE, BLACK);
@@ -843,7 +852,7 @@ if (redrawList) {
   if (cursorX < 5) {
     goto(redrawloop);
   }
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ position the scrollbar box
   work1 = 152;
@@ -1517,7 +1526,7 @@ if (btnAction > 0) {
     }
     
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     
     [ go back to control room
     new.room(rm.ControlRoom); [ ##LE002##
@@ -1551,14 +1560,12 @@ if (btnAction > 0) {
           goto(setinst);
         }
       }
-[      sound(m.PPDTheme, sndDone);
-load.sound(s.WestminsterHour);
-sound(s.WestminsterHour, sndDone);
+      sound(m.KQ1Track1, sndDone);
       [ update button text
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, WHITE);
       display(18, 9, "Stop");
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
       set(sndTest);
     }
   }
@@ -1567,7 +1574,7 @@ sound(s.WestminsterHour, sndDone);
   if ((btnAction < B_INST0 || btnAction == B_UNSEL)) {
     [ deselect instrument
     if (currentInst < 255) {
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0);
       set.text.attribute(BLACK, WHITE);
       cursorY = 19;
       cursorX = currentInst;
@@ -1581,7 +1588,7 @@ sound(s.WestminsterHour, sndDone);
       }
       work1 = *work1;
       display.v(cursorX, cursorY, work1);
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
       
       [ reset selection
       currentInst = -1;
@@ -1643,7 +1650,7 @@ sound(s.WestminsterHour, sndDone);
       if ((!useMIDI || btnAction < B_INST3)) {
         [ deselect current instrument
         if (currentInst < 255) {
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           cursorY = 19;
           cursorX = currentInst;
@@ -1657,13 +1664,13 @@ sound(s.WestminsterHour, sndDone);
           }
           work1 = *work1;
           display.v(cursorX, cursorY, work1);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
         }
         [ reselect new instrument
         currentInst = btnAction;
         currentInst -= 12;
         
-        set.text.attribute(-1, 0);
+        set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
         set.text.attribute(WHITE, BLACK);
         cursorY = 19;
         cursorX = currentInst;
@@ -1677,7 +1684,7 @@ sound(s.WestminsterHour, sndDone);
         }
         work1 = *work1;
         display.v(cursorX, cursorY, work1);
-        set.text.attribute(0, -1);
+        set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
       }
     }
   }
@@ -1687,10 +1694,10 @@ sound(s.WestminsterHour, sndDone);
 if (sndDone) {
   reset(sndDone);
   reset(sndTest);
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
   display(18, 9, "Test");
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 [ always reset button action
@@ -1698,9 +1705,9 @@ btnAction = 0;
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 [ actual instrument values are one less (Acoust. Grand
 [ Piano is instrument #0 for example); this is because
 [ AGI messages start at 1 - message 0 is not allowed

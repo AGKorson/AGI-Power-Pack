@@ -1,4 +1,0 @@
-if (isset(newRoom))
-  {  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);  set.horizon(36);  show.pic();  return();  }if (isset(haveInput) &&     !isset(haveMatch) &&     unknownWordNum == 0)
-  {  if (said("examine"))
-    {    print("You see nothing of interest.");    }  }return();[ Messages#message 1 "You see nothing of interest."

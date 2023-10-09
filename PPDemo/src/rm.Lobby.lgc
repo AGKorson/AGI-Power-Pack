@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.Lobby
 [
@@ -16,12 +16,15 @@
 [ leaves. When saving/restoring, patient objects need to be temp-
 [ orarily erased, then redrawn after view resources are properly
 [ set up.
+[
+[*********************************************************************
 
-[ ********************************************************************
+[ power pack support
+#include "powerpack.txt"
 
-[ **************************************
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define backpane         o1
 #define frontpane        o2
 #define oReceptionist    o3
@@ -68,6 +71,7 @@
 #define fFalling       f235
 #define fSlipped       f236
 #define fPagesTurned   f237
+#define fEgoInHall     f238
 
 #define receptionistLoc v220
 #define   PHONE         1
@@ -149,19 +153,22 @@
 #define   STOPCONV     40
 #define   EXAMREADY    41
 
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
 if (newRoom) {
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
   discard.pic(currentRoom);
-  [ add toolbar buttons
-  load.view(vw.ButtonsDown);
-  call(lgc.InitToolbar);
   
   [ the horizon defines the upper limit of ego's movement
   set.horizon(94);
   
-  [ add additional room initialization here
+  [ add toolbar buttons
+  load.view(vw.ButtonsDown);
+  call(lgc.InitToolbar);
+  
   load.view(vw.LobbyArt);
   if (obj.in.room("magazine", currentRoom)) {
     animate.obj(oMagazine);
@@ -273,7 +280,7 @@ if (newRoom) {
   [  18  L           E  
   [  19  L               P4 EXIT
   [ 
-  [ *first time ego enters lobby, patient 1 will 
+  [**first time ego enters lobby, patient 1 will 
   [ always ask to use restroom at  1 minute mark
   [
   [ all patients begin seated if present when
@@ -300,7 +307,7 @@ if (newRoom) {
     patient1Timer -= 60;
   }
   [ patient1 is in the room
-  block(BIT.OR, 0, &whosIn, 2); [ bit.or(BYVAL, VAR, MASK)
+  block(BIT.OR, BYNUM, &whosIn, 2); [ bit.or(FN_MODE, VAR, MASK)
   
   [ to save on memory, patient 2/3/4 views are
   [ only loaded when needed; need to turn off
@@ -330,7 +337,7 @@ if (newRoom) {
       }
       draw(oPatient2);
       [ patient2 is in the room
-      block(BIT.OR, 0, &whosIn, 4); [ bit.or(BYVAL, VAR, MASK)
+      block(BIT.OR, BYNUM, &whosIn, 4); [ bit.or(FN_MODE, VAR, MASK)
     } else {
       position(oPatient2, 12, 92);
     }
@@ -359,7 +366,7 @@ if (newRoom) {
       }
       draw(oPatient3);
       [ patient3 is in the room
-      block(BIT.OR, 0, &whosIn, 8); [ bit.or(BYVAL, VAR, MASK)
+      block(BIT.OR, BYNUM, &whosIn, 8); [ bit.or(FN_MODE, VAR, MASK)
     } else {
       position(oPatient3, 12, 92);
     }
@@ -388,7 +395,7 @@ if (newRoom) {
       }
       draw(oPatient4);
       [ patient4 is in the room
-      block(BIT.OR, 0, &whosIn, 16); [ bit.or(BYVAL, VAR, MASK)
+      block(BIT.OR, BYNUM, &whosIn, 16); [ bit.or(FN_MODE, VAR, MASK)
     } else {
       position(oPatient4, 12, 92);
     }
@@ -440,11 +447,15 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 }
+
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 
 [ check for restoring - need to reload correct views
 if (gameRestored) {
@@ -527,9 +538,9 @@ if ((egoX > 78 || egoY > 125)) {
   }
 }
 
-[**************************************************************
+[*******************
 [ RECEPTIONIST
-[**************************************************************
+[*******************
 
 [ check for request to talk with receptionist
 if (checktalk) {
@@ -664,7 +675,7 @@ if (fRDone) {
     receptionistSeq = RTNHALL2;
     move.obj(oReceptionist, 60, 99, 1, fRDone);
     [ receptionist is in the room
-    block(BIT.OR, 0, &whosIn, 1); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 1); [ bit.or(FN_MODE, VAR, MASK)
     goto(doneRSeq);
   }
   [ if at second point of return-to-hall (or if standing up at phone station)
@@ -725,7 +736,7 @@ if (fRDone) {
     receptionistSeq = MOVEHALL3;
     move.obj(oReceptionist, 16, 93, 1, fRDone);
     [ no longer in the room
-    block(BIT.AND, 0, &whosIn, 254); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 254); [ bit.and(FN_MODE, VAR, MASK)
     goto(doneRSeq);
   }
   [ if at third point of hall move, (out of view, to the left)
@@ -1000,9 +1011,9 @@ if (receptionistSeq == NEWLOCATION) {
   receptionistLoc = work1;
 }
 
-[**************************************************************
+[*******************
 [ PATIENT 1
-[**************************************************************
+[*******************
 [ if a counter is active
 if (patient1Ctr > 0) {
   [ countdown
@@ -1196,8 +1207,7 @@ if (fP1Done) {
   if (patient1Seq == STANDUP) {
     patient1Seq = MOVECOUNTER;
     set.loop(oPatient1, LP_MOVELEFT);
-    [ disable cycle at rest
-    work1 = 1;
+    work1 = AUTO_CYCLE;
     set.upper.left(&oPatient1, &work1);  [ autocycle(oSOBJ, vMODE)
     normal.cycle(oPatient1);
     move.obj(oPatient1, 76, 117, 1, fP1Done);
@@ -1221,7 +1231,7 @@ if (fP1Done) {
     set.loop(oPatient1, LP_MOVELEFT);
     move.obj(oPatient1, 12, 92, 1, fP1Done);
     [ patient1 is out of the room
-    block(BIT.AND, 0, &whosIn, 253); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 253); [ bit.and(FN_MODE, VAR, MASK)
     goto(p1SeqDone);
   }
   if (patient1Seq == MOVEHALL3) {
@@ -1239,7 +1249,7 @@ if (fP1Done) {
     set.loop(oPatient1, LP_MOVEDOWN);
     move.obj(oPatient1, 86, 97, 1, fP1Done);
     [ patient1 is back in the room
-    block(BIT.OR, 0, &whosIn, 2); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 2); [ bit.or(FN_MODE, VAR, MASK)
     goto(p1SeqDone);
   }
   if (patient1Seq == RTNHALL2) {
@@ -1250,8 +1260,7 @@ if (fP1Done) {
   }
   if (patient1Seq == RTNHALL3) {
     patient1Seq = RTNHALL4;
-    [ allow cycle at rest
-    work1 = 0;
+    work1 = CYCLE_AT_REST;
     set.upper.left(&oPatient1, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient1, LP_P_SIT);
     set.cel(oPatient1, 3);
@@ -1260,10 +1269,9 @@ if (fP1Done) {
 }
 :p1SeqDone
 
-[**************************************************************
+[*******************
 [ PATIENT 2
-[**************************************************************
-
+[*******************
 [ if a counter is active
 if (patient2Ctr > 0) {
   --patient2Ctr;
@@ -1271,8 +1279,7 @@ if (patient2Ctr > 0) {
     [ patient 2 arrives
     if (patient2Seq == ARRIVE) {
       patient2Seq = MOVESEAT1;
-      [ disable cycle at rest
-      work1 = 1;
+      work1 = AUTO_CYCLE;
       set.upper.left(&oPatient2, &work1);  [ autocycle(oSOBJ, vMODE)
       set.loop(oPatient2, LP_MOVEUP);
       normal.cycle(oPatient2);
@@ -1388,13 +1395,12 @@ if (fP2Done) {
     set.loop(oPatient2, LP_MOVERIGHT);
     move.obj(oPatient2, 139, 133, 1, fP2Done);
     [ patient2 is in the room
-    block(BIT.OR, 0, &whosIn, 4); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 4); [ bit.or(FN_MODE, VAR, MASK)
     goto(p2SeqDone);
   }
   if (patient2Seq == MOVESEAT2) {
     patient2Seq = SITDOWN;
-    [ allow cycle at rest
-    work1 = 0;
+    work1 = CYCLE_AT_REST;
     set.upper.left(&oPatient2, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient2, LP_P_SIT);
     set.cel(oPatient2, 3);
@@ -1413,8 +1419,7 @@ if (fP2Done) {
   }
   if (patient2Seq == STANDUP) {
     patient2Seq = MOVEHALL1;
-    [ disable cycle at rest
-    work1 = 1;
+    work1 = AUTO_CYCLE;
     set.upper.left(&oPatient2, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient2, LP_MOVELEFT);
     normal.cycle(oPatient2);
@@ -1436,7 +1441,7 @@ if (fP2Done) {
     normal.cycle(oPatient2);
     move.obj(oPatient2, 12, 91, 1, fP2Done);
     [ patient2 is out of the room
-    block(BIT.AND, 0, &whosIn, 251); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 251); [ bit.and(FN_MODE, VAR, MASK)
     goto(p2SeqDone);
   }
   if (patient2Seq == MOVEHALL3) {
@@ -1448,7 +1453,7 @@ if (fP2Done) {
     set.loop(oPatient2, LP_MOVEDOWN);
     move.obj(oPatient2, 86, 114, 1, fP2Done);
     [ patient2 is back in the room
-    block(BIT.OR, 0, &whosIn, 4); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 4); [ bit.or(FN_MODE, VAR, MASK)
     goto(p2SeqDone); 
   }
   if (patient2Seq == RTNHALL2) {
@@ -1464,7 +1469,7 @@ if (fP2Done) {
     move.obj(oPatient2, 116, 167, 1, fP2Done);
     goto(p2SeqDone); 
     [ patient2 is not in the room
-    block(BIT.AND, 0, &whosIn, 251); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 251); [ bit.and(FN_MODE, VAR, MASK)
   }
   if (patient2Seq == RTNHALL4) {
     patient2Seq = IDLE;
@@ -1483,10 +1488,9 @@ if (fP2Done) {
 }
 :p2SeqDone
 
-[**************************************************************
+[*******************
 [ PATIENT 3
-[**************************************************************
-
+[*******************
 [ if a counter is active
 if (patient3Ctr > 0) {
   --patient3Ctr;
@@ -1494,8 +1498,7 @@ if (patient3Ctr > 0) {
     [ patient 3 arrives
     if (patient3Seq == ARRIVE) {
       patient3Seq = MOVESEAT1;
-      [ disable cycle at rest
-      work1 = 1;
+      work1 = AUTO_CYCLE;
       set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
       set.loop(oPatient3, LP_MOVEUP);
       normal.cycle(oPatient3);
@@ -1610,13 +1613,12 @@ if (fP3Done) {
     set.loop(oPatient3, LP_MOVERIGHT);
     move.obj(oPatient3, 130, 112, 1, fP3Done);
     [ patient3 is in the room
-    block(BIT.OR, 0, &whosIn, 8); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 8); [ bit.or(FN_MODE, VAR, MASK)
     goto(p3SeqDone);
   }
   if (patient3Seq == MOVESEAT2) {
     patient3Seq = SITDOWN;
-    [ allow cycle at rest
-    work1 = 0;
+    work1 = CYCLE_AT_REST;
     set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient3, LP_P_SIT);
     set.cel(oPatient3, 3);
@@ -1634,8 +1636,7 @@ if (fP3Done) {
     goto(p3SeqDone);
   }
   if (patient3Seq == STANDUP) {
-    [ disable cycle at rest
-    work1 = 1;
+    work1 = AUTO_CYCLE;
     set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     patient3Seq = MOVEHALL1;
     set.loop(oPatient3, LP_MOVELEFT);
@@ -1656,7 +1657,7 @@ if (fP3Done) {
     normal.cycle(oPatient3);
     move.obj(oPatient3, 12, 91, 1, fP3Done);
     [ patient3 is out of the room
-    block(BIT.AND, 0, &whosIn, 247); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 247); [ bit.and(FN_MODE, VAR, MASK)
     goto(p3SeqDone);
   }
   if (patient3Seq == MOVEHALL3) {
@@ -1668,7 +1669,7 @@ if (fP3Done) {
     set.loop(oPatient3, LP_MOVEDOWN);
     move.obj(oPatient3, 86, 114, 1, fP3Done);
     [ patient3 is back in the room
-    block(BIT.OR, 0, &whosIn, 2); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 2); [ bit.or(FN_MODE, VAR, MASK)
     goto(p3SeqDone); 
   }
   if (patient3Seq == RTNHALL2) {
@@ -1683,7 +1684,7 @@ if (fP3Done) {
     set.loop(oPatient3, LP_MOVEDOWN);
     move.obj(oPatient3, 116, 167, 1, fP3Done);
     [ patient3 has left
-    block(BIT.AND, 0, &whosIn, 247); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 247); [ bit.and(FN_MODE, VAR, MASK)
     goto(p3SeqDone); 
   }
   if (patient3Seq == RTNHALL4) {
@@ -1703,9 +1704,9 @@ if (fP3Done) {
 }
 :p3SeqDone
 
-[**************************************************************
+[*******************
 [ PATIENT 4
-[**************************************************************
+[*******************
 [ if a counter is active
 if (patient4Ctr > 0) {
   --patient4Ctr;
@@ -1713,8 +1714,7 @@ if (patient4Ctr > 0) {
     [ patient 4 arrives
     if (patient4Seq == ARRIVE) {
       patient4Seq = MOVESEAT1;
-      [ disable cycle at rest
-      work1 = 1;
+      work1 = AUTO_CYCLE;
       set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
       set.loop(oPatient4, LP_MOVEUP);
       normal.cycle(oPatient4);
@@ -1829,13 +1829,12 @@ if (fP4Done) {
     set.loop(oPatient4, LP_MOVERIGHT);
     move.obj(oPatient4, 137, 127, 1, fP4Done);
     [ patient4 is in the room
-    block(BIT.OR, 0, &whosIn, 16); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 16); [ bit.or(FN_MODE, VAR, MASK)
     goto(p4SeqDone);
   }
   if (patient4Seq == MOVESEAT2) {
     patient4Seq = SITDOWN;
-    [ allow cycle at rest
-    work1 = 0;
+    work1 = CYCLE_AT_REST;
     set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient4, LP_P_SIT);
     set.cel(oPatient4, 3);
@@ -1860,8 +1859,7 @@ if (fP4Done) {
   }
   if (patient4Seq == STANDUP) {
     patient4Seq = MOVEHALL1;
-    [ disable cycle at rest
-    work1 = 1;
+    work1 = AUTO_CYCLE;
     set.upper.left(&oPatient3, &work1);  [ autocycle(oSOBJ, vMODE)
     set.loop(oPatient4, LP_MOVELEFT);
     normal.cycle(oPatient4);
@@ -1881,7 +1879,7 @@ if (fP4Done) {
     normal.cycle(oPatient4);
     move.obj(oPatient4, 12, 91, 1, fP4Done);
     [ patient4 is out of the room
-    block(BIT.AND, 0, &whosIn, 239); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 239); [ bit.and(FN_MODE, VAR, MASK)
     goto(p4SeqDone);
   }
   if (patient4Seq == MOVEHALL3) {
@@ -1893,7 +1891,7 @@ if (fP4Done) {
     set.loop(oPatient4, LP_MOVEDOWN);
     move.obj(oPatient4, 86, 114, 1, fP4Done);
     [ patient4 is back in the room
-    block(BIT.OR, 0, &whosIn, 16); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &whosIn, 16); [ bit.or(FN_MODE, VAR, MASK)
     goto(p4SeqDone); 
   }
   if (patient4Seq == RTNHALL2) {
@@ -1908,7 +1906,7 @@ if (fP4Done) {
     set.loop(oPatient4, LP_MOVEDOWN);
     move.obj(oPatient4, 116, 167, 1, fP4Done);
     [ patient4 has left
-    block(BIT.AND, 0, &whosIn, 239); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &whosIn, 239); [ bit.and(FN_MODE, VAR, MASK)
     goto(p4SeqDone); 
   }
   if (patient4Seq == RTNHALL4) {
@@ -1923,9 +1921,9 @@ if (fP4Done) {
 }
 :p4SeqDone
 
-[**************************************************************
+[*******************
 [ AUTO-OPEN DOOR
-[**************************************************************
+[*******************
 if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
   if (!frontdooropen) {
     [ open it
@@ -2001,9 +1999,8 @@ if (fFalling) {
   end.of.loop(ego, fSlipped);
   work1 = 2;
   cycle.time(ego, work1);
-  [ allow cycle at rest
-  work1 = 0;
-  set.upper.left(&ego, &work1);
+  work1 = CYCLE_AT_REST;
+  set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
   stop.motion(ego);
   draw(ego);
   
@@ -2034,11 +2031,10 @@ if (deathType) {
   return();
 }
 
-[ **************************************
+[***************************************
 [ PROCESS PLAYER INPUT
-[ **************************************
+[***************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
-  [ place said tests here
   [ if ego is talking to receptionist, respond to input differently
   if (fEgoTalkReceptionist) {
     block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -2117,7 +2113,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
     return();
   }
-
+  
+  [ general responses
   if (said("talk")) {
     print("Be more specific.");
   }
@@ -2131,13 +2128,13 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   
-[    patient1 is old lady (no name)      2
-[    patient2 is young lady (Ms. Cole)   4
-[    patient3 is old man (Mr. Lowe)      8
-[    patient4 is young man (Mr. Walls)  16
-  if (said("talk", "patient")) {
+  [    patient1 is old lady (no name)      2
+  [    patient2 is young lady (Ms. Cole)   4
+  [    patient3 is old man (Mr. Lowe)      8
+  [    patient4 is young man (Mr. Walls)  16
+  if ((said("talk", "patient") || said("talk", "person"))) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 254); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 254); [ bit.and(FN_MODE, VAR, MASK)
     [ if no one near
     if (work1 == 0) {
       print("There is no one here.");
@@ -2161,7 +2158,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("talk", "woman")) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 6); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 6); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 == 2) {
       goto(talkpatient1);
     } else {
@@ -2174,7 +2171,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("talk", "man")) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 24); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 24); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 == 8) {
       goto(talkpatient3);
     } else {
@@ -2187,7 +2184,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("talk", "old", "woman")) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 2); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 2); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 == 2) {
       [ same as click on patient1
       goto(talkpatient1);
@@ -2204,7 +2201,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (work2 != 0) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 4); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 4); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 == 4) {
       [ same as click on patient2
       goto(talkpatient2);
@@ -2225,7 +2222,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (work2 > 0) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 8); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 8); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 == 8) {
       [ same as click on patient3
       goto(talkpatient3);
@@ -2246,7 +2243,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (work2 > 0) {
     work1 = whosIn;
-    block(BIT.AND, 0, &work1, 16); [ bit.and(BYVAL, VAR, MASK)
+    block(BIT.AND, BYNUM, &work1, 16); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 == 16) {
       [ same as click on patient4
       goto(talkpatient4);
@@ -2259,7 +2256,6 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   
-[ TODO: more said statements for lobby
   if (said("look")) {
     print("This is the lobby. There is a desk and some chairs in the waiting area.");
     [ is receptionist here?
@@ -2292,8 +2288,312 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("use", "bathroom")) {
     print("Who are you talking to?");
   }
+  
+  if (said("look", "desk")) {
+    print("This counter is where the receptionist spends most of her time.");
+  }
+  if (said("look", "under", "desk")) {
+    print("You can't see under the desk from this side.");
+  }
+  if ((said("climb", "desk") || said("jump", "on", "desk"))) {
+    print("The receptionist would kick your butt if you tried that.");
+  }
+  if (said("look", "chair")) {
+    print("The benches are old and worn, but look reasonably comfortable "
+          "for sitting if you need to wait for an appointment.");
+  }
+  if (said("look", "under", "chair")) {
+    if ((posn(ego, 98, 95, 133, 102) || posn(ego, 122, 96, 137, 114) ||
+         posn(ego, 129, 113, 153, 143))) {
+      print("There are a few wads of gum under there. But it's mostly "
+            "pretty clean, which is what you'd expect at a health care "
+            "facility.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("sit", "on", "chair")) {
+    if ((posn(ego, 98, 95, 133, 102) || posn(ego, 122, 96, 137, 114) ||
+         posn(ego, 129, 113, 153, 143))) {
+      print("You don't have time to sit around. You've only got one day for "
+            "this visit.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("get", "chair")) {
+    print("Why would you want to do that? How could dragging a chair "
+          "around possibly be useful?"); 
+  }
+  if (said("look", "under", "table")) {
+    if (posn(ego, 114, 91, 131, 106)) {
+      print("There is nothing under the table.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "table")) {
+    goto(looktable);
+  }
+  if (said("climb", "table")) {
+    print("That table is not strong enough for you to stand on.");
+  }
+  if (said("look", "floor")) {
+    print("The floor looks like it has just been cleaned. You can see a "
+          "few damp spots near the left exit.");
+  }
+  if (said("look", "ceiling")) {
+    print("The ceiling hangs over your head. As it should.");
+  }
+  if (said("look", "sign")) {
+    print("It says \"CAUTION - Wet Floor\". You should probably stay "
+          "away to be safe.");
+  }
+  if (said("look", "hall")) {
+    print("You can see a hallway behind the lobby. That might be an area "
+          "worth exploring.");
+  }
+  if (said("read", "sign")) {
+    print("It says \"CAUTION - Wet Floor\".");
+  }
+  if (said("get", "sign")) {
+    if (!posn(ego, 0, 133, 9, 151)) {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "receptionist")) {
+    [ depends on location
+    if (receptionistLoc == HALL) {
+      print("The receptionist is taking care of some business away from her "
+            "desk. She should be back shortly.");
+    } else {
+      print("The receptionist looks really busy. It takes a lot of effort to "
+            "manage this facility and all its patients.");
+    }    
+  }
+  if (said("kiss", "receptionist")) {
+    [ depends on location
+    if (receptionistLoc == HALL) {
+      print("She's not here right now.");
+    } else {
+      print("You don't want to do that. It's just a lawsuit waiting to happen.");
+    }
+  }
+  if (said("kiss", "woman")) {
+    print("Although you consider yourself a lady's man, be assured, no one here does!");
+  }
+  if ((said("kiss", "patient") || said("kiss", "person"))) {
+    print("None of the patients would welcome a kiss from you.");
+  }
+  if (said("kiss", "anyword", "rol")) {
+    print("Why would you want to do that?");
+  }
+  if ((said("look", "patient") || said("look", "person"))) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 254); [ bit.and(FN_MODE, VAR, MASK)
+    [ if no one near
+    if (work1 == 0) {
+      print("There is no one here.");
+    } else {
+      [ if only one
+      if ((work1 == 2 || work1 == 4 || work1 == 8 || work1 == 16)) {
+        if (work1 == 2) {
+          goto(lookpatient1);
+        }
+        if (work1 == 4) {
+          goto(lookpatient2);
+        }
+        if (work1 == 8) {
+          goto(lookpatient3);
+        }
+        goto(lookpatient4); 
+      } else {
+        print("Be more specific.");
+      }
+    }
+  }
+  if (said("look", "woman")) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 6); [ bit.and(FN_MODE, VAR, MASK)
+    if (work1 == 2) {
+      goto(lookpatient1);
+    } else {
+      if (work1 == 4) {
+        goto(lookpatient2);
+      } else {
+        print("Be more specific.");
+      }
+    }
+  }
+  if (said("look", "man")) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 24); [ bit.and(FN_MODE, VAR, MASK)
+    if (work1 == 8) {
+      goto(lookpatient3);
+    } else {
+      if (work1 == 16) {
+        goto(lookpatient4);
+      } else {
+        print("Be more specific.");
+      }
+    }
+  }
+  if (said("look", "old", "woman")) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 2); [ bit.and(FN_MODE, VAR, MASK)
+    if (work1 == 2) {
+      [ same as click on patient1
+      goto(lookpatient1);
+    } else {
+      print("The old lady isn't here.");
+    }
+  }
+  work2 = 0;
+  if (said("look", "young", "woman")) {
+    work2 = 1;
+  }
+  if (said("look", "cole")) {
+    work2 = 2;
+  }
+  if (work2 != 0) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 4); [ bit.and(FN_MODE, VAR, MASK)
+    if (work1 == 4) {
+      [ same as click on patient2
+      goto(lookpatient2);
+    } else {
+      if (work2 == 1) {
+        print("The young lady isn't here.");
+      } else {
+        print("Ms. Cole isn't here.");
+      }
+    }
+  }
+  work2 = 0;
+  if (said("look", "old", "man")) {
+    work2 = 1;
+  }
+  if (said("look", "lowe")) {
+    work2 = 2;
+  }
+  if (work2 > 0) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 8); [ bit.and(FN_MODE, VAR, MASK)
+    if (work1 == 8) {
+      [ same as click on patient3
+      goto(lookpatient3);
+    } else {
+      if (work2 == 1) {
+        print("The old man isn't here.");
+      } else {
+        print("Mr. Lowe isn't here.");
+      }
+    }
+  }
+  work2 = 0;
+  if (said("look", "young", "man")) {
+    work2 = 1;
+  }
+  if (said("look", "walls")) {
+    work2 = 2;
+  }
+  if (work2 > 0) {
+    work1 = whosIn;
+    block(BIT.AND, BYNUM, &work1, 16); [ bit.and(FN_MODE, VAR, MASK)
+    if (work1 == 16) {
+      [ same as click on patient4
+      goto(lookpatient4);
+    } else {
+      if (work2 == 1) {
+        print("The young man isn't here.");
+      } else {
+        print("Mr. Walls isn't here.");
+      }
+    }
+  }
+
+  if (said("look", "wall")) {
+    print("The walls are painted in light blue, with a white accent below "
+          "the rail line.");
+  }
+  if ((said("look", "painting") || said("look", "picture"))) {
+    print("The floral prints hanging on the wall brighten the "
+          "atmosphere of the waiting room."); 
+  }
+  if ((said("look", "behind", "painting") || said("move", "painting"))) {
+    print("All of the paintings are firmly attached to the wall. Besides, "
+          "what makes you think there's something behind the pictures?");
+  }
+  if (said("get", "painting")) {
+    print("All of the paintings are firmly attached to the wall.");
+  }
+  if (said("look", "papers")) {
+    if (posn(ego, 16, 117, 69, 135)) {
+      print("This stack of papers must be very important to the administration "
+            "of this clinic.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("read", "papers")) {
+    if (posn(ego, 16, 117, 69, 135)) {
+      print("They likely contain personal medical information. It's really "
+            "none of your business.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("get", "papers")) {
+    if (posn(ego, 16, 117, 69, 135)) {
+      print("These papers probably contain sensitive information "
+            "about the clinic and its patients. You shouldn't "
+            "take them.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "computer")) {
+    print("The receptionist uses this computer to manage patient "
+          "accounts and scheduling.");
+  }
+  if ((said("use", "computer") || said("get", "computer"))) {
+    print("You couldn't do that without getting to the other side of the "
+          "receptionists desk.");
+  }
+  if (said("look", "door")) {
+    print("The glass entrance door opens and closes automatically.");
+  }
+  if ((said("open", "door") || said("close", "door"))) {
+    print("The glass entrance door opens and closes automatically.");
+  }
+  if (said("look", "magazine")) {
+    if (has("magazine")) {
+      [ let game functions logic handle it
+      reset(haveMatch);
+    } else {
+      goto(lookmagazine);
+    }
+  }
+  if (said("get", "magazine")) {
+    if (has("magazine")) {
+      print("You already have it.");
+    } else {
+      goto(getmagazine);
+    }
+  }
+  if (said("look", "hallway")) {
+    print("You can see a hallway behind the lobby. That might be an area "
+          "worth exploring.");
+  }
+  if ((said("sit", "down") || said("wait"))) {
+    print("Why? You don't have an appointment here, and your visit here "
+          "won't last very long. You should keep moving.");
+  }
 }
 
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -2306,18 +2606,19 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   if (cursormode == C_LOOK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You see you.");
       goto(doneclick);
     }
     [ receptionist
-    if (posn(oReceptionist, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oReceptionist, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("The receptionist looks really busy. It takes a lot of effort to "
             "manage this facility and all its patients.");
       goto(doneclick);
     }
     [ patient 1
-    if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient1, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookpatient1
       if (elapsedMinutes < 10) {
         [ if using phone
         if ((patient1Seq == GETPHONE || patient1Seq == USEPHONE || patient1Seq == STOWPHONE)) {
@@ -2336,37 +2637,44 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }    
     [ patient 2
-    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient2, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookpatient2
       print("The young lady seems very impatient. She must be in a hurry.");
       goto(doneclick);
     }
     
     [ patient 3
-    if (posn(oPatient3, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient3, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookpatient3
       print("The old man reminds you of your grandpa. He's got the same big nose.");
       goto(doneclick);
     }
     
     [ patient 4
-    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient2, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookpatient4
       print("With those thick glasses, you wonder if this guy is here for an eye exam.");
       goto(doneclick);
     }
     
     [ magazine
-    if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
-      print("It's an old computer magazine from the 1990s.");
+    if (posn(oMagazine, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :lookmagazine
+      distance(ego, oMagazine, work1);
+      if (work1 < 20) {
+        print("It's an old computer magazine from the 1990s.");
+      } else {
+        print("You see a magazine on the table in the corner.");
+      }
       goto(doneclick);
     }
     
     [ desk papers
-    if (posn(oPapers, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPapers, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("This stack of papers must be very important to the administration "
             "of this clinic.");
       goto(doneclick);
     }
-    
-    [ other things to look at
     
     [ computer 22, 73, 32, 86
     if (mouseX > 21 && mouseX < 33 && mouseY > 72 && mouseY < 87) {
@@ -2387,9 +2695,9 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ table 127, 88, 133, 97
     if (mouseX > 126 && mouseX < 134 && mouseY > 87 && mouseY < 98) {
+      :looktable
       print("The corner table is old and worn.");
-      work1 = rm.Lobby;
-      if (obj.in.room("magazine", work1)) {
+      if (!has("magazine")) {
         print("There is a magazine on the table.");
       }
       goto(doneclick);
@@ -2417,8 +2725,30 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
     work1 /= 16;
     if (work1 == 9) {
-      print("The walls are painted in light blue, with a white accent below "
-            "the rail line.");
+      [ paintings are also visible
+      work1 = 0;
+      if (mouseX > 15 && mouseX < 51 && mouseY > 18 && mouseY < 80) {
+        work1 = 1;
+      }
+      if (mouseX > 74 && mouseX < 54 && mouseY > 79 && mouseY < 71) {
+        work1 = 1;
+      }
+      if (mouseX > 103 && mouseX < 51 && mouseY > 126 && mouseY < 72) {
+        work1 = 1;
+      }
+      if (mouseX > 136 && mouseX < 49 && mouseY > 141 && mouseY < 79) {
+        work1 = 1;
+      }
+      if (mouseX > 144 && mouseX < 48 && mouseY > 151 && mouseY < 91) {
+        work1 = 1;
+      }
+      if (work1 == 1) {
+        print("The floral prints hanging on the wall brighten the "
+              "atmosphere of the waiting room."); 
+      } else {
+        print("The walls are painted in light blue, with a white accent below "
+              "the rail line.");
+      }
       goto(doneclick);
     }
     [ hall (25, 52, 95, 94)
@@ -2442,12 +2772,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   
   if (cursormode == C_TALK) {
     [ receptionist
-    if (posn(oReceptionist, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oReceptionist, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       set(checktalk);
       goto(doneclick);
     }
     [ patients
-    if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient1, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       :talkpatient1
       distance(ego, oPatient1, work1);
       if (work1 < 40) {
@@ -2483,7 +2813,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         print("She can't hear you from here.");
       }
     }
-    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient2, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       [ determine which patient
       current.view(oPatient2, work1);
       if (work1 == vw.Patient2) {
@@ -2543,7 +2873,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         }
       }
     }
-    if (posn(oPatient3, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient3, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       :talkpatient3
       distance(ego, oPatient3, work1);
       if (work1 < 40) {
@@ -2573,16 +2903,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   if (cursormode == C_USE) {
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself in public.");
       goto(doneclick);
     }
     [ receptionist
-    if (posn(oReceptionist, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oReceptionist, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You can't reach her from here.");
       goto(doneclick);
     }
-    if (posn(oPatient1, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient1, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       distance(ego, oPatient1, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -2593,39 +2923,40 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       goto(doneclick);
     }
-    if (posn(oPatient2, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient2, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       distance(ego, oPatient2, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
         print("\"Don't touch me!\"");
         block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
-        print("You are not close enough.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
-    if (posn(oPatient3, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient3, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       distance(ego, oPatient3, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
         print("\"Ooh, do that again. I like that!\"");
         block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
-        print("You are not close enough.");
+        print("Move closer.");
       }
     }
-    if (posn(oPatient4, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPatient4, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       distance(ego, oPatient4, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
         print("\"Ooh, do that again. I like that!\"");
         block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
-        print("You are not close enough.");
+        print("Move closer.");
       }
     }
     [ magazine
-    if (posn(oMagazine, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oMagazine, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :getmagazine
       distance(ego, oMagazine, work1);
       if (work1 < 20) {
         [ play sound (walkman not active in lobby)
@@ -2637,35 +2968,72 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         work1 = 3;
         call(lgc.ScoreHandler);
       } else {
-        print("You are not close enough.");
+        print("Move closer.");
       }
     }
     [ desk papers
-    if (posn(oPapers, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(oPapers, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       distance(ego, oMagazine, work1);
       if (work1 < 20) {
         print("These papers probably contain sensitive information "
               "about the clinic and its patients. You shouldn't "
               "take them.");
       } else {
-        print("You are not close enough.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
+   
+    [ paintings (on the walls)
+    block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+    work1 /= 16;
+    [ walls are pri 9
+    if (work1 == 9) {
+      [ check for click on a painting
+      work1 = 0;
+      if (mouseX > 15 && mouseX < 51 && mouseY > 18 && mouseY < 80) {
+        work1 = 1;
+      }
+      if (mouseX > 74 && mouseX < 54 && mouseY > 79 && mouseY < 71) {
+        work1 = 1;
+      }
+      if (mouseX > 103 && mouseX < 51 && mouseY > 126 && mouseY < 72) {
+        work1 = 1;
+      }
+      if (mouseX > 136 && mouseX < 49 && mouseY > 141 && mouseY < 79) {
+        work1 = 1;
+      }
+      if (mouseX > 144 && mouseX < 48 && mouseY > 151 && mouseY < 91) {
+        work1 = 1;
+      }
+      if (work1 == 1) {
+        print("All of the paintings are firmly attached to the wall.");
+      }
+      goto(doneclick);
+    }
+    
+    [ entry door 112, 150, 139, 167
+    if (mouseX > 111 && mouseX < 140 && mouseY > 149 && mouseY < 168) {
+      print("The glass entrance door opens and closes automatically.");
+      goto(doneclick);
+    }
+    
     [ floor sign 2, 125, 8, 140
     if (mouseX > 1 && mouseX < 9 && mouseY > 124 && mouseY < 141) {
-      print("You are not close enough.");
+      [ ego can never get close enough (he'll slip when he gets
+      [ close to the cone)
+      print("Move closer.");
     }
     goto(doneclick);
   }
   
   :doneclick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 if (edgeEgoHit == TOP_EDGE) {
@@ -2679,10 +3047,17 @@ if (edgeEgoHit == TOP_EDGE) {
     }
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-    [ fade out, then change room
-    block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
-    new.room(rm.Hallway);  [ ##LE001##
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    [ send ego to end of hall
+    ignore.objs(ego);
+    ignore.horizon(ego);
+    get.posn(ego, work1, work2);
+    work2 = 93;
+    work3 = 1;
+    move.obj.v(ego, work1, work2, work3, fEgoInHall);
+    [ disable input
+    prevent.input();
+    set(disableGameFunctions);
   } else {
     block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
     print.at("\"Excuse me sir, only patients are allowed past the lobby.\"", 6, 6, 35);
@@ -2696,6 +3071,15 @@ if (edgeEgoHit == TOP_EDGE) {
     set.dir(ego, egoDir);
   }
 }
+if (fEgoInHall) {
+  if (egoX > 20) {
+    move.obj(ego, 17, 93, 1, fEgoInHall);
+  } else {
+    [ fade out, then change room
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+    new.room(rm.Hallway);  [ ##LE001##
+  }
+}
 
 if (edgeEgoHit == BOTTOM_EDGE) {
   [ if patient 1 visited restroom, reset first visit flag
@@ -2704,16 +3088,16 @@ if (edgeEgoHit == BOTTOM_EDGE) {
   }
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.ParkingLot);  [ ##LE002##
 }
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

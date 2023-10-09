@@ -1,12 +1,18 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ cp.ICAPOCC
 [
 [ Indexed Chromatic Association Properties Options Control Console
 [ ICAPOCC
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -82,7 +88,10 @@
 #define prevPal       m21  [ formatted text that points to the edit palette
 #define defaultPal    m22  [ default AGI palette
 
-[if this control panel is not enabled show error screen
+[***************************************
+[ ERROR CHECK
+[***************************************
+[ if this control panel is not enabled show error screen
 if (!enableICAPOCC) {
   if (newRoom) {
     work1 = pic.cp.Error;
@@ -90,36 +99,36 @@ if (!enableICAPOCC) {
     draw.pic(work1);
     discard.pic(work1);
     show.pic();
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
-    set.text.attribute(0, -1);
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
-if(newRoom) {
+[***************************************
+if (newRoom) {
   [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
 
   [ if first time, score it
   work1 = cpusage;
-  block(BIT.AND, 0, &work1, 4); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 4); [ bit.and(FN_MODE, VAR, MASK)
   if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
-    block(BIT.OR, 0, &cpusage, 4); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &cpusage, 4); [ bit.or(FN_MODE, VAR, MASK)
   }
   
   load.pic(currentRoom);
@@ -234,7 +243,7 @@ if(newRoom) {
   [ set to colorindex zero value as default starting point
   colorindex = 0;
   [ and set sliders to match
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
   [ extract the red value
   tmpRow = 20;
@@ -253,7 +262,7 @@ if(newRoom) {
   [ extract the green value
   tmpCol = 33;
   work1 = 4;
-  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN);
   work1 = 2;
   block(STR.LEFT, &strTemp, &strTemp, &work1); [ str.left(sINPUT, sRESULT, vLEN);
   block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT);
@@ -267,7 +276,7 @@ if(newRoom) {
   [ extract the blue value
   tmpCol = 37;
   work1 = 2;
-  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ strRight(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN);
   block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT);
   bluepos = work1;
   display.v(tmpRow, tmpCol, tmpVal);
@@ -285,10 +294,10 @@ if(newRoom) {
   [ original color name
   set.text.attribute(BLACK, LT_GRAY);
   display(14, 16, "  BLACK   "); 
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ load this palette, but don't set it yet
-  block(SET.PALETTE, 0, &displayPal, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &displayPal, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
   
   [ cache ego movement parameters (to be restored
   [ when returning to the control room)
@@ -305,7 +314,7 @@ if(newRoom) {
 [ if room is being drawn or redrawn, need to add text
 if ((newRoom || refresh)) {
   [ push display colors
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ add button text
   set.text.attribute(BLACK, WHITE);
@@ -333,14 +342,14 @@ if ((newRoom || refresh)) {
   display(2, 37, "BL");
   
   [ pop display colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ if first time through
   if (newroom) {
     [ load the palette
-    block(SET.PALETTE, 0, &displayPal, 1); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+    block(SET.PALETTE, BYNUM, &displayPal, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
     [ then fade it in
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   } else {
     [ refreshing - reset the flag
     reset(refresh);
@@ -350,9 +359,9 @@ if ((newRoom || refresh)) {
   return();
 }
 
-[ **************************************
+[***************************************
 [ EVERY CYCLE
-[ **************************************
+[***************************************
 
 [ is cursor in text mode?
 if (cursormode) {
@@ -382,10 +391,10 @@ if (cursormode) {
           tmpVal = 1;
           tmpRow = 20;
           tmpCol = 29;
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           display.v(tmpRow, tmpCol, tmpVal);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
           work1 *= -2;
           work1 += 149;
           tmpCol = 115;
@@ -401,10 +410,10 @@ if (cursormode) {
           tmpVal = 1;
           tmpRow = 20;
           tmpCol = 33;
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           display.v(tmpRow, tmpCol, tmpVal);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
           work1 *= -2;
           work1 += 149;
           tmpCol = 131;
@@ -420,10 +429,10 @@ if (cursormode) {
           tmpVal = 1;
           tmpRow = 20;
           tmpCol = 37;
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           display.v(tmpRow, tmpCol, tmpVal);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
           work1 *= -2;
           work1 += 149;
           tmpCol = 147;
@@ -471,10 +480,10 @@ if (cursormode) {
           tmpVal = 1;
           tmpRow = 20;
           tmpCol = 29;
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           display.v(tmpRow, tmpCol, tmpVal);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
           work1 *= -2;
           work1 += 149;
           tmpCol = 115;
@@ -490,10 +499,10 @@ if (cursormode) {
           tmpVal = 1;
           tmpRow = 20;
           tmpCol = 33;
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           display.v(tmpRow, tmpCol, tmpVal);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
           work1 *= -2;
           work1 += 149;
           tmpCol = 131;
@@ -509,10 +518,10 @@ if (cursormode) {
           tmpVal = 1;
           tmpRow = 20;
           tmpCol = 37;
-          set.text.attribute(-1, 0);
+          set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
           set.text.attribute(BLACK, WHITE);
           display.v(tmpRow, tmpCol, tmpVal);
-          set.text.attribute(0, -1);
+          set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
           work1 *= -2;
           work1 += 149;
           tmpCol = 147;
@@ -934,9 +943,9 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   egoY = egoPrevY;
   egoDir = egoPrevDir;
   [ fade out
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR);
   [ change to temporary palette, load but don't display it
-  block(SET.PALETTE, 0, &prevPal, 1); [ set.palette(BYVAR, PALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &prevPal, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY);
 
   [ restore speed
   animationInterval = oldSpeed;
@@ -973,19 +982,19 @@ if (btnAction == B_SET_COL) {
   work1 = colorindex;
   work1 *= 6;
   [ trim palette at insertion point
-  block(STR.LEFT, &editPal, &editPal, &work1); [ strRight(sINPUT, sRESULT, vLEN);
+  block(STR.LEFT, &editPal, &editPal, &work1); [ str.right(sINPUT, sRESULT, vLEN);
   [ get palette data following insertion point
   work1 *= -1;
   work1 += 90;
-  block(STR.RIGHT, &copyPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &copyPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vLEN);
   [ add new color
-  block(STR.CONCAT, &editPal, &curColHex, 0); [ sINPUT, sADD);
+  block(STR.CONCAT, &editPal, &curColHex, 0); [ str.concat(sINPUT, sADD);
   [ add rest of palette
-  block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD);
+  block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD);
   [ copy current color string to default string
   block(STR.COPY, &curColHex, &defColHex, 0); [ str.copy(sINPUT, sRESULT);
   [ refresh the display palette
-  block(SET.PALETTE, 0, &displayPal, 0); [ set.palette(BYVAR, PALETTE, LOADONLY);  
+  block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY);  
 }
 
 if (btnAction == B_RESTORE) {
@@ -993,156 +1002,156 @@ if (btnAction == B_RESTORE) {
   if (colorindex == 0) {
     [ BLACK
     work1 = 90;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     editPal = "000000";
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 1) {
     [ BLUE
     work1 = 84;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 6;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "00002A";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 2) {
     [ GREEN
     work1 = 78;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 12;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "002A00";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 3) {
     [ CYAN
     work1 = 72;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 18;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "002A2A";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 4) {
     [ RED
     work1 = 66;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 24;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "2A0000";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 5) {
     [ MAGENTA
     work1 = 60;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 30;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "2A002A";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 6) {
     [ BROWN
     work1 = 54;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 36;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "2A1500";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 7) {
     [ LT GRAY
     work1 = 48;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 42;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "2A2A2A";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 8) {
     [ DK GRAY
     work1 = 42;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 48;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "151515";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 9) {
     [ LT BLUE
     work1 = 36;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 54;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "15153F";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 10) {
     [ LT GREEN
     work1 = 30;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 60;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "153F15";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 11) {
     [ LT CYAN
     work1 = 24;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 66;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "153F3F";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 12) {
     [ LT RED
     work1 = 18;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 72;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "3F1515";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 13) {
     [ LT MAGENTA
     work1 = 12;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 78;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "3F153F";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 14) {
     [ YELLOW
     work1 = 6;
-    block(STR.RIGHT, &editPal, &copyPal, &work1); [ strRight(sINPUT, sRESULT, vCOUNT)
+    block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     work1 = 84;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "3F3F15";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
-    block(STR.CONCAT, &editPal, &copyPal, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
   if (colorindex == 15) {
     [ WHITE
     work1 = 90;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "3F3F3F";
-    block(STR.CONCAT, &editPal, &strTemp, 0); [ sINPUT, sADD)
+    block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
   }
   colorindex = -1;
 }
@@ -1229,7 +1238,7 @@ btnAction = 0;
 [ check for index change
 if (newindex != colorindex) {
   [ push display colors
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ update panel
   set.text.attribute(BLACK, WHITE);
@@ -1277,7 +1286,7 @@ if (newindex != colorindex) {
   [ extract the green value
   tmpCol = 33;
   work1 = 4;
-  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ strRight(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ str.right(sINPUT, sRESULT, vLEN);
   work1 = 2;
   block(STR.LEFT, &defColHex, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN);
   block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT);
@@ -1292,7 +1301,7 @@ if (newindex != colorindex) {
   [ blue
   tmpCol = 37;
   work1 = 2;
-  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ strRight(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ str.right(sINPUT, sRESULT, vLEN);
   block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT);
   bluepos = work1;
   display.v(tmpRow, tmpCol, tmpVal);
@@ -1303,12 +1312,12 @@ if (newindex != colorindex) {
   reposition.to.v(oSliderBlue, tmpCol, work1);
   
   [ restore attributes
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ copy color hex text to default string
   block(STR.COPY, &curColHex, &defColHex, 0); [ str.copy(sINPUT, sRESULT);
   [ switch the palette immediately
-  block(SET.PALETTE, 0, &displayPal, 0); [ set.palette(BYVAR, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
   [ update index value
   colorindex = newindex;
 }
@@ -1318,16 +1327,16 @@ if (update) {
   [ recalculate the new color value and adjust palette
   block(BYTE2HEX, &curColHex, &redpos, 0); [ byte2hex(sRESULT, vINPUT);
   block(BYTE2HEX, &copyPal, &greenpos, 0); [ byte2hex(sRESULT, vINPUT);
-  block(STR.CONCAT, &curColHex, &copyPal, 0); [ sINPUT, sADD);
+  block(STR.CONCAT, &curColHex, &copyPal, 0); [ str.concat(sINPUT, sADD);
   block(BYTE2HEX, &copyPal, &bluepos, 0); [ byte2hex(sRESULT, vINPUT);
-  block(STR.CONCAT, &curColHex, &copyPal, 0); [ sINPUT, sADD);
+  block(STR.CONCAT, &curColHex, &copyPal, 0); [ str.concat(sINPUT, sADD);
 
   [ update the palette
-  block(SET.PALETTE, 0, 20, 0); [ set.palette(BYVAR, PALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &s20, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY);
   reset(update);
   
   [ update color value text fields
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
   tmpRow = 20;
   tmpVal = 1;
@@ -1343,15 +1352,15 @@ if (update) {
   tmpCol = 37;
   work1 = bluepos;
   display.v(tmpRow, tmpCol, tmpVal);
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 :done
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%v46|2"
 #message 2  "  BLACK   "
 #message 3  "   BLUE   "

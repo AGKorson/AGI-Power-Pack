@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.Main: Main logic
 [
@@ -32,8 +32,10 @@
 [ Local and dynamic variables/flags are reset whenever a new room is
 [ loaded.
 [
+[*********************************************************************
 
-[ ********************************************************************
+[ power pack support
+#include "powerpack.txt"
 
 [**** BEGIN DEBUG CODE
 [:wait
@@ -45,9 +47,9 @@
 [goto(wait);
 [**** END DEBUG CODE
 
-[ **************************************
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define mnu_msgUseItem              m1
 #define mnu_msgSndToggle            m2
 #define mnu_msgSoundPC              m3
@@ -62,19 +64,18 @@
 #define mnu_msgSpeedFast           m12
 #define mnu_msgSpeedFastest        m13
 #define mnu_msgSkipIntro           m14
-
 #define msgSpeed                   m15
 #define msgExamine                 m16
 #define msgUse                     m17
-[ **************************************
-[ ERROR CHECK
-[ **************************************
 
+[***************************************
+[ ERROR CHECK
+[***************************************
 [ if one of the few trappable errors in AGI is encountered, the game
 [ is probably not able to continue; make an announcement to the player
 [ and quit
 if (errorNumber > 0) {
-  block(FADE.IN, 0, 0, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, 0, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   call(lgc.Error); 
 }
 
@@ -84,9 +85,9 @@ if (showHelp) {
   return();
 }
 
-[ **************************************
+[***************************************
 [ GAME START
-[ **************************************
+[***************************************
 [ when game begins, or restarts, there are a number
 [ of setup activities to take care of
 if (currentRoom == 0) {
@@ -113,7 +114,7 @@ if (currentRoom == 0) {
   if (gameRestarted) {
     [ make sure speed menu is enabled
     s23 = msgSpeed; [ "Speed"
-    block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSpeed, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     [ go to first room here (skip Intro)
     new.room(rm.ParkingLot);
   } else {
@@ -180,9 +181,9 @@ set.menu.item(m42, cShowClicks); [ "Display Clicks: Off"
   }
 }
 
-[ **************************************
+[***************************************
 [ NEW ROOM
-[ **************************************
+[***************************************
 if (newRoom) {
   [ First interpreter cycle in a new room
   [ Note: Everything other than logic 0 is discarded
@@ -230,7 +231,7 @@ if (newRoom) {
     if (closetTimerStart) {
       [ stop the timer
       reset(closetTimerStart);
-      block(TOGGLE.TIMER, 0, 0, 0); [ toggle.timer(STATE)
+      block(TOGGLE.TIMER, STOP_TIMER, 0, 0); [ toggle.timer(STATE)
     }
   }
   
@@ -246,14 +247,14 @@ if (newRoom) {
   }
 }
 
-[ **************************************
+[***************************************
 [ EVERY CYCLE
-[ **************************************
+[***************************************
 
 [ check for click-resets when coming from cutscenes
 if (resetClicks) {
   reset(resetClicks);
-  set.key(-1, -1, cLeftClick); [ clear.controller(cNUM)
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [**** BEGIN DEBUG CODE
@@ -267,7 +268,7 @@ if (controller(cLogInput)) {
     s22 = "Off";
   }
   block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m40, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  block(SET.MSG, BYNUM, &m40, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 }
 [ show click data
 if (controller(cShowClicks)) {
@@ -280,7 +281,7 @@ if (controller(cShowClicks)) {
     s22 = "Off";
   }
   block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, 0, &m41, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+  block(SET.MSG, BYNUM, &m41, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 }
 if (fShowClicks) {
   [ used to assist in creating click statements and said statements
@@ -354,7 +355,7 @@ if (!disableGameFunctions) {
     menu.input();
     oldSeconds = -1;
     [ reset click event
-    set.key(-1, -1, cLeftClick); [ clear.controller(cNUM)
+    set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
     
     [ refresh dynamic menu items
     [ inventory menu item
@@ -363,12 +364,12 @@ if (!disableGameFunctions) {
         [ enable 'use item'
         enable.item(cChooseItem);
         s23 = msgUse; [ "Use Item     <F4>"
-        block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+        block(SET.MSG, BYNUM, &mnu_msgUseItem, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       } else {
         [ enable 'examine item' for all other cursors
         enable.item(cChooseItem);
         s23 = msgExamine; [ "Examine Item  <F4>"
-        block(SET.MSG, 0, &mnu_msgUseItem, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+        block(SET.MSG, BYNUM, &mnu_msgUseItem, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       }
     } else {
       [ not enabled if dead
@@ -406,7 +407,7 @@ if (!disableGameFunctions) {
     }
     s22 = "Sound: %s23  <F2>";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSndToggle, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSndToggle, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
   
     [ check the correct sound option, uncheck the rest
     if (musicMode == PC_SOUND) {
@@ -416,7 +417,7 @@ if (!disableGameFunctions) {
     }
     s22 = "%s23PC Speaker     ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSoundPC, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSoundPC, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     
     if (musicMode == FM_SOUND) {
       s23 = "\x10";
@@ -425,7 +426,7 @@ if (!disableGameFunctions) {
     }
     s22 = "%s23FM Synth       ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSoundFM, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSoundFM, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     
     if (musicMode == MIDI_SOUND) {
       s23 = "\x10";
@@ -434,7 +435,7 @@ if (!disableGameFunctions) {
     }
     s22 = "%s23MIDI           ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSoundMIDI, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSoundMIDI, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
     [ clock toggle and mode
     if (clockOn) {
@@ -448,7 +449,7 @@ if (!disableGameFunctions) {
     }
     s22 = "Clock: %s23  <F6>"; 
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgClockToggle, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgClockToggle, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     if (realClock) {
       s21 = " ";
       s23 = "\x10";
@@ -458,21 +459,21 @@ if (!disableGameFunctions) {
     }
     s22 = "%s21Game Time      ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgGameTime, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgGameTime, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     s22 = "%s23Real Time      ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgRealTime, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgRealTime, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
     [ speed menu not available when dead
     s23 = mnu_msgSpeed;
     block(STR.LEN, &s23, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 == 0 && deathType != DT_SEQ_DONE) {
       s23 = msgSpeed; [ "Speed"
-      block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+      block(SET.MSG, BYNUM, &mnu_msgSpeed, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     }
     if (work1 !=0 && deathType == DT_SEQ_DONE) {
       s23 = "";
-      block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+      block(SET.MSG, BYNUM, &mnu_msgSpeed, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     }
     [ speed mode
     if (animationInterval == SLOW_SPEED) {
@@ -493,7 +494,7 @@ if (!disableGameFunctions) {
     } 
     s22 = "%s23Slow   ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSpeedSlow, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSpeedSlow, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     [ normal (6) is 5 - 8
     if (animationInterval > 4 && animationInterval < 9) {
       s23 = "\x10";
@@ -502,7 +503,7 @@ if (!disableGameFunctions) {
     }
     s22 = "%s23Normal ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSpeedNorm, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSpeedNorm, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     [ fast (3) is 1 - 4 
     if (animationInterval > 0 && animationInterval < 5) {
       s23 = "\x10";
@@ -511,7 +512,7 @@ if (!disableGameFunctions) {
     } 
     s22 = "%s23Fast   ";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSpeedFast, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSpeedFast, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     if (animationInterval == FASTEST_SPEED) {
       s23 = "\x10";
     } else {
@@ -519,7 +520,7 @@ if (!disableGameFunctions) {
     } 
     s22 = "%s23Fastest";
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, 0, &mnu_msgSpeedFastest, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSpeedFastest, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
     [ skip intro
     s22 = mnu_msgSkipIntro;
@@ -529,14 +530,14 @@ if (!disableGameFunctions) {
       if (work1 == 15) {
         work1 = 7; [ ascii value for bullet symbol
         block(BYTE2CHAR, &s23, &work1, 0); [ byte2char(sRESULT, vCHAR)
-        block(STR.CONCAT, &s22, &s23, 0); [ sINPUT, sADD)
-        block(SET.MSG, 0, &mnu_msgSkipIntro, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+        block(STR.CONCAT, &s22, &s23, 0); [ str.concat(sINPUT, sADD)
+        block(SET.MSG, BYNUM, &mnu_msgSkipIntro, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       }
     } else {
       if (work1 == 16) {
         work1 = 15;
         block(STR.LEFT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-        block(SET.MSG, 0, &mnu_msgSkipIntro, &s22); [ set.msg(BYVAR, MSGOLD, STRNEW)
+        block(SET.MSG, BYNUM, &mnu_msgSkipIntro, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       }
     }
   }
@@ -565,9 +566,9 @@ if (clockOn) {
   }
 }
 
-[ **************************************
+[***************************************
 [ DYNAMIC MENU CHECKS
-[ **************************************
+[***************************************
 [ these checks need to be in logic 0, not in the game function logic
 
 [ SOUND MENU ITEMS
@@ -597,13 +598,14 @@ if (controller(cSoundPC)) {
     [ set pc sound mode
     reset(4channelsound);
     reset(useMIDI);
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
     
     [ if playing cassette,
     if (currentTrack > 0 && currentTrack < 128) {
       set(noScript);
       work1 = &musicDone;
       call(lgc.SetSound);
-      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
       reset(noScript);
     }
     [ update the config file
@@ -627,7 +629,7 @@ if (controller(cSoundFM)) {
     if (currentTrack > 0 && currentTrack < 128) {
       call(lgc.SetSound);
       work1 = &musicDone;
-      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
     }
     [ update the config file
     call(lgc.SaveOptions);
@@ -650,7 +652,7 @@ if (controller(cSoundMIDI)) {
     if (currentTrack > 0 && currentTrack < 128) {
       call(lgc.SetSound);
       work1 = &musicDone;
-      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
     }
     [ update the config file
     call(lgc.SaveOptions);
@@ -761,9 +763,9 @@ if (controller(cFaster)) {
   }
 }
 
-[ **************************************
+[***************************************
 [ NON-CONTROLLER CHECKS
-[ **************************************
+[***************************************
 
 [ check for end of closet timer
 if (closetTimerDone) {
@@ -834,7 +836,7 @@ if (deathType) {
     disable.item(cChooseItem);
     [ hide speed menu by setting it to a null string
     s23 = "";
-    block(SET.MSG, 0, &mnu_msgSpeed, &s23); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &mnu_msgSpeed, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     
     [ load the death handler logic
     load.logics(lgc.Death);
@@ -881,7 +883,7 @@ if (musicDone) {
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       call(lgc.SetSound);
       work1 = &musicDone;
-      block(SND.V.FN, PLAY.SOUND.V, &currentTrack, &work1); [ play.sound.v(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
     }
     reset(noScript);
   }
@@ -893,9 +895,9 @@ if (soundDone) {
   reset(playSound);
 }
 
-[ **************************************
+[***************************************
 [ GENERIC CONTROLLERS & TEXT INPUT
-[ **************************************
+[***************************************
 
 [ only if not disabled!
 if (!disableGameFunctions) {
@@ -907,7 +909,7 @@ if (!disableGameFunctions) {
     work1 = v227;
     work1 += 40;
     work2 = 16;
-    block(SET.MSG, 1, &work1, &work2); [ set.msg(BYVAR, MSGOLD, STRNEW) 
+    block(SET.MSG, BYVAR, &work1, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW) 
     [ provide feedback
     print.at("Cursor saved.", 14, 19, 15);
     return();
@@ -924,7 +926,7 @@ if (!disableGameFunctions) {
     block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
     [ now copy it to the current cursor msgnum
     work2 -= 10;
-    block(SET.MSG, 1, &work2, &work1); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYVAR, &work2, &work1); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     [ force update by resetting the cursor index
     v227 = -1;
     [ provide feedback
@@ -945,9 +947,9 @@ if (!disableGameFunctions) {
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 
 [ menu layout - dynamic items will be explicitly defined
 [ "PPDemo"

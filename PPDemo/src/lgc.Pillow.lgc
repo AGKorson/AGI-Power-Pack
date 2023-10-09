@@ -1,11 +1,23 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.Pillow
 [ 
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ pause game clock while viewing
-block(PAUSE.CLOCK, 1, 0, 0); [ pause.clock(MODE)
+block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 
 [ no script entries for this sequence
 set(noScript);
@@ -14,13 +26,13 @@ prevent.input();
 status.line.off();
 
 [ fade out until done loading
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
-set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 
 [ hide objects while showing manual
-block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE);
+block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE);
 
 work1 = pic.Pillow;
 load.pic(work1);
@@ -29,7 +41,7 @@ show.pic();
 discard.pic(work1);
 
 [ fade back in
-block(FADE.IN, 0, 5, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 
 [ main input loop; wait until a key is pressed
 lastChar = 0;
@@ -46,13 +58,13 @@ if (!scorePillow) {
 }
 
 [ fade out during the switch
-block(FADE.OUT, 0, 5, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

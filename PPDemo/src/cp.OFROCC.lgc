@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ cp.OFROCC
 [
@@ -13,8 +13,14 @@
 [ slider to select a speed
 [ textbox that shows current speed value
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define oCursorB       o1  [ need four objects for cursor otherwise
 #define oCursorT       o2  [ text gets erased
 #define oCursorL       o3
@@ -67,7 +73,10 @@
 #define cursormode   f222
 #define sliding      f223
 
-[if this control panel is not enabled show error screen
+[***************************************
+[ ERROR CHECK
+[***************************************
+[ if this control panel is not enabled show error screen
 if (!enableOFROCC) {
   if (newRoom) {
     work1 = pic.cp.Error;
@@ -75,36 +84,36 @@ if (!enableOFROCC) {
     draw.pic(work1);
     discard.pic(work1);
     show.pic();
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
-    set.text.attribute(0, -1);
-    block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
 }
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
-if(newRoom) {
+[***************************************
+if (newRoom) {
   [ this is the first cycle through this room
   [ do basic room initialization
 
   [ if first time, score it
   work1 = cpusage;
-  block(BIT.AND, 0, &work1, 16); [ bit.and(BYVAL, VAR, MASK)
+  block(BIT.AND, BYNUM, &work1, 16); [ bit.and(FN_MODE, VAR, MASK)
   if (work1 == 0) {
     work1 = 5;
     call(lgc.ScoreHandler);
-    block(BIT.OR, 0, &cpusage, 16); [ bit.or(BYVAL, VAR, MASK)
+    block(BIT.OR, BYNUM, &cpusage, 16); [ bit.or(FN_MODE, VAR, MASK)
   }
   
   [ load, draw and discard the picture resource for the current room
@@ -222,7 +231,7 @@ if(newRoom) {
   show.pic();
   
   [ push display colors
-  set.text.attribute(-1, 0);
+  set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ add button text (AFTER showing pic)
   set.text.attribute(BLACK, WHITE);
@@ -248,17 +257,17 @@ if(newRoom) {
   display(16, 12, "Animation Interval:");
   
   [ pop display colors
-  set.text.attribute(0, -1);
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ remember to fade in to be able to see the screen again
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR);
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
   
   return();
 }
 
-[ **************************************
-[ EVERY CYCLE
-[ **************************************
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ is cursor in text mode?
 if (cursormode) {
@@ -584,14 +593,14 @@ if (cursormode) {
     [ if it changed, update speed
     if (work1 != animationInterval) {
       animationInterval = work1;
-      set.text.attribute(-1, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, WHITE);
       if (animationInterval > 9) {
         display(16, 32, "%v10");
       } else {
         display(16, 32, " %v10");
       }
-      set.text.attribute(0, -1);
+      set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     }
   }
 }
@@ -605,7 +614,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   if (btnAction == B_OK) {
     [ save animation interval (but always stay in turbomode)
     if (!tmpTurbo) {
-      work1 = 1;
+      work1 = TURBO_SPEED;
       cycle.time(TOGGLE.TURBO, work1);
       animationInterval *= 3;
     }
@@ -616,7 +625,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
     animationInterval = tmpInterval;
     [ always stay in turbo mode
     if (!tmpTurbo) {
-      work1 = 1;
+      work1 = TURBO_SPEED;
       cycle.time(TOGGLE.TURBO, work1);
     }
   }
@@ -627,7 +636,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   egoDir = egoPrevDir;
   
   [ fade out 
-  block(FADE.OUT, 0, FADECOUNT, BLACK);  [ fade.out(BYVAR, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
   
   [ go back to previous room
   new.room(rm.ControlRoom); [ ##LE002##
@@ -637,12 +646,12 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
 if (btnAction == B_TURBO) {
   toggle(tmpTurbo);
   if (tmpTurbo) {
-    work1 = 1;
+    work1 = TURBO_SPEED;
     cycle.time(TOGGLE.TURBO, work1);
     set.cel(oCheck, 1);
     animationInterval *= 3;
   } else {
-    work1 = 0;
+    work1 = NORMAL_SPEED;
     cycle.time(TOGGLE.TURBO, work1);
     set.cel(oCheck, 0);
     animationInterval /= 3;
@@ -653,7 +662,7 @@ if (btnAction == B_TURBO) {
 }
 
 [ push colors
-set.text.attribute(-1, 0);
+set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 set.text.attribute(BLACK, WHITE);
 
 [ slider update
@@ -714,7 +723,7 @@ if (btnAction == B_FASTEST) {
 }
 
 [ restore colors
-set.text.attribute(0, -1);
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 [ always reset button action
 btnaction = 0;
@@ -722,9 +731,9 @@ btnaction = 0;
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "  OK  "
 #message 2 "Cancel"
 #message 3 " Slow"

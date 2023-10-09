@@ -1,15 +1,17 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ rm.Closet
 [
 [ 
 [
-[ ********************************************************************
-[ TODO: more said statements for closet
+[*********************************************************************
 
-[ **************************************
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define wall        o1
 #define broom       o2
 #define drip        o3
@@ -54,8 +56,10 @@
 #define    MOVESINK2     2
 #define    WASHING       3
 
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
 if (newRoom) {
-  [ this is the first cycle through this room
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
@@ -157,7 +161,7 @@ if (newRoom) {
   load.sound(s.DoorOpen);
   load.sound(s.DoorClose);
   
-  [ add additional room initialization here
+  [ setup ego
   egoDir = STOPPED;
   if (previousRoom == rm.SecretRoom) {
     if (trapped) {
@@ -174,13 +178,11 @@ if (newRoom) {
       set.cel(ego, 0);
       program.control();
       prevent.input();
-      [ turn off auto-cycle to allow cycle-at-rest
-      work1 = 0;
-      set.upper.left(&ego, &work1);
+      work1 = CYCLE_AT_REST;
+      set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
       end.of.loop(ego, uncrouch);
     }
   } else {
-    [if (previousRoom == rm.Hallway) {
     position(ego, 100, 147);
     set.loop(ego, 1);
   }
@@ -192,18 +194,24 @@ if (newRoom) {
   [ display the picture on screen
   show.pic();
   [ fade in
-  block(FADE.IN, 0, FADECOUNT, BLACK); [ fade.in(BYVAR, DELAY, COLOR)
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ only restore cursor for Hallway entrance, or if trapped
   [ (coming from secret room has extra standup sequence)
   if ((previousRoom == rm.Hallway || fEgoDead)) {
     [ restore cursor
     cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
   }
   return();
 }
 
-[ check drip timer if faucet isn't fixed yet
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
+
+[*******************
+[ FAUCET DRIP
+[*******************
 if (dripdone && !faucetfixed) {
   if (dripping) {
     stop.update(drip);
@@ -237,6 +245,9 @@ if (fEgoDead) {
   return();
 }
 
+[*******************
+[ HOLE-IN-WALL
+[*******************
 [ check for uncrouching
 if (uncrouch) {
   [ restore player control
@@ -247,24 +258,533 @@ if (uncrouch) {
   player.control();
   accept.input();
   [ restore autocycle
-  work1 = 1;
-  set.upper.left(&ego, &work1);
+  work1 = AUTO_CYCLE;
+  set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 }
 
-[*****
-:handleInput       [ check for input from player
-[*****
-if (haveInput && !haveMatch && unknownWordNum == 0) {
-  [ place said tests here
-  if (said("look")) {
-    print("This is an old janitor closet.");
+[ trip and fall into wall
+if (egoHitSpecial && !wallbreak && fallSeq == NOFALL) {
+  [ fall, and break wall
+  print("Look out for that broom!");
+  fallSeq = STARTFALL;
+}
+[ startfall is a separate state so that it can be reached
+[ by trying to pick up the broom, or by moving over it
+if (fallSeq == STARTFALL) {
+  fallSeq = MOVE2WALL1;
+  set.view(ego, vw.Tripping);
+  set.loop(ego, 0);
+  fix.loop(ego);
+  move.obj(ego, 72, 145, 1, fDone);
+  prevent.input();
+  cursoricon = C_WAIT;
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  [ disable click2move if in walk mode
+  if (cursormode == C_WALK) {
+    reset(click2move);
   }
-  
+    
+}
+if (fDone && fallSeq == MOVE2WALL1) {
+  fallSeq = MOVE2WALL2;
+  move.obj(ego, 72, 146, 1, fDone);
+}
+if (fDone && fallSeq == MOVE2WALL2) {
+  fallSeq = FALLDOWN;
+  work1 = CYCLE_AT_REST;
+  set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
+  set.loop(ego, 2);
+  set.cel(ego, 0);
+  end.of.loop(ego, fDone);
+}
+if (fDone && fallSeq == FALLDOWN) {
+  fallSeq = BREAKWALL;
+  [ drip could be a problem
+  if (playSound) {
+    stop.sound();
+    reset(soundDone);
+    reset(playSound);
+  }
+  [ no walkman to worry about when wall breaks 
+  work1 = 0;
+  work2 = 100;  [ instrument 100
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set(playSound);
+  sound(s.Crumble1, soundDone);
+  start.update(wall);
+  end.of.loop(wall, fDone);
+}
+if (fallSeq == BREAKWALL) {
+  current.cel(wall, work1);
+  if (work1 == 10) {
+    sound(s.Crumble2, soundDone);
+  }
+  if (fDone) {
+    reset(fDone);
+    fallSeq = SITUP;
+    print("As you fall against the wall, it caves in, revealing a large hole.");
+    set(wallbreak);
+    stop.update(wall);
+    ignore.objs(wall);
+    set.loop(ego, 3);
+    set.cel(ego, 0);
+    end.of.loop(ego, fDONE);
+  }
+}
+if (fDone && fallSeq == SITUP) {
+  reset(fDone);
+  player.control();
+  accept.input();
+  cursoricon = cursormode;
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  fallSeq = FALLDONE;
+  work1 = 5;
+  call(lgc.ScoreHandler);
+}
+if (egoDir != STOPPED && fallSeq == FALLDONE) {
+  [ get up first
+  :getup
+  egoDir = STOPPED;
+  fallSeq = STANDUP;
+  set.loop(ego, 4);
+  end.of.loop(ego, fDone);
+}
+if (fDone && fallSeq == STANDUP) {
+  reset(fDone);
+  fallSeq = NOFALL;
+  set.view(ego, vw.Ego);
+  set.loop(ego, 2);
+  start.cycling(ego);
+  release.loop(ego);
+  [ reenable click2move if in walk mode
+  if (cursormode == C_WALK) {
+    set(click2move);
+  }
+  [ restore auto-cycle
+  work1 = AUTO_CYCLE;
+  set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
+  triptimer = TRIPDELAY;
 }
 
+[*******************
+[ BROOM TRIP
+[*******************
+[ trip over broom even after first fall, unless it's been moved
+if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
+  print("You trip over the broom again!");
+  work1 = -1;
+  call(lgc.ScoreHandler);
+  reset(cantrip);
+  triptimer = TRIPDELAY;
+  triptimer = 90;
+  set.view(ego, vw.Tripping);
+  current.loop(ego, work1);
+  if (work1 > 1) {
+    work1 -= 2;
+  }
+  set.loop.v(ego, work1);
+  fix.loop(ego);
+  wander(ego);
+  prevent.input();
+  cursoricon = C_WAIT;
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  prevent.input();
+}
+[ check for end of stumbling sequence
+if (triptimer > TRIPDELAY) {
+  --triptimer;
+  if (triptimer == TRIPDELAY) {
+    [ restore ego movement
+    set.view(ego, vw.Ego);
+    release.loop(ego);
+    egoDir = STOPPED;
+    player.control();
+    accept.input();
+    cursoricon = cursormode;
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  }
+} else {
+  [ not stumbling - if not on the broom, run the countdown
+  if (!egoHitSpecial && triptimer > 0 && !broommoved) {
+    --triptimer;
+    if (triptimer == 0) {
+      set(cantrip);
+    }
+  }
+}
+
+[ move broom to corner
+if (fDone && movebroomstatus == MOVE2CORNER) {
+  erase(broom);
+  set.cel(broom, 1);
+  position(broom, 44, 153);
+  draw(broom);
+  stop.update(broom);
+  movebroomstatus = NOMOVE;
+  block(43, 148, 50, 154);
+  set(broommoved);
+  work1 = 2;
+  call(lgc.ScoreHandler);
+}
+
+[*******************
+[ CLOSET DOOR
+[*******************
+if (opendoor) {
+  reset(opendoor);
+  if (closetopen) {
+    print("The closet door is already open.");
+  } else {
+    if (posn(ego, 97, 142, 106, 147)) {
+      [ only play sound if walkman is not in use
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        [ drip could be a problem
+        if (playSound) {
+          stop.sound();
+          reset(soundDone);
+          reset(playSound);
+        }
+        call(lgc.SetSound);
+        sound(s.DoorOpen, soundDone);
+        set(playSound);
+      }
+      end.of.loop(door, fDoorDone);
+    } else {
+      print("Move closer.");
+    }
+  }
+}
+if (closedoor) {
+  reset(closedoor);
+  if (closetopen) {
+    if (posn(ego, 97, 142, 106, 156)) {
+      reverse.loop(door, fDoorDone);
+      [ only play sound if walkman is not in use
+      if ((currentTrack == 0 || currentTrack > 128)) {
+        [ drip could be a problem
+        if (playSound) {
+          stop.sound();
+          reset(soundDone);
+          reset(playSound);
+        }
+        call(lgc.SetSound);
+        sound(s.DoorClose, soundDone);
+        set(playSound);
+      }
+    } else {
+      print("Move closer.");
+    }
+  } else {
+    print("The closet door is already closed.");
+  }
+}
+if (fDoorDone) {
+  reset(fDoorDone);
+  if (closetopen) {
+    reset(closetopen);
+  } else {
+    set(closetopen);
+  }
+}
+
+[*******************
+[ WASH HANDS
+[*******************
+if (fDoneWash) {
+  if (washSeq == MOVESINK1) {
+    washSeq = MOVESINK2;
+    move.obj(ego, 60, 144, 1, fDoneWash);
+    return();
+  }
+  if (washSeq == MOVESINK2) {
+    set(noScript);
+    load.view(vw.EgoWashingHands);
+    set.view(ego, vw.EgoWashingHands);
+    set.loop(ego, 0);
+    set.cel(ego, 0);
+    work1 = CYCLE_AT_REST;
+    set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
+    end.of.loop(ego, fDoneWash);
+    washSeq = WASHING;
+    return();
+  }
+  if (washSeq == WASHING) {
+    washSeq = 0;
+    set.view(ego, vw.Ego);
+    set.loop(ego, 3);
+    discard.view(vw.EgoWashingHands);
+    start.cycling(ego);
+    work1 = AUTO_CYCLE;
+    set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
+    reset(noScript);
+    reset(disableGameFunctions);
+    accept.input();
+    set(handsWashed);
+    if (touchTrees && touchPlunger) {
+      print("Washing the sap and plunger-stink from your hands was a good "
+            "idea. They are now clean and germ-free!");
+      work1 = 3;
+    } else {
+      if (touchTrees) {
+        print("You wash the sap from your hands. Now they aren't so sticky.");
+        work1 = 1;
+      } else {
+        if (touchPlunger) {
+          print("Touching that plunger was not a great idea. Washing your "
+                "hands is.");
+          work1 = 2;
+        } else {
+          print("Might as well wash your hands. Cleanliness is next to "
+                "godliness!");
+          work1 = 0;
+        }
+      }
+    }
+    if (!firstWash) {
+      set(firstWash);
+      ++work1;
+    }
+    call(lgc.ScoreHandler);
+    reset(touchTrees);
+    reset(touchPlunger);
+  }
+}
+
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+if (haveInput && !haveMatch && unknownWordNum == 0) {
+
+  if (said("stand up") && fallSeq == FALLDONE) {
+    goto(getup);
+  } else {
+    [ if still sitting (after falling), don't do anything until
+    [ getting back up
+    if (fallSeq == FALLDONE) {
+      print("You should stand up first.");
+      reset(haveInput);
+      goto(doneclick);
+    }
+  }
+  if (said("look")) {
+    print("This is an old janitor closet. It is full of janitor stuff.");
+  }
+  if (said("look", "wall")) {
+    print("The walls are stained and worn, with lots of cracks. They "
+          "could be use a new coat of paint.");
+    if (wallbreak) {
+      print("There is a large hole in the wall where you fell.");
+    }
+  }
+  if (said("look", "floor")) {
+    print("The floor is scuffed and worn, but clean. There is a drain in "
+          "the center.");
+  }
+  if (said("look", "ceiling")) {
+    print("You see a drain pipe hanging from the ceiling.");
+  }
+  if (said("look", "drain")) {
+    print("The stainless steel drain keeps the floor dry.");
+  }
+  if (said("look", "in", "drain")) {
+    if (obj.in.box(ego, 66, 142, 89, 156)) {
+      print("You can see dirt and debris in the drain. It looks "
+            "kind of gross when you look at it closely.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("pee", "in", "drain")) {
+    if (obj.in.box(ego, 66, 142, 89, 156)) {
+      print("Even though there's no one around, it's still a "
+            "disgusting thought. Don't go there.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("get", "drain") || said("move", "drain"))) {
+    goto(getdrain);
+  }
+  if (said("look", "ladder")) {
+    print("There is a large ladder hanging on the wall.");
+  }
+  if (said("get", "ladder")) {
+    print("You have not taken ladder safety training recently, so you "
+          "decide to leave it on the wall.");
+  }
+  if (said("look", "mop")) {
+    print("There is a mop and bucket in the corner and several mops and "
+          "brooms hanging on the wall.");
+  }
+  if ((said("get", "mop") || said("use", "mop") || said("mop", "floor"))) {
+    print("As much as you've always wanted to become a janitor, perhaps you "
+          "should just leave the mops and brooms alone.");
+  }
+  if (said("look", "bucket")) {
+    print("A bucket sits in the corner. A dirty mop is resting inside it.");
+  }
+  if (said("get", "bucket")) {
+    if (posn(ego, 44, 133, 62, 150)) {
+      print("You don't need a bucket.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("use", "bucket")) {
+    if (posn(ego, 44, 133, 62, 150)) {
+    print("As much as you've always wanted to become a janitor, perhaps you "
+          "should just leave the bucket alone.");
+    } else {
+      print("You don't have a bucket.");
+    }
+  }
+  if (said("look", "broom")) {
+    if (broommoved) {
+      s12 = ", including that stupid broom you tripped over earlier.";
+    } else {
+      if (!wallbreak) {
+        s12 = ". One broom is lying on the floor in the "
+              "middle of the room. It looks like a tripping hazard!";
+      } else {
+        s12 = ". The broom you tripped over is still lying on the "
+              "floor in the middle of the room.";
+      }
+    }
+    print("There are several mops and brooms in this closet along "
+          "the back wall%s12");
+  }
+  if (said("get", "broom")) {
+    if (broommoved) {
+      print("As much as you've always wanted to become a janitor, "
+            "perhaps you should just leave the mops and brooms alone.");
+    } else {
+      goto(getbroom);
+    }
+  }
+  if ((said("use", "broom") || said("sweep", "floor"))) {
+    print("You don't have a broom.");
+  }
+  if ((said("put", "broom", "away") || said("move", "broom") ||
+       said("hang", "up", "broom"))) {
+    if (broommoved) {
+      print("The brooms are already set neatly along the back wall.");
+    } else {
+      goto(getbroom);
+    }
+  }
+  if (said("look", "sink")) {
+    print("It's a typical utility closet sink. Great for rinsing mops.");
+  }
+  if ((said("use", "sink") || said("turn", "on", "faucet"))) {
+    print("Is there something you need to wash?");
+  }
+  if ((said("wash", "hands") || said("wash", "hands", "in", "sink"))) {
+    goto(washhands);
+  }
+  if (said("dry", "hands")) {
+    if (handsWashed) {
+      print("Shaking them dry after washing was good enough.");
+    } else {
+      print("Yes, your hands are dry.");
+    }
+  }
+  if (said("pee", "in", "sink")) {
+    print("That's disgusting. What kind of sicko are you?");
+  }
+  if (said("look", "faucet")) {
+    goto(lookfaucet);
+  }
+  if ((said("turn", "off", "faucet") || said("tighten", "faucet"))) {
+    goto(faucetoff);
+  }
+  if (said("look", "plunger")) {
+    print("This old plunger looks like it needs to be rinsed clean.");
+  }
+  if (said("get", "plunger")) {
+    goto(getplunger1);
+  }
+  if (said("lick", "plunger")) {
+    if (obj.in.box(ego, 72, 138, 92, 147)) {
+      print("After touching the dirty plunger, you suddenly realize "
+            "that licking it is no longer a good idea.");
+      goto(getplunger2);
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("look", "shelves")) {
+      print("There are an assortment of typical cleaning supplies on "
+            "the sturdy metal shelves in the closet. shelf.");
+      print("The sturdy metal shelves have an assortment of typical cleaning supplies on this "
+      "shelf.");
+      print("This is a study metal shelf unit.");
+  }
+  if (said("climb", "shelves")) {
+    print("There is no reason to climb the shelves.");
+  }
+  if (said("look", "supplies")) {
+    print("You see boxes of toilet paper and other cleaning supplies "
+          "on the various shelves in the closet.");
+  }
+  if (said("get", "supplies")) {
+    print("You have no need for cleaning supplies.");
+  }
+  if (said("get", "toilet paper")) {
+    print("You don't need any toilet paper. Besides, you don't have "
+          "any way to open the boxes.");
+  }
+  if (said("look", "pipe")) {
+    print("It looks like a drain pipe from the second floor.");
+  }
+  if ((said("climb", "pipe") || said("climb", "pipe"))) {
+    print("That pipe is WAY too high for you to reach it.");
+  }
+  if (said("look", "boxes")) {
+    print("Labels on the boxes say they contain toilet paper and assorted "
+          "cleaning supplies.");
+  }
+  if (said("get", "boxes")) {
+    print("The boxes are much too large for you to pick up.");
+  }
+  if (said("look", "in", "boxes")) {
+    print("All of the boxes are securely taped shut.");
+  }
+  if (said("open", "boxes")) {
+    print("You don't have anything that you could use to opent the boxes.");
+  }
+  if ((said("look", "door") || said("look", "closet", "door"))) {
+    goto(lookdoor);
+  }
+  if ((said("open", "door") || said("open", "closet", "door"))) {
+    if (closetopen) {
+      print("The closet door is already open.");
+    } else {
+      set(opendoor);
+    }
+  }
+  if ((said("close", "door") || said("close", "closet", "door"))) {
+    if (closetopen) {
+      set(closedoor);
+    } else {
+      print("The closet door is already closed.");
+    }
+  }
+  if ((said("lock", "door") || said("lock", "closet", "door") ||
+       said("unlock", "door") || said("unlock", "closet", "door"))) {
+    if (posn(ego, 97, 142, 106, 156)) {
+      print("There is no lock on the closet door.");
+    } else {
+      print("Move closer.");
+    }
+  }
+}
+
+[***************************************
+[ MOUSE INPUT
+[***************************************
 [ if cursor is look/talk/use and left-click and NOT 
 [ clicking on the actual toolbar, check for clicks
 [ on in-game items
@@ -330,13 +850,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ look
   if (cursormode == C_LOOK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You see you.");
       goto(doneclick);
     }
     
     [ closet door
-    if (posn(door, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(door, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
+      :lookdoor
       if (closetopen) {
         print("The closet door is open.");
       } else {
@@ -386,6 +907,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ faucet (62, 117, 66, 125)
     if (mouseX > 61 && mouseX < 67 && mouseY > 116 && mouseY < 126) {
+      :lookfaucet
       if (faucetfixed) {
         print("The faucet is no longer dripping.");
       } else {
@@ -412,7 +934,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       set(clickmops);
     }
     if (clickmops) {
-      print("There mop and bucket in the corner and several mops and "
+      print("There is a mop and bucket in the corner and several mops and "
             "brooms hanging on the wall.");
       goto(doneclick);
     }
@@ -437,7 +959,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ shelf1 supplies (89, 107, 102, 113)
     if (mouseX > 88 && mouseX < 103 && mouseY > 106 && mouseY < 114) {
-      print("There are an assortment of typical cleaning supplies on this shelf.");
+      print("There are an assortment of typical cleaning supplies on this "
+      "shelf.");
       goto(doneclick);
     }
     
@@ -465,7 +988,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    if (posn(wall, ON.OBJ, 1, &mouseX, &mouseY)) { [ on.obj(MODE, vX, vY);
+    if (posn(wall, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       if (wallbreak) {
         print("There is a large hole in the wall where you fell.");
       } else {
@@ -483,12 +1006,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ walls - 41, 74, 113, 139
     if (mouseX > 40 && mouseX < 114 && mouseY > 73 && mouseY < 140) {
-      print("The walls are stained and worn. They could be use a new coat of paint.");
+      print("The walls are stained and worn, with lots of cracks. They "
+            "could be use a new coat of paint.");
       goto(doneclick);
     }
     [ floor - 41, 140, 113, 158
     if (mouseX > 40 && mouseX < 114 && mouseY > 139 && mouseY < 159) {
-      print("The floor is scuffed and worn, but clean. There is a drain in the center.");
+      print("The floor is scuffed and worn, but clean. There is a drain "
+            "in the center.");
       goto(doneclick);
     }
   }
@@ -496,7 +1021,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ talk
   if (cursormode == C_TALK) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("You have nothing to say.");
     } else {
       print("There is no one here to talk to.");
@@ -507,13 +1032,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   [ grab/use
   if (cursormode == C_USE) {
     [ ego
-    if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+    if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Not even in a closet.");
       goto(doneclick);
     }
     
     [ closet door
-    if (posn(door, ON.OBJ, 0, &mouseX, &mouseY)) {
+    if (posn(door, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       if (closetopen) {
         set(closedoor);
       } else {
@@ -530,7 +1055,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         if (obj.in.box(ego, 47, 149, 58, 155)) {
           print("You don't need the broom so you leave it in the corner.");
         } else {
-          print("You can't reach that from here.");
+          print("Move closer.");
         }
         goto(doneclick);
       }
@@ -551,6 +1076,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     if (clickbroom) {
+      :getbroom
       if ((obj.in.box(ego, 47, 146, 77, 156) ||
            obj.in.box(ego, 57, 140, 85, 147))) {
         if (!wallbreak) {
@@ -564,7 +1090,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           movebroomstatus = MOVE2CORNER;
         }
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -578,6 +1104,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ faucet (62, 117, 66, 125)
     if (mouseX > 61 && mouseX < 67 && mouseY > 116 && mouseY < 126) {
+      :faucetoff
       if (posn(ego, 57, 140, 70, 146)) {
         if (faucetfixed) {
           print("You already tightened the faucet handle.");
@@ -588,13 +1115,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           call(lgc.ScoreHandler);
         }
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
     
     [ sink (59, 123, 68, 136)
     if (mouseX > 58 && mouseX < 69 && mouseY > 122 && mouseY < 137) {
+      :washhands
       if (posn(ego, 57, 140, 70, 150)) {
         if (!handsWashed) {
           set(disableGameFunctions);
@@ -610,7 +1138,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           print("You already washed your hands.");
         }
       } else {
-        print("You can't reach it from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -631,22 +1159,26 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         print("As much as you've always wanted to become a janitor, perhaps you "
               "should just leave the mops and brooms alone.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
     
     [ plunger (80, 129, 84, 142)
     if (mouseX > 79 && mouseX < 85 && mouseY > 128 && mouseY < 143) {
+      :getplunger1
       if (obj.in.box(ego, 72, 138, 92, 147)) {
         print("Maybe touching a dirty smelly plunger wasn't such a good idea.");
-        [ lose 2 points
-        work1 = -2;
-        call(lgc.ScoreHandler);
-        set(touchPlunger);
-        reset(handsWashed);
+        :getplunger2
+        if (!touchPlunger) {
+          [ lose 2 points
+          work1 = -2;
+          call(lgc.ScoreHandler);
+          set(touchPlunger);
+          reset(handsWashed);
+        }
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -655,7 +1187,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 83, 140, 108, 146)) {
         print("The boxes are up too high for you to reach.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -665,7 +1197,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 83, 144, 108, 156)) {
         print("The boxes are sealed up. You shouldn't open them.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -675,7 +1207,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 85, 140, 108, 148)) {
         print("You have no need for cleaning supplies.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -685,7 +1217,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 85, 140, 108, 148)) {
         print("You have no need for cleaning supplies.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
@@ -695,318 +1227,36 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (obj.in.box(ego, 74, 140, 108, 148)) {
         print("There is nothing you can do with the shelf.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
     
     [ floor drain (74, 142, 81, 158)
     if (mouseX > 74 && mouseX < 81 && mouseY > 142 && mouseY < 154) {
+      :getdrain
       if (obj.in.box(ego, 66, 142, 89, 156)) {
-        egodir = STOPPED;
-        
-        print("The drain is firmly attached to the floor. You can't pull it up.");
+        print("The drain is firmly attached to the floor. You can't "
+              "pull it up.");
       } else {
-        print("You can't reach that from here.");
+        print("Move closer.");
       }
       goto(doneclick);
     }
     
     [ steam pipe (44, 77, 98, 83)
     if (mouseX > 43 && mouseX < 99 && mouseY > 76 && mouseY < 86) {
-        egodir = STOPPED;
       print("You can't reach the pipe. Not even if you jumped.");
     }
   }
   
   :doneclick
-  set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
 }
 
-[ trip and fall into wall
-if (egoHitSpecial && !wallbreak && fallSeq == NOFALL) {
-  [ fall, and break wall
-  print("Look out for that broom!");
-  fallSeq = STARTFALL;
-}
-[ startfall is a separate state so that it can be reached
-[ by trying to pick up the broom, or by moving over it
-if (fallSeq == STARTFALL) {
-  fallSeq = MOVE2WALL1;
-  set.view(ego, vw.Tripping);
-  set.loop(ego, 0);
-  fix.loop(ego);
-  move.obj(ego, 72, 145, 1, fDone);
-  prevent.input();
-  cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  [ disable click2move if in walk mode
-  if (cursormode == C_WALK) {
-    reset(click2move);
-  }
-    
-}
-if (fDone && fallSeq == MOVE2WALL1) {
-  fallSeq = MOVE2WALL2;
-  move.obj(ego, 72, 146, 1, fDone);
-}
-if (fDone && fallSeq == MOVE2WALL2) {
-  fallSeq = FALLDOWN;
-  [ turn off auto-cycle to allow cycle-at-rest
-  work1 = 0;
-  set.upper.left(&ego, &work1);
-  set.loop(ego, 2);
-  set.cel(ego, 0);
-  end.of.loop(ego, fDone);
-}
-
-if (fDone && fallSeq == FALLDOWN) {
-  fallSeq = BREAKWALL;
-  [ drip could be a problem
-  if (playSound) {
-    stop.sound();
-    reset(soundDone);
-    reset(playSound);
-  }
-  [ no walkman to worry about when wall breaks 
-  work1 = 0;
-  work2 = 100;  [ instrument 100
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
-  set(playSound);
-  sound(s.Crumble1, soundDone);
-  start.update(wall);
-  end.of.loop(wall, fDone);
-}
-if (fallSeq == BREAKWALL) {
-  current.cel(wall, work1);
-  if (work1 == 10) {
-    sound(s.Crumble2, soundDone);
-  }
-  if (fDone) {
-    reset(fDone);
-    fallSeq = SITUP;
-    print("As you fall against the wall, it caves in, revealing a large hole.");
-    set(wallbreak);
-    stop.update(wall);
-    ignore.objs(wall);
-    set.loop(ego, 3);
-    set.cel(ego, 0);
-    end.of.loop(ego, fDONE);
-  }
-}
-if (fDone && fallSeq == SITUP) {
-  reset(fDone);
-  player.control();
-  accept.input();
-  cursoricon = cursormode;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  fallSeq = FALLDONE;
-  work1 = 5;
-  call(lgc.ScoreHandler);
-}
-if (egoDir != STOPPED && fallSeq == FALLDONE) {
-  [ get up first
-  egoDir = STOPPED;
-  fallSeq = STANDUP;
-  set.loop(ego, 4);
-  end.of.loop(ego, fDone);
-}
-if (fDone && fallSeq == STANDUP) {
-  reset(fDone);
-  fallSeq = NOFALL;
-  set.view(ego, vw.Ego);
-  set.loop(ego, 2);
-  start.cycling(ego);
-  release.loop(ego);
-  [ reenable click2move if in walk mode
-  if (cursormode == C_WALK) {
-    set(click2move);
-  }
-  [ restore auto-cycle
-  work1 = 1;
-  set.upper.left(&ego, &work1);
-  triptimer = TRIPDELAY;
-}
-[ trip over broom even after first fall, unless it's been moved
-if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
-  print("You trip over the broom again!");
-  work1 = -1;
-  call(lgc.ScoreHandler);
-  reset(cantrip);
-  triptimer = TRIPDELAY;
-  triptimer = 90;
-  set.view(ego, vw.Tripping);
-  current.loop(ego, work1);
-  if (work1 > 1) {
-    work1 -= 2;
-  }
-  set.loop.v(ego, work1);
-  fix.loop(ego);
-  wander(ego);
-  prevent.input();
-  cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  prevent.input();
-}
-[ check for end of stumbling sequence
-if (triptimer > TRIPDELAY) {
-  --triptimer;
-  if (triptimer == TRIPDELAY) {
-    [ restore ego movement
-    set.view(ego, vw.Ego);
-    release.loop(ego);
-    egoDir = STOPPED;
-    player.control();
-    accept.input();
-    cursoricon = cursormode;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
-  }
-} else {
-  [ not stumbling - if not on the broom, run the countdown
-  if (!egoHitSpecial && triptimer > 0 && !broommoved) {
-    --triptimer;
-    if (triptimer == 0) {
-      set(cantrip);
-    }
-  }
-}
-
-[ move broom to corner
-if (fDone && movebroomstatus == MOVE2CORNER) {
-  erase(broom);
-  set.cel(broom, 1);
-  position(broom, 44, 153);
-  draw(broom);
-  stop.update(broom);
-  movebroomstatus = NOMOVE;
-  block(43, 148, 50, 154);
-  set(broommoved);
-  work1 = 2;
-  call(lgc.ScoreHandler);
-}
-
-if (opendoor) {
-  reset(opendoor);
-  if (closetopen) {
-    print("The closet door is already open.");
-  } else {
-    if (posn(ego, 97, 142, 106, 147)) {
-      [ only play sound if walkman is not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        [ drip could be a problem
-        if (playSound) {
-          stop.sound();
-          reset(soundDone);
-          reset(playSound);
-        }
-        call(lgc.SetSound);
-        sound(s.DoorOpen, soundDone);
-        set(playSound);
-      }
-      end.of.loop(door, fDoorDone);
-    } else {
-      print("You are not close enough.");
-    }
-  }
-}
-if (closedoor) {
-  reset(closedoor);
-  if (closetopen) {
-    if (posn(ego, 97, 142, 106, 156)) {
-      reverse.loop(door, fDoorDone);
-      [ only play sound if walkman is not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        [ drip could be a problem
-        if (playSound) {
-          stop.sound();
-          reset(soundDone);
-          reset(playSound);
-        }
-        call(lgc.SetSound);
-        sound(s.DoorClose, soundDone);
-        set(playSound);
-      }
-    } else {
-      print("You are not close enough.");
-    }
-  } else {
-    print("The closet door is already closed.");
-  }
-}
-
-if (fDoorDone) {
-  reset(fDoorDone);
-  if (closetopen) {
-    reset(closetopen);
-  } else {
-    set(closetopen);
-  }
-}
-
-[ washing hands
-if (fDoneWash) {
-  if (washSeq == MOVESINK1) {
-    washSeq = MOVESINK2;
-    move.obj(ego, 60, 144, 1, fDoneWash);
-    return();
-  }
-  if (washSeq == MOVESINK2) {
-    set(noScript);
-    load.view(vw.EgoWashingHands);
-    set.view(ego, vw.EgoWashingHands);
-    set.loop(ego, 0);
-    set.cel(ego, 0);
-    work1 = 0;
-    set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
-    end.of.loop(ego, fDoneWash);
-    washSeq = WASHING;
-    return();
-  }
-  if (washSeq == WASHING) {
-    washSeq = 0;
-    set.view(ego, vw.Ego);
-    set.loop(ego, 3);
-    discard.view(vw.EgoWashingHands);
-    start.cycling(ego);
-    work1 = 1;
-    set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
-    reset(noScript);
-    reset(disableGameFunctions);
-    accept.input();
-    set(handsWashed);
-    if (touchTrees && touchPlunger) {
-      print("Washing the sap and plunger-stink from your hands was a good "
-            "idea. They are now clean and germ-free!");
-      work1 = 3;
-    } else {
-      if (touchTrees) {
-        print("You wash the sap from your hands. Now they aren't so sticky.");
-        work1 = 1;
-      } else {
-        if (touchPlunger) {
-          print("Touching that plunger was not a great idea. Washing your "
-                "hands is.");
-          work1 = 2;
-        } else {
-          print("Might as well wash your hands. Cleanliness is next to "
-                "godliness!");
-          work1 = 0;
-        }
-      }
-    }
-    if (!firstWash) {
-      set(firstWash);
-      ++work1;
-    }
-    call(lgc.ScoreHandler);
-    reset(touchTrees);
-    reset(touchPlunger);
-  }
-}
-
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 :exit
 
 if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
@@ -1017,17 +1267,16 @@ if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
   set.cel(ego, 0);
   program.control();
   prevent.input();
-  [ turn off auto-cycle to allow cycle-at-rest
-  work1 = 0;
+  work1 = CYCLE_AT_REST;
   set.upper.left(&ego, &work1);  [ autocycle(oSOBJ, vMODE)
   end.of.loop(ego, fDone);
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
 }
 if (crouch && fDone) {
   [ fade out, then change room
-  block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.SecretRoom);  [ ##LE002##
 }
 
@@ -1037,9 +1286,9 @@ if ((posn(ego, 100, 143, 100, 143) || posn(ego, 101, 144, 101, 144) ||
   if (closetopen) { 
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(1, &cursoricon, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
     [ fade out, then change room
-    block(FADE.OUT, 0, FADECOUNT, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.Hallway);  [ ##LE001##
   } else {
     if (egoDir > 0 && egoDir < 5) {
@@ -1050,9 +1299,9 @@ if ((posn(ego, 100, 143, 100, 143) || posn(ego, 101, 144, 101, 144) ||
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 "%g20"
 #message 2 "%g21"
 #message 3 "%g22"

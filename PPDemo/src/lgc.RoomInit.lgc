@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ lgc.RoomInit: Room Initialization
 [ 
@@ -6,7 +6,19 @@
 [ first time after a new.room() command is encountered. It takes care 
 [ of the common items that are done for all rooms.
 [
-[ ********************************************************************
+[*********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ for all rooms except the control panels and start, set screen to 80 col mode 
 [ (control panels manage that separately)
@@ -16,7 +28,7 @@ if (currentRoom < 21 && currentRoom != 1) {
     [ existing picture (or it will display again after the switch, which 
     [ will interfere with fade in/out)
     work1 = 64;
-    block(PIC.DRAW, -1, &work1, 0); [ pic.draw(FILLSTYLE, vCOLORPAIR)
+    block(PIC.CLEAR, CLEAR_SCREEN, &work1, 0); [ pic.clear(FILLSTYLE, vCOLORPAIR)
     [ 64 = 0x40, which clears the screen to black, with priority set
     [ to 4. DO NOT pass a value that sets priority to zero; the game
     [ will lock up if the entire priority screen is set to zero
@@ -25,7 +37,7 @@ if (currentRoom < 21 && currentRoom != 1) {
     configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
     set(column80);
     [ force fade back to black
-    block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+    block(FADE.OUT, BYNUM, 0, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   }
   
   
@@ -49,8 +61,8 @@ if (currentRoom < 21 && currentRoom != 1) {
   [ by default, set ego to autocycle; remember to turn it 
   [ off when you want cycle an animation of ego when it's
   [ not moving
-  work1 = 1;
-  set.upper.left(&ego, &work1);
+  work1 = AUTO_CYCLE;
+  set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
 
   [ turn status line on during normal game play
   status.line.on();
@@ -68,8 +80,8 @@ if (currentRoom < 21 && currentRoom != 1) {
     reset(click2move);
   }
   [ use straightline mode
-  work1 = -1;
-  step.size(ego, work1);
+  work1 = MOVE_DIRECT;
+  step.size(ego, work1); [ set.click2move.mode(vMODE)
 
 }
 
@@ -89,20 +101,20 @@ if (currentRoom > 20) {
     if (!column80) {
       [ before switching mode, clear the picture
       work1 = 64;
-      block(PIC.DRAW, -1, &work1, 0); [ pic.draw(FILLSTYLE, vCOLORPAIR)
+      block(PIC.CLEAR, CLEAR_SCREEN, &work1, 0); [ pic.clear(FILLSTYLE, vCOLORPAIR)
       configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
       set(column80);
       [ force fade back to black
-      block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 0, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     }
   } else {
     [ if loading any other control panel, use 40 col mode
     if (column80) {
       work1 = 64;
-      block(PIC.DRAW, -1, &work1, 0); [ pic.draw(FILLSTYLE, vCOLORPAIR)
+      block(PIC.CLEAR, CLEAR_SCREEN, &work1, 0); [ pic.clear(FILLSTYLE, vCOLORPAIR)
       configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
       [ force fade back to black
-      block(FADE.OUT, 0, 0, BLACK); [ fade.out(BYVAR, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 0, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       reset(column80);
     }
   }
@@ -149,6 +161,6 @@ if (work1 > 219) {
 
 return();
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
