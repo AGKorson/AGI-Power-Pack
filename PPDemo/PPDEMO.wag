@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/8/2023 11:04:34 PM"
+   LastEdit = "10/9/2023 4:51:09 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -86,8 +86,8 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H8A689208
-   CompCRC32 = &HBAFA73F0
+   CRC32 = &H3844C32E
+   CompCRC32 = &H3844C32E
    IsRoom = True
 
 [Logic5]
@@ -114,15 +114,15 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HED97C15F
-   CompCRC32 = &HED97C15F
+   CRC32 = &H68BCEDAC
+   CompCRC32 = &H68BCEDAC
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H5B2DEAB
-   CompCRC32 = &H5B2DEAB
+   CRC32 = &H885B1C81
+   CompCRC32 = &H885B1C81
    IsRoom = True
 
 [Logic20]

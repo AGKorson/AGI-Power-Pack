@@ -105,11 +105,10 @@ if (newRoom) {
   
   [ if coming from stairwell, and access system not set, 
   if (previousRoom == rm.Stairway && !resetBaDASS) {
-    [ play sound if walkman not active
-    if ((currentTrack == 0 || currentTrack > 128)) {
-      call(lgc.SetSound);
-      sound(s.SystemFail, soundDone);
-    }
+    [ play sound (walkman can't be active yet)
+    call(lgc.SetSound);
+    sound(s.SystemFail, soundDone);
+    [ one little shake
     shake.screen(1);
     work1 = 0;
     :flickerit
@@ -136,10 +135,17 @@ if (newRoom) {
 [ PROCESS PLAYER INPUT
 [***************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
-[ TODO: more said statements for control room
-[ look
+  [ check if ego is near terminal (saves repeating this
+  [ check multiple lines in all the said checks)
+  reset(nearTerminal);
+  if (obj.in.box(ego, 64, 133, 104, 138)) {
+    set(nearTerminal);
+  }
+    
+  [ look
   if (said("look")) {
-    print("This is the Power Pack control room.");
+    print("The room is dominated by a large control panel in the center "
+          "of the room. There are exits leading to the left and right.");
   }
   
   if (said("look", "door")) {
@@ -152,55 +158,89 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("open", "door")) {
-    if (resetBaDASS) {
-      print("The door is already open.");
+    if (posn(ego, 67, 153, 88, 166)) {
+      if (resetBaDASS) {
+        print("The door is already open.");
+      } else {
+        print("The electronic lock on the door has failed. You can't open "
+              "the door.");
+      }
     } else {
-      print("The electronic lock on the door has failed. You can't open "
-            "the door.");
+      print("Move closer.");
     }
   }
   if (said("close", "door")) {
-    if (resetBadASS) {
-      print("There is no need to close the door. It will close automatically "
-            "when you leave.");
+    if (posn(ego, 67, 153, 88, 166)) {
+      if (resetBadASS) {
+        print("There is no need to close the door. It will close automatically "
+              "when you leave.");
+      } else {
+        print("The door is already closed.");
+      }
     } else {
-      print("The door is already closed.");
+      print("Move closer.");
     }
   }
   if (said("unlock", "door")) {
-    if (resetBadASS) {
-      print("The door is open, so there is no need to unlock it.");
+    if (posn(ego, 67, 153, 88, 166)) {
+      if (resetBadASS) {
+        print("The door is open, so there is no need to unlock it.");
+      } else {
+        print("The lock is controlled by the electronic access control "
+              "system. The system is currently not working.");
+      }
     } else {
-      print("The lock is controlled by the electronic access control "
-            "system. The system is currently not working.");
+      print("Move closer.");
     }
   }
-  if ((said("break", "down", "door") || said("smash", "door") || 
-       said("hit", "door"))) {
-    if (resetBadASS) {
+  if ((said("break", "down", "door") || said("break", "door", "down") || 
+       said("smash", "door") || said("hit", "door"))) {
+    if (posn(ego, 67, 153, 88, 166)) {
+      if (resetBadASS) {
+        print("The door is open. Why bother trying to break it down?");
+      } else {
+        print("the massive door is much too strong for you to cause any "
+              "damage, or to force it open.");
+      }
+    } else {
+      print("Move closer.");
+    }
   }
   if (said("kick", "door")) {
-    if (resetBadASS) {
-      print("The door is open. Why bother kicking it?");
+    if (posn(ego, 67, 153, 88, 166)) {
+      if (resetBadASS) {
+        print("The door is open. Why bother kicking it?");
+      } else {
+        print("You'll break your foot before doing any damage to this "
+              "sturdy door.");
+      }
     } else {
-      print("You'll break your foot before doing any damage to this "
-            "sturdy door.");
+      print("Move closer.");
     }
   }
-  if (said("look", "wall")) {}
-  if (said("look", "floor")) {}
-  if (said("look", "ceiling")) {}
-  if (said("look", "light")) {}
-  if (said("turn", "on", "light")) {}
-  if (said("turn", "off", "light")) {}
-  if (said("get", "light")) {}
-  if (said("look", "keyboard")) {}
-  if (said("look", "mouse")) {}
-  if (said("get", "keyboard")) {}
-  if (said("get", "mouse")) {}
-  if (said("look", "screen")) {}
-  if ((said("use", "keyboard") || said("type", "keyboard"))) {}
-  if (said("use", "mouse")) {}
+  if (said("look", "wall")) {
+    print("The walls are plain and bare. You see a few marks indicating some "
+          "posters or signs may have been taped or tacked up in the past, but "
+          "they are long since gone.");
+  }
+  if (said("look", "floor")) {
+    print("There is a thin layer of dust on the plain floor. You can "
+          "see your footprints in the dust. It looks like you've been "
+          "the only one in here in a very long time.");
+  }
+  if (said("look", "ceiling")) {
+    print("The drop down ceiling has a single light hanging down over "
+          "the center of the room.");
+  }
+  if (said("look", "light")) {
+    print("A single incandescent bulb provides a soft warm glow that "
+          "lights up the room without causing glare on the console "
+          "video screens.");
+  }
+  if ((said("turn", "on", "light") || said("turn", "off", "light"))) {
+    print("You don't see a switch for the lights. They are probably "
+          "controlled by the facility's control system.");
+  }
   
   [ insert floppy
   if ((said("put", "disk", "in", "slot") || 
@@ -208,7 +248,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
        said("put", "disk", "in", "drive") || said("insert", "disk") || 
        said("insert", "disk", "drive"))) {
     if (has("floppy disk")) {
-      if (obj.in.box(ego, 64, 133, 104, 138)) {
+      if (nearTerminal) {
         print("You insert the disk and flip the latch to secure it.");
         set(floppyInserted);
         work1 = cp.Terminal;
@@ -228,14 +268,14 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   [ remove/take floppy
-  if ((said(said("eject", "disk") || "get", "disk") || 
+  if ((said("eject", "disk") || said("get", "disk") || 
        said("get", "disk", "console") || said("get", "disk", "drive") ||
        said("remove", "disk") || said("remove", "disk", "console") || 
        said("remove", "disk", "drive")
        )) {
     work1 = cp.Terminal;
     if (obj.in.room("floppy disk", work1)) {
-      if (obj.in.box(ego, 64, 133, 104, 138)) {
+      if (nearTerminal) {
         [ play sound if walkman not active
         if ((currentTrack == 0 || currentTrack > 128)) {
           call(lgc.SetSound);
@@ -257,31 +297,125 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       }
     }
   }
-  if (said("look", "console")) {}
-  if (said("look", "CAISOCC")) {}
-  if (said("look", "ERIDOCC")) {}
-  if (said("look", "ESADOCC")) {}
-  if (said("look", "ICAPOCC")) {}
-  if (said("look", "OFROCC")) {}
-  if (said("look", "RANDOCC")) {}
-  if ((said("look", "MOCC") || said("look", "AMOS"))) {}
-  if (said("log", "on")) {}
-  if ((said("log", "on", "console") || said("use", "console") || 
-       said("log", "on", "computer") || said("use", "computer"))) {}
-  if ((said("log", "on", "CAISOCC") || said("use", "CAISOCC"))) {}
-  if ((said("log", "on", "ERIDOCC") || said("use", "ERIDOCC"))) {}
-  if ((said("log", "on", "ESADOCC") || said("use", "ESADOCC"))) {}
-  if ((said("log", "on", "ICAPOCC") || said("use", "ICAPOCC"))) {}
-  if ((said("log", "on", "OFROCC") || said("use", "OFROCC"))) {}
-  if ((said("log", "on", "RANDOCC") || said("use", "RANDOCC"))) {}
-  if ((said("log", "on", "MOCC") || said("use", "MOCC"))) {}
+  if ((said("look", "console") || said("look", "computer"))) {
+    print("There are several different output monitors on the "
+          "console, and a keyboard and mouse in front of the central "
+          "terminal. There are rooms leading off on both sides of "
+          "the room.");
+  }
+  if (said("look", "keyboard")) {
+    print("It's a standard 101 key IBM PC keyboard.");
+  }
+  if (said("look", "mouse")) {
+    print("It's an old Microsoft Mouse, from the late 1980s.");
+  }
+  if (said("get", "keyboard")) {
+    if (nearTerminal) {
+      print("The keyboard cable goes into the console and can't be "
+            "easily disconnected.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("get", "mouse")) {
+    if (nearTerminal) {
+      print("The mouse cord goes into the console and can't be "
+            "easily disconnected.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if ((said("use", "keyboard") || said("type", "keyboard") ||
+       said("log", "on", "console") || said("use", "console") || 
+       said("log", "on", "computer") || said("use", "computer") ||
+       said("log", "on"))) {
+    if (nearTerminal) {
+      set(showMOCC);
+    } else {
+      print("You need to move closer to reach the keyboard and mouse.");
+    }
+  }
+  if (said("use", "mouse")) {
+    if (nearTerminal) {
+      print("The mouse doesn't seem do do anything with the "
+            "text screen displayed on the main terminal. It "
+            "must be for use with the other six consoles.");
+    } else {
+      print("You need to move closer to reach the keyboard and mouse.");
+    }
+  }
+  if (said("look", "screen")) {
+    print("The central terminal station has a simple monocrhome text "
+          "display. The six larger auxiliary panels are large color "
+          "monitors, probably considered state of the art in the late "
+          "1980s through early 1990s.");
+  }
+  if ((said("look", "MOCC") || said("look", "AMOS"))) {
+    print("This looks like an old style computer terminal display. A "
+          "floppy disk drive is located to the right of the display.");
+  }
+  if (said("look", "CAISOCC")) {
+    goto(lookcaisocc);
+  }
+  if (said("look", "ERIDOCC")) {
+    goto(lookeridocc);
+  }
+  if (said("look", "ESADOCC")) {
+    goto(lookesadocc);
+  }
+  if (said("look", "ICAPOCC")) {
+    goto(lookicapocc);
+  }
+  if (said("look", "OFROCC")) {
+    goto(lookofrocc);
+  }
+  if (said("look", "RANDOCC")) {
+    goto(lookrandocc);
+  }
+  if ((said("log", "on", "CAISOCC") || said("use", "CAISOCC"))) {
+    goto(usecaisocc);
+  }
+  if ((said("log", "on", "ERIDOCC") || said("use", "ERIDOCC"))) {
+    goto(useeridocc);
+  }
+  if ((said("log", "on", "ESADOCC") || said("use", "ESADOCC"))) {
+    goto(useesadocc);
+  }
+  if ((said("log", "on", "ICAPOCC") || said("use", "ICAPOCC"))) {
+    goto(useicapocc);
+  }
+  if ((said("log", "on", "OFROCC") || said("use", "OFROCC"))) {
+    goto(useofrocc);
+  }
+  if ((said("log", "on", "RANDOCC") || said("use", "RANDOCC"))) {
+    goto(userandocc);
+  }
   if ((said("turn", "off", "computer") || said("turn", "off", "console") || 
-       said("turn", "off", "anyword", "console"))) {}
-  if (said("climb", "on", "console")) {}
+       said("turn", "off", "anyword", "console"))) {
+    if (nearTerminal) {
+      print("The console and all its systems appear to be powered "
+            "from a hardwired power source. There is no local switch "
+            "to turn power on or off.");
+    } else {
+      print("Move closer.");
+    }
+  }
+  if (said("climb", "on", "console")) {
+    if (nearTerminal) {
+      print("If you did that, you might damage the console or its "
+            "components. It's better that you don't.");
+    } else {
+      print("Move closer.");
+    }
+  }
   if ((said("hack", "computer") || said("hack", "console") || said("hack", "MOCC") || 
        said("hack", "CAISOCC") || said("ERIDOCC") ||
        said("hack", "ESADOCC") || said("ICAPOCC") ||
-       said("hack", "OFROCC") || said("RANDOCC"))) {}
+       said("hack", "OFROCC") || said("RANDOCC"))) {
+    print("If you actually had any computer skills, maybe you could do that. "
+          "But face it, you have trouble just turning on a computer, let "
+          "alone hacking one.");
+  }
 }
 
 [***************************************
@@ -298,6 +432,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     goto(doneclick);
   }
 
+  [ check if ego is near terminal (saves repeating this
+  [ check multiple lines in all the mouse-click checks)
+  reset(nearTerminal);
+  if (obj.in.box(ego, 64, 133, 104, 138)) {
+    set(nearTerminal);
+  }
+    
   [ look
   if (cursormode == C_LOOK) {
     [ ego
@@ -317,6 +458,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         print("The heavy metal door is shut tight. The "
               "access control system doesn't appear to be working.");
       }
+      goto(doneclick);
+    }
+    
+    [ light 75, 60, 83, 66
+    if (mouseX > 75 && mouseX < 83 && mouseY > 60 && mouseY < 66) {
+      print("A single incandescent bulb provides a soft warm glow that "
+            "lights up the room without causing glare on the console "
+            "video screens.");
       goto(doneclick);
     }
     
@@ -349,8 +498,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 == 6) {
       [ ERIDOCC
+      :lookeridocc
       if (showERIDOCC) {
-        print("This is the ERIDOCC module interface display.");
+        print("This is the ERIDOCC module interface display. The ERIDOCC "
+              "module let's you create custom mouse pointers for AGI "
+              "power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
               "is not known.");
@@ -359,8 +511,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 == 7) {
       [ OFROCC
+      :lookofrocc
       if (showOFROCC) {
-        print("This is the OFROCC module interface display.");
+        print("This is the OFROCC module interface display. The OFROCC "
+              "module let's you adjust game speed and turbo mode that "
+              "is only available in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
               "is not known.");
@@ -369,8 +524,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 == 8) {
       [ ESADOCC
-      if (showERIDOCC) {
-        print("This is the ERIDOCC module interface display.");
+      :lookesadocc
+      if (showESADOCC) {
+        print("This is the ESADOCC module interface display. The ESADOCC "
+              "module demonstrates available sound options and instrument "
+              "settings in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
               "is not known.");
@@ -379,8 +537,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 == 9) {
       [ ICAPOCC
+      :lookicapocc
       if (showICAPOCC) {
-        print("This is the ICAPOCC module interface display.");
+        print("This is the ICAPOCC module interface display. The ICAPOCC "
+              "module provides an interface to allow you to alter color "
+              "palettes in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
               "is not known.");
@@ -389,8 +550,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 == 10) {
       [ RANDOCC
+      :lookrandocc
       if (showRANDOCC) {
-        print("This is the RANDOCC module interface display.");
+        print("This is the RANDOCC module interface display. The RANDOCC "
+              "module let's you adjust the color elements of display message "
+              "windows in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
               "is not known.");
@@ -399,8 +563,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (work1 == 11) {
       [ CAISOCC
+      :lookcaisocc
       if (showCAISOCC) {
-        print("This is the CAISOCC module interface display.");
+        print("This is the CAISOCC module interface display. The CAISOCC "
+              "module is used to create custom FM synth instruments for "
+              "use in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
               "is not known.");
@@ -411,10 +578,46 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ main console 31, 46, 128, 131
     if (mouseX > 30 && mouseX < 129 && mouseY > 45 && mouseY < 132) {
       print("This massive computer control console takes up most of the "
-            "room. There is a central terminal station, and six auxillary "
+            "room. There is a central terminal station, and six auxiliary "
             "display panels.");
       goto(doneclick);
     }
+    
+    [ ceiling
+    if (mouseY < 31) {
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      [ extract just visual
+      work1 *= 16;
+      work1 /= 16;
+      if (work1 != CYAN) {
+        print("The drop down ceiling has a single light hanging down over "
+              "the center of the room.");
+        goto(doneclick);
+      }
+    }
+    
+    [ floor
+    if (mouseY > 124) {
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      [ extract just visual
+      work1 *= 16;
+      work1 /= 16;
+      if ((work1 == WHITE || work1 == LT_GRAY || work1 == DK_GRAY)) {
+        print("There is a thin layer of dust on the plain floor. You can "
+              "see your footprints in the dust. It looks like you've been "
+              "the only one in here in a very long time.");
+        goto(doneclick);
+      }
+    }
+    
+    [ walls
+    if (mouseY > 21 && mouseY < 158) {
+      print("The walls are plain and bare. You see a few marks indicating some "
+            "posters or signs may have been taped or tacked up in the past, but "
+            "they are long since gone.");
+      goto(doneclick);
+    }
+    
     [ nothing specific
     print("The room is dominated by a large control panel in the center "
           "of the room. There are exits leading to the left and right.");
@@ -464,11 +667,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
-    reset(nearTerminal);
-    if (obj.in.box(ego, 64, 133, 104, 138)) {
-      set(nearTerminal);
-    }
-    
     [ keyboard/mouse 67, 112, 96, 122
     if (mouseX > 66 && mouseX < 97 && mouseY > 111 && mouseY < 123) {
       if (nearTerminal) {
@@ -488,55 +686,74 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (nearTerminal) {
         set(showMOCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the keyboard to interact with "
+              "this system.");
       }
+      goto(doneclick);
     }
     if (work1 == 6) {
       [ ERIDOCC
+      :useeridocc
       if (nearTerminal) {
         set(showERIDOCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the mouse and keyboard to interact with "
+              "this system.");
       }
+      goto(doneclick);
     }
     if (work1 == 7) {
       [ OFROCC
+      :useofrocc
       if (nearTerminal) {
         set(showOFROCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the mouse and keyboard to interact with "
+              "this system.");
       }
+      goto(doneclick);
     }
     if (work1 == 8) {
       [ ESADOCC
+      :useesadocc
       if (nearTerminal) {
         set(showESADOCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the mouse and keyboard to interact with "
+              "this system.");
       }
+      goto(doneclick);
     }
     if (work1 == 9) {
       [ ICAPOCC
+      :useicapocc
       if (nearTerminal) {
         set(showICAPOCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the mouse and keyboard to interact with "
+              "this system.");
       }
+      goto(doneclick);
     }
     if (work1 == 10) {
       [ RANDOCC
+      :userandocc
       if (nearTerminal) {
         set(showRANDOCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the mouse and keyboard to interact with "
+              "this system.");
       }
+      goto(doneclick);
     }
     if (work1 == 11) {
       [ CAISOCC
+      :usecaisocc
       if (nearTerminal) {
         set(showCAISOCC);
       } else {
-        print("Use the mouse and keyboard to interact with this system.");
+        print("Move closer to the mouse and keyboard to interact with "
+              "this system.");
       }
     }
   }

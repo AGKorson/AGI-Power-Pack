@@ -1427,6 +1427,12 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
 
+  if ((said("turn", "on", "light") || said("turn", "off", "light"))) {
+    print("Given how messed up the electrical systems are in this part "
+          "of the building, you decide it's best not to mess with the "
+          "lights.");
+  }
+  
 }
 
 [***************************************
