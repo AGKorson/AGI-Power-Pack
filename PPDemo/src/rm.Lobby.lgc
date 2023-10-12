@@ -2633,9 +2633,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           goto(doneclick);
         }
         [ if reading a book
-        if (patient1Seq > STOWPHONE && patient1Seq == TAPTOE) {        
+        if (patient1Seq > STOWPHONE && patient1Seq < TAPTOE) {        
           print("This patient is reading a book. It's nice to know that some "
                 "people can survive without constantly checking their cell phone.");
+        } else {
+          print("She seems like a friendly old lady.");
         }
       } else {
         print("This old lady has been here a long time. She doesn't seem to "
