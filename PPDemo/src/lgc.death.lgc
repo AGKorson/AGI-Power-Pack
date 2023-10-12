@@ -13,6 +13,7 @@
 [ 5: stunned by batmobile theft deterrent system
 [ 6: slipped on wet spot in lobby
 [ 7: car stolen
+[ 8: kicked the bucket
 
 [ 99: ego driving away (check win/lose/score)
 [
@@ -60,7 +61,8 @@ if (deathType < DT_SEQ_DONE) {
   [ check deathtype to display initial death message
   [ hit by a car
   if (deathType == DT_RUNOVER) {
-    print("Stepping in front of a moving vehicle turned out to be a bad idea.");
+    print("Stepping in front of a moving vehicle turned out to be a "
+          "bad idea.");
     [ patients continue on their way
     #define patientCar   o3
     start.update(patientCar);
@@ -68,17 +70,20 @@ if (deathType < DT_SEQ_DONE) {
 
   [ trapped in the secret room
   if (deathType == DT_TRAPPED) {
-    print("In secret rooms, no one can hear you scream. Looks like you'll be here awhile.");
+    print("In secret rooms, no one can hear you scream. Looks like "
+          "you'll be here awhile.");
   }
   
   [ stuck in the coffin
   if (deathType == DT_COFFIN) {
-    print("Look on the bright side - at least you'll save money on your funeral costs.");
+    print("Look on the bright side - at least you'll save money on your "
+          "funeral costs.");
   }
   
   [ escorted from the premises 
   if (deathType == DT_ARRESTED) {
-    print("Looks like your trip to Oakhurst will include a tour of the city jail!");
+    print("Looks like your trip to Oakhurst will include a tour of the "
+          "city jail!");
   }
   
   [ stunned by bat-mobile security alarm
@@ -88,12 +93,20 @@ if (deathType < DT_SEQ_DONE) {
   
   [ slip on wet floor
   if (deathType == DT_BROKE_LEG) {
-    print("Looks like you broke your leg! At least you did it in a medical facility!");
+    print("Looks like you broke your leg! At least you did it in a medical "
+          "facility!");
   }
   
   [ car stolen (left unlocked)
   if (deathType == DT_STOLEN_CAR) {
-    print("Your car has been stolen! You should have locked your door. Now you'll need to thumb a ride back home. ");
+    print("Your car has been stolen! You should have locked your door. "
+          "Now you'll need to thumb a ride back home. ");
+  }
+  
+  [ kicked the bucket (literally)
+  if (deathType == DT_KICK_BUCKET) {
+    print("You have (literally) kicked the bucket. Also, you have "
+          "(figuratively) kicked the bucket. RIP.");
   }
   
   [ check for game over
@@ -104,6 +117,12 @@ if (deathType < DT_SEQ_DONE) {
     [ death sequence is over
     deathType = DT_SEQ_DONE;
   }
+}
+
+[ if kicking bucket, make sure it goes away
+[ when it gets to edge of screen
+if (v4 == &oBucket) {
+  erase(oBucket);
 }
 
 [ decrement timer
@@ -137,20 +156,20 @@ if (deathTimer == 1) {
     }
     [ if player has floppy with source code, it's a win
     if (has("floppy disk") && (floppyfiles == 2 || floppyfiles == 3)) {
-    load.sound(m.Winner);
-    set(4channelsound);
-    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    [ use correct instrument
-    work3 = 0;
-    work2 = 73; [ flute
-    set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-    ++work3;
-    work2 = 68; [ oboe
-    set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-    ++work3;
-    work2 = 67; [ baritone sax
-    set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-    sound(m.Winner, soundDone);
+      load.sound(m.Winner);
+      set(4channelsound);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      [ use correct instrument
+      work3 = 0;
+      work2 = 73; [ flute
+      set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work3;
+      work2 = 68; [ oboe
+      set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      ++work3;
+      work2 = 67; [ baritone sax
+      set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(m.Winner, soundDone);
       print("Your vist to Oakhurst was a big success! You managed "
             "to find a copy of the source files for the AGI Power "
             "Pack.");
@@ -257,8 +276,3 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "You are now dead."
-#message 2 "Thank you for playing this game. Better luck next time!"
-#message 3 "You are dead! You can only restore, restart, quit the game or view your inventory."
-#message 4 "You are dead by a different method."
-#message 5 gameAboutMsg

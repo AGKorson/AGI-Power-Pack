@@ -183,13 +183,19 @@ if (fDoorDone) {
   doorSeq = 0;
 }
 
+[ if ego is dead, skip player input
+if (deathType) {
+  return();
+}
+
 [***************************************
 [ PROCESS PLAYER INPUT
 [***************************************
 if (haveInput && !haveMatch && unknownWordNum == 0) {
 [ TODO: more said statements for stairway room
   if (said("look")) {
-    print("You see nothing of interest.");
+    print("A dimly lit stairway leads down from the secret room to a "
+          "small foyer.");
   }
   if (said("open", "door")) {
     if (posn(ego, 26, 154, 43, 156)) {
@@ -210,12 +216,32 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       print("you are not close enough.");
     }
   }
-  if (said("look", "stairs")) {}
-  if (said("look", "wall")) {}
-  if (said("look", "cracks")) {}
-  if (said("look", "floor")) {}
-  if (said("look", "ceiling")) {}
-  if (said("look", "light")) {}
+  if (said("look", "stairs")) {
+          print("A long set of stairs leads down from the secret room to a "
+                "small foyer.");
+          print("The stairwell is illuninated by a couple of overhead lights.");
+  }
+  if (said("look", "wall")) {
+    print("The walls are a bit plain, and show signs of age with "
+          "various cracks clearly visible.");
+  }
+  if (said("look", "cracks")) {
+    print("There are several cracks an the wall and also a lot of peeling paint.");
+  }
+  if (said("look", "floor")) {
+    print("There is a thin layer of dust on the plain floor. You can "
+          "see your footprints in the dust. It looks like you've been "
+          "the only one in here in a very long time.");
+  }
+  if (said("look", "ceiling")) {
+  }
+  if (said("look", "light")) {
+    print("The stairwell is illuninated by a couple of overhead lights.");
+    if (!resetMOCC) {
+      print("The lower light flickers a lot, as if there is something "
+            "not quite right with the electrical circuit.");
+    }
+  }
   if (said("look", "door")) {}
   if (said("unlock", "door")) {}
   if ((said("break", "down", "door") || said("smash", "door") || said("hit", "door"))) {}
@@ -258,42 +284,51 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ access control pad
     if (mouseX > 45 && mouseX < 50 && mouseY > 135 && mouseY < 143) {
-      print("It's a door access keypad. With the right code, it will unlock the door.");
+      print("It's a door access keypad. With the right code, it will unlock "
+            "the door.");
       goto(doneclick);
     }
-    [ stairs/wall
+    
+    [ stair steps
     if (mouseX > 53) {
-      work1 = 215;
-      work1 -= mouseX;
-      if (work1 >= mouseY) {
-        work2 = work1;
-        work2 -= mouseY;
-        if (work2 < 12) {
-          print("A long set of stairs leads down from the secret room to a small foyer.");
-        } else {
-          if (work2 < 56) {
-            print("The walls are a bit plain, and show signs of age with various cracks clearly visible.");
-            print("The stairwell is illuninated by a couple of overhead lights.");
-            if (!resetMOCC) {
-              print("The lower light flickers a lot, as if there is something not quite right with the electrical circuit.");
-            }
-          }
-        }
+      work1 = mouseX;
+      work1 += mouseY;
+      if (work1 > 202 && work1 < 214) {
+        print("A long set of stairs leads down from the secret room to a "
+              "small foyer.");
+        goto(doneclick);
       }
+    }
+    
+    [ floor 23,153, 57,158
+    if (mouseX > 23 && mouseX < 57 && mouseY > 153 && mouseY < 158) {
+      print("There is a thin layer of dust on the plain floor. You can "
+            "see your footprints in the dust. It looks like you've been "
+            "the only one in here in a very long time.");
       goto(doneclick);
     }
+    
     [ rest of wall
-    if (mouseX > 22 && mouseX < 60 && mouseY > 99 && mouseY < 154) {
-      print("The walls are a bit plain, and show signs of age with "
-            "various cracks clearly visible.");
-      print("The stairwell is illuninated by a couple of overhead "
-            "lights.");
-      if (!resetMOCC) {
-        print("The lower light flickers a lot, as if there is something "
-              "not quite right with the electrical circuit.");
+    if (mouseX > 23 && mouseY > 19 && mouseY < 153) {
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
+      [ strip off pri
+      work1 *= 16;
+      work1 /= 16;
+      if (work1 != BLACK) {
+        print("The walls are a bit plain, and show signs of age with "
+              "various cracks clearly visible.");
+        print("The stairwell is illuninated by a couple of overhead "
+              "lights.");
+        if (!resetMOCC) {
+          print("The lower light flickers a lot, as if there is something "
+                "not quite right with the electrical circuit.");
+        }
+        goto(doneclick);
       }
-      goto(doneclick);
     }
+    print("blackness");
+    goto(doneclick);
+    
   }
   
   [ talk

@@ -8,6 +8,7 @@
 #define NORMAL_SPEED             6
 #define SLOW_SPEED              12
 #define cursor                "_"
+#define oBucket                o14
 #define tbStateBtn             o15
 #define tbActionBtn            o16
 #define cMenu                   c0 [ menu: n/a;     key: ESC; used to display the menu
@@ -46,7 +47,7 @@
 #define cSkipIntro             c33
 #define cLogInput              c34 [ temp debug item
 #define cShowClicks            c35 [ temp debug item
-#define useMIDI                f19  [ local flag to track whether 4channel mode is FM or MIDI
+#define useMIDI                f19 [ local flag to track whether 4channel mode is FM or MIDI
 #define touchTrees             f21
 #define handsWashed            f22
 #define tbBtnDown              f23 [ set when mouse down occurs on toolbar button
@@ -54,6 +55,8 @@
 #define trapped                f25
 #define closetTimerDone        f26
 #define realClock              f27
+#define kickBucket             f28
+#define bucketDone             f29
 #define negativeScore          f30 [ set when player score is below zero
 #define firstLobby             f31 [ to track first time ego visits the lobby
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
@@ -141,6 +144,7 @@
 #define DT_STUNNED               5
 #define DT_BROKE_LEG             6
 #define DT_STOLEN_CAR            7
+#define DT_KICK_BUCKET           8
 #define DT_DRIVE_AWAY           99
 #define DT_SEQ_DONE            254
 #define DT_GAME_OVER           255

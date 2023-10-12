@@ -416,14 +416,14 @@ if (gameRestarted) {
   if (clockOn) {
     if (realClock) {
       [ status bar checks realtime minutes
-      set.cursor.char(" l29, v3, v7, v23, v99, v78, f9");
+      set.cursor.char(" l27, v3, v7, v23, v99, v78, f9");
     } else {
       [ status bar checks gametime seconds
-      set.cursor.char(" l29, v3, v7, v23, v99, v11, f9");
+      set.cursor.char(" l27, v3, v7, v23, v99, v11, f9");
     }
   } else {
     [ status bar doesn't check for time
-    set.cursor.char(" l29, v3, v7, v23, v99, f9");
+    set.cursor.char(" l27, v3, v7, v23, v99, f9");
   }
 }
 

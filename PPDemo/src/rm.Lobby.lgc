@@ -162,7 +162,7 @@ if (newRoom) {
   draw.pic(currentRoom);
   discard.pic(currentRoom);
   
-  [ the horizon defines the upper limit of ego's movement
+  [ set horizon at entrance to hallway
   set.horizon(94);
   
   [ add toolbar buttons
@@ -591,6 +591,7 @@ if (receptionistCtr > 0) {
     [ answering patient 1 request for bathroom
     if (patient1Seq == TALKCOUNTER1) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 8;
       print.at("\"Sure! It's through that doorway. Go left "
                "and it's the second door on the right.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
@@ -604,6 +605,7 @@ if (receptionistCtr > 0) {
     [ respond to ego or patient1 request to speak
     if ((fEgoWaitTalk || patient1Seq == WAITCOUNTER) && receptionistSeq == STANDSPEAK1) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 4;
       print.at("\"Can I help you?\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ stop receptionist from cycling
@@ -844,6 +846,7 @@ if (fRDone) {
     [ if patient 2/3/4 ready to see nurse, announce it
     if (patient2Seq == EXAMREADY) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 6;
       print.at("\"Ms. Cole, the nurse will see you now.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ patient called to exam room
@@ -855,6 +858,7 @@ if (fRDone) {
     }
     if (patient3Seq == EXAMREADY) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 6;
       print.at("\"Mr. Lowe, the nurse will see you now.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ patient called to exam room
@@ -866,6 +870,7 @@ if (fRDone) {
     }
     if (patient4Seq == EXAMREADY) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 6;
       print.at("\"Mr. Walls, the nurse will see you now.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ patient called to exam room
@@ -1026,6 +1031,7 @@ if (patient1Ctr > 0) {
       set.cel(oPatient1, 0);
       stop.cycling(oPatient1);
       block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 5;
       print.at("\"May I use the restroom please?\"", 8, 38, 30);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ set timer for receptionist to speak
@@ -1035,6 +1041,7 @@ if (patient1Ctr > 0) {
     [ ready to speak second line
     if (patient1Seq == TALKCOUNTER2) {
       block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
+      printTimeout = 4;
       print.at("\"Thank you!\"", 8, 38, 30);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       patient1Seq = MOVEHALL1;

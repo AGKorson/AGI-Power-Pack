@@ -105,7 +105,7 @@ if (currentRoom == 0) {
     [ messages to be in wrong places
     call(lgc.PowerPack);
   }
-
+  
   [ do start/restart initialization activities
   call(lgc.Init);       [ this sets up the game; assigns key controllers,
                         [ configures the screen and other startup activities
@@ -774,7 +774,7 @@ if (closetTimerDone) {
   reset(closetTimerDone);
   reset(closetopen);
   if (currentRoom > 6) {
-    print("%l90|9");
+    print("%l50|9");
     set(trapped);
   }
 }
@@ -1035,14 +1035,14 @@ return();
             "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
 
 [ default cursor pointers
-#message 30 "%l90|1"
-#message 31 "%l90|2"
-#message 32 "%l90|3"
-#message 33 "%l90|4"
-#message 34 "%l90|5"
-#message 35 "%l90|6"
-#message 36 "%l90|7"
-#message 37 "%l90|8"
+#message 30 "%l50|1"
+#message 31 "%l50|2"
+#message 32 "%l50|3"
+#message 33 "%l50|4"
+#message 34 "%l50|5"
+#message 35 "%l50|6"
+#message 36 "%l50|7"
+#message 37 "%l50|8"
 
 [ debug menu items
 #message 41 "Log Input:      Off"

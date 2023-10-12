@@ -25,11 +25,11 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define entryDelay v240
-#define rndNum     v241
+#define entryDelay   v240
+#define rndNum       v241
 
-#define tmpStr1    s20
-#define tmpStr2    s21
+#define tmpStr1       s20
+#define tmpStr2       s21
 
 [***************************************
 [ MAIN CODE BLOCK 
@@ -53,6 +53,50 @@ if (newRoom) {
     work1 = &musicDone;
     block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
     reset(noScript);
+  }
+}
+
+[ check for kicking bucket
+if (kickBucket) {
+  if (currentRoom == rm.ParkingLot) {
+    [ in parking lot, end the sequence after the death loop
+    [ finishes
+    if (bucketDone) {
+      reset(kickBucket);
+      deathType = DT_KICK_BUCKET;
+    }
+    return();
+  }
+  [ in all other rooms, check ego loop to determine next 
+  [ action in the sequence
+  current.loop(ego, work1);
+  if (bucketDone) {
+    [ when each loop finishes, move to next sequence
+    if (work1 == 0) {
+      [ after kicking, switch to falling
+      set.loop(ego, 1);
+      set.cel(ego, 0);
+      end.of.loop(ego, bucketDone);
+    } else {
+      [ after falling, end the sequence
+      reset(kickBucket);
+      deathType = DT_KICK_BUCKET;
+      return();
+    }
+  } else {
+    [ during kick cycle, check for the right time
+    [ to start the bucket moving
+    if (work1 == 0) {
+      current.cel(ego, work1);
+      if (work1 == 2) {
+        work1 = UP_RIGHT;
+        set.dir(oBucket, work1);
+      }
+    }
+  }
+  [ if bucket reaches right edge, erase it
+  if (v4 == &oBucket) {
+    erase(oBucket);
   }
 }
 
@@ -478,11 +522,6 @@ if (haveInput && !haveMatch) {
     }
   }
   
-  [ look drew
-  if (said("look", "drew")) {
-    print("Yes, Drew is a very handsome fellow. Easy on the eyes.");
-  }
-  
   [ wegup is not a word
   if (said("wegup")) {
     print("That is not a valid word.");
@@ -511,21 +550,57 @@ if (haveInput && !haveMatch) {
     }
   }
   
+  if (said("kick", "bucket")) {
+    print("OK.");
+    [ stop ego, have him kick a bucket
+    egoDir = STOPPED;
+    work1 = CYCLE_AT_REST;
+    set.upper.left(&ego, &work1);  [ auto.cycle(oSOBJ, vMODE)
+    if (currentRoom == rm.ParkingLot) {
+      [ in parking lot, ego is tiny - so skip 
+      [ the kicking animation, just die
+      load.view(vw.EgoDead);
+      set.view(ego, vw.EgoDead);
+      set.cel(ego, 0);
+      end.of.loop(ego, bucketDone);
+    } else {
+      [ start by showing kicking loop
+      load.view(vw.KickBucket);
+      set.view(ego, vw.KickBucket);
+      set.loop(ego, 0);
+      set.cel(ego, 0);
+      end.of.loop(ego, bucketDone);
+      [ add the bucket
+      animate.obj(oBucket);
+      get.posn(ego, work1, work2);
+      work1 += 8;
+      position.v(oBucket, work1, work2);
+      set.view(oBucket, vw.KickBucket);
+      set.loop(oBucket, 2);
+      fix.loop(oBucket);
+      set.priority(oBucket, 15);
+      ignore.blocks(oBucket);
+      ignore.objs(oBucket);
+      ignore.horizon(oBucket);
+      work1 = 3;
+      step.size(oBucket, work1);
+      draw(oBucket);
+    }
+    program.control();
+    prevent.input();
+    set(kickBucket);
+    return();
+  }
   [ hit/punch/kill/shoot/kick anything
   if ((said("hit", "rol") || said("kick", "rol"))) {
     print("Unprovoked violence is never acceptable.");
   }
   
-  [ climb anything - not allowed (in most rooms)
-  if (said("climb", "rol")) {
-    print("There is no need to cimb anything.");
-  }
-  
   [ look anything
-  if (said("look", "rol")) {
+  if (said("look", "anyword", "rol")) {
     print("What? Where?");
   }
-  
+
   [ get anything
   if (said("get", "rol")) {
     print("You can't get that here.");
@@ -535,21 +610,50 @@ if (haveInput && !haveMatch) {
   if (said("use", "rol")) {
     print("Be more specific. What do you want me to do with it?");
   }
-  [ TODO: more generic said statments
-  if (said("move", "anyword", "rol")) {}
-  if ((said("push", "anyword", "rol") || said("pull", "anyword", "rol"))) {}
-  if ((said("look", "ego") || said("look", "drew"))) {}
-  if (said("look", "pocket")) {}
-  if (said("climb", "up", "anyword", "rol")) {}
-  if (said("climb", "in", "anyword", "rol")) {}
-  if (said("get", "in", "anyword", "rol")) {}
-  if (said("where", "is", "anyword", "rol")) {}
-  if (said("who", "is", "anyword", "rol")) {}
-  if (said("what", "is", "anyword", "rol")) {}
-  if (said("jump")) {}
-  if (said("jump", "rol")) {}
-  if (said("drop", "anyword", "rol")) {}
-  if (said("kick", "bucket")) {}
+
+  if (said("move", "anyword", "rol")) {
+    print("Leave things be. No need to move anything here.");
+  }
+  if ((said("push", "anyword", "rol") || said("pull", "anyword", "rol"))) {
+    print("There is no need to push or pull anything.");
+  }
+
+  if ((said("look", "ego") || said("look", "drew"))) {
+    print("Yes, Drew is a very handsome fellow. Easy on the eyes.");
+  }
+  if (said("look", "pocket")) {
+    print("Your enormously oversized pockets have room for all kinds of "
+          "amazing things. Right now you have the following items:");
+    [ disable selection of inventory items
+    reset(enableItemSelect);
+    status();
+  }
+  
+  [ climb anything - not allowed (in most rooms)
+  if (said("climb", "rol")) {
+    print("There is no need to cimb anything here.");
+  }
+  
+  if (said("climb", "up", "anyword", "rol")) {
+    print("What are you, a mountain goat?");
+  }
+  if ((said("climb", "in", "anyword", "rol") || said("get", "in", "anyword", "rol"))) {
+    print("What are you, a hermit crab?");
+  }
+  if (said("what", "anyword", "rol")) {
+    print("That's a good question. Maybe you should ask google.");
+  }
+  if (said("ask", "google", "rol")) {
+    print("If only you had a cell phone, that might work.");
+  }
+  if (said("jump", "rol")) {
+    print("There's no reason for jumping of any kind needed here.");
+  }
+  if (said("drop", "anyword", "rol")) {
+    print("Since your pockets are so ridiculously large, and can carry "
+          "more than your average pack mule, there's no reason to drop "
+          "anything. It's best to keep it all.");
+  }
   
   [ UNKNOWN WORD CHECK
   if (unknownWordNum > 0) {

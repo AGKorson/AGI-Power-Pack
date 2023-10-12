@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/9/2023 4:51:09 PM"
+   LastEdit = "10/12/2023 1:02:09 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HD95F2129
-   CRC32 = &HD95F2129
+   CompCRC32 = &HA5C75481
+   CRC32 = &HA5C75481
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -65,15 +65,15 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "ego arrives in car; to win, player must get back in car, with disk that has pp source\nleaving early allowed, but no win;\na few other cars in parking lot, but no other animation here"
-   CRC32 = &H5BF77035
-   CompCRC32 = &H5BF77035
+   CRC32 = &HF6DFEB59
+   CompCRC32 = &HF6DFEB59
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "can't pass through unless you ask receptionist to use the bathroom; another npc will ask, which will be a clue; receptionist will do some tasks behind the desk randomly. a couple patients will be seated in waiting room."
-   CRC32 = &H9B68ADD4
-   CompCRC32 = &H9B68ADD4
+   CRC32 = &HD4EB50FF
+   CompCRC32 = &HD4EB50FF
    IsRoom = True
 
 [Logic4]
@@ -86,43 +86,43 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H3844C32E
-   CompCRC32 = &H3844C32E
+   CRC32 = &H14C83AC2
+   CompCRC32 = &H14C83AC2
    IsRoom = True
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &HB2587737
-   CompCRC32 = &HB2587737
+   CRC32 = &H8B32D314
+   CompCRC32 = &H8B32D314
    IsRoom = True
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
-   CRC32 = &H1780FD80
-   CompCRC32 = &H1780FD80
+   CRC32 = &H4F252953
+   CompCRC32 = &H4F252953
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &HF9E6A9DE
-   CompCRC32 = &HF9E6A9DE
+   CRC32 = &H660F84D2
+   CompCRC32 = &H660F84D2
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H68BCEDAC
-   CompCRC32 = &H68BCEDAC
+   CRC32 = &HC5508620
+   CompCRC32 = &HC5508620
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &H885B1C81
-   CompCRC32 = &H885B1C81
+   CRC32 = &HF5D1F4BF
+   CompCRC32 = &HF5D1F4BF
    IsRoom = True
 
 [Logic20]
@@ -359,15 +359,15 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &HC3811CB1
-   CompCRC32 = &HC3811CB1
+   CRC32 = &HDFC9520E
+   CompCRC32 = &HDFC9520E
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
-   CRC32 = &H17F87432
-   CompCRC32 = &H17F87432
+   CRC32 = &H4A0007D
+   CompCRC32 = &H4A0007D
    IsRoom = False
 
 [Logic52]
@@ -380,8 +380,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H38996D58
-   CompCRC32 = &H38996D58
+   CRC32 = &H13380894
+   CompCRC32 = &H13380894
    IsRoom = False
 
 [Logic55]
@@ -415,8 +415,8 @@
 [Logic60]
    ID = lgc.PowerPack
    Description = ""
-   CRC32 = &H57292174
-   CompCRC32 = &H57292174
+   CRC32 = &HE7225F70
+   CompCRC32 = &HE7225F70
    IsRoom = False
 
 [Logic61]
@@ -3380,5 +3380,9 @@
 
 [View57]
    ID = vw.SmallPerson7
+   Description = ""
+
+[View45]
+   ID = vw.KickBucket
    Description = ""
 [::END Views::]

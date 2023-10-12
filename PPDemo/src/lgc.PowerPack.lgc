@@ -19,7 +19,7 @@
 [ confirm platform is PC
 if (machineType != PC) {
   load.logics(lgc.Error);
-  print("%l97|33");
+  print("%l55|33");
   quit(1);
 }
       
@@ -27,13 +27,13 @@ if (machineType != PC) {
 call(lgc.Version2Check);
 if (!IntVersion) {
   load.logics(lgc.Error);
-  print("%l97|34");
+  print("%l55|34");
   quit(1);
 }
 if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272)) {
   [ these versions not supported
   load.logics(lgc.Error);
-  print("%l97|35");
+  print("%l55|35");
   quit(1);
 }
 
@@ -91,17 +91,17 @@ if (IntVersion == VERSION_2936) {
 [ confirm video, mouse and sound settings
 if (monitorType != EGA) {
   load.logics(lgc.Error);
-  print("%l97|36");
+  print("%l55|36");
   quit(1);
 }
 if (!enableDblClick) {
   load.logics(lgc.Error);
-  print("%l97|37");
+  print("%l55|37");
   quit(1);
 }
 if (numberOfVoices != 4) {
   load.logics(lgc.Error);
-  print("%l97|38");
+  print("%l55|38");
   quit(1);
 }
 

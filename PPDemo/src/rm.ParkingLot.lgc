@@ -66,13 +66,13 @@
 #define fPatientDone f221
 #define fPatientHere f222
 #define f2ndspot     f223
-#define fEgoDead     f224
-#define fRunOver     f225
-#define fClickOn     f226
-#define fSkip1       f227
-#define fElectrocuted  f228
-#define fCarSound     f229
-#define patientVisible f230
+#define fRunOver     f224
+#define fClickOn     f225
+#define fSkip1       f226
+#define fElectrocuted  f227
+#define fCarSound      f228
+#define patientVisible f229
+#define egoDying       f230
 
 #define CAR_INSTRUMENT   41  [ 41 = viola
 
@@ -220,11 +220,10 @@ if (newRoom) {
       random(1, 10, work1);
       if (work1 == 10) {
         [ it's gone!
-        set(fEgoDead);
         deathType = DT_STOLEN_CAR;
       }
     }
-    if (!fEgoDead) {
+    if (!deathType) {
       [ car is in parking spot
       position(egoCar, 41, 143);
       draw(egoCar);
@@ -381,7 +380,6 @@ if (egoCarSeq) {
     [ (using death handler)
     egoCarSeq = EC_IDLE;
     erase(egoCar);
-    set(fEgoDead);
     print("You drive away, your visit to Sierra On-Line is over.");
     [ set deathType
     deathType = DT_DRIVE_AWAY;
@@ -743,7 +741,7 @@ if (soundDone) {
 }
 
 :checkdeath
-if (!fEgoDead) {
+if (!egoDying && !deathType && !kickBucket) {
   [ check for ego getting run over
   get.posn(oPatientCar, carX, carY);
   work1 = carY;
@@ -760,7 +758,7 @@ if (!fEgoDead) {
         ++work1;
         set.priority.v(ego, work1);
       }
-      set(fEgoDead);
+      set(egoDying);
       [ temporarily stop driving
       stop.update(oPatientCar);
       load.view(vw.EgoDead);
@@ -833,7 +831,7 @@ if (!fEgoDead) {
         work1 = 2;
         cycle.time(ego, work1);
         end.of.loop(ego, fElectrocuted);
-        set(fEgoDead);
+        set(egoDying);
         print("Yikes! This batmobile has an anti-theft system!");
       }
     }
@@ -859,8 +857,8 @@ if (fElectrocuted && deathSeq == 6) {
   ignore.objs(oPatient);
 }
 
-[ if dead, skip player input
-if (fEgoDead) {
+[ if dead or dying, skip player input
+if ((deathType || egoDying)) {
   [ check for stolen car
   if (deathType == DT_STOLEN_CAR) {
     print("Hey! Where is your car???");
