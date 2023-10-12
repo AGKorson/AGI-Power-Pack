@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/12/2023 1:02:09 AM"
+   LastEdit = "10/12/2023 8:36:54 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -254,8 +254,8 @@
 [Logic29]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &HFA33ECF3
-   CompCRC32 = &HFA33ECF3
+   CRC32 = &H463288AD
+   CompCRC32 = &H463288AD
    IsRoom = False
 
 [Logic30]

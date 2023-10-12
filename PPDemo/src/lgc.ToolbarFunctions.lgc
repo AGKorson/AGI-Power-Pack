@@ -52,6 +52,17 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
   }
 }
 
+[ right-dbl click to cycle through modes
+if (controller(cRightDblClick)) {
+  if (cursormode > 0 && cursormode < 6) {
+    ++cursormode;
+    if (cursormode == 6) {
+      cursormode = 1;
+    }
+    set(toggleBtn);
+  }
+}
+
 [ check for button click
 if (controller(cLeftClick)) {
   if (!deathType) {
@@ -159,6 +170,12 @@ if (toggleBtn) {
     set.cel(tbStateBtn, 7);
     reposition.to(tbStateBtn, 129, 16);
   }
+  [ set click2move if in walk mode
+  if (cursormode == C_WALK) {
+    set(click2move);
+  } else {
+    reset(click2move);
+  }
 }
 
 [ check for mouse up on a button
@@ -217,7 +234,7 @@ if (mouseBtn != 1) {
     }
     
     [ ignore clicks for rest of cycle
-    set.key(-1, -1, cLeftClick); [ clear.controller(cLeftClick);
+    set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
   }
 }
 
