@@ -2,7 +2,17 @@
 [
 [ rm.ParkingLot
 [
-[ 
+[ Start of game. Car drives in, ego gets out. Ego can only enter
+[ building, or get in car (which ends the game.) Every few minutes,
+[ another car arrives, patient gets out and enters building. Also, a
+[ patient may exit building, get in car and then leave. There should
+[ be 4-5 cars in the parking lot at a time. if ego crosses in front of 
+[ a moving vehicle, he can get run over, ending the game in a loss. if 
+[ a patient arrives in a batmobile and ego tries to touch it, it
+[ shocks and kills him. Touching the trees will get sap on ego's
+[ hands, which costs a point; he can wash in the sink in the closet
+[ to get the point back. Ego can get back in car; this ends game
+[ (winning condition is to have disk with PP source code.)
 [
 [*********************************************************************
 

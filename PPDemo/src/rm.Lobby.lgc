@@ -2,10 +2,23 @@
 [
 [ rm.Lobby
 [
-[ receptionist is always here. start with patients 1 and 2
-[ patient 3 arrives later. Patient 2 will then leave, patient 4
-[ (reusing object number for patient 2 will arrive. Patient 3
-[ then leaves; no more patient changes after that.
+[ Enter lobby through sliding glass door. There is a receptionist at
+[ the desk. One to three patients wait on chairs. Occasionally, a
+[ patient will get up, ask receptionist to use bathroom, then exit
+[ into hallway. Receptionist will move around, working on computer,
+[ tending desk, etc. if ego approaches, receptionist will stop work
+[ and speak to ego. If ego asks to use restroom, permission is granted
+[ to go into hallway. If ego tries to go into hallway without asking,
+[ receptionist will prevent it. Every few minutes, receptionist will
+[ tell a patient to go to exam room; patient will exit into hallway.
+[ Another patient will enter and take a seat. An old computer magazine
+[ (from 1990) is on the table. It contains an article about Sierra and
+[ the rumored AGI upgrade, believed to be called the 'Power Pack'.
+[ Instead, SCI was released. Hidden in the magazine is code needed to
+[ enter the secret room at bottom of stairs. Ego should take the
+[ magazine and read it. A cone/placard warns of wet/slippery floor to
+[ left of the screen. if ego tries to go past the cone, he slips,
+[ falls and dies.
 [
 [ This room is a memory hog! In order to make it work with four
 [ different patients, the views for patients are only loaded when

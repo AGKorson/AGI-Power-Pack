@@ -2,8 +2,28 @@
 [ 
 [ rm.ControlRoom
 [ 
-[ The control room has the main consoles that display the six 
-[ power pack modules.
+[ The AGI Power Pack Control Room has a large console in the middle of
+[ room. Two exits, to right and left lead to an office, and a store
+[ room, respectively. The console consists of a central terminal
+[ (keyboard and monitor, with disk drive), and six panels:
+[    -mouse cursor panel (ERIDOCC)
+[    -sound mode panel (ESADOCC)
+[    -custom FM instrument panel (CAISOCC)
+[    -custom message box color panel (RANDOCC)
+[    -animation speed panel (OFFROC)
+[    -color palette panel (ICAPOCC)
+[
+[ When ego enters from the stairwell, the control panel fails (flash
+[ screen, sound effects), door slams shut and won't open. Terminal is
+[ only part of panel working. It's a DOS-like system. Most commands
+[ don't work; there's memory corruption. Ego has to reboot/restart
+[ system to get it working correctly. Once rebooted, the six control
+[ panels and the security system (BaDASS - Building and Digital Access
+[ Security System) need passwords to be restarted. The passwords can
+[ be found among things in the office and store room. Once BaDASS is
+[ restarted, door will unlock; ego can leave, going back to car in
+[ parking lot to end the game. Ego needs to copy the PP source code to
+[ a floppy disk in order to 'win'. 
 [
 [*********************************************************************
 

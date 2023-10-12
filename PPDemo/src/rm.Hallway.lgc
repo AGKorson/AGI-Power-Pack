@@ -2,7 +2,14 @@
 [
 [ rm.Hallway
 [
-[ 
+[  Four doors- a restroom (will never open; it's always 'occupied'),
+[ a doctor's office (never opens, doctor is always out), and an exam
+[ room (will open, but ego interrupts an exam, and the nurse will slam
+[ door shut). Repeated attempts to enter exam room will get ego thrown
+[ out of building, and game will end in a loss. Last door is a janitor
+[ closet. Ego can go through that door to enter the hallway. Failing
+[ to close the door while going further into the 'hidden' area will
+[ result in ego getting trapped (i.e. lose game).
 [
 [*********************************************************************
 

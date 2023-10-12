@@ -2,7 +2,15 @@
 [
 [ rm.Closet
 [
-[ 
+[ Full of 'janitor' stuff. When ego moves far enough into room, he
+[ trips over a broom. (if ego tries to pick up broom, that also starts
+[ the tripping sequence.) Tripping results in ego causing wall to
+[ collapse, revealing a hole to another room. The sink faucet has a
+[ slight drip; ego can fix it to get extra points. if broom is left
+[ on floor, ego will trip again (but not actually fall over) at random
+[ time intervals. Ego can put broom in corner to get extra points.
+[ Touching the plunger will subtract points. Ego can wash hands in
+[ sink to recover lost points.
 [
 [*********************************************************************
 

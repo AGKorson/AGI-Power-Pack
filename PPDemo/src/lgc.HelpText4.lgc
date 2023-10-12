@@ -102,8 +102,8 @@ if (selectedTopic == 15) {
   block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
   display(2, 46, "%s20");
   display(4, 23, "The Toolbar lets you change the function of the mouse.");
-  display(5, 23, "Click on a button to select a function. Available");
-  display(6, 23, "functions include:");
+  display(5, 23, "Click on a button to select a function. Right-double-");
+  display(6, 23, "click to cycle options. Available functions include:");
   display(8, 23, "DEFAULT: The mouse has no in-game function.");
   display(10, 23, "QUIT/SAVE/RESTORE/RESTART: These don't chage the mouse");
   display(11, 23, "function, they run the selected command. If ego dies,");
