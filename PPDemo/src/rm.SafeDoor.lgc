@@ -93,7 +93,7 @@ if (newRoom) {
   [ set instruments
   work1 = 0;
   work2 = 128;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
   work1 = 4;
   work2 = 1;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
@@ -1155,7 +1155,7 @@ if (newRoom) {
   force.update(ego);
   [ use hand cursor
   cursoricon = C_USE; [cursormode;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade in
   block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   return();
@@ -1168,7 +1168,7 @@ if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
   comboNumber = currentNum;
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out to black (faster than room fade)
   block(FADE.OUT, BYNUM, 10, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ restore default palette

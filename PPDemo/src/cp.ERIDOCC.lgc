@@ -134,13 +134,13 @@ if (!enableERIDOCC) {
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
     set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
@@ -776,7 +776,7 @@ if (cursormode) {
       set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     }
     [ change the cursor
-    set.key(BYNUM, &m2, mouse); [ set.cursor(FN_MODE, mCURSOR);
+    set.key(BYNUM, &m2, mouse); [ set.cursor(FN_MODE, mCURSOR)
   }
   
   [ if on grid, determine gridx/gridy/gridmode
@@ -976,7 +976,7 @@ if ((btnAction == B_SETGRID || btnAction == B_RSTGRID)) {
   } else {
     [ clear the desired bit in the designated byte
     [ invert the mask
-    block(BIT.NOT, 0, &work1, 0); [ bit.not(VAR);
+    block(BIT.NOT, 0, &work1, 0); [ bit.not(VAR)
     [ combine it with current byte
     block(BIT.AND, BYVAR, &work2, &work1); [ bit.and(FN_MODE, VAR, MASK)
     [ set cel to add new block to the grid
@@ -1008,7 +1008,7 @@ if (btnAction == B_EXIT) {
   reset(noScript);
   
   [ fade out 
-  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
   
   [ go back to previous room
   new.room.v(previousRoom); 
@@ -1018,7 +1018,7 @@ if (btnAction == B_PREVIEW) {
   [ change current cursor, wait for any mouse press
   set(prevcursor);
   sTemp = "%s16";
-  set.key(BYNUM, &m2, mouse); [ set.cursor(FN_MODE, mCURSOR);
+  set.key(BYNUM, &m2, mouse); [ set.cursor(FN_MODE, mCURSOR)
   [ if in text mode, temporarily enable the mouse
   if (cursormode) {
     enable.item(mouse);
@@ -1526,7 +1526,7 @@ if (newIndex != cIndex) {
   
   if (newroom) {
     [ remember to fade in to be able to see the screen again
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   }
 }
 

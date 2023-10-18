@@ -37,7 +37,7 @@ set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
-set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 
 [ draw the picture for selected item
 if (selectedItem == 107) {

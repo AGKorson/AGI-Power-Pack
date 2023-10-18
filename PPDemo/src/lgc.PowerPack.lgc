@@ -19,7 +19,9 @@
 [ confirm platform is PC
 if (machineType != PC) {
   load.logics(lgc.Error);
-  print("%l55|33");
+  print("The AGI Power Pack Demo will only run on a PC (or in "
+        "DosBOX emulating a PC). No other platforms are "
+        "supported.\nAborting...");
   quit(1);
 }
       
@@ -27,13 +29,17 @@ if (machineType != PC) {
 call(lgc.Version2Check);
 if (!IntVersion) {
   load.logics(lgc.Error);
-  print("%l55|34");
+  print("Invalid AGI version. Power Pack Demo requires a valid MSDOS "
+        "interpreter running on a PC, or in DOSBox. ScummVM and NAGI "
+        "are not supported.\n\nAborting...");
   quit(1);
 }
 if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272)) {
   [ these versions not supported
   load.logics(lgc.Error);
-  print("%l55|35");
+  print("The Power Pack does work with version 2.089 and 2.272, however "
+        "this demo game does not support them. Please use a later "
+        "version 2 interpreter to run this demo game.");
   quit(1);
 }
 
@@ -91,17 +97,21 @@ if (IntVersion == VERSION_2936) {
 [ confirm video, mouse and sound settings
 if (monitorType != EGA) {
   load.logics(lgc.Error);
-  print("%l55|36");
+  print("The AGI Power Pack Demo will only run in EGA mode on a PC "
+        "(or in DosBOX).\n\nAborting...");
   quit(1);
 }
 if (!enableDblClick) {
   load.logics(lgc.Error);
-  print("%l55|37");
+  print("The AGI Power Pack Demo will only run on a PC (or in DosBOX) "
+        "with a mouse driver installed.\n\nAborting...");
   quit(1);
 }
 if (numberOfVoices != 4) {
   load.logics(lgc.Error);
-  print("%l55|38");
+  print("The AGI Power Pack Demo will only run on a PC (or in DosBOX) "
+        "with an FM synthesizer card (Adlib or compatible) and a MIDI "
+        "device enabled.\n\nAborting...");
   quit(1);
 }
 

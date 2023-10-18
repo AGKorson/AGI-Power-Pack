@@ -115,7 +115,7 @@ if (newRoom) {
   block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   return();
 }
 
@@ -146,14 +146,14 @@ if (flickerTime > 0) {
         [ use correct instruments
         work1 = 0;
         work2 = 128;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         sound(s.Flicker, soundDone);
         set(playSound);
       }
@@ -437,7 +437,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         } else {
           [ show wait cursor
           cursoricon = C_WAIT;
-          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
           [ fade out, then display access panel
           block(FADE.OUT, BYNUM, 10, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
           new.room(rm.DoorKeypad); [ ##LE001##
@@ -450,7 +450,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   :doneclick
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
   
 [***************************************
@@ -461,7 +461,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 if (edgeEgoHit == RIGHT_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.SecretRoom); [ ##LE002##
@@ -470,7 +470,7 @@ if (edgeEgoHit == RIGHT_EDGE) {
 if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.ControlRoom); [ ##LE003##

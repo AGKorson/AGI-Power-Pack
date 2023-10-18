@@ -35,7 +35,7 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
   if (cursormode != cursoricon) {
     [ change it
     cursoricon = cursormode;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   }
   [ reenable click2move if in walk mode
   if (cursormode == C_WALK) {
@@ -46,7 +46,7 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
   if (cursoricon != C_DEFAULT) {
     [ change it
     cursoricon = C_DEFAULT;
-    set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM)
     [ disable click2move
     reset(click2move);
   }

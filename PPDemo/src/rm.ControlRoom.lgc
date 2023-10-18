@@ -123,7 +123,7 @@ if (newRoom) {
   block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   
   [ if coming from stairwell, and access system not set, 
   if (previousRoom == rm.Stairway && !resetBaDASS) {
@@ -785,7 +785,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
 
   :doneclick
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [***************************************
@@ -815,7 +815,7 @@ if (showCAISOCC) {
   [ fade out
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ use default cursor
-  set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ then change room
   new.room(cp.CAISOCC);  [ ##LE002##
 }
@@ -883,7 +883,7 @@ if (showRANDOCC) {
 if (egoHitSpecial && egoX > 100) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.StoreRoom);  [ ##LE004##
@@ -892,7 +892,7 @@ if (egoHitSpecial && egoX > 100) {
 if (egoHitSpecial && egoX < 60) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.Office);  [ ##LE003##
@@ -902,7 +902,7 @@ if (egoHitSpecial && egoX < 60) {
 if (edgeEgoHit == BOTTOM_EDGE) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.Stairway); [ ##LE007##

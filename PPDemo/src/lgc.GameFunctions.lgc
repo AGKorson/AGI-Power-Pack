@@ -26,6 +26,10 @@
 [    GET.DATE - add easter egg to show a message on certain days of the week (in gameinit logic)
 [    GET.DAYOFWEEK - add easter egg to show a message on certain days of the year (in gameinit logic)
 [    DELETE.FILE - add option to clear all save games
+[    SET.ITEM - change disk description once it's formatted
+[    ITEM.COUNT - ? maybe make a comment when ego has everything? 'your pockets are full!'
+[    PREVIOUS.INPUT - ??
+[    TRACE.H.POSN - ??
 
 [***************************************
 [ LOCAL DEFINES
@@ -111,15 +115,15 @@ if (kickBucket) {
 [ check for cussing
 work1 = 0;
 :loop1
-get.string(tmpStr1, m1, CURRENT.INPUT, 0, 0);
+get.string(tmpStr1, m1, CURRENT.INPUT, 0, 0); [ current.input(sRESULT)
 work2 = 70; ['F'
 [ pass starting pos via vRESULT
 work3 = work1;
-block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
+block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT)
 if (work3 == 255) {
   work2 = 102; [ 'f'
   work3 = work1;
-  block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT);
+  block(INSTR, &tmpStr1, &work2, &work3); [ instr(sINPUT, vCHAR, vRESULT)
 }
 [ save result in work1
 work1 = work3;
@@ -128,17 +132,17 @@ if (work1 < 255) {
   [ check for match against 'fuck' by getting 
   [ 'f' plus next three letters
   work2 = 4;
-  block(STR.MID, &tmpStr1, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN);
+  block(STR.MID, &tmpStr1, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
   tmpStr2 = "fuck";
   [ advance position so loop can look for next 'f'
   ++work1;
   if (compare.strings(tmpStr1, tmpStr2)) {
     print("Watch your language, you son of a bitch!");
     get.string(tmpStr1, m1, -1, 0, 0);
-    block(STR.LEFT, &tmpStr1, &tmpStr1, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+    block(STR.LEFT, &tmpStr1, &tmpStr1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     tmpStr2 = "***";
-    block(STR.CONCAT, &tmpStr1, &tmpStr2, 0);
-    set.string(SET.INPUT, "%s20");
+    block(STR.CONCAT, &tmpStr1, &tmpStr2, 0); [ str.concat(sINPUT, sADD)
+    set.string(SET.INPUT, "%s20"); [ set.input(mINPUT)
   } else {
     [ check rest of line
     goto(loop1);

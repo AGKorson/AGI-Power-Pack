@@ -148,13 +148,13 @@ if (!enableESADOCC) {
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
     set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
@@ -353,7 +353,7 @@ if (newRoom) {
   set(update);
   
   [ remember to fade in to be able to see the screen again
-  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 }
 
 [***************************************
@@ -1472,7 +1472,7 @@ if (btnAction > 0) {
       set(4channelsound);
       [ FMsynth
       reset(useMIDI);
-      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ move the button
       erase(oChannels);
       position(oChannels, 8, 105);
@@ -1490,7 +1490,7 @@ if (btnAction > 0) {
       set(4channelsound);
       [ MIDI
       set(useMIDI);
-      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       [ move the button
       erase(oChannels);
       position(oChannels, 8, 121);
@@ -1533,7 +1533,7 @@ if (btnAction > 0) {
     }
     
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     
     [ go back to control room
     new.room(rm.ControlRoom); [ ##LE002##
@@ -1555,11 +1555,11 @@ if (btnAction > 0) {
         [ convert msg index to actual instrument value
         --work1;
         if (work1 < 131) {
-          set.key(&cursorX, &work1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+          set.key(&cursorX, &work1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         } else {
           [ assign a custom instrument
           work2 -= 124;
-          set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
+          set.key(&cursorX, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         }
       if (cursorX < 4) {
         if ((cursorX < 2 || !useMIDI)) {
@@ -1581,7 +1581,7 @@ if (btnAction > 0) {
   if ((btnAction < B_INST0 || btnAction == B_UNSEL)) {
     [ deselect instrument
     if (currentInst < 255) {
-      set.text.attribute(PUSH.ATTRIBUTES, 0);
+      set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, WHITE);
       cursorY = 19;
       cursorX = currentInst;
@@ -1633,11 +1633,11 @@ if (btnAction > 0) {
         }
         [ change instrument
         if (work2 < 131) {
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         } else {
           [ assign a custom instrument
           work2 -= 124;
-          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
+          set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         }
         if (btnAction < B_TEST3) {
           sound(s.InstTest, sndDone);

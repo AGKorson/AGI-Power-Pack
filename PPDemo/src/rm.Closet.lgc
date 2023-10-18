@@ -157,7 +157,7 @@ if (newRoom) {
     [ until faucet gets tightened
     driptimerM = 0;
     driptimerS = 3;
-    block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
+    block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ start.timer(vMINUTES, vSECONDS, fDONE)
     load.sound(s.Drip);
   }
   
@@ -208,7 +208,7 @@ if (newRoom) {
   if ((previousRoom == rm.Hallway || fEgoDead)) {
     [ restore cursor
     cursoricon = cursormode;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   }
   return();
 }
@@ -227,7 +227,7 @@ if (dripdone && !faucetfixed) {
     [ active in this room
     driptimerM = 0;
     driptimerS = 3;
-    block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ set.timer(vMIN, vSEC, fDONE);
+    block(START.TIMER, &driptimerM, &driptimerS, &dripdone); [ start.timer(vMIN, vSEC, fDONE)
   } else {
     set.cel(drip, 0);
     end.of.loop(drip, dripdone);
@@ -240,7 +240,7 @@ if (dripdone && !faucetfixed) {
       [ use correct instrument
       work1 = 0;
       work2 = 115;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.Drip, soundDone);
       set(playSound);
     }
@@ -270,7 +270,7 @@ if (uncrouch) {
   set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 }
 
 [ trip and fall into wall
@@ -289,7 +289,7 @@ if (fallSeq == STARTFALL) {
   move.obj(ego, 72, 145, 1, fDone);
   prevent.input();
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ disable click2move if in walk mode
   if (cursormode == C_WALK) {
     reset(click2move);
@@ -319,7 +319,7 @@ if (fDone && fallSeq == FALLDOWN) {
   [ no walkman to worry about when wall breaks 
   work1 = 0;
   work2 = 100;  [ instrument 100
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
   set(playSound);
   sound(s.Crumble1, soundDone);
   start.update(wall);
@@ -347,7 +347,7 @@ if (fDone && fallSeq == SITUP) {
   player.control();
   accept.input();
   cursoricon = cursormode;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   fallSeq = FALLDONE;
   work1 = 5;
   call(lgc.ScoreHandler);
@@ -398,7 +398,7 @@ if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomsta
   wander(ego);
   prevent.input();
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   prevent.input();
 }
 [ check for end of stumbling sequence
@@ -412,7 +412,7 @@ if (triptimer > TRIPDELAY) {
     player.control();
     accept.input();
     cursoricon = cursormode;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   }
 } else {
   [ not stumbling - if not on the broom, run the countdown
@@ -1264,7 +1264,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   :doneclick
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [***************************************
@@ -1285,7 +1285,7 @@ if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
   end.of.loop(ego, fDone);
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 }
 if (crouch && fDone) {
   [ fade out, then change room
@@ -1299,7 +1299,7 @@ if ((posn(ego, 100, 143, 100, 143) || posn(ego, 101, 144, 101, 144) ||
   if (closetopen) { 
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
     [ fade out, then change room
     block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.Hallway);  [ ##LE001##

@@ -122,7 +122,7 @@ if (floppyInserted) {
 }
 
 [ check password to see if it's been changed
-set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE);
+set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
 sTemp2 = "Temp123!";
 if (compare.strings(sTemp2, kwpassword)) {
   set(defaultPW);
@@ -149,7 +149,7 @@ display(22, 22, "Press <ESC> to return to control room");
 set.text.attribute(GREEN, BLACK);
 
 [ command input is not case sensitive
-set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE);
+set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE)
 :login
 [ display welcome text
 [ if not restarted, include a few glitches
@@ -246,7 +246,7 @@ if (lastChar == 27) {
 [ CTRL+SHIFT+ENTER for reboot
 if (lastChar == 10) {
   block(GET.SHIFTSTATE, &work1, 0, 0); [ get.shiftstate(vSTATE)
-  if (work1 == 3) { [  && inputmode == IM_CMDLINE) {
+  if (work1 == 3) {
     if (inputmode != IM_CMDLINE) {
       terminalfn = LINEFEED;
       call(lgc.TerminalFunctions);
@@ -460,13 +460,13 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(loggedon);
       }
       [ passwords are case sensitive
-      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE);
+      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
       if (!compare.strings(input, kwpassword)) {
         [ password is not valid
         reset(loggedon);
       }
       [ go back to case-insensitive compare
-      set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE);
+      set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE)
       [ if valid continue
       if (loggedon) {
         output = "logged on as kw002";
@@ -510,7 +510,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     }
     
     [ passwords are case sensitive
-    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE);
+    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
     
     [ changing password
     if (PWfunction == PW_CHANGE) {
@@ -717,7 +717,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     
     [ command input is case-insensitive
     :getCmdInput
-    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE);
+    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE)
     inputmode = IM_CMDLINE;
     [ get more input
     goto(getInput);
@@ -750,7 +750,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     }
     
     [ convert input to lower case, trim it,
-    block(STR.LOWER, &input, &input, 0); [ str.upper(sINPUT, sRESULT)
+    block(STR.LOWER, &input, &input, 0); [ str.lower(sINPUT, sRESULT)
     work1 = TRIM_ALL;
     block(STR.TRIM, &input, &input, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
     [ then extract the command (first word)
@@ -2127,12 +2127,12 @@ if (lastChar == 8) {
     
     [ remove the last char from the input line
     --work1;
-    block(STR.LEFT, &input, &input, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+    block(STR.LEFT, &input, &input, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   }
 } else {
   [ if any other char, add it to input
-  block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
-  block(STR.CONCAT, &input, &char, 0); [ str.concat(sINPUT, sADD);
+  block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR)
+  block(STR.CONCAT, &input, &char, 0); [ str.concat(sINPUT, sADD)
   [ if in password mode, display an asterisk
   if (inputmode == IM_PASSWORD) {
     work1 = &m5;

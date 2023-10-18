@@ -97,7 +97,7 @@ if (newRoom) {
   
   [ use a blank cursor so it doesn't get in the way but
   [ clicks still work
-  set.key(BYNUM, &m7, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYNUM, &m7, mouse); [ set.cursor(FN_MODE, MSGNUM)
   
   [ save speed value, to restore it later
   tmpSpeed = animationInterval;
@@ -167,7 +167,7 @@ if (newRoom) {
   set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
   work1 = 0;
   work2 = 128;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
   work1 = 4;
   work2 = 1;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
@@ -686,7 +686,7 @@ if (titleTimer > 0) {
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       work1 = 0;
       work2 = 73;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       ++work1;
       work2 = 58;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
@@ -748,7 +748,7 @@ if (titleTimer > 0) {
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       work1 = 0;
       work2 = 4; [ electric piano 1
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       ++work1;
       work2 = 49; [ string ensemble 1
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
@@ -825,7 +825,7 @@ if (titleTimer > 0) {
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
       work1 = 0;
       work2 = 127; [ gunshot
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       ++work1;
       work2 = 126; [ applause
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
@@ -944,7 +944,7 @@ if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) 
   :continue
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out to black
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ restore palette

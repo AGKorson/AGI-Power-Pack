@@ -103,9 +103,9 @@ if (terminalfn == LINEFEED) {
 :delay1
 if ((terminalfn == DELAY || terminalfn == DELAY_LF)) {
   work2 = 250;
-  cycle.time(o254, work2); [ delay(vDELAY);
-  cycle.time(o254, work2); [ delay(vDELAY);
-  cycle.time(o254, work2); [ delay(vDELAY);
+  cycle.time(DELAY.TIME, work2); [ delay(vMSEC)
+  cycle.time(DELAY.TIME, work2); [ delay(vMSEC)
+  cycle.time(DELAY.TIME, work2); [ delay(vMSEC)
   if (terminalfn == DELAY_LF) {
     terminalfn = LINEFEED;
     goto(addlinefeed);
@@ -446,7 +446,7 @@ if (terminalfn == FORMAT_A) {
       display.v(cursor_row, cursor_col, lastChar);
       [ remove the last char from the input line
       --work2;
-      block(STR.LEFT, &floppylabel, &floppylabel, &work2); [ str.left(sINPUT, sRESULT, vLEN);
+      block(STR.LEFT, &floppylabel, &floppylabel, &work2); [ str.left(sINPUT, sRESULT, vLEN)
     } else {
       [ check for invalid characters
       work3 = 0;
@@ -457,8 +457,8 @@ if (terminalfn == FORMAT_A) {
           lastChar -= 32;
         }
         ++work2;
-        block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR);
-        block(STR.CONCAT, &floppylabel, &char, 0); [ str.concat(sINPUT, sADD);
+        block(BYTE2CHAR, &char, &lastChar, 0); [ byte2char(sRESULT, vCHAR)
+        block(STR.CONCAT, &floppylabel, &char, 0); [ str.concat(sINPUT, sADD)
         work1 = &charmsg;
         display.v(cursor_row, cursor_col, work1);
         

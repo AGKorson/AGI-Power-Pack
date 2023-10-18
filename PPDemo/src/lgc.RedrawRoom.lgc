@@ -163,10 +163,10 @@ if (currentRoom == rm.Office) {
 
 [ restore cursor
 cursoricon = cursormode;
-set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 
 [ redisplay objects
-block(HIDE.OBJS, SHOW_OBJS, 0, 0); [ hide.objs(MODE);
+block(HIDE.OBJS, SHOW_OBJS, 0, 0); [ hide.objs(MODE)
 show.pic();
 [ now fade in 
 block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)

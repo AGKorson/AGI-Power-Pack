@@ -100,13 +100,13 @@ if (!enableRANDOCC) {
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
     set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
@@ -586,7 +586,7 @@ if (btnAction == B_OK) {
   egoDir = egoPrevDir;
   
   [ fade out 
-  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
   [ go back to previous room
   new.room.v(previousRoom); 
 }
@@ -601,7 +601,7 @@ if (btnAction == B_CANCEL) {
   block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
   
   [ fade out 
-  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
   [ just go back to previous room
   new.room.v(previousRoom);
 }

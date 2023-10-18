@@ -357,15 +357,15 @@ if (gameRestarted) {
     [ enable MIDI, and set desired instruments
     set(4channelsound);
     set(useMIDI);
-    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
+    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     musicmode = MIDI_SOUND;
     work1 = 0;
     work2 = 0;
-    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     ++work1;
-    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     ++work1;
-    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
   
     [ set speed to normal (delay=2/20ths of a second)
     animationInterval = NORMAL_SPEED;
@@ -433,7 +433,7 @@ set(enableTrace);
 
 [ set turbo mode (regular mode is never used in the demo)
 work1 = TURBO_SPEED;
-cycle.time(TOGGLE.TURBO, work1); [   toggle.turbo(vMODE);
+cycle.time(TOGGLE.TURBO, work1); [ toggle.turbo(vMODE)
 set(turboMode);
 
 [ set mouse parameters

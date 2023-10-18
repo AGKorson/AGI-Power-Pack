@@ -226,7 +226,7 @@ if (newRoom) {
     set(closetTimerStart);
     timerMin = 4;
     timerSec = 0;
-    block(START.TIMER, &timerMin, &timerSec, &closetTimerDone); [ start.timer(vMINUTES, vSECONDS, fDONE)
+    block(START.TIMER, &timerMin, &timerSec, &closetTimerDone); [ start.timer(vMIN, vSEC, fDONE)
   } else {
     if (closetTimerStart) {
       [ stop the timer
@@ -598,7 +598,7 @@ if (controller(cSoundPC)) {
     [ set pc sound mode
     reset(4channelsound);
     reset(useMIDI);
-    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     
     [ if playing cassette,
     if (currentTrack > 0 && currentTrack < 128) {
@@ -921,7 +921,7 @@ if (!disableGameFunctions) {
     work1 = &s12;
     work2 = v227;
     work2 += 30;
-    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG);
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
     [ format it
     block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
     [ now copy it to the current cursor msgnum

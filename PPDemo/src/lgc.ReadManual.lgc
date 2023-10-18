@@ -37,7 +37,7 @@ pageNum = 1;
 block(FADE.OUT, BYNUM, 5, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
 [ use default mouse cursor
 cursoricon = C_DEFAULT;
-set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 
 [ add keyboard instructions
 set.text.attribute(DK_GRAY, BLACK);
@@ -45,7 +45,7 @@ display(23, 35, "ESC = EXIT");
 display(23, 67, "RIGHT = >");
 
 [ hide objects while showing manual
-block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE);
+block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE)
 load.pic(pageImg);
 draw.pic(pageImg);
 show.pic();

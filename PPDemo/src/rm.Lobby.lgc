@@ -463,7 +463,7 @@ if (newRoom) {
   block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   [ restore cursor
   cursoricon = cursormode;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 }
 
 [***************************************
@@ -3050,7 +3050,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
   }
   
   :doneclick
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cLeftClick);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [***************************************
@@ -3069,7 +3069,7 @@ if (edgeEgoHit == TOP_EDGE) {
     }
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
     [ send ego to end of hall
     ignore.objs(ego);
     ignore.horizon(ego);
@@ -3110,7 +3110,7 @@ if (edgeEgoHit == BOTTOM_EDGE) {
   }
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.ParkingLot);  [ ##LE002##

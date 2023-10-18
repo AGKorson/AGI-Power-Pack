@@ -85,13 +85,13 @@ if (!enableOFROCC) {
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
     set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
@@ -257,7 +257,7 @@ if (newRoom) {
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ remember to fade in to be able to see the screen again
-  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   
   return();
 }
@@ -612,7 +612,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
     [ save animation interval (but always stay in turbomode)
     if (!tmpTurbo) {
       work1 = TURBO_SPEED;
-      cycle.time(TOGGLE.TURBO, work1);
+      cycle.time(TOGGLE.TURBO, work1); [ toggle.turbo(vMODE)
       animationInterval *= 3;
     }
     call(lgc.SaveOptions);
@@ -623,7 +623,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
     [ always stay in turbo mode
     if (!tmpTurbo) {
       work1 = TURBO_SPEED;
-      cycle.time(TOGGLE.TURBO, work1);
+      cycle.time(TOGGLE.TURBO, work1); [ toggle.turbo(vMODE)
     }
   }
   
@@ -633,7 +633,7 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   egoDir = egoPrevDir;
   
   [ fade out 
-  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
   
   [ go back to previous room
   new.room(rm.ControlRoom); [ ##LE002##
@@ -644,12 +644,12 @@ if (btnAction == B_TURBO) {
   toggle(tmpTurbo);
   if (tmpTurbo) {
     work1 = TURBO_SPEED;
-    cycle.time(TOGGLE.TURBO, work1);
+    cycle.time(TOGGLE.TURBO, work1); [ toggle.turbo(vMODE)
     set.cel(oCheck, 1);
     animationInterval *= 3;
   } else {
     work1 = NORMAL_SPEED;
-    cycle.time(TOGGLE.TURBO, work1);
+    cycle.time(TOGGLE.TURBO, work1); [ toggle.turbo(vMODE)
     set.cel(oCheck, 0);
     animationInterval /= 3;
   }

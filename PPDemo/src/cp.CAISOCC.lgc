@@ -182,13 +182,13 @@ if (!enableCAISOCC) {
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
     set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
@@ -226,7 +226,7 @@ if (newRoom) {
   [ make sure sound mode is 4channel FMsynth
   set(4channelsound);
   reset(useMIDI);
-  set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE);
+  set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
   
   [ option button that determines input mode; mouse or keyboard
   animate.obj(oMode);
@@ -315,7 +315,7 @@ if (newRoom) {
     strByte = "%v46Custom Inst %v47       ";
     block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
     sTemp = "%s";
-    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD)
     block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
     block(SET.MSG, BYVAR, &work3, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     ++work1;
@@ -388,7 +388,7 @@ if (newRoom) {
   selinst = 1;
   work1 = 22;
   sTemp = m132;
-  block(STR.LEFT, &sTemp, &strInst, &work1); [ str.Left(sINPUT, sRESULT, vLEN);
+  block(STR.LEFT, &sTemp, &strInst, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   
   [ selection listbox starts at top
   listindex = 0;
@@ -401,7 +401,7 @@ if (newRoom) {
   set(loadinst);
   
   [ remember to fade in to be able to see the screen again
-  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+  block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 }
 
 [***************************************
@@ -425,9 +425,9 @@ if (update) {
       tmpCol = &sTemp;
       tmpRow = selinst;
       tmpRow += 131;
-      block(SET.STRING.V, &tmpCol, &tmpRow, 0); [ set.string.v(vSTR, vMSG);
+      block(SET.STRING.V, &tmpCol, &tmpRow, 0); [ set.string.v(vSTR, vMSG)
       tmpRow = 22;
-      block(STR.LEFT, &sTemp, &strInst, &tmpRow); [ str.left(sINPUT, sRESULT, vLEN);
+      block(STR.LEFT, &sTemp, &strInst, &tmpRow); [ str.left(sINPUT, sRESULT, vLEN)
       [ loadinst is handled separately   
     } else {
       set.text.attribute(BLACK, WHITE);
@@ -752,10 +752,10 @@ if (redrawList) {
     tmpVal += cursorX;
     ++tmpVal;
     work2 = &sTemp;
-    block(SET.STRING.V, &work2, &tmpVal, 0); [ set.string.v(vSTR, vMSG);
+    block(SET.STRING.V, &work2, &tmpVal, 0); [ set.string.v(vSTR, vMSG)
     [ strip off data chunk
     tmpVal = 20;
-    block(STR.RIGHT, &sTemp, &sTemp, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN);
+    block(STR.RIGHT, &sTemp, &sTemp, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN)
     display.v(tmpRow, tmpCol, work1);
     ++cursorX;
     ++tmpRow;
@@ -810,25 +810,25 @@ if (dropmode == DROPUP) {
     ++listindex;
     tmpCol = &sTemp;
     [ get instrument data from the selected instrument
-    block(SET.STRING.V, &tmpCol, &listindex, 0); [ set.string.v(vSTR, vMSG);
+    block(SET.STRING.V, &tmpCol, &listindex, 0); [ set.string.v(vSTR, vMSG)
 
     [ restore listindex
     --listindex;
     tmpVal = 22;
-    block(STR.LEFT, &sTemp, &sTemp, &tmpVal); [ str.left(sINPUT, sRESULT, vLEN);
+    block(STR.LEFT, &sTemp, &sTemp, &tmpVal); [ str.left(sINPUT, sRESULT, vLEN)
     [ add it to current selected instrument
     tmpVal = selinst;
     tmpVal += 131;
     tmpCol = &sTemp2;
-    block(SET.STRING.V, &tmpCol, &tmpVal, 0); [ set.string.v(vSTR, vMSG);
+    block(SET.STRING.V, &tmpCol, &tmpVal, 0); [ set.string.v(vSTR, vMSG)
     tmpVal = 20;
-    block(STR.RIGHT, &sTemp2, &sTemp2, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN);
-    block(STR.CONCAT, &sTemp, &sTemp2, 0); [ str.concat(sINPUT, sADD);
+    block(STR.RIGHT, &sTemp2, &sTemp2, &tmpVal); [ str.right(sINPUT, sRESULT, vLEN)
+    block(STR.CONCAT, &sTemp, &sTemp2, 0); [ str.concat(sINPUT, sADD)
     [ update the message value
     tmpVal = &sTemp;
     work1 = selinst;
     work1 += 131;
-    block(SET.MSG, BYVAR, &work1, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW);
+    block(SET.MSG, BYVAR, &work1, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     [ mark it as dirty
     set(instDirty);
     [ redraw instrument
@@ -1341,7 +1341,7 @@ if (cursormode) {
     if (egoDir == UP) {
       if (cursorpos == CP_INST) {
         [ check for shift+up
-        block(GET.SHIFTSTATE, &tmpVal, 0, 0);
+        block(GET.SHIFTSTATE, &tmpVal, 0, 0); [ get.shiftstate(vSTATE)
         if (tmpVal == 1) {
           [ SHIFT+UP
           [ increment selected instrument, and redraw display
@@ -1398,7 +1398,7 @@ if (cursormode) {
       }
       if (cursorpos == CP_INST) {
         [ check for shift+down
-        block(GET.SHIFTSTATE, &tmpVal, 0, 0);
+        block(GET.SHIFTSTATE, &tmpVal, 0, 0); [ get.shiftstate(vSTATE)
         if (tmpVal == 1) {
           [ SHIFT+DOWN
           [ decrement selected instrument, and redraw display
@@ -1855,9 +1855,9 @@ if (btnAction > 0) {
 
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(BYNUM, &m160, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYNUM, &m160, mouse); [ set.cursor(FN_MODE, MSGNUM)
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     
     [ go back to control room
     new.room(rm.ControlRoom); [ ##LE002##
@@ -1886,7 +1886,7 @@ if (btnAction > 0) {
     if (modKyScale) {
       work1 += 16;
     }
-    block(BYTE2HEX, &strInst, &work1, 0); [ byte2hex(sRESULT, vINPUT);
+    block(BYTE2HEX, &strInst, &work1, 0); [ byte2hex(sRESULT, vINPUT)
     [byte 2
     work1 = carFreqMult;
     if (carTremolo) {
@@ -1901,60 +1901,60 @@ if (btnAction > 0) {
     if (carKyScale) {
       work1 += 16;
     }
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 3
     work1 = modKSL;
     work1 *= 64;
     work1 += modLevel;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 4
     work1 = carKSL;
     work1 *= 64;
     work1 += carLevel;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 5
     work1 = modAttack;
     work1 *= 16;
     work1 += modDecay;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 6
     work1 = carAttack;
     work1 *= 16;
     work1 += carDecay;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 7
     work1 = modSusLvl;
     work1 *= 16;
     work1 += modRelease;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 8
     work1 = carSusLvl;
     work1 *= 16;
     work1 += carRelease;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 9
     work1 = modWaveForm;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 10
     work1 = carWaveForm;
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ byte 11
     work1 = feedback;
     work1 *= 2;
     if (connect) {
       ++work1;
     }
-    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT);
-    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(BYTE2HEX, &strByte, &work1, 0); [ byte2hex(sRESULT, vINPUT)
+    block(STR.CONCAT, &strInst, &strByte, 0); [ str.concat(sINPUT, sADD)
     [ strInst now has the current instrument string
   } 
     
@@ -1964,10 +1964,10 @@ if (btnAction > 0) {
     work3 = 131;
     work3 += selinst;
     tmpVal = &sTemp;
-    block(STR.COPY, &strInst, &sTemp, 0); [ str.copy(sINPUT, sRESULT);
+    block(STR.COPY, &strInst, &sTemp, 0); [ str.copy(sINPUT, sRESULT)
     strByte = "Custom Inst %v221       ";
     block(STR.FORMAT, &strByte, &strByte, 0); [ str.format(sINPUT, sRESULT)
-    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD);
+    block(STR.CONCAT, &sTemp, &strByte, 0); [ str.concat(sINPUT, sADD)
     block(SET.MSG, BYVAR, &work3, &tmpVal); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     
     [ save it
@@ -2010,7 +2010,7 @@ if (btnAction > 0) {
     block(SET.MSG, BYNUM, &m142, &strInst); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     work1 = 0;
     work2 = &strInst;
-    set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR);
+    set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
     sound(s.InstTest, soundDone);
 [load.sound(s.Tone0);
 [sound(s.Tone0, soundDone);

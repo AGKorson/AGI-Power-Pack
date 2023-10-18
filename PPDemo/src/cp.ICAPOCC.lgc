@@ -97,6 +97,9 @@
                            [ display the current color being edited
 #define prevPal       m21  [ formatted text that points to the edit palette
 #define defaultPal    m22  [ default AGI palette
+#define gamePal       m23  [ main palette used in rest of game
+
+[ TODO: make color changes automatic; don't need a 'Set' button
 
 [***************************************
 [ ERROR CHECK
@@ -113,13 +116,13 @@ if (!enableICAPOCC) {
     set.text.attribute(GREEN, BLACK);
     display(1, 1, "> subsystem error");
     set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR);
+    block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
-    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
+    block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.ControlRoom); [ ##LE001##
   }
   return();
@@ -239,13 +242,16 @@ if (newRoom) {
   [ the global game palette string.
   
   [ copy the current palette to a temporary string
-  block(STR.COPY, &palette, &editPal, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &palette, &editPal, 0); [ str.copy(sINPUT, sRESULT)
   
   [ get hex value of color zero (first six characters of the temp palette)
   work1 = 6;
-  block(STR.LEFT, &editPal, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+  block(STR.LEFT, &editPal, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   [ copy it to curColHex
-  block(STR.COPY, &defColHex, &curColHex, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &defColHex, &curColHex, 0); [ str.copy(sINPUT, sRESULT)
+  
+  [ load this palette, but don't set it yet
+  block(SET.PALETTE, BYNUM, &displayPal, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   
   [ need to show the pic before text can be added
   show.pic();
@@ -259,8 +265,8 @@ if (newRoom) {
   tmpRow = 20;
   tmpCol = 29;
   work1 = 2;
-  block(STR.LEFT, &curColHex, &strTemp, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-  block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT);
+  block(STR.LEFT, &curColHex, &strTemp, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   redpos = work1;
   tmpVal = &m1;
   display.v(tmpRow, tmpCol, tmpVal);
@@ -272,10 +278,10 @@ if (newRoom) {
   [ extract the green value
   tmpCol = 33;
   work1 = 4;
-  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.LEFT, &strTemp, &strTemp, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-  block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT);
+  block(STR.LEFT, &strTemp, &strTemp, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   greenpos = work1;
   display.v(tmpRow, tmpCol, tmpVal);
   [ position the slider
@@ -286,8 +292,8 @@ if (newRoom) {
   [ extract the blue value
   tmpCol = 37;
   work1 = 2;
-  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN);
-  block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT);
+  block(STR.RIGHT, &curColHex, &strTemp, &work1); [ str.right(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &strTemp, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   bluepos = work1;
   display.v(tmpRow, tmpCol, tmpVal);
   [ position the slider
@@ -305,9 +311,6 @@ if (newRoom) {
   set.text.attribute(BLACK, LT_GRAY);
   display(14, 16, "  BLACK   "); 
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-  
-  [ load this palette, but don't set it yet
-  block(SET.PALETTE, BYNUM, &displayPal, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
   
   [ cache ego movement parameters (to be restored
   [ when returning to the control room)
@@ -356,9 +359,7 @@ if ((newRoom || refresh)) {
   
   [ if first time through
   if (newroom) {
-    [ load the palette
-    block(SET.PALETTE, BYNUM, &displayPal, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
-    [ then fade it in
+    [ fade in
     block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   } else {
     [ refreshing - reset the flag
@@ -810,55 +811,37 @@ if (cursormode) {
       btnAction = B_PREV_PAL;
     }
     
-    [ over red slider zone
-    if (mouseX >= 115 && mouseX <= 124) {
+    [ on red slider
+    if (posn(oSliderRed, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       get.posn(oSliderRed, tmpCol, tmpRow);
-      [ adjust for button height
-      tmpCol = tmpRow;
-      tmpCol -= 7;
-      [ is mouse is on the button?
-      if (mouseY >= tmpCol && mouseY <= tmpRow) {
-        [ start slide action for red
-        sliding = 1;
-        [ calculate offset from actual object position
-        [ to mouse position (ofst = posy - mY)
-        slideoffset = tmpRow;
-        slideoffset -= mouseY;
-      }
+      [ start slide action for red
+      sliding = 1;
+      [ calculate offset from actual object position
+      [ to mouse position (ofst = posy - mY)
+      slideoffset = tmpRow;
+      slideoffset -= mouseY;
     }
     
-    [ over green slider zone
-    if (mouseX >= 131 && mouseX <= 140) {
+    [ on green slider
+    if (posn(oSliderGreen, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       get.posn(oSliderGreen, tmpCol, tmpRow);
-      [ adjust for button height
-      tmpCol = tmpRow;
-      tmpCol -= 7;
-      [ is mouse is on the button?
-      if (mouseY >= tmpCol && mouseY <= tmpRow) {
-        [ start slide action for green
-        sliding = 2;
-        [ calculate offset from actual object position
-        [ to mouse position (ofst = posy - mY)
-        slideoffset = tmpRow;
-        slideoffset -= mouseY;
-      }
+      [ start slide action for green
+      sliding = 2;
+      [ calculate offset from actual object position
+      [ to mouse position (ofst = posy - mY)
+      slideoffset = tmpRow;
+      slideoffset -= mouseY;
     }
     
-    [ over blue slider zone
-    if (mouseX >= 147 && mouseX <= 156) {
+    [ on blue slider
+    if (posn(oSliderBlue, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       get.posn(oSliderBlue, tmpCol, tmpRow);
-      [ adjust for button height
-      tmpCol = tmpRow;
-      tmpCol -= 7;
-      [ is mouse is on the button?
-      if (mouseY >= tmpCol && mouseY <= tmpRow) {
-        [ start slide action for blue
-        sliding = 3;
-        [ calculate offset from actual object position
-        [ to mouse position (ofst = posy - mY)
-        slideoffset = tmpRow;
-        slideoffset -= mouseY;
-      }
+      [ start slide action for blue
+      sliding = 3;
+      [ calculate offset from actual object position
+      [ to mouse position (ofst = posy - mY)
+      slideoffset = tmpRow;
+      slideoffset -= mouseY;
     }
   }
 
@@ -945,17 +928,16 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
   
   if (btnAction == B_OK) {
     [ save the palette
-    block(STR.COPY, &editPal, &palette, 0); [ str.copy(sINPUT, sRESULT);
+    block(STR.COPY, &editPal, &palette, 0); [ str.copy(sINPUT, sRESULT)
   }
-
   [ restore ego movement parameters
   egoX = egoPrevX;
   egoY = egoPrevY;
   egoDir = egoPrevDir;
   [ fade out
-  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR);
-  [ change to temporary palette, load but don't display it
-  block(SET.PALETTE, BYNUM, &prevPal, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY);
+  block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+  [ change to game palette, load but don't display it
+  block(SET.PALETTE, BYNUM, &gamePal, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
 
   [ restore speed
   animationInterval = oldSpeed;
@@ -988,23 +970,23 @@ if (btnAction == B_SET_COL) {
   [ set a new value for this color
   
   [ make a copy of editPal
-  block(STR.COPY, &editPal, &copyPal, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &editPal, &copyPal, 0); [ str.copy(sINPUT, sRESULT)
   work1 = colorindex;
   work1 *= 6;
   [ trim palette at insertion point
-  block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN);
+  block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
   [ get palette data following insertion point
   work1 *= -1;
   work1 += 90;
-  block(STR.RIGHT, &copyPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &copyPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   [ add new color
-  block(STR.CONCAT, &editPal, &curColHex, 0); [ str.concat(sINPUT, sADD);
+  block(STR.CONCAT, &editPal, &curColHex, 0); [ str.concat(sINPUT, sADD)
   [ add rest of palette
-  block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD);
+  block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   [ copy current color string to default string
-  block(STR.COPY, &curColHex, &defColHex, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &curColHex, &defColHex, 0); [ str.copy(sINPUT, sRESULT)
   [ refresh the display palette
-  block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY);  
+  block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
 }
 
 if (btnAction == B_RESTORE) {
@@ -1171,9 +1153,9 @@ if (btnAction == B_PREV_PAL) {
   get.num("Room # to preview (1 - 10):", work1);
   if (work1 > 0 && work1 < 11) {
     [ fade to black, 2msec fade value
-    block(FADE.OUT, 0, 2, BLACK);
+    block(FADE.OUT, BYNUM, 2, BLACK);[ fade.out(FN_MODE, DELAY, COLOR)
     [ change to temporary palette, load but don't display it
-    block(SET.PALETTE, 0, &prevPal, 1);
+    block(SET.PALETTE, 0, &prevPal, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   
     [ load the test picture
     set(noScript);
@@ -1198,7 +1180,7 @@ if (btnAction == B_PREV_PAL) {
     show.pic();
   
     [ fade in from black, 2msec fade value
-    block(FADE.IN, 0, 2, BLACK);
+    block(FADE.IN, BYNUM, 2, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   
     [ wait for a keypress
     lastChar = 0;
@@ -1208,9 +1190,9 @@ if (btnAction == B_PREV_PAL) {
     }
   
     [ fade to black, 2msec fade value
-    block(FADE.OUT, 0, 2, BLACK);
+    block(FADE.OUT, BYNUM, 2, BLACK);[ fade.out(FN_MODE, DELAY, COLOR)
     [ restore room palette (but don't update it yet)
-    block(SET.PALETTE, 0, &displayPal, 1);
+    block(SET.PALETTE, 0, &displayPal, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
     
     [ restore room picture
     load.pic(currentRoom);
@@ -1233,7 +1215,7 @@ if (btnAction == B_PREV_PAL) {
     call(cp.ICAPOCC);
     
     [ fade in from black, 2msec fade value
-    block(FADE.IN, 0, 2, BLACK);
+    block(FADE.IN, BYNUM, 2, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     
     [ force index update
     colorindex = -1;
@@ -1271,18 +1253,18 @@ if (newindex != colorindex) {
   [ extract the color hex string
   colorindex = newindex;
   colorindex *= 6;
-  block(STR.COPY, &editPal, &copyPal, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &editPal, &copyPal, 0); [ str.copy(sINPUT, sRESULT)
   work1 = 6;
-  block(STR.MID, &copyPal, &colorindex, &work1); [ str.mid(sINPUT, vPOS, vLEN);
+  block(STR.MID, &copyPal, &colorindex, &work1); [ str.mid(sINPUT, vPOS, vLEN)
   [ copy it to current color string
-  block(STR.COPY, &copyPal, &curColHex, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &copyPal, &curColHex, 0); [ str.copy(sINPUT, sRESULT)
   
   [ extract the red value
   tmpRow = 20;
   tmpCol = 29;
   work1 = 2;
-  block(STR.LEFT, &curColHex, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-  block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT);
+  block(STR.LEFT, &curColHex, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   
   redpos = work1;
   tmpVal = 1;
@@ -1296,10 +1278,10 @@ if (newindex != colorindex) {
   [ extract the green value
   tmpCol = 33;
   work1 = 4;
-  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ str.right(sINPUT, sRESULT, vLEN);
+  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   work1 = 2;
-  block(STR.LEFT, &defColHex, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN);
-  block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT);
+  block(STR.LEFT, &defColHex, &defColHex, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   greenpos = work1;
   display.v(tmpRow, tmpCol, tmpVal);
   [ position the slider
@@ -1311,8 +1293,8 @@ if (newindex != colorindex) {
   [ blue
   tmpCol = 37;
   work1 = 2;
-  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ str.right(sINPUT, sRESULT, vLEN);
-  block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT);
+  block(STR.RIGHT, &curColHex, &defColHex, &work1); [ str.right(sINPUT, sRESULT, vLEN)
+  block(HEX2BYTE, &defColHex, &work1, 0); [ hex2byte(sINPUT, vRESULT)
   bluepos = work1;
   display.v(tmpRow, tmpCol, tmpVal);
   [ position the slider
@@ -1325,9 +1307,9 @@ if (newindex != colorindex) {
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ copy color hex text to default string
-  block(STR.COPY, &curColHex, &defColHex, 0); [ str.copy(sINPUT, sRESULT);
+  block(STR.COPY, &curColHex, &defColHex, 0); [ str.copy(sINPUT, sRESULT)
   [ switch the palette immediately
-  block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, mPALETTE, LOADONLY)
   [ update index value
   colorindex = newindex;
 }
@@ -1335,14 +1317,14 @@ if (newindex != colorindex) {
 [ if color variables have changed, update the palette and text displays
 if (update) {
   [ recalculate the new color value and adjust palette
-  block(BYTE2HEX, &curColHex, &redpos, 0); [ byte2hex(sRESULT, vINPUT);
-  block(BYTE2HEX, &copyPal, &greenpos, 0); [ byte2hex(sRESULT, vINPUT);
-  block(STR.CONCAT, &curColHex, &copyPal, 0); [ str.concat(sINPUT, sADD);
-  block(BYTE2HEX, &copyPal, &bluepos, 0); [ byte2hex(sRESULT, vINPUT);
-  block(STR.CONCAT, &curColHex, &copyPal, 0); [ str.concat(sINPUT, sADD);
+  block(BYTE2HEX, &curColHex, &redpos, 0); [ byte2hex(sRESULT, vINPUT)
+  block(BYTE2HEX, &copyPal, &greenpos, 0); [ byte2hex(sRESULT, vINPUT)
+  block(STR.CONCAT, &curColHex, &copyPal, 0); [ str.concat(sINPUT, sADD)
+  block(BYTE2HEX, &copyPal, &bluepos, 0); [ byte2hex(sRESULT, vINPUT)
+  block(STR.CONCAT, &curColHex, &copyPal, 0); [ str.concat(sINPUT, sADD)
 
   [ update the palette
-  block(SET.PALETTE, BYNUM, &s20, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &s20, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   reset(update);
   
   [ update color value text fields
@@ -1393,5 +1375,5 @@ return();
 #message 20 "%m18%s12%s13%m19"
 #message 21 "%s14"
 #message 22 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
-
+#message 23 "%s2"
   

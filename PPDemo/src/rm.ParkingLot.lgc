@@ -261,7 +261,7 @@ if (newRoom) {
   if (egoCarSeq == EC_IDLE) {
     [ restore cursor
     cursoricon = cursormode;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   }
 }
 
@@ -289,7 +289,7 @@ if (egoCarSeq) {
     move.obj(egoCar, 40, 143, 1, fCarDone);
     [ restore cursor for message
     cursoricon = cursormode;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
     print("At long last, you finally made it to Oakhurst, "
           "California to visit the original Sierra On-Line headquarters "
           "building.");
@@ -297,14 +297,14 @@ if (egoCarSeq) {
           "pull into the parking lot.");
     [ show wait cursor
     cursoricon = C_WAIT;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
     [ play car-running sound, force 4-channel FM
     set(4channelsound);
     set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     [ use correct instrument
     work1 = 0;
     work2 = CAR_INSTRUMENT;
-    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     sound(s.Car, soundDone);
     set(playSound);
   }
@@ -329,7 +329,7 @@ if (egoCarSeq) {
     draw(ego);
     [ restore cursor for message
     cursoricon = cursormode;
-    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+    set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
     print("The building is now a medical office. There aren't too many "
           "cars in the parking lot. So you decide to go inside and "
           "take a look around.");
@@ -361,7 +361,7 @@ if (egoCarSeq) {
     [ use correct instrument
     work1 = 0;
     work2 = CAR_INSTRUMENT;
-    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     sound(s.CarStart, soundDone);
     set(playSound);
     egoCarSeq = EC_STARTCAR;
@@ -399,7 +399,7 @@ if (egoCarSeq) {
 [ timing bug with controllers
 if (fSkip1) {
   reset(fSkip1);
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM);  
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [ parked cars in rightside parking lot don't quite align with priority bands
@@ -462,7 +462,7 @@ if (patientTimer == 0) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.Car, soundDone);
       set(playSound);
     } else {
@@ -513,7 +513,7 @@ if (fPatientDone) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.CarStart, soundDone);
       set(playSound);
     } else {
@@ -559,7 +559,7 @@ if (fPatientDone) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.CarStop, soundDone);
       set(playSound);
     } else {
@@ -619,7 +619,7 @@ if (fPatientDone) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.CarStart, soundDone);
       set(playSound);
     } else {
@@ -665,7 +665,7 @@ if (fPatientDone) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.CarStop, soundDone);
       set(playSound);
     } else {
@@ -690,7 +690,7 @@ if (soundDone) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.Car, soundDone);
       set(playSound);
     }
@@ -719,7 +719,7 @@ if (soundDone) {
       [ use correct instrument
       work1 = 0;
       work2 = CAR_INSTRUMENT;
-      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.Car, soundDone);
       set(playSound);
     }
@@ -744,7 +744,7 @@ if (soundDone) {
     [ use correct instrument
     work1 = 0;
     work2 = CAR_INSTRUMENT;
-    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     sound(s.Car, soundDone);
     set(playSound);
   }
@@ -807,7 +807,7 @@ if (!egoDying && !deathType && !kickBucket) {
         [ use correct instrument
         work1 = 3;
         work2 = 129;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         sound(s.Shock, soundDone);
         set(playSound);
       }
@@ -825,7 +825,7 @@ if (!egoDying && !deathType && !kickBucket) {
           [ use correct instrument
           work1 = 3;
           work2 = 129;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
           sound(s.Shock, soundDone);
           set(playSound);
         }
@@ -1277,12 +1277,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         if (cursoricon != C_DEFAULT) {
           [ change it
           cursoricon = C_DEFAULT;
-          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+          set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
           [ disable click2move
           reset(click2move);
         }
         [ clear input and controller before starting wait loop
-        set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM);  
+        set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
         lastChar = 0;
         work1 = 0;
         :wait
@@ -1460,7 +1460,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
   }
   :doneClick
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [***************************************
@@ -1471,7 +1471,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 if (egoHitSpecial) {
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ move to lobby

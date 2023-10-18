@@ -107,7 +107,7 @@ if (newRoom) {
   pressButton = -1;
   
   [ use a palette with a much darker 'dark gray'
-  block(SET.PALETTE, BYNUM, &m9, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &m9, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY)
   
   [ button sounds
   work1 = s.Tone0;
@@ -132,15 +132,15 @@ if (newRoom) {
   [ set instrument for buttons
   work1 = 0;
   work2 = 128;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
   ++work1;
-  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT);
+  set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
 
   [ display the picture on screen
   show.pic();
   [ use a finger cursor
   cursoricon = -1; [cursormode;
-  set.key(BYNUM, &m11, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYNUM, &m11, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade in
   block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   return();
@@ -356,11 +356,11 @@ if ((unlockdoor || controller(cRightClick))) {
   reset(disableGameFunctions);
   [ show wait cursor
   cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM);
+  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out to black (faster than room fade)
   block(FADE.OUT, BYNUM, 10, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   [ restore palette
-  block(SET.PALETTE, BYNUM, &m10, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY);
+  block(SET.PALETTE, BYNUM, &m10, 1); [ set.palette(FN_MODE, mPALETTE, LOADONLY)
   new.room(rm.Stairway); [ ##LE001##
 }
 

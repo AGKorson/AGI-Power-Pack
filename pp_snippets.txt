@@ -85,8 +85,8 @@
 
 [Snippet]
    Name = delay.time
-   Value = "cycle.time(o254, %1); [ delay.time(vCOUNT)"
-   ArgTips = "var vCOUNT (in milliseconds)"
+   Value = "cycle.time(DELAY.TIME, %1); [ delay.time(vMSEC)"
+   ArgTips = "var vMSEC (in milliseconds)"
 
 [Snippet]
    Name = delete.file
@@ -99,7 +99,7 @@
 
 [Snippet]
    Name = disable.click2move
-   Value = "reset(click2move); [ disable.click2move"
+   Value = "reset(click2move); [ disable.click2move()"
 
 [Snippet]
    Name = disable.custom.status
@@ -116,7 +116,7 @@
 
 [Snippet]
    Name = enable.click2move
-   Value = "set(click2move); [ enable.click2move"
+   Value = "set(click2move); [ enable.click2move()"
 
 [Snippet]
    Name = enable.custom.status
@@ -164,7 +164,7 @@
 
 [Snippet]
    Name = hide.mouse
-   Value = "disable.item(mouse);"
+   Value = "disable.item(mouse);" [ hide.mouse()
 
 [Snippet]
    Name = hide.objs
@@ -198,8 +198,8 @@
 
 [Snippet]
    Name = on.obj
-   Value = "posn(%1, -1, %2, %3, %4)"
-   ArgTips = "obj oOBJNUM, byt MODE, var vX, var vY (0=frame, 1=visible)"
+   Value = "posn(%1, ON.OBJ, %2, %3, %4)"
+   ArgTips = "obj oOBJNUM, byt MODE (0=frame, 1=visible), var vX, var vY"
 
 [Snippet]
    Name = pause.clock
@@ -310,8 +310,8 @@
 
 [Snippet]
    Name = start.timer
-   Value = "block(START.TIMER, %1, %2, %3); [ start.timer(vMINUTES, vSECONDS, fDONE)"
-   ArgTips = "var vMINUTES, var vSECONDS, flg fDONE"
+   Value = "block(START.TIMER, %1, %2, %3); [ start.timer(vMIN, vSEC, fDONE)"
+   ArgTips = "var vMIN, var vSEC, flg fDONE"
 
 [Snippet]
    Name = str.concat
@@ -380,7 +380,7 @@
 
 [Snippet]
    Name = toggle.turbo
-   Value = "cycle.time(TOGGLE.TURBO, %1); [   toggle.turbo(vMODE)"
+   Value = "cycle.time(TOGGLE.TURBO, %1); [ toggle.turbo(vMODE)"
    ArgTips = "var vMODE"
 
 [Snippet]

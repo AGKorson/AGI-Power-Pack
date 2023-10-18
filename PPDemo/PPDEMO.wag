@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/17/2023 8:24:09 PM"
+   LastEdit = "10/18/2023 10:24:11 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HA5C75481
-   CRC32 = &HA5C75481
+   CompCRC32 = &HAECA3221
+   CRC32 = &HAECA3221
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -58,190 +58,190 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H68359604
-   CompCRC32 = &H0
+   CRC32 = &H9A7B2499
+   CompCRC32 = &H9A7B2499
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = ""
-   CRC32 = &H9D38FEC5
-   CompCRC32 = &HF6DFEB59
+   CRC32 = &HCC89EFF8
+   CompCRC32 = &HCC89EFF8
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = ""
-   CRC32 = &HFD15F236
-   CompCRC32 = &HE93D592D
+   CRC32 = &H747C9DFF
+   CompCRC32 = &HC7F80398
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
-   CRC32 = &HD478A2B4
-   CompCRC32 = &H591DDABD
+   CRC32 = &H6FEC98CC
+   CompCRC32 = &H259030F2
    IsRoom = True
 
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H58BBC6A8
-   CompCRC32 = &H14C83AC2
+   CRC32 = &HA2E60921
+   CompCRC32 = &HB72167BF
    IsRoom = True
 
 [Logic5]
    ID = rm.Closet
    Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
-   CRC32 = &H85993393
-   CompCRC32 = &H8B32D314
+   CRC32 = &HFB8F35A3
+   CompCRC32 = &HA0A972CA
    IsRoom = True
 
 [Logic6]
    ID = rm.SecretRoom
    Description = ""
-   CRC32 = &HC85288A3
-   CompCRC32 = &H4F252953
+   CRC32 = &H4D68CF8
+   CompCRC32 = &H94A5F4D0
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
    Description = ""
-   CRC32 = &H2EBDB274
-   CompCRC32 = &H95367B1A
+   CRC32 = &HE426673F
+   CompCRC32 = &H732336A4
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &H839368F5
-   CompCRC32 = &HC5508620
+   CRC32 = &H9B744327
+   CompCRC32 = &H62032960
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
-   CRC32 = &HA2538C85
-   CompCRC32 = &HF5D1F4BF
+   CRC32 = &H6C12B391
+   CompCRC32 = &H11410DF4
    IsRoom = True
 
 [Logic20]
    ID = lgc.ReadScroll
    Description = ""
-   CRC32 = &HB89F68F
-   CompCRC32 = &HB89F68F
+   CRC32 = &H373A1E9D
+   CompCRC32 = &H373A1E9D
    IsRoom = False
 
 [Logic11]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H82A505F5
-   CompCRC32 = &HA96ABC91
+   CRC32 = &H2405E5F6
+   CompCRC32 = &H2405E5F6
    IsRoom = True
 
 [Logic12]
    ID = cp.CAISOCC
    Description = ""
-   CRC32 = &H633209BD
-   CompCRC32 = &H585C71E0
+   CRC32 = &H780A2404
+   CompCRC32 = &H780A2404
    IsRoom = True
 
 [Logic13]
    ID = cp.ERIDOCC
    Description = ""
-   CRC32 = &H79380010
-   CompCRC32 = &H5ED49768
+   CRC32 = &H434FC668
+   CompCRC32 = &H434FC668
    IsRoom = True
 
 [Logic14]
    ID = cp.ESADOCC
    Description = ""
-   CRC32 = &H7C7C688B
-   CompCRC32 = &HED44327B
+   CRC32 = &H653B1BAA
+   CompCRC32 = &H8AAE7A44
    IsRoom = True
 
 [Logic15]
    ID = cp.ICAPOCC
    Description = ""
-   CRC32 = &HE73EA00B
-   CompCRC32 = &HF9E0C665
+   CRC32 = &H4374FB63
+   CompCRC32 = &H4374FB63
    IsRoom = True
 
 [Logic16]
    ID = cp.OFROCC
    Description = ""
-   CRC32 = &H8991D970
-   CompCRC32 = &H169DD51C
+   CRC32 = &HD8801F2
+   CompCRC32 = &HD8801F2
    IsRoom = True
 
 [Logic17]
    ID = cp.RANDOCC
    Description = ""
-   CRC32 = &H581A6A27
-   CompCRC32 = &HE1D332BF
+   CRC32 = &H1DDD4231
+   CompCRC32 = &H1DDD4231
    IsRoom = True
 
 [Logic18]
    ID = rm.DoorKeypad
    Description = ""
-   CRC32 = &H54A05FC3
-   CompCRC32 = &H54A05FC3
+   CRC32 = &H1A97B3C1
+   CompCRC32 = &H1A97B3C1
    IsRoom = True
 
 [Logic19]
    ID = rm.SafeDoor
    Description = ""
-   CRC32 = &HE9437073
-   CompCRC32 = &HE9437073
+   CRC32 = &HEE6D1C63
+   CompCRC32 = &HEE6D1C63
    IsRoom = True
 
 [Logic21]
    ID = lgc.ReadNotebook
    Description = ""
-   CRC32 = &H7C24ABD1
-   CompCRC32 = &H7C24ABD1
+   CRC32 = &HA8E8A3C6
+   CompCRC32 = &HA8E8A3C6
    IsRoom = False
 
 [Logic22]
    ID = lgc.ReadMagazine
    Description = ""
-   CRC32 = &H64D01914
-   CompCRC32 = &H64D01914
+   CRC32 = &HF428254F
+   CompCRC32 = &HF428254F
    IsRoom = False
 
 [Logic23]
    ID = lgc.ReadManual
    Description = ""
-   CRC32 = &H1B556658
-   CompCRC32 = &H1B556658
+   CRC32 = &HD1406681
+   CompCRC32 = &HD1406681
    IsRoom = False
 
 [Logic24]
    ID = lgc.Podium
    Description = ""
-   CRC32 = &H98CF15AD
-   CompCRC32 = &H98CF15AD
+   CRC32 = &H3A588BFF
+   CompCRC32 = &H3A588BFF
    IsRoom = False
 
 [Logic25]
    ID = lgc.Pillow
    Description = ""
-   CRC32 = &H48D879B6
-   CompCRC32 = &H48D879B6
+   CRC32 = &H342827AF
+   CompCRC32 = &H342827AF
    IsRoom = False
 
 [Logic26]
    ID = lgc.Walkman
    Description = ""
-   CRC32 = &H61B87EFF
-   CompCRC32 = &H61B87EFF
+   CRC32 = &HCDD5AF64
+   CompCRC32 = &HCDD5AF64
    IsRoom = False
 
 [Logic27]
    ID = lgc.Statusbar
    Description = "custom status bar"
-   CRC32 = &H5F09A499
-   CompCRC32 = &H5F09A499
+   CRC32 = &HEFF9E31E
+   CompCRC32 = &HEFF9E31E
    IsRoom = False
 
 [Logic28]
@@ -254,15 +254,15 @@
 [Logic29]
    ID = lgc.ToolbarFunctions
    Description = ""
-   CRC32 = &H463288AD
-   CompCRC32 = &H463288AD
+   CRC32 = &HA5F8DD93
+   CompCRC32 = &HA5F8DD93
    IsRoom = False
 
 [Logic30]
    ID = lgc.TerminalFunctions
    Description = ""
-   CRC32 = &HDA7C3DA7
-   CompCRC32 = &HDA7C3DA7
+   CRC32 = &HD8FA49AF
+   CompCRC32 = &HD8FA49AF
    IsRoom = False
 
 [Logic31]
@@ -275,15 +275,15 @@
 [Logic32]
    ID = lgc.ExamineItem
    Description = ""
-   CRC32 = &H2340E9E0
-   CompCRC32 = &H2340E9E0
+   CRC32 = &H8D04B3DA
+   CompCRC32 = &H8D04B3DA
    IsRoom = False
 
 [Logic33]
    ID = lgc.ScoreHandler
    Description = ""
    CRC32 = &H52B6C351
-   CompCRC32 = &H4DAA38
+   CompCRC32 = &H52B6C351
    IsRoom = False
 
 [Logic34]
@@ -352,29 +352,29 @@
 [Logic53]
    ID = lgc.RedrawRoom
    Description = ""
-   CRC32 = &H83F1D6EF
-   CompCRC32 = &H83F1D6EF
+   CRC32 = &H86936808
+   CompCRC32 = &H86936808
    IsRoom = False
 
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &HA397E953
-   CompCRC32 = &HDFC9520E
+   CRC32 = &HDD7AABB1
+   CompCRC32 = &HF889AAD2
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
-   CRC32 = &H4684EC75
-   CompCRC32 = &H4A0007D
+   CRC32 = &HD12C8128
+   CompCRC32 = &HD12C8128
    IsRoom = False
 
 [Logic52]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H7DEC6834
-   CompCRC32 = &H9F7A0675
+   CRC32 = &H286DD41A
+   CompCRC32 = &H286DD41A
    IsRoom = False
 
 [Logic54]
@@ -387,8 +387,8 @@
 [Logic55]
    ID = lgc.Error
    Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
-   CRC32 = &HC883F208
-   CompCRC32 = &HC883F208
+   CRC32 = &H316E1650
+   CompCRC32 = &H316E1650
    IsRoom = False
 
 [Logic56]
@@ -415,8 +415,8 @@
 [Logic60]
    ID = lgc.PowerPack
    Description = ""
-   CRC32 = &HE7225F70
-   CompCRC32 = &HE7225F70
+   CRC32 = &H149291E8
+   CompCRC32 = &H149291E8
    IsRoom = False
 
 [Logic61]
