@@ -178,7 +178,7 @@ if (gameRestarted) {
     work1 = 3;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     work1 = 7;
-    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     [ convert to number
     block(STR2BYTE, &tmpString1, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
     [ options are 3-digit number: hundreds = soundOn
@@ -208,14 +208,14 @@ if (gameRestarted) {
     work1 = 2;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     work1 = 5;
-    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     [ convert to number (4channel value)
     block(STR2BYTE, &tmpString1, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
     [ next two digits are clock options
     work1 = 2;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     work1 = 3;
-    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     [ convert to number
     block(STR2BYTE, &tmpString1, &tmp0, 0); [ str2byte(sINPUT, vRESULT)
     if (tmp0 > 9) {
@@ -233,7 +233,7 @@ if (gameRestarted) {
     work1 = 2;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     work1 = 1;
-    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     [ convert speed to number
     block(STR2BYTE, &tmpString1, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
     
@@ -263,7 +263,7 @@ if (gameRestarted) {
       [ remove this value
       block(STR.LEN, &tmpString0, &work2, 0); [ str.len(sINPUT, vRESULT)
       work2 -= 3;
-      block(STR.RIGHT, &tmpString0, &tmpString0, &work2); [ str.left(sINPUT, sRESULT, vLEN)
+      block(STR.RIGHT, &tmpString0, &tmpString0, &work2); [ str.right(sINPUT, sRESULT, vLEN)
       ++work1;
     if (work1 < 71) {
       goto(nextinst4);

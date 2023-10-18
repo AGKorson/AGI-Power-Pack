@@ -3,17 +3,27 @@
 [ cp.Terminal 
 [
 [ Master Options Control Console
-[ MOCC
 [
-[ a command driven text terminal
+[ A simple text terminal that controls all other consoles. MOCC starts
+[ out corrupted. Commands will randomly fail until it gets reset.
+[ Only one account (kw002) is accessible. Password is on the memo 
+[ found on the printer in the office.
+[ After resetting, all six consoles, and the security system need to
+[ be restarted; passwords to start them are hidden in various places
+[ in the two side rooms.
 [
-[ valid commands:
-[ AMOS       CLS        CD         CHDIR   
-[ CHKDSK     DIR        COPY       DEL
-[ ERASE      EXIT       FORMAT     HELP
-[ LOGOFF     MD         MKDIR      RD
-[ RMDIR      REN        RENAME     SUDO
-[ TYPE       VER        VOL
+[ The source code files for the Power Pack are located in kw001 user
+[ drive. User has to find a disk, format it, then copy the files to
+[ the disk in order to win.
+[
+[ The MOCC simulates an operating system by providing a bunch of DOS
+[ commands. Most don't do anything real. Valic commands include:
+[   AMOS       CLS        CD         CHDIR   
+[   CHKDSK     DIR        COPY       DEL
+[   ERASE      EXIT       FORMAT     HELP
+[   LOGOFF     MD         MKDIR      RD
+[   RMDIR      REN        RENAME     SUDO
+[   TYPE       VER        VOL
 [*********************************************************************
 
 [ power pack support
@@ -135,7 +145,7 @@ show.pic();
 set.text.attribute(WHITE, BLACK);
 display(22, 22, "Press <ESC> to return to control room");
 
-[ set terminal colors (maybe use amber?)
+[ set terminal colors
 set.text.attribute(GREEN, BLACK);
 
 [ command input is not case sensitive
@@ -423,6 +433,8 @@ if ((lastChar == 13 || lastChar == 10)) {
   parse(input);
     
   [ take appropriate action based on command and input mode
+  
+  [ process userID
   if (inputmode == IM_USERID) {
     [ userid entered; get password
     block(STR.COPY, &input, &userid, 0); [ str.copy(sINPUT, sRESULT)
@@ -436,8 +448,11 @@ if ((lastChar == 13 || lastChar == 10)) {
     goto(getKey);
   }
   
+  [ process password
   if (inputmode == IM_PASSWORD) {
     if (PWfunction == PW_LOGON) {
+      [ assume not valid
+      reset(loggedon);
       [ validate userid/password
       sCmd = "kw002";
       if (compare.strings(userid, sCmd)) {
@@ -707,8 +722,9 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ get more input
     goto(getInput);
   }
+  
+  [ process command line
   if (inputmode == IM_CMDLINE) {
-
     if (!resetMOCC) {
       [ add occasional error codes if not reset
       random(1, 10, work1);
@@ -736,7 +752,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ convert input to lower case, trim it,
     block(STR.LOWER, &input, &input, 0); [ str.upper(sINPUT, sRESULT)
     work1 = TRIM_ALL;
-    block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+    block(STR.TRIM, &input, &input, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
     [ then extract the command (first word)
     work1 = 32;
     work2 = 0;
@@ -748,7 +764,7 @@ if ((lastChar == 13 || lastChar == 10)) {
       work1 -= work2;
       block(STR.RIGHT, &input, &input, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
       work1 = TRIM_ALL;
-      block(STR.TRIM, &input, &input, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+      block(STR.TRIM, &input, &input, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
     } else {
      block(STR.COPY, &input, &sCmd, 0); [ str.copy(sINPUT, sRESULT)
      input = "";
@@ -789,7 +805,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         work1 -= 5;
         block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         work1 = TRIM_ALL;
-        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         sTemp2 = "badass";
         if (compare.strings(sCmd, sTemp2)) {
@@ -855,7 +871,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         work1 -= 5;
         block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         work1 = TRIM_ALL;
-        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         [ check for one of the seven subsystems
         sTemp2 = "badass";
@@ -970,7 +986,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         work1 -= 5;
         block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         work1 = TRIM_ALL;
-        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         sTemp2 = "badass";
         if (compare.strings(sCmd, sTemp2)) {
@@ -1056,7 +1072,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         work1 -= 5;
         block(STR.RIGHT, &input, &sCmd, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
         work1 = TRIM_ALL;
-        block(STR.TRIM, &sCmd, &sCmd, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+        block(STR.TRIM, &sCmd, &sCmd, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
         reset(validmodule);
         [ check for one of the seven subsystems
         sTemp2 = "badass";
@@ -1173,7 +1189,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         if (work1 == 92) {
           block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
           --work1;
-          block(STR.LEFT, &input, &input, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+          block(STR.LEFT, &input, &input, &work1); [ str.left(sINPUT, sRESULT, vCOUNT)
         }
         [ valid dir values from any dir:
         [ c:, c:\users, c:\users\kw002, a:
@@ -1369,7 +1385,7 @@ if ((lastChar == 13 || lastChar == 10)) {
           work1 -= work2;
           block(STR.RIGHT, &input, &sTemp3, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
           work1 = TRIM_ALL;
-          block(STR.TRIM, &sTemp3, &sTemp3, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+          block(STR.TRIM, &sTemp3, &sTemp3, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
           [ trim src
           block(STR.LEFT, &input, &input, &work2); [ str.left(sINPUT, sRESULT, vLEN)
         } else {
@@ -1572,7 +1588,7 @@ if ((lastChar == 13 || lastChar == 10)) {
           if (work1 == 92) {
             block(STR.LEN, &input, &work1, 0); [ str.len(sINPUT, vRESULT)
             --work1;
-            block(STR.LEFT, &input, &input, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+            block(STR.LEFT, &input, &input, &work1); [ str.left(sINPUT, sRESULT, vCOUNT)
           }
           vShowDir = -1;
           [ valid dir values from any dir:

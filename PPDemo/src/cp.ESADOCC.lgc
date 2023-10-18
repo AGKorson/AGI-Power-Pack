@@ -3,12 +3,19 @@
 [ cp.ESADOCC
 [
 [ Electronic Synthesized Audio Data Options Control Console
-[ ESADOCC
 [ 
-[ toggle between pc speaker and 4chan
-[ allow instrument selection for each channel
-[ test button - play a short song
+[ This console lets the user change the sound settings for in game
+[ sounds that do not use specific custom settings. The music played by
+[ the Walkman, and some of the generic sound effects will use these
+[ settings.
 [
+[ Options include switching between PC speaker (default AGI) sound,
+[ and four channel sound. When four channel sound is selected, you
+[ can specify either FM synthesis or MIDI playback. You can also 
+[ specify which instrument to use for each of the sound channels.
+[ 
+[ There is a TEST button to let you hear what your selected option 
+[ will sound like (it plays the theme from King's Quest I).
 [
 [*********************************************************************
 

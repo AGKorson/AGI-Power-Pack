@@ -122,7 +122,7 @@ use s.TunnelDoor for coffin
     ANIMATION ART: done
     SOUND: done
     SCORING: -1 for touching trees; +1 for getting run over; +1 for getting shocked by batmobile; +5 for getting in car to end game; +20 if game ends with power pack source disk
-    CODING: 'said' statements
+    CODING: done
 
 4. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. One to three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If ego approaches, receptionist will stop work and speak to ego. If ego asks to use restroom, permission is granted to go into hallway. If ego tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will tell a patient to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Ego should take the magazine and read it. A cone/placard warns of wet/slippery floor to left of the screen. If ego tries to go past the cone, he slips, falls and dies.
 
@@ -130,7 +130,7 @@ use s.TunnelDoor for coffin
     ANIMATION ART: done
     SOUND: done
     SCORING: +1 for slipping on wet floor; +5 for asking to use bathroom; +3 for getting magazine; +2 for reading it;
-    CODING: 'said' statements
+    CODING: done
 
 4A. Closeup of magazine: mostly text, will have an article talking about Sierra; with a paragraph or two on the rumored 'Power Pack'; hidden in the text will be the passcode for the control room entry door.
     BACKGROUND: done
@@ -145,7 +145,7 @@ use s.TunnelDoor for coffin
     ANIMATION ART: done
     SOUND: done
     SCORING: +1 for getting arrested; +1 for opening closet door
-    CODING: 'said' statements
+    CODING: done
 
 6. Closet: Full of 'janitor' stuff. When ego moves far enough into room, he trips over a broom. (If ego tries to pick up broom, that also starts the tripping sequence.) Tripping results in ego causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; ego can fix it to get extra points. If broom is left on floor, ego will trip again (but not actually fall over) at random time intervals. Ego can put broom in corner to get extra points. Touching the plunger will subtract points. Ego can wash hands in sink to recover lost points.
 
@@ -153,7 +153,7 @@ use s.TunnelDoor for coffin
     ANIMATION ART: done
     SOUND: done 
     SCORING: +3 for closing closet door; +5 for making hole in wall; -1 each time for tripping over broom after hole is made; +2 for putting broom in corner; -3 for touching plunger; +1 first time washing hands; +1/+3 for washing hands after touching tree/plunger; +3 pts for fixing drip
-    CODING: 'said' statements 
+    CODING: done 
 
 7. Secret Room: Connects the closet to the stairway. No other purpose/action for this room.
  
@@ -161,7 +161,7 @@ use s.TunnelDoor for coffin
     ANIMATION ART: done
     SOUND: n/a
     SCORING: n/a
-    CODING: 'said' statements
+    CODING: done
 
 8. Stairway: At bottom of stairs is a door to the PP Control Room. The door is locked with a keypad code needed to enter. The code can be found in the magazine article. To open the door, a close up picture/room is used to enter the code. Correct code will open door. There are lights along the stairway. One of them flickers every few seconds.
 
@@ -169,7 +169,7 @@ use s.TunnelDoor for coffin
     ANIMATION ART: done
     SOUND: done
     SCORING: n/a
-    CODING: 'said' statements
+    CODING: done
 
 8A. Closeup of keypad for entering code: The keypad is a standard 12 button keypad; 0-9, plus clear/enter buttons. Correct code will open door, scoring points. If wrong code entered too many times, lose a point, kick player back to room and make them wait a minute.
 Touch tone frequencies:
@@ -209,15 +209,15 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
     ANIMATION ART: done 
     SOUND: done
     SCORING: +5 pts for each module successfully restored (30 pts total); +10 pts for restoring BaDASS; 4 pts for inserting drive; +6 for copying source files to floppy
-    CODING: 'said' statements
+    CODING: done
 
-10. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, AOL, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
+10. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, gym locker, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
 
     BACKGROUND: done
     ANIMATION ART: done 
     SOUND: done
     SCORING: 3 pts for getting memo from printer; 3 pts for getting password list; 2 pts for getting walkman; 2 pts for finding safe; 3 pts for getting BadASS code; 4 pts for getting floppy disk; 3 pts for getting notebook; 2 pts moving rug; 3 pts for getting folder with sound password
-    CODING: 'said' statements
+    CODING: done
 
 10A. Safe door closeup: spinning combo lock dial.Enter correct combination to open.
 
@@ -227,7 +227,7 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
     SCORING: 3 pts for opening safe
     CODING: done
 
-10B: Walkman closeup: use cassette to insert it into walkman; spacebar to flip/change side? Play starts the current track (unless at end)
+10B: Walkman closeup: use cassette to insert it into Walkman; spacebar to flip/change side? Play starts the current track (unless at end)
 rewind backs up one track; fast-forward moves to next track.
 
     BACKGROUND: done
@@ -241,8 +241,8 @@ rewind backs up one track; fast-forward moves to next track.
     BACKGROUND: done
     ANIMATION art: done 
     SOUND: done
-    SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in walkman
-    CODING: 'said' statements 
+    SCORING: 3 pts for finding pillow code; 3 pts for finding podium code; 1 pt for opening treasure chest; 3 pts for getting scroll from chest; 3 pts for getting music sheet; 4 pts for getting mix tape; 4 pts for playing mix tape in Walkman
+    CODING: done 
 
 11A: Coffin pillow close up: no interaction
     BACKGROUND: done
@@ -272,7 +272,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done
 
@@ -281,7 +281,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done
 
@@ -290,7 +290,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done (confirm save function)
 
@@ -299,7 +299,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done (confirm save function)
 
@@ -308,7 +308,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done
 
@@ -317,7 +317,7 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
 
     BACKGROUND: done
     ANIMATION ART: done
-    SOUND: button click
+    SOUND: n/a
     SCORING: n/a
     CODING: done
 

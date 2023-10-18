@@ -3,7 +3,13 @@
 [ cp.RANDOCC
 [
 [ Rectangular Alpha-Numeric Display Options Control Console
-[ RANDOCC
+[
+[ This console lets the user change the colors used for displaying
+[ message boxes. Changes made will be reflected in all message boxes
+[ including the pause message and save/restore game dialogs.
+[
+[ Use the Restore button to reset to default colors (BLACK text on
+[ a WHITE background with RED border).
 [
 [*********************************************************************
 
@@ -63,13 +69,17 @@
 #define egoPrevX     v234
 #define egoPrevY     v235
 #define egoPrevDir   v236
-#define oldFG        v237
+#define chgElement   v237
+#define   CHG_BG     1
+#define   CHG_FG     2
+#define   CHG_BD     3
+#define oldColor     v238
 
 #define update       f220
 #define rightmode    f221   [ when true, rightclick sets border
                             [ when false, rightclick sets bg
 #define cursormode   f222
-#define noredraw     f223 [ fg only needs text re-displayed
+#define drawbtns     f223   [ forces button text to redraw
 
 #define sTemp        s12  [ includes s13
 #define hexBG        s14
@@ -587,6 +597,9 @@ if (btnAction == B_CANCEL) {
   egoY = egoPrevY;
   egoDir = egoPrevDir;
   
+  [ restore colors
+  block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+  
   [ fade out 
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK);  [ fade.out(FN_MODE, DELAY, COLOR);
   [ just go back to previous room
@@ -603,28 +616,31 @@ if (btnAction == B_RESET) {
 }
 
 if (btnAction == B_PAL_FG) {
-  [ change FG IF it doesn't match current FG/BG
-  if (tmpFG != colorindex && tmpBG != colorindex) {
-    [ change FG
-    oldFG = tmpFG;
+  [ change FG IF it doesn't match current FG
+  if (tmpFG != colorindex) {
+    chgElement = CHG_FG;
+    oldColor = tmpFG;
     tmpFG = colorindex;
     set(update);
-    [ redisplay text only
-    set(noredraw);
   }
 }
 if (btnAction ==  B_PAL_BG) {
-  [ change BG, IF it doesn't match current FG/BG
-  if (tmpFG != colorindex && tmpBG != colorindex) {
+  [ change BG, IF it doesn't match current BG
+  if (tmpBG != colorindex) {
+    chgElement = CHG_BG;
+    oldColor = tmpBG;
     tmpBG = colorindex;
     set(update);
   }
 }
-
 if (btnAction ==  B_PAL_BD) {
-  [ change border
-  tmpBorder = colorindex;
-  set(update);
+  [ change border IF it doesn't match current border
+  if (tmpBorder != colorindex) {
+    chgElement = CHG_BD;
+    oldColor = tmpBorder;
+    tmpBorder = colorindex;
+    set(update);
+  }
 }
 
 if (btnAction ==  B_OP_BG) {
@@ -651,77 +667,29 @@ btnaction = 0;
 if (update) {
   reset(update);
   
-  [ if drawing entire box
-  if (!noredraw) {
-    [ this string draws a blank msgbox with correct bkgd color and border
-    sTemp = "F0%s14F41B233480231CF81E28F0%s15F41C24337F241DFF";
-    [ convert bkgd and border colors to hex strings
-    block(BYTE2HEX, &hexBG, &tmpBG, 0); [ byte2Hex(sRESULT, vINPUT); 
-    block(BYTE2HEX, &hexBD, &tmpBorder, 0); [ byte2Hex(sRESULT, vINPUT);
-    [ now execute the picdraw function (enable paintover)
-    block(PIC.DRAW, COLOR_FILL, &sTemp, 0); [ pic.draw(FILLSTYLE, sCMDS);
-  
-    [ the draw function clears all text from the screen
-    
-    [ if picture is not visible yet, show it now 
-    if (newroom) {
-      show.pic();
-    }
-  }
-  
   [ push display colors
   set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
-  [ attributes by var
-  toggle.monitor(); [ set.text.attr.v(vFG, vBG)
-  set.text.attribute(&tmpFG, &tmpBG);
-  [ add test message text
-  display(6, 8, "This is a test message.");
-  
-  [ update palette to show current color selections
-  
-  [ add FG text to palette
-  cInit = 2; [ FG
-  cRow = 16;
-  cCol = tmpFG;
-  cCol *= 3;
-  palBG = tmpFG;
-  if (tmpFG > 7) {
-    cRow += 3;
-    cCol -= 10;
-    palFG = BLACK;
-  } else {
-    cCol += 14;
-    palFG = WHITE;
-  }
-  [ attributes by var
-  toggle.monitor(); [ set.text.attr.v(vFG, vBG)
-  set.text.attribute(&palFG, &palBG);
-  display.v(cRow, cCol, cInit);
-  
-  if (noredraw) {
-    [ erase old FG 
-    reset(noredraw);
-    cInit = 4; [ blank
-    cRow = 16;
-    cCol = oldFG;
-    cCol *= 3;
-    palBG = oldFG;
-    if (oldFG > 7) {
-      cRow += 3;
-      cCol -= 10;
-      palFG = BLACK;
-    } else {
-      cCol += 14;
-      palFG = WHITE;
-    }
-    [ attributes by var
-    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
-    set.text.attribute(&palFG, &palBG);
-    display.v(cRow, cCol, cInit);
-  } else {
-    [ forced redraw all other text
-    cInit = 1; [ BG
+  [ if picture is not visible yet, show it now 
+  if (newroom) {
+    show.pic();
+    [ add button text
+    set.text.attribute(BLACK, WHITE);
+    display(16, 1, "  OK  ");
+    display(18, 1, "Cancel");
+    display(20, 1, "Reset ");
+    
+    set.text.attribute(BLACK, LT_GRAY);
+    display(10, 2, "  Cursor   ");
+    display(12, 4, "Ms");
+    display(12, 10, "Kb");
+    
+    display(10, 26, "Right Click");
+    display(12, 28, "BG");
+    display(12, 34, "Bd");
+    
+    [ update all palette colors
+    cInit = CHG_BG; [ BG
     cRow = 16;
     cCol = tmpBG;
     cCol *= 3;
@@ -738,8 +706,26 @@ if (update) {
     toggle.monitor(); [ set.text.attr.v(vFG, vBG)
     set.text.attribute(&palFG, &palBG);
     display.v(cRow, cCol, cInit);
-  
-    cInit = 3; [ Border
+    
+    cInit = CHG_FG; [ FG
+    cRow = 16;
+    cCol = tmpFG;
+    cCol *= 3;
+    palBG = tmpFG;
+    if (tmpFG > 7) {
+      cRow += 3;
+      cCol -= 10;
+      palFG = BLACK;
+    } else {
+      cCol += 14;
+      palFG = WHITE;
+    }
+    [ attributes by var
+    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
+    set.text.attribute(&palFG, &palBG);
+    display.v(cRow, cCol, cInit);
+    
+    cInit = CHG_BD; [ Border
     cRow = 17;
     cCol = tmpBorder;
     cCol *= 3;
@@ -757,22 +743,53 @@ if (update) {
     set.text.attribute(&palFG, &palBG);
     display.v(cRow, cCol, cInit);
     
-    [ add button text
-    set.text.attribute(BLACK, WHITE);
-    display(16, 1, "  OK  ");
-    display(18, 1, "Cancel");
-    display(20, 1, "Reset ");
+  } else {
+    [ erase old marker 
+    cInit = 4; [ blank
+    cRow = 16;
+    if (chgElement == CHG_BD) {
+      ++cRow;
+    }
+    cCol = oldColor;
+    cCol *= 3;
+    palBG = oldColor;
+    if (oldColor > 7) {
+      cRow += 3;
+      cCol -= 10;
+    } else {
+      cCol += 14;
+    }
+    [ FG doesn't matter when displaying blanks
+    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
+    set.text.attribute(&palFG, &palBG);
+    display.v(cRow, cCol, cInit);
     
-    set.text.attribute(BLACK, LT_GRAY);
-    display(10, 2, "  Cursor   ");
-    display(12, 4, "Ms");
-    display(12, 10, "Kb");
-    
-    display(10, 26, "Right Click");
-    display(12, 28, "BG");
-    display(12, 34, "Bd");
+    [ add new marker (colorindex is the new color)
+    cRow = 16;
+    if (chgElement == CHG_BD) {
+      ++cRow;
+    }
+    cCol = colorindex;
+    cCol *= 3;
+    palBG = colorindex;
+    if (colorindex > 7) {
+      cRow += 3;
+      cCol -= 10;
+      palFG = BLACK;
+    } else {
+      cCol += 14;
+      palFG = WHITE;
+    }
+    toggle.monitor(); [ set.text.attr.v(vFG, vBG)
+    set.text.attribute(&palFG, &palBG);
+    display.v(cRow, cCol, chgElement);
   }
   
+  [ display test message with the new colors
+  block(MSGBOX.COLOR.V, &tmpBorder, &tmpFG, &tmpBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+  set(leaveWindow);
+  print.at("This is a test message.", 5, 8, 30);
+
   [ pop display colors
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   

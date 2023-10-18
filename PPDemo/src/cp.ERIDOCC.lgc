@@ -3,9 +3,9 @@
 [ cp.ERIDOCC
 [
 [ Emulated Rodent Input Device Option Control Console
-[ ERIDOCC
 [
-[ cursors:
+[ This console lets the user modify the cursors used in the game. 
+[ There are six different cursors that can be edited:
 [  - normal
 [  - walk
 [  - look
@@ -13,9 +13,13 @@
 [  - talk
 [  - hourglass
 [
-[ left click to set a pixel; right click to clear a pixel
+[ When editing, use left-click to set a pixel, right-click to clear a
+[ pixel (or press SPACEBAR to toggle the currently selected pixel).
 [
-[
+[ Cursors can be saved to a file so you can easily imort them into 
+[ another Power Pack enabled game. Open the file in a hex editor and
+[ copy the hex string for your cursor. (The cursor name is included
+[ to help identify it.)
 [
 [*********************************************************************
 
@@ -1045,7 +1049,7 @@ if (btnAction == B_EXPORT) {
   block(STR.CONCAT, &sTemp, &s13, 0); [ str.concat(sINPUT, sADD)
   block(STR.FORMAT, &sTemp, &sTemp, 0); [ str.format(sINPUT, sRESULT)
   work1 = TRIM_ALL;
-  block(STR.TRIM, &sTemp, &sTemp, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
+  block(STR.TRIM, &sTemp, &sTemp, &work1); [ str.trim(sINPUT, sRESULT, vMODE)
   
   [ get a filename (limit to 12 characters (8.3 format))
   :getfile
@@ -1124,7 +1128,7 @@ if (btnAction == B_EXPORT) {
   work2 = &s15;
   block(SAVE.STRING, &sFilename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
   [ provide feedback
-  print.at("Cursor data exported to game directory as '%s20'", 14, 19, 19);
+  print.at("Cursor data exported to game directory as '%s21'", 14, 19, 19);
   :donesave
   prevent.input();
 }

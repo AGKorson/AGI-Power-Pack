@@ -3,15 +3,12 @@
 [ cp.OFROCC
 [
 [ Overall Frame Rate Options Control Console
-[ OFROCC
-[
-[ toggle for turbo mode; slider for game speed
-[
-[ toggle for turbomode 
-[ ok,cancel
-[ slow, normal, fast fastest options
-[ slider to select a speed
-[ textbox that shows current speed value
+[ 
+[ This console lets the user try different settings of Turbo mode and
+[ game speed settings. The Power Pack Demo game uses Turbo mode for 
+[ all rooms and logics, so changes here will not affect the game's 
+[ speed settings. But it gives the user an idea of how speed can
+[ be controlled with/without the turbo option.
 [
 [*********************************************************************
 

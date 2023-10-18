@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/12/2023 3:58:52 PM"
+   LastEdit = "10/17/2023 8:24:09 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -59,13 +59,13 @@
    ID = rm.Title
    Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
    CRC32 = &H68359604
-   CompCRC32 = &H1D75F8C
+   CompCRC32 = &H0
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = ""
-   CRC32 = &HF0073A1C
+   CRC32 = &H9D38FEC5
    CompCRC32 = &HF6DFEB59
    IsRoom = True
 
@@ -86,7 +86,7 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H839B2665
+   CRC32 = &H58BBC6A8
    CompCRC32 = &H14C83AC2
    IsRoom = True
 
@@ -114,7 +114,7 @@
 [Logic9]
    ID = rm.Office
    Description = ""
-   CRC32 = &HC63D0235
+   CRC32 = &H839368F5
    CompCRC32 = &HC5508620
    IsRoom = True
 
@@ -135,49 +135,49 @@
 [Logic11]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &HA96ABC91
+   CRC32 = &H82A505F5
    CompCRC32 = &HA96ABC91
    IsRoom = True
 
 [Logic12]
    ID = cp.CAISOCC
    Description = ""
-   CRC32 = &H585C71E0
+   CRC32 = &H633209BD
    CompCRC32 = &H585C71E0
    IsRoom = True
 
 [Logic13]
    ID = cp.ERIDOCC
    Description = ""
-   CRC32 = &H5ED49768
+   CRC32 = &H79380010
    CompCRC32 = &H5ED49768
    IsRoom = True
 
 [Logic14]
    ID = cp.ESADOCC
    Description = ""
-   CRC32 = &HED44327B
+   CRC32 = &H7C7C688B
    CompCRC32 = &HED44327B
    IsRoom = True
 
 [Logic15]
    ID = cp.ICAPOCC
    Description = ""
-   CRC32 = &HF9E0C665
+   CRC32 = &HE73EA00B
    CompCRC32 = &HF9E0C665
    IsRoom = True
 
 [Logic16]
    ID = cp.OFROCC
    Description = ""
-   CRC32 = &H169DD51C
+   CRC32 = &H8991D970
    CompCRC32 = &H169DD51C
    IsRoom = True
 
 [Logic17]
    ID = cp.RANDOCC
    Description = ""
-   CRC32 = &HE1D332BF
+   CRC32 = &H581A6A27
    CompCRC32 = &HE1D332BF
    IsRoom = True
 
@@ -282,7 +282,7 @@
 [Logic33]
    ID = lgc.ScoreHandler
    Description = ""
-   CRC32 = &H4DAA38
+   CRC32 = &H52B6C351
    CompCRC32 = &H4DAA38
    IsRoom = False
 
@@ -359,21 +359,21 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &HDFC9520E
+   CRC32 = &HA397E953
    CompCRC32 = &HDFC9520E
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
-   CRC32 = &H4A0007D
+   CRC32 = &H4684EC75
    CompCRC32 = &H4A0007D
    IsRoom = False
 
 [Logic52]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H9F7A0675
+   CRC32 = &H7DEC6834
    CompCRC32 = &H9F7A0675
    IsRoom = False
 

@@ -30,6 +30,8 @@
 [ power pack support
 #include "powerpack.txt"
 
+[ TODO: clicking on door should say something
+
 [***************************************
 [ LOCAL DEFINES
 [***************************************

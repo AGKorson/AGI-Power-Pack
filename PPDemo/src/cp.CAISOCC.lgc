@@ -3,7 +3,23 @@
 [ cp.CAISOCC
 [
 [ Custom Acoustic Instrument Setting Options Control Console
-[ CAISOCC
+[ 
+[ This console allows user to customize the FM instruments. It mimics
+[ a MSDOS application called IEDIT.EXE, "Instrument editor v1.0", 
+[ (c) 1998 by Steven Don (https://www.shdon.com/dos/sound)
+[
+[ There are five custom instruments that can be edited. You can copy
+[ an existing instrument to a custom instrument, and/or edit the 
+[ custom instrument. 
+[
+[ Once edited, custom instruments can be chosen to be used in sound
+[ playback usign the ESADOCC terminal. 
+[ 
+[ This logic needs a lot of variable and flag space to handle all the
+[ data associated with custom sounds. Dynamic flags and variables are
+[ used in this room to accomodate. This is not a problem because there
+[ are no dynamic logics that get called while this console is 
+[ displayed.
 [
 [*********************************************************************
 
@@ -148,7 +164,7 @@
 [ strings
 #define strInst       s12
 #define strByte       s13
-#define sTemp         s14 [ s15
+#define sTemp         s14 [ and s15
 #define sTemp2        s16
 
 [***************************************

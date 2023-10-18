@@ -79,7 +79,7 @@ if (newRoom) {
   tmpStr = "001E1E";
   block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ str.concat(sINPUT, sADD)
   work1 = 24;
-  block(STR.RIGHT, &palette, &tmpStr, &work1); [ strRight(sINPUT, sRESULT, vLEN)
+  block(STR.RIGHT, &palette, &tmpStr, &work1); [ str.right(sINPUT, sRESULT, vLEN)
   block(STR.CONCAT, &tmpPalette, &tmpStr, 0); [ str.concat(sINPUT, sADD)
   block(SET.MSG, BYNUM, &m9, &tmpPalette); [ set.msg(FN_MODE, MSGOLD, STRNEW)
   block(SET.PALETTE, BYNUM, &m9, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)

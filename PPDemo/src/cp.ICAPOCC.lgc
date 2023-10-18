@@ -3,7 +3,17 @@
 [ cp.ICAPOCC
 [
 [ Indexed Chromatic Association Properties Options Control Console
-[ ICAPOCC
+[ 
+[ This console lets you edit the default palette used in the game.
+[ Select a color index, then use the red-green-blue sliders to adjust
+[ the color to the desired value.
+[
+[ After setting new color values, use the Preview button to see how
+[ the rooms in the game look with the new palette.
+[
+[ Clicking OK will apply the new palette to all game rooms. The 
+[ Restore button will restore a selected color to its default.  Use
+[ Reset to restore all colors to default.
 [
 [*********************************************************************
 
@@ -982,7 +992,7 @@ if (btnAction == B_SET_COL) {
   work1 = colorindex;
   work1 *= 6;
   [ trim palette at insertion point
-  block(STR.LEFT, &editPal, &editPal, &work1); [ str.right(sINPUT, sRESULT, vLEN);
+  block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN);
   [ get palette data following insertion point
   work1 *= -1;
   work1 += 90;

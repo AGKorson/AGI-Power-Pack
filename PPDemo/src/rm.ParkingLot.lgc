@@ -1189,6 +1189,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       distance(ego, oPatient, work1);
       :talkpatient
       if (work1 <= 20) {
+        block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
         [ coming or going?
         if (patientSeq > 100) {
           random(9, 12, work1);
@@ -1197,6 +1198,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           random(13, 16, work1);
           print.v(work1); [ m13 - m16
         }
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgboxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
         print("The person is too far away to hear you.");
       }

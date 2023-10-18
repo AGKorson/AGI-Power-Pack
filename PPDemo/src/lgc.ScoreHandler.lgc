@@ -1,3 +1,4 @@
+[*********************************************************************
 [ 
 [ lgc.ScoreHandler
 [ 
@@ -9,6 +10,8 @@
 [
 [ max negative value is -250  
 [ max positive value is +250
+[ 
+[*********************************************************************
 
 [ power pack support
 #include "powerpack.txt"

@@ -184,7 +184,7 @@
 [Snippet]
    Name = msgbox.color
    Value = "block(MSGBOX.COLOR, %1, %2, %3); [ msgbox.color(BORDER, FG, BG)"
-   ArgTips = "var BORDER, var FG, var BG"
+   ArgTips = "byt BORDER, byt FG, byt BG"
 
 [Snippet]
    Name = msgbox.color.v

@@ -20,9 +20,9 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
-[ for all rooms except the control panels and start, set screen to 80 col mode 
+[ for all rooms except the control panels and title, set screen to 80 col mode 
 [ (control panels manage that separately)
-if (currentRoom < 21 && currentRoom != 1) {
+if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && currentRoom != rm.Title) {
   if (!column80) {
     [ before switching to 80 col mode, need to clear the 
     [ existing picture (or it will display again after the switch, which 
@@ -94,7 +94,7 @@ if (currentRoom == rm.Title) {
 }
 
 [ control panels
-if (currentRoom > 20) {
+if (currentRoom >= cp.Terminal && currentRoom <= cp.RANDOCC) {
   [ if loading the terminal or instrument control panel
   if ((currentRoom == cp.Terminal || currentRoom == cp.CAISOCC)) {
     [ use 80 col mode
