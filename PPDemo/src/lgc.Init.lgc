@@ -115,8 +115,12 @@ if (gameRestarted) {
 } else {
   [ some things only happen during initial start
   
-  trace.info(lgc.traceinfo, 3, 10);  [ sets up the command tracer; you should
-                                     [ delete this before releasing your game
+  [ sets up the command tracer, 
+  trace.info(lgc.traceinfo, 3, 10);
+  [ tracing should only occur in 80col rooms; so it's OK to
+  [ set the horizontal position
+  trace.info(TRACE.H.POSN, 33, 45); [ trace.h.posn(LEFT, WIDTH)
+  
   [ assign controller shortcut keys
   set.key(0, 59, cHelp);             [ F1 - Help
   set.key(0, 60, cToggleSound);      [ F2 - Sound on/off

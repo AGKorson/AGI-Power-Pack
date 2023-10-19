@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/18/2023 10:24:11 AM"
+   LastEdit = "10/18/2023 10:37:11 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -86,8 +86,8 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &HA2E60921
-   CompCRC32 = &HB72167BF
+   CRC32 = &H655CC1B2
+   CompCRC32 = &H655CC1B2
    IsRoom = True
 
 [Logic5]
@@ -163,8 +163,8 @@
 [Logic15]
    ID = cp.ICAPOCC
    Description = ""
-   CRC32 = &H4374FB63
-   CompCRC32 = &H4374FB63
+   CRC32 = &HC21710DA
+   CompCRC32 = &HC21710DA
    IsRoom = True
 
 [Logic16]
@@ -359,22 +359,22 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &HDD7AABB1
-   CompCRC32 = &HF889AAD2
+   CRC32 = &H278C7070
+   CompCRC32 = &H278C7070
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
-   CRC32 = &HD12C8128
-   CompCRC32 = &HD12C8128
+   CRC32 = &H527D8877
+   CompCRC32 = &H527D8877
    IsRoom = False
 
 [Logic52]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H286DD41A
-   CompCRC32 = &H286DD41A
+   CRC32 = &HB784EB40
+   CompCRC32 = &HB784EB40
    IsRoom = False
 
 [Logic54]
@@ -394,8 +394,8 @@
 [Logic56]
    ID = lgc.Debug
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
-   CRC32 = &HBE0FA8F
-   CompCRC32 = &HBE0FA8F
+   CRC32 = &H10C4F95E
+   CompCRC32 = &H10C4F95E
    IsRoom = False
 
 [Logic57]

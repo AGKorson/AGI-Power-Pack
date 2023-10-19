@@ -28,8 +28,6 @@
 [    DELETE.FILE - add option to clear all save games
 [    SET.ITEM - change disk description once it's formatted
 [    ITEM.COUNT - ? maybe make a comment when ego has everything? 'your pockets are full!'
-[    PREVIOUS.INPUT - ??
-[    TRACE.H.POSN - ??
 
 [***************************************
 [ LOCAL DEFINES

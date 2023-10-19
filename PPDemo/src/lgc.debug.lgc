@@ -23,6 +23,8 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
+[ TODO: rewrite debug commands to use inline numbers
+
 [ show/hide ego coordinates
 if (said("coords")) {
   toggle(showCoords);
@@ -44,14 +46,14 @@ if (said("debug", "help")) {
   call(lgc.DebugHelp);
 }
 
-[ force ego to die
-if (said("die")) {
-  load.view(vw.EgoDead);
-  set.view(ego, vw.EgoDead);
-  program.control();
-  stop.motion(ego);
-  get.num("how? ",deathType);
-}        
+[[ force ego to die
+[if (said("die")) {
+[  load.view(vw.EgoDead);
+[  set.view(ego, vw.EgoDead);
+[  program.control();
+[  stop.motion(ego);
+[  get.num("how? ",deathType);
+[}        
 
 [ enable command tracing
 if (said("trace", "on")) {
@@ -64,14 +66,26 @@ if (said("show", "mem")) {
 }
 
 [ teleport to another room
-if (said("tp")) {
-  get.num("new room: ", tmpVarB);
+if (said("tp", "rol")) {
+  [ check for a room number
+  get.string(s12, m1, PREVIOUS.INPUT, 0, 0); [ current.input(sRESULT)
+  block(STR.TRIM, &s12, &s12, TRIM_ALL); [ strTrim(sINPUT, sRESULT, vMODE)
+  block(STR.LEN, &s12, &tmpVarB, 0); [ str.len(sINPUT, vRESULT)
+  tmpVarB -= 2;
+  block(STR.RIGHT, &s12, &s12, &tmpVarB); [ str.right(sINPUT, sRESULT, vCOUNT)
+  block(STR.TRIM, &s12, &s12, TRIM_ALL); [ strTrim(sINPUT, sRESULT, vMODE)
+  block(STR.LEN, &s12, &tmpVarB, 0); [ str.len(sINPUT, vRESULT)
+  if (tmpVarB == 0) {
+    get.num("new room: ", tmpVarB);
+  } else {
+    block(STR2BYTE, &s12, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
   [ don't allow teleporting to room 0
-  if (tmpVarB != 0) {
-    [ it is up to player to make sure 
-    [ new room value points to an
-    [ actual room
+  if (tmpVarB > 1 && tmpVarB < 11) {
+    block(FADE.OUT, BYNUM, 0, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     new.room.v(tmpVarB);
+  } else {
+    print("not a valid room");
   }
 }
 
@@ -85,8 +99,17 @@ if (said("pos")) {
 }
 
 [ show value of a variable
-if (said("show", "var")) {
-  get.num("var number: ", tmpVarB);
+if (said("show", "var", "rol")) {
+  [ alternate way to extract a number from the input line
+  reset(haveMatch);
+  if (said("show", "var")) {
+    get.num("var number: ", tmpVarB);
+  } else {
+    set(haveMatch);
+    word.to.string(s12, w3);
+    block(STR2BYTE, &s12, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
+  
   tmpVarA = *tmpVarB;
   print("var %v255: %v254");
 }

@@ -44,8 +44,6 @@ if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && currentRoom != rm
   [ enable mouse in all regular rooms
   enable.item(mouse);
 
-  [ if not opening title room, do regular room setup
-  
   [ animate and reset the ego object
   animate.obj(ego);
   step.size(ego, egoStepSize);

@@ -30,8 +30,6 @@
 [ power pack support
 #include "powerpack.txt"
 
-[ TODO: clicking on door should say something
-
 [***************************************
 [ LOCAL DEFINES
 [***************************************
@@ -98,6 +96,7 @@ if (newRoom) {
     block(71, 165, 90, 167);
   }
   
+  [ add ego to the room
   if (previousRoom == rm.Office) {
     position(ego, 15, 149);
   }
@@ -108,14 +107,11 @@ if (newRoom) {
     position(ego, 74, 161);
   }
   egoDir = STOPPED;
-  [ add ego to the room
   draw(ego);
   
+  [ load the sounds used in this room
   load.sound(s.GetItem);
   load.sound(s.SystemFail);
-  
-  [ make sure input is on
-  accept.input();
   
   [ display the picture on screen
   show.pic();
@@ -666,6 +662,16 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ ego
     if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       print("Please don't touch yourself. Not even when you're alone.");
+      goto(doneclick);
+    }
+    
+    [ doorway to stairwell 71, 159, 90, 167
+    if (mouseX > 70 && mouseX < 91 && mouseY > 158 && mouseY < 168) {
+      [ door is only here if system not reset yet
+      if (!resetBaDASS) {
+        print("The heavy metal door is shut tight. There's no way "
+              "you can open it.");
+      }
       goto(doneclick);
     }
     
