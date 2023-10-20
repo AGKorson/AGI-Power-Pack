@@ -17,13 +17,11 @@
 #define tmpVarA         v254
 #define tmpVarB         v255
 
-#define comment          s12 
+#define tmpStr           s12 
 
 [***************************************
 [ MAIN CODE BLOCK 
 [***************************************
-
-[ TODO: rewrite debug commands to use inline numbers
 
 [ show/hide ego coordinates
 if (said("coords")) {
@@ -46,18 +44,9 @@ if (said("debug", "help")) {
   call(lgc.DebugHelp);
 }
 
-[[ force ego to die
-[if (said("die")) {
-[  load.view(vw.EgoDead);
-[  set.view(ego, vw.EgoDead);
-[  program.control();
-[  stop.motion(ego);
-[  get.num("how? ",deathType);
-[}        
-
-[ enable command tracing
+[ start command tracing
 if (said("trace", "on")) {
-  set(enableTrace);
+  set(startTrace);
 }
 
 [ show current memory status
@@ -65,20 +54,26 @@ if (said("show", "mem")) {
   show.mem();
 }
 
-[ teleport to another room
+[ teleport to another room (enable inline room number)
 if (said("tp", "rol")) {
-  [ check for a room number
-  get.string(s12, m1, PREVIOUS.INPUT, 0, 0); [ current.input(sRESULT)
-  block(STR.TRIM, &s12, &s12, TRIM_ALL); [ strTrim(sINPUT, sRESULT, vMODE)
-  block(STR.LEN, &s12, &tmpVarB, 0); [ str.len(sINPUT, vRESULT)
+  [ check for a room number by manually parsing the previous
+  [ input line
+  get.string(tmpStr, m1, PREVIOUS.INPUT, 0, 0); [ current.input(sRESULT)
+  block(STR.TRIM, &tmpStr, &tmpStr, TRIM_ALL); [ strTrim(sINPUT, sRESULT, vMODE)
+  [ strip off 'tp' at front of line, then remove extra spaces
+  block(STR.LEN, &tmpStr, &tmpVarB, 0); [ str.len(sINPUT, vRESULT)
   tmpVarB -= 2;
-  block(STR.RIGHT, &s12, &s12, &tmpVarB); [ str.right(sINPUT, sRESULT, vCOUNT)
-  block(STR.TRIM, &s12, &s12, TRIM_ALL); [ strTrim(sINPUT, sRESULT, vMODE)
-  block(STR.LEN, &s12, &tmpVarB, 0); [ str.len(sINPUT, vRESULT)
+  block(STR.RIGHT, &tmpStr, &tmpStr, &tmpVarB); [ str.right(sINPUT, sRESULT, vCOUNT)
+  block(STR.TRIM, &tmpStr, &tmpStr, TRIM_ALL); [ strTrim(sINPUT, sRESULT, vMODE)
+  [ now check to see what's left on the line
+  block(STR.LEN, &tmpStr, &tmpVarB, 0); [ str.len(sINPUT, vRESULT)
   if (tmpVarB == 0) {
+    [ nothing- player entered just 'tp'
     get.num("new room: ", tmpVarB);
   } else {
-    block(STR2BYTE, &s12, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+    [ assume what's left on line is room number; convert the string
+    [ to a byte value
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
   }
   [ don't allow teleporting to room 0
   if (tmpVarB > 1 && tmpVarB < 11) {
@@ -98,55 +93,96 @@ if (said("pos")) {
   draw(ego);
 }
 
-[ show value of a variable
+[ show value of a variable (enable inline variable number)
 if (said("show", "var", "rol")) {
   [ alternate way to extract a number from the input line
   reset(haveMatch);
   if (said("show", "var")) {
-    get.num("var number: ", tmpVarB);
+    get.num("variable number: ", tmpVarB);
   } else {
     set(haveMatch);
-    word.to.string(s12, w3);
-    block(STR2BYTE, &s12, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
   }
-  
   tmpVarA = *tmpVarB;
   print("var %v255: %v254");
 }
 
-[ change a variable value
-if (said("set", "var")) {
-  get.num("var number: ", tmpVarA);
-  get.num("var value: ", tmpVarB);
+[ change a variable value (enable inline variable number)
+if (said("set", "var", "rol")) {
+  reset(haveMatch);
+  if (said("set", "var")) {
+    get.num("variable number: ", tmpVarA);
+  } else {
+    set(haveMatch);
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
+  get.num("v%254 new value: ", tmpVarB);
   *tmpVarA = tmpVarB;
 }
 
-[ show value of a flag
-if (said("show", "flag")) {
-  get.num("flag number: ", tmpVarB);
-  if (issetv(tmpVarB)) {
-    print("flag %v255 is set");
+[ show value of a flag (enable inline flag number)
+if (said("show", "flag", "rol")) {
+  reset(haveMatch);
+  if (said("show", "flag")) {
+    get.num("flag number: ", tmpVarB);
   } else {
-    print("flag %v255 is not set");
+    set(haveMatch);
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
+  if (issetv(tmpVarB)) {
+    print("flag f%v255 is SET");
+  } else {
+    print("flag f%v255 is RESET");
   }
 }
 
-[ set a flag to TRUE
-if (said("set", "flag")) {
-  get.num("flag number: ", tmpVarB);
+[ set a flag to TRUE (enable inline flag number)
+if (said("set", "flag", "rol")) {
+  reset(haveMatch);
+  if (said("set", "flag")) {
+    get.num("flag number: ", tmpVarB);
+  } else {
+    set(haveMatch);
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
   set.v(tmpVarB);
+  print("flag f%v255 is SET");
 }
 
-[ reset a flag to FALSE
-if (said("reset", "flag")) {
-  get.num("flag number: ", tmpVarB);
+[ reset a flag to FALSE (enable inline flag number)
+if (said("reset", "flag", "rol")) {
+  reset(haveMatch);
+  if (said("reset", "flag")) {
+    get.num("flag number: ", tmpVarB);
+  } else {
+    set(haveMatch);
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
   reset.v(tmpVarB);
+  print("flag f%v255 is RESET");
 }
 
-[ display status of any object
-if (said("object")) {
-  get.num("object #: ", tmpVarB);
-  obj.status.v(tmpVarB);
+[ display status of any object (enable inline object number)
+if (said("object", "rol")) {
+  reset(haveMatch);
+  if (said("object")) {
+    get.num("object #: ", tmpVarB);
+  } else {
+    set(haveMatch);
+    word.to.string(tmpStr, w2);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
+  [ validate
+  if (tmpVarB > 16) {
+    print("Invalid object: valid range is 0 - 16");
+  } else {
+    obj.status.v(tmpVarB);
+  }
 }
 
 [ show the priority screen
@@ -154,22 +190,34 @@ if (said("show", "pri")) {
   show.pri.screen();
 }
 
-[ move an inventory object to ego's inventory
-if (said("get", "object")) {
-  get.num("object number: ", tmpVarB);
-  if (tmpVarB > numberOfItems) {
-    print("Invalid object number!");
+[ move an inventory object to ego's inventory (enable inline object number)
+if (said("get", "item", "rol")) {
+  reset(haveMatch);
+  if (said("get", "item")) {
+    get.num("item number: ", tmpVarB);
+  } else {
+    set(haveMatch);
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
+  tmpVarA = 0;
+  block(ITEM.COUNT, &tmpVarA, &tmpVarA, 0); [ item.count(vLOCATION, vRESULT)
+  if ((tmpVarB > tmpVarA || tmpVarB == 0)) {
+    print("Invalid item number!");
   } else {
     get.v(tmpVarB);
+    print("You now have '%o255'");
   }
 }
 
 [ get all inventory objects
 if (said("gimme", "gimme")) {
   print("You gottum!");
+  tmpVarA = 0;
+  block(ITEM.COUNT, &tmpVarA, &tmpVarA, 0); [ item.count(vLOCATION, vRESULT)
   tmpVarB = 0;
   NextObj:
-  if (tmpVarB < numberOfItems) {
+  if (tmpVarB < tmpVarA) {
     ++tmpVarB;
     get.v(tmpVarB);
     goto(NextObj);
@@ -177,30 +225,46 @@ if (said("gimme", "gimme")) {
 }
 
 [ display the room where an inventory object is located
-if (said("object", "room")) {
-  get.num("Object number: ", tmpVarB);
-  if (tmpVarB > numberOfItems) {
-    print("Invalid object number!");
+if (said("item", "room")) {
+  get.num("item number: ", tmpVarB);
+  tmpVarA = 0;
+  block(ITEM.COUNT, &tmpVarA, &tmpVarA, 0); [ item.count(vLOCATION, vRESULT)
+  if (tmpVarB > tmpVarA) {
+    print("Invalid item number!");
   } else {
     get.room.v(tmpVarB, tmpVarA);
     [ a room value of 255 means 'in player inventory'
     if (tmpVarA == 255) {
-      print("Object %v255 is in your inventory.");
+      print("item %v255 is in your inventory.");
     } else {
-      print("Object %v255 is in room %v254.");
+      print("item %v255 is in room %v254.");
     }
   }
 }
 
-[ set ego priority to a fixed value
-if (said("set", "pri")) {
-  get.num("New priority: ", tmpVarB);
-  set.priority.v(ego, tmpVarB);
+[ set ego priority to a fixed value (enable inline priority number)
+if (said("set", "pri", "rol")) {
+  reset(haveMatch);
+  if (said("set", "pri")) {
+    get.num("New priority: ", tmpVarB);
+  } else {
+    set(haveMatch);
+    word.to.string(tmpStr, w3);
+    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+  }
+  [ validate
+  if (tmpVarB > 3 && tmpVarB < 16) {
+    set.priority.v(ego, tmpVarB);
+    print("ego priority set to %v255");
+  } else {
+    print("Invalid priority value");
+  }
 }
 
 [ restore auto priority assignment
 if (said("release", "pri")) {
   release.priority(ego);
+  print("ego priority reset to auto");
 }
 
 [ if ego coordinates need to be shown
@@ -257,7 +321,7 @@ if (!fLogInput && !isset(haveMatch) &&
 
 [ add a comment to log file
 if (said("log")) {
-  get.string(comment, "Comment: ", 22, 0, 25);
+  get.string(tmpStr, "Comment: ", 22, 0, 25);
   log("%m31%s1");
   clear.lines(22, 24, 0);
   accept.input();

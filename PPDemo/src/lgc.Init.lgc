@@ -431,9 +431,10 @@ if (gameRestarted) {
   }
 }
 
-[ enable debugging and tracing by default (remove when ready to release game)
-set(debugging);
-set(enableTrace);
+[[ enable debugging and tracing by default (remove if you don't want
+[[ to allow user to enter trace mode or use debugging commands
+[set(debugging);
+[set(enableTrace);
 
 [ set turbo mode (regular mode is never used in the demo)
 work1 = TURBO_SPEED;

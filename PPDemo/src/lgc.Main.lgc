@@ -37,16 +37,6 @@
 [ power pack support
 #include "powerpack.txt"
 
-[**** BEGIN DEBUG CODE
-[:wait
-[if (!have.key()) {
-[  goto(wait);
-[}
-[print("char: %v19");
-[lastChar = 0;
-[goto(wait);
-[**** END DEBUG CODE
-
 [***************************************
 [ LOCAL DEFINES
 [***************************************
@@ -67,6 +57,10 @@
 #define msgSpeed                   m15
 #define msgExamine                 m16
 #define msgUse                     m17
+#define mnu_msgDebug               m18
+#define msgDebug                   m19
+#define mnu_msgDbgLog              m41
+#define mnu_msgDbgClick            m42
 
 [***************************************
 [ ERROR CHECK
@@ -77,6 +71,11 @@
 if (errorNumber > 0) {
   block(FADE.IN, BYNUM, 0, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   call(lgc.Error); 
+}
+[ check for start trace
+if (startTrace) {
+  reset(startTrace);
+  trace.on();
 }
 
 [ help screens use ONLY their custom logics
@@ -158,12 +157,12 @@ if (currentRoom == 0) {
     set.menu.item(mnu_msgSpeedFast, cFast); [ " Fast   "
     set.menu.item(mnu_msgSpeedFastest, cFastest); [ " Fastest"
     
-[**** BEGIN DEBUG CODE
-[ temporary debug items
-set.menu("Debug");
-set.menu.item(m41, cLogInput);   [ "Log Input:      Off"
-set.menu.item(m42, cShowClicks); [ "Display Clicks: Off"
-[**** END DEBUG CODE
+    [ debug menu; disable by default
+    set.menu(mnu_msgDebug); [ "Debug"
+    set.menu.item(mnu_msgDbgLog, cLogInput);   [ "Log Input:      Off"
+    set.menu.item(mnu_msgDbgClick, cShowClicks); [ "Display Clicks: Off"
+    s22 = "";
+    block(SET.MSG, BYNUM, &mnu_msgDebug, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
     [ submit the menu (which makes it ready to use)
     submit.menu();
@@ -199,11 +198,11 @@ if (newRoom) {
     load.logics(lgc.ToolbarFunctions);
     load.logics(lgc.UseItem);
   }
-  [ if debugging is active
-  if (debugging) {
+[  [ if debugging is active
+[  if (debugging) {
     [ load debug logic into memory
     load.logics(lgc.Debug);
-  }
+[  }
   [ score handler (to allow score to go below zero)
   load.logics(lgc.ScoreHandler);
   
@@ -257,62 +256,63 @@ if (resetClicks) {
   set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
-[**** BEGIN DEBUG CODE
-if (controller(cLogInput)) {
-  [ toggle the message
-  toggle(fLogInput);
-  s23 = "Log Input:      %s22";
-  if (fLogInput) {
-    s22 = " On";    
-  } else {
-    s22 = "Off";
-  }
-  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, BYNUM, &m40, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-}
-[ show click data
-if (controller(cShowClicks)) {
-  [ toggle the message
-  toggle(fShowClicks);
-  s23 = "Display Clicks: %s22";
-  if (fShowClicks) {
-    s22 = " On";
-  } else {
-    s22 = "Off";
-  }
-  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-  block(SET.MSG, BYNUM, &m41, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-}
-if (fShowClicks) {
-  [ used to assist in creating click statements and said statements
-  if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
-    get.posn(ego, work1, work2);
-    display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
-  }
-  [[ show the open closet door timer
-  [ display(24, 0, "%v79|2:%v80|2");
-  [ show remaining available memory
-  display(24, 0, "mem pages: %v8  ");
-}
-if (fLogInput) {
-  if (haveInput) {
-    if (unknownWordNum > 0) {
-      log("unknown word: %v9");
+[ if debugging, handle the debug functions
+if (debugging) {
+  if (controller(cLogInput)) {
+    [ toggle the message
+    toggle(fLogInput);
+    s23 = "Log Input:      %s22";
+    if (fLogInput) {
+      s22 = " On";    
     } else {
-      log("");
+      s22 = "Off";
+    }
+    block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, BYNUM, &mnu_msgDbgLog, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+  }
+  [ show click data
+  if (controller(cShowClicks)) {
+    [ toggle the message
+    toggle(fShowClicks);
+    s23 = "Display Clicks: %s22";
+    if (fShowClicks) {
+      s22 = " On";
+    } else {
+      s22 = "Off";
+    }
+    block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, BYNUM, &mnu_msgDbgClick, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+  }
+  if (fShowClicks) {
+    [ used to assist in creating click statements and said statements
+    if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
+      get.posn(ego, work1, work2);
+      display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
+    }
+    [[ show the open closet door timer
+    [ display(24, 0, "%v79|2:%v80|2");
+    [ show remaining available memory
+    display(24, 0, "mem pages: %v8  ");
+  }
+  if (fLogInput) {
+    if (haveInput) {
+      if (unknownWordNum > 0) {
+        log("unknown word: %v9");
+      } else {
+        log("");
+      }
     }
   }
+  if (said("test", "get")) {
+    get.num("add to score: ", work1);
+    call(lgc.ScoreHandler);
+  }
+  if (said("test", "drop")) {
+    get.num("sub from score: ", work1);
+    work1 *= -1;
+    call(lgc.ScoreHandler);
+  }
 }
-if (said("test", "get")) {
-  get.num("add to score: ", work1);
-  call(lgc.ScoreHandler);
-}
-if (said("test", "drop")) {
-  get.num("sub from score: ", work1);
-  work1 *= -1;
-  call(lgc.ScoreHandler);
-}
-[**** END DEBUG CODE
 
 [ MENU AND STATUS BAR CHECKS
 if (!disableGameFunctions) {
@@ -471,7 +471,7 @@ if (!disableGameFunctions) {
       s23 = msgSpeed; [ "Speed"
       block(SET.MSG, BYNUM, &mnu_msgSpeed, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     }
-    if (work1 !=0 && deathType == DT_SEQ_DONE) {
+    if (work1 > 0 && deathType == DT_SEQ_DONE) {
       s23 = "";
       block(SET.MSG, BYNUM, &mnu_msgSpeed, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     }
@@ -539,6 +539,18 @@ if (!disableGameFunctions) {
         block(STR.LEFT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
         block(SET.MSG, BYNUM, &mnu_msgSkipIntro, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       }
+    }
+    
+    [ debug menu only available in debug mode
+    s23 = mnu_msgDebug;
+    block(STR.LEN, &s23, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 == 0 && debugging) {
+      s23 = msgDebug; [ "Debug"
+      block(SET.MSG, BYNUM, &mnu_msgDebug, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+    }
+    if (work1 > 0 && !debugging) {
+      s23 = "";
+      block(SET.MSG, BYNUM, &mnu_msgDebug, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     }
   }
 }
@@ -1008,7 +1020,8 @@ return();
 #message 15 "Speed"
 #message 16 "Examine Item  <F4>"
 #message 17 "Use Item      <F4>"
-
+#message 18 "Debug"
+#message 19 "Debug"
 [ active cursors
 #message 20 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"

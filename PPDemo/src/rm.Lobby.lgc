@@ -519,10 +519,10 @@ if (currentTrack > 0 && currentTrack < 128) {
 if (firstLobbyVisit && secondCtr < 60) {
   if (tmpSec != elapsedSeconds) {
     tmpSec = elapsedSeconds;
-[**** BEGIN DEBUG CODE
-[ debug code to track timer
-display(23, 68, "%v12|2:%v11|2 (%v237)  ");
-[**** END DEBUG CODE
+    if (debugging) {
+      [ debug code to track timer
+      display(23, 68, "%v12|2:%v11|2 (%v237)  ");
+    }
     ++secondCtr;
     if (secondCtr == 60) {
 [    if (secondCtr == 10) {

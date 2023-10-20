@@ -117,6 +117,7 @@
 #define initialRun             f87 [ set when game runs first time (no config file found)
 #define skipIntro              f88
 #define showHelp               f89
+#define startTrace             f90 [ when set, main loop will enter trace mode
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
