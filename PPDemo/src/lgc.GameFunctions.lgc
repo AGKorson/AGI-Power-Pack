@@ -26,8 +26,6 @@
 [    GET.DATE - add easter egg to show a message on certain days of the week (in gameinit logic)
 [    GET.DAYOFWEEK - add easter egg to show a message on certain days of the year (in gameinit logic)
 [    DELETE.FILE - add option to clear all save games
-[    SET.ITEM - change disk description once it's formatted
-[    ITEM.COUNT - ? maybe make a comment when ego has everything? 'your pockets are full!'
 
 [***************************************
 [ LOCAL DEFINES

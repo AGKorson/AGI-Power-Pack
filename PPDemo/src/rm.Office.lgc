@@ -215,7 +215,7 @@ if (newRoom) {
     }
     if (officeFileDrStatus == OPEN3) { 
       position(oFileDrawer, 93, 130);
-      if (has("floppy disk")) {
+      if (has(floppydisk)) {
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
       } else {
@@ -430,7 +430,7 @@ if (fFileDrawer) {
         }
       } else {
         officeFileDrStatus = OPEN3;
-        if (!has("floppy disk")) {
+        if (!has(floppydisk)) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 6);
           force.update(oFileDrawer);
@@ -1105,7 +1105,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("look", "disk")) {
-    if (has("floppy disk")) {
+    if (has(floppydisk)) {
       [ let game functions logic handle it
       reset(haveMatch);
     } else {
@@ -1117,7 +1117,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("get", "disk")) {
-    if (has("floppy disk")) {
+    if (has(floppydisk)) {
       print("You already have it.");
     } else {
       if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN3) {
@@ -1561,7 +1561,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         }
       } else {
         if (officeFileDrStatus == OPEN3) {
-          if (!has("floppy disk")) {
+          if (!has(floppydisk)) {
             print("There is a box of floppy disks in this file cabinet drawer.");
           } else {
             print("The file cabinet drawer is empty.");
@@ -1896,14 +1896,14 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           goto(doneclick);
         }
         if (officeFileDrStatus == OPEN3 && mouseY < 123) {
-          if (!has("floppy disk")) {
+          if (!has(floppydisk)) {
             :getdisk
             [ play sound if walkman not active
             if ((currentTrack == 0 || currentTrack > 128)) {
               call(lgc.SetSound);
               sound(s.GetItem, soundDone);
             }
-            get("floppy disk");
+            get(floppydisk);
             work1 = 4;
             call(lgc.ScoreHandler);
             print("You decide to take one of the disks.");
@@ -2205,14 +2205,14 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "%g20"
-#message 2 "%g21"
-#message 3 "%g22"
-#message 4 "%g23"
-#message 5 "%g24"
-#message 6 "%g25"
-#message 7 "%g26"
-#message 8 "%g27"
+#message 1 "%g30"
+#message 2 "%g31"
+#message 3 "%g32"
+#message 4 "%g33"
+#message 5 "%g34"
+#message 6 "%g35"
+#message 7 "%g36"
+#message 8 "%g37"
 [ custom palette
 #message 9 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15001E1E3F15153F153F3F3F153F3F3F"
 [ default palette

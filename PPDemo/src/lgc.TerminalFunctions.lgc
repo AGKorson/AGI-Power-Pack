@@ -497,6 +497,9 @@ if (terminalfn == FORMAT_A) {
   output = "Volume Serial Number is %s17";
   terminalfn = ADDLINE_LF;
   call(lgc.TerminalFunctions);
+  [ change item description
+  sTemp2 = "formatted floppy disk";
+  block(SET.ITEM, BYNUM, &floppydisk, &sTemp2); [ set.item(FN_MODE, ITEM, STRNEW)
   return();
 }
 

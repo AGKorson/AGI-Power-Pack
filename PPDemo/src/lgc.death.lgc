@@ -155,7 +155,7 @@ if (deathTimer == 1) {
       ++work1;
     }
     [ if player has floppy with source code, it's a win
-    if (has("floppy disk") && (floppyfiles == 2 || floppyfiles == 3)) {
+    if (has(floppydisk) && (floppyfiles == 2 || floppyfiles == 3)) {
       load.sound(m.Winner);
       set(4channelsound);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)

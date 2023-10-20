@@ -54,13 +54,13 @@
 #define mnu_msgSpeedFast           m12
 #define mnu_msgSpeedFastest        m13
 #define mnu_msgSkipIntro           m14
-#define msgSpeed                   m15
-#define msgExamine                 m16
-#define msgUse                     m17
-#define mnu_msgDebug               m18
-#define msgDebug                   m19
-#define mnu_msgDbgLog              m41
-#define mnu_msgDbgClick            m42
+#define mnu_msgDebug               m15
+#define mnu_msgDbgLog              m16
+#define mnu_msgDbgClick            m17
+#define msgSpeed                   m18
+#define msgExamine                 m19
+#define msgUse                     m20
+#define msgDebug                   m21
 
 [***************************************
 [ ERROR CHECK
@@ -124,7 +124,7 @@ if (currentRoom == 0) {
     set.menu.item("About           ", cAbout);
     set.menu.item("Version  <Alt-V>", cVersion);
     set.menu.item("Help        <F1>", cHelp);
-    set.menu.item("Skip Intro     ", cSkipIntro);
+    set.menu.item(mnu_msgSkipIntro, cSkipIntro);
     set.menu("File");
     set.menu.item("Save     <F5>", cSave);
     set.menu.item("Restore  <F7>", cRestore);
@@ -198,11 +198,10 @@ if (newRoom) {
     load.logics(lgc.ToolbarFunctions);
     load.logics(lgc.UseItem);
   }
-[  [ if debugging is active
-[  if (debugging) {
-    [ load debug logic into memory
-    load.logics(lgc.Debug);
-[  }
+  [ load debug logic into memory so it will be there 
+  [ if it's needed
+  load.logics(lgc.Debug);
+
   [ score handler (to allow score to go below zero)
   load.logics(lgc.ScoreHandler);
   
@@ -684,16 +683,16 @@ if (controller(cClock)) {
   if (clockOn) {
     if (realClock) {
       [ status bar checks realtime minutes
-      set.cursor.char(" l29, v3, v7, v23, v99, v78, f9");
+      set.cursor.char(" l27, v3, v7, v23, v99, v78, f9");
       [ force realtime clock update
       block(GET.TIME, &currentHour, &currentMinute, &currentSecond); [ get.time(vHOUR, vMINUTE, vSECOND)
     } else {
       [ status bar checks gametime seconds
-      set.cursor.char(" l29, v3, v7, v23, v99, v11, f9");
+      set.cursor.char(" l27, v3, v7, v23, v99, v11, f9");
     }
   } else {
     [ status bar doesn't check for time
-    set.cursor.char(" l29, v3, v7, v23, v99, f9");
+    set.cursor.char(" l27, v3, v7, v23, v99, f9");
   }
   [ update the config file
   call(lgc.SaveOptions);
@@ -702,7 +701,7 @@ if (controller(cRealClock)) {
   if (!realClock) {
     set(realClock);
     [ status bar checks realtime minutes
-    set.cursor.char(" l29, v3, v7, v23, v99, v78, f9");
+    set.cursor.char(" l27, v3, v7, v23, v99, v78, f9");
     [ force realtime clock update
     block(GET.TIME, &currentHour, &currentMinute, &currentSecond); [ get.time(vHOUR, vMINUTE, vSECOND)
     [ update the config file
@@ -713,7 +712,7 @@ if (controller(cGameClock)) {
   if (realClock) {
     reset(realClock);
     [ status bar checks gametime seconds
-    set.cursor.char(" l29, v3, v7, v23, v99, v11, f9");
+    set.cursor.char(" l27, v3, v7, v23, v99, v11, f9");
     [ update the config file
     call(lgc.SaveOptions);
   }
@@ -911,41 +910,41 @@ if (soundDone) {
 [ GENERIC CONTROLLERS & TEXT INPUT
 [***************************************
 
+[ saving a cursor from ERIDOCC
+if (saveCursor) {
+  reset(saveCursor);
+  [ copy s16 into designated cursor msg value
+  [ v227 is cursor index value in cp.ERIDOCC logic
+  work1 = v227;
+  work1 += 30;
+  work2 = 16;
+  block(SET.MSG, BYVAR, &work1, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW) 
+  [ provide feedback
+  print.at("Cursor saved.", 14, 19, 15);
+  return();
+}
+[ restore a cursor from ERIDOCC
+if (restoreCursor) {
+  reset(restoreCursor);
+  [ set s12 to default of designated cursor
+  work1 = &s12;
+  work2 = v227;
+  work2 += 40;
+  block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
+  [ format it
+  block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
+  [ now copy it to the current cursor msgnum
+  work2 -= 10;
+  block(SET.MSG, BYVAR, &work2, &work1); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+  [ force update by resetting the cursor index
+  v227 = -1;
+  [ provide feedback
+  print.at("Cursor restored.", 14, 19, 17);
+  return();
+}
+
 [ only if not disabled!
 if (!disableGameFunctions) {
-  [ saving a cursor from ERIDOCC
-  if (saveCursor) {
-    reset(saveCursor);
-    [ copy s16 into designated cursor msg value
-    [ v227 is cursor index value in cp.ERIDOCC logic
-    work1 = v227;
-    work1 += 40;
-    work2 = 16;
-    block(SET.MSG, BYVAR, &work1, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW) 
-    [ provide feedback
-    print.at("Cursor saved.", 14, 19, 15);
-    return();
-  }
-  [ restore a cursor from ERIDOCC
-  if (restoreCursor) {
-    reset(restoreCursor);
-    [ set s12 to default of designated cursor
-    work1 = &s12;
-    work2 = v227;
-    work2 += 30;
-    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
-    [ format it
-    block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
-    [ now copy it to the current cursor msgnum
-    work2 -= 10;
-    block(SET.MSG, BYVAR, &work2, &work1); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-    [ force update by resetting the cursor index
-    v227 = -1;
-    [ provide feedback
-    print.at("Cursor restored.", 14, 19, 17);
-    return();
-  }
-  
   [ check common game functions, depending on current cursor
   if (cursormode < C_DISK) {
     call(lgc.GameFunctions);
@@ -1015,48 +1014,46 @@ return();
 #message 11 " Slow   "
 #message 12 " Fast   "
 #message 13 " Fastest"
-#message 14 "Skip Intro     "
+#message 14 "Skip Intro     \x07"
+#message 15 "Debug"
+#message 16 "Log Input:      Off"
+#message 17 "Display Clicks: Off"
 [ constant values for dynamic menus
-#message 15 "Speed"
-#message 16 "Examine Item  <F4>"
-#message 17 "Use Item      <F4>"
-#message 18 "Debug"
-#message 19 "Debug"
+#message 18 "Speed"
+#message 19 "Examine Item  <F4>"
+#message 20 "Use Item      <F4>"
+#message 21 "Debug"
 [ active cursors
-#message 20 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
+#message 30 "0000FF3FFF1FFF0FFF07FF03FF01FF007F003F001F00FF01FF00FF307FF87FF8FFFC"
             "00000040006000700078007C007E007F807F007C006C00460006000300030000"
 [ walk
-#message 21 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
+#message 31 "040FFFF1FFE07FC07FC0FFE0FFF1FFE17FC03FC07FE0FFE1FFC1FF80FF087F183FBC"
             "0000000E001D001F000E0004000C0016801B0006000C001C0036006200430000"
 [ look
-#message 22 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
+#message 32 "0709FFFFFFFFFFFFFFFEEFF62DB40BD0024001808001018003C00FF03FFCFFFFFFFF"
             "000000000000000000000000C003F00F7C3E3E7C7C3EF00FC003000000000000"
 [ talk
-#message 23 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
+#message 33 "050E1FF807E0018000000000000000000000008001E007FC0FFE3FFC7FF8FFF9FFFF"
             "0000E007F81FFE7FFE7FFE7FFE7FFE7FFE1FF803F000C0008001000200000000"
 [ use 
-#message 24 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
+#message 34 "0803FFFFFFFF1FFE07F801F000F000F000F00090000000000000018001C003E007F0"
             "000000000000C000D806DA06DA06DA06DA06FA6FFE7FFE7FFC3FFC1FF80F0000"
 [ wait 
-#message 25 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
+#message 35 "0707018003C003C007E007E00FF01FF83FFC3FFC1FF80FF007E007E003C003C00180"
             "0000F81FF81F5005A00A40058002000180004003E007700E1008081000000000"
 [ disk
-#message 26 "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF"
+#message 36 "0707FFFFFFFFFFFF0000000000000000000000000000000001000300FFFFFFFFFFFF"
             "0000000000000000EE77EE770E70FE7FFE7FFE7F1E78DC790000000000000000"
 [ tape
-#message 27 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
+#message 37 "0707FFFFFFFFFFFFFFFF01800000000000000000000000000000FFFFFFFFFFFFFFFF"
             "00000000000000000000FE7FF66FEA57F66F1E78EE7700000000000000000000"
 
 [ default cursor pointers
-#message 30 "%l50|1"
-#message 31 "%l50|2"
-#message 32 "%l50|3"
-#message 33 "%l50|4"
-#message 34 "%l50|5"
-#message 35 "%l50|6"
-#message 36 "%l50|7"
-#message 37 "%l50|8"
-
-[ debug menu items
-#message 41 "Log Input:      Off"
-#message 42 "Display Clicks: Off"
+#message 40 "%l50|1"
+#message 41 "%l50|2"
+#message 42 "%l50|3"
+#message 43 "%l50|4"
+#message 44 "%l50|5"
+#message 45 "%l50|6"
+#message 46 "%l50|7"
+#message 47 "%l50|8"

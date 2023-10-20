@@ -11,6 +11,7 @@
 #define oBucket                o14
 #define tbStateBtn             o15
 #define tbActionBtn            o16
+#define floppydisk              i2 [ need to use a define, because the item text is dynamic
 #define cMenu                   c0 [ menu: n/a;     key: ESC; used to display the menu
 #define cAbout                  c1 [ menu: PPDemo;  key: none
 #define cVersion                c2 [ menu: PPDemo;  key: Alt+V

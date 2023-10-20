@@ -114,13 +114,13 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "%g20"
-#message 2 "%g21"
-#message 3 "%g22"
-#message 4 "%g23"
-#message 5 "%g24"
-#message 6 "%g25"
-#message 7 "%g26"
-#message 8 "%g27"
+#message 1 "%g30"
+#message 2 "%g31"
+#message 3 "%g32"
+#message 4 "%g33"
+#message 5 "%g34"
+#message 6 "%g35"
+#message 7 "%g36"
+#message 8 "%g37"
 #message 9 "000000140A001E0F001E14002418002C1B00352B1C2A2A2A15151515153F003F153F38233F15153F153F3F3F153F3F3F"
 #message 10 "%s2"

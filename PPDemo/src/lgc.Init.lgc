@@ -86,14 +86,14 @@ if (gameRestarted) {
   if (clockOn) {
     if (realClock) {
       [ status bar checks realtime minutes
-      set.cursor.char(" l29, v3, v7, v23, v99, v78, f9");
+      set.cursor.char(" l27, v3, v7, v23, v99, v78, f9");
     } else {
       [ status bar checks gametime seconds
-      set.cursor.char(" l29, v3, v7, v23, v99, v11, f9");
+      set.cursor.char(" l27, v3, v7, v23, v99, v11, f9");
     }
   } else {
     [ status bar doesn't check for time
-    set.cursor.char(" l29, v3, v7, v23, v99, f9");
+    set.cursor.char(" l27, v3, v7, v23, v99, f9");
   }
 
   [ s21 holds speed
@@ -431,10 +431,9 @@ if (gameRestarted) {
   }
 }
 
-[[ enable debugging and tracing by default (remove if you don't want
-[[ to allow user to enter trace mode or use debugging commands
-[set(debugging);
-[set(enableTrace);
+[ the floppy drive starts out unformatted
+s20 = "floppy disk";
+block(SET.ITEM, BYNUM, &floppydisk, &s20); [ set.item(FN_MODE, ITEM, STRNEW)
 
 [ set turbo mode (regular mode is never used in the demo)
 work1 = TURBO_SPEED;

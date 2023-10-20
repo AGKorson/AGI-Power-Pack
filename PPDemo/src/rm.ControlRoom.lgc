@@ -269,12 +269,12 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
        said("put", "disk", "in", "console") || 
        said("put", "disk", "in", "drive") || said("insert", "disk") || 
        said("insert", "disk", "drive"))) {
-    if (has("floppy disk")) {
+    if (has(floppydisk)) {
       if (nearTerminal) {
         print("You insert the disk and flip the latch to secure it.");
         set(floppyInserted);
         work1 = cp.Terminal;
-        put("floppy disk", work1);
+        put(floppydisk, work1);
         [ first time awards bonus points
         if (scoreFloppy) {
           work1 = -4;
@@ -296,7 +296,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
        said("remove", "disk", "drive")
        )) {
     work1 = cp.Terminal;
-    if (obj.in.room("floppy disk", work1)) {
+    if (obj.in.room(floppydisk, work1)) {
       if (nearTerminal) {
         [ play sound if walkman not active
         if ((currentTrack == 0 || currentTrack > 128)) {
@@ -305,14 +305,14 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         }
         print("Ok.");
         reset(floppyInserted);
-        get("floppy disk");
+        get(floppydisk);
         work1 = 4;
         call(lgc.ScoreHandler);
       } else {
         print("Move closer.");
       }
     } else {
-      if (has("floppy disk")) {
+      if (has(floppydisk)) {
         print("You already have the disk.");
       } else {
         print("What disk?");
@@ -679,7 +679,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         work1 = cp.Terminal;
-        if (obj.in.room("floppy disk", work1)) {
+        if (obj.in.room(floppydisk, work1)) {
           [ play sound if walkman not active
           if ((currentTrack == 0 || currentTrack > 128)) {
             call(lgc.SetSound);
@@ -687,7 +687,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
           print("You undo the door latch and remove the disk.");
           reset(floppyInserted);
-          get("floppy disk");
+          get(floppydisk);
           work1 = 4;
           call(lgc.ScoreHandler);
         } else {
@@ -919,11 +919,11 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "%g20"
-#message 2 "%g21"
-#message 3 "%g22"
-#message 4 "%g23"
-#message 5 "%g24"
-#message 6 "%g25"
-#message 7 "%g26"
-#message 8 "%g27"
+#message 1 "%g30"
+#message 2 "%g31"
+#message 3 "%g32"
+#message 4 "%g33"
+#message 5 "%g34"
+#message 6 "%g35"
+#message 7 "%g36"
+#message 8 "%g37"

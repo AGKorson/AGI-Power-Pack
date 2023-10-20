@@ -1190,14 +1190,14 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "%g20"
-#message 2 "%g21"
-#message 3 "%g22"
-#message 4 "%g23"
-#message 5 "%g24"
-#message 6 "%g25"
-#message 7 "%g26"
-#message 8 "%g27"
+#message 1 "%g30"
+#message 2 "%g31"
+#message 3 "%g32"
+#message 4 "%g33"
+#message 5 "%g34"
+#message 6 "%g35"
+#message 7 "%g36"
+#message 8 "%g37"
 [             blk   blu     grn    cyn    red     mgt    brn   ltg
 [#message ## "000000 00002A 002A00 002A2A 2A0000 2A002A 2A1500 2A2A2A"
 [            "151515 15153F 153F15 153F3F 3F1515 3F153F 3F3F15 3F3F3F"

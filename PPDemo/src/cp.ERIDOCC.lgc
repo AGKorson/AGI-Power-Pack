@@ -767,7 +767,7 @@ if (cursormode) {
       sTemp = "%m1";
     }
     else {
-      sTemp = "%g20";
+      sTemp = "%g30";
       [ also remove coordinates display
       set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
       set.text.attribute(BLACK, LT_GRAY);
@@ -1419,7 +1419,7 @@ lastChar = 0;
 [ if index has changed, draw a new cursor
 if (newIndex != cIndex) {
   cIndex = newIndex;
-  cIndex += 20;
+  cIndex += 30;
   sCursor = "%g";
   s17 = "%v227";
   block(STR.FORMAT, &s17, &s17, 0); [ str.format(sINPUT, sRESULT)
@@ -1532,56 +1532,14 @@ if (newIndex != cIndex) {
 
 return();
 
-
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
 #message 1 "07077FFE3FFC3FFC3FFC3FFC3FFC01808001800101803FFC3FFC3FFC3FFC3FFC7FFE00008001800180018001800180017E7E7E7E8001800180018001800180010000"
 #message 2 "%s12"
-#message 3 "Preview"
-#message 4 " Save  "
-#message 5 "Restore"
-#message 6 "Export "
-#message 7 " Exit  "
-#message 8 "\x11"
-#message 9 "\x10"
-#message 10 "   Mode"
-#message 11 "Ms"
-#message 12 "Kb"
-#message 13 "CURSOR:"
 #message 14 "default"
 #message 15 " walk  "
 #message 16 " look  "
 #message 17 " talk  "
 #message 18 "  use  "
 #message 19 " wait  "
-#message 20 "%m1"
-#message 21 "%g20"
-#message 22 "%g"
-#message 23 "%v227"
-#message 24 "%s21"
-#message 25 "GRID"
-#message 26 "X:"
-#message 27 "Y:"
-#message 28 "HOTSPOT"
-#message 29 "  "
-#message 30 " %v222"
-#message 31 "%v222"
-#message 32 " %v223"
-#message 33 "%v223"
-#message 34 " %v225"
-#message 35 "%v225"
-#message 36 " %v226"
-#message 37 "%v226"
-#message 38 "%s16"
-#message 39 "%m"
-#message 40 "%v46"
-#message 41 "%s12 cursor hex string: %s16"
-#message 42 "Cursor exported to logfile"
-#message 43 " "
-#message 44 "-%v240"
-#message 45 " %v240"
-#message 46 "-"
-#message 47 "%v243"
-#message 48 "%v244"
-#message 49 "%s20"

@@ -22,13 +22,13 @@
 [ check for mouse clicks
 if (controller(cLeftClick)) {
   [ floppy disk
-  if (selectedItem == &i2) {
+  if (selectedItem == &floppydisk) {
     if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         print("You insert the disk and flip the latch to secure it.");
         set(floppyInserted);
         work1 = cp.Terminal;
-        put("floppy disk", work1);
+        put(floppydisk, work1);
         [ first time awards bonus points
         if (scoreFloppy) {
           work1 = -4;

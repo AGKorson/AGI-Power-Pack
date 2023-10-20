@@ -26,10 +26,11 @@
 [***************************************
 
 if (selectedTopic == 1) {
-  display(3, 2, "About SQ:PPDemo");
+[  display(3, 2, "About SQ:PPDemo");
+  display(3, 2, "About PPDemo");
   [ add details
   set.text.attribute(BLACK, LT_GRAY);
-  topicTitle = "About SQ:PPDemo";
+  topicTitle = "About PPDemo";
   block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
   display(2, 43, "%s20");
   display(4, 31, "Version: 0.1");
@@ -85,10 +86,10 @@ if (selectedTopic == 2) {
   return();
 }
 if (selectedTopic == 3) {
-  display(6, 2, "Running SQ:PPDemo");
+  display(6, 2, "Running PPDemo");
   [ add details
   set.text.attribute(BLACK, LT_GRAY);
-  topicTitle = "Running SQ:PPDemo";
+  topicTitle = "Running PPDemo";
   block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
   display(2, 41, "%s20");
   [ how to load/run; file ops-save/load/
