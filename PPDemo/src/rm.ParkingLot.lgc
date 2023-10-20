@@ -71,6 +71,7 @@
 #define carX         v223
 #define carY         v224
 #define deathSeq     v225
+#define weekday      v226
 
 #define fCarDone     f220
 #define fPatientDone f221
@@ -83,6 +84,9 @@
 #define fCarSound      f228
 #define patientVisible f229
 #define egoDying       f230
+
+#define theDay          s12
+#define weekendMsg      s13
 
 #define CAR_INSTRUMENT   41  [ 41 = viola
 
@@ -252,6 +256,10 @@ if (newRoom) {
     draw(ego);
   }
   
+  [ get day of the week, so opening message can be
+  [ customized
+  block(GET.DAYOFWEEK, &weekday, 0, 0); [ get.dayofweek(vDOW)
+  
   [ display the picture on screen
   show.pic();
   [ fade in
@@ -295,6 +303,7 @@ if (egoCarSeq) {
           "building.");
     print("It has been a long drive, but you are super excited as you "
           "pull into the parking lot.");
+          
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
@@ -330,7 +339,18 @@ if (egoCarSeq) {
     [ restore cursor for message
     cursoricon = cursormode;
     set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
-    print("The building is now a medical office. There aren't too many "
+    [ check for weekend
+    if ((weekday == 0 || weekday == 6)) {
+      if (weekday == 0) {
+        theDay = "Sunday";
+      } else {
+        theDay = "Saturday";
+      }
+      weekendMsg = "What luck! The clinic is open on %s12! ";
+    } else {
+      weekendMsg = "";
+    }
+    print("The building is now a medical clinic. %s13There aren't too many "
           "cars in the parking lot. So you decide to go inside and "
           "take a look around.");
     print("Who knows? Maybe you might find some original Sierra memorabilia "
@@ -395,6 +415,20 @@ if (egoCarSeq) {
     deathType = DT_DRIVE_AWAY;
   }  
 }
+
+[ if first time in room and not showing opening sequence
+if (newRoom && (previousRoom == 0 || previousRoom == rm.Title)) {
+  if ((weekday == 0 || weekday == 6)) {
+weekday = 0;
+    if (weekday == 0) {
+      theDay = "Sunday";
+    } else {
+      theDay = "Saturday";
+    }
+    print("What luck! The clinic is open on %s12! ");
+  }
+}
+
 
 [ timing bug with controllers
 if (fSkip1) {
@@ -781,6 +815,7 @@ if (!egoDying && !deathType && !kickBucket) {
       work1 = 2;
       cycle.time(ego, work1);
       end.of.loop(ego, fRunOver);
+      [ TODO: why does ego show on wrong side of the car sometimes?
       print("Uh oh! That car just hit you!");
     }
   }

@@ -24,7 +24,6 @@
 
 [TODO: PP FUNCTIONS not in demo game:
 [    GET.DATE - add easter egg to show a message on certain days of the week (in gameinit logic)
-[    GET.DAYOFWEEK - add easter egg to show a message on certain days of the year (in gameinit logic)
 [    DELETE.FILE - add option to clear all save games
 
 [***************************************

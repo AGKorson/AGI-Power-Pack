@@ -18,6 +18,9 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
+[ TODO: redo help page; use 80col, and include all items, including
+[ debug menu options
+
 [ pause game clock
 block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)
 

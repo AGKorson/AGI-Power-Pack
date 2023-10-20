@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/19/2023 4:57:55 PM"
+   LastEdit = "10/20/2023 3:25:39 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -65,8 +65,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = ""
-   CRC32 = &H45394933
-   CompCRC32 = &H45394933
+   CRC32 = &H7A5C7911
+   CompCRC32 = &H7A5C7911
    IsRoom = True
 
 [Logic3]
@@ -359,8 +359,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &H4332EC49
-   CompCRC32 = &H4332EC49
+   CRC32 = &HE739927B
+   CompCRC32 = &HE739927B
    IsRoom = False
 
 [Logic51]
@@ -401,7 +401,7 @@
 [Logic57]
    ID = lgc.DebugHelp
    Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
-   CRC32 = &HBA1F1E05
+   CRC32 = &H3548D51
    CompCRC32 = &HBA1F1E05
    IsRoom = False
 
