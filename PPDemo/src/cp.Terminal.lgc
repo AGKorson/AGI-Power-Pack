@@ -172,9 +172,36 @@ if (resetMOCC) {
   display(12, 13, m21); [ "  (c) 1«86 Sierra Online, Inc."
 }
 
+[ if a major holiday, add it
+block(GET.DATE, &work1, &work2, &work3); [ get.date(vYEAR, vMONTH, vDAY)
+display(14, 9, "%v47|2/%v48|2/20%v46 ");
+if (work2 == 1 && work3 == 1) {
+  display(15, 9, "Happy New Year 20%v46!");
+}
+if (work2 == 12 && work3 == 25) {
+  display(15, 9, "Merry Christmas!");
+}
+if (work2 == 7 && work3 == 4) {
+  display(15, 9, "Happy Independence Day!");
+}
+if (work2 == 5 && work3 == 6) {
+  display(15, 9, "The Sierra Network rocks!");
+}
+block(GET.TIME, &work1, &work2, &work3); [ get.time(vHOUR, vMINUTE, vSECOND)
+if (work1 > 11) {
+  sTemp2 = "PM";
+  work1 -= 12;
+} else {
+  sTemp2 = "AM";
+}
+if (work1 == 0) {
+  work1 = 12;
+}
+display(14, 20, "%v46|2:%v47|2:%v48|2 %s17");
+
 [ position cursor after userid prompt
-display(16, 9, "userid: ");
-cursor_row = 16; 
+display(17, 9, "userid: ");
+cursor_row = 17; 
 cursor_col = 17;
 cursor_char = 1;
 display.v(cursor_row, cursor_col, cursor_char);
@@ -1125,7 +1152,7 @@ if ((lastChar == 13 || lastChar == 10)) {
           [ clear return instruction row
           clear.lines(22, 22, BLACK);
           [ switch to esadocc module
-          new.room(cp.ESADOCC); [ ##LE005##
+          new.room(cp.ICAPOCC); [ ##LE005##
         }
         sTemp2 = "ofrocc";
         if (compare.strings(sCmd, sTemp2)) {
