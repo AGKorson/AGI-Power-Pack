@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/20/2023 10:10:44 PM"
+   LastEdit = "10/21/2023 12:57:29 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -65,8 +65,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = ""
-   CRC32 = &H7A5C7911
-   CompCRC32 = &H7A5C7911
+   CRC32 = &HD5C45F17
+   CompCRC32 = &HD5C45F17
    IsRoom = True
 
 [Logic3]
@@ -86,8 +86,8 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H665B7E38
-   CompCRC32 = &H665B7E38
+   CRC32 = &H3E103CD6
+   CompCRC32 = &H3E103CD6
    IsRoom = True
 
 [Logic5]
@@ -135,8 +135,8 @@
 [Logic11]
    ID = cp.Terminal
    Description = ""
-   CRC32 = &H2405E5F6
-   CompCRC32 = &H2405E5F6
+   CRC32 = &HC529BF73
+   CompCRC32 = &HC529BF73
    IsRoom = True
 
 [Logic12]
@@ -359,8 +359,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &H5091779B
-   CompCRC32 = &H5091779B
+   CRC32 = &H2EB989A
+   CompCRC32 = &H2EB989A
    IsRoom = False
 
 [Logic51]

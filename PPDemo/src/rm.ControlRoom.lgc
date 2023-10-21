@@ -350,6 +350,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if ((said("use", "keyboard") || said("type", "keyboard") ||
        said("log", "on", "console") || said("use", "console") || 
        said("log", "on", "computer") || said("use", "computer") ||
+       said("log", "on", "mocc") || said("use", "mocc") || 
        said("log", "on"))) {
     if (nearTerminal) {
       set(showMOCC);

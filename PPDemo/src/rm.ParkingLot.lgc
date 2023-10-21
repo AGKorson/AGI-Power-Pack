@@ -176,7 +176,6 @@ if (newRoom) {
   [ patient car
   animate.obj(oPatientCar);
   set.view(oPatientCar, vw.Cars);
-  ignore.objs(oPatientCar);
   [ don't draw until needed
   
   [ tiny patient view
@@ -419,7 +418,6 @@ if (egoCarSeq) {
 [ if first time in room and not showing opening sequence
 if (newRoom && (previousRoom == 0 || previousRoom == rm.Title)) {
   if ((weekday == 0 || weekday == 6)) {
-weekday = 0;
     if (weekday == 0) {
       theDay = "Sunday";
     } else {
@@ -796,12 +794,6 @@ if (!egoDying && !deathType && !kickBucket) {
     work2 = carX;
     work2+= 15;
     if (work1 >= carX && egoX <= work2) {
-    [ if ego is on or in front of the car, force priority
-      if (egoY == carY) {
-        get.priority(ego, work1);
-        ++work1;
-        set.priority.v(ego, work1);
-      }
       set(egoDying);
       [ temporarily stop driving
       stop.update(oPatientCar);
@@ -815,7 +807,6 @@ if (!egoDying && !deathType && !kickBucket) {
       work1 = 2;
       cycle.time(ego, work1);
       end.of.loop(ego, fRunOver);
-      [ TODO: why does ego show on wrong side of the car sometimes?
       print("Uh oh! That car just hit you!");
     }
   }

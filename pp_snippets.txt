@@ -156,6 +156,7 @@
 [Snippet]
    Name = get.time
    Value = "block(GET.TIME, %1, %2, %3); [ get.time(vHOUR, vMINUTE, vSECOND)"
+   ArgTips = "var vHOUR, var vMINUTE, var vSECOND"
 
 [Snippet]
    Name = hex2byte
