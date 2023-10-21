@@ -161,6 +161,7 @@ if (currentRoom == 0) {
     set.menu(mnu_msgDebug); [ "Debug"
     set.menu.item(mnu_msgDbgLog, cLogInput);   [ "Log Input:      Off"
     set.menu.item(mnu_msgDbgClick, cShowClicks); [ "Display Clicks: Off"
+    set.menu.item("Debug Help", cDebugHelp);
     s22 = "";
     block(SET.MSG, BYNUM, &mnu_msgDebug, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
@@ -255,33 +256,9 @@ if (resetClicks) {
   set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
-[ if debugging, handle the debug functions
+[ if debugging, handle these debug functions before
+[ other game functions
 if (debugging) {
-  if (controller(cLogInput)) {
-    [ toggle the message
-    toggle(fLogInput);
-    s23 = "Log Input:      %s22";
-    if (fLogInput) {
-      s22 = " On";    
-    } else {
-      s22 = "Off";
-    }
-    block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, BYNUM, &mnu_msgDbgLog, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-  }
-  [ show click data
-  if (controller(cShowClicks)) {
-    [ toggle the message
-    toggle(fShowClicks);
-    s23 = "Display Clicks: %s22";
-    if (fShowClicks) {
-      s22 = " On";
-    } else {
-      s22 = "Off";
-    }
-    block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-    block(SET.MSG, BYNUM, &mnu_msgDbgClick, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-  }
   if (fShowClicks) {
     [ used to assist in creating click statements and said statements
     if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
@@ -313,7 +290,9 @@ if (debugging) {
   }
 }
 
+[***************************************
 [ MENU AND STATUS BAR CHECKS
+[***************************************
 if (!disableGameFunctions) {
   [ this trick makes it easy to test for
   [ 'if (controller(cLeftClick) && y > 247) || controller(cMenu)'
@@ -524,7 +503,6 @@ if (!disableGameFunctions) {
     [ skip intro
     s22 = mnu_msgSkipIntro;
     block(STR.LEN, &s22, &work1, 0); [ str.len(sINPUT, vRESULT)
-
     if (skipIntro) {
       if (work1 == 15) {
         work1 = 7; [ ascii value for bullet symbol
@@ -669,7 +647,7 @@ if (controller(cSoundMIDI)) {
     call(lgc.SaveOptions);
   }
 }
-[ skip intro option
+[ SKIP INTRO OPTION
 if (controller(cSkipIntro)) {
   toggle(skipIntro);
   [ update the config file
@@ -772,6 +750,33 @@ if (controller(cFaster)) {
     [ update the config file
     call(lgc.SaveOptions);
   }
+}
+
+[ DEBUG MENU ITEMS
+if (controller(cLogInput)) {
+  [ toggle the message
+  toggle(fLogInput);
+  s23 = "Log Input:      %s22";
+  if (fLogInput) {
+    s22 = " On";    
+  } else {
+    s22 = "Off";
+  }
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, BYNUM, &mnu_msgDbgLog, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+}
+[ show click data
+if (controller(cShowClicks)) {
+  [ toggle the message
+  toggle(fShowClicks);
+  s23 = "Display Clicks: %s22";
+  if (fShowClicks) {
+    s22 = " On";
+  } else {
+    s22 = "Off";
+  }
+  block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
+  block(SET.MSG, BYNUM, &mnu_msgDbgClick, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 }
 
 [***************************************

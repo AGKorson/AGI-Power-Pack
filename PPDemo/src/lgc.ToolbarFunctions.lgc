@@ -53,7 +53,7 @@ if ((mouseX < 14 || mouseX > 145 || mouseY > 17) && mouseY < 248) {
 }
 
 [ right-dbl click to cycle through modes
-if (controller(cRightDblClick)) {
+if (controller(cRightDblClick) && !deathType) {
   if (cursormode > 0 && cursormode < 6) {
     ++cursormode;
     if (cursormode == 6) {

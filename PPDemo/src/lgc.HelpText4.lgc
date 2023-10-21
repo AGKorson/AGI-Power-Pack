@@ -50,6 +50,9 @@ if (selectedTopic == 13) {
   display(18, 36, "-  Activate menu");
   display(19, 36, "-  Decrease animation speed");
   display(20, 36, "-  Increase animation interval");
+  display(21, 36, "-  Enable debug mode");
+  display(22, 36, "-  Display the Debug Help Screen");
+
   set.text.attribute(BLUE, LT_GRAY);
   display(4, 32, "F1");
   display(5, 25, "F2/Ctrl+S");
@@ -68,6 +71,8 @@ if (selectedTopic == 13) {
   display(18, 31, "ESC");
   display(19, 25, "Ctrl+LEFT");
   display(20, 24, "Ctrl+RIGHT");
+  display(21, 29, "Alt+D");
+  display(22, 26, "Shift+F1");
   return();
 }
 if (selectedTopic == 14) {

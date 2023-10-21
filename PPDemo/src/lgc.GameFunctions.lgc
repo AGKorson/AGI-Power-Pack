@@ -24,7 +24,6 @@
 
 [TODO: PP FUNCTIONS not in demo game:
 [    GET.DATE - add easter egg to show a message on certain days of the week (in gameinit logic)
-[    DELETE.FILE - add option to clear all save games
 
 [***************************************
 [ LOCAL DEFINES
@@ -172,7 +171,7 @@ if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
   }
 }
 
-if ((said("debug") || said("debug", "on"))) {
+if ((controller(cDebugMode) || said("debug") || said("debug", "on"))) {
   [ if not in debug mode yet
   if (!debugging) {
     [ activate it

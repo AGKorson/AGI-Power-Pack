@@ -144,6 +144,8 @@ if (gameRestarted) {
   set.key(1, 2, cRightClick);        [ mouse right button click
   set.key(1, 3, cLeftDblClick);      [ mouse left button dbl-click
   set.key(1, 4, cRightDblClick);     [ mouse right button dbl-click
+  set.key(0, 32, cDebugMode);        [ ALT+D - enter debug mode
+  set.key(0, 84, cDebugHelp);        [ SHIFT+F1 - show debug help screen
   
   set.game.id("PPD"); 
                          

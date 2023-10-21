@@ -17,7 +17,7 @@
 #define tmpVarA         v254
 #define tmpVarB         v255
 
-#define tmpStr           s12 
+#define tmpStr           s20 
 
 [***************************************
 [ MAIN CODE BLOCK 
@@ -40,7 +40,7 @@ if (said("game version")) {
 }
 
 [ debug help screen
-if (said("debug", "help")) {
+if ((controller(cDebugHelp) || said("debug", "help"))) {
   call(lgc.DebugHelp);
 }
 
@@ -325,6 +325,33 @@ if (said("log")) {
   log("%m31%s1");
   clear.lines(22, 24, 0);
   accept.input();
+}
+
+[ clear save games
+if (said("delete", "save")) {
+  work1 = 1;
+  work2 = 0;
+  :delloop
+    tmpStr = "PPDSG.%v46";
+    block(STR.FORMAT, &tmpStr, &tmpStr, 0); [ str.format(sINPUT, sRESULT)
+    block(DELETE.FILE, &tmpStr, 0, 0); [ delete.file(sFILENAME)
+    if (!errorParameter) {
+      ++work2;
+    }
+    ++work1;
+  if (work1 < 13) {
+    goto(delloop);
+  }
+  if (work2 == 0) {
+    print("No save game files found.");
+  } else {
+    if (work2 == 1) {
+      tmpStr = "";
+    } else {
+      tmpStr = "s";
+    }
+    print("Deleted %v47 save game file%s20");
+  }
 }
 
 return();

@@ -16,38 +16,40 @@
 #define cAbout                  c1 [ menu: PPDemo;  key: none
 #define cVersion                c2 [ menu: PPDemo;  key: Alt+V
 #define cHelp                   c3 [ menu: PPDemo;  key: F1
-#define cSave                   c4 [ menu: File;    key: F5
-#define cRestore                c5 [ menu: File;    key: F7
-#define cRestart                c6 [ menu: File;    key: F9
-#define cQuit                   c7 [ menu: File;    key: Alt+Q
-#define cStatus                 c8 [ menu: Action;  key: TAB/Ctrl+I
-#define cChooseItem             c9 [ menu: Action;  key: F4
-#define cToggleSound           c10 [ menu: Sound;   key: F2
-#define cDecrescendo           c11 [ menu: Sound;   key: -
-#define cCrescendo             c12 [ menu: Sound;   key: +
-#define cSoundPC               c13 [ menu: Sound;   key: none
-#define cSoundFM               c14 [ menu: Sound;   key: none
-#define cSoundMIDI             c15 [ menu: Sound;   key: none
-#define cClock                 c16 [ menu: Time;    key: F6
-#define cGameClock             c17 [ menu: Time;    key: none
-#define cRealClock             c18 [ menu: Time;    key: none
-#define cPause                 c19 [ menu: Time;    key: none (ESC to show menu also pauses game)
-#define cSlower                c20 [ menu: Speed;   key: Ctrl+LEFT
-#define cFaster                c21 [ menu: Speed;   key: Ctrl+RIGHT
-#define cNormal                c22 [ menu: Speed;   key: none
-#define cSlow                  c23 [ menu: Speed;   key: none
-#define cFast                  c24 [ menu: Speed;   key: none
-#define cFastest               c25 [ menu: Speed;   key: none
-#define cCancelLine            c26 [ menu: none;    key: Ctrl+C
-#define cEchoLine              c27 [ menu: none;    key: F3
-#define cLeftClick             c28 [ mouse left button click
-#define cLeftDblClick          c29 [ mouse left button double click
-#define cRightClick            c30 [ mouse right button click
-#define cRightDblClick         c31 [ mouse right button double click
-#define cDummy                 c32 [ menu separator - should always be disabled
-#define cSkipIntro             c33
-#define cLogInput              c34 [ temp debug item
-#define cShowClicks            c35 [ temp debug item
+#define cSkipIntro              c4 [ menu: PPDemo;  key: none
+#define cSave                   c5 [ menu: File;    key: F5
+#define cRestore                c6 [ menu: File;    key: F7
+#define cRestart                c7 [ menu: File;    key: F9
+#define cQuit                   c8 [ menu: File;    key: Alt+Q
+#define cStatus                 c9 [ menu: Action;  key: TAB/Ctrl+I
+#define cChooseItem            c10 [ menu: Action;  key: F4
+#define cToggleSound           c11 [ menu: Sound;   key: F2
+#define cDecrescendo           c12 [ menu: Sound;   key: -
+#define cCrescendo             c13 [ menu: Sound;   key: +
+#define cSoundPC               c14 [ menu: Sound;   key: none
+#define cSoundFM               c15 [ menu: Sound;   key: none
+#define cSoundMIDI             c16 [ menu: Sound;   key: none
+#define cClock                 c17 [ menu: Time;    key: F6
+#define cGameClock             c18 [ menu: Time;    key: none
+#define cRealClock             c19 [ menu: Time;    key: none
+#define cPause                 c20 [ menu: Time;    key: none (ESC to show menu also pauses game)
+#define cSlower                c21 [ menu: Speed;   key: Ctrl+LEFT
+#define cFaster                c22 [ menu: Speed;   key: Ctrl+RIGHT
+#define cNormal                c23 [ menu: Speed;   key: none
+#define cSlow                  c24 [ menu: Speed;   key: none
+#define cFast                  c25 [ menu: Speed;   key: none
+#define cFastest               c26 [ menu: Speed;   key: none
+#define cLogInput              c27 [ menu: Debug;   key: none
+#define cShowClicks            c28 [ menu: Debug;   key: none
+#define cDebugHelp             c29 [ menu: Debug;   key: Shift+F1
+#define cCancelLine            c30 [ menu: none;    key: Ctrl+C
+#define cEchoLine              c31 [ menu: none;    key: F3
+#define cDebugMode             c32 [ menu: none;    key: Alt+D
+#define cLeftClick             c33 [ mouse left button click
+#define cLeftDblClick          c34 [ mouse left button double click
+#define cRightClick            c35 [ mouse right button click
+#define cRightDblClick         c36 [ mouse right button double click
+#define cDummy                 c37 [ menu separator - should always be disabled
 #define useMIDI                f19 [ local flag to track whether 4channel mode is FM or MIDI
 #define touchTrees             f21
 #define handsWashed            f22

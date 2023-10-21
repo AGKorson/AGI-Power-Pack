@@ -18,7 +18,6 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
-[ TODO: redo help page; use 80col, and include all items, including
 [ debug menu options
 
 [ pause game clock
@@ -33,39 +32,101 @@ status.line.off();
 [ save attributes
 set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 
-[ switch to text screen, 40col
-configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
+[ set default colors
+set.text.attribute(BLUE, LT_GRAY);
+
+[ switch to text screen, 80col
+configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
 
 [ make sure keyboard buffer is clear
 lastChar = 0;
 
-[ set colors
-set.text.attribute(LT_GRAY, BLACK);
+display(1, 31, "DEBUG MODE HELP");
+display(2, 0, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+display(3, 39, "³");
+display(4, 39, "³");
+display(5, 39, "³");
+display(6, 39, "³");
+display(7, 39, "³");
+display(8, 39, "³");
+display(9, 39, "³");
+display(10, 39, "³");
+display(11, 39, "³");
+display(12, 39, "³");
+display(13, 39, "³");
+display(14, 39, "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+display(15, 39, "³");
+display(15, 54, "MENU ITEMS");
+display(16, 39, "³");
+display(17, 39, "³");
+display(18, 39, "³");
+display(19, 39, "³");
+display(20, 39, "³");
+display(21, 39, "³");
+display(22, 39, "³");
+display(23, 39, "³");
 
-[ now display the help information
-display(0, 12, "DEBUG MODE HELP             ");
+set.text.attribute(MAGENTA, LT_GRAY);
+display( 3, 0, "game version");
+display( 5, 2,   "debug help");
+display( 7, 4,     "trace on");
+display( 8, 8,         "tp #");
+display( 9, 4,     "show mem");
+display(10, 4,     "show pri");
+display(11, 9,          "log");
+display(14, 2,   "show var #");
+display(15, 3,    "set var #");
+display(16, 1,  "show flag #");
+display(17, 2,   "set flag #");
+display(18, 0, "reset flag #");
+display(20, 2,   "get item #");
+display(21, 1,  "gimme gimme");
+display(22, 3,    "item room");
 
-display(2, 0, "trace on    - enables tracing          ");
-display(3, 0, "              (SCROlL LOCK to activate)");
-display(4, 0, "show mem    - display memory stats     ");
-display(5, 0, "tp          - teleport                 ");
-display(6, 0, "pos         - change ego's position    ");
-display(7, 0, "show var    - display value of a var   ");
-display(8, 0, "set var     - change value of a var    ");
-display(9, 0, "show flag   - display status of a flag ");
-display(10, 0, "set flag    - set a flag               ");
-display(11, 0, "reset flag  - reset (clear) a flag     ");
-display(12, 0, "object      - display information about");
-display(13, 0, "              a screen object          ");
-display(14, 0, "show pri    - display priority screen  ");
-display(15, 0, "get object  - get any inventory object ");
-display(16, 0, "gimme gimme - get all inventory objects");
-display(17, 0, "object room - display room number of   ");
-display(18, 0, "              an inventory object      ");
-display(19, 0, "set pri     - set ego's priority       ");
-display(20, 0, "release pri - release ego's priority   ");
-display(21, 0, "coords      - ego's coordinates on/off ");
-display(22, 0, "log         - logs error's into logfile");
+display( 3, 45,    "object #");
+display( 6, 50,         "pos");
+display( 7, 44,   "set pri #");
+display( 8, 42, "release pri");
+display( 9, 47,      "coords");
+display(11, 42, "delete save");
+display(16, 42, "Log Input");
+display(20, 42, "Display Clicks");
+
+set.text.attribute(BLACK, LT_GRAY);
+display( 3, 13, "- display game version");
+display( 4, 15,   "info");
+display( 5, 13, "- shows this help screen");
+display( 7, 13, "- start tracing");
+display( 8, 13, "- teleport to room");
+display( 9, 13, "- display memory stats");
+display(10, 13, "- show priority screen");
+display(11, 13, "- write a comment to");
+display(12, 15,   "the logfile");
+display(14, 13, "- display variable value");
+display(15, 13, "- change variable value");
+display(16, 13, "- display flag status");
+display(17, 13, "- set a flag");
+display(18, 13, "- reset a flag");
+display(20, 13, "- get inventory item");
+display(21, 13, "- get all inventory items");
+display(22, 13, "- display room number of");
+display(23, 15,   "an inventory item");
+
+display( 3, 54, "- display information");
+display( 4, 56,   "about a screen object");
+display( 6, 54, "- change ego's position");
+display( 7, 54, "- set ego's priority");
+display( 8, 54, "- release ego's priority");
+display( 9, 54, "- ego's coordinates on/off");
+display(11, 54, "- deletes all save game");
+display(12, 56,   "files");
+display(16, 51, ":");
+display(17, 44, "When enabled, all player input is");
+display(18, 44, "logged to the LOGFILE");
+display(20, 56, ":");
+display(21, 44, "When enabled, mouse clicks are");
+display(22, 44, "displayed, along with ego's current");
+display(23, 44, "position and memory pages remaining");
 
 [ run a loop to wait for player to press any key
 WaitForKey:
