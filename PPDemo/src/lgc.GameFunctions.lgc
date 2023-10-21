@@ -22,9 +22,6 @@
 [ power pack support
 #include "powerpack.txt"
 
-[TODO: PP FUNCTIONS not in demo game:
-[    GET.DATE - add easter egg to show a message on certain days of the week (in gameinit logic)
-
 [***************************************
 [ LOCAL DEFINES
 [***************************************
