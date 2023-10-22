@@ -1,14 +1,17 @@
-[ ********************************************************************
+[*********************************************************************
 [ 
 [ rm.Entrance
 [ 
 [ An example room with several exits.
 [
-[ ********************************************************************
+[*********************************************************************
 
-[ **************************************
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define strN              s3
 #define strNo             s4
 #define strAnswer         s5
@@ -21,9 +24,9 @@
 #define tmpCol            v225
 #define tmpMsg            v226
 
-[ **************************************
+[***************************************
 [ FIRST CYCLE ONLY
-[ **************************************
+[***************************************
 if (newRoom) {
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
@@ -36,7 +39,7 @@ if (newRoom) {
   [ add room-specific initialization here
   
   [ default horizion is 36; adjust it as needed
-  set.horizon(120);  
+  set.horizon(120);
   
   [ set ego parameters, if different from lgc.RoomInit
   
@@ -67,9 +70,9 @@ if (newRoom) {
   load.logics(lgc.TestPart3);
 }
 
-[ **************************************
+[***************************************
 [ EVERY CYCLE
-[ **************************************
+[***************************************
 
 [ add room specific statements here
 
@@ -149,12 +152,12 @@ if (ppTesting) {
   
   [ if past step 10 set autocycle
   if (teststep > 10) {
-    work1 = 1;
+    work1 = AUTO_CYCLE;
     if (IntVersion == VERSION_2089) {
       init.joy();
       set.cel.v(ego, work1);
     } else {
-      set.upper.left(&ego, &work1);
+      set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
     }
   }
   
@@ -169,7 +172,7 @@ if (ppTesting) {
       msgTimer = 1;
       [ cancel ptc movement
       egodir = 0;
-      set.dir(ego, egodir);
+      set.dir(ego, egodir); [ cancel.click2move 
     }
     if (controller(cLeftDblClick)) {
       display(23, 29, "L-DB-CLICK");
@@ -187,9 +190,9 @@ if (ppTesting) {
     if ((teststep != 41 || subteststep != 8) && hasMouse) {
     
       if (IntVersion > VERSION_2272) {
-        enable.item(mouse);
+        enable.item(mouse); [ show.mouse()
       } else {
-        set.key(1, 0, c251);
+        set.key(2E_SHOW_MOUSE, 0, MOUSE.FN); [ show.mouse()
       }
     }
   }
@@ -204,29 +207,29 @@ if (ppTesting) {
     }
     
     if (said("status", "test")) {
-      set.cursor.char(" l6, v3, v27, v28, v29, f9");
+      set.cursor.char(" l6, v3, v65, v66, v67, f9"); [ enable.custom.status()
     }
     
     if (said("status", "reset")) {
-      set.cursor.char(" ");
+      set.cursor.char(" "); [ disable.custom.status()
     }
   }
   
   [ if at or past click-to-move test, enable changes
   if (teststep > 17 && teststep != 39) {
     if (said("clickmove", "straight")) {
-      stepcounter = -1;
-      step.size(ego, stepcounter);
+      stepcounter = MOVE_DIRECT;
+      step.size(ego, stepcounter); [ set.click2move.mode(vMODE)
     }
     if (said("clickmove", "normal")) {
-      work1 = -2;
-      step.size(ego, work1);
+      work1 = MOVE_AGI;
+      step.size(ego, work1); [ set.click2move.mode(vMODE)
     }
     if (said("clickmove", "on")) {
-      set(clickmove);
+      set(click2move); [ enable.click2move()
     }
     if (said("clickmove", "off")) {
-      reset(clickmove);
+      reset(click2move); [ disable.click2move()
     }
   }
   
@@ -262,9 +265,9 @@ if (ppTesting) {
 }
 
 
-[ **************************************
+[***************************************
 [ CHECK FOR AN EXIT CONDITION
-[ **************************************
+[***************************************
 
 if (teststep == 44) {
   if (edgeEgoHit == TOP_EDGE) {
@@ -287,9 +290,9 @@ if (teststep == 44) {
   }
 }
 
-[ **************************************
+[***************************************
 [ PROCESS PLAYER INPUT
-[ **************************************
+[***************************************
 
 [ if player has provided input and match not yet found,
 [ do said tests
@@ -303,7 +306,7 @@ if (haveInput && !haveMatch) {
 :done
 return();
 
-[ **************************************
+[***************************************
 [ MESSAGES
-[ **************************************
+[***************************************
 #message 33 "logic1"

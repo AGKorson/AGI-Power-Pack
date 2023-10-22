@@ -1,11 +1,23 @@
+[*********************************************************************
 [ 
 [ lgc.StatusLine
 [ 
+[*********************************************************************
 
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define vRow       v244
 #define vCol       v245
 #define vMsg       v246
 #define v80Offset  v247
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ if in 80 col mode, use an offset so entire width is used
 if (isset(graphics80)) {
@@ -68,12 +80,12 @@ set.text.attribute(0, -1);
 return();
 
 
-[ **************************************
+[***************************************
 [ DECLARED MESSAGES
-[ **************************************
+[***************************************
 #message 1 " "
 #message 2 "Score: %v3/%v7  "
 #message 3 "         "
 #message 4 "  "
-#message 5 "B:%v29 X:%v27|3  Y:%v28|3"
+#message 5 "B:%v67 X:%v65|3  Y:%v66|3"
 #message 6 "%v250  "

@@ -1,4 +1,4 @@
-[ ********************************************************************
+[*********************************************************************
 [
 [ lgc.GameFunctions: Game-specific functions
 [
@@ -17,15 +17,20 @@
 [ (although these may require some modification for your game). Also,
 [ this makes logic 0 easier to manage.
 [
-[ ********************************************************************
+[*********************************************************************
 
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
 #define entryDelay v240
 
 
-[ *************************************************
-[ put all non-input functions that are not
-[ room-specific here
-[ *************************************************
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ if a new room was visited for first time
 if (!egoExplored && currentRoom != rm.Entrance) {
@@ -52,9 +57,9 @@ if (controller(cLeftClick)) {
     return();
   }
 }
-[ **************************************
+[***************************************
 [ PROCESS PLAYER INPUT
-[ **************************************
+[***************************************
 
 [ if player has provided input and match not yet found,
 [ do said tests
@@ -124,9 +129,9 @@ if (haveInput && !haveMatch) {
 :done
 return();
 
-[ **************************************
-[ MESSAGES
-[ **************************************
+[***************************************
+[ DECLARED MESSAGES
+[***************************************
 #message 1 "I am going to tell on you!"
 #message 2 "Don't say anymore words like that!"
 #message 3 "Don't say I didn't warn you."

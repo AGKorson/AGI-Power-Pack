@@ -1,10 +1,15 @@
+[*********************************************************************
 [ 
 [ lgc.TestPart1
 [
+[*********************************************************************
 
-[ **************************************
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define strN              s3
 #define strNo             s4
 #define strAnswer         s5
@@ -19,6 +24,10 @@
 #define volume            v227
 
 #define sndDone           f220
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [***********************************************************
 [ run tests 1-20:
@@ -117,8 +126,8 @@ if (teststep == 1) {
       print("Press CTRL+Z or enter 'continue' after testing.");
     }
     [ clear the controllers
-    set.key(-1, -1, c41); [ clear.controller(cNUM);
-    set.key(-1, -1, c42); [ clear.controller(cNUM);
+    set.key(CLR.CTRL, CLR.CTRL, c41); [ clear.controller(cNUM);
+    set.key(CLR.CTRL, CLR.CTRL, c42); [ clear.controller(cNUM);
     
     [ these should never happen
     if (controller(c41)) {
@@ -187,7 +196,7 @@ if (teststep == 3) {
   
   [ check for continue
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-[    configure.screen(-1, 0, 0);
+[    configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
     [ check results
     get.string(strAnswer, "Did ext chars display correctly? ", 22, 0, 3);
     goto(nexttest);
@@ -209,7 +218,7 @@ if (teststep == 4) {
     print("scrolling the red zone up one blue line");
     set.text.attribute(BLACK, BLUE);
     clear.text.rect(13, 5, 15, 15, -1);
-    print("scrolling the green zone up two blue lines");      
+    print("scrolling the green zone up two blue lines");
     clear.lines(5, 7, -2);
     [ restore colors
     set.text.attribute(WHITE, BLACK);
@@ -258,7 +267,7 @@ if (teststep == 6) {
       if (work2 == work1) {
         goto(getBG);
       }
-      toggle.monitor();
+      toggle.monitor(); [ set.text.attr.v(vFG, vBG)
       set.text.attribute(&work1, &work2);
       work1 = work3;
       work1 += 2;
@@ -277,19 +286,19 @@ if (teststep == 6) {
   return();
 }
 
-[ TEST7:  'set.text.attributes' command allows "pushing" 
-[         "and popping" the current attributes
+[ TEST7:  'set.text.attributes' command allows 'pushing' 
+[         and 'popping' the current attributes
 if (teststep == 7) {
   if (newtest) {
     display(24, 0, "%v63: PUSH/POP COLORS TEST");
     reset(newtest);
     set.text.attribute(WHITE, BLACK);
     [ push color
-    set.text.attribute(-1, 0);
+    set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
     set.text.attribute(BLUE, YELLOW);
     display(4, 8, "block 1: blue on yellow ");
     [ pop color
-    set.text.attribute(0, -1);
+    set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
     display(6, 8, "block 2: white on black ");
     
     [ check results
@@ -331,7 +340,7 @@ if (teststep == 9) {
     reset(newtest);
     print("Switching to 80 column text mode");
     set.text.attribute(BLACK, LT_GRAY);
-    configure.screen(-1, 1, 1);
+    configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
     display(11, 14, "  This is the text screen in eighty column mode.  "); 
     display(12, 14, "Press any key to switch to forty column text mode.");
     lastChar = 0;
@@ -339,7 +348,7 @@ if (teststep == 9) {
     if (!have.key()) {
       goto(wait1);
     }
-    configure.screen(-1, 1, 0);
+    configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
     display(11, 1, "      Text in forty column mode.      ");
     display(12, 1, "Press any key to test graphics screen.");
     lastChar = 0;
@@ -348,7 +357,7 @@ if (teststep == 9) {
       goto(wait2);
     }
     set.text.attribute(WHITE, BLACK);
-    configure.screen(-1, 0, 1);
+    configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
     display(24, 0, "%v63: 80 COLUMN MODE TEST");
     if (IntVersion > VERSION_2272) {
       s6 = "Confirm the menu displays correctly in this mode. ";
@@ -361,7 +370,7 @@ if (teststep == 9) {
   }
   [ check for continue
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-    configure.screen(-1, 0, 0);
+    configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
     display(24, 0, "%v63: 80 COLUMN MODE TEST");
     [ check results
     get.string(strAnswer, "Did display show correct columns? ", 22, 0, 3);
@@ -380,12 +389,12 @@ if (teststep == 10) {
           "right exit for testing. When you are done testing, "
           "press CTRL+Z or enter 'continue'.");
     block(131, 134, 146, 164);
-    work1 = 1;
+    work1 = AUTO_CYCLE;
     if (IntVersion == VERSION_2089) {
       init.joy();
       set.cel.v(ego, work1);
     } else {
-      set.upper.left(&ego, &work1);
+      set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
     }
   }
   [ check for continue
@@ -426,12 +435,12 @@ if (teststep == 12) {
           "it can be modified, including all the way back to the "
           "start. Entering just 'test' will run the test again. "
           "Press CTRL+Z or enter 'continue' when you are done testing.");
-    set.string(s255, "test test test");
+    set.string(SET.INPUT, "test test test"); [ set.input(mINPUT)
   }
   
   [ check for test reset
   if (said("test")) {
-    set.string(s255, "test test test");
+    set.string(SET.INPUT, "test test again"); [ set.input(mINPUT)
   }
   
   [ check for continue
@@ -460,7 +469,7 @@ if (teststep == 13) {
     s11 = "Test String";
     [ check binary
     print("Testing binary compare mode.");
-    set.string(s254, m2);
+    set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
     if (compare.strings(s8, s9)) {
       goto(fail);
     }
@@ -475,7 +484,7 @@ if (teststep == 13) {
     }
     [ check text
     print("Binary compare mode passed. Testing text compare.");
-    set.string(s254, m1);
+    set.string(SET.CMPMODE, COMPARE_TEXT); [ set.cmpmode(MODE)
     if (compare.strings(s8, s9)) {
       goto(fail);
     }
@@ -490,7 +499,7 @@ if (teststep == 13) {
     }
     [ check AGI
     print("Text compare mode passed. Testing AGI compare.");
-    set.string(s254, m0);
+    set.string(SET.CMPMODE, COMPARE_AGI); [ set.cmpmode(MODE)
     [ for 2.089 only, this test must fail
     if (IntVersion == VERSION_2089) {
       if (compare.strings(s8, s9)) {
@@ -536,10 +545,11 @@ if (teststep == 14) {
     if (IntVersion > VERSION_2272) {
       enable.item(mouse);
     } else {
-      set.key(1, 0, c251);
+      set.key(2E_SHOW_MOUSE, 0, MOUSE.FN); [ show.mouse()
     }
+    block(CONFIGURE.MOUSE, &mouseX, &mouseY, &mouseBtn); [ configure.mouse(XVAR, YVAR, BTNVAR)
     print("Confirm basic mouse function is working. Cursor should "
-          "be visible.");
+          "be visible. Mouse variables should update on line 23.");
     if (IntVersion > VERSION_2272) {
       print("You should be able to click status line to show the menu. "
             "You can click to highlight a menu item, and double click "
@@ -550,10 +560,12 @@ if (teststep == 14) {
     subteststep = 1;
   }
   [ subtest 1: mouse on
+  display(23, 1, "x:%v65|3 y:%v66|3 btn:%v67 ");
   if (subteststep == 1) {
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
       get.string(strAnswer, "Did mouse work correctly? ", 22, 0, 3);
+      clear.lines(24, 24, BLACK);
       goto(nextsubtest);
     }
   }
@@ -562,7 +574,7 @@ if (teststep == 14) {
     if (newtest) {
       print("Next test will change cursor. Press CTRLZ+Z or enter "
             "'continue' when you are ready to move on.");
-      set.key(0, &m102, mouse); [ set.key(BYVAR, mCURSOR*, c255);
+      set.key(BYNUM, &m102, mouse); [ set.cursor(FN_MODE, MSGNUM)
       reset(newtest);
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
@@ -570,7 +582,7 @@ if (teststep == 14) {
       get.string(strAnswer, "Did cursor change to walking man? ", 22, 0, 3);
       [ use byval
       work1 = &m103;
-      set.key(1, &work1, mouse); [ set.key(BYVAR, mCURSOR*, c255);
+      set.key(BYVAR, &work1, mouse); [ set.cursor(FN_MODE, MSGNUM)
       goto(nextsubtest);
     }
   }
@@ -579,16 +591,16 @@ if (teststep == 14) {
   if (subteststep == 3) {
     if (newtest) {
       print("Do same checks in 80 column mode.");
-      configure.screen(-1, 0, 1);
-      set.key(0, &m102, mouse); [ set.key(BYVAR, mCURSOR*, c255);
+      configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
+      set.key(BYNUM, &m102, mouse); [ set.cursor(FN_MODE, MSGNUM)
       display(24, 0, "%v63: MOUSE SUPPORT TEST");
       reset(newtest);
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-      set.key(0, &m103, mouse);
+      set.key(BYNUM, &m103, mouse); [ set.cursor(FN_MODE, MSGNUM)
       [ check results
       get.string(strAnswer, "Did mouse work correctly in 80col mode? ", 22, 0, 3);
-      configure.screen(-1, 0, 0);
+      configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
       display(24, 0, "%v63: MOUSE SUPPORT TEST");
       goto(nextsubtest);
     }
@@ -598,9 +610,9 @@ if (teststep == 14) {
   if (subteststep == 4) {
     if (newtest) {
       if (IntVersion > VERSION_2272) {
-        disable.item(mouse);
+        disable.item(mouse); [ hide.mouse()
       } else {
-        set.key(0, 0, c251);
+        set.key(2E_HIDE_MOUSE, 0, MOUSE.FN); [ hide.mouse()
       }
       [ check results
       get.string(strAnswer, "Did cursor disappear? ", 22, 0, 3);
@@ -669,14 +681,14 @@ if (teststep == 16) {
   if (subteststep == 2) {
     if (newtest) {
       print("Do same checks in 80 column mode.");
-      configure.screen(-1, 0, 1);
+      configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
       display(24, 0, "%v63: INVENTORY SCREEN TEST");
       reset(newtest);
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
       get.string(strAnswer, "Did inv screen work correctly? ", 22, 0, 3);
-      configure.screen(-1, 0, 0);
+      configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
       display(24, 0, "%v63: INVENTORY SCREEN TEST");
       subteststep = 0;
       goto(nexttest);
@@ -698,7 +710,7 @@ if (teststep == 17) {
     print("Enter 'status reset' to show the default status bar "
           "and 'status test' to see the custom status bar.");
     print("After confirming it works correctly, press CTRL+Z or enter 'continue'.");
-    set.cursor.char(" l6, v3, v27, v28, v29, f9");
+    set.cursor.char(" l6, v3, v65, v66, v67, f9"); [ enable.custom.status()
     subteststep = 1;
   }
   [ subtest 1: custom status test
@@ -714,7 +726,7 @@ if (teststep == 17) {
     if (newtest) {
       print("Do same checks in 80 column mode.");
       set(graphics80);
-      configure.screen(-1, 0, 1);
+      configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
       display(24, 0, "%v63: CUSTOM STATUS LINE TEST");
       reset(newtest);
     }
@@ -722,7 +734,7 @@ if (teststep == 17) {
       [ check results
       get.string(strAnswer, "Is statusline working correctly? ", 22, 0, 3);
       reset(graphics80);
-      configure.screen(-1, 0, 0);
+      configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
       display(24, 0, "%v63: CUSTOM STATUS LINE TEST");
       goto(nexttest);
     }
@@ -741,14 +753,14 @@ if (teststep == 18) {
     print("For normal AGI movement, enter 'clickmove normal'. "
           "For straight-line movement, enter 'clickmove straight'. "
           "Press CTRL+Z or enter 'continue' when done testing.");
-    set(clickmove);
-    set.key(0, &m102, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set(click2move); [ enable.click2move()
+    set.key(BYNUM, &m102, mouse); [ set.cursor(FN_MODE, MSGNUM);
     reset(newtest);
   }
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
     [ check results
     get.string(strAnswer, "Is clickmove working correctly? ", 22, 0, 3);
-    set.key(0, &m103, mouse); [ set.cursor(BYVAR, MSGNUM);
+    set.key(BYNUM, &m103, mouse); [ set.cursor(FN_MODE, MSGNUM);
     goto(nexttest);
   }
   return();
@@ -793,7 +805,7 @@ if (teststep == 20) {
       work1 = kq1theme;
       block(SND.V.FN, LOAD.SOUND.V, &work1, 0); [ load.sound.v(vSNDNUM)
       work2 = &sndDone;
-      block(SND.V.FN, PLAY.SOUND.V, &work1, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
+      block(SND.V.FN, SOUND.V, &work1, &work2); [ play.sound(vSNDNUM, vDONEFLAG)
     } else {
       if (sndDone) {
         block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
@@ -856,7 +868,7 @@ if (teststep == 20) {
     print("First test is single channel PC sound. Volume should not be "
           "adjustable.");
     reset(newtest);
-    reset(4channelsound);
+    reset(4channelsound); [ disable.4chan()
     sound(kq1theme, soundDone);
   }
   
@@ -869,7 +881,7 @@ if (teststep == 20) {
         print("Next test is FM synth, 4 channel with default instruments. "
         "Try adjusting volume during playback.");
         reset(newtest);
-        set(4channelsound);
+        set(4channelsound); [ enable.4chan()
         sound(kq1theme, soundDone);
       }
     } else {
@@ -887,13 +899,13 @@ if (teststep == 20) {
         [ to change channel envelopes (instruments):
         work1 = 0;
         work2 = 20;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         sound(kq1theme, soundDone);
       }
     } else {
@@ -911,13 +923,13 @@ if (teststep == 20) {
         work1 = 0;
         work2 = &s6;
         s6 = m4;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
+        set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         ++work1;
         s6 = m5;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
+        set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         ++work1;
         s6 = m6;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
+        set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         sound(kq1theme, soundDone);
       }
     } else {
@@ -949,10 +961,10 @@ if (teststep == 20) {
         work1 = 3;
         work2 = &s6;
         s6 = m4;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
+        set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         ++work1;
         s6 = m5;
-        set.key(&work1, &work2, c252); [  set.key(vCHANNEL, vENVDATASTR, c252);
+        set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
         sound(s.Noise, soundDone);
       }
     } else {
@@ -967,8 +979,7 @@ if (teststep == 20) {
         display(2, 15, "volume: %v227 ");
         print("Testing default MIDI.");
         reset(newtest);
-        work1 = 1;
-        set.key(&work1, 0, c254); [ set.key(MODE, ANY***, c254);
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         sound(kq1theme, soundDone);
       }
     } else {
@@ -987,13 +998,13 @@ if (teststep == 20) {
         [ to change channel envelopes (instruments):
         work1 = 0;
         work2 = 20;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         sound(kq1theme, soundDone);
       }
     } else {
@@ -1074,9 +1085,9 @@ if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {
 
 return();
 
-[ **************************************
-[ MESSAGES
-[ **************************************
+[***************************************
+[ DECLARED MESSAGES
+[***************************************
 [ Instruments
 #message 1 "02023000F1F58404000000"
 #message 4 "82040500F1A50C35000002"

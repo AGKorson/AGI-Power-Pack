@@ -1,10 +1,15 @@
+[*********************************************************************
 [ 
 [ lgc.TestPart2
 [ 
+[*********************************************************************
 
-[ **************************************
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define strN              s3
 #define strNo             s4
 #define strAnswer         s5
@@ -17,6 +22,10 @@
 #define tmpCol            v225
 #define tmpMsg            v226
 #define maxCPS            v227
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [***********************************************************
 [
@@ -65,7 +74,7 @@ if (teststep == 21) {
 [            "showing inventory screen.");
 [      [ for this test, don't bother pushing color;
 [      [ it gets overridden by custom status logic 
-[      [ set.text.attribute(-1, 0);
+[      [ set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 [      set.text.attribute(BLUE, YELLOW);
 [    }
 [    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
@@ -111,7 +120,7 @@ if (teststep == 22) {
       maxCPS = 0;
       print("Testing normal speed. There should be 20 ticks per "
             "second.");
-      animationInterval = 1;
+      animationInterval = FAST_SPEED;
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
@@ -125,8 +134,8 @@ if (teststep == 22) {
       print("Enabling turbo mode. There should be 60 ticks per "
             "second.");
       reset(newtest);
-      work1 = 1;
-      cycle.time(o255, work1);
+      work1 = TURBO_SPEED;
+      cycle.time(SET.SPEED, work1); [ SET.SPEED(vMODE)
       work1 = 3;
       step.time(ego, work1);
       dblClickDelay = 12;
@@ -134,10 +143,35 @@ if (teststep == 22) {
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
       get.string(strAnswer, "Sixty ticks per second? ", 22, 0, 3);
-      goto(nexttest);
+      goto(nextsubtest);
     }
   }
   
+  [ subtest 2: restore normal agi mode
+  if (subteststep == 2) {
+    if (newtest) {
+      print("Restoring normal AGI mode. There should be 20 ticks per "
+            "second.");
+      reset(newtest);
+      work1 = AGI_SPEED;
+      cycle.time(SET.SPEED, work1); [ SET.SPEED(vMODE)
+      work1 = 1;
+      step.time(ego, work1);
+      dblClickDelay = 4;
+      maxCPS = 0;
+    }
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      get.string(strAnswer, "Twenty ticks per second? ", 22, 0, 3);
+      [ use turbo for rest of tests
+      work1 = TURBO_SPEED;
+      cycle.time(SET.SPEED, work1); [ SET.SPEED(vMODE)
+      work1 = 3;
+      step.time(ego, work1);
+      dblClickDelay = 12;
+      goto(nexttest);
+    }
+  }
   [ run the timer
   ++tmpTimer1;
   display(4, 32, "%v220/%v227  ");
@@ -157,11 +191,11 @@ if (teststep == 23) {
     display(24, 0, "%v63: TIMER TEST");
     reset(newtest);
     print("Testing a delay counter. The next message should appear "
-          "in ~5 seconds.");    
+          "in ~5 seconds.");
     work1 = 250;
     work2 = 20;
     :delay
-      cycle.time(o254, work1);
+      cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
       --work2;
     if (work2) {
       goto(delay);
@@ -180,14 +214,14 @@ if (teststep == 23) {
             "or 'reset' to begin over at 8 seconds.");
       tmpTimer1 = 0;
       tmpTimer2 = 10;
-      block(START.TIMER, &tmpTimer1, &tmpTimer2, &f220);
+      block(START.TIMER, &tmpTimer1, &tmpTimer2, &f220); [ start.timer(vMIN, vSEC, fDONE)
     }
     display(4, 32, "%v221 ");
     if (said("stop")) {
-      block(TOGGLE.TIMER, 0, 0, 0);
+      block(TOGGLE.TIMER, STOP_TIMER, 0, 0); [ toggle.timer(STATE)
     }
     if (said("start")) {
-      block(TOGGLE.TIMER, 1, 0, 0);
+      block(TOGGLE.TIMER, START_TIMER, 0, 0); [ toggle.timer(STATE)
     }
     if (said("reset")) {
       tmpTimer2 = 8;
@@ -220,9 +254,9 @@ if (teststep == 24) {
           "previous input line will be shown on row 24");
   }
   clear.lines(23, 24, BLACK);
-  get.string(s6, m0, -1, 0, 0);
+  get.string(s6, m1, CURRENT.INPUT, 0, 0); [ current.input(sRESULT)
   display(23, 1, "%s6");
-  get.string(s6, m0, -2, 0, 0);
+  get.string(s6, m1, PREVIOUS.INPUT, 0, 0); [ previous.input(sRESULT)
   display(24, 1, "%s6");
   
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
@@ -247,12 +281,13 @@ if (teststep == 25) {
       load.logics(lgc.traceinfo160);
       trace.info(lgc.traceinfo160, 3, 15);
     }
-    [ set left/width
-    trace.info(0, 3, 34); [ l >3, l+w <77
+    [ set left/width (l >3, l+w <77)
+    trace.info(0, 3, 34); [ trace.h.posn(LEFT, WIDTH) [
     set(enableTrace);
     print("Testing trace mode. Try the new interactive features "
           "(CTRL+V/F/O; ego direction keys/INS for input.");
     trace.on();
+    [ confirm second trace.on() doesn't crash agi
     trace.on();
   }
   if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
@@ -272,8 +307,9 @@ if (teststep == 26) {
           "location.");
     [ switch to 80col
     set(graphics80);
-    configure.screen(-1, 0, 1);
-    trace.info(0, 44, 32); [ l >3, l+w <77
+    configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
+    [ set left/width (l >3, l+w <77)
+    trace.info(0, 44, 32); [ trace.h.posn(LEFT, WIDTH)
     [ early version(2.089/2.272) use different message set
     if (IntVersion > VERSION_2272) {
       load.logics(lgc.TraceInfo);
@@ -289,7 +325,7 @@ if (teststep == 26) {
     get.string(strAnswer, "Trace window OK? ", 22, 0, 3);
     [ back to 40
     reset(graphics80);
-    configure.screen(-1, 0, 0);
+    configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
     goto(nexttest);
   }
   return();
@@ -312,59 +348,59 @@ if (teststep == 27) {
     }
             
     print("Long string check passed. Checking STR.LEN function");
-    [strLen:    block(-4, sSrc, vRESULT, ANY);
+    [ STR.LEN
     s6 = "abc";
-    block(STR.LEN, &s6, &work1, 0);
+    block(STR.LEN, &s6, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 3) {
       print("STR.LEN check1 failed.");
       goto(fail);
     }
     s6 = "";
-    block(STR.LEN, &s6, &work1, 0);
+    block(STR.LEN, &s6, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 0) {
       print("STR.LEN check2 failed.");
       goto(fail);
     }
     print("STR.LEN check passed. Checking STR.COPY");
     
-    [strCopy:   block(-5, sSrc, sTgt, ANY);
+    [ STR.COPY
     s6 = "a string";
     s7 = "";
-    block(STR.COPY, &s6, &s7, 0);
+    block(STR.COPY, &s6, &s7, 0); [ str.copy(sINPUT, sRESULT)
     if (!compare.strings(s6, s7)) {
       print("STR.COPY check failed.");
       goto(fail);
     }
     print("STR.COPY check passed. Checking STR.CONCAT");
     
-    [strConcat: block(-6, sSrc, sAdd, ANY);
+    [ STR.CONCAT
     s6 = "This is ";
     s8 = "This is a string";
-    block(STR.CONCAT, &s6, &s7, 0);
+    block(STR.CONCAT, &s6, &s7, 0); [ str.concat(sINPUT, sADD)
     if (!compare.strings(s6, s8)) {
       print("STR.CONCAT check1 failed.");
       goto(fail);
     }
     s7 = "";
-    block(STR.CONCAT, &s6, &s7, 0);
+    block(STR.CONCAT, &s6, &s7, 0); [ str.concat(sINPUT, sADD)
     if (!compare.strings(s6, s8)) {
       print("STR.CONCAT check2 failed.");
       goto(fail);
     }
     s6 = "string";
     s8 = "stringstring";
-    block(STR.CONCAT, &s6, &s6, 0);
+    block(STR.CONCAT, &s6, &s6, 0); [ str.concat(sINPUT, sADD)
     if (!compare.strings(s6, s8)) {
       print("STR.CONCAT check3 failed.");
       goto(fail);
     }
     print("STR.CONCAT check passed. Checking STR.LEFT");
     
-    [sLeft:     block(-7, sSrc, sTgt, vLEN);
+    [ STR.LEFT
     work1 = 3;
     s6 = "test string";
     s7 = "tes";
-    block(STR.LEFT, &s6, &s6, &work1);
+    block(STR.LEFT, &s6, &s6, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.LEFT check1 failed.");
       goto(fail);
@@ -372,7 +408,7 @@ if (teststep == 27) {
     work1 = 0;
     s6 = "test string";
     s7 = "";
-    block(STR.LEFT, &s6, &s6, &work1);
+    block(STR.LEFT, &s6, &s6, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.LEFT check2 failed.");
       goto(fail);
@@ -380,18 +416,18 @@ if (teststep == 27) {
     work1 = 25;
     s6 = "test string";
     s7 = "test string";
-    block(STR.LEFT, &s6, &s6, &work1);
+    block(STR.LEFT, &s6, &s6, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.LEFT check3 failed.");
       goto(fail);
     }
     print("STR.LEFT check passed. Checking STR.RIGHT");
     
-    [sRight:    block(-8, sSrc, sTgt, vLEN);
+    [ STR.RIGHT
     work1 = 3;
     s6 = "test string";
     s7 = "ing";
-    block(STR.RIGHT, &s6, &s6, &work1);
+    block(STR.RIGHT, &s6, &s6, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.RIGHT check1 failed.");
       goto(fail);
@@ -399,7 +435,7 @@ if (teststep == 27) {
     work1 = 0;
     s6 = "test string";
     s7 = "";
-    block(STR.RIGHT, &s6, &s6, &work1);
+    block(STR.RIGHT, &s6, &s6, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.RIGHT check2 failed.");
       goto(fail);
@@ -407,19 +443,19 @@ if (teststep == 27) {
     work1 = 25;
     s6 = "test string";
     s7 = "test string";
-    block(STR.RIGHT, &s6, &s6, &work1);
+    block(STR.RIGHT, &s6, &s6, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.RIGHT check3 failed.");
       goto(fail);
     }
     print("STR.RIGHT check passed. Checking STR.MID");
     
-    [sMid:      block(-9, sSrc, vPOS, vLEN); overwrites source, different from rest
+    [ STR.MID
     work1 = 0;
     work2 = 4;
     s6 = "test string";
     s7 = "test";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check1 failed.");
       goto(fail);
@@ -428,7 +464,7 @@ if (teststep == 27) {
     work2 = 11;
     s6 = "test string";
     s7 = "test string";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check2 failed.");
       goto(fail);
@@ -437,7 +473,7 @@ if (teststep == 27) {
     work2 = 12;
     s6 = "test string";
     s7 = "test string";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check3 failed.");
       goto(fail);
@@ -446,7 +482,7 @@ if (teststep == 27) {
     work2 = 20;
     s6 = "test string";
     s7 = "test string";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check4 failed.");
       goto(fail);
@@ -455,7 +491,7 @@ if (teststep == 27) {
     work2 = 5;
     s6 = "test string";
     s7 = "t str";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check5 failed.");
       goto(fail);
@@ -464,7 +500,7 @@ if (teststep == 27) {
     work2 = 8;
     s6 = "test string";
     s7 = "t string";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check6 failed.");
       goto(fail);
@@ -473,7 +509,7 @@ if (teststep == 27) {
     work2 = 9;
     s6 = "test string";
     s7 = "t string";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check7 failed.");
       goto(fail);
@@ -482,7 +518,7 @@ if (teststep == 27) {
     work2 = 20;
     s6 = "test string";
     s7 = "t string";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check8 failed.");
       goto(fail);
@@ -491,7 +527,7 @@ if (teststep == 27) {
     work2 = 5;
     s6 = "test string";
     s7 = "g";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check9 failed.");
       goto(fail);
@@ -500,7 +536,7 @@ if (teststep == 27) {
     work2 = 5;
     s6 = "test string";
     s7 = "";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check10 failed.");
       goto(fail);
@@ -509,15 +545,15 @@ if (teststep == 27) {
     work2 = 5;
     s6 = "test string";
     s7 = "";
-    block(STR.MID, &s6, &work1, &work2);
+    block(STR.MID, &s6, &work1, &work2); [ str.mid(sINPUT, vPOS, vLEN)
     if (!compare.strings(s6, s7)) {
       print("STR.MID check11 failed.");
       goto(fail);
     }
     print("STR.MID check passed. Checking STR.TRIM");
     
-    [strTrim:   block(-10, sSrc, sTgt, MODE); mode 0=fulltrim, 1=ltrim, 2=rtrim, 3=agiparsetrim
-    work1 = AGITRIM;
+    [ STR.TRIM
+    work1 = TRIM_AGI;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = "a string ABC";
@@ -526,138 +562,138 @@ if (teststep == 27) {
       print("STR.TRIM check1 failed.");
       goto(fail);
     }
-    work1 = RTRIM;
+    work1 = TRIM_RIGHT;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = " a,.!string {[(ABC)]}";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check2 failed.");
       goto(fail);
     }
-    work1 = LTRIM;
+    work1 = TRIM_LEFT;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = "a,.!string {[(ABC)]}     ";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check3 failed.");
       goto(fail);
     }
-    work1 = TRIM;
+    work1 = TRIM_ALL;
     s6 = " a,.!string {[(ABC)]}     ";
     s7 = "";
     s8 = "a,.!string {[(ABC)]}";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check4 failed.");
       goto(fail);
     }
-    work1 = AGITRIM;
+    work1 = TRIM_AGI;
     s6 = "      ";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check5 failed.");
       goto(fail);
     }
-    work1 = RTRIM;
+    work1 = TRIM_RIGHT;
     s6 = "      ";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check6 failed.");
       goto(fail);
     }
-    work1 = LTRIM;
+    work1 = TRIM_LEFT;
     s6 = "      ";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check7 failed.");
       goto(fail);
     }
-    work1 = TRIM;
+    work1 = TRIM_ALL;
     s6 = "      ";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check8 failed.");
       goto(fail);
     }
-    work1 = AGITRIM;
+    work1 = TRIM_AGI;
     s6 = "";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check9 failed.");
       goto(fail);
     }
-    work1 = RTRIM;
+    work1 = TRIM_RIGHT;
     s6 = "";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check10 failed.");
       goto(fail);
     }
-    work1 = LTRIM;
+    work1 = TRIM_LEFT;
     s6 = "";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check11 failed.");
       goto(fail);
     }
-    work1 = TRIM;
+    work1 = TRIM_ALL;
     s6 = "";
     s7 = "x";
     s8 = "";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check12 failed.");
       goto(fail);
     }
     
-    work1 = TRIM;
+    work1 = TRIM_ALL;
     s6 = " x ";
     s7 = "";
     s8 = "x";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check13 failed.");
       goto(fail);
     }
-    work1 = LTRIM;
+    work1 = TRIM_LEFT;
     s6 = " x";
     s7 = "";
     s8 = "x";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check14 failed.");
       goto(fail);
     }
-    work1 = RTRIM;
+    work1 = TRIM_RIGHT;
     s6 = " x  ";
     s7 = "";
     s8 = " x";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check15 failed.");
       goto(fail);
     }
-    work1 = AGITRIM;
+    work1 = TRIM_AGI;
     s6 = " x";
     s7 = "";
     s8 = "x";
-    block(STR.TRIM, &s6, &s7, &work1);
+    block(STR.TRIM, &s6, &s7, &work1); [ strTrim(sINPUT, sRESULT, vMODE)
     if (!compare.strings(s7, s8)) {
       print("STR.TRIM check16 failed.");
       goto(fail);
@@ -665,160 +701,160 @@ if (teststep == 27) {
     
     print("STR.TRIM check passed. Checking INSTR");
     
-    [sInstr:    block(-11, sSrc, vCHAR, vPOS);
+    [ INSTR
     work1 = 110;
     work2 = 0;
     s6 = "one banana";
-    block(INSTR, &s6, &work1, &work2);
+    block(INSTR, &s6, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != 1) {
       print("INSTR check1 failed.");
       goto(fail);
     }
     work1 = 110;
     ++work2;
-    block(INSTR, &s6, &work1, &work2);
+    block(INSTR, &s6, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != 6) {
       print("INSTR check2 failed.");
       goto(fail);
     }
     work1 = 110;
     ++work2;
-    block(INSTR, &s6, &work1, &work2);
+    block(INSTR, &s6, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != 8) {
       print("INSTR check3 failed.");
       goto(fail);
     }
     work1 = 110;
     ++work2;
-    block(INSTR, &s6, &work1, &work2);
+    block(INSTR, &s6, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != -1) {
       print("INSTR check4 failed.");
       goto(fail);
     }
     work1 = 110;
     work2 = 50;
-    block(INSTR, &s6, &work1, &work2);
+    block(INSTR, &s6, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != -1) {
       print("INSTR check5 failed.");
       goto(fail);
     }
     work1 = 0;
     work2 = 0;
-    block(INSTR, &s6, &work1, &work2);
+    block(INSTR, &s6, &work1, &work2); [ instr(sINPUT, vCHAR, vPOS)
     if (work2 != -1) {
       print("INSTR check6 failed.");
       goto(fail);
     }
     print("INSTR check passed. Checking STR.FORMAT");
     
-    [ strFormat block(-12, sINPUT, sRESULT, ANY**)
+    [ STR.FORMAT
     s6 = "test";
     work1 = 1;
     #message 1 "msg"
     work2 = 4;
     s7 = "%s6%v46%m1%o47%l1|33";
     s8 = "test1msgdaggerlogic1";
-    block(STR.FORMAT, &s7, &s9, 0);
+    block(STR.FORMAT, &s7, &s9, 0); [ str.format(sINPUT, sRESULT)
     if (!compare.strings(s9, s8)) {
       print("STR.FORMAT check1 failed.");
       goto(fail);
     }
     print("STR.FORMAT check passed. Checking STR2BYTE");
     
-    [ str2byte block(-13, sINPUT, vRESULT, ANY**)
+    [ STR2BYTE
     s6 = "123";
     work1 = 0;
-    block(STR2BYTE, &s6, &work1, 0);
+    block(STR2BYTE, &s6, &work1, 0); [ str2byte(sINPUT, vRESULT)
     if (work1 != 123) {
       print("STR2BYTE check1 failed.");
       goto(fail);
     }
     print("STR2BYTE check passed. Checking HEX2BYTE");
     
-    [ hex2byte block(-14, sINPUT, vRESULT, ANY**)
+    [ HEX2BYTE
     s6 = "FF";
     work1 = 0;
-    block(HEX2BYTE, &s6, &work1, 0);
+    block(HEX2BYTE, &s6, &work1, 0); [ hex2byte(sINPUT, vRESULT)
     if (work1 != 255) {
       print("HEX2BYTE check1 failed.");
       goto(fail);
     }
     s6 = "ff";
     work1 = 0;
-    block(HEX2BYTE, &s6, &work1, 0);
+    block(HEX2BYTE, &s6, &work1, 0); [ hex2byte(sINPUT, vRESULT)
     if (work1 != 255) {
       print("HEX2BYTE check2 failed.");
       goto(fail);
     }
     print("HEX2BYTE check passed. Checking BYTE2HEX");
     
-    [ byte2hex block(-15, sRESULT, vINPUT, ANY**)
+    [ BYTE2HEX
     s6 = "";
     s7 = "ff";
     work1 = 255;
-    block(BYTE2HEX, &s6, &work1, 0);
+    block(BYTE2HEX, &s6, &work1, 0); [ byte2hex(sRESULT, vINPUT)
     if (!compare.strings(s6, s7)) {
       print("BYTE2HEX check1 failed.");
       goto(fail);
     }
     print("BYTE2HEX check passed. Checking STR.UPPER");
     
-    [ strUpper block(-16, sINPUT, sRESULT, ANY**)
+    [ STR.UPPER
     s6 = "abc123DEF";
     s7 = "";
     s8 = "ABC123DEF";
-    block(STR.UPPER, &s6, &s7, 0);
+    block(STR.UPPER, &s6, &s7, 0); [ str.upper(sINPUT, sRESULT)
     if (!compare.strings(s7, s8)) {
       print("STR.UPPER check1 failed.");
       goto(fail);
     }
     print("STR.UPPER check passed. Checking STR.LOWER");
     
-    [ strLower
+    [ STR.LOWER
     s6 = "abc123DEF";
     s7 = "";
     s8 = "abc123def";
-    block(STR.LOWER, &s6, &s7, 0);
+    block(STR.LOWER, &s6, &s7, 0); [ str.lower(sINPUT, sRESULT)
     if (!compare.strings(s7, s8)) {
       print("STR.LOWER check1 failed.");
       goto(fail);
     }
     print("STR.LOWER check passed. Checking BYTE2CHAR");
     
-    [ byte2char block(-18, sRESULT, vCHAR, ANY**)
+    [ BYTE2CHAR
     s6 = "";
     s7 = "A";
     work1 = 65;
-    block(BYTE2CHAR, &s6, &work1, 0);
+    block(BYTE2CHAR, &s6, &work1, 0); [ byte2char(sRESULT, vCHAR)
     if (!compare.strings(s6, s7)) {
       print("BYTE2CHAR check1 failed.");
       goto(fail);
     }
     print("BYTE2CHAR check passed. Checking CHAR2BYTE");
     
-    [ char2byte block(-19, sINPUT, vRESULT, ANY**)
+    [ CHAR2BYTE
     s6 = "ABCD";
     work1 = -1;
-    block(CHAR2BYTE, &s6, &work1, 0);
+    block(CHAR2BYTE, &s6, &work1, 0); [ char2byte(sCHAR, vRESULT)
     if (work1 != 65) {
       print("CHAR2BYTE check1 failed.");
       goto(fail);
     }
     s6 = "";
     work1 = -1;
-    block(CHAR2BYTE, &s6, &work1, 0);
+    block(CHAR2BYTE, &s6, &work1, 0); [ char2byte(sCHAR, vRESULT)
     if (work1 != 0) {
       print("CHAR2BYTE check2 failed.");
       goto(fail);
     }
     print("CHAR2BYTE check passed. Checking set.string.v");
     
-    [ set.string.v block(-20, sINPUT, vMSG, ANY**)
+    [ SET.STRING.V
     s6 = "";
     s7 = "test string";
     work1 = 3;
     work2 = 6;
-    block(SET.STRING.V, &work2, &work1, 0);
+    block(SET.STRING.V, &work2, &work1, 0); [ set.string.v(vSTR, vMSG)
     if (!compare.strings(s6, s7)) {
       print("set.string.v check1 failed.");
       goto(fail);
@@ -851,7 +887,7 @@ if (teststep == 28) {
     reset(newtest);
     
     print("Testing palette change; changing to red theme.");
-    block(SET.PALETTE, 0, &m37, 0);
+    block(SET.PALETTE, BYNUM, &m37, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
     [ check results
     get.string(strAnswer, "Palette change is correct? ", 22, 0, 3);
     goto(nextsubtest);
@@ -859,16 +895,16 @@ if (teststep == 28) {
   if (subteststep == 1) {
     display(24, 0, "%v63: PALETTE AND FADE TEST");
     print("Next test will fade to black, then fade in with same red palette.");
-    block(FADE.OUT, 0, 20, BLACK);
+    block(FADE.OUT, BYNUM, 20, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     [ one second pause
     work1 = 250;
-    cycle.time(o254, work1);
-    cycle.time(o254, work1);
-    cycle.time(o254, work1);
-    cycle.time(o254, work1);
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
     work1 = 20;
     work2 = 0;
-    block(FADE.IN, 1, &work1, &work2);
+    block(FADE.IN, BYVAR, &work1, &work2); [ fade.in(FN_MODE, DELAY, COLOR)
     [ check results
     get.string(strAnswer, "Fade to/from black worked? ", 22, 0, 3);
     goto(nextsubtest);
@@ -878,20 +914,19 @@ if (teststep == 28) {
     print("Next test will fade to white, and then fade in back to normal palette.");
     work1 = 20;
     work2 = 1;
-    block(FADE.OUT, 1, &work1, &work2);
-    [block(FADE.OUT, 0, 20, 1);
+    block(FADE.OUT, BYVAR, &work1, &work2); [ fade.out(FN_MODE, DELAY, COLOR)
     [one second pause
     work1 = 250;
-    cycle.time(o254, work1);
-    cycle.time(o254, work1);
-    cycle.time(o254, work1);
-    cycle.time(o254, work1);
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
+    cycle.time(DELAY.TIME, work1); [ delay.time(vMSEC)
     [ set palette, but don't update
     work1 = &m38;
     work2 = 1;
-    block(SET.PALETTE, 1, &work1, &work2);
+    block(SET.PALETTE, BYVAR, &work1, &work2); [ set.palette(FN_MODE, PALETTE, LOADONLY)
     [ fade in
-    block(FADE.IN, 0, 20, 1);
+    block(FADE.IN, BYNUM, 20, 1); [ fade.in(FN_MODE, DELAY, COLOR)
     [ check results
     get.string(strAnswer, "Fade to/from white worked? ", 22, 0, 3);
     goto(nexttest);
@@ -908,7 +943,7 @@ if (teststep == 29) {
     print("Original message: \n  '%m9'");
     s6 = m10;
     work1 = &m9;
-    block(SET.MSG, 0, &m9, &s6); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &m9, &s6); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     print("Changed message: \n  '%m9'");
     [ check results
     get.string(strAnswer, "Did message change? ", 22, 0, 3);
@@ -970,7 +1005,7 @@ if (teststep == 30) {
       reset(newtest);
       work2 = 1;
       s6 = "Rubik's cube";
-      block(SET.ITEM, 0, &i1, &s6);
+      block(SET.ITEM, BYNUM, &i1, &s6); [ set.item(FN_MODE, ITEM, STRNEW)
       if (!has(i1)) {
        get(i1);
       }
@@ -993,7 +1028,7 @@ if (teststep == 30) {
       s6 = "strange colored cube";
       work2 = &i1;
       work3 = &s6;
-      block(SET.ITEM, 1, &work2, &work3);
+      block(SET.ITEM, BYVAR, &work2, &work3); [ set.item(FN_MODE, ITEM, STRNEW)
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
@@ -1045,7 +1080,7 @@ if (teststep == 31) {
     [ total items (including i0('?')
     work2 = 0;
     work3 = 0;
-    block(ITEM.COUNT, &work2, &work3, 0);
+    block(ITEM.COUNT, &work2, &work3, 0); [ item.count(vLOCATION, vRESULT)
     if (work3 != 9) {
       print("ITEM.COUNT check1 failed.");
       goto(fail);
@@ -1053,14 +1088,14 @@ if (teststep == 31) {
     [ items in inventory
     work2 = 255;
     work3 = 0;
-    block(ITEM.COUNT, &work2, &work3, 0);
+    block(ITEM.COUNT, &work2, &work3, 0); [ item.count(vLOCATION, vRESULT)
     if (work3 != 1) {
       print("ITEM.COUNT check2 failed.");
       goto(fail);
     }
     work2 = 3;
     work3 = 0;
-    block(ITEM.COUNT, &work2, &work3, 0);
+    block(ITEM.COUNT, &work2, &work3, 0); [ item.count(vLOCATION, vRESULT)
     if (work3 != 2) {
       print("ITEM.COUNT check3 failed. %v48");
       goto(fail);
@@ -1089,7 +1124,7 @@ if (teststep == 32) {
                  [ formatcode number is NONNUMERIC or wrong value
                  [ gets used!
       s7 = "F0%s6F20EF43D879B60873DF83E88F1F200F53D9B60FF";
-      block(PIC.DRAW, 1, &s7, 0);
+      block(PIC.DRAW, COLOR_FILL, &s7, 0); [ pic.draw(FILLSTYLE, sCMDS)
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
@@ -1102,14 +1137,14 @@ if (teststep == 32) {
       display(24, 0, "%v63: PIC DRAW TEST");
       print("Next test will blank the entire screen to blue and hide ego. ");
       work1 = 65;
-      block(PIC.DRAW,-1, &work1, 0);
-      block(HIDE.OBJS, 1, 0, 0); [ hide.objs(MODE)
+      block(PIC.CLEAR, CLEAR_SCREEN, &work1, 0); [ pic.clear(vCOLORS)
+      block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE)
       get.string(strAnswer, "Did screen go blue and is ego gone? ", 22, 0, 3);
       [ restore original picture
       load.pic(currentRoom);
       draw.pic(currentRoom);
       discard.pic(currentRoom);
-      block(HIDE.OBJS, 0, 0, 0); [ hide.objs(MODE)
+      block(HIDE.OBJS, SHOW_OBJS, 0, 0); [ hide.objs(MODE)
       
       [ check results
       goto(nexttest);
@@ -1131,7 +1166,7 @@ if (teststep == 33) {
   if (controller(cLeftClick)) {
     if (mouseY < 168) {
       work1 = 0;
-      block(GET.PIXEL, &mouseX, &mouseY, &work1);
+      block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
       [ lower nibble is visual
       work2 = work1;
       if (IntVersion > VERSION_2272) {
@@ -1140,18 +1175,18 @@ if (teststep == 33) {
         [ upper nibble is priority
         work1 /= 16;
       } else {
-        block(MUL, 0, &work2, 16);
-        block(DIV, 0, &work2, 16);
+        block(MUL, BYNUM, &work2, 16); [ mul(FN_MODE, vA, B)
+        block(DIV, BYNUM, &work2, 16); [ div(FN_MODE, vA, B)
         [ upper nibble is priority
-        block(DIV, 0, &work1, 16);
+        block(DIV, BYNUM, &work1, 16); [ div(FN_MODE, vA, B)
       }
       [ convert to msg number
       work1 += 40;
       work2 += 40;
       work3 = 5;
-      block(SET.STRING.V, &work3, &work2, 0);
+      block(SET.STRING.V, &work3, &work2, 0); [ set.string.v(vSTR, vMSG)
       work3 = 6;
-      block(SET.STRING.V, &work3, &work1, 0);
+      block(SET.STRING.V, &work3, &work1, 0); [ set.string.v(vSTR, vMSG)
       tmpMsg = 39;
       tmpRow = 23;
       tmpCol = 0;
@@ -1169,7 +1204,7 @@ if (teststep == 33) {
   return();
 }
 
-[ TEST34: bitwise math functions (or, and, xor, bitshift)
+[ TEST34: bitwise math functions (or, and, xor, not, shl, shr)
 if (teststep == 34) {
   if (newtest) {
     display(24, 0, "%v63: BIT MATH TEST");
@@ -1179,14 +1214,14 @@ if (teststep == 34) {
     
     [ BIT.AND
     work1 = 255;
-    block(BIT.AND, 0, &work1, 3);
+    block(BIT.AND, BYNUM, &work1, 3); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 != 3) {
       print("BIT.AND check1 failed.");
       goto(fail);
     }
     work1 = 255;
     work2 = 6;
-    block(BIT.AND, 1, &work1, &work2);
+    block(BIT.AND, BYVAR, &work1, &work2); [ bit.and(FN_MODE, VAR, MASK)
     if (work1 != 6) {
       print("BIT.AND check2 failed.");
       goto(fail);
@@ -1195,14 +1230,14 @@ if (teststep == 34) {
     
     [ BIT.OR
     work1 = 129;
-    block(BIT.OR, 0, &work1, 3);
+    block(BIT.OR, BYNUM, &work1, 3); [ bit.or(FN_MODE, VAR, MASK)
     if (work1 != 131) {
       print("BIT.OR check1 failed.");
       goto(fail);
     }
     work1 = 129;
     work2 = 3;
-    block(BIT.OR, 1, &work1, &work2);
+    block(BIT.OR, BYVAR, &work1, &work2); [ bit.or(FN_MODE, VAR, MASK)
     if (work1 != 131) {
       print("BIT.OR check2 failed.");
       goto(fail);
@@ -1211,14 +1246,14 @@ if (teststep == 34) {
     
     [ BIT.XOR
     work1 = 129;
-    block(BIT.XOR, 0, &work1, 9);
+    block(BIT.XOR, BYNUM, &work1, 9); [ bit.xor(FN_MODE, VAR, MASK)
     if (work1 != 136) {
       print("BIT.XOR check1 failed.");
       goto(fail);
     }
     work1 = 129;
     work2 = 9;
-    block(BIT.XOR, 1, &work1, &work2);
+    block(BIT.XOR, BYVAR, &work1, &work2); [ bit.xor(FN_MODE, VAR, MASK)
     if (work1 != 136) {
       print("BIT.XOR check2 failed.");
       goto(fail);
@@ -1227,7 +1262,7 @@ if (teststep == 34) {
     
     [ BIT.NOT
     work1 = 170;
-    block(BIT.NOT, 0, &work1, 0);
+    block(BIT.NOT, 0, &work1, 0); [ bit.not(VAR)
     if (work1 != 85) {
       print("BIT.NOT check1 failed.");
       goto(fail);
@@ -1236,14 +1271,14 @@ if (teststep == 34) {
     
     [ BIT.SHL
     work1 = 255;
-    block(BIT.SHL, 0, &work1, 4);
+    block(BIT.SHL, BYNUM, &work1, 4); [ bit.shl(FN_MODE, VAR, SHIFT)
     if (work1 != 240) {
       print("BIT.SHL check1 failed.");
       goto(fail);
     }
     work1 = 255;
     work2 = 4;
-    block(BIT.SHL, 1, &work1, &work2);
+    block(BIT.SHL, BYVAR, &work1, &work2); [ bit.shl(FN_MODE, VAR, SHIFT)
     if (work1 != 240) {
       print("BIT.SHL check2 failed.");
       goto(fail);
@@ -1252,14 +1287,14 @@ if (teststep == 34) {
     
     [ BIT.SHR
     work1 = 255;
-    block(BIT.SHR, 0, &work1, 4);
+    block(BIT.SHR, BYNUM, &work1, 4); [ bit.shr(FN_MODE, VAR, SHIFT)
     if (work1 != 15) {
       print("BIT.SHR check1 failed.");
       goto(fail);
     }
     work1 = 255;
     work2 = 4;
-    block(BIT.SHR, 1, &work1, &work2);
+    block(BIT.SHR, BYVAR, &work1, &work2); [ bit.shr(FN_MODE, VAR, SHIFT)
     if (work1 != 15) {
       print("BIT.SHR check2 failed.");
       goto(fail);
@@ -1314,9 +1349,9 @@ if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[***************************************
+[ DECLARED MESSAGES
+[***************************************
 
 #message 3 "test string"
 

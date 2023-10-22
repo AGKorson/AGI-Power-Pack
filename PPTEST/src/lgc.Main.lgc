@@ -1,6 +1,6 @@
-[ ********************************************************************
+[*********************************************************************
 [
-[ lgc.Main: Main logic
+[ lgc.Main
 [
 [ This logic runs in every interpreter cycle and calls
 [ other logics as needed.
@@ -13,7 +13,7 @@
 [ (  v0 - v26;     f0 - f16, f20)
 [
 [ global = usable and accessible by all logics
-[ ( v27 - v219;   clickmove - f19, f21 - f219)
+[ ( v27 - v219;   f17 - f19, f21 - f219)
 [
 [ local = usable and accessible by single room
 [ (v220 - v239;  f220 - f239)
@@ -24,16 +24,19 @@
 [ Local and dynamic variables/flags are reset whenever a new room is
 [ loaded.
 [
-[ ********************************************************************
+[*********************************************************************
 
-[ **************************************
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define rndNum                     v255
 
-[ **************************************
+[***************************************
 [ ERROR CHECK
-[ **************************************
+[***************************************
 
 [ if one of the few trappable errors in AGI is encountered, the game
 [ is probably not able to continue; make an announcement to the player
@@ -42,9 +45,9 @@ if (errorNumber > 0) {
   call(lgc.Error); 
 }
 
-[ **************************************
+[***************************************
 [ GAME START
-[ **************************************
+[***************************************
 if (currentRoom == 0) {
   [ when the game starts, the current room is zero, so all the
   [ setup/initialization code goes here
@@ -295,11 +298,9 @@ if (currentRoom == 0) {
   }
 }
 
-[ **************************************
-[ EVERY CYCLE
-[ **************************************
-
-[ if a new room has just been loaded
+[***************************************
+[ NEW ROOM
+[***************************************
 if (newRoom) {
   [ Note: Everything other than logic 0 is discarded
   [ from memory when new.room is executed
@@ -327,6 +328,10 @@ if (newRoom) {
   statusSeconds = 255; 
 }
 
+[***************************************
+[ EVERY CYCLE
+[***************************************
+
 [ check for menu change requests
 if (changeMenu) {
   reset(changeMenu);
@@ -335,22 +340,22 @@ if (changeMenu) {
     #message 71 "CHANGE LGC0 MSG"
     print("Original message: \n  '%m70'");
     s6 = m71;
-    block(SET.MSG, 0, &m70, &s6); [ set.msg(BYVAR, MSGOLD, STRNEW)
+    block(SET.MSG, BYNUM, &m70, &s6); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     print("Changed message: \n  '%m70'");
   } else {
     work3 = &m14;
     work2 = &s6;
     s6 = m44;
-    block(SET.MSG, 1, &work3, &work2);
+    block(SET.MSG, BYVAR, &work3, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     work3 = &m18;
     s6 = m45;
-    block(SET.MSG, 1, &work3, &work2);
+    block(SET.MSG, BYVAR, &work3, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     work3 = &m19;
     s6 = m46;
-    block(SET.MSG, 1, &work3, &work2);
+    block(SET.MSG, BYVAR, &work3, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     work3 = &m20;
     s6 = m47;
-    block(SET.MSG, 1, &work3, &work2);
+    block(SET.MSG, BYVAR, &work3, &work2); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     disable.item(cInitJoy);
   }
 }
@@ -371,13 +376,13 @@ if (changeMenu) {
 if (restoreMenu) {
   reset(restoreMenu);
   s6 = m40;
-  block(SET.MSG, 0, &m14, &s6);
+  block(SET.MSG, BYNUM, &m14, &s6); [ set.msg(FN_MODE, MSGOLD, STRNEW)
   s6 = m41;
-  block(SET.MSG, 0, &m18, &s6);
+  block(SET.MSG, BYNUM, &m18, &s6); [ set.msg(FN_MODE, MSGOLD, STRNEW)
   s6 = m42;
-  block(SET.MSG, 0, &m19, &s6);
+  block(SET.MSG, BYNUM, &m19, &s6); [ set.msg(FN_MODE, MSGOLD, STRNEW)
   s6 = m43;
-  block(SET.MSG, 0, &m20, &s6);
+  block(SET.MSG, BYNUM, &m20, &s6); [ set.msg(FN_MODE, MSGOLD, STRNEW)
   enable.item(cInitJoy);
 }
 
@@ -420,9 +425,9 @@ if (deathType > 0) {
   return();
 }
 
-[ ***********************
+[***************************************
 [ CHECK CONTROLLER INPUT
-[ *********************** 
+[***************************************
 
 [ these controllers are only checked if game functions are active
 if (!disableGameFunctions) {
@@ -629,9 +634,9 @@ if ((said("clock") || controller(cClock))) {
   }
 }
 
-[ ***********************
+[***************************************
 [ NON-CONTROLLER CHECKS
-[ *********************** 
+[***************************************
 
 [ if clock display is needed
 if (clockOn && !disableGameFunctions) {
@@ -652,7 +657,7 @@ if (clockOn && !disableGameFunctions) {
 [ if this is first cycle since restore game executed
 if (isset(gameRestored)) {
   [ make sure input area is cleared
-  clear.lines(23, 24, 0);
+  clear.lines(23, 24, BLACK);
   [ debugging off by default
   reset(debugging);
   if (IntVersion > VERSION_2272) {
@@ -736,12 +741,11 @@ oldSeconds = elapsedSeconds;
 oldMinutes = elapsedMinutes;
 oldHours = elapsedHours;
 oldDays = elapsedDays;
-[pause();
 return();
 
-[ **************************************
-[ MESSAGES
-[ **************************************
+[***************************************
+[ DECLARED MESSAGES
+[***************************************
 #message 1 "AGI"
 #message 2 "About      "
 #message 3 "Help   <F1>"

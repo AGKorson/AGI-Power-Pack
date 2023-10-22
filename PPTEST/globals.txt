@@ -1,189 +1,99 @@
 [
 [ global defines file for DGN
 [
-#define cMenu                   c0 [ menu: none;    key: ESC; used to display the menu
-#define cAbout                  c1 [ menu: File;    key: none
-#define cHelp                   c2 [ menu: File;    key: F1
-#define cSave                   c3 [ menu: File;    key: F5
-#define cRestore                c4 [ menu: File;    key: F7
-#define cRestart                c5 [ menu: File;    key: F9
-#define cQuit                   c6 [ menu: File;    key: Alt+Q
-#define cShowObj                c7 [ menu: Action;  key: F4
-#define cStatus                 c8 [ menu: Action;  key: Tab
-#define cToggleSound            c9 [ menu: Special; key: F2
-#define cToggleMonitor         c10 [ menu: Special; key: Ctrl+R
-#define cClock                 c11 [ menu: Special; key: F6
-#define cInitJoy               c12 [ menu: Special; key: Ctrl+J
-#define cPause                 c13 [ menu: Special; key: none (ESC to show menu also pauses game)
-#define cNormal                c14 [ menu: Speed;   key: none
-#define cSlow                  c15 [ menu: Speed;   key: none
-#define cFast                  c16 [ menu: Speed;   key: none
-#define cFastest               c17 [ menu: Speed;   key: none
-#define cDebugHelp             c18 [ menu: Debug;   key: none
-#define cShowEgo               c19 [ menu: Debug;   key: Alt+E
-#define cShowPriority          c20 [ menu: Debug;   key: Alt+P
-#define cShowMem               c21 [ menu: Debug;   key: Alt+M
-#define cObjInfo               c22 [ menu: Debug;   key: Alt+I
-#define cXY                    c23 [ menu: Debug;   key: Alt+X
-#define cGimme                 c24 [ menu: Debug;   key: none
-#define cCancelLine            c25 [ menu: none;    key: Ctrl+C
-#define cEchoLine              c26 [ menu: none;    key: F3
-#define cDebug                 c27 [ menu: none;    key: Alt+D
-#define cCrescendo             c28 [ menu: none;    key: +
-#define cDecrescendo           c29 [ menu: none;    key: -
-#define cVersion               c30 [ menu: none;    key: Alt+V
-#define cDummy                 c31 [ separator used in menus
-#define NORMAL_STEP_SIZE         1 [ number of times player has entered a word that is on the 'bad word' list
-#define MAX_SCORE_VALUE          3
-#define FASTEST_SPEED            0
-#define FAST_SPEED               1
-#define NORMAL_SPEED             2
-#define SLOW_SPEED               4
+#define cMenu                  c0 [ menu: none;    key: ESC; used to display the menu
+#define cAbout                 c1 [ menu: File;    key: none
+#define cHelp                  c2 [ menu: File;    key: F1
+#define cSave                  c3 [ menu: File;    key: F5
+#define cRestore               c4 [ menu: File;    key: F7
+#define cRestart               c5 [ menu: File;    key: F9
+#define cQuit                  c6 [ menu: File;    key: Alt+Q
+#define cShowObj               c7 [ menu: Action;  key: F4
+#define cStatus                c8 [ menu: Action;  key: Tab
+#define cToggleSound           c9 [ menu: Special; key: F2
+#define cToggleMonitor        c10 [ menu: Special; key: Ctrl+R
+#define cClock                c11 [ menu: Special; key: F6
+#define cInitJoy              c12 [ menu: Special; key: Ctrl+J
+#define cPause                c13 [ menu: Special; key: none (ESC to show menu also pauses game)
+#define cNormal               c14 [ menu: Speed;   key: none
+#define cSlow                 c15 [ menu: Speed;   key: none
+#define cFast                 c16 [ menu: Speed;   key: none
+#define cFastest              c17 [ menu: Speed;   key: none
+#define cDebugHelp            c18 [ menu: Debug;   key: none
+#define cShowEgo              c19 [ menu: Debug;   key: Alt+E
+#define cShowPriority         c20 [ menu: Debug;   key: Alt+P
+#define cShowMem              c21 [ menu: Debug;   key: Alt+M
+#define cObjInfo              c22 [ menu: Debug;   key: Alt+I
+#define cXY                   c23 [ menu: Debug;   key: Alt+X
+#define cGimme                c24 [ menu: Debug;   key: none
+#define cCancelLine           c25 [ menu: none;    key: Ctrl+C
+#define cEchoLine             c26 [ menu: none;    key: F3
+#define cDebug                c27 [ menu: none;    key: Alt+D
+#define cCrescendo            c28 [ menu: none;    key: +
+#define cDecrescendo          c29 [ menu: none;    key: -
+#define cVersion              c30 [ menu: none;    key: Alt+V
+#define cDummy                c31 [ separator used in menus
+#define NORMAL_STEP_SIZE        1 [ number of times player has entered a word that is on the 'bad word' list
+#define MAX_SCORE_VALUE         3
+#define FASTEST_SPEED           0
+#define FAST_SPEED              1
+#define NORMAL_SPEED            2
+#define SLOW_SPEED              4
 #define cursor                "_"
-#define cLeftClick             c32 [ mouse left button click
-#define cLeftDblClick          c33
-#define cRightClick            c34
-#define cRightDblClick         c35
-#define cNext                  c36 [ menu: nmone;    key: CTRL+Z - next test
-#define mouse                 c255
-#define clickmove              f17 [ when true, use left button to set ego destination point
-#define 4channelsound          f18 [ when true, use four channel sound instead of PC speaker
-#define cycleEgoAtRest         f30
-#define debugging              f32
-#define disableGameFunctions   f33
-#define clockOn                f34
-#define showCoords             f35
-#define soundDone              f36
-#define musicDone              f37
-#define egoExplored            f38
-#define terminalOn             f39 [ when true, terminal is active; need to disable printing, menus, help, etc to preserve the display
-#define saveCursor             f40 [ when set, the current cursor gets saved in logic 0
-#define restoreCursor          f41 [ when set, the default data for current cursor is restored
-#define turboMode              f42 [ when true, turbo option is set
-#define saveCustomInst         f43 [ used to update the custom instrument data in Logic0
-#define ppTesting              f44
-#define newtest                f45
-#define graphics80             f46
-#define changeMenu             f47
-#define restoreMenu            f48
-#define hasMouse               f49
-#define hasMIDI                f50
-#define hasFM                  f51
-#define setAutoCycle           f52
-#define unknownWord             s1
-#define palette                 s2 [ 96 bytes; uses s2, s3, s4
-#define mouseX                 v27
-#define mouseY                 v28
-#define mouseBtn               v29
-#define IntVersion             v30
-#define VERSION_2089             1
-#define VERSION_2272             2
-#define VERSION_2411             3
-#define VERSION_2425             4
-#define VERSION_2426             5
-#define VERSION_2435             6
-#define VERSION_2439             7
-#define VERSION_2440             8
-#define VERSION_2903             9
-#define VERSION_2911            10
-#define VERSION_2912            11
-#define VERSION_2915            12
-#define VERSION_2917            13
-#define VERSION_2936            14
-#define VERSION_3002086         15
-#define VERSION_3002098         16
-#define VERSION_3002102         17
-#define VERSION_3002107         18
-#define VERSION_3002149         19
-#define oldSeconds             v31
-#define oldMinutes             v32
-#define oldHours               v33
-#define oldDays                v34
-#define deathType              v35
-#define deathTimer             v36
-#define clearStatusSeconds     v37 [ the seconds value currently displayed on status bar when showCoords is TRUE; when this value is different from game seconds, the clock is updated
-#define egoX                   v38
-#define egoY                   v39
-#define oldEgoX                v40
-#define oldEgoY                v41
-#define oldEgoDir              v42
-#define msgBoxBG               v43
-#define msgBoxFG               v44
-#define msgBoxBorder           v45
-#define work1                  v46 [ this is a globally available flag that can be used for counting or any other temporary purpose
-#define work2                  v47
-#define work3                  v48
-#define statusSeconds          v49 [ used by death handler to time display of messages and restart
-#define egoCycleTime           v59
-#define egoStepTime            v60
-#define egoStepSize            v61
-#define badWordCount           v62
-#define teststep               v63
-#define subteststep            v64
-#define 2E_MOUSE                -1
-#define SET.CURSOR              -1
-#define SET.SNDMODE             -2
-#define SET.INST                -3
-#define CUSTOM.INST             -4
-#define MSGBOX.COLOR.V          -1
-#define MSGBOX.COLOR            -2
-#define CONFIGURE.MOUSE         -3
-#define STR.LEN                 -4
-#define STR.COPY                -5
-#define STR.CONCAT              -6
-#define STR.LEFT                -7
-#define STR.RIGHT               -8
-#define STR.MID                 -9
-#define STR.TRIM               -10
-#define INSTR                  -11
-#define STR.FORMAT             -12
-#define STR2BYTE               -13
-#define HEX2BYTE               -14
-#define BYTE2HEX               -15
-#define STR.UPPER              -16
-#define STR.LOWER              -17
-#define BYTE2CHAR              -18
-#define CHAR2BYTE              -19
-#define SET.STRING.V           -20
-#define SET.PALETTE            -21
-#define FADE.IN                -22
-#define FADE.OUT               -23
-#define SET.MSG                -24
-#define SET.ITEM               -25
-#define ITEM.COUNT             -26
-#define PIC.DRAW               -27
-#define GET.PIXEL              -28
-#define START.TIMER            -29
-#define TOGGLE.TIMER           -30
-#define BIT.AND                -31
-#define BIT.OR                 -32
-#define BIT.XOR                -33
-#define BIT.NOT                -34
-#define BIT.SHL                -35
-#define BIT.SHR                -36
-#define GET.DATE               -37
-#define GET.TIME               -38
-#define GET.DAYOFWEEK          -39
-#define NEW.FILE               -40
-#define SAVE.STRING            -41
-#define READ.STRING            -42
-#define DELETE.FILE            -43
-#define GET.SHIFTSTATE         -44
-#define MUL                    -45
-#define DIV                    -46
-#define HIDE.OBJS              -47
-#define PAUSE.CLOCK            -48
-#define SND.V.FN               -49
-#define LOAD.SOUND.V             0
-#define PLAY.SOUND.V             1
-#define DISCARD.SOUND.V          2
-#define ON.OBJ                  -1
-#define SET.INPUT             s255
-#define SET.CMPMODE           s254
-#define COMPARE_AGI             m0
-#define COMPARE_TEXT            m1
-#define COMPARE_BINARY          m2
-#define TRIM                     0
-#define LTRIM                    1
-#define RTRIM                    2
-#define AGITRIM                  3
+#define cLeftClick            c32 [ mouse left button click
+#define cLeftDblClick         c33
+#define cRightClick           c34
+#define cRightDblClick        c35
+#define cNext                 c36 [ menu: nmone;    key: CTRL+Z - next test
+#define cycleEgoAtRest        f30
+#define debugging             f32
+#define disableGameFunctions  f33
+#define clockOn               f34
+#define showCoords            f35
+#define soundDone             f36
+#define musicDone             f37
+#define egoExplored           f38
+#define terminalOn            f39 [ when true, terminal is active; need to disable printing, menus, help, etc to preserve the display
+#define saveCursor            f40 [ when set, the current cursor gets saved in logic 0
+#define restoreCursor         f41 [ when set, the default data for current cursor is restored
+#define turboMode             f42 [ when true, turbo option is set
+#define saveCustomInst        f43 [ used to update the custom instrument data in Logic0
+#define ppTesting             f44
+#define newtest               f45
+#define graphics80            f46
+#define changeMenu            f47
+#define restoreMenu           f48
+#define hasMouse              f49
+#define hasMIDI               f50
+#define hasFM                 f51
+#define setAutoCycle          f52
+#define unknownWord            s1
+#define palette                s2 [ 96 bytes; uses s2, s3, s4
+#define oldSeconds            v31
+#define oldMinutes            v32
+#define oldHours              v33
+#define oldDays               v34
+#define deathType             v35
+#define deathTimer            v36
+#define clearStatusSeconds    v37 [ the seconds value currently displayed on status bar when showCoords is TRUE; when this value is different from game seconds, the clock is updated
+#define egoX                  v38
+#define egoY                  v39
+#define oldEgoX               v40
+#define oldEgoY               v41
+#define oldEgoDir             v42
+#define msgBoxBG              v43
+#define msgBoxFG              v44
+#define msgBoxBorder          v45
+#define work1                 v46 [ this is a globally available flag that can be used for counting or any other temporary purpose
+#define work2                 v47
+#define work3                 v48
+#define statusSeconds         v49 [ used by death handler to time display of messages and restart
+#define egoCycleTime          v59
+#define egoStepTime           v60
+#define egoStepSize           v61
+#define badWordCount          v62
+#define teststep              v63
+#define subteststep           v64
+#define mouseX                v65
+#define mouseY                v66
+#define mouseBtn              v67

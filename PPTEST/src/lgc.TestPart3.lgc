@@ -1,10 +1,15 @@
+[*********************************************************************
 [ 
 [ lgc.TestPart3
 [ 
+[*********************************************************************
 
-[ **************************************
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
 [ LOCAL DEFINES
-[ **************************************
+[***************************************
 #define strN              s3
 #define strNo             s4
 #define strAnswer         s5
@@ -22,6 +27,10 @@
 #define counter1          v230
 #define counter2          v231
 
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [***********************************************************
 [
@@ -53,35 +62,32 @@ if (teststep == 35) {
     work2 = 1;
     work3 = 1;
     [ get date
-    block(GET.DATE, &work1, &work2, &work3);
+    block(GET.DATE, &work1, &work2, &work3); [ get.date(vYEAR, vMONTH, vDAY)
     [ convert month to text
     work2 += 70;
     tmpVal = 6;
-    block(SET.STRING.V, &tmpVal, &work2, 0);
+    block(SET.STRING.V, &tmpVal, &work2, 0); [ set.string.v(vSTR, vMSG)
     [ get day of week
     work2 = 0;
-    block(GET.DAYOFWEEK, &work2, 0, 0);
+    block(GET.DAYOFWEEK, &work2, 0, 0); [ get.dayofweek(vDOW)
     work2 += 60;
     tmpVal = 5;
-    block(SET.STRING.V, &tmpVal, &work2, 0);
+    block(SET.STRING.V, &tmpVal, &work2, 0); [ set.string.v(vSTR, vMSG)
     print("Today is %s5 %s6 %v48, 20%v46.");
     
     [ time
     work1 = 0;
     work2 = 0;
     work3 = 0;
-    block(GET.TIME, &work1, &work2, &work3);
+    block(GET.TIME, &work1, &work2, &work3); [ get.time(vHOUR, vMINUTE, vSECOND)
     if (work1 > 11) {
       s5 = "PM";
+      work1 -= 12;
     } else {
       s5 = "AM";
     }
     if (work1 == 0) {
       work1 = 12;
-    } else {
-      if (work1 > 12) {
-        work1 -= 12;
-      }
     }
     print("The current time is\n    %v46:%v47|2:%v48|2 %s5");
     
@@ -106,7 +112,7 @@ if (teststep == 36) {
     work1 = &s5;
     work2 = &m1;
     :clearstr
-      block(SET.STRING.V, &work1, &work2, 0);
+      block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
       ++work1;
     if (work1 < 12) {
       goto(clearstr);
@@ -114,7 +120,7 @@ if (teststep == 36) {
     
     [ get item count
     work2 = 0;
-    block(ITEM.COUNT, &work2, &work1, 0);
+    block(ITEM.COUNT, &work2, &work1, 0); [ item.count(vLOCATION, vRESULT)
     [ if greater than 7, limit it to 7 (six plus i0)
     if (work1 > 7) {
       work1 = 7;
@@ -124,14 +130,14 @@ if (teststep == 36) {
     work3 = &s6; [ start with s6
     :setstr
       s2 = "%o47";
-      block(STR.FORMAT, &s2, &s2, 0);
+      block(STR.FORMAT, &s2, &s2, 0); [ str.format(sINPUT, sRESULT)
       [ update msg 2 then use set.string.v; could also just use str.copy!
-      block(SET.MSG, 0, &m2, &s2);
+      block(SET.MSG, BYNUM, &m2, &s2); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       tmpVal = &m2;
-      block(SET.STRING.V, &work3, &tmpVal, 0);
+      block(SET.STRING.V, &work3, &tmpVal, 0); [ set.string.v(vSTR, vMSG)
       [ restore blank line
       s2 = m1;
-      block(SET.MSG, 0, &m2, &s2);
+      block(SET.MSG, BYNUM, &m2, &s2); [ set.msg(FN_MODE, MSGOLD, STRNEW)
       ++work3;
       ++work2;
       --work1;
@@ -142,7 +148,7 @@ if (teststep == 36) {
     s2 = "itemlist.dat";
     work1 = &s6;
     work2 = &s11;
-    block(NEW.FILE, &s2, &work1, &work2);
+    block(NEW.FILE, &s2, &work1, &work2); [ new.file(sFILENAME, vSTART, vEND)
     [ check for error
     if (errorParameter != 0) {
       print("File IO error. Aborting this test.");
@@ -164,7 +170,7 @@ if (teststep == 36) {
     work2 = 6;
     s6 = m1;
     s6 = "LINE1";
-    block(SAVE.STRING, &s2, &work1, &work2);
+    block(SAVE.STRING, &s2, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
     [ check for error
     if (errorParameter != 0) {
       print("File IO error. Aborting this test.");
@@ -176,7 +182,7 @@ if (teststep == 36) {
     work1 = 2;
     s6 = m1;
     s6 = "LINE3";
-    block(SAVE.STRING, &s2, &work1, &work2);
+    block(SAVE.STRING, &s2, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
     [ check for error
     if (errorParameter != 0) {
       print("File IO error. Aborting this test.");
@@ -197,7 +203,7 @@ if (teststep == 36) {
     work1 = 0;
     work2 = 8;
     s9 = "LINE1";
-    block(READ.STRING, &s2, &work1, &work2);
+    block(READ.STRING, &s2, &work1, &work2); [ read.string(sFILENAME, vINDEX, vSTRIN)
     [ check for error
     if (errorParameter != 0) {
       print("File IO error. Aborting this test.");
@@ -213,7 +219,7 @@ if (teststep == 36) {
     [ try next index
     work1 = 2;
     s9 = "LINE3";
-    block(READ.STRING, &s2, &work1, &work2);
+    block(READ.STRING, &s2, &work1, &work2); [ read.string(sFILENAME, vINDEX, vSTRIN)
     [ check for error
     if (errorParameter != 0) {
       print("File IO error. Aborting this test.");
@@ -228,7 +234,7 @@ if (teststep == 36) {
     }
     
     print("Read from file check passed. The file will now be deleted.");
-    block(DELETE.FILE, &s2, 0, 0);
+    block(DELETE.FILE, &s2, 0, 0); [ delete.file(sFILENAME)
     [ check for error
     if (errorParameter != 0) {
       print("File IO error. Aborting this test.");
@@ -257,17 +263,17 @@ if (teststep == 37) {
   work1 = 0;
   block(GET.SHIFTSTATE, &work1, 0, 0); [ get.shiftstate(vSTATE)
   work2 = work1;
-  block(BIT.AND, 0, &work2, 1);
+  block(BIT.AND, BYNUM, &work2, 1); [ bit.and(FN_MODE, VAR, MASK)
   if (work2) {
     display(24, 4, "SHIFT");
   }
   work2 = work1;
-  block(BIT.AND, 0, &work2, 2);
+  block(BIT.AND, BYNUM, &work2, 2); [ bit.and(FN_MODE, VAR, MASK)
   if (work2) {
     display(24, 10, "CTRL");
   }
   work2 = work1;
-  block(BIT.AND, 0, &work2, 4);
+  block(BIT.AND, BYNUM, &work2, 4); [ bit.and(FN_MODE, VAR, MASK)
   if (work2) {
     display(24, 15, "ALT");
   }
@@ -348,7 +354,7 @@ if (teststep == 39) {
             "Press CTRL+Z or enter 'continue' when done testing."); 
     }
     if (controller(cLeftClick)) {
-      if (posn(ego, ON.OBJ, 0, &mouseX, &mouseY)) {
+      if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
         print("ON EGO");
       }
     }
@@ -368,7 +374,7 @@ if (teststep == 39) {
             "Press CTRL+Z or enter 'continue' when done testing.");
     }
     if (controller(cLeftClick)) {
-      if (posn(ego, ON.OBJ, 1, &mouseX, &mouseY)) {
+      if (posn(ego, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
         print("ON EGO PIXEL");
       }
     }
@@ -415,7 +421,7 @@ if (teststep == 41) {
       reset(newtest);
       print("Hiding ego. Confirm he's gone. "
             "Press CTRL+Z or enter 'continue' when done testing."); 
-      block(-47, 1, 0, 0);
+      block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE)
     }
     
     [ check for continue
@@ -431,7 +437,7 @@ if (teststep == 41) {
       reset(newtest);
       print("Restoring ego. Confirm he's back. "
             "Press CTRL+Z or enter 'continue' when done testing."); 
-      block(-47, 0, 0, 0);
+      block(HIDE.OBJS, SHOW_OBJS, 0, 0); [ hide.objs(MODE)
     }
     
     [ check for continue
@@ -453,10 +459,10 @@ if (teststep == 42) {
           "Press CTRL+Z or enter 'continue' when done testing."); 
   }
   if (said("pause", "clock")) {
-    block(-48, 1, 0, 0);
+    block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(mode)
   }
   if (said("start", "clock")) {
-    block(-48, 0, 0, 0);
+    block(PAUSE.CLOCK, START_CLOCK, 0, 0); [ pause.clock(mode)
   }
   display(23, 0, "clock: %v13|2:%v12|2:%v11|2");
   
@@ -484,14 +490,14 @@ if (teststep == 43) {
 [    print("Loading and playing a sound by variable - ");
 [    work1 = 1;
 [    work2 = 240;
-[    block(-49, 0, &work1, 0);
-[    block(-49, 1, &work1, &work2);
+[    block(SND.V.FN, LOAD.SOUND.V, &work1, 0); [ load.sound.v(vSNDNUM)
+[    block(SND.V.FN, SOUND.V, &work1, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
 [  }
 [  if (f240) {
 [    reset(f240);
 [    print("sound is done, discarding it.");
 [    work1 = 1;
-[    block(-49, 2, &work1, 0);
+[    block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
 [  }
 [  [ check for continue
 [  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
@@ -511,18 +517,18 @@ if (teststep == 44) {
             "reset after a restart.");
       print("Switching to 80 column text mode, then 80 column graphics mode.");
       [ switch to text80;
-      configure.screen(-1, 1, 1);
+      configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
       set(graphics80);
-      configure.screen(-1, 0, 1);
+      configure.screen(SCREEN.MODE, 0, 80COL); [ screen.mode(MODE, WIDTH)
       set(graphics80);
       if (hasMouse) {
         [ set mouse on with custom cursor; 
         if (IntVersion > VERSION_2272) {
-          enable.item(mouse);
+          enable.item(mouse); [ show.mouse()
         } else {
-          set.key(1, 0, c251);
+          set.key(2E_SHOW_MOUSE, 0, MOUSE.FN); [ show.mouse()
         }
-        set.key(0, &m102, mouse);
+        set.key(BYNUM, &m102, mouse); [ set.cursor(FN_MODE, MSGNUM)
         print("Enabling mouse with a custom cursor.");
         [ save it to compare after restarting
         s6 = "y";
@@ -533,24 +539,24 @@ if (teststep == 44) {
       block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)
       print("Setting custom message box colors.");
       [ set a custom palette
-      block(SET.PALETTE, 0, &m3, 0);
+      block(SET.PALETTE, BYNUM, &m3, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       print("Swapping BLACK and WHITE in the color palette.");
       [ point and click on, straight mode
       print("Enabling click-to-move in 'straight' mode.");
-      set(clickmove);
-      work1 = -1;
-      step.size(ego, work1);
+      set(click2move); [ enable.click2move()
+      work1 = MOVE_DIRECT;
+      step.size(ego, work1); [ set.click2move.mode(vMODE)
       [ setting speed to 60 cps
       print("Setting game speed to 60 cycles per second.");
-      work1 = 1;
-      cycle.time(o255, work1);
+      work1 = TURBO_SPEED;
+      cycle.time(SET.SPEED, work1); [ set.speed(vMODE)
       animationInterval = 1;
       dblClickDelay = 12;
       [ string compare to binary;
       print("Setting string compare to binary mode.");
-      set.string(s254, m2);
+      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
       [ custom status line on
-      set.cursor.char(" l6, v3, v27, v28, v29, f9");
+      set.cursor.char(" l6, v3, v65, v66, v67, f9"); [ enable.custom.status()
       status.line.off();
       status.line.on();
       print("Enabling custom status line.");
@@ -558,22 +564,22 @@ if (teststep == 44) {
       print("Starting a countdown timer.");
       counter1 = 0;
       counter2 = 99;
-      block(START.TIMER, &counter1, &counter2, &f220);
+      block(START.TIMER, &counter1, &counter2, &f220); [ start.timer(vMIN, vSEC, fDONE)
       [ sound to 4channel mode
       load.sound(m.Theme);
       if (hasMIDI) {
         print("Enabling MIDI sound playback.");
-        set(4channelsound);
-        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);
+        set(4channelsound); [ enable.4chan()
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
 
         sound(m.Theme, soundDone);
       } else {
         if (hasFM) {
           print("Enabling FM Synth sound playback.");
           
-          set(4channelsound);
+          set(4channelsound); [ enable.4chan()
           work1 = 0;
-          set.key(0, 0, c254);  [ set.key(MODE, ANY***, c254);
+          set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
           sound(m.Theme, soundDone);
         }
       }
@@ -656,9 +662,9 @@ if (teststep == 44) {
       }
       graphics();
       print("40 Column graphics mode.\nPress ENTER to continue.");
-      configure.screen(-1, 0, 1);
+      configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
       print("80 Column graphics mode.\nPress ENTER to continue.");
-      configure.screen(-1, 1, 1);
+      configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
       display(12, 7, "   80 Column text mode.\n        Press any key to continue.");
       lastChar = 0;
       :wait2
@@ -666,7 +672,7 @@ if (teststep == 44) {
         goto(wait2);
       }
       [ reset to graphics 40
-      configure.screen(-1, 0, 0);
+      configure.screen(SCREEN.MODE, GRAFMODE, 40COL); [ screen.mode(MODE, WIDTH)
       print("Finally, back to 40 Column graphics.");
       [ check results
       clear.lines(23, 24, BLACK);
@@ -718,7 +724,7 @@ if (teststep == 44) {
               "default instruments.");
         print("When done testing, press CTRL+Z or enter 'continue' to "
               "move to next test.");
-        set(4channelsound);
+        set(4channelsound); [ enable.4chan()
         [ should be in fm mode by default
         sound(m.Theme, soundDone);
       }
@@ -742,7 +748,7 @@ if (teststep == 44) {
               "default instruments.");
         print("When done testing, press CTRL+Z or enter 'continue' to "
               "move to next test.");
-        set.key(1, 0, c254); [  set.key(MODE, ANY***, c254);
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         sound(m.Theme, soundDone);
       }
       if ((said("continue") || controller(cNext) || controller(cRightDblClick) || soundDone)) {
@@ -791,21 +797,21 @@ if (teststep == 44) {
     if (hasMouse) {
       if (said("mouse", "on")) {
         if (IntVersion > VERSION_2272) {
-          enable.item(mouse);
+          enable.item(mouse); [ show.mouse()
         } else {
-          set.key(1, 0, c251);
+          set.key(2E_SHOW_MOUSE, 0, MOUSE.FN); [ show.mouse()
         }
       }
         
       if (said("mouse", "test")) {
-        set.key(0, &m102, mouse);
+        set.key(BYNUM, &m102, mouse); [ set.cursor(FN_MODE, MSGNUM)
       }
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
       [ check results
       clear.lines(23, 24, BLACK);
       get.string(strAnswer, "Did mouse work correctly? ", 22, 0, 3);
-      set.key(0, &m101, mouse);
+      set.key(BYNUM, &m101, mouse); [ set.cursor(FN_MODE, MSGNUM)
       goto(nextsubtest);
     }
   }
@@ -860,17 +866,17 @@ if (teststep == 45) {
       [ settings
       print("Setting 80 column text mode, then 80 column graphics mode.");
       [ switch to text80;
-      configure.screen(-1, 1, 1);
-      configure.screen(-1, 0, 1);
+      configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
+      configure.screen(SCREEN.MODE, GRAFMODE, 80COL); [ screen.mode(MODE, WIDTH)
       set(graphics80);
       if (hasMouse) {
         [ set mouse on with custom cursor; 
-        if (IntVersion == VERSION_2089) {
-          set.key(1, 0, c251);
+        if (IntVersion <= VERSION_2272) {
+          set.key(2E_SHOW_MOUSE, 0, MOUSE.FN); [ show.mouse()
         } else {
-          enable.item(mouse);
+          enable.item(mouse); [ show.mouse()
         }
-        set.key(0, &m102, mouse);
+        set.key(BYNUM, &m102, mouse); [ set.cursor(FN_MODE, MSGNUM)
         print("Enabling mouse with a custom cursor.");
         [ save it to compare after restarting
         s6 = "y";
@@ -881,12 +887,12 @@ if (teststep == 45) {
       block(MSGBOX.COLOR, BLACK, YELLOW, BROWN); [ msgbox.color(BORDER, FG, BG)
       print("Setting custom message box colors.");
       [ set a custom palette
-      block(SET.PALETTE, 0, &m3, 0);
+      block(SET.PALETTE, BYNUM, &m3, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       print("Swapping BLACK and WHITE in the color palette.");
       [ setting speed to 60 cps
       print("Setting game speed to 60 cycles per second.");
-      work1 = 1;
-      cycle.time(o255, work1);
+      work1 = TURBO_SPEED;
+      cycle.time(SET.SPEED, work1); [ set.speed(vMODE)
       animationInterval = 1;
       [ adjust ego speed to account for faster cycle time
       work1 = 3;
@@ -896,15 +902,15 @@ if (teststep == 45) {
       [ load and discard a sound resource by var
       print("Loading and discarding a sound resource.");
       work1 = 1;
-      block(-49, 0, &work1, 0);
-      block(-49, 2, &work1, 0);
+      block(SND.V.FN, LOAD.SOUND.V, &work1, 0); [ load.sound.v(vSNDNUM)
+      block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
       [ point and click on, straight mode
       print("Enabling click-to-move in 'straight' mode. Click "
             "on a distant point to start ego moving for this test, "
             "then press CTRL+Z or enter 'continue.");
-      set(clickmove);
-      work1 = -1;
-      step.size(ego, work1);
+      set(click2move); [ enable.click2move()
+      work1 = MOVE_DIRECT;
+      step.size(ego, work1); [ set.click2move.mode(vMODE)
     }
     if ((said("continue") || controller(cNext))) {
       [ next subtest
@@ -918,9 +924,9 @@ if (teststep == 45) {
     if (newtest) {
       [ string compare to binary;
       print("Setting string compare to binary mode.");
-      set.string(s254, m2);
+      set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
       [ custom status line on
-      set.cursor.char(" l6, v3, v27, v28, v29, f9");
+      set.cursor.char(" l6, v3, v65, v66, v67, f9"); [ enable.custom.status()
       status.line.off();
       status.line.on();
       print("Enabling custom status line.");
@@ -928,38 +934,38 @@ if (teststep == 45) {
       print("Starting a countdown timer.");
       counter1 = 0;
       counter2 = 99;
-      block(START.TIMER, &counter1, &counter2, &f220);
+      block(START.TIMER, &counter1, &counter2, &f220); [ start.timer(vMIN, vSEC, fDONE)
       [ set up sound
       load.sound(m.Theme);
       if (hasMIDI) {
         print("Enabling MIDI sound playback.");
-        set(4channelsound);
-        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);
+        set(4channelsound); [ enable.4chan()
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         [ change instruments
         work1 = 0;
         work2 = 20;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         ++work1;
         ++work2;
-        set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
         sound(m.Theme, soundDone);
       } else {
         if (hasFM) {
           print("Enabling FM Synth sound playback.");
-          set(4channelsound);
-          set.key(0, 0, c254); 
+          set(4channelsound); [ enable.4chan()
+          set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
           work1 = 0;
           work2 = 1;
-          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
           ++work1;
           ++work2;
-          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
           ++work1;
           ++work2;
-          set.key(&work1, &work2, c253); [ set.key(vCHANNEL*, vINSTRUMENT*, c253);
+          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
           sound(m.Theme, soundDone);
         }
       }
@@ -977,7 +983,7 @@ if (teststep == 45) {
       :nextfile
         s8 = "PP%v30sg.%v46";
         block(STR.FORMAT, &s8, &s8, 0); [ str.format(sINPUT, sRESULT)
-        block(DELETE.FILE, &s8, 0, 0);
+        block(DELETE.FILE, &s8, 0, 0); [ delete.file(sFILENAME)
         ++work1;
       if (work1 < 13) {
         goto(nextfile);
@@ -1046,7 +1052,7 @@ if (teststep == 45) {
     if (newtest) {
       reset(newtest);
       [ restore palette
-      block(SET.PALETTE, 0, &m4, 0); [ set.palette(BYVAR, PALETTE, LOADONLY)
+      block(SET.PALETTE, BYNUM, &m4, 0); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       print("Message box colors should still be custom.");
       [ check results
@@ -1154,7 +1160,7 @@ if (teststep == 45) {
         reset(newtest);
         print("Testing 4 FM channel sound. "
               "After confirming, press CTRL+Z or enter 'continue.");
-        set(4channelsound);
+        set(4channelsound); [ enable.4chan()
         sound(m.Theme, soundDone);
       } else {
         ++subteststep;
@@ -1176,8 +1182,8 @@ if (teststep == 45) {
         reset(newtest);
         print("Testing 4 MIDI channel sound. "
               "After confirming, press CTRL+Z or enter 'continue.");
-        set(4channelsound);
-        set.key(1, 0, c254); [ set.key(MODE, ANY***, c254);
+        set(4channelsound); [ enable.4chan()
+        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         sound(m.Theme, soundDone);
       } else {
         ++subteststep;
@@ -1224,7 +1230,7 @@ if (teststep == 45) {
       [ check results
       clear.lines(23, 24, BLACK);
       get.string(strAnswer, "Is mouse working correctly? ", 22, 0, 3);
-      set.key(0, &m101, mouse);
+      set.key(BYNUM, &m101, mouse); [ set.cursor(FN_MODE, MSGNUM)
       goto(nextsubtest);
     }
   }
@@ -1283,9 +1289,9 @@ if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {
 
 return();
 
-[*****
-[ messages         [  declared messages go here
-[*****
+[***************************************
+[ DECLARED MESSAGES
+[***************************************
 #message 1 "                                       "
 #message 2 "                                       "
 #message 3 "3F3F3F00002A002A00002A2A2A00002A002A2A15002A2A2A"

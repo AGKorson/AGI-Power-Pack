@@ -1,1 +1,79 @@
-[ ********************************************************************[[ rm.NorthRoom[[ An example room. This one is empty - nothing special.[[ ********************************************************************[ **************************************[ LOCAL DEFINES[ **************************************[ **************************************[ FIRST CYCLE ONLY[ **************************************if (newRoom) {  [ load, draw and discard the picture resource for the current room  load.pic(currentRoom);  draw.pic(currentRoom);  discard.pic(currentRoom);    [ do basic room initialization  call(lgc.RoomInit);    [ add room-specific initialization here    [ default horizion is 36; adjust it as needed   [ set ego parameters, if different from lgc.RoomInit    [ AGI will automatically position ego on the opposite  [ edge when entering a new room, but if you want to manually  [ position ego, do that here, before drawing ego    [ add ego to the room  draw(ego);    [ display the picture on screen  show.pic();}[ **************************************[ EVERY CYCLE[ **************************************[ add room specific statements here[ **************************************[ CHECK FOR AN EXIT CONDITION[ **************************************if (edgeEgoHit == BOTTOM_EDGE) {  new.room(rm.Entrance);  [ ##LE001##}[ **************************************[ PROCESS PLAYER INPUT[ **************************************[ if player has provided input and match not yet found,[ do said testsif (haveInput && !haveMatch) {  [ look  if (said("look")) {    print("You see nothing of interest.");  }}  :donereturn();[ **************************************[ MESSAGES[ **************************************#message 1 "You see nothing of interest."
+[*********************************************************************
+[
+[ rm.NorthRoom
+[
+[ An example room. This one is empty - nothing special.
+[
+[*********************************************************************
+
+[ power pack defines file
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+
+[***************************************
+[ FIRST CYCLE ONLY
+[***************************************
+if (newRoom) {
+  [ load, draw and discard the picture resource for the current room
+  load.pic(currentRoom);
+  draw.pic(currentRoom);
+  discard.pic(currentRoom);
+  
+  [ do basic room initialization
+  call(lgc.RoomInit);
+  
+  [ add room-specific initialization here
+  
+  [ default horizion is 36; adjust it as needed
+ 
+  [ set ego parameters, if different from lgc.RoomInit
+  
+  [ AGI will automatically position ego on the opposite
+  [ edge when entering a new room, but if you want to manually
+  [ position ego, do that here, before drawing ego
+  
+  [ add ego to the room
+  draw(ego);
+  
+  [ display the picture on screen
+  show.pic();
+}
+
+
+[***************************************
+[ EVERY CYCLE
+[***************************************
+
+[ add room specific statements here
+
+
+[***************************************
+[ CHECK FOR AN EXIT CONDITION
+[***************************************
+if (edgeEgoHit == BOTTOM_EDGE) {
+  new.room(rm.Entrance);  [ ##LE001##
+}
+
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+
+[ if player has provided input and match not yet found,
+[ do said tests
+if (haveInput && !haveMatch) {
+  [ look
+  if (said("look")) {
+    print("You see nothing of interest.");
+  }
+}
+  
+:done
+return();
+
+[***************************************
+[ MESSAGES
+[***************************************
+#message 1 "You see nothing of interest."
