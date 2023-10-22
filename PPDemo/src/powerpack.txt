@@ -94,11 +94,11 @@
 [ pic.draw fillstyle constants:
     #define AGI_FILL             0
     #define COLOR_FILL           1
-#define PIC.CLEAR              -27  [ block(PIC.CLEAR, CLEAR_SCREEN, vCOLORS, 0);
+#define PIC.CLEAR              -27  [ block(PIC.CLEAR, CLEAR_SCREEN, vCOLORPAIR, 0);
 [ pic.clear fillstyle constant:
     #define CLEAR_SCREEN        -1
 #define GET.PIXEL              -28  [ block(GET.PIXEL, vX, vY, vRESULT);
-#define START.TIMER            -29  [ block(START.TIMER, vMIN, vSEC, fDONE);
+#define START.TIMER            -29  [ block(START.TIMER, vMINUTES, vSECONDS, fDONE);
 #define TOGGLE.TIMER           -30  [ block(TOGGLE.TIMER, STATE, 0, 0);
 [ toggle.timer mode constants:
     #define STOP_TIMER           0
@@ -130,7 +130,7 @@
 #define SND.V.FN               -49  [ block(SND.V.FN, FNTYPE, VAR1, VAR2);
 [ sound-by-variable function types:
     #define LOAD.SOUND.V         0  [ block(SND.V.FN, LOAD.SOUND.V, vSNDNUM, 0);
-    #define SOUND.V         1  [ block(SND.V.FN, SOUND.V, vSNDNUM, vDONEFLAG);
+    #define SOUND.V              1  [ block(SND.V.FN, SOUND.V, vSNDNUM, vDONEFLAG);
     #define DISCARD.SOUND.V      2  [ block(SND.V.FN, DISCARD.SOUND.V, vSNDNUM, 0);
 
 [************************************************
@@ -147,9 +147,9 @@
 [*******************************************
 [ CYCLE.TIME command new function constants:
 [*******************************************
-#define TOGGLE.TURBO          o255  [ cycle.time(TOGGLE.TURBO, vMODE);
+#define SET.SPEED          o255  [ cycle.time(SET.SPEED, vMODE);
 [ turbo mode constants:
-    #define NORMAL_SPEED         0
+    #define AGI_SPEED            0
     #define TURBO_SPEED          1
 #define DELAY.TIME            o254  [ cycle.time(DELAY.TIME, vMSEC);
 
@@ -167,10 +167,16 @@
     #define OBJ_FRAME            0
     #define OBJ_VISIBLE          1
 
+[***************************************
+[ SET.CURSOR.CHAR command new functions:
+[***************************************
+[ disable.custom.status()           [ set.cursor.char(" ");
+[ enable.custom.status()            [ set.cursor.char(mSTATUS_DATA);
+
 [****************************************
 [ SET.KEY command new function constants:
 [****************************************
-#define CLR.CTRL                -1  [ set.key(CLR.CTRL, CLR.CTRL, cNUM);
+#define CLR.CTRL                -1  [ set.key(CLR.CTRL, CLR_.TRL, cNUM);
 #define CUSTOM.INST           c252  [ set.key(vCHANNEL, vENVDATASTR, CUSTOM.INST);
 #define SET.INST              c253  [ set.key(vCHANNEL, vINSTRUMENT, SET.INST);
 #define SET.SNDMODE           c254  [ set.key(MODE, 0, SET.SNDMODE);
@@ -196,21 +202,19 @@
 [ to push:                          [ set.text.attribute(PUSH.ATTRIBUTES, 0);
 [ to pop:                           [ set.text.attribute(0, POP.ATTRIBUTES);
 [
-[ to set attributes by var:         [toggle.screen();
+[ to set attributes by var:         [toggle.monitor();
 [                                   [set.text.attribute(vFG, vBG);
 
 [***********************************************
 [ SET.UPPER.LEFT command new function constants:
 [***********************************************
-[ auto.cycle
+[ auto.cycle                        [ set.upper.left(sOBJ, vMODE);
 #define CYCLE_AT_REST            0
 #define AUTO_CYCLE               1
-[ to set autocycle mode:            [ set.upper.left(sOBJ, vMODE);
 
 [******************************************
 [ STEP.SIZE command new function constants:
 [******************************************
-[ set.click2move.mode
 #define MOVE_DIRECT             -1
 #define MOVE_AGI                -2
 [ to set new mode:                  [ step.size(ego, vMODE);
@@ -219,3 +223,11 @@
 [ TRACE.INFO command new function constants:
 [*******************************************
 #define TRACE.H.POSN             0  [ trace.info(TRACE.H.POSN, LEFT, WIDTH);
+
+
+[*******************************************
+[ Version 2.089/2.272 only 
+[*******************************************
+#define MOUSE.FN            c251  [ set.key(FNTYPE, 0, MOUSE.FN);
+    #define 2E_HIDE_MOUSE      0
+    #define 2E_SHOW_MOUSE      1

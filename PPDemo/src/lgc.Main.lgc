@@ -535,7 +535,7 @@ if (!disableGameFunctions) {
 [ CHECK FOR GAME RESTORE
 if (isset(gameRestored)) {
   [ make sure input area is cleared
-  clear.lines(23, 24, 0);
+  clear.lines(23, 24, BLACK);
   [ need to 're-disable menu separators)
   disable.item(cDummy);
   [ and redraw toolbar buttons
@@ -842,7 +842,7 @@ if (elapsedMinutes != oldMinutes) {
   }
 }
 
-[ check for ego death (usually happens a lot in AGI games...)
+[ check for ego death
 if (deathType) {
   [ if this is first cycle since ego died
   if (deathType < DT_SEQ_DONE) {

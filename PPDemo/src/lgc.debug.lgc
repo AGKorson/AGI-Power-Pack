@@ -29,7 +29,7 @@ if (said("coords")) {
   [ if coordinate are now hidden
   if (!showCoords) {
     [ clear the coordinate line
-    clear.lines(24, 24, 0);
+    clear.lines(24, 24, BLACK);
   }
 }
 
@@ -323,7 +323,7 @@ if (!fLogInput && !isset(haveMatch) &&
 if (said("log")) {
   get.string(tmpStr, "Comment: ", 22, 0, 25);
   log("%m31%s1");
-  clear.lines(22, 24, 0);
+  clear.lines(22, 24, BLACK);
   accept.input();
 }
 

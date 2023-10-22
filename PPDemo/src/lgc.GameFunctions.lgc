@@ -469,8 +469,8 @@ if ((controller(cQuit) ||
   quit(0);
 }
 
-[ if player hasn't provided input or if match already found, no need
-[ to do rest of said tests (including unknown words)
+[ if player has provided input and no match found yet
+[ (including unknown words)
 if (haveInput && !haveMatch) {
   [ read magazine
   if (said("read", "magazine")) {

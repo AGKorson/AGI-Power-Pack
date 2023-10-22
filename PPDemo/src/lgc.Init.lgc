@@ -439,7 +439,7 @@ block(SET.ITEM, BYNUM, &floppydisk, &s20); [ set.item(FN_MODE, ITEM, STRNEW)
 
 [ set turbo mode (regular mode is never used in the demo)
 work1 = TURBO_SPEED;
-cycle.time(TOGGLE.TURBO, work1); [ toggle.turbo(vMODE)
+cycle.time(SET.SPEED, work1); [ toggle.turbo(vMODE)
 set(turboMode);
 
 [ set mouse parameters

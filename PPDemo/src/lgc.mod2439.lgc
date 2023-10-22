@@ -440,8 +440,8 @@ if (said(2, 16, 10748)){} [ 29FC
 [ than the number of text rows in the region, the entire region is cleared to
 [ the current background color. 
 [
-[ If the number of lines to scroll (n) is larger than the total number or rows  
-[ in the region being scrolled, the entire region is scrolled. If the bottom  
+[ If the number of lines to scroll (n) is larger than the total number of rows
+[ in the region being scrolled, the entire region is scrolled. If the bottom
 [ value is less than the top value no scrolling is done.
 [
 [ PATCH CODE:
@@ -1317,7 +1317,7 @@ if (said(27, 98, 29741)){} [ 742D
 [
 [ SYNTAX:
 [   [ to enable or modify custom status line parameters:
-[   set.cursor.char(" lNUM, vA, vB, vC, vD, vE, fA, fB, fC, fD, fE"); 
+[   set.cursor.char(" lNUM, vA, vB, vC, vD, vE, fA, fB, fC, fD, fE");
 [   
 [   [ to disable the custom status line:
 [   set.cursor.char(" ");
@@ -2072,7 +2072,7 @@ if (said(3, 155, 3321)){} [ 0CF9
 [  *** The compiler expects numbers for all arguments so pass variables and 
 [      flags as numbers, without the 'v' or 'f' prefix
 [
-[***** This argument is ignored, so it can be any value
+[ **** This argument is ignored, so it can be any value
 [
 [ LIMITATIONS/CONSIDERATIONS: The turbo mode runs game cycles three times 
 [ faster than normal. So if animationInterval (v10) is 1 in normal mode, 
@@ -2608,16 +2608,16 @@ if (said(3, 197, 3098)){} [ 0C1A
 [   sADD can be the same as sINPUT, in which case sINPUT will be doubled 
 [   up.
 [
-[   sLeft - n characters (where n = value of vLEN) are copied from the left
-[   of sINPUT into sRESULT. If vLEN is greater than the length of sINPUT
-[   all of sINPUT is copied.
+[   strLeft - n characters (where n = value of vLEN) are copied from the
+[   left of sINPUT into sRESULT. If vLEN is greater than the length of
+[   sINPUT all of sINPUT is copied.
 [
-[   sRight - n characters (where n = value of vLEN) are copied from the 
+[   strRight - n characters (where n = value of vLEN) are copied from the 
 [   right of sINPUT into sRESULT. If vLEN is greater than the length of 
 [   sINPUT all of sINPUT is copied.
 [
-[   sMid - **This function modifies sINPUT, instead of putting the result
-[   in a different string.**
+[   strMid - **This function modifies sINPUT, instead of putting the
+[   result in a different string.**
 [   n characters (where n = value of vLEN) are copied from sINPUT,
 [   starting at character p (where p = value of vPOS). Position values 
 [   are zero-based (meaning first character is 0, last character is
@@ -2808,8 +2808,8 @@ if (said(1, 200, 6461)){} [ 193D
 [ out command, there is a matching fade in command to restore the screen. 
 [
 [ By default, arguments are passed as numbers. If you want to pass them by 
-[ variable, use a numeric value of 1 for FN_MODE; the other two arguments in all 
-[ commands will then be passed by variable.
+[ variable, use a numeric value of 1 for FN_MODE; the other two arguments in 
+[ all commands will then be passed by variable.
 [
 [ The Power Pack Demo game contains many examples and more detailed 
 [ explanations on how the palette functions work.
@@ -3887,7 +3887,7 @@ if (said(3, 238, 19257)){} [ 4B39
 [ 
 [ Memory management in AGI is based on 16 bit address segments, so there is not
 [ much that can be done to make more than 64K bytes available. Most of the data
-[ used in AGI relies heavily on everything (resources, DIR files, overlay data)
+[ used in AGI rely heavily on everything (resources, DIR files, overlay data)
 [ being in the same segment. Message text data is one exception; it turns out 
 [ to be relatively easy to move message text data, and redirect functions that 
 [ need to access it the new segment.
@@ -3983,7 +3983,7 @@ unblock();
 return();
 
 
-[***************************************
+[ **************************************
 [ MESSAGES
-[***************************************
+[ **************************************
 [ for easier reference, messages are declared as they are used

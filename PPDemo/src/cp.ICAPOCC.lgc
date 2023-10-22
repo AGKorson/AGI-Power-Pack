@@ -314,9 +314,9 @@ if (newRoom) {
   egoPrevY = egoY;
   egoPrevDir = egoDir;
   
-  [ set speed to fast for best mouse performance
+  [ set speed to fastest for best mouse performance
   oldSpeed = animationInterval;
-  animationInterval = FAST_SPEED;
+  animationInterval = FASTEST_SPEED;
 
 }
 

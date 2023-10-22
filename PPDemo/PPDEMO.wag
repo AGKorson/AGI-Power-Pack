@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/21/2023 12:57:29 PM"
+   LastEdit = "10/22/2023 2:24:29 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H61838334
-   CRC32 = &H61838334
+   CompCRC32 = &H2BF41551
+   CRC32 = &HC361EF6E
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -149,8 +149,8 @@
 [Logic13]
    ID = cp.ERIDOCC
    Description = ""
-   CRC32 = &HF13D2F35
-   CompCRC32 = &HF13D2F35
+   CRC32 = &H7D9E0057
+   CompCRC32 = &H7D9E0057
    IsRoom = True
 
 [Logic14]
@@ -163,15 +163,15 @@
 [Logic15]
    ID = cp.ICAPOCC
    Description = ""
-   CRC32 = &HC21710DA
-   CompCRC32 = &HC21710DA
+   CRC32 = &HE0887A70
+   CompCRC32 = &HE0887A70
    IsRoom = True
 
 [Logic16]
    ID = cp.OFROCC
    Description = ""
-   CRC32 = &HD8801F2
-   CompCRC32 = &HD8801F2
+   CRC32 = &H8D9F73AC
+   CompCRC32 = &H8D9F73AC
    IsRoom = True
 
 [Logic17]
@@ -359,21 +359,21 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
-   CRC32 = &H2EB989A
-   CompCRC32 = &H2EB989A
+   CRC32 = &H46EAA38B
+   CompCRC32 = &H46EAA38B
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
-   CRC32 = &HF3912A8
-   CompCRC32 = &HF3912A8
+   CRC32 = &HF9E677E4
+   CompCRC32 = &HF9E677E4
    IsRoom = False
 
 [Logic52]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HB784EB40
+   CRC32 = &H31B7462B
    CompCRC32 = &HB784EB40
    IsRoom = False
 
@@ -394,7 +394,7 @@
 [Logic56]
    ID = lgc.Debug
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
-   CRC32 = &HFB82BF24
+   CRC32 = &H33ECD21C
    CompCRC32 = &HFB82BF24
    IsRoom = False
 
@@ -429,85 +429,85 @@
 [Logic62]
    ID = lgc.mod2411
    Description = ""
-   CRC32 = &H442DF533
-   CompCRC32 = &H442DF533
+   CRC32 = &H390279D
+   CompCRC32 = &H390279D
    IsRoom = False
 
 [Logic63]
    ID = lgc.mod2425
    Description = ""
-   CRC32 = &H20DDED48
-   CompCRC32 = &H20DDED48
+   CRC32 = &HEE14451D
+   CompCRC32 = &HEE14451D
    IsRoom = False
 
 [Logic64]
    ID = lgc.mod2426
    Description = ""
-   CRC32 = &HA0EF8EDE
-   CompCRC32 = &HA0EF8EDE
+   CRC32 = &HA5E79D7A
+   CompCRC32 = &HA5E79D7A
    IsRoom = False
 
 [Logic65]
    ID = lgc.mod2435
    Description = ""
-   CRC32 = &HF5C4A7F3
-   CompCRC32 = &HF5C4A7F3
+   CRC32 = &HBDFD134F
+   CompCRC32 = &HBDFD134F
    IsRoom = False
 
 [Logic66]
    ID = lgc.mod2439
    Description = ""
-   CRC32 = &H29DFCB58
-   CompCRC32 = &H29DFCB58
+   CRC32 = &HB1373284
+   CompCRC32 = &HB1373284
    IsRoom = False
 
 [Logic67]
    ID = lgc.mod2440
    Description = ""
-   CRC32 = &H27CEAA19
-   CompCRC32 = &H27CEAA19
+   CRC32 = &H3E6AE7E3
+   CompCRC32 = &H3E6AE7E3
    IsRoom = False
 
 [Logic68]
    ID = lgc.mod2903
    Description = ""
-   CRC32 = &HEF9A66D5
-   CompCRC32 = &HEF9A66D5
+   CRC32 = &H66FE988D
+   CompCRC32 = &H66FE988D
    IsRoom = False
 
 [Logic69]
    ID = lgc.mod2911
    Description = ""
-   CRC32 = &HCA5D641D
-   CompCRC32 = &HCA5D641D
+   CRC32 = &HFE5076D1
+   CompCRC32 = &HFE5076D1
    IsRoom = False
 
 [Logic70]
    ID = lgc.mod2912
    Description = ""
-   CRC32 = &H7F8A7F4
-   CompCRC32 = &H7F8A7F4
+   CRC32 = &HF6F4BDAA
+   CompCRC32 = &HF6F4BDAA
    IsRoom = False
 
 [Logic71]
    ID = lgc.mod2915
    Description = ""
-   CRC32 = &H839A99C3
-   CompCRC32 = &H839A99C3
+   CRC32 = &HA0F5D551
+   CompCRC32 = &HA0F5D551
    IsRoom = False
 
 [Logic72]
    ID = lgc.mod2917
    Description = ""
-   CRC32 = &H68582F
-   CompCRC32 = &H68582F
+   CRC32 = &HA10C7FDC
+   CompCRC32 = &HA10C7FDC
    IsRoom = False
 
 [Logic73]
    ID = lgc.mod2936
    Description = ""
-   CRC32 = &H5E1A084B
-   CompCRC32 = &H5E1A084B
+   CRC32 = &H690B5284
+   CompCRC32 = &H690B5284
    IsRoom = False
 [::END Logics::]
 

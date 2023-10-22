@@ -136,7 +136,7 @@ if (currentRoom >= cp.Terminal && currentRoom <= cp.RANDOCC) {
 }
 
 [ make sure input area is cleared
-clear.lines(23, 24, 0);
+clear.lines(23, 24, BLACK);
 
 [ reset/restore any global variables/flags that
 [ need to be reset whenever a new room is encountered
