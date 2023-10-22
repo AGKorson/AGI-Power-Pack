@@ -10,7 +10,7 @@
 
 [Snippet]
    Name = auto.cycle
-   Value = "set.upper.left(%1, %2);  [ auto.cycle(oSOBJ, vMODE)"
+   Value = "set.upper.left(%1, %2); [ auto.cycle(oSOBJ, vMODE)"
    ArgTips = "obj SOBJ, var vMODE"
 
 [Snippet]
@@ -173,6 +173,11 @@
    ArgTips = "byt MODE (0=show; 1=hide)"
 
 [Snippet]
+   Name = instr
+   Value = "block(INSTR, %1, %2, %3); [ instr(sINPUT, vCHAR, vPOS)"
+   ArgTips = "str sINPUT, vCHAR, vPOS"
+
+[Snippet]
    Name = item.count
    Value = "block(ITEM.COUNT, %1, %2, 0); [ item.count(vLOCATION, vRESULT)"
    ArgTips = "var vLOCATION, var vRESULT"
@@ -246,6 +251,11 @@
    ArgTips = "byt MODE (0=graphics; 1=text), byt WIDTH (0=40col; 1=80col)"
 
 [Snippet]
+   Name = set.click2move.mode
+   Value = "step.size(ego, %1); [ set.click2move.mode(vMODE)"
+   ArgTips = "var vMODE (-1=DIRECT, -2=AGI)"
+
+[Snippet]
    Name = set.cmpmode
    Value = "set.string(SET.CMPMODE, %1); [ set.cmpmode(MODE)"
    ArgTips = "byt MODE (0=AGI; 1=TEXT; 2=BINARY)"
@@ -259,11 +269,6 @@
    Name = set.input
    Value = "set.string(SET.INPUT, %1); [ set.input(mINPUT)"
    ArgTips = "msg mINPUT"
-
-[Snippet]
-   Name = set.click2move.mode
-   Value = "step.size(ego, %1); [ set.click2move.mode(vMODE)"
-   ArgTips = "var vMODE (-1=DIRECT, -2=AGI)"
 
 [Snippet]
    Name = set.inst
@@ -291,6 +296,11 @@
    ArgTips = "byt MODE (0=FMsynth; 1=MIDI)"
 
 [Snippet]
+   Name = set.speed
+   Value = "cycle.time(SET.SPEED, %1); [ set.speed(vMODE)"
+   ArgTips = "var vMODE"
+
+[Snippet]
    Name = set.string.v
    Value = "block(SET.STRING.V, %1, %2, 0); [ set.string.v(vSTR, vMSG)"
    ArgTips = "var vSTRNUM, var vMSG"
@@ -302,7 +312,7 @@
 
 [Snippet]
    Name = show.mouse
-   Value = "enable.item(mouse);
+   Value = "enable.item(mouse); [ show.mouse()"
 
 [Snippet]
    Name = sound.v
@@ -330,14 +340,9 @@
    ArgTips = "str sINPUT, str sRESULT"
 
 [Snippet]
-   Name = str.instr
-   Value = "block(INSTR, %1, %2, %3); [ str.instr(sINPUT, vCHAR, vPOS)"
-   ArgTips = "str sINPUT, vCHAR, vPOS"
-
-[Snippet]
    Name = str.left
    Value = "block(STR.LEFT, %1, %2, %3); [ str.left(sINPUT, sRESULT, vLEN)"
-   ArgTips = "str sINPUT, str sRESULT, var vCOUNT"
+   ArgTips = "str sINPUT, str sRESULT, var vLEN"
 
 [Snippet]
    Name = str.len
@@ -352,12 +357,12 @@
 [Snippet]
    Name = str.mid
    Value = "block(STR.MID, %1, %2, %3); [ str.mid(sINPUT, vPOS, vLEN)"
-   ArgTips = "str sINPUT, var vPOS, var vCOUNT"
+   ArgTips = "str sINPUT, var vPOS, var vLEN"
 
 [Snippet]
    Name = str.right
-   Value = "block(STR.RIGHT, %1, %2, %3); [ str.right(sINPUT, sRESULT, vCOUNT)"
-   ArgTips = "str sINPUT, str sRESULT, var vCOUNT"
+   Value = "block(STR.RIGHT, %1, %2, %3); [ str.right(sINPUT, sRESULT, vLEN)"
+   ArgTips = "str sINPUT, str sRESULT, var vLEN"
 
 [Snippet]
    Name = str.trim
@@ -378,11 +383,6 @@
    Name = toggle.timer
    Value = "block(TOGGLE.TIMER, %1, 0, 0); [ toggle.timer(STATE)"
    ArgTips = "byt STATE (0=STOP, 1=START)"
-
-[Snippet]
-   Name = toggle.turbo
-   Value = "cycle.time(TOGGLE.TURBO, %1); [ toggle.turbo(vMODE)"
-   ArgTips = "var vMODE"
 
 [Snippet]
    Name = trace.h.posn

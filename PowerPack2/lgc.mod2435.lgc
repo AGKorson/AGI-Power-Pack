@@ -202,6 +202,8 @@
 [
 [******************************************************************************
 
+[ power pack defines file
+#include "powerpack.txt"
 
 [******************************************************************************
 [ these strings are used in several of the patches; instead of using a 
@@ -438,8 +440,8 @@ if (said(2, 16, 10748)){} [ 29FC
 [ than the number of text rows in the region, the entire region is cleared to
 [ the current background color. 
 [
-[ If the number of lines to scroll (n) is larger than the total number or rows  
-[ in the region being scrolled, the entire region is scrolled. If the bottom  
+[ If the number of lines to scroll (n) is larger than the total number of rows
+[ in the region being scrolled, the entire region is scrolled. If the bottom
 [ value is less than the top value no scrolling is done.
 [
 [ PATCH CODE:
@@ -963,7 +965,7 @@ if (said(3, 62, 3764)){} [ 0EB4
 [   disable.item(c255);
 [
 [   [ to load a cursor:
-[   set.key(BYVAR, mCURSOR*, c255);
+[   set.key(FN_MODE, mCURSOR*, c255);
 [
 [   [ to change mouse variables:
 [   block(-3, XVAR, YVAR, BVAR);
@@ -1315,7 +1317,7 @@ if (said(27, 98, 29741)){} [ 742D
 [
 [ SYNTAX:
 [   [ to enable or modify custom status line parameters:
-[   set.cursor.char(" lNUM, vA, vB, vC, vD, vE, fA, fB, fC, fD, fE"); 
+[   set.cursor.char(" lNUM, vA, vB, vC, vD, vE, fA, fB, fC, fD, fE");
 [   
 [   [ to disable the custom status line:
 [   set.cursor.char(" ");
@@ -2607,16 +2609,16 @@ if (said(3, 198, 3098)){} [ 0C1A
 [   sADD can be the same as sINPUT, in which case sINPUT will be doubled 
 [   up.
 [
-[   sLeft - n characters (where n = value of vLEN) are copied from the left
-[   of sINPUT into sRESULT. If vLEN is greater than the length of sINPUT
-[   all of sINPUT is copied.
+[   strLeft - n characters (where n = value of vLEN) are copied from the
+[   left of sINPUT into sRESULT. If vLEN is greater than the length of
+[   sINPUT all of sINPUT is copied.
 [
-[   sRight - n characters (where n = value of vLEN) are copied from the 
+[   strRight - n characters (where n = value of vLEN) are copied from the 
 [   right of sINPUT into sRESULT. If vLEN is greater than the length of 
 [   sINPUT all of sINPUT is copied.
 [
-[   sMid - **This function modifies sINPUT, instead of putting the result
-[   in a different string.**
+[   strMid - **This function modifies sINPUT, instead of putting the
+[   result in a different string.**
 [   n characters (where n = value of vLEN) are copied from sINPUT,
 [   starting at character p (where p = value of vPOS). Position values 
 [   are zero-based (meaning first character is 0, last character is
@@ -2772,13 +2774,13 @@ if (said(1, 201, 6461)){} [ 193D
 [
 [ SYNTAX: 
 [   [ to change the palette
-[   block(-21, BYVAR, PALETTE, LOADONLY);
+[   block(-21, FN_MODE, PALETTE, LOADONLY);
 [
 [   [ to fade screen in from blank 
-[   block(-22, BYVAR, DELAY, COLOR); 
+[   block(-22, FN_MODE, DELAY, COLOR); 
 [
 [   [ to fade screen out to blank
-[   block(-23, BYVAR, DELAY, COLOR);
+[   block(-23, FN_MODE, DELAY, COLOR);
 [
 [ LIMITATIONS/CONSIDERATIONS: To change the current display palette, use the 
 [ block command with -19 as the first argument. PALETTE is a message that 
@@ -2807,8 +2809,8 @@ if (said(1, 201, 6461)){} [ 193D
 [ out command, there is a matching fade in command to restore the screen. 
 [
 [ By default, arguments are passed as numbers. If you want to pass them by 
-[ variable, use a numeric value of 1 for BYVAR; the other two arguments in all 
-[ commands will then be passed by variable.
+[ variable, use a numeric value of 1 for FN_MODE; the other two arguments in 
+[ all commands will then be passed by variable.
 [
 [ The Power Pack Demo game contains many examples and more detailed 
 [ explanations on how the palette functions work.
@@ -2878,7 +2880,7 @@ if (said(614, 202, 50508)){} [ C54C
 [ when the assigned messages changes.
 [
 [ SYNTAX:
-[   block(-24, BYVAR, MSGOLD*, STRNEW*);
+[   block(-24, FN_MODE, MSGOLD*, STRNEW*);
 [
 [    * The compiler expects numbers for all arguments so pass messages, strings
 [      and variables as numbers, without the 'm', 's' or 'v' prefix
@@ -2895,7 +2897,7 @@ if (said(614, 202, 50508)){} [ C54C
 [ explanations on how to manage message changes.
 [
 [ By default, MSGOLD and STRNEW are passed as numbers, i.e. 'm1', 's2'. To pass
-[ by variable, use a numeric value of 1 for BYVAR; the other two arguments 
+[ by variable, use a numeric value of 1 for FN_MODE; the other two arguments 
 [ will then be passed by variable.
 [
 [ One of the primary benefits of changing messages is the ability to create 
@@ -2938,7 +2940,7 @@ if (said(26, 205, 19425)){} [ 4BE1
 [ to a string value.
 [
 [ SYNTAX:
-[   block(-25, BYVAR, ITEM*, STRNEW*);
+[   block(-25, FN_MODE, ITEM*, STRNEW*);
 [
 [    * The compiler expects numbers for all arguments so pass messages, strings
 [      and variables as numbers, without the 'i', 's' or 'v' prefix
@@ -2952,7 +2954,7 @@ if (said(26, 205, 19425)){} [ 4BE1
 [ how to manage item changes.
 [
 [ By default, ITEM and STRNEW are passed as numbers, i.e. 'i1', 's2'. To pass 
-[ by variable, use a numeric value of 1 for BYVAR; the other two arguments 
+[ by variable, use a numeric value of 1 for FN_MODE; the other two arguments 
 [ will then be passed by variable.
 [
 [ PATCH CODE:
@@ -3113,22 +3115,22 @@ if (said(41, 211, 51640)){} [ C9B8
 [
 [ SYNTAX:
 [   [ BIT_AND
-[   block(-31, BYVAR, vNUM*, AMOUNT); 
+[   block(-31, FN_MODE, vNUM*, AMOUNT); 
 [
 [   [ BIT_OR
-[   block(-32, BYVAR, vNUM*, AMOUNT);
+[   block(-32, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ BIT_XOR
-[   block(-33, BYVAR, vNUM*, AMOUNT);
+[   block(-33, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ BIT_NOT
 [   block(-34, ANY**, vNUM*, ANY**);
 [
 [   [ BIT_SHL
-[   block(-35, BYVAR, vNUM*, AMOUNT);
+[   block(-35, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ BIT_SHR
-[   block(-36, BYVAR, vNUM*, AMOUNT);
+[   block(-36, FN_MODE, vNUM*, AMOUNT);
 [
 [    * The compiler expects numbers for all arguments so pass variables as
 [      numbers, without the 'v' prefix
@@ -3136,7 +3138,7 @@ if (said(41, 211, 51640)){} [ C9B8
 [   ** This argument is ignored, so it can be any value
 [
 [ LIMITATIONS/CONSIDERATIONS: The value passed as AMOUNT is bit-operated into
-[ variable vNUM. If the BYVAR argument is non-zero, then AMOUNT is treated as
+[ variable vNUM. If the FN_MODE argument is non-zero, then AMOUNT is treated as
 [ a variable, and its value is used in the bit-operations on vNUM.
 [
 [ PATCH CODE:
@@ -3635,16 +3637,16 @@ if (said(3, 225, 2195)){} [ 0893
 [
 [ SYNTAX:
 [   [ MUL.N/V
-[   block(-45, BYVAR, vNUM*, AMOUNT);
+[   block(-45, FN_MODE, vNUM*, AMOUNT);
 [
 [   [ DIV.N/V
-[   block(-46, BYVAR, vNUM*, AMOUNT);
+[   block(-46, FN_MODE, vNUM*, AMOUNT);
 [
 [    * The compiler expects numbers for all arguments so pass variables as
 [      numbers, without the 'v' prefix
 [
 [ LIMITATIONS/CONSIDERATIONS: The value passed as AMOUNT is multiplied/divided 
-[ into variable vNUM. If the BYVAR argument is non-zero, then AMOUNT is  
+[ into variable vNUM. If the FN_MODE argument is non-zero, then AMOUNT is  
 [ treated a variable, and its value is used in the operation on vNUM.
 [
 [ Do NOT divide by zero. It will crash AGI. 
@@ -3885,7 +3887,7 @@ if (said(3, 238, 19257)){} [ 4B39
 [ 
 [ Memory management in AGI is based on 16 bit address segments, so there is not
 [ much that can be done to make more than 64K bytes available. Most of the data
-[ used in AGI relies heavily on everything (resources, DIR files, overlay data)
+[ used in AGI rely heavily on everything (resources, DIR files, overlay data)
 [ being in the same segment. Message text data is one exception; it turns out 
 [ to be relatively easy to move message text data, and redirect functions that 
 [ need to access it the new segment.
