@@ -151,7 +151,7 @@
 [ turbo mode constants:
     #define AGI_SPEED            0
     #define TURBO_SPEED          1
-#define DELAY.TIME            o254  [ cycle.time(DELAY.TIME, vCOUNT);
+#define DELAY.TIME            o254  [ cycle.time(DELAY.TIME, vMSEC);
 
 [*******************************************
 [ GET.STRING command new function constants:
