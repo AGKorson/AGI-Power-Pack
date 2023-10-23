@@ -5,9 +5,9 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/22/2023 2:24:29 AM"
+   LastEdit = "10/22/2023 10:32:21 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
-   Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of the power pack commands.\n"
+   Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.1"
    About = "Power Pack Demo Game\n  by Andrew Korson"
    ResDir = src
@@ -49,7 +49,7 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H2BF41551
+   CompCRC32 = &HC361EF6E
    CRC32 = &HC361EF6E
    ID = lgc.Main
    IsRoom = False
@@ -57,473 +57,463 @@
 
 [Logic1]
    ID = rm.Title
-   Description = "Opening/intro\n\nThis is an example of an intro screen, with scrolling credits and a theme song."
-   CRC32 = &H9A7B2499
-   CompCRC32 = &H9A7B2499
+   Description = "Opening/intro"
+   CRC32 = &H4730C4F2
+   CompCRC32 = &H4730C4F2
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
-   Description = ""
+   Description = "Parking lot of the Sierra building. Game starts here."
    CRC32 = &HD5C45F17
    CompCRC32 = &HD5C45F17
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
-   Description = ""
+   Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
    CRC32 = &H51389566
    CompCRC32 = &H51389566
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
-   Description = "one door is bathroom; it is always occupied. another door is the examination room; it will open, but nurse will immediately slam it shut\ncloset at end of hall can be opened/entered"
+   Description = "One door is bathroom; it is always occupied. Another door is the examination room; it will open, but nurse will immediately slam it shut. Closet at end of hall can be opened/entered."
    CRC32 = &HB01897B7
    CompCRC32 = &HB01897B7
    IsRoom = True
 
-[Logic8]
-   ID = rm.ControlRoom
-   Description = "this has the main terminal where the other room/control consoles are enabled. Player has to figure out how to turn it on, and then how to enable all the other functions/panels"
-   CRC32 = &H3E103CD6
-   CompCRC32 = &H3E103CD6
-   IsRoom = True
-
 [Logic5]
    ID = rm.Closet
-   Description = "walkng pas or trying to pick up broom will cause ego to fall and break wall.\nafter wall breaks, broom remains a tripping hazard until its picked up\nsearching boxes and shelves reveals nothing useful"
+   Description = "Walkng past or trying to pick up broom will cause Drew to fall and break wall.\nAfter wall breaks, broom remains a tripping hazard until it's picked up.\nSearching boxes and shelves reveals nothing useful."
    CRC32 = &H247B3AD8
    CompCRC32 = &H247B3AD8
    IsRoom = True
 
 [Logic6]
    ID = rm.SecretRoom
-   Description = ""
+   Description = "This room is just a bridge between the closet and the stairwell entrance to the secret control room."
    CRC32 = &HC3DED043
    CompCRC32 = &HC3DED043
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
-   Description = ""
+   Description = "At the bottom of the stairs is a locked door. Behind the door is the control room for the fabled AGI Power Pack development project."
    CRC32 = &H232E3B84
    CompCRC32 = &H232E3B84
    IsRoom = True
 
+[Logic8]
+   ID = rm.ControlRoom
+   Description = "The control room is dominated by the main terminal with its multiple displays that demonstrate various power pack features. Drew has to figure out how to turn it on, and then how to enable all the displays."
+   CRC32 = &H3E103CD6
+   CompCRC32 = &H3E103CD6
+   IsRoom = True
+
 [Logic9]
    ID = rm.Office
-   Description = ""
+   Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
    CRC32 = &H756704FC
    CompCRC32 = &H756704FC
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
-   Description = "include a walkman/tape player, with  a handful of casettes that can be used to play different sounds"
+   Description = "Room is filled with things from various Sierra AGI games. Clues are hidden through out that Drew will need to gain access to the main console and the power point functions."
    CRC32 = &HB3E6BCEA
    CompCRC32 = &HB3E6BCEA
    IsRoom = True
 
-[Logic20]
-   ID = lgc.ReadScroll
-   Description = ""
-   CRC32 = &H88398086
-   CompCRC32 = &H88398086
-   IsRoom = False
-
 [Logic11]
    ID = cp.Terminal
-   Description = ""
-   CRC32 = &HC529BF73
+   Description = "The main terminal screen. Needed to reboot the security system, so Drew can leave, and to load the modules that run the power pack functions."
+   CRC32 = &H4546EC07
    CompCRC32 = &HC529BF73
    IsRoom = True
 
 [Logic12]
    ID = cp.CAISOCC
-   Description = ""
-   CRC32 = &H780A2404
+   Description = "Custom Acoustic Instrument Settings Option Control Console: lets you edit the FM synthesizer sound channels."
+   CRC32 = &HB5030D65
    CompCRC32 = &H780A2404
    IsRoom = True
 
 [Logic13]
    ID = cp.ERIDOCC
-   Description = ""
-   CRC32 = &H7D9E0057
+   Description = "Emulated Rodent Input Device Option Control Console: lets you edit mouse cursors that can be exported for use in other AGI games."
+   CRC32 = &HAB9C5DB3
    CompCRC32 = &H7D9E0057
    IsRoom = True
 
 [Logic14]
    ID = cp.ESADOCC
-   Description = ""
-   CRC32 = &H653B1BAA
+   Description = "Electronic Synthesized Audio Data Options Control Console: lets you switch between AGI standard sound, FM synthesizer and MIDI output modes. You can also change the instruments. "
+   CRC32 = &H7F227A3B
    CompCRC32 = &H653B1BAA
    IsRoom = True
 
 [Logic15]
    ID = cp.ICAPOCC
-   Description = ""
-   CRC32 = &HE0887A70
+   Description = "Indexed Chromatic Association Properties Options Control Console: lets you edit color palettes, and also export them for use in other AGI games."
+   CRC32 = &H9BE78D08
    CompCRC32 = &HE0887A70
    IsRoom = True
 
 [Logic16]
    ID = cp.OFROCC
-   Description = ""
-   CRC32 = &H8D9F73AC
+   Description = "Overall Frame Rate Options Control Console: lets you experiment with the turbo mode speed setting."
+   CRC32 = &HBE2DB68F
    CompCRC32 = &H8D9F73AC
    IsRoom = True
 
 [Logic17]
    ID = cp.RANDOCC
-   Description = ""
-   CRC32 = &H1DDD4231
+   Description = "Rectangular Alpha-Numeric Display Options Control Console: lets you modify the color settings for message box displays."
+   CRC32 = &H121386AE
    CompCRC32 = &H1DDD4231
    IsRoom = True
 
 [Logic18]
    ID = rm.DoorKeypad
-   Description = ""
-   CRC32 = &H160F1483
-   CompCRC32 = &H160F1483
+   Description = "Close up of the access control keypad that controls access to the Power Pack control room."
+   CRC32 = &HFE26A627
+   CompCRC32 = &HFE26A627
    IsRoom = True
 
 [Logic19]
    ID = rm.SafeDoor
-   Description = ""
-   CRC32 = &H79A08D35
-   CompCRC32 = &H79A08D35
+   Description = "Close up of the safe door that's hidden behind the picture in the Power Pack operator's office."
+   CRC32 = &H1138BF11
+   CompCRC32 = &H1138BF11
    IsRoom = True
+
+[Logic20]
+   ID = lgc.ReadScroll
+   Description = "Displays the scroll in response to a 'read scroll' input."
+   CRC32 = &H7D7A8438
+   CompCRC32 = &H7D7A8438
+   IsRoom = False
 
 [Logic21]
    ID = lgc.ReadNotebook
-   Description = ""
-   CRC32 = &H771CACBD
-   CompCRC32 = &H771CACBD
+   Description = "Displays the notebook in response to a 'read notebook' input."
+   CRC32 = &HED43CC7D
+   CompCRC32 = &HED43CC7D
    IsRoom = False
 
 [Logic22]
    ID = lgc.ReadMagazine
-   Description = ""
-   CRC32 = &H2BDC2A34
-   CompCRC32 = &H2BDC2A34
+   Description = "Displays the magazine in response to a 'read magazine' input."
+   CRC32 = &H1A8A374E
+   CompCRC32 = &H1A8A374E
    IsRoom = False
 
 [Logic23]
    ID = lgc.ReadManual
-   Description = ""
-   CRC32 = &HEB469FA
-   CompCRC32 = &HEB469FA
+   Description = "Displays the security system manual in response to a 'read manual' input."
+   CRC32 = &H3302E365
+   CompCRC32 = &H3302E365
    IsRoom = False
 
 [Logic24]
    ID = lgc.Podium
-   Description = ""
-   CRC32 = &H13A14398
-   CompCRC32 = &H13A14398
+   Description = "Close up of the podium top. Will show the PQ note if it hasn't been picked up yet."
+   CRC32 = &H616582E6
+   CompCRC32 = &H616582E6
    IsRoom = False
 
 [Logic25]
    ID = lgc.Pillow
-   Description = ""
-   CRC32 = &HEBDC28D4
-   CompCRC32 = &HEBDC28D4
+   Description = "Close up of the pillow in the coffin. There's a clue stitched in the lower left corner."
+   CRC32 = &H9C813BA0
+   CompCRC32 = &H9C813BA0
    IsRoom = False
 
 [Logic26]
    ID = lgc.Walkman
-   Description = ""
-   CRC32 = &HC7F216B8
+   Description = "Close up of the Sony Walkman. Player can load/unload the cassette, pause/play/rewind/fast forward sound tracks."
+   CRC32 = &HCC2FBD80
    CompCRC32 = &HC7F216B8
    IsRoom = False
 
 [Logic27]
    ID = lgc.Statusbar
-   Description = "custom status bar"
+   Description = "Manages the PPDemo status bar, to include game score, clocks, sound settings."
    CRC32 = &HEFF9E31E
    CompCRC32 = &HEFF9E31E
    IsRoom = False
 
 [Logic28]
    ID = lgc.InitToolbar
-   Description = ""
+   Description = "Sets up the main toolbar when a room is first loaded."
    CRC32 = &H6D63BB30
    CompCRC32 = &H6D63BB30
    IsRoom = False
 
 [Logic29]
    ID = lgc.ToolbarFunctions
-   Description = ""
+   Description = "Provides all the functions for toolbar interactions."
    CRC32 = &HF84E0C0A
    CompCRC32 = &HF84E0C0A
    IsRoom = False
 
 [Logic30]
    ID = lgc.TerminalFunctions
-   Description = ""
+   Description = "Provides additional functions for the Terminal Control Panel logic."
    CRC32 = &H30215106
    CompCRC32 = &H30215106
    IsRoom = False
 
 [Logic31]
    ID = lgc.UseItem
-   Description = ""
+   Description = "Handles functions to interact with items in player's inventory."
    CRC32 = &H9C52F4BD
    CompCRC32 = &H9C52F4BD
    IsRoom = False
 
 [Logic32]
    ID = lgc.ExamineItem
-   Description = ""
+   Description = "Handles functions to display images of items in player's inventory."
    CRC32 = &H52F0BCA1
    CompCRC32 = &H52F0BCA1
    IsRoom = False
 
 [Logic33]
    ID = lgc.ScoreHandler
-   Description = ""
+   Description = "Manages player score. Score can go below zero."
    CRC32 = &H52B6C351
    CompCRC32 = &H52B6C351
    IsRoom = False
 
 [Logic34]
    ID = lgc.SetSound
-   Description = "handles setting the sound parameters to correct values before music or sounds get played"
+   Description = "Needed to set the sound parameters for sounds that use the default "
    CRC32 = &HC31B2001
    CompCRC32 = &HC31B2001
    IsRoom = False
 
 [Logic35]
    ID = lgc.SaveOptions
-   Description = ""
+   Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
    CRC32 = &HCB459041
    CompCRC32 = &HCB459041
    IsRoom = False
 
 [Logic36]
    ID = lgc.CacheOptions
-   Description = ""
+   Description = "Caches game settings so they can be restored after a game reset."
    CRC32 = &HB6C1078E
    CompCRC32 = &HB6C1078E
    IsRoom = False
 
 [Logic37]
    ID = lgc.GameHelp
-   Description = "Help Screen\n\nThis screen also demonstrates the use of extended characters in text mode."
+   Description = "Main Help Screen. Sets the correct mode and loads the default first topic page."
    CRC32 = &H19D92FF
    CompCRC32 = &H19D92FF
    IsRoom = False
 
 [Logic38]
    ID = lgc.HelpText1
-   Description = ""
+   Description = "Contains code to display help topic pages 1 to 4."
    CRC32 = &HFD138284
    CompCRC32 = &HFD138284
    IsRoom = False
 
 [Logic39]
    ID = lgc.HelpText2
-   Description = ""
+   Description = "Contains code to display help topic pages 5 to 8."
    CRC32 = &H3BB7786B
    CompCRC32 = &H3BB7786B
    IsRoom = False
 
-[Logic42]
-   ID = txt.Memo
-   Description = ""
-   CRC32 = &HC9D1396B
-   CompCRC32 = &HC9D1396B
-   IsRoom = False
-
 [Logic40]
    ID = lgc.HelpText3
-   Description = ""
+   Description = "Contains code to display help topic pages 8 to 12."
    CRC32 = &H68F0A50E
    CompCRC32 = &H68F0A50E
    IsRoom = False
 
 [Logic41]
    ID = lgc.HelpText4
-   Description = ""
+   Description = "Contains code to display help topic pages 13 to 17."
    CRC32 = &H82775E83
    CompCRC32 = &H82775E83
    IsRoom = False
 
-[Logic53]
-   ID = lgc.RedrawRoom
-   Description = ""
-   CRC32 = &H59676773
-   CompCRC32 = &H59676773
+[Logic42]
+   ID = txt.Memo
+   Description = "Displays the memo in response to a 'read memo' input."
+   CRC32 = &HC9D1396B
+   CompCRC32 = &HC9D1396B
    IsRoom = False
 
 [Logic50]
    ID = lgc.GameFunctions
-   Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
+   Description = "Game-specific functions."
    CRC32 = &H46EAA38B
    CompCRC32 = &H46EAA38B
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
-   Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
+   Description = "Initialization - this logic is called once, when the game first starts."
    CRC32 = &HF9E677E4
    CompCRC32 = &HF9E677E4
    IsRoom = False
 
 [Logic52]
    ID = lgc.RoomInit
-   Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
+   Description = "This logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms, inlcuding setting the correct graphics mode settings."
    CRC32 = &H31B7462B
-   CompCRC32 = &HB784EB40
+   CompCRC32 = &H31B7462B
+   IsRoom = False
+
+[Logic53]
+   ID = lgc.RedrawRoom
+   Description = "After close up logics are done, this logic handles restoring appropriate settings based on which room called for the close up."
+   CRC32 = &H59676773
+   CompCRC32 = &H59676773
    IsRoom = False
 
 [Logic54]
    ID = lgc.Death
-   Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
+   Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
    CRC32 = &H1BC61CC1
    CompCRC32 = &H1BC61CC1
    IsRoom = False
 
 [Logic55]
    ID = lgc.Error
-   Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
+   Description = "hen AGI traps an error, this logic will display information on the error and then quit AGI."
    CRC32 = &H316E1650
    CompCRC32 = &H316E1650
    IsRoom = False
 
 [Logic56]
    ID = lgc.Debug
-   Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
+   Description = "When debugging, this logic handles all debug commands."
    CRC32 = &H33ECD21C
-   CompCRC32 = &HFB82BF24
+   CompCRC32 = &H33ECD21C
    IsRoom = False
 
 [Logic57]
    ID = lgc.DebugHelp
-   Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
+   Description = "Displays a help screen that explains the available debug commands when debug mode is active."
    CRC32 = &HB7323AE6
    CompCRC32 = &HB7323AE6
    IsRoom = False
 
 [Logic58]
    ID = lgc.TraceInfo
-   Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
+   Description = "This logic includes the text of agi commands used by AGI's trace function."
    CRC32 = &HE1DD84F8
    CompCRC32 = &HE1DD84F8
    IsRoom = False
 
 [Logic60]
    ID = lgc.PowerPack
-   Description = ""
+   Description = "The main Power Pack logic. Needs to be called from main logic as the first thing when the game starts. It handles identifying and loading the appropriate power pack patch."
    CRC32 = &H149291E8
    CompCRC32 = &H149291E8
    IsRoom = False
 
 [Logic61]
    ID = lgc.Version2Check
-   Description = ""
+   Description = "This logic scans the loaded game's memory to determine which AGI version is running."
    CRC32 = &H7BC29213
    CompCRC32 = &H7BC29213
    IsRoom = False
 
 [Logic62]
    ID = lgc.mod2411
-   Description = ""
+   Description = "Patch code for AGI version 2.411."
    CRC32 = &H390279D
    CompCRC32 = &H390279D
    IsRoom = False
 
 [Logic63]
    ID = lgc.mod2425
-   Description = ""
+   Description = "Patch code for AGI version 2.425."
    CRC32 = &HEE14451D
    CompCRC32 = &HEE14451D
    IsRoom = False
 
 [Logic64]
    ID = lgc.mod2426
-   Description = ""
+   Description = "Patch code for AGI version 2.426."
    CRC32 = &HA5E79D7A
    CompCRC32 = &HA5E79D7A
    IsRoom = False
 
 [Logic65]
    ID = lgc.mod2435
-   Description = ""
+   Description = "Patch code for AGI version 2.435."
    CRC32 = &HBDFD134F
    CompCRC32 = &HBDFD134F
    IsRoom = False
 
 [Logic66]
    ID = lgc.mod2439
-   Description = ""
+   Description = "Patch code for AGI version 2.439."
    CRC32 = &HB1373284
    CompCRC32 = &HB1373284
    IsRoom = False
 
 [Logic67]
    ID = lgc.mod2440
-   Description = ""
+   Description = "Patch code for AGI version 2.440."
    CRC32 = &H3E6AE7E3
    CompCRC32 = &H3E6AE7E3
    IsRoom = False
 
 [Logic68]
    ID = lgc.mod2903
-   Description = ""
+   Description = "Patch code for AGI version 2.903."
    CRC32 = &H66FE988D
    CompCRC32 = &H66FE988D
    IsRoom = False
 
 [Logic69]
    ID = lgc.mod2911
-   Description = ""
+   Description = "Patch code for AGI version 2.911."
    CRC32 = &HFE5076D1
    CompCRC32 = &HFE5076D1
    IsRoom = False
 
 [Logic70]
    ID = lgc.mod2912
-   Description = ""
+   Description = "Patch code for AGI version 2.912."
    CRC32 = &HF6F4BDAA
    CompCRC32 = &HF6F4BDAA
    IsRoom = False
 
 [Logic71]
    ID = lgc.mod2915
-   Description = ""
+   Description = "Patch code for AGI version 2.915."
    CRC32 = &HA0F5D551
    CompCRC32 = &HA0F5D551
    IsRoom = False
 
 [Logic72]
    ID = lgc.mod2917
-   Description = ""
+   Description = "Patch code for AGI version 2.917."
    CRC32 = &HA10C7FDC
    CompCRC32 = &HA10C7FDC
    IsRoom = False
 
 [Logic73]
    ID = lgc.mod2936
-   Description = ""
+   Description = "Patch code for AGI version 2.936."
    CRC32 = &H690B5284
    CompCRC32 = &H690B5284
    IsRoom = False
 [::END Logics::]
 
 [::BEGIN Pictures::]
-[Picture6]
-   ID = pic.SecretRoom
-   Description = ""
-   BkgdImg = ""
-
-[Picture7]
-   ID = pic.Stairway
-   Description = ""
-   BkgdImg = ""
-
-[Picture8]
-   ID = pic.ControlRoom
+[Picture1]
+   ID = pic.Title
    Description = ""
    BkgdImg = ""
 
@@ -547,6 +537,21 @@
    Description = ""
    BkgdImg = ""
 
+[Picture6]
+   ID = pic.SecretRoom
+   Description = ""
+   BkgdImg = ""
+
+[Picture7]
+   ID = pic.Stairway
+   Description = ""
+   BkgdImg = ""
+
+[Picture8]
+   ID = pic.ControlRoom
+   Description = ""
+   BkgdImg = ""
+
 [Picture9]
    ID = pic.Office
    Description = ""
@@ -554,15 +559,6 @@
 
 [Picture10]
    ID = pic.StoreRoom
-   Description = ""
-   BkgdImg = ""
-   BkgdShow = ""
-   BkgdTrans = ""
-   BkgdPosn = ""
-   BkgdSize = ""
-
-[Picture36]
-   ID = pic.PQList
    Description = ""
    BkgdImg = ""
 
@@ -618,7 +614,7 @@
 [Picture20]
    ID = pic.Scroll
    Description = ""
-   BkgdImg = "PPDemo Art\scroll.jpg"
+   BkgdImg = "support\scroll.jpg"
    BkgdTrans = 127
    BkgdPosn = 0|2|3|0
    BkgdSize = 319|166|957|498
@@ -667,39 +663,10 @@
 [Picture29]
    ID = pic.PodiumTopClear
    Description = ""
-   BkgdImg = src\woodgrain.jpg
+   BkgdImg = support\woodgrain.jpg
    BkgdTrans = 204
    BkgdPosn = 0|33|3|0
    BkgdSize = 319|120|957|504
-   BkgdShow = False
-
-[Picture35]
-   ID = ovl.Walkman4
-   Description = ""
-   BkgdImg = ""
-
-[Picture34]
-   ID = ovl.Walkman3
-   Description = ""
-   BkgdImg = ""
-
-[Picture33]
-   ID = ovl.Walkman2
-   Description = ""
-   BkgdImg = ""
-
-[Picture32]
-   ID = ovl.Walkman1
-   Description = ""
-   BkgdImg = ""
-
-[Picture31]
-   ID = pic.Walkman
-   Description = ""
-   BkgdImg = "support\PPDemo Art\walkman.bmp"
-   BkgdTrans = 127
-   BkgdPosn = 17|0|0|9
-   BkgdSize = 303|167|2727|1503
    BkgdShow = False
 
 [Picture30]
@@ -710,6 +677,40 @@
    BkgdPosn = 0|0|0|0
    BkgdSize = 320|168|1600|840
    BkgdShow = False
+
+[Picture31]
+   ID = pic.Walkman
+   Description = ""
+   BkgdImg = "support\walkman.bmp"
+   BkgdTrans = 127
+   BkgdPosn = 17|0|0|9
+   BkgdSize = 303|167|2727|1503
+   BkgdShow = False
+
+[Picture32]
+   ID = ovl.Walkman1
+   Description = ""
+   BkgdImg = ""
+
+[Picture33]
+   ID = ovl.Walkman2
+   Description = ""
+   BkgdImg = ""
+
+[Picture34]
+   ID = ovl.Walkman3
+   Description = ""
+   BkgdImg = ""
+
+[Picture35]
+   ID = ovl.Walkman4
+   Description = ""
+   BkgdImg = ""
+
+[Picture36]
+   ID = pic.PQList
+   Description = ""
+   BkgdImg = ""
 
 [Picture37]
    ID = pic.FolderInterior
@@ -728,11 +729,6 @@
 
 [Picture40]
    ID = pic.PowerPackLogo
-   Description = ""
-   BkgdImg = ""
-
-[Picture1]
-   ID = pic.Title
    Description = ""
    BkgdImg = ""
 
@@ -778,43 +774,9 @@
 [::END Pictures::]
 
 [::BEGIN Sounds::]
-[Sound106]
-   ID = s.DoorOpen
-   Description = "A simple sound effect for an automatic closing door."
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound1]
    ID = m.KQ1Track1
    Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound107]
-   ID = s.DoorClose
-   Description = "A simple sound effect for an automatic opening door."
    Key = 0
    TPQN = 4
    Visible0 = True
@@ -846,42 +808,8 @@
    Mute2 = False
    Mute3 = False
 
-[Sound108]
-   ID = s.InstTest
-   Description = "used in sound control panel to test instruments"
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound3]
    ID = m.DDPGTrack1
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound109]
-   ID = s.NoiseTest1
    Description = ""
    Key = 0
    TPQN = 4
@@ -914,42 +842,8 @@
    Mute2 = False
    Mute3 = False
 
-[Sound110]
-   ID = s.NoiseTest2
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound5]
    ID = m.KQ2Track1
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound111]
-   ID = s.Drip
    Description = ""
    Key = 0
    TPQN = 4
@@ -982,42 +876,8 @@
    Mute2 = False
    Mute3 = False
 
-[Sound112]
-   ID = s.Crumble1
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound7]
    ID = m.KQ2Track3
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound113]
-   ID = s.Crumble2
    Description = ""
    Key = 0
    TPQN = 4
@@ -1067,23 +927,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound115]
-   ID = s.Tone0
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound10]
    ID = m.KQ2Track6
    Description = ""
@@ -1095,23 +938,6 @@
    Visible3 = True
    Inst0 = 80
    Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound116]
-   ID = s.Tone1
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1135,23 +961,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound117]
-   ID = s.Tone2
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound12]
    ID = m.BCTrack1
    Description = ""
@@ -1163,23 +972,6 @@
    Visible3 = True
    Inst0 = 80
    Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound118]
-   ID = s.Tone3
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1203,23 +995,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound119]
-   ID = s.Tone4
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound14]
    ID = m.BCTrack3
    Description = ""
@@ -1231,23 +1006,6 @@
    Visible3 = True
    Inst0 = 80
    Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound120]
-   ID = s.Tone5
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1271,23 +1029,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound121]
-   ID = s.Tone6
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound16]
    ID = m.SQ1Track2
    Description = ""
@@ -1299,23 +1040,6 @@
    Visible3 = True
    Inst0 = 80
    Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound122]
-   ID = s.Tone7
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1339,23 +1063,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound123]
-   ID = s.Tone8
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound18]
    ID = m.SQ1Track4
    Description = ""
@@ -1367,23 +1074,6 @@
    Visible3 = True
    Inst0 = 80
    Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound124]
-   ID = s.Tone9
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -1407,23 +1097,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound125]
-   ID = s.ToneStar
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound20]
    ID = m.KQ3Track2
    Description = ""
@@ -1435,23 +1108,6 @@
    Visible3 = True
    Inst0 = 80
    Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
-[Sound126]
-   ID = s.TonePound
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 98
-   Inst1 = 98
    Inst2 = 80
    Mute0 = False
    Mute1 = False
@@ -2546,40 +2202,6 @@
    Mute2 = False
    Mute3 = False
 
-[Sound127]
-   ID = s.WrongCode
-   Description = ""
-   Key = 0
-   TPQN = 16
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-
-[Sound128]
-   ID = s.RightCode
-   Description = ""
-   Key = 0
-   TPQN = 16
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-
 [Sound85]
    ID = s.SafeDial
    Description = ""
@@ -2835,6 +2457,23 @@
    Visible2 = True
    Visible3 = True
 
+[Sound100]
+   ID = s.RugTrip
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
 [Sound101]
    ID = s.CoffinSlam
    Description = ""
@@ -2886,23 +2525,6 @@
    Visible2 = True
    Visible3 = True
 
-[Sound100]
-   ID = s.RugTrip
-   Description = ""
-   Key = 0
-   TPQN = 16
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-   Inst0 = 80
-   Inst1 = 80
-   Inst2 = 80
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-
 [Sound104]
    ID = s.OpenCoffin
    Description = ""
@@ -2922,6 +2544,397 @@
 
 [Sound105]
    ID = s.CloseCoffin
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound106]
+   ID = s.DoorOpen
+   Description = "A simple sound effect for an automatic closing door."
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound107]
+   ID = s.DoorClose
+   Description = "A simple sound effect for an automatic opening door."
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound108]
+   ID = s.InstTest
+   Description = "used in sound control panel to test instruments"
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound109]
+   ID = s.NoiseTest1
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound110]
+   ID = s.NoiseTest2
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound111]
+   ID = s.Drip
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound112]
+   ID = s.Crumble1
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound113]
+   ID = s.Crumble2
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound114]
+   ID = m.Theme
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Inst0 = 25
+   Inst1 = 31
+   Inst2 = 63
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound115]
+   ID = s.Tone0
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound116]
+   ID = s.Tone1
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound117]
+   ID = s.Tone2
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound118]
+   ID = s.Tone3
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound119]
+   ID = s.Tone4
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound120]
+   ID = s.Tone5
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound121]
+   ID = s.Tone6
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound122]
+   ID = s.Tone7
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound123]
+   ID = s.Tone8
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound124]
+   ID = s.Tone9
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound125]
+   ID = s.ToneStar
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound126]
+   ID = s.TonePound
+   Description = ""
+   Key = 0
+   TPQN = 4
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+   Inst0 = 98
+   Inst1 = 98
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+
+[Sound127]
+   ID = s.WrongCode
+   Description = ""
+   Key = 0
+   TPQN = 16
+   Inst0 = 80
+   Inst1 = 80
+   Inst2 = 80
+   Mute0 = False
+   Mute1 = False
+   Mute2 = False
+   Mute3 = False
+   Visible0 = True
+   Visible1 = True
+   Visible2 = True
+   Visible3 = True
+
+[Sound128]
+   ID = s.RightCode
    Description = ""
    Key = 0
    TPQN = 16
@@ -2996,23 +3009,6 @@
    Inst0 = 62
    Inst1 = 50
    Inst2 = 55
-   Mute0 = False
-   Mute1 = False
-   Mute2 = False
-   Mute3 = False
-   Visible0 = True
-   Visible1 = True
-   Visible2 = True
-   Visible3 = True
-
-[Sound114]
-   ID = m.Theme
-   Description = ""
-   Key = 0
-   TPQN = 4
-   Inst0 = 25
-   Inst1 = 31
-   Inst2 = 63
    Mute0 = False
    Mute1 = False
    Mute2 = False
@@ -3126,16 +3122,92 @@
 [::END Sounds::]
 
 [::BEGIN Views::]
-[View12]
-   ID = vw.cp.CAISOCC
-   Description = ""
-
 [View0]
    ID = vw.Ego
    Description = "this is Drew"
 
+[View1]
+   ID = vw.Logos
+   Description = ""
+
+[View2]
+   ID = vw.ParkingLotArt
+   Description = ""
+
+[View3]
+   ID = vw.LobbyArt
+   Description = ""
+
+[View4]
+   ID = vw.HallwayArt
+   Description = ""
+
+[View5]
+   ID = vw.ClosetArt
+   Description = ""
+
+[View7]
+   ID = vw.StairwayArt
+   Description = ""
+
+[View8]
+   ID = vw.CtrlRoomArt
+   Description = ""
+
+[View9]
+   ID = vw.OfficeArt
+   Description = ""
+
+[View10]
+   ID = vw.StoreRoomArt
+   Description = ""
+
+[View11]
+   ID = vw.TerminalArt
+   Description = ""
+
+[View12]
+   ID = vw.cp.CAISOCC
+   Description = ""
+
+[View13]
+   ID = vw.cp.ERIDOCC
+   Description = ""
+
+[View14]
+   ID = vw.cp.ESADOCC
+   Description = ""
+
+[View15]
+   ID = vw.cp.ICAPOCC
+   Description = ""
+
+[View16]
+   ID = vw.cp.OFROCC
+   Description = ""
+
+[View17]
+   ID = vw.cp.RANDOCC
+   Description = ""
+
+[View18]
+   ID = vw.Cars
+   Description = ""
+
 [View19]
    ID = vw.ParkedCars
+   Description = ""
+
+[View20]
+   ID = vw.ReceptionistWalk
+   Description = ""
+
+[View21]
+   ID = vw.ReceptionistAct
+   Description = ""
+
+[View22]
+   ID = vw.Nurse
    Description = ""
 
 [View23]
@@ -3158,12 +3230,104 @@
    ID = vw.Security
    Description = ""
 
-[View104]
-   ID = vw.inv.Cassette
+[View28]
+   ID = vw.EgoSmall
    Description = ""
 
-[View105]
-   ID = vw.inv.Walkman
+[View29]
+   ID = vw.EgoSlip
+   Description = ""
+
+[View30]
+   ID = vw.EgoArrest
+   Description = ""
+
+[View31]
+   ID = vw.EgoDead
+   Description = ""
+
+[View32]
+   ID = vw.EgoCoffin
+   Description = ""
+
+[View33]
+   ID = vw.Tripping
+   Description = ""
+
+[View34]
+   ID = vw.EgoWashingHands
+   Description = ""
+
+[View35]
+   ID = vw.MagazineArt
+   Description = ""
+
+[View36]
+   ID = vw.PINPad
+   Description = ""
+
+[View37]
+   ID = vw.SafeNumbers1
+   Description = ""
+
+[View38]
+   ID = vw.SafeNumbers2
+   Description = ""
+
+[View39]
+   ID = vw.SafeHandle
+   Description = ""
+
+[View40]
+   ID = vw.SafeDial
+   Description = ""
+
+[View41]
+   ID = vw.ButtonsDown
+   Description = ""
+
+[View42]
+   ID = vw.ButtonsUp
+   Description = ""
+
+[View43]
+   ID = vw.MsgBoxColors
+   Description = ""
+
+[View44]
+   ID = vw.Credits
+   Description = ""
+
+[View45]
+   ID = vw.KickBucket
+   Description = ""
+
+[View51]
+   ID = vw.SmallPerson1
+   Description = ""
+
+[View52]
+   ID = vw.SmallPerson2
+   Description = ""
+
+[View53]
+   ID = vw.SmallPerson3
+   Description = ""
+
+[View54]
+   ID = vw.SmallPerson4
+   Description = ""
+
+[View55]
+   ID = vw.SmallPerson5
+   Description = ""
+
+[View56]
+   ID = vw.SmallPerson6
+   Description = ""
+
+[View57]
+   ID = vw.SmallPerson7
    Description = ""
 
 [View101]
@@ -3176,6 +3340,14 @@
 
 [View103]
    ID = vw.inv.Keyfob
+   Description = ""
+
+[View104]
+   ID = vw.inv.Cassette
+   Description = ""
+
+[View105]
+   ID = vw.inv.Walkman
    Description = ""
 
 [View106]
@@ -3208,181 +3380,5 @@
 
 [View113]
    ID = vw.InvPQList
-   Description = ""
-
-[View2]
-   ID = vw.ParkingLotArt
-   Description = ""
-
-[View1]
-   ID = vw.Logos
-   Description = ""
-
-[View3]
-   ID = vw.LobbyArt
-   Description = ""
-
-[View4]
-   ID = vw.HallwayArt
-   Description = ""
-
-[View5]
-   ID = vw.ClosetArt
-   Description = ""
-
-[View7]
-   ID = vw.StairwayArt
-   Description = ""
-
-[View8]
-   ID = vw.CtrlRoomArt
-   Description = ""
-
-[View9]
-   ID = vw.OfficeArt
-   Description = ""
-
-[View10]
-   ID = vw.StoreRoomArt
-   Description = ""
-
-[View13]
-   ID = vw.cp.ERIDOCC
-   Description = ""
-
-[View14]
-   ID = vw.cp.ESADOCC
-   Description = ""
-
-[View15]
-   ID = vw.cp.ICAPOCC
-   Description = ""
-
-[View16]
-   ID = vw.cp.OFROCC
-   Description = ""
-
-[View17]
-   ID = vw.cp.RANDOCC
-   Description = ""
-
-[View18]
-   ID = vw.Cars
-   Description = ""
-
-[View11]
-   ID = vw.TerminalArt
-   Description = ""
-
-[View20]
-   ID = vw.ReceptionistWalk
-   Description = ""
-
-[View21]
-   ID = vw.ReceptionistAct
-   Description = ""
-
-[View22]
-   ID = vw.Nurse
-   Description = ""
-
-[View28]
-   ID = vw.EgoSmall
-   Description = ""
-
-[View29]
-   ID = vw.EgoSlip
-   Description = ""
-
-[View30]
-   ID = vw.EgoArrest
-   Description = ""
-
-[View31]
-   ID = vw.EgoDead
-   Description = "Contains two different versions of Ego after dying. Add others to show additional ways Ego might die"
-
-[View32]
-   ID = vw.EgoCoffin
-   Description = ""
-
-[View33]
-   ID = vw.Tripping
-   Description = ""
-
-[View34]
-   ID = vw.EgoWashingHands
-   Description = ""
-
-[View35]
-   ID = vw.MagazineArt
-   Description = ""
-
-[View36]
-   ID = vw.PINPad
-   Description = ""
-
-[View37]
-   ID = vw.SafeNumbers1
-   Description = ""
-
-[View39]
-   ID = vw.SafeHandle
-   Description = ""
-
-[View38]
-   ID = vw.SafeNumbers2
-   Description = ""
-
-[View40]
-   ID = vw.SafeDial
-   Description = ""
-
-[View41]
-   ID = vw.ButtonsDown
-   Description = ""
-
-[View42]
-   ID = vw.ButtonsUp
-   Description = ""
-
-[View43]
-   ID = vw.MsgBoxColors
-   Description = ""
-
-[View44]
-   ID = vw.Credits
-   Description = ""
-
-[View54]
-   ID = vw.SmallPerson4
-   Description = ""
-
-[View53]
-   ID = vw.SmallPerson3
-   Description = ""
-
-[View51]
-   ID = vw.SmallPerson1
-   Description = ""
-
-[View52]
-   ID = vw.SmallPerson2
-   Description = ""
-
-[View55]
-   ID = vw.SmallPerson5
-   Description = ""
-
-[View56]
-   ID = vw.SmallPerson6
-   Description = ""
-
-[View57]
-   ID = vw.SmallPerson7
-   Description = ""
-
-[View45]
-   ID = vw.KickBucket
    Description = ""
 [::END Views::]

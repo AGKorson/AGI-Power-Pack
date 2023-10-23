@@ -2,6 +2,11 @@
 [ 
 [ lgc.Pillow
 [ 
+[ This is a close up of the pillow in the coffin. This logic is 
+[ called when the player looks inside the coffin. The code for 
+[ the ICAPOCC console is stitched into the lower left corner of the
+[ pillow.
+[
 [*********************************************************************
 
 [ power pack support

@@ -938,8 +938,16 @@ if (fLogoDone) {
   }
 }
 
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+[ no input in this room
+
+[***************************************
+[ CHECK FOR AN EXIT CONDITION
+[***************************************
 :getkey
-[ check for a keypress or joystick button
+[ check for a keypress or mouse button to move to start room
 if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) {
   :continue
   [ show wait cursor

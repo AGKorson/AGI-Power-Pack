@@ -4,7 +4,7 @@
 [
 [ Emulated Rodent Input Device Option Control Console
 [
-[ This console lets the user modify the cursors used in the game. 
+[ This console lets the player modify the cursors used in the game. 
 [ There are six different cursors that can be edited:
 [  - normal
 [  - walk
@@ -1195,7 +1195,7 @@ if ((btnAction == B_HOTX || btnAction == B_HOTY)) {
   [ adjust current column to end of text
   tmpCol += work2;
   ++tmpCol;
-  [ allow user to press number keys, bkspc/enter/esc/minus;
+  [ allow player to press number keys, bkspc/enter/esc/minus;
   [ up to two digits, 0-15
   :getChar
   lastChar = 0;

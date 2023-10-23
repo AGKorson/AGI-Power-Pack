@@ -2,7 +2,8 @@
 [
 [ rm.DoorKeypad
 [
-[ digit1 is ones, digit2 is tens, etc 
+[ This is a close up of the digital keypad that controls the door to
+[ the control room. If player enters correct code, the door will open. 
 [
 [*********************************************************************
 

@@ -4,7 +4,7 @@
 [
 [ Rectangular Alpha-Numeric Display Options Control Console
 [
-[ This console lets the user change the colors used for displaying
+[ This console lets the player change the colors used for displaying
 [ message boxes. Changes made will be reflected in all message boxes
 [ including the pause message and save/restore game dialogs.
 [

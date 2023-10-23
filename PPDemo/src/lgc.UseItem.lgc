@@ -3,7 +3,7 @@
 [ lgc.UseItem
 [
 [ when in 'use-item' mode, this logic 
-[ handles the user's input (click)
+[ handles the player's input (click)
 [
 [*********************************************************************
 

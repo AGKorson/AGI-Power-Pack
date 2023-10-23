@@ -181,8 +181,8 @@ if ((controller(cDebugMode) || said("debug") || said("debug", "on"))) {
     version();
     [ load debug logic into memory 
     [ (!this could be a concern since some logics
-    [ do dynamic loading/unloading of resources; user 
-    [ needs to be careful
+    [ do dynamic loading/unloading of resources; 
+    [ needs to be careful!
 [    load.logics(lgc.Debug);
   }
 }

@@ -2,11 +2,12 @@
 [
 [ rm.SafeDoor
 [
-[ views for dial numbers take up A LOT of memory; need to split them
-[ into two views, and use memory-swap techniques to manage them
+[ This is a close up of the safe door. The player has to dial in the
+[ correct code to open the safe.
 [
-[ turn right for 1st num, left one full turn, then to 2nd
-[ then right to 3rd num
+[ Views for dial numbers take up A LOT of memory. In order to display
+[ rotating numbers, the views are split into two views. The logic 
+[ swaps them in and out of memory as needed.
 [
 [*********************************************************************
 

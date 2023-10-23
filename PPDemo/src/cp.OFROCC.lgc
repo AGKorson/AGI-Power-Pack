@@ -4,10 +4,10 @@
 [
 [ Overall Frame Rate Options Control Console
 [ 
-[ This console lets the user try different settings of Turbo mode and
-[ game speed settings. The Power Pack Demo game uses Turbo mode for 
-[ all rooms and logics, so changes here will not affect the game's 
-[ speed settings. But it gives the user an idea of how speed can
+[ This console lets the player try different settings of Turbo mode
+[ and game speed settings. The Power Pack Demo game uses Turbo mode 
+[ for all rooms and logics, so changes here will not affect the game's
+[ speed settings. But it gives the player an idea of how speed can
 [ be controlled with/without the turbo option.
 [
 [*********************************************************************
@@ -184,7 +184,7 @@ if (newRoom) {
   position.v(oSlider, cursorX, cursorY);
   stop.cycling(oSlider);
   draw(oSlider);
-  [ cache current animationInterval in case user cancels
+  [ cache current animationInterval in case player cancels
   tmpInterval = animationInterval;
   
   [ turbo checkbox

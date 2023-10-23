@@ -1112,7 +1112,7 @@ if (btnAction == B_RESTORE) {
 }
 
 if (btnAction == B_PREV_PAL) {
-  [ let user choose a room number; preview that picture
+  [ let player choose a room number; preview that picture
   get.num("Room # to preview (1 - 10):", work1);
   if (work1 > 0 && work1 < 11) {
     [ fade to black, 2msec fade value

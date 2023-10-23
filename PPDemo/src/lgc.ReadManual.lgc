@@ -2,6 +2,11 @@
 [ 
 [ lgc.ReadManual
 [ 
+[ Displays a close up of the BaDASS manual for the player to examine.
+[ The manual includes some hints about how the system controls the 
+[ doors, and the factory reset code, which is needed in the MOCC
+[ terminal to enable the door to re-open.
+[
 [*********************************************************************
 
 [ power pack support

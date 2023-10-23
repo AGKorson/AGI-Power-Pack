@@ -2,6 +2,11 @@
 [ 
 [ lgc.ReadNotebook
 [ 
+[ The notebook has several pages. This logic handles displaying the
+[ pages, and allowing the player to scroll through them all.
+[ Hints about the ERIDOCC module password can be found on the pages
+[ of the notebook.
+[
 [*********************************************************************
 
 [ power pack support
