@@ -2,6 +2,15 @@
 [ 
 [ lgc.ToolbarFunctions
 [ 
+[ Provides all the functions for toolbar interactions, including 
+[ setting the correct cursor when changes are needed. If game is in a
+[ 'wait' state, no toolbar interaction is allowed. If Drew is dead, 
+[ only the default 'arrow' tool is allowed. 
+[
+[ When cursor is over the toolbar it will automatically display the 
+[ arrow cursor, reverting back to selected tool icon after moving off
+[ the toolbar.
+[
 [*********************************************************************
 
 [ power pack support
@@ -61,6 +70,8 @@ if (controller(cRightDblClick) && !deathType) {
     }
     set(toggleBtn);
   }
+  [ ignore this click for rest of cycle
+  set.key(CLR.CTRL, CLR.CTRL, cRightDblClick); [ clear.controller(cNUM)
 }
 
 [ check for button click
@@ -110,11 +121,8 @@ if (controller(cLeftClick)) {
         set(toggleBtn);
       }
     }
-    [ normally after processing a click, you should always 
-    [ clear the controller; here we don't because this is  
-    [ the last logic run in the game cycle, so controllers 
-    [ will be reset anyway (this saves us a few bytes of
-    [ memory)
+    [ ignore this click for rest of cycle
+    set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
   }
   
   [ check for mouse down/mouse up on quit/save/restore buttons
@@ -233,7 +241,7 @@ if (mouseBtn != 1) {
       restore.game();
     }
     
-    [ ignore clicks for rest of cycle
+    [ ignore this click for rest of cycle
     set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
   }
 }

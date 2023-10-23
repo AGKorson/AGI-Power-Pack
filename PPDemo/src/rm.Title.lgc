@@ -947,8 +947,9 @@ if (fLogoDone) {
 [ CHECK FOR AN EXIT CONDITION
 [***************************************
 :getkey
-[ check for a keypress or mouse button to move to start room
-if (!initialRun && (have.key() || controller(cLeftClick) || controller(cMenu))) {
+[ check for a keypress (including ESC) or mouse button to move to start room
+if (!initialRun && (have.key() || controller(cMenu) || 
+    controller(cLeftClick) || controller(cRightClick))) {
   :continue
   [ show wait cursor
   cursoricon = C_WAIT;

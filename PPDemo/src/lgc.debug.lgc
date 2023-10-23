@@ -1,8 +1,8 @@
 [*********************************************************************
 [
-[ lgc.Debug: Debug mode
+[ lgc.Debug
 [
-[ When debugging, use this logic to handle debug commands.
+[ When debugging, this logic handles all debug commands.
 [
 [*********************************************************************
 
@@ -214,12 +214,14 @@ if (said("get", "item", "rol")) {
 if (said("gimme", "gimme")) {
   print("You gottum!");
   tmpVarA = 0;
+  [ get count of items
   block(ITEM.COUNT, &tmpVarA, &tmpVarA, 0); [ item.count(vLOCATION, vRESULT)
-  tmpVarB = 0;
+  [ skip item 0 ('?')
+  tmpVarB = 1;
   NextObj:
-  if (tmpVarB < tmpVarA) {
-    ++tmpVarB;
     get.v(tmpVarB);
+    ++tmpVarB;
+  if (tmpVarB < tmpVarA) {
     goto(NextObj);
   }
 }

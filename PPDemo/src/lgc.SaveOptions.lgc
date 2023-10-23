@@ -2,10 +2,13 @@
 [
 [ lgc.SaveOptions
 [
-[ saves sound mode, clock mode, speed and custom instrument
-[ values to the ppdemo.cfg settings file
+[ Sound settings, clock mode, game speed and custom instrument values
+[ need to be saved so they can be restored every time the game starts.
+[ This logic writes these game settings to the PPDEMO.CFG file.
 [
-[ first string is sound/clock/speed:
+[ Format of PPDEMO.CFG:
+[
+[ STRING0: sound/clock/speed:
 [   ten characters long:
 [   abcdefghi
 [   a:  0 = sound disabled
@@ -23,11 +26,11 @@
 [   j:  0 = show intro
 [       1 = skip intro
 [
-[ second string is instrument index values:
+[ STRING1: instrument index values:
 [  FM instrument settings (five sets of three-digts)
 [  MIDI instruments (three sets of three-digits)
 [
-[ strings three-seven are the custom FM instrument strings
+[ STRING2 - STRING6: custom FM instruments
 [
 [*********************************************************************
 
@@ -52,7 +55,7 @@
 [ set filename
 filename = "ppdemo.cfg";
 
-[ update settings
+[ build string0 to hold sound, clock, speed values
 if (soundOn) {
   work1 = 1;
 } else {
@@ -88,7 +91,6 @@ if (skipIntro) {
 [ blank the output string
 tmpStr2 = "                                       ";
 [ create sound/clock/speed output (in s23)
-[ (use 4channel attenuation value[v101])
 tmpStr1 = "%v46%v47%v48%v23|2%v240%v241%v10|2%v242";
 [ format it and copy to output string
 block(STR.FORMAT, &tmpStr1, &tmpStr2, 0); [ str.format(sINPUT, sRESULT)

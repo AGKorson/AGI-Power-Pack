@@ -2,7 +2,12 @@
 [
 [ lgc.HelpText1
 [
-[ displays help topics 1 - 4
+[ Display help topic details for topics 1 - 4.
+[
+[ TOPIC 1: About PPDemo
+[ TOPIC 2: Credits
+[ TOPIC 3: Running PPDemo
+[ TOPIC 4: Game Options
 [
 [*********************************************************************
 
@@ -26,7 +31,6 @@
 [***************************************
 
 if (selectedTopic == 1) {
-[  display(3, 2, "About SQ:PPDemo");
   display(3, 2, "About PPDemo");
   [ add details
   set.text.attribute(BLACK, LT_GRAY);
@@ -58,29 +62,29 @@ if (selectedTopic == 2) {
   topicTitle = "Credits";
   block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
   display(2, 46, "%s20");
-  display(3, 22, "Sierra Quest written");
-  display(3, 60, "Background Art");
-  display(4, 23, "and programmed by");
-  display(4, 66, "by");
-  display(7, 25, "Animation Art");
-  display(7, 60, "Additional Art");
-  display(8, 30, "by");
-  display(8, 65, "by");
-  display(11, 23, "Original Music and");
-  display(11, 59, "Additional Sound");
-  display(12, 24, "Sound Effects by");
-  display(12, 62, "Effects by");
+  display(3, 22, "Power Pack Demo written");
+  display(3, 61, "Background Art");
+  display(4, 25, "and programmed by");
+  display(4, 67, "by");
+  display(7, 27, "Animation Art");
+  display(7, 61, "Additional Art");
+  display(8, 32, "by");
+  display(8, 66, "by");
+  display(11, 25, "Original Music and");
+  display(11, 60, "Additional Sound");
+  display(12, 26, "Sound Effects by");
+  display(12, 63, "Effects by");
   display(14, 43, "AGI Power Pack");
   display(15, 44, "programmed by");
-  display(19, 28, "Sierra Quest was designed and created in the");
+  display(19, 26, "Power Pack Demo was designed and created in the");
   display(20, 35, "WinAGI Game Development System");
   set.text.attribute(BLUE, LT_GRAY);
-  display(5, 25, "Andrew Korson");
-  display(5, 62, "Klownstein");
-  display(9, 27, "Klownstein");
-  display(9, 61, "Andrew Korson");
-  display(13, 25, "Andrew Korson");
-  display(13, 63, "doomlazer");
+  display(5, 27, "Andrew Korson");
+  display(5, 63, "Klownstein");
+  display(9, 29, "Klownstein");
+  display(9, 62, "Andrew Korson");
+  display(13, 27, "Andrew Korson");
+  display(13, 64, "doomlazer");
   display(16, 44, "Andrew Korson");
   display(22, 24, "http://agiwiki.sierrahelp.com/index.php?title=WinAGI");
   return();

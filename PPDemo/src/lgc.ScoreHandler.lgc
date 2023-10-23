@@ -2,14 +2,15 @@
 [ 
 [ lgc.ScoreHandler
 [ 
-[ currentScore has absolute value of score; negativeScore flag
-[ determines sign;
-[
-[ work1 has score adjustment, positive, or negative
-[ adjustment is never more than +/-5
-[
-[ max negative value is -250  
-[ max positive value is +250
+[ This score handler logic is needed to allow for negative score
+[ values. It uses a flag (negativeScore) to determine if the value of
+[ currentScore is treated as positive or negative.
+[ 
+[ Maximum positive value is 250 and maximum negative value is -250.
+
+[ When adjusting scores, maximum increase/decrease must be no more 
+[ than +/-5 (otherwise the adjustment may interfere with the 
+[ maximum/minimum values).
 [ 
 [*********************************************************************
 
@@ -34,14 +35,16 @@ if (deathType == DT_GAME_OVER) {
 if (negativeScore) {
   [ subtract the adjustment amount
   currentScore -= work1;
-  [ if adustment was negative(-1 through -5)
+  [ if subtracting from a negative score
+  [ (adjustment value is -1 to -5)
   if (work1 > 250) {
-    [ max is 250
+    [ lowest negative value is -250
     if (currentScore > 250) {
       currentScore = 250;
     }
   } else {
-    [ check for reversal to positive value
+    [ if adding to a negative score check for
+    [ reversal to positive value
     if ((currentScore > 251 || currentScore == 0)) {
       reset(negativeScore);
       currentScore *= -1;

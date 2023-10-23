@@ -1,21 +1,12 @@
 [*********************************************************************
 [
-[ lgc.GameFunctions: Game-specific functions
+[ lgc.GameFunctions
 [
-[ You should use this logic to perform any game specific functions, 
-[ such as counting down timers, etc and processing player input 
-[ related to the game (such as examining/using inventory items) and 
-[ any other things that are required in several rooms that you don't
-[ want to duplicate in each room.
+[ This logic is for game specific functions, such as counting down
+[ timers, etc. and processing player input that apply to all rooms.
 [
 [ This logic is called from logic 0, on every cycle, unless 
 [ disableGameFunctions is set.
-[
-[ Sierra did not use a separate logic for all this - they just did it
-[ all from logic 0. I find it is neater this way, as you can keep your
-[ game specific processing separate from other system-related things
-[ (although these may require some modification for your game). Also,
-[ this makes logic 0 easier to manage.
 [
 [*********************************************************************
 
@@ -179,10 +170,14 @@ if ((controller(cDebugMode) || said("debug") || said("debug", "on"))) {
     print(gameVersionMsg); 
     [ and interpreter version
     version();
-    [ load debug logic into memory 
-    [ (!this could be a concern since some logics
-    [ do dynamic loading/unloading of resources; 
-    [ needs to be careful!
+    [ Ideally, lgc.Debug would be loaded here, when debug mode is
+    [ requested. But since this game does a lot of resource swapping
+    [ it's too difficult to manage adding debug logic so it won't get
+    [ orphaned (example is if Walkman is playing a sound; if debug
+    [ logic was loaded while a sound was playing, after the sound 
+    [ finished, the debug logic would be lost). 
+    [ The solution is to always load the debug logic (in lgc.Main) 
+    [ every time a new.room command is encountered.
 [    load.logics(lgc.Debug);
   }
 }
@@ -245,7 +240,7 @@ if ((controller(cRestart) ||
 if ((controller(cHelp) || said("help"))) {
   [ show the main help screen
   set(showHelp);
-  [ use local variable to initialize the help screen
+  [ use local variable 240 to initialize the help screen
   set(f240);
   call(lgc.GameHelp);
 }
@@ -420,43 +415,11 @@ if (controller(cChooseItem)) {
         call(lgc.RedrawRoom);
       }
     } else {
-      selectedItem += 100;
-      show.obj.v(selectedItem);
-      [ some items get a second, detailed look
-      [  post-it note, music sheet, PQList
-      if ((selectedItem == 107 || selectedItem == 112 || 
-           selectedItem == 113)) {
-        call(lgc.ExamineItem);
-        call(lgc.RedrawRoom);
-      }
-      [ some items get additional information, which is a clue to 
-      [ look closer
-      if (selectedItem == 101) {
-        [ magazine
-        print("The articles are, of course, outdated, but probably "
-              "very interesting as nostalgia items.");
-      }
-      if (selectedItem == 106) {
-        [ memo
-        print("It looks like a memo for AMOS users.");
-      }
-      if (selectedItem == 108) {
-        [ BaDASS manual
-        print("This would be useful to BaDASS system administrators.");
-      }
-      if (selectedItem == 109) {
-        [ notebook
-        print("Notes from AMOS Team meetings - that could be interesting.");
-      }
-      if (selectedItem == 110) {
-        [ folder
-        print("The folder is thin- is there anything left in it?");
-      }
-      if (selectedItem == 111) {
-        [ scroll
-        print("It was probably used by the original development "
-              "team when KQIII was first designed.");
-      }
+      [ display the item
+      work1 = selectedItem;
+      [ set haveMatch to avoid the 'I don't understand' response
+      set(haveMatch);
+      goto(lookitem);
     }
   }
 }
@@ -472,6 +435,158 @@ if ((controller(cQuit) ||
 [ if player has provided input and no match found yet
 [ (including unknown words)
 if (haveInput && !haveMatch) {
+  [ for inventory item look statements, check if
+  [ player has the item; if so, show it with 
+  [ show.obj.v (also used by status() window)
+  
+  work1 = 0;
+  [ look magazine
+  if (said("look", "magazine")) {
+    if (has("magazine")) {
+      work1 = 1;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look floppy disk
+  if (said("look", "floppy disk")) {
+    if (has(floppydisk)) {
+      work1 = 2;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look keyfob
+  if (said("look", "keyfob")) {
+    if (has("car keyfob")) {
+      work1 = 3;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look cassette
+  if (said("look", "cassette")) {
+    if (has("cassette tape")) {
+      work1 = 4;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look Walkman
+  if (said("look", "walkman")) {
+    if (has("Walkman")) {
+      work1 = 5;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look memo
+  if (said("look", "memo")) {
+    if (has("memo")) {
+      work1 = 6;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look post-it note
+  if (said("look", "note")) {
+    if (has("post-it note")) {
+      work1 = 7;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look manual
+  if (said("look", "manual")) {
+    if (has("BaDASS manual")) {
+      work1 = 8;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look notebook
+  if (said("look", "notebook")) {
+    if (has("notebook")) {
+      work1 = 9;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look folder
+  if (said("look", "folder")) {
+    if (has("folder")) {
+      work1 = 10;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look scroll
+  if (said("look", "scroll")) {
+    if (has("scroll")) {
+      work1 = 11;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look music sheet
+  if (said("look", "music sheet")) {
+    if (has("music sheet")) {
+      work1 = 12;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ look PQ list
+  if (said("look", "list")) {
+    if (has("PQ idea list")) {
+      work1 = 13;
+    } else {
+      print("You don't have it.");
+    }
+  }
+  [ if something matched, show it now
+  if (work1 > 0) {
+    :lookitem
+
+    work1 += 100;
+    show.obj.v(work1);
+    [ some items get a second, detailed look
+    [  post-it note, music sheet, PQList
+    if ((work1 == 107 || work1 == 112 || 
+         work1 == 113)) {
+      call(lgc.ExamineItem);
+      call(lgc.RedrawRoom);
+    }
+    [ some items get additional information, which is a clue to 
+    [ look closer
+    if (work1 == 101) {
+      [ magazine
+      print("The articles are, of course, outdated, but probably "
+            "very interesting as nostalgia items.");
+    }
+    if (work1 == 106) {
+      [ memo
+      print("It looks like a memo for AMOS users.");
+    }
+    if (work1 == 108) {
+      [ BaDASS manual
+      print("This would be useful to BaDASS system administrators.");
+    }
+    if (work1 == 109) {
+      [ notebook
+      print("Notes from AMOS Team meetings - that could be interesting.");
+    }
+    if (work1 == 110) {
+      [ folder
+      print("The folder is thin- is there anything left in it?");
+    }
+    if (work1 == 111) {
+      [ scroll
+      print("It was probably used by the original development "
+            "team when KQIII was first designed.");
+    }
+  }
+  
   [ read magazine
   if (said("read", "magazine")) {
     if (has("magazine")) {

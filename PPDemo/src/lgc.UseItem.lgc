@@ -2,8 +2,8 @@
 [ 
 [ lgc.UseItem
 [
-[ when in 'use-item' mode, this logic 
-[ handles the player's input (click)
+[ Contains functions to interact with items in player's inventory when
+[ the player clicks on an item in inventory in the 'use-item' mode.
 [
 [*********************************************************************
 
@@ -23,6 +23,8 @@
 if (controller(cLeftClick)) {
   [ floppy disk
   if (selectedItem == &floppydisk) {
+    [ only valid in control room (which is checked before this
+    [ logic is called)
     if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         print("You insert the disk and flip the latch to secure it.");
@@ -31,9 +33,12 @@ if (controller(cLeftClick)) {
         put(floppydisk, work1);
         [ first time awards bonus points
         if (scoreFloppy) {
+          [ temporarily lose four points for dropping the floppy
           work1 = -4;
         } else {
+          [ only drop two points (for a net of +2 when it's retrieved)
           work1 = -2;
+          set(scoreFloppy);
         }
         call(lgc.ScoreHandler);
       } else {

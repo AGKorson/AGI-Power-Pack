@@ -1,12 +1,13 @@
 [*********************************************************************
 [
-[ lgc.GameHelp: Help Screen
+[ lgc.GameHelp
 [
-[ This screen also demonstrates the use of extended characters 
-[ in text mode.
+[ This is the Main Help Screen. The Help Screen is a text mode screen
+[ that interrupts normal game play. It has a topics list panel on the
+[ left, and a topic details panel on the right.
 [
-[ Left panel has topics; use cursor to select topics; right panel will
-[ display relevant information.
+[ The player can use the up/down arrows to highlight a topic, and the
+[ text of that topic's details will be displayed in the details panel.
 [
 [*********************************************************************
 
@@ -26,9 +27,9 @@
 #define topicTitle      s20
 
 [***************************************
-[ MAIN CODE BLOCK 
+[ INITIALIZATION CODE 
 [***************************************
-
+[ first time through, set the mode and draw the main frame
 if (initScreen) {
   reset(initScreen);
   
@@ -70,6 +71,7 @@ if (initScreen) {
   if (work1 < 24) {
     goto(drawedge);
   }
+  [ add topics to list
   display(4, 4, "Credits");
   display(6, 2, "Running PPDemo");
   display(8, 2, "Game Options");
@@ -93,6 +95,10 @@ if (initScreen) {
   prevItem = 0;
   set(moveSelection);
 }
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
 
 [ check for change in egoDir
 if (egoDir) {
@@ -206,12 +212,19 @@ if (moveSelection) {
 }            
 
 :getkey
-if ((have.key() || controller(cMenu))) {
+[ any key (including ESC), or any mouse click
+if ((have.key() || controller(cMenu) ||
+     controller(cLeftClick) || controller(cRightClick))) {
   [ reset helpmode
   reset(showHelp);
   
+  [ clear mouse clicks/ESC
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
+  set.key(CLR.CTRL, CLR.CTRL, cRightClick); [ clear.controller(cNUM)
+  set.key(CLR.CTRL, CLR.CTRL, cMenu); [ clear.controller(cNUM)
+  
   [ restore colors
-  [ (before statusline or stored values will be
+  [ (before restoring statusline or stored values will be
   [ overwritten)
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   

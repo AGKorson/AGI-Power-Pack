@@ -1,9 +1,9 @@
 [*********************************************************************
 [
-[ lgc.TraceInfo: Tracer Info
+[ lgc.TraceInfo
 [
-[ This logic includes the text of agi commands so the trace window
-[ will display the command text instead of just numbers.
+[ This logic includes the text of agi commands used by AGI's trace
+[ function.
 [
 [*********************************************************************
 

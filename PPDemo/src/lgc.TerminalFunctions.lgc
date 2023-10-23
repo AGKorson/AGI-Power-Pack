@@ -2,7 +2,12 @@
 [ 
 [ lgc.TerminalFunctions
 [ 
-[ valid commands:
+[ Provides additional functions for the Terminal Control Panel logic.
+[ This logic is called by the cp.Terminal logic as needed to update
+[ the terminal display and handle some of the command output. The 
+[ desired function is passed in variable 'terminalfn'. 
+[
+[ List of valid commands:
 [ AMOS       CLS        CD         CHDIR   
 [ CHKDSK     DIR        COPY       DEL
 [ ERASE      EXIT       FORMAT     HELP

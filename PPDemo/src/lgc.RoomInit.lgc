@@ -1,10 +1,12 @@
 [*********************************************************************
 [ 
-[ lgc.RoomInit: Room Initialization
+[ lgc.RoomInit
 [ 
 [ This logic is called by room logics when they are executed for the
 [ first time after a new.room() command is encountered. It takes care 
-[ of the common items that are done for all rooms.
+[ of the common items that are done for all rooms, such as setting 
+[ the correct screen width, animating ego, and clearing all room and
+[ dynamic variables and flags.
 [
 [*********************************************************************
 

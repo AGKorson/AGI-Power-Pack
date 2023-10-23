@@ -80,6 +80,8 @@ if (startTrace) {
 
 [ help screens use ONLY their custom logics
 if (showHelp) {
+  [ use local variable 240 to initialize the help screen
+  set(f240);
   call(lgc.GameHelp);
   return();
 }

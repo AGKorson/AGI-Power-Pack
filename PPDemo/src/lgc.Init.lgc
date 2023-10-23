@@ -1,11 +1,13 @@
 [*********************************************************************
 [
-[ lgc.Init: Initialization
+[ lgc.Init
 [
 [
-[ This logic should only be called once, when the game first starts
-[ see the 'Keyboard Controller' topic in the Help file for details on
-[ key assignments.
+[ This logic should only be called once, when the game first starts,
+[ or on a restart. It sets up the game for play, including keyboard 
+[ controllers, menu adjustments, randomizing the parking lot cars, and
+[ other setup functions. The PPDEMO.CFG file is checked for sound/
+[ clock/speed settings and sound settings.
 [
 [*********************************************************************
 

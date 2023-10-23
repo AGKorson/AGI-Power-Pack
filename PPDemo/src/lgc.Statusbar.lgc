@@ -2,8 +2,18 @@
 [ 
 [ lgc.Statusbar
 [ 
-[ add score, name of game, and music icons
+[ Used by the Power Pack custom status bar function. This logic runs
+[ during each cycle when one of the tagged variables or flags changes.
+[ Because it runs outside the normal AGI logics processing cycle, you
+[ have to be very careful to avoid situations that may corrupt your 
+[ game. You should keep the logic as small as possible so it won't 
+[ affect overall game performance.
 [
+[ The status bar in the Demo game is dynamic. It will display the 
+[ current score (which may be negative), the game title, and a clock, 
+[ (either real-time or game-time), and sound volume.
+[
+[ MAP OF STATUS BAR ELEMENTS:
 [0         1         2         3         4         5         6         7         ]
 [01234567890123456789012345678901234567890123456789012345678901234567890123456789]
 [ Score: xxx of yyy       AGI Power Pack Demo Game         hh:mm AM   |ssssssss| ]

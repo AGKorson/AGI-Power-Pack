@@ -1,6 +1,12 @@
 [*********************************************************************
 [ 
 [ lgc.SetSound
+[
+[ Since several sound effects in the game use specific settings, 
+[ other generic sounds (and the Walkman soundtrack) that use the 
+[ game's default settings need the sound parameters reset before
+[ the sounds are played. This logic handles setting up the sound
+[ settings correctly.
 [ 
 [*********************************************************************
 
@@ -52,6 +58,7 @@ if (musicmode == FM_SOUND) {
     ++work1;
     set.key(&work1, &MIDIInst2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
   } else {
+    [ set AGI single-channel mode
     reset(4channelsound);
   }
 }

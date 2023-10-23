@@ -2,12 +2,11 @@
 [ 
 [ lgc.RedrawRoom
 [ 
-[ redraws the current room after the 'reading' room
-[ for items is done; some rooms need graphic elements
-[ re-added to the picture
+[ After close up logics are done, this logic handles restoring 
+[ appropriate settings based on which room called for the close up.
 [
-[ Views don't need to be loaded, since they are already
-[ loaded by the room that called this function
+[ Room-specific views don't need to be loaded, since they are already
+[ loaded by the room that called this function.
 [
 [*********************************************************************
 

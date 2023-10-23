@@ -2,8 +2,11 @@
 [ 
 [ lgc.CacheOptions
 [ 
-[ cache sound, clock, speed, instrument settings before restarting
-[ uses s12 - s23
+[ When restarting a game, instead of reading settings from PPDEMO.CFG,
+[ it's easier to get them from strings. Strings are not modified 
+[ when a game restarts. This function sets strings s12 through s23 
+[ with sound/clock/speed settings and instrument settings so they can
+[ be restored after a game is restarted.
 [
 [*********************************************************************
 

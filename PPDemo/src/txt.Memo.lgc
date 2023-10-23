@@ -2,7 +2,10 @@
 [
 [ txt.Memo
 [
-[ displays the contents of the office memo, using the text screen
+[ Displays the memo in response to a 'read memo' input. There are no
+[ graphical elements, so text.screen mode is used here. The text of 
+[ menu is split into a top half and bottom half. Any key (or mouse 
+[ click advances to second half/closes the display.
 [
 [*********************************************************************
 
@@ -31,7 +34,9 @@ display(19, 13, "reissued new userids. Your new userid will be your ");
 display(20, 13, "initials and your employee IDnumber (which is based on ");
 display(21, 13, "seniority in the company, for example 'jd123'). ");
 display(23, 13, "3. Every account has been assigned the same temporary ");
-v242 = 1;
+
+[ draw side lines
+v242 = &m1;
 v240 = 2;
 Label1:
 v241 = 5;
@@ -42,16 +47,29 @@ display.v(v240, v241, v242);
 if (v240 < 25) {
   goto(Label1);
 }
+
+[ wait for any key (including ESC) or any mouse click
 lastChar = 0;
-Label2:
-if (!have.key()) {
-  goto(Label2);
+getkey1:
+if (!have.key() && !controller(cMenu) && 
+    !controller(cLeftClick) && !controller(cRightClick)) {
+  goto(getkey1);
 }
+[ clear mouse clicks/ESC
+set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
+set.key(CLR.CTRL, CLR.CTRL, cRightClick); [ clear.controller(cNUM)
+set.key(CLR.CTRL, CLR.CTRL, cMenu); [ clear.controller(cNUM)
+
+[ show bottom half of memo
 clear.text.rect(2, 6, 24, 73, WHITE);
 set.text.attribute(WHITE, BLACK);
-clear.lines(0, 24, 254);
+[ bump entire image up two lines, exposing black below
+[ bottom of memo
+clear.lines(0, 24, -2);
+[ clear bottom line of memo to white
 set.text.attribute(BLACK, WHITE);
 clear.text.rect(23, 4, 23, 75, WHITE);
+[ add text for bottom half
 display(3, 13, "password (Temp123!). You need to logon as soon as ");
 display(4, 13, "possible and choose another password that meets the ");
 display(5, 13, "new security requirements. Passwords must now be at ");
@@ -67,15 +85,23 @@ display(16, 13, "5. If you have any questions, please call one of the ");
 display(17, 13, "AMOS System Administrators.");
 display(23, 5, "읕컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"
         "컴컴켸");
-lastChar = 0;
-Label3:
-if (!have.key()) {
-  goto(Label3);
-}
-set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
-[[ restore text screen to 40col
-[configure.screen(SCREEN.MODE, TEXTMODE, 40COL); [ screen.mode(MODE, WIDTH)
 
+[ wait for any key (including ESC) or any mouse click
+lastChar = 0;
+getkey2:
+if (!have.key() && !controller(cMenu) && 
+    !controller(cLeftClick) && !controller(cRightClick)) {
+  goto(getkey2);
+}
+[ clear mouse clicks/ESC
+set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
+set.key(CLR.CTRL, CLR.CTRL, cRightClick); [ clear.controller(cNUM)
+set.key(CLR.CTRL, CLR.CTRL, cMenu); [ clear.controller(cNUM)
+
+[ restore colors
+set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
+
+[ go back to game
 graphics();
 accept.input();
 return();

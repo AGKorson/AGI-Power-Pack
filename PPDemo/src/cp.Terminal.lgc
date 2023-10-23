@@ -17,7 +17,7 @@
 [ the disk in order to win.
 [
 [ The MOCC simulates an operating system by providing a bunch of DOS
-[ commands. Most don't do anything real. Valic commands include:
+[ commands. Most don't do anything real. Valid commands include:
 [   AMOS       CLS        CD         CHDIR   
 [   CHKDSK     DIR        COPY       DEL
 [   ERASE      EXIT       FORMAT     HELP

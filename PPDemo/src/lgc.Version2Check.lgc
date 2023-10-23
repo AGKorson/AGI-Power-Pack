@@ -2,6 +2,9 @@
 [ 
 [ lgc.Version2Check
 [ 
+[ This logic scans the loaded game's memory to determine which AGI
+[ version is running.
+[
 [*********************************************************************
 
 [ power pack support

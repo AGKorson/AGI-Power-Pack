@@ -2,6 +2,9 @@
 [ 
 [ lgc.InitToolbar
 [ 
+[ Sets up the main toolbar when a room is first loaded by adding the
+[ correct images to the tool bar template at the top of the screen.
+[
 [*********************************************************************
 
 [ power pack support

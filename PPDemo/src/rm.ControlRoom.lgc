@@ -277,9 +277,12 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         put(floppydisk, work1);
         [ first time awards bonus points
         if (scoreFloppy) {
+          [ temporarily lose four points for dropping the floppy
           work1 = -4;
         } else {
+          [ only drop two points (for a net of +2 when it's retrieved)
           work1 = -2;
+          set(scoreFloppy);
         }
         call(lgc.ScoreHandler);
       } else {

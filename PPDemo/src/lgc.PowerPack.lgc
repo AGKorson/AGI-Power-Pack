@@ -2,6 +2,13 @@
 [ 
 [ lgc.PowerPack
 [ 
+[ The main Power Pack logic. Needs to be called from main logic as the
+[ first thing when the game starts. It handles identifying and loading
+[ the appropriate power pack patch.
+[
+[ If this instance of AGI does not support the Power Pack, user is
+[ informed of the problem and the game immediately quits.
+[
 [*********************************************************************
 
 [ power pack support

@@ -1,9 +1,13 @@
 [*********************************************************************
 [
-[ lgc.Death: Death handler
+[ lgc.Death
 [
-[ This logic is run when the player dies, or otherwise ends the game.
-[ The death message displayed depends on the value of deathType.
+[ The death handler! This logic is run when ego dies, or otherwise
+[ ends the game. It handles the limited input that is allowed while
+[ ego is dead.
+[
+[ There are eight different ways for ego to die in this game. The
+[ deathType variable is used to track ego's death state:
 [
 [ 0: not dead
 [ 1: run over by car
@@ -14,9 +18,7 @@
 [ 6: slipped on wet spot in lobby
 [ 7: car stolen
 [ 8: kicked the bucket
-
 [ 99: ego driving away (check win/lose/score)
-[
 [ 254: death sequence complete
 [ 255: winning sequence complete
 [
@@ -54,16 +56,18 @@ if (deathType < DT_SEQ_DONE) {
   discard.view(vw.ButtonsUp);
   reset(noScript);
   
-  [ start a timer to provide a delay after announcement
-  [ before player is shown final 'thx for playing' message
+  [ start a timer to provide a delay after death announcement
+  [ before player is shown final 'thanks for playing' message
   deathTimer = 25;
 
-  [ check deathtype to display initial death message
+  [ check deathtype to display initial death message:
+  
   [ hit by a car
   if (deathType == DT_RUNOVER) {
     print("Stepping in front of a moving vehicle turned out to be a "
           "bad idea.");
-    [ patients continue on their way
+    [ other patients continue on their way
+    [ (yes, they are heartless bastards!)
     #define patientCar   o3
     start.update(patientCar);
   }
@@ -227,6 +231,8 @@ call(lgc.ToolbarFunctions);
 
 [ looking at help screen is allowed
 if ((controller(cHelp) || said("help"))) {
+  [ use local variable 240 to initialize the help screen
+  set(f240);
   call(lgc.GameHelp);
 }
 

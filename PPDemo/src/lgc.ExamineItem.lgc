@@ -2,9 +2,10 @@
 [ 
 [ lgc.ExamineItem
 [ 
-[ displays a custom close up picture for certain items
-[ selectedItem variable has index (offset by 100) of 
-[ desired item
+[ Handles functions to display images of items in player's inventory.
+[ Certain items need an entire picture resource to display the item
+[ for examination. This logic handles the setup needed to display the
+[ item's picture without interfering with current game state.
 [
 [*********************************************************************
 
@@ -40,28 +41,28 @@ cursoricon = C_DEFAULT;
 set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 
 [ draw the picture for selected item
-if (selectedItem == 107) {
-  work1 = pic.ComboList;
+if (work1 == 107) {
+  work2 = pic.ComboList;
 }
-if (selectedItem == 110) {
-  work1 = pic.FolderInterior;
+if (work1 == 110) {
+  work2 = pic.FolderInterior;
 }
-if (selectedItem == 112) {
-  work1 = pic.MusicSheet;
+if (work1 == 112) {
+  work2 = pic.MusicSheet;
 }
-if (selectedItem == 113) {
-  work1 = pic.PQList;
+if (work1 == 113) {
+  work2 = pic.PQList;
 }
-load.pic(work1);
-draw.pic(work1);
-discard.pic(work1);
+load.pic(work2);
+draw.pic(work2);
+discard.pic(work2);
 
 [ hide objects while showing items
 block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE)
 show.pic();
 
 [ some items need text added
-if (selectedItem == 110) {
+if (work1 == 110) {
   set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(RED, WHITE);
   display(6, 47, "Drew, don't");
@@ -71,7 +72,7 @@ if (selectedItem == 110) {
   display(10, 47, "Snd4chan$");
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
-if (selectedItem == 113) {
+if (work1 == 113) {
   [ add text after drawing the picture
   [ 4     5         6   X      
   [ 4567890123456789012345

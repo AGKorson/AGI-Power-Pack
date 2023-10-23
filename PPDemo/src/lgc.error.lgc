@@ -1,9 +1,9 @@
 [*********************************************************************
 [
-[ lgc.Error: Error Handler
+[ lgc.Error
 [
-[ When AGI traps an error, this logic will display information
-[ on the error and then quit AGI.
+[ When AGI traps an error, this logic will display information on the
+[ error, log it to LOGFILE and then quit AGI.
 [
 [*********************************************************************
 
@@ -18,7 +18,7 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
-[ print the error
+[ display the error message
 print.v(errorNumber);
 
 [ log it (build the correct output string)
@@ -63,7 +63,7 @@ return();
 #message 20 "draw(%v18):%m31"
 #message 21 "discard.pic(%v18):%m32"
 #message 22 ""
-#message 23 "get(%v18) or put(%v18):%m26"
+#message 23 "get(%v18), put(%v18) or drop(%v18):%m33"
 #message 24 ""
 #message 25 "\nPress ESC to quit."
 #message 26 "%m27.%m25"
@@ -73,3 +73,4 @@ return();
 #message 30 "%m29loaded.%m25"
 #message 31 "%m29set.%m25"
 #message 32 "Picture not loaded.%m25"
+#message 33 "\nInvalid inventory item number%m25"

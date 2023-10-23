@@ -1,8 +1,9 @@
 [*********************************************************************
 [
-[ lgc.DebugHelp: Debug mode help screen
+[ lgc.DebugHelp
 [
-[ Displays a help screen with typical debug mode commands.
+[ Displays a help screen that explains the available debug commands
+[ when debug mode is active.
 [
 [*********************************************************************
 
@@ -155,25 +156,3 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "DEBUG MODE HELP             "
-#message 2 "trace on    - enables tracing          "
-#message 3 "              (SCROlL LOCK to activate)"
-#message 4 "show mem    - display memory stats     "
-#message 5 "tp          - teleport                 "
-#message 6 "pos         - change ego's position    "
-#message 7 "show var    - display value of a var   "
-#message 8 "set var     - change value of a var    "
-#message 9 "show flag   - display status of a flag "
-#message 10 "set flag    - set a flag               "
-#message 11 "reset flag  - reset (clear) a flag     "
-#message 12 "object      - display information about"
-#message 13 "              a screen object          "
-#message 14 "show pri    - display priority screen  "
-#message 15 "get object  - get any inventory object "
-#message 16 "gimme gimme - get all inventory objects"
-#message 17 "object room - display room number of   "
-#message 18 "              an inventory object      "
-#message 19 "set pri     - set ego's priority       "
-#message 20 "release pri - release ego's priority   "
-#message 21 "coords      - ego's coordinates on/off "
-#message 22 "log         - logs error's into logfile"
