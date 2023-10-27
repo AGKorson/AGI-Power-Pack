@@ -378,7 +378,7 @@ if (lastChar == 10) {
       terminalfn = ADDLINE;
       call(lgc.TerminalFunctions);
       [ pause for a bit
-      tmpCounter1 = 4;
+      tmpCounter1 = 3;
       output = ".";
       :wait5
         terminalfn = DELAY_ADD;
@@ -397,7 +397,7 @@ if (lastChar == 10) {
     output = "amos load:all";
     terminalfn = ADDLINE;
     call(lgc.TerminalFunctions);
-    tmpCounter1 = 3;
+    tmpCounter1 = 1;
     :delay1
       terminalfn = DELAY_LF;
       call(lgc.TerminalFunctions);

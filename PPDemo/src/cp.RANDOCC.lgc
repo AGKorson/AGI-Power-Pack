@@ -73,6 +73,7 @@
 #define   CHG_BG     1
 #define   CHG_FG     2
 #define   CHG_BD     3
+#define   CHG_ALL    4
 #define oldColor     v238
 
 #define update       f220
@@ -611,8 +612,9 @@ if (btnAction == B_RESET) {
   tmpBG = WHITE;
   tmpFG = BLACK;
   tmpBorder = RED;
-  [ and update them
+  [ and update them all
   set(update);
+  chgElement = CHG_ALL;
 }
 
 if (btnAction == B_PAL_FG) {
@@ -687,8 +689,44 @@ if (update) {
     display(10, 26, "Right Click");
     display(12, 28, "BG");
     display(12, 34, "Bd");
+    [ update all
+    chgElement = CHG_ALL;
+  }
+  
+  if (chgElement == CHG_ALL) {
+    [ update all palette colors - first clear existing
+    palBG = 0;   [ start with black
+    work1 = 16;  [ row
+    work2 = 14;  [ col
+    work3 = &m4; [ two blank spaces
+    :clearcolor
+      [ attributes by var
+      toggle.monitor(); [ set.text.attr.v(vFG, vBG)
+      [ foreground doesn't matter since text is blank
+      set.text.attribute(&palFG, &palBG);
+      [ clear both lines of this color
+      display.v(work1, work2, work3);
+      ++work1;
+      display.v(work1, work2, work3);
+     
+      [ now do bottom row
+      palBG += 8;
+      work1 += 2;
+      toggle.monitor(); [ set.text.attr.v(vFG, vBG)
+      set.text.attribute(&palFG, &palBG);
+      display.v(work1, work2, work3);
+      ++work1;
+      display.v(work1, work2, work3);
+      [ reset to top row
+      palBG -= 8;
+      work1 -= 4;
+    if (palBG < 7) {
+      ++palBG;
+      work2 += 3;
+      goto(clearcolor);
+    }
     
-    [ update all palette colors
+    [ now add new labels
     cInit = CHG_BG; [ BG
     cRow = 16;
     cCol = tmpBG;

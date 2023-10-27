@@ -156,39 +156,39 @@ if (mouseBtn == 1) {
       display(19, 13, "to include:");
 
     [ display( 2,  9, "7890123456789012345678");
-      display( 4, 47, " - mouse and cursor");
-      display( 5, 47, "   support;");
+      display( 4, 48, "- mouse and cursor");
+      display( 5, 50, "support;");
 
-      display( 7, 47, " - soundboard/midi");
-      display( 8, 47, "   support;");
+      display( 7, 48, "- soundboard/midi");
+      display( 8, 50, "support;");
 
-      display(10, 47, " - 80 column text mode");
+      display(10, 48, "- 80 column text mode");
 
-      display(12, 47, " - improved text");
-      display(13, 47, "   support (extended");
-      display(14, 47, "   characters?);");
+      display(12, 48, "- improved text");
+      display(13, 50, "support (extended");
+      display(14, 50, "characters?);");
 
-      display(16, 47, " - support for the new");
-      display(17, 47, "   MSDOS code page");
-      display(18, 47, "   feature (for inter-");
-      display(19, 47, "   national character");
-      display(20, 47, "   support);");
+      display(16, 48, "- support for the new");
+      display(17, 50, "MSDOS code page");
+      display(18, 50, "feature (for inter-");
+      display(19, 50, "national character");
+      display(20, 50, "support);");
     }
     
     if (pageNum == 3) {
     [ display( 2,  9, "3456789012345678901234");
       set.text.attribute(BLACK, WHITE);
-      display( 4, 13, " - improved color");
-      display( 5, 13, "   options - dynamic");
-      display( 6, 13, "   palettes, screen");
-      display( 7, 13, "   fade options, more");
-      display( 8, 13, "   display/message");
-      display( 9, 13, "   box color choices;");
+      display( 4, 14, "- improved color");
+      display( 5, 16, "options - dynamic");
+      display( 6, 16, "palettes, screen");
+      display( 7, 16, "fade options, more");
+      display( 8, 16, "display/message");
+      display( 9, 16, "box color choices;");
 
-      display(11, 13, " - reconfigure memory");
-      display(12, 13, "   model (more than");
-      display(13, 13, "   256K is becoming");
-      display(14, 13, "   standard)");
+      display(11, 14, "- reconfigure memory");
+      display(12, 16, "model (more than");
+      display(13, 16, "256K is becoming");
+      display(14, 16, "standard)");
 
     [ display( 2,  9, "7890123456789012345678");
       display( 4, 47, "5/23/88");

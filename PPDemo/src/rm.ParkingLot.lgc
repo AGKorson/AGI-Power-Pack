@@ -83,6 +83,7 @@
 #define electrocuted  f227
 #define patientVisible f228
 #define egoDying       f229
+#define playCarSound   f230
 
 #define theDay          s12
 #define weekendMsg      s13
@@ -411,7 +412,7 @@ if (egoCarSeq) {
     print("You drive away, your visit to Sierra On-Line is over.");
     [ set deathType
     deathType = DT_DRIVE_AWAY;
-  }  
+  }
 }
 
 [ if first time in room and not showing opening sequence
@@ -485,8 +486,10 @@ if (patientTimer == 0) {
       move.obj(oPatientCar, 99, 128, 2, patientDone);
     }
     draw(oPatientCar);
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+  set(f10);trace.on();
+  
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -518,9 +521,12 @@ if (patientDone) {
     erase(oPatientCar);
     reset(patientHere);
     reset(patientDone);
-    if (playSound) {
-      stop.sound();
+    [ if car sound is active, stop it
+    [ (but not any other sound)
+    if (playCarSound) {
       reset(playSound);
+      reset(playCarSound);
+      stop.sound();
     }
     patientSeq = IDLE;
   }
@@ -536,8 +542,8 @@ if (patientDone) {
     [ start car
     reset(patientDone);
     patientSeq = P2_START; 
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-start sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -547,6 +553,7 @@ if (patientDone) {
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.CarStart, soundDone);
       set(playSound);
+      set(playCarSound);
     } else {
       set(soundDone);
     }
@@ -582,8 +589,8 @@ if (patientDone) {
     [ stop car
     reset(patientDone);
     patientSeq = P2_STOP; 
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-stop sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -619,8 +626,11 @@ if (patientDone) {
     erase(oPatientCar);
     reset(patientHere);
     reset(patientDone);
-    if (playSound) {
+    [ if car sound is playing, stop it
+    [ (but not any other sound)
+    if (playCarSound) {
       stop.sound();
+      reset(playCarSound);
       reset(playSound);
     }
     patientSeq = IDLE;
@@ -641,9 +651,10 @@ if (patientDone) {
     reset(patientVisible);
     [ start car
     reset(patientDone);
-    patientSeq = P1_START; 
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    patientSeq = P1_START;
+    [ only play sound if walkman is not in use 
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-start sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -653,6 +664,7 @@ if (patientDone) {
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.CarStart, soundDone);
       set(playSound);
+      set(playCarSound);
     } else {
       set(soundDone);
     }
@@ -688,8 +700,8 @@ if (patientDone) {
     [ stop car
     reset(patientDone);
     patientSeq = P1_STOP; 
-    [ only play sound if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-stop sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -713,8 +725,8 @@ if (soundDone) {
     move.obj(oPatientCar, 5, 143, 1, patientDone);
     unblock();
     patientSeq = P1_DRIVE_B;
-    [ only play sound effect if walkman not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -742,8 +754,8 @@ if (soundDone) {
     move.obj(oPatientCar, 61, 131, 1, patientDone);
     unblock();
     patientSeq = P2_DRIVE_E;
-    [ only play sound effect if walkman not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    [ and not playing any other music
+    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -766,8 +778,9 @@ if (soundDone) {
     goto(checkdeath);
   }
   
-  [ if walkman not in use, continue car sound effects if car is moving
-  if ((currentTrack == 0 || currentTrack > 128) && 
+  [ if walkman not in use and not playing any other music, 
+  [continue car sound effects if car is moving
+  if ((currentTrack == 0 || currentTrack > 128) && !playSound && 
       patientSeq > 200) {
     [ play car-running sound, force 4-channel FM
     set(4channelsound);
@@ -778,6 +791,10 @@ if (soundDone) {
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     sound(s.Car, soundDone);
     set(playSound);
+    [ need to track specifically if car sound is playing
+    [ so it can be stopped correctly when car reaches 
+    [ edge of screen
+    set(playCarSound);
   }
 }
 
@@ -1270,12 +1287,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
   if (cursormode == C_USE) {
     [ same as 'use item'
-    [ ego
-    if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
-      print("Please don't touch yourself in public. There may be children watching.");
-      goto(doneclick);
-    }
-
+    
     [ ego car
     if (posn(egoCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       :entercar
@@ -1370,6 +1382,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       goto(doneclick);
     }
     
+    [ ego
+    if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
+      print("Please don't touch yourself in public. There may be children watching.");
+      goto(doneclick);
+    }
+
     [ patient
     if (posn(oPatient, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       distance(ego, oPatient, work1);

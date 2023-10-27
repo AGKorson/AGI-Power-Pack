@@ -797,7 +797,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     [ is ego by file cabinet?
     if (obj.in.box(ego, 73, 117, 93, 122)) {
       if ((storeFileDrStatus == OPEN1 || storeFileDrStatus == OPEN2)) {
-        print("No drawers are open.");
+        print("The drawer is empty.");
       } else {
         if (storeFileDrStatus == OPEN3) {
           if (has("cassette tape")) {

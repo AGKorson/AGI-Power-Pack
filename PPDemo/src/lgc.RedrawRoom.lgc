@@ -164,6 +164,9 @@ if (currentRoom == rm.Office) {
 cursoricon = cursormode;
 set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 
+[ clear any text from bottom rows
+clear.lines(23, 24, BLACK);
+
 [ redisplay objects
 block(HIDE.OBJS, SHOW_OBJS, 0, 0); [ hide.objs(MODE)
 show.pic();

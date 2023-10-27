@@ -149,6 +149,8 @@ if (gameRestarted) {
   set.key(0, 32, cDebugMode);        [ ALT+D - enter debug mode
   set.key(0, 84, cDebugHelp);        [ SHIFT+F1 - show debug help screen
   
+  [ gameID can be set without worrying about the game quitting
+  [ (it can even be changed during the game!)
   set.game.id("PPD"); 
                          
   [ set up screen configuration (agi's default of 0, 23, 21 is not desired)
@@ -362,11 +364,11 @@ if (gameRestarted) {
     custInst2 = "22215909FFFF030F020000";
     custInst3 = "2F200000FFFF0F0F00030E";
     custInst4 = "22242100C0C00C0C000000";
-    [ enable MIDI, and set desired instruments
+    [ enable FM synth, and set default instruments
     set(4channelsound);
-    set(useMIDI);
-    set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    musicmode = MIDI_SOUND;
+    reset(useMIDI);
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    musicmode = FM_SOUND;
     work1 = 0;
     work2 = 0;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)

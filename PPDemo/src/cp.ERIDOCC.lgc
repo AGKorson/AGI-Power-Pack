@@ -295,8 +295,19 @@ if ((newRoom || refresh)) {
   display(16, 1, "Restore");
   display(18, 1, "Export ");
   display(20, 1, " Exit  ");
-  display(4, 22, "\x11");
-  display(4, 32, "\x10");
+  if (cIndex > 0) {
+    display(4, 22, "\x11");
+  }
+  if (cIndex < 4) {
+    display(4, 32, "\x10");
+  }
+  set.text.attribute(LT_GRAY, WHITE);
+  if (cIndex == 0) {
+    display(4, 22, "\x11");
+  }
+  if (cIndex == 4) {
+    display(4, 32, "\x10");
+  }
   
   set.text.attribute(BLACK, LT_GRAY);
   display(6, 2, "   Mode");
@@ -1134,6 +1145,16 @@ if (btnAction == B_EXPORT) {
 }
 
 if (btnAction == B_IDX_DN) {
+  [ update arrow buttons
+  if (newIndex == 1) {
+    set.text.attribute(LT_GRAY, WHITE);
+    display(4, 22, "\x11");
+  }
+  if (newIndex == 5) {
+    set.text.attribute(BLACK, WHITE);
+    display(4, 32, "\x10");
+  }
+  [ move down one index level  
   --newIndex;
   tmpX = 4;
   tmpY = 24;
@@ -1141,11 +1162,22 @@ if (btnAction == B_IDX_DN) {
   work1 += 14;
   set.text.attribute(BLACK, LT_GRAY);
   display.v(tmpX, tmpY, work1);
+  
   [ pop display colors
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 if (btnAction == B_IDX_UP) {
+  [ update arrow buttons
+  if (newIndex == 0) {
+    set.text.attribute(BLACK, WHITE);
+    display(4, 22, "\x11");
+  }
+  if (newIndex == 4) {
+    set.text.attribute(LT_GRAY, WHITE);
+    display(4, 32, "\x10");
+  }
+  [ move up one index level
   ++newIndex;
   tmpX = 4;
   tmpY = 24;

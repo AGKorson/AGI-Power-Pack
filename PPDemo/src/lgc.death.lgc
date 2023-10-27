@@ -160,6 +160,7 @@ if (deathTimer == 1) {
     }
     [ if player has floppy with source code, it's a win
     if (has(floppydisk) && (floppyfiles == 2 || floppyfiles == 3)) {
+      stop.sound();
       load.sound(m.Winner);
       set(4channelsound);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -174,6 +175,7 @@ if (deathTimer == 1) {
       work2 = 67; [ baritone sax
       set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(m.Winner, soundDone);
+      set(playSound);
       print("Your vist to Oakhurst was a big success! You managed "
             "to find a copy of the source files for the AGI Power "
             "Pack.");

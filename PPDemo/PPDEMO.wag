@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/26/2023 9:32:04 PM"
+   LastEdit = "10/27/2023 3:49:35 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.1"
@@ -65,8 +65,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &H4317A9D7
-   CompCRC32 = &H4317A9D7
+   CRC32 = &HBB40E929
+   CompCRC32 = &HBB40E929
    IsRoom = True
 
 [Logic3]
@@ -121,15 +121,15 @@
 [Logic10]
    ID = rm.StoreRoom
    Description = "Room is filled with things from various Sierra AGI games. Clues are hidden through out that Drew will need to gain access to the main console and the power point functions."
-   CRC32 = &HB3E6BCEA
-   CompCRC32 = &HB3E6BCEA
+   CRC32 = &HCC519B2B
+   CompCRC32 = &HCC519B2B
    IsRoom = True
 
 [Logic11]
    ID = cp.Terminal
    Description = "The main terminal screen. Needed to reboot the security system, so Drew can leave, and to load the modules that run the power pack functions."
-   CRC32 = &HDD245BC
-   CompCRC32 = &HDD245BC
+   CRC32 = &H196B2E14
+   CompCRC32 = &H196B2E14
    IsRoom = True
 
 [Logic12]
@@ -142,8 +142,8 @@
 [Logic13]
    ID = cp.ERIDOCC
    Description = "Emulated Rodent Input Device Option Control Console: lets you edit mouse cursors that can be exported for use in other AGI games."
-   CRC32 = &H12F0A03D
-   CompCRC32 = &H12F0A03D
+   CRC32 = &H48AB5B94
+   CompCRC32 = &H48AB5B94
    IsRoom = True
 
 [Logic14]
@@ -156,8 +156,8 @@
 [Logic15]
    ID = cp.ICAPOCC
    Description = "Indexed Chromatic Association Properties Options Control Console: lets you edit color palettes, and also export them for use in other AGI games."
-   CRC32 = &H1061EED3
-   CompCRC32 = &H1061EED3
+   CRC32 = &HF4F803E4
+   CompCRC32 = &HF4F803E4
    IsRoom = True
 
 [Logic16]
@@ -170,8 +170,8 @@
 [Logic17]
    ID = cp.RANDOCC
    Description = "Rectangular Alpha-Numeric Display Options Control Console: lets you modify the color settings for message box displays."
-   CRC32 = &H121386AE
-   CompCRC32 = &H121386AE
+   CRC32 = &HA204031E
+   CompCRC32 = &HA204031E
    IsRoom = True
 
 [Logic18]
@@ -198,8 +198,8 @@
 [Logic21]
    ID = lgc.ReadNotebook
    Description = "Displays the notebook in response to a 'read notebook' input."
-   CRC32 = &HED43CC7D
-   CompCRC32 = &HED43CC7D
+   CRC32 = &HC8F373CD
+   CompCRC32 = &HC8F373CD
    IsRoom = False
 
 [Logic22]
@@ -359,8 +359,8 @@
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &HE8CF4FF9
-   CompCRC32 = &HE8CF4FF9
+   CRC32 = &H99E53A9C
+   CompCRC32 = &H99E53A9C
    IsRoom = False
 
 [Logic52]
@@ -373,15 +373,15 @@
 [Logic53]
    ID = lgc.RedrawRoom
    Description = "After close up logics are done, this logic handles restoring appropriate settings based on which room called for the close up."
-   CRC32 = &HC0A9224B
-   CompCRC32 = &HC0A9224B
+   CRC32 = &HBB5C367
+   CompCRC32 = &HBB5C367
    IsRoom = False
 
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &HCA08DC83
-   CompCRC32 = &HCA08DC83
+   CRC32 = &H99C5EB29
+   CompCRC32 = &H99C5EB29
    IsRoom = False
 
 [Logic55]

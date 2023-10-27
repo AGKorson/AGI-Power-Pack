@@ -40,8 +40,8 @@
 #define LP_CF_IDX   4 [    "     "    "  Index up/down buttons
 #define LP_SLIDER   5 [ slider button states
 
-#define colorindex   v220
-#define newindex     v221
+#define colorIndex   v220
+#define newIndex     v221
 #define tmpRow       v222
 #define tmpCol       v223
 #define tmpVal       v224
@@ -253,8 +253,8 @@ if (newRoom) {
   [ need to show the pic before text can be added
   show.pic();
   
-  [ set to colorindex zero value as default starting point
-  colorindex = 0;
+  [ set to colorIndex zero value as default starting point
+  colorIndex = 0;
   [ and set sliders to match
   set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   set.text.attribute(BLACK, WHITE);
@@ -337,9 +337,20 @@ if ((newRoom || refresh)) {
   
   display(16, 18, "Restore");
   
-  display(7, 17, "\x11");
-  display(7, 24, "\x10");
-
+  if (colorIndex > 0) {
+    display(7, 17, "\x11");
+  }
+  if (colorIndex < 15) {
+    display(7, 24, "\x10");
+  }
+  set.text.attribute(LT_GRAY, WHITE);
+  if (colorIndex == 0) {
+    display(7, 17, "\x11");
+  }
+  if (colorIndex == 15) {
+    display(7, 24, "\x10");
+  }
+  
   set.text.attribute(BLACK, LT_GRAY);
   display(10, 2, "  Cursor");
   display(12, 4, "Ms");
@@ -724,10 +735,14 @@ if (cursormode) {
         btnAction = B_RESET;
       }
       if (cursorpos == CP_IDX_DN) {
-        btnAction = B_IDX_DN;
+        if (colorIndex > 0) {
+          btnAction = B_IDX_DN;
+        }
       }
       if (cursorpos == CP_IDX_UP) {
-        btnAction = B_IDX_UP;
+        if (colorIndex < 15) {
+          btnAction = B_IDX_UP;
+        }
       }
       if (cursorpos == CP_RESTORE) {
         btnAction = B_RESTORE;
@@ -780,12 +795,16 @@ if (cursormode) {
     
     [ over IndexDn button [66, 46 - 73, 57]
     if (mouseX > 66 && mouseX < 73 && mouseY > 46 && mouseY < 57) {
-      btnAction = B_IDX_DN;
+      if (colorIndex > 0) {
+        btnAction = B_IDX_DN;
+      }
     }
     
     [ over IndexUp button [94, 46 - 101, 57]
     if (mouseX > 94 && mouseX < 101 && mouseY > 46 && mouseY < 57) {
-      btnAction = B_IDX_UP;
+      if (colorIndex < 15) {
+        btnAction = B_IDX_UP;
+      }
     }
     [ over RestoreColor button [70, 118 - 101, 129]
     if (mouseX > 70 && mouseX < 101 && mouseY > 118 && mouseY < 129) {
@@ -936,32 +955,49 @@ if (btnAction == B_RESET) {
   [ change to default palette
   editPal = defaultPal;
   [ force refresh
-  colorindex = -1;
+  colorIndex = -1;
 }
 
 if (btnAction == B_IDX_DN) {
+  if (newIndex == 1) {
+    set.text.attribute(LT_GRAY, WHITE);
+    display(7, 17, "\x11");
+  }
+  if (newIndex == 15) {
+    set.text.attribute(BLACK, WHITE);
+    display(7, 24, "\x10");
+  }
   [ move down one index level
-  --newindex;
-
+  --newIndex;
+  [ pop display colors
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 if (btnAction == B_IDX_UP) {
-  [ move up one index level
-  if (newindex < 15) {
-    ++newindex;
+  if (newIndex == 0) {
+    set.text.attribute(BLACK, WHITE);
+    display(7, 17, "\x11");
   }
+  if (newIndex == 14) {
+    set.text.attribute(LT_GRAY, WHITE);
+    display(7, 24, "\x10");
+  }
+  [ move up one index level
+  ++newIndex;
+  [ pop display colors
+  set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 }
 
 if (btnAction == B_RESTORE) {
   [ restore default value for current color
-  if (colorindex == 0) {
+  if (colorIndex == 0) {
     [ BLACK
     work1 = 90;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
     editPal = "000000";
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 1) {
+  if (colorIndex == 1) {
     [ BLUE
     work1 = 84;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -971,7 +1007,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 2) {
+  if (colorIndex == 2) {
     [ GREEN
     work1 = 78;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -981,7 +1017,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 3) {
+  if (colorIndex == 3) {
     [ CYAN
     work1 = 72;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -991,7 +1027,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 4) {
+  if (colorIndex == 4) {
     [ RED
     work1 = 66;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1001,7 +1037,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 5) {
+  if (colorIndex == 5) {
     [ MAGENTA
     work1 = 60;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1011,7 +1047,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 6) {
+  if (colorIndex == 6) {
     [ BROWN
     work1 = 54;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1021,7 +1057,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 7) {
+  if (colorIndex == 7) {
     [ LT GRAY
     work1 = 48;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1031,7 +1067,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 8) {
+  if (colorIndex == 8) {
     [ DK GRAY
     work1 = 42;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1041,7 +1077,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 9) {
+  if (colorIndex == 9) {
     [ LT BLUE
     work1 = 36;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1051,7 +1087,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 10) {
+  if (colorIndex == 10) {
     [ LT GREEN
     work1 = 30;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1061,7 +1097,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 11) {
+  if (colorIndex == 11) {
     [ LT CYAN
     work1 = 24;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1071,7 +1107,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 12) {
+  if (colorIndex == 12) {
     [ LT RED
     work1 = 18;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1081,7 +1117,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 13) {
+  if (colorIndex == 13) {
     [ LT MAGENTA
     work1 = 12;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1091,7 +1127,7 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 14) {
+  if (colorIndex == 14) {
     [ YELLOW
     work1 = 6;
     block(STR.RIGHT, &editPal, &copyPal, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
@@ -1101,14 +1137,14 @@ if (btnAction == B_RESTORE) {
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
     block(STR.CONCAT, &editPal, &copyPal, 0); [ str.concat(sINPUT, sADD)
   }
-  if (colorindex == 15) {
+  if (colorIndex == 15) {
     [ WHITE
     work1 = 90;
     block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
     strTemp = "3F3F3F";
     block(STR.CONCAT, &editPal, &strTemp, 0); [ str.concat(sINPUT, sADD)
   }
-  colorindex = -1;
+  colorIndex = -1;
 }
 
 if (btnAction == B_PREV_PAL) {
@@ -1181,6 +1217,9 @@ if (btnAction == B_PREV_PAL) {
     block(FADE.IN, BYNUM, 2, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     
     reset(noScript);
+  } else {
+    [ canceled, or zero
+    clear.lines(23, 23, BLACK);
   }
 }
 
@@ -1188,7 +1227,7 @@ if (btnAction == B_PREV_PAL) {
 btnAction = 0;
   
 [ check for index change
-if (newindex != colorindex) {
+if (newIndex != colorIndex) {
   [ push display colors
   set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
@@ -1197,7 +1236,7 @@ if (newindex != colorindex) {
   tmpRow = 7;
   tmpCol = 20;
   tmpVal = &m1;
-  work1 = newindex;
+  work1 = newIndex;
   display.v(tmpRow, tmpCol, tmpVal);
   [ original color name
   set.text.attribute(BLACK, LT_GRAY);  
@@ -1211,11 +1250,11 @@ if (newindex != colorindex) {
   set.text.attribute(BLACK, WHITE);
   
   [ extract the color hex string
-  colorindex = newindex;
-  colorindex *= 6;
+  colorIndex = newIndex;
+  colorIndex *= 6;
   block(STR.COPY, &editPal, &copyPal, 0); [ str.copy(sINPUT, sRESULT)
   work1 = 6;
-  block(STR.MID, &copyPal, &colorindex, &work1); [ str.mid(sINPUT, vPOS, vLEN)
+  block(STR.MID, &copyPal, &colorIndex, &work1); [ str.mid(sINPUT, vPOS, vLEN)
   [ copy it to current color string
   block(STR.COPY, &copyPal, &curColHex, 0); [ str.copy(sINPUT, sRESULT)
   
@@ -1271,7 +1310,7 @@ if (newindex != colorindex) {
   [ switch the palette immediately
   block(SET.PALETTE, BYNUM, &displayPal, 0); [ set.palette(FN_MODE, mPALETTE, LOADONLY)
   [ update index value
-  colorindex = newindex;
+  colorIndex = newIndex;
 }
 
 [ if color variables have changed, update the palette and text displays
@@ -1290,7 +1329,7 @@ if (update) {
   
   [ update editPal
   block(STR.COPY, &editPal, &copyPal, 0); [ str.copy(sINPUT, sRESULT)
-  work1 = colorindex;
+  work1 = colorIndex;
   work1 *= 6;
   [ trim palette at insertion point
   block(STR.LEFT, &editPal, &editPal, &work1); [ str.left(sINPUT, sRESULT, vLEN)
