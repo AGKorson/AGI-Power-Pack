@@ -810,8 +810,11 @@ if (showMOCC) {
     stop.sound();
     reset(musicDone);
   }
-  [ fade out, then change room
+  [ fade out
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+  [ use default cursor
+  set.key(BYNUM, &m1, mouse); [ set.cursor(FN_MODE, MSGNUM)
+  [ then change room
   new.room(cp.Terminal);  [ ##LE005##
 }
 

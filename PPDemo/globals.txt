@@ -4,13 +4,13 @@
 #define NORMAL_STEP_SIZE         1
 #define MAX_SCORE_VALUE        146 [ assign this constant to v7 (MaxScore)
 #define FASTEST_SPEED            0
-#define FAST_SPEED               3 [ turbo is 3x standard
-#define NORMAL_SPEED             6
-#define SLOW_SPEED              12
+#define FAST_SPEED               3 [ turbo is 3x standard speed
+#define NORMAL_SPEED             6 [ turbo is 3x standard speed
+#define SLOW_SPEED              12 [ turbo is 3x standard speed
 #define cursor                "_"
-#define oBucket                o14
-#define tbStateBtn             o15
-#define tbActionBtn            o16
+#define oBucket                o14 [ it's for ego to kick
+#define tbStateBtn             o15 [ represents the pressed button for the current cursor mode
+#define tbActionBtn            o16 [ represents the save or restore button when pressed down
 #define floppydisk              i2 [ need to use a define, because the item text is dynamic
 #define cMenu                   c0 [ menu: n/a;     key: ESC; used to display the menu
 #define cAbout                  c1 [ menu: PPDemo;  key: none
@@ -51,15 +51,15 @@
 #define cRightDblClick         c36 [ mouse right button double click
 #define cDummy                 c37 [ menu separator - should always be disabled
 #define useMIDI                f19 [ local flag to track whether 4channel mode is FM or MIDI
-#define touchTrees             f21
-#define handsWashed            f22
+#define touchTrees             f21 [ touching trees gets sap on hands; loses points unless you wash
+#define handsWashed            f22 [ indicates hands are clean (after touching trees and/or plunger)
 #define tbBtnDown              f23 [ set when mouse down occurs on toolbar button
-#define closetTimerStart       f24
-#define trapped                f25
-#define closetTimerDone        f26
-#define realClock              f27
-#define kickBucket             f28
-#define bucketDone             f29
+#define closetTimerStart       f24 [ needed to help set the timer in case ego leaves the door open
+#define trapped                f25 [ if too much time passes in secret room with closet door open, ego gets trapped inside
+#define closetTimerDone        f26 [ timer end flag; initiates the trapped sequence
+#define realClock              f27 [ if true, status bar shows real time; otherwise it shows game time
+#define kickBucket             f28 [ set if player enters 'kick the bucket'; starts the death sequence
+#define bucketDone             f29 [ true when bucket hits screen edge (so it can be erased)
 #define negativeScore          f30 [ set when player score is below zero
 #define firstLobby             f31 [ to track first time ego visits the lobby
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
@@ -73,44 +73,44 @@
 #define saveCursor             f40 [ when set, the current cursor gets saved in logic 0
 #define restoreCursor          f41 [ when set, the default data for current cursor is restored
 #define turboMode              f42 [ when true, turbo option is set
-#define playSound              f43
+#define playSound              f43 [ true when a sound is playing (makes it easier to manage sounds and instruments)
 #define column80               f44 [ tracks display column count; true when 80 col mode is set
 #define wallbreak              f45 [ set after ego falls through wall in closet
 #define closetopen             f46 [ set when closet door is open
 #define broommoved             f47 [ set once broom is picked up and moved
 #define faucetfixed            f48 [ set when faucet in closet has been tightened
 #define allowedPastLobby       f49 [ set once ego is allowed in hallway, so receptionist can shoo him back to lobby
-#define firstLobbyVisit        f50
+#define firstLobbyVisit        f50 [ used to trigger the old lady to ask for restroom (as a hint to player)
 #define ctrlroomunlocked       f51 [ set when correct pin entered on door keypad for first time
-#define enableCAISOCC          f52
-#define enableRANDOCC          f53
-#define enableICAPOCC          f54
-#define enableESADOCC          f55
-#define enableOFROCC           f56
-#define enableERIDOCC          f57
-#define resetMOCC              f58
-#define scoreClosetDoor        f59
-#define findFolder             f60
-#define touchPlunger           f61
-#define findWalkman            f62
-#define findList               f63
-#define findNotebook           f64
-#define findDisk               f65
-#define findEmptyDrawer        f66
-#define findManual             f67
-#define fOpenSafe              f68
-#define floppyInserted         f69
-#define floppyFormatted        f70
-#define scoreMagazine          f71
-#define firstWash              f72
-#define carLocked              f73
-#define scorePainting          f74
-#define scoreSafe              f75
-#define scorePillow            f76
-#define scoreChest             f77
-#define cassetteLoaded         f78
-#define cassetteSideB          f79
-#define warnWalkman            f80
+#define resetMOCC              f52 [ indicates player has restarted MOCC
+#define enableCAISOCC          f53 [ set when player re-enables CAISOCC
+#define enableERIDOCC          f54 [ set when player re-enables ERIDOCC
+#define enableESADOCC          f55 [ set when player re-enables ESADOCC
+#define enableICAPOCC          f56 [ set when player re-enables ICAPOCC
+#define enableOFROCC           f57 [ set when player re-enables OFROCC
+#define enableRANDOCC          f58 [ set when player re-enables RANDOCC
+#define touchPlunger           f59 [ touching the stinky plunger costs you points
+#define findFolder             f60 [ find flags indicate player has found/collected a specific item
+#define findWalkman            f61
+#define findList               f62
+#define findNotebook           f63
+#define findDisk               f64
+#define findEmptyDrawer        f65
+#define findManual             f66
+#define openSafe               f67 [ set when player enters correct safe combo
+#define floppyInserted         f68 [ indicates floppy is in the disk drive
+#define floppyFormatted        f69 [ set when player formats the floppy
+#define cassetteLoaded         f70 [ true if cassette is in the Walkman
+#define cassetteSideB          f71 [ true if cassette side B is active in the Walkman
+#define warnWalkman            f72 [ if ego tries to play Walkman in lobby, receptionist warns him to turn it off
+#define firstWash              f73 [ indicates player has washed hands
+#define carLocked              f74 [ true if player locks car door
+#define scoreMagazine          f75 [ scoring flags make sure each item is only scored once
+#define scoreClosetDoor        f76
+#define scorePainting          f77
+#define scoreSafe              f78
+#define scorePillow            f79
+#define scoreChest             f80
 #define scorePlayTape          f81
 #define scoreFloppy            f82
 #define scoreWalkman           f83
@@ -118,23 +118,23 @@
 #define scoreNotebook          f85
 #define resetClicks            f86 [ used to clear click events between screen shifts
 #define initialRun             f87 [ set when game runs first time (no config file found)
-#define skipIntro              f88
-#define showHelp               f89
+#define skipIntro              f88 [ if true, the Intro gets skipped when game starts
+#define showHelp               f89 [ used to direct input to the help screen when it's being shown
 #define startTrace             f90 [ when set, main loop will enter trace mode
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
 #define palette                 s2 [ 96 bytes; uses s2, s3, s4
-#define floppylabel             s5
+#define floppylabel             s5 [ when reformatting, floppy can be assigned a label
 #define kwpassword              s6 [ password for kw002 account on MOCC
-#define custInst0               s7
+#define custInst0               s7 [ custom FM instrument data
 #define custInst1               s8
 #define custInst2               s9
 #define custInst3              s10
 #define custInst4              s11
-#define mouseX                 v27
-#define mouseY                 v28
-#define mouseBtn               v29
+#define mouseX                 v27 [ default mousex
+#define mouseY                 v28 [ default mousey
+#define mouseBtn               v29 [ default mousebutton
 #define oldSeconds             v31 [ cached value of game seconds (v11)
 #define oldMinutes             v32 [ cached value of game minutes (v12)
 #define oldHours               v33 [ cached value of game hours (v13)
@@ -159,12 +159,12 @@
 #define oldEgoX                v40 [ previous ego X position
 #define oldEgoY                v41 [ previous ego Y position
 #define oldEgoDir              v42 [ previous ego direction
-#define msgBoxBG               v43
-#define msgBoxFG               v44
-#define msgBoxBorder           v45
-#define work1                  v46 [ this is a globally available variable that can be used for counting or any other temporary purpose
-#define work2                  v47
-#define work3                  v48
+#define msgBoxBG               v43 [ current msgBox background color
+#define msgBoxFG               v44 [ current msgBox foreground color
+#define msgBoxBorder           v45 [ current msgBox border color
+#define work1                  v46 [ globally available generic variable
+#define work2                  v47 [ globally available generic variable
+#define work3                  v48 [ globally available generic variable
 #define egoCycleTime           v59 [ current ego cycle time
 #define egoStepTime            v60 [ current ego step time
 #define egoStepSize            v61 [ current ego step size
@@ -174,11 +174,11 @@
 #define FMInst2                v65 [ instrument number for channel 3
 #define FMInst3                v66 [ instrument number for noise noise
 #define FMInst4                v67 [ instrument number for noise tone
-#define MIDIInst0              v68
-#define MIDIInst1              v69
-#define MIDIInst2              v70
+#define MIDIInst0              v68 [ instrument number for channel 1
+#define MIDIInst1              v69 [ instrument number for channel 2
+#define MIDIInst2              v70 [ instrument number for channel 3
 #define cursormode             v71 [ mouse cursor mode
-#define cursoricon             v72
+#define cursoricon             v72 [ the index of currently visible cursor
 #define C_DEFAULT                1
 #define C_WALK                   2
 #define C_LOOK                   3
@@ -187,32 +187,32 @@
 #define C_WAIT                   6
 #define C_DISK                   7
 #define C_TAPE                   8
-#define car0car1               v73
+#define car0car1               v73 [ random view values for parking lot cars
 #define car2car3               v74
 #define car4car5               v75
 #define car6car7               v76
 #define currentHour            v77 [ hour value of real time
 #define currentMinute          v78 [ minute value of real time
-#define currentSecond          v79
-#define rugStatus              v80
-#define timerMin               v81
-#define timerSec               v82
+#define currentSecond          v79 [ second value of real time
+#define rugStatus              v80 [ tracks whether rug corner is up or down
+#define timerMin               v81 [ used by Power Pack timer function
+#define timerSec               v82 [ used by Power Pack timer function
 #define patientClock           v83 [ twenty minute timer cycle to track patient locations
-#define patient1Loc            v84
+#define patient1Loc            v84 [ indicates where patients are currently located
 #define patient2Loc            v85
 #define patient3Loc            v86
 #define patient4Loc            v87
 #define LOC_LOBBY                1 [ patient is in lobby, waiting
 #define LOC_EXAM                 2 [ patient is going to/at exam
 #define LOC_GONE                 3 [ patient is done exam and/or gone
-#define safeStatus             v88
-#define paintingStatus         v89
-#define officeDskDrStatus      v90
-#define officeFileDrStatus     v91
-#define storeDeskDrStatus      v92
-#define storeFileDrStatus      v93
-#define storeBureauDrStatus    v94
-#define storeChestStatus       v95
+#define safeStatus             v88 [ tracks opening/closing of safe
+#define paintingStatus         v89 [ tracks opening/closing of painting on office wall
+#define officeDskDrStatus      v90 [ tracks opening/closing of office desk drawers
+#define officeFileDrStatus     v91 [ tracks opening/closing of office file cabinet drawers
+#define storeDeskDrStatus      v92 [ tracks opening/closing of storeroom desk drawers
+#define storeFileDrStatus      v93 [ tracks opening/closing of storeroom file cabinet drawers
+#define storeBureauDrStatus    v94 [ tracks opening/closing of bureau drawer
+#define storeChestStatus       v95 [ tracks opening/closing of treasure chest
 #define CLOSED                   0
 #define OPEN                     1
 #define OPEN1                    1
@@ -223,9 +223,9 @@
 #define floppyfiles            v96 [ 0=blank; 1=zip; 2=txt; 3=both
 #define cpusage                v97 [ bitfield indicates which control panels have been used by player
 #define currentTrack           v98 [ zero if at end of tape; negative if paused
-#define musicMode              v99
+#define musicMode              v99 [ tracks current sound mode (for sounds that don't use custom settings)
 #define PC_SOUND                 0
 #define FM_SOUND                 1
 #define MIDI_SOUND               2
 #define comboNumber           v100 [ last position of combination lock
-#define FADECOUNT               25
+#define FADECOUNT               20 [ controls the speed of fade in/fade out between rooms

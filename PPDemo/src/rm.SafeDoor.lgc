@@ -240,7 +240,7 @@ if (newRoom) {
 }
 
 if (fOpening) {
-  if (!fOpenSafe) {
+  if (!openSafe) {
     ++handleCel;
     if (handleCel < 12) {
       set.cel.v(oNum00, handleCel);
@@ -295,7 +295,7 @@ if (fOpening) {
         reposition(oNum00, work1, work2);
       }
     } else {
-      set(fOpenSafe);
+      set(openSafe);
     }
   }
   goto(checkexit);
@@ -1163,7 +1163,7 @@ if (newRoom) {
 }
 [ ESC or right-click to cancel;
 [ correct combo to open
-if ((fOpenSafe || lastChar == 27 || controller(cRightClick))) {
+if ((openSafe || lastChar == 27 || controller(cRightClick))) {
   :exit
   [ save current dial position
   comboNumber = currentNum;

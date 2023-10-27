@@ -74,7 +74,7 @@
 #define creditstep        v228
 #define tmpSeconds        v229
 
-#define fLogoDone         f220
+#define logoDone          f220
 #define themeMusicDone    f221
 
 [***************************************
@@ -84,7 +84,7 @@ if (newRoom) {
   [ start up sequence doesn't need to use scripts since it will 
   [ never be part of a game restore
   set(noScript);
-  
+
   [ since this is the first room in the game, there is no
   [ previous room that faded out; so force a fade.out
   [ (with zero delay) so this room can then be faded back in
@@ -95,7 +95,9 @@ if (newRoom) {
   
   [ no ego used in this room
   
-  [ use a blank cursor so it doesn't get in the way but
+  [ enable mouse ...
+  enable.item(mouse);
+  [ BUT use a blank cursor so it doesn't get in the way but
   [ clicks still work
   set.key(BYNUM, &m7, mouse); [ set.cursor(FN_MODE, MSGNUM)
   
@@ -177,7 +179,9 @@ if (newRoom) {
 [ NON-INPUT CODE 
 [***************************************
 
-[ one-time events
+[*******************
+[ ONE-TIME EVENTS
+[*******************
 if (titleSeq == TS_SCROLLCREDS) {
   [ credit events are based on which line, its position and state/step
   get.posn(oLogo, work1, work2);
@@ -450,8 +454,8 @@ if (titleSeq == TS_FADEIN_AG && letterindex < 27) {
 }
 
 if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
-  [ display letters, one at a time
-  [ and fade them in at same time
+  [ display letters, one at a time and fade them 
+  [ in at same time
   ++delaycounter;
   if (delaycounter == 3) {
     delaycounter = 0;
@@ -474,18 +478,19 @@ if (titleSeq == TS_FADEIN_WIN && letterindex < 20) {
 }
 
 if (titleSeq == TS_ANIMATE_AGI) {
+  [ fade out to just 'A G I'
   ++delaycounter;
   if (delaycounter == 10) {
     delaycounter = 0;
     --letterindex;
-    [color1
+    [ color1
     if (letterindex < 64) {
       block(BYTE2HEX, &sChar, &letterindex, 0); [ byte2hex(sRESULT, vINPUT)
       block(STR.COPY, &sChar, &sColor1, 0); [ str.copy(sINPUT, sRESULT)
       block(STR.CONCAT, &sColor1, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor1, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color2
+    [ color2
     if (letterindex > 3 && letterindex < 68) {
       work1 = letterindex;
       work1 -= 4;
@@ -494,7 +499,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor2, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor2, &sChar, 0); [ sstr.concat(sINPUT, sADD)
     }
-    [color3
+    [ color3
     if (letterindex > 7 && letterindex < 72) {
       work1 = letterindex;
       work1 -= 8;
@@ -503,7 +508,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor3, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor3, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color4
+    [ color4
     if (letterindex > 11 && letterindex < 76) {
       work1 = letterindex;
       work1 -= 12;
@@ -512,7 +517,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor4, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor4, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color5
+    [ color5
     if (letterindex > 15 && letterindex < 80) {
       work1 = letterindex;
       work1 -= 16;
@@ -521,7 +526,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor5, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor5, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color6
+    [ color6
     if (letterindex > 19 && letterindex < 84) {
       work1 = letterindex;
       work1 -= 20;
@@ -530,7 +535,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor6, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor6, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color7
+    [ color7
     if (letterindex > 23 && letterindex < 88) {
       work1 = letterindex;
       work1 -= 24;
@@ -539,7 +544,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor7, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor7, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color8
+    [ color8
     if (letterindex > 27 && letterindex < 92) {
       work1 = letterindex;
       work1 -= 28;
@@ -548,7 +553,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
       block(STR.CONCAT, &sColor8, &sChar, 0); [ str.concat(sINPUT, sADD)
       block(STR.CONCAT, &sColor8, &sChar, 0); [ str.concat(sINPUT, sADD)
     }
-    [color9
+    [ color9
     if (letterindex > 31 && letterindex < 96) {
       work1 = letterindex;
       work1 -= 32;
@@ -571,6 +576,7 @@ if (titleSeq == TS_ANIMATE_AGI) {
   }
 }
 
+[ a short delay
 if (titleSeq == TS_WAIT_AGI) {
   if (elapsedSeconds == tmpSeconds) {
     ++titleSeq;
@@ -578,6 +584,7 @@ if (titleSeq == TS_WAIT_AGI) {
   }
 }
 
+[ move from vertical to horizontal
 if (titleSeq == TS_MOVE_AGI) {
   ++delaycounter;
   if (delaycounter == 4) {
@@ -620,6 +627,7 @@ if (titleSeq == TS_MOVE_AGI) {
   }
 }
 
+[ add color effect to large block AGI
 if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
   [delay
   ++delayCounter;
@@ -665,6 +673,7 @@ if (titleSeq == TS_PP_SHIFT && titleTimer == 0) {
   }
 }
 
+[ short pause afterv music is done
 if (themeMusicDone) {
   reset(themeMusicDone);
   if (titleSeq == TS_WIN_SOUND) {
@@ -672,14 +681,16 @@ if (themeMusicDone) {
   } 
 }
 
-[ timer events
+[*******************
+[ TIMER EVENTS
+[*******************
 if (titleTimer > 0) {
   --titleTimer;
   if (titleTimer == 0) {
     ++titleSeq;
     
     if (titleSeq == TS_SALUTE) {
-      end.of.loop(oDrew, fLogoDone);
+      end.of.loop(oDrew, logoDone);
       [ play salute
       set(4channelsound);
       set(useMIDI);
@@ -696,7 +707,7 @@ if (titleTimer > 0) {
       sound(s.Salute, soundDone);
     }
     if (titleSeq == TS_SALUTE_WAIT) {
-      reverse.loop(oDrew, fLogoDone);
+      reverse.loop(oDrew, logoDone);
     }
     if (titleSeq == TS_PAUSE1) {
       titleTimer = 5;
@@ -762,8 +773,8 @@ if (titleTimer > 0) {
       display(11, 15, "A");
       display(12, 18, "G");
       display(13, 14, "I");
-      [ display other letters in colors that will be
-      [ used for the fade effect
+      [ display other letters in colors that will be used for 
+      [ the fade effect
       set.text.attribute(1, 0);
       display(13, 15, "n");
       set.text.attribute(2, 0);
@@ -833,8 +844,8 @@ if (titleTimer > 0) {
       work2 = 122; [ seashore
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
       sound(s.Kaboom, soundDone);
-      work1 = titleSeq;
-      work1 += 26;
+      [ start with first explode picture
+      work1 = pic.Explode1;
       :drawpic
         load.pic(work1);
         draw.pic(work1);
@@ -853,7 +864,6 @@ if (titleTimer > 0) {
       ++titleSeq;
     }
     if (titleSeq == TS_PPACK) {
-    
       [ set starting palette
       block(SET.PALETTE, BYNUM, &m5, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
       work1 = pic.PowerPackLogo;
@@ -926,9 +936,11 @@ if (titleTimer > 0) {
   }
 }
 
-[ cycling events
-if (fLogoDone) {
-  reset(fLogoDone);
+[*******************
+[ CYCLING EVENTS
+[*******************
+if (logoDone) {
+  reset(logoDone);
   ++titleSeq;
   if (titleSeq == TS_SALUTE_UP) {
     titleTimer = 30;
@@ -947,15 +959,15 @@ if (fLogoDone) {
 [ CHECK FOR AN EXIT CONDITION
 [***************************************
 :getkey
-[ check for a keypress (including ESC) or mouse button to move to start room
+[ check for a keypress (including ESC) or mouse button to
+[ move to start room
 if (!initialRun && (have.key() || controller(cMenu) || 
     controller(cLeftClick) || controller(cRightClick))) {
   :continue
-  [ show wait cursor
-  cursoricon = C_WAIT;
-  set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ fade out to black
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+  [ restore default cursor
+  set.key(BYNUM, &m8, mouse); [ set.cursor(FN_MODE, MSGNUM)
   [ restore palette
   block(SET.PALETTE, BYNUM, &m1, 1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   [ enable game functions for rest of game
@@ -977,10 +989,8 @@ return();
 [***************************************
 #message 1 "%s2"
 #message 2 "%s13"
+[ palettes
 #message 3 "000000%s14%s15%s16%s17%s18%s19%s20%s21%s22%%003F15153F3F3F15153F153F3F3F153F3F3F"
-
-[           |BLK  | BLU | GRN | CYN | RED | MGT | BRN | LGRY| DGRY| LBLU| LGRN| LCYN| LRED| LMGT| YLW | WHT |
-[palettes:  | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  | 13  | 14  | 15  |
 #message 4 "000000%s13%%0000%s14%%0000%s15%%0000%s16%%0000%s17%%0000%s18%%0000%s19%%0000%s20%%0000%s21%%0000%s22%%0000%s23%%00003F15153F153F3F3F153F3F3F"
 #message 5 "0000000000000000000000000000000000000000000000000000000000000000000000003F15153F153F3F3F153F3F3F"
 
@@ -990,3 +1000,5 @@ return();
 [ blank mouse cursor
 #message 7 "0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
            "0000000000000000000000000000000000000000000000000000000000000000"
+[ default cursor
+#message 8 "%g30"

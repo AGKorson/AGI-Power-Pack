@@ -246,7 +246,7 @@ if (newRoom) {
   
   [ set speed to fast for best mouse performance
   oldSpeed = animationInterval;
-  animationInterval = FASTEST_SPEED;
+  animationInterval = FAST_SPEED;
 
   [ blank out end of export string (39 spaces, one null char)
   s19 = "                                       ";

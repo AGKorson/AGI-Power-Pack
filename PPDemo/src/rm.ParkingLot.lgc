@@ -73,17 +73,16 @@
 #define deathSeq     v225
 #define weekday      v226
 
-#define fCarDone     f220
-#define fPatientDone f221
-#define fPatientHere f222
-#define f2ndspot     f223
-#define fRunOver     f224
-#define fClickOn     f225
-#define fSkip1       f226
-#define fElectrocuted  f227
-#define fCarSound      f228
-#define patientVisible f229
-#define egoDying       f230
+#define carDone      f220
+#define patientDone  f221
+#define patientHere  f222
+#define 2ndSpot      f223
+#define runOver      f224
+#define clickOn      f225
+#define skip1        f226
+#define electrocuted  f227
+#define patientVisible f228
+#define egoDying       f229
 
 #define theDay          s12
 #define weekendMsg      s13
@@ -293,7 +292,7 @@ if (egoCarSeq) {
     ++egoCarSeq;
     position(egoCar, 0, 131);
     draw(egoCar);
-    move.obj(egoCar, 40, 143, 1, fCarDone);
+    move.obj(egoCar, 40, 143, 1, carDone);
     [ restore cursor for message
     cursoricon = cursormode;
     set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
@@ -321,10 +320,10 @@ if (egoCarSeq) {
     [ (sound parameters are already set, so just play the sound)
     sound(s.Car, soundDone);
   }
-  if (egoCarSeq == EC_PARKING && fCarDone) {
+  if (egoCarSeq == EC_PARKING && carDone) {
     [ stop car, play engine shutdown sound
     [ (sound parameters are already set, so just play the sound)
-    reset(fCarDone);
+    reset(carDone);
     sound(s.CarStop, soundDone);
     stop.cycling(egoCar);
     egoCarSeq = EC_PARKED;
@@ -389,7 +388,7 @@ if (egoCarSeq) {
     [ ego drives away
     egoCarSeq = EC_LEAVING;
     start.cycling(egoCar);
-    move.obj(egoCar, 143, 126, 2, fCarDone);
+    move.obj(egoCar, 143, 126, 2, carDone);
     [ (sound parameters are already set, so just play the sound)
     sound(s.Car, soundDone);
     set(playSound);
@@ -400,8 +399,8 @@ if (egoCarSeq) {
     sound(s.Car, soundDone);
     set(playSound);
   }
-  if (egoCarSeq == EC_LEAVING && fCarDone) {
-    reset(fCarDone);
+  if (egoCarSeq == EC_LEAVING && carDone) {
+    reset(carDone);
     [ stop sound
     stop.sound();
     reset(playSound);
@@ -429,8 +428,8 @@ if (newRoom && (previousRoom == 0 || previousRoom == rm.Title)) {
 
 
 [ timing bug with controllers
-if (fSkip1) {
-  reset(fSkip1);
+if (skip1) {
+  reset(skip1);
   set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
@@ -453,16 +452,16 @@ if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
 if (patientTimer == 0) {
   [ reset the timer
   random(80, 250, patientTimer);
-  if (fPatientHere) {
+  if (patientHere) {
     [ time for patient to leave
     position(oPatient, 55, 117);
-    if (f2ndspot) {
+    if (2ndSpot) {
       [ go back to parking spot 2
-      move.obj(oPatient, 55, 127, 1, fPatientDone);
+      move.obj(oPatient, 55, 127, 1, patientDone);
       patientSeq = P2_WALK_C;
     } else {
       [ go back to parking spot 1
-      move.obj(oPatient, 55, 127, 1, fPatientDone);
+      move.obj(oPatient, 55, 127, 1, patientDone);
       patientSeq = P1_WALK_C;
     }
     draw(oPatient);
@@ -471,19 +470,19 @@ if (patientTimer == 0) {
     [ time for patient to arrive
     random(0, 1, work1);
     if (work1 == 0) {
-      reset(f2ndspot);
+      reset(2ndSpot);
       patientSeq = P1_DRIVE_A; [ drive to first point
       random(0, 18, work1);
       set.loop.v(oPatientCar, work1);
       position(oPatientCar, 0, 131);
-      move.obj(oPatientCar, 18, 143, 2, fPatientDone);
+      move.obj(oPatientCar, 18, 143, 2, patientDone);
     } else {
-      set(f2ndspot);
+      set(2ndSpot);
       patientSeq = P2_DRIVE_A; [ gdrive to first point
       random(19, 37, work1);
       set.loop.v(oPatientCar, work1);
       position(oPatientCar, 143, 128);
-      move.obj(oPatientCar, 99, 128, 2, fPatientDone);
+      move.obj(oPatientCar, 99, 128, 2, patientDone);
     }
     draw(oPatientCar);
     [ only play sound if walkman is not in use
@@ -512,13 +511,13 @@ if (patientTimer == 0) {
     --patientTimer;
   }
 }
-if (fPatientDone) {
+if (patientDone) {
   [ patient/path 2
   if (patientSeq == P2_DRIVE_F) {
     [ car has left 
     erase(oPatientCar);
-    reset(fPatientHere);
-    reset(fPatientDone);
+    reset(patientHere);
+    reset(patientDone);
     if (playSound) {
       stop.sound();
       reset(playSound);
@@ -527,7 +526,7 @@ if (fPatientDone) {
   }
   if (patientSeq == P2_DRIVE_E) {
     [ move car to last point
-    move.obj(oPatientCar, 0, 131, 2, fPatientDone);
+    move.obj(oPatientCar, 0, 131, 2, patientDone);
     patientSeq = P2_DRIVE_F;
   }
   if (patientSeq == P2_WALK_E) {
@@ -535,7 +534,7 @@ if (fPatientDone) {
     erase(oPatient);
     reset(patientVisible);
     [ start car
-    reset(fPatientDone);
+    reset(patientDone);
     patientSeq = P2_START; 
     [ only play sound if walkman is not in use
     if ((currentTrack == 0 || currentTrack > 128)) {
@@ -554,12 +553,12 @@ if (fPatientDone) {
   }
   if (patientSeq == P2_WALK_D) {
     [ walk to car
-    move.obj(oPatient, 88, 142, 1, fPatientDone);
+    move.obj(oPatient, 88, 142, 1, patientDone);
     patientSeq = P2_WALK_E;  
   }
   if (patientSeq == P2_WALK_C) {
     [ walk to next point
-    move.obj(oPatient, 70, 142, 1, fPatientDone);
+    move.obj(oPatient, 70, 142, 1, patientDone);
     patientSeq = P2_WALK_D;  
   }
   if (patientSeq == P2_WALK_B) {
@@ -567,12 +566,12 @@ if (fPatientDone) {
     erase(oPatient);
     reset(patientVisible);
     patientSeq = IDLE;
-    set(fPatientHere);
-    reset(fPatientDone);
+    set(patientHere);
+    reset(patientDone);
   }
   if (patientSeq == P2_WALK_A) {
     [ walk to building door
-    move.obj(oPatient, 55, 117, 1, fPatientDone);
+    move.obj(oPatient, 55, 117, 1, patientDone);
     patientSeq = P2_WALK_B;  
   }
   if (patientSeq == P2_DRIVE_D) {
@@ -581,7 +580,7 @@ if (fPatientDone) {
     ignore.blocks(oPatientCar);
     block(78, 138, 99, 142);
     [ stop car
-    reset(fPatientDone);
+    reset(patientDone);
     patientSeq = P2_STOP; 
     [ only play sound if walkman is not in use
     if ((currentTrack == 0 || currentTrack > 128)) {
@@ -600,17 +599,17 @@ if (fPatientDone) {
   }
   if (patientSeq == P2_DRIVE_C) {
     [ drive to parking spot 2
-    move.obj(oPatientCar, 83, 141, 1, fPatientDone);
+    move.obj(oPatientCar, 83, 141, 1, patientDone);
     patientSeq = P2_DRIVE_D;  
   }
   if (patientSeq == P2_DRIVE_B) {
     [ drive to next point
-    move.obj(oPatientCar, 61, 141, 1, fPatientDone);
+    move.obj(oPatientCar, 61, 141, 1, patientDone);
     patientSeq = P2_DRIVE_C;  
   }
   if (patientSeq == P2_DRIVE_A) {
     [ drive to next point
-    move.obj(oPatientCar, 75, 129, 2, fPatientDone);
+    move.obj(oPatientCar, 75, 129, 2, patientDone);
     patientSeq = P2_DRIVE_B;  
   }
   
@@ -618,8 +617,8 @@ if (fPatientDone) {
   if (patientSeq == P1_DRIVE_D) {
     [ car has left
     erase(oPatientCar);
-    reset(fPatientHere);
-    reset(fPatientDone);
+    reset(patientHere);
+    reset(patientDone);
     if (playSound) {
       stop.sound();
       reset(playSound);
@@ -628,12 +627,12 @@ if (fPatientDone) {
   }
   if (patientSeq == P1_DRIVE_C) {
     [ drive to last point
-    move.obj(oPatientCar, 143, 128, 2, fPatientDone);
+    move.obj(oPatientCar, 143, 128, 2, patientDone);
     patientSeq = P1_DRIVE_D;
   }
   if (patientSeq == P1_DRIVE_B) {
     [ drive to next point
-    move.obj(oPatientCar, 20, 128, 2, fPatientDone);
+    move.obj(oPatientCar, 20, 128, 2, patientDone);
     patientSeq = P1_DRIVE_C;
   }
   if (patientSeq == P1_WALK_E) {
@@ -641,7 +640,7 @@ if (fPatientDone) {
     erase(oPatient);
     reset(patientVisible);
     [ start car
-    reset(fPatientDone);
+    reset(patientDone);
     patientSeq = P1_START; 
     [ only play sound if walkman is not in use
     if ((currentTrack == 0 || currentTrack > 128)) {
@@ -660,12 +659,12 @@ if (fPatientDone) {
   }
   if (patientSeq == P1_WALK_D) {
     [ walk to next point
-    move.obj(oPatient, 25, 140, 1, fPatientDone);
+    move.obj(oPatient, 25, 140, 1, patientDone);
     patientSeq = P1_WALK_E;
   }
   if (patientSeq == P1_WALK_C) {
     [ walk to next point
-    move.obj(oPatient, 38, 127, 1, fPatientDone);
+    move.obj(oPatient, 38, 127, 1, patientDone);
     patientSeq = P1_WALK_D;
   }
   if (patientSeq == P1_WALK_B) {
@@ -673,12 +672,12 @@ if (fPatientDone) {
     erase(oPatient);
     reset(patientVisible);
     patientSeq = IDLE;
-    set(fPatientHere);
-    reset(fPatientDone);
+    set(patientHere);
+    reset(patientDone);
   }
   if (patientSeq == P1_WALK_A) {
     [ walk to building door
-    move.obj(oPatient, 55, 117, 1, fPatientDone);
+    move.obj(oPatient, 55, 117, 1, patientDone);
     patientSeq = P1_WALK_B;
   }
   if (patientSeq == P1_DRIVE_A) {
@@ -687,7 +686,7 @@ if (fPatientDone) {
     ignore.blocks(oPatientCar);
     block(14, 140, 34, 144);
     [ stop car
-    reset(fPatientDone);
+    reset(patientDone);
     patientSeq = P1_STOP; 
     [ only play sound if walkman is not in use
     if ((currentTrack == 0 || currentTrack > 128)) {
@@ -711,7 +710,7 @@ if (soundDone) {
   if (patientSeq == P1_START) {
     [ drive car to first point
     start.cycling(oPatientCar);
-    move.obj(oPatientCar, 5, 143, 1, fPatientDone);
+    move.obj(oPatientCar, 5, 143, 1, patientDone);
     unblock();
     patientSeq = P1_DRIVE_B;
     [ only play sound effect if walkman not in use
@@ -733,14 +732,14 @@ if (soundDone) {
     position(oPatient, 25, 140);
     draw(oPatient);
     set(patientVisible);
-    move.obj(oPatient, 55, 125, 1, fPatientDone);
+    move.obj(oPatient, 55, 125, 1, patientDone);
     patientSeq = P1_WALK_A;
     goto(checkdeath);
   }
   if (patientSeq == P2_START) {
     [ drive car to first point
     start.cycling(oPatientCar);
-    move.obj(oPatientCar, 61, 131, 1, fPatientDone);
+    move.obj(oPatientCar, 61, 131, 1, patientDone);
     unblock();
     patientSeq = P2_DRIVE_E;
     [ only play sound effect if walkman not in use
@@ -762,7 +761,7 @@ if (soundDone) {
     position(oPatient, 88, 142);
     draw(oPatient);
     set(patientVisible);
-    move.obj(oPatient, 72, 142, 1, fPatientDone);
+    move.obj(oPatient, 72, 142, 1, patientDone);
     patientSeq = P2_WALK_A;
     goto(checkdeath);
   }
@@ -806,7 +805,7 @@ if (!egoDying && !deathType && !kickBucket) {
       set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
       work1 = 2;
       cycle.time(ego, work1);
-      end.of.loop(ego, fRunOver);
+      end.of.loop(ego, runOver);
       print("Uh oh! That car just hit you!");
     }
   }
@@ -824,7 +823,7 @@ if (!egoDying && !deathType && !kickBucket) {
       set.cel(ego, 0);
       work1 = CYCLE_AT_REST;
       set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
-      end.of.loop(ego, fElectrocuted);
+      end.of.loop(ego, electrocuted);
       [ only play sound effects if walkman not in use
       if ((currentTrack == 0 || currentTrack > 128)) {
         [ play electrify sound, force 4-channel FM
@@ -838,11 +837,11 @@ if (!egoDying && !deathType && !kickBucket) {
         set(playSound);
       }
     }
-    if (fElectrocuted) {
+    if (electrocuted) {
       if (deathSeq < 5) {
         ++deathSeq;
         set.cel(ego, 0);
-        end.of.loop(ego, fElectrocuted);
+        end.of.loop(ego, electrocuted);
         [ only play sound effects if walkman not in use
         if ((currentTrack == 0 || currentTrack > 128)) {
           [ play electrify sound, force 4-channel FM
@@ -866,7 +865,7 @@ if (!egoDying && !deathType && !kickBucket) {
         set.cel(ego, 0);
         work1 = 2;
         cycle.time(ego, work1);
-        end.of.loop(ego, fElectrocuted);
+        end.of.loop(ego, electrocuted);
         set(egoDying);
         print("Yikes! This batmobile has an anti-theft system!");
       }
@@ -875,8 +874,8 @@ if (!egoDying && !deathType && !kickBucket) {
 }
 
 [ check for end of run-over death cycle
-if (fRunOver) {
-  reset(fRunOver);
+if (runOver) {
+  reset(runOver);
   deathType = DT_RUNOVER;
   work1 = 1;
   cycle.time(ego, work1);
@@ -885,8 +884,8 @@ if (fRunOver) {
 }
 
 [ check for end of electrocution death cycle
-if (fElectrocuted && deathSeq == 6) {
-  reset(fElectrocuted);
+if (electrocuted && deathSeq == 6) {
+  reset(electrocuted);
   ++deathSeq;
   deathType = DT_STUNNED;
   accept.input();
@@ -1140,23 +1139,23 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ parked cars
-    reset(fClickOn);
+    reset(clickOn);
     if (mouseX > 26 && mouseX < 41 && mouseY > 145 && mouseY < 157) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 46 && mouseX < 61 && mouseY > 144 && mouseY < 155) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 51 && mouseX < 66 && mouseY > 156 && mouseY < 167) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 106 && mouseX < 121 && mouseY > 130 && mouseY < 141) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
-      set(fClickOn);
+      set(clickOn);
     }
-    if (fClickOn) {
+    if (clickOn) {
       print("There are a several cars in the parking lot. Only one is yours. This is not the one.");
       goto(doneclick);
     }
@@ -1244,23 +1243,23 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ parked cars
-    reset(fClickOn);
+    reset(clickOn);
     if (mouseX > 26 && mouseX < 41 && mouseY > 145 && mouseY < 157) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 46 && mouseX < 61 && mouseY > 144 && mouseY < 155) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 51 && mouseX < 66 && mouseY > 156 && mouseY < 167) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 106 && mouseX < 121 && mouseY > 130 && mouseY < 141) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
-      set(fClickOn);
+      set(clickOn);
     }
-    if (fClickOn) {
+    if (clickOn) {
       print("There is no one in the car to talk to.");
       goto(doneclick);
     }
@@ -1364,7 +1363,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ or inherent to MSDOS/AGI; but on occasion, a second 'ghost click'
         [ will set the left-click controller when the dialog is dismissed)
         [ to fix this, skip the controller on the very next cycle
-        set(fSkip1);
+        set(skip1);
       } else {
         print("You are too far away to get in your vehicle from here.");
       }
@@ -1423,23 +1422,23 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
 
     [ parked cars
-    reset(fClickOn);
+    reset(clickOn);
     if (mouseX > 26 && mouseX < 41 && mouseY > 145 && mouseY < 157) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 46 && mouseX < 61 && mouseY > 144 && mouseY < 155) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 51 && mouseX < 66 && mouseY > 156 && mouseY < 167) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 106 && mouseX < 121 && mouseY > 130 && mouseY < 141) {
-      set(fClickOn);
+      set(clickOn);
     }
     if (mouseX > 92 && mouseX < 107 && mouseY > 143 && mouseY < 154) {
-      set(fClickOn);
+      set(clickOn);
     }
-    if (fClickOn) {
+    if (clickOn) {
       print("There's nothing you can do with this car.");
       goto(doneclick);
     }

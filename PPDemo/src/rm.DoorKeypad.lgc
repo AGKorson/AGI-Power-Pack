@@ -181,6 +181,30 @@ if (indicatorTimer) {
   goto(exit);
 }
 
+[***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+
+[ check for keypress
+if (have.key()) {
+ [ digits
+ if (lastChar > 47 && lastChar < 58) {
+   pressButton = lastChar;
+   pressButton -= 48;
+   goto(pressBtn);
+  }
+  [ *
+  if (lastChar == 42) {
+   pressButton = 10;
+   goto(pressBtn);
+  }
+  [ # (or ENTER)
+  if ((lastChar == 35 || lastChar == 13)) {
+   pressButton = 11;
+   goto(pressBtn);
+  }
+} 
+
 [ check for keypad button presses
 if (mouseBtn == 1) { 
   if (pressButton == -1) {
@@ -188,6 +212,7 @@ if (mouseBtn == 1) {
     [ priority value indicates button
     pressButton /= 16;
     if (pressButton < 15) {
+      :pressBtn
       [ highlight the pressed button
       if (pressButton == 0) {
         [ fill 78,133
@@ -343,8 +368,9 @@ if (unlockdoor && !ctrlroomunlocked) {
   call(lgc.ScoreHandler);
 }
 
-[ right-click to cancel and exit
-if ((unlockdoor || controller(cRightClick))) {
+[ ESC or right-click to cancel and exit
+if ((unlockdoor || controller(cMenu) || 
+     controller(cRightClick))) {
  [ use work2 to indicate if door is open or closed
  [ because it doesn't get used during new.room calls
   if (unlockdoor) {
@@ -355,6 +381,8 @@ if ((unlockdoor || controller(cRightClick))) {
   [ reenable input
   accept.input();
   reset(disableGameFunctions);
+  [ clear menu controller
+[  set.key(CLR.CTRL, CLR.CTRL, cMenu); [ clear.controller(cNUM)
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
@@ -381,7 +409,7 @@ return();
 [ custom palette
 #message 9 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A09090915153F153F15153F3F3F15153F153F3F3F153F3F3F"
 [ default palete
-#message 10 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
+#message 10 "%s2"
 [ finger pointer
 #message 11 "0400FFF3FFE1FFE1FFE1FFE149E000E000E000800000000000000100018001800380"
            "0000000C000C000C000C000CB60DB60DB60DFE6FFE6FFE6FFC7FFC3FFC3F0000" 

@@ -97,7 +97,7 @@ if (mouseBtn == 1) {
   if ((work2 == 6 || work2 == 5)) {
     if (work2 == 6) {
       :pageright
-      block(FADE.OUT, BYVAR, 1, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 1, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       ++pageNum;
       if (pageNum == 5) {
         pageImg = pic.MagazineEnd;

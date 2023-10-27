@@ -286,6 +286,8 @@ if (controller(cChooseItem)) {
       [ magazine
       if (selectedItem == 1) {
         [ same as 'read magazine'
+        [ (set haveMatch to avoid the 'I don't understand' message)
+        set(haveMatch);
         goto(readmag);
       }
       [ disk
@@ -373,44 +375,52 @@ if (controller(cChooseItem)) {
       [ memo
       if (selectedItem == 6) {
         [ read the memo
+        [ (set haveMatch to avoid the 'I don't understand' message)
+        set(haveMatch);
         goto(readMemo);
       }
       [ post-it note
       if (selectedItem == 7) {
         [ read the note
-        selectedItem += 100;
+        work1 = 107;
         call(lgc.ExamineItem);
         call(lgc.RedrawRoom);
       }
       [ BaDASS manual
       if (selectedItem == 8) {
         [ read the manual
+        [ (set haveMatch to avoid the 'I don't understand' message)
+        set(haveMatch);
         goto(readManual);
       }
       [ notebook
       if (selectedItem == 9) {
         [ read the notebook
+        [ (set haveMatch to avoid the 'I don't understand' message)
+        set(haveMatch);
         goto(readNotebook);
       }
       [ folder
       if (selectedItem == 10) {
-        selectedItem += 100;
+        work1 = 110;
         call(lgc.ExamineItem);
         call(lgc.RedrawRoom);
       }
       [ scroll
       if (selectedItem == 11) {
+        [ (set haveMatch to avoid the 'I don't understand' message)
+        set(haveMatch);
         goto(readScroll);
       }
       [ music sheet
       if (selectedItem == 12) {
-        selectedItem += 100;
+        work1 = 112;
         call(lgc.ExamineItem);
         call(lgc.RedrawRoom);
       }
       [ PQ idea list
       if (selectedItem == 13) {
-        selectedItem += 100;
+        work1 = 113;
         call(lgc.ExamineItem);
         call(lgc.RedrawRoom);
       }
@@ -630,7 +640,7 @@ if (haveInput && !haveMatch) {
   if ((said("look", "in", "folder") ||
        said("read", "folder"))) {
     if (has("folder")) {
-      selectedItem = 110;
+      work1 = 110;
       call(lgc.ExamineItem);
       call(lgc.RedrawRoom);
     } else {

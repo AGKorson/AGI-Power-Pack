@@ -38,8 +38,8 @@ if (selectedTopic == 9) {
   topicTitle = "PPDEMO.CFG";
   block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
   display(2, 45, "%s20");
-  display(4, 25, "When 'Sierra Quest: Power Pack Demo' is started");
-  display(5, 25, "it uses the Power Pack file functions to check");
+  display(4, 25, "When the Power Pack Demo' game is started it");
+  display(5, 25, "uses the Power Pack file functions to check");
   display(6, 25, "for the file 'PPDEMO.CFG'. This file contains");
   display(7, 25, "various default settings.");
   display(9, 25, "If the file does not exist, the game uses its");
@@ -82,12 +82,12 @@ if (selectedTopic == 11) {
   display(6, 25, "checks for the presence of a mouse driver (which");
   display(7, 25, "is automatically included in DOSBox). If no mouse");
   display(8, 25, "is present, the game will not run.");
-  display(10, 25, "In 'Sierra Quest: Power Pack Demo', the mouse is");
-  display(11, 25, "used extensively. You can use it make selections");
-  display(12, 25, "on the tool bar, to move ego via point-and-click,");
+  display(10, 25, "In the Power Pack Demo game, the mouse is used");
+  display(11, 25, "extensively. You can use it make selections on");
+  display(12, 25, "the tool bar to move ego via point-and-click,");
   display(13, 25, "interact directly with items and actors, and");
   display(14, 25, "access the menu system (click to highlight,");
-  display(15, 25, "double-click to select; right-click to cancel).");
+  display(15, 25, "double-click to select, right-click to cancel).");
   display(17, 25, "The game save and restore functions also use the");
   display(18, 25, "mouse, (i.e. click/double-click to highlight/");
   display(19, 25, "select game slots).");

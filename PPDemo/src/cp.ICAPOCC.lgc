@@ -115,6 +115,7 @@ if (!enableICAPOCC) {
     block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     lastChar = 0;
   }
+
   [ any key, or any mouse-click to exit
   if ((have.key() || controller(cLeftClick) || controller(cRightClick))) {
     [ fade out 
@@ -314,10 +315,9 @@ if (newRoom) {
   egoPrevY = egoY;
   egoPrevDir = egoDir;
   
-  [ set speed to fastest for best mouse performance
+  [ set speed to fast for best mouse performance
   oldSpeed = animationInterval;
-  animationInterval = FASTEST_SPEED;
-
+  animationInterval = FAST_SPEED;
 }
 
 [ if room is being drawn or redrawn, need to add text

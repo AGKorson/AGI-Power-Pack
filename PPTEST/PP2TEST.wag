@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PP2T
    Interpreter = 2.917
-   LastEdit = "10/22/2023 12:06:01 PM"
+   LastEdit = "10/26/2023 9:32:27 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -49,7 +49,7 @@
 [::BEGIN Logics::]
 [Logic0]
    CompCRC32 = &H67CBAC3C
-   CRC32 = &H67CBAC3C
+   CRC32 = &H3C8B401B
    ID = lgc.Main
    IsRoom = False
    Size = 2917
@@ -57,7 +57,7 @@
 
 [Logic1]
    CompCRC32 = &HDA181A4B
-   CRC32 = &HDA181A4B
+   CRC32 = &H9046EFA3
    ID = rm.Entrance
    IsRoom = True
    Size = 937
@@ -66,7 +66,7 @@
 [Logic2]
    ID = rm.Outside
    Description = "An example room with an automatic door and sound effects."
-   CRC32 = &H1A09FFAA
+   CRC32 = &HDE29E40E
    CompCRC32 = &H1A09FFAA
    IsRoom = True
    Size = 494
@@ -74,7 +74,7 @@
 [Logic3]
    ID = rm.WestRoom
    Description = "An example room."
-   CRC32 = &HF499D72A
+   CRC32 = &H4C2A5B8D
    CompCRC32 = &HF499D72A
    IsRoom = True
    Size = 921
@@ -82,7 +82,7 @@
 [Logic4]
    ID = rm.NorthRoom
    Description = "An example room."
-   CRC32 = &HB671FBF4
+   CRC32 = &HF44CCBA3
    CompCRC32 = &HB671FBF4
    IsRoom = True
    Size = 82
@@ -90,14 +90,14 @@
 [Logic5]
    ID = rm.EastRoom
    Description = "An example room."
-   CRC32 = &H612375DC
+   CRC32 = &HFB6B44B5
    CompCRC32 = &H612375DC
    IsRoom = True
    Size = 82
 
 [Logic90]
    CompCRC32 = &H614E2543
-   CRC32 = &H614E2543
+   CRC32 = &H8604DF7F
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 659
@@ -105,7 +105,7 @@
 
 [Logic91]
    CompCRC32 = &H7FC8CAC3
-   CRC32 = &H7FC8CAC3
+   CRC32 = &HA7A054DA
    IsRoom = False
    ID = lgc.Init
    Size = 155
@@ -114,7 +114,7 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HF8D15AA7
+   CRC32 = &HF1F42011
    CompCRC32 = &HF8D15AA7
    IsRoom = False
    Size = 56
@@ -122,7 +122,7 @@
 [Logic94]
    ID = lgc.DebugHelp
    Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
-   CRC32 = &H4D0143F0
+   CRC32 = &HD7CB0DF8
    CompCRC32 = &H4D0143F0
    IsRoom = False
    Size = 1077
@@ -130,7 +130,7 @@
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H8C4D9252
+   CRC32 = &H6F1EF2AE
    CompCRC32 = &H8C4D9252
    IsRoom = False
    Size = 409
@@ -145,7 +145,7 @@
 
 [Logic98]
    CompCRC32 = &H3B8C2CF0
-   CRC32 = &H3B8C2CF0
+   CRC32 = &HD67BD4FE
    ID = lgc.Error
    IsRoom = False
    Size = 821
@@ -153,7 +153,7 @@
 
 [Logic99]
    CompCRC32 = &H24EA9763
-   CRC32 = &H24EA9763
+   CRC32 = &H3D181718
    ID = lgc.Debug
    IsRoom = False
    Size = 1147
@@ -282,7 +282,7 @@
 [Logic6]
    ID = lgc.StatusLine
    Description = ""
-   CRC32 = &H3CFBD55B
+   CRC32 = &HD61A80D9
    CompCRC32 = &H3CFBD55B
    IsRoom = False
    Size = 200
@@ -290,7 +290,7 @@
 [Logic7]
    ID = lgc.TestPart1
    Description = ""
-   CRC32 = &H252BEDC0
+   CRC32 = &H2189DBFB
    CompCRC32 = &H252BEDC0
    IsRoom = False
    Size = 10626
@@ -298,7 +298,7 @@
 [Logic8]
    ID = lgc.TestPart2
    Description = ""
-   CRC32 = &HC82026F2
+   CRC32 = &HE7C7605F
    CompCRC32 = &HC82026F2
    IsRoom = False
    Size = 11089
@@ -306,7 +306,7 @@
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &H1F73E6E1
+   CRC32 = &H912137A
    CompCRC32 = &H1F73E6E1
    IsRoom = False
    Size = 10945
@@ -314,7 +314,7 @@
 [Logic93]
    ID = lgc.GameHelp
    Description = ""
-   CRC32 = &H26D1DB44
+   CRC32 = &H43D4B0D2
    CompCRC32 = &H26D1DB44
    IsRoom = False
    Size = 1363
@@ -322,7 +322,7 @@
 [Logic10]
    ID = lgc.MsgMemTest
    Description = "test logic with several Kbytes of message text, but no commands."
-   CRC32 = &H8F0F9B48
+   CRC32 = &H1319C685
    CompCRC32 = &H8F0F9B48
    IsRoom = False
    Size = 26271

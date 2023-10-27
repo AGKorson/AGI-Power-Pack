@@ -296,8 +296,8 @@ if (fSafe) {
   }
 }
 [ open the safe
-if (fOpenSafe) {
-  reset(fOpenSafe);
+if (openSafe) {
+  reset(openSafe);
   [ if too close
   if (obj.in.box(ego, 38, 126, 65, 129)) {
     work1 = 130;

@@ -80,8 +80,6 @@ if (startTrace) {
 
 [ help screens use ONLY their custom logics
 if (showHelp) {
-  [ use local variable 240 to initialize the help screen
-  set(f240);
   call(lgc.GameHelp);
   return();
 }
@@ -106,10 +104,12 @@ if (currentRoom == 0) {
     [ messages to be in wrong places
     call(lgc.PowerPack);
   }
-  
+
   [ do start/restart initialization activities
-  call(lgc.Init);       [ this sets up the game; assigns key controllers,
-                        [ configures the screen and other startup activities
+  
+  [ init logic sets up the game; assigns key controllers, configures 
+  [ the screen and other startup activities
+  call(lgc.Init);
 
   [ some start/restart actions have to be done within logic0
   if (gameRestarted) {
@@ -159,7 +159,7 @@ if (currentRoom == 0) {
     set.menu.item(mnu_msgSpeedFast, cFast); [ " Fast   "
     set.menu.item(mnu_msgSpeedFastest, cFastest); [ " Fastest"
     
-    [ debug menu; disable by default
+    [ debug menu; disable(hide) by default
     set.menu(mnu_msgDebug); [ "Debug"
     set.menu.item(mnu_msgDbgLog, cLogInput);   [ "Log Input:      Off"
     set.menu.item(mnu_msgDbgClick, cShowClicks); [ "Display Clicks: Off"
@@ -188,8 +188,8 @@ if (currentRoom == 0) {
 [***************************************
 if (newRoom) {
   [ First interpreter cycle in a new room
-  [ Note: Everything other than logic 0 is discarded
-  [ from memory when new.room is executed
+  [ Note: Everything other than logic 0 is discarded from memory
+  [ when new.room is executed
 
   [ do basic room initialization
   call(lgc.RoomInit);
@@ -208,14 +208,14 @@ if (newRoom) {
   [ score handler (to allow score to go below zero)
   load.logics(lgc.ScoreHandler);
   
-  [ always animate ego object when starting a new room
-  animate.obj(ego);
-  [ load and set view
-  [ (for more complex games, this will probably need 
-  [ to be moved into each room's logic)
-  if (currentRoom > 2 && currentRoom < 11) {
-    load.view(vw.Ego);
-    set.view(ego, vw.Ego);
+  [ load ego view
+  if (currentRoom > 1 && currentRoom < 11) {
+    [ all except parking lot use full size ego
+    if (currentRoom != rm.ParkingLot) {
+        [ load and set view
+        load.view(vw.Ego);
+        set.view(ego, vw.Ego);
+    }
   }
   [ force clock value to update, if time is visible
   clearStatusSeconds = -1; 
@@ -258,21 +258,21 @@ if (resetClicks) {
   set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
-[ if debugging, handle these debug functions before
-[ other game functions
+[ if debugging, handle these debug functions before other game
+[ functions
 if (debugging) {
   if (fShowClicks) {
-    [ used to assist in creating click statements and said statements
+    [ useful to assist in creating click statements and said statements
     if (controller(cLeftClick)  && currentRoom != 12 && currentRoom != 13) {
       get.posn(ego, work1, work2);
       display(4, 1, "left click: (%v27, %v28)  ego pos:  (%v46, %v47)        ");
     }
-    [[ show the open closet door timer
-    [ display(24, 0, "%v79|2:%v80|2");
     [ show remaining available memory
     display(24, 0, "mem pages: %v8  ");
   }
   if (fLogInput) {
+    [ this logs everything player types; and also specifically
+    [ identifies unknown words
     if (haveInput) {
       if (unknownWordNum > 0) {
         log("unknown word: %v9");
@@ -281,6 +281,7 @@ if (debugging) {
       }
     }
   }
+  [ score testing functions
   if (said("test", "get")) {
     get.num("add to score: ", work1);
     call(lgc.ScoreHandler);
@@ -502,7 +503,7 @@ if (!disableGameFunctions) {
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
     block(SET.MSG, BYNUM, &mnu_msgSpeedFastest, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
-    [ skip intro
+    [ make sure skip intro menu matches skipIntro value 
     s22 = mnu_msgSkipIntro;
     block(STR.LEN, &s22, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (skipIntro) {

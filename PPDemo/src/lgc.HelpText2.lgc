@@ -100,7 +100,7 @@ if (selectedTopic == 8) {
   topicTitle = "Skip Intro";
   block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
   display(2, 45, "%s20");
-  display(4, 26, "When 'Sierra Quest: Power Pack Demo' is started");
+  display(4, 26, "When the Power Pack Demo game is started");
   display(5, 26, "for the first time, the entire Introduction");
   display(6, 26, "sequence is shown before the player is taken to");
   display(7, 26, "the starting room in the game. You cannot opt");

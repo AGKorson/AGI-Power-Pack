@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "10/23/2023 4:16:11 PM"
+   LastEdit = "10/26/2023 9:32:04 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.1"
@@ -49,8 +49,8 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H6B0AB76C
-   CRC32 = &H6B0AB76C
+   CompCRC32 = &HCE744BE9
+   CRC32 = &HCE744BE9
    ID = lgc.Main
    IsRoom = False
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
@@ -58,15 +58,15 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro"
-   CRC32 = &HFDA3E524
-   CompCRC32 = &HFDA3E524
+   CRC32 = &H87476C24
+   CompCRC32 = &H87476C24
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &HD5C45F17
-   CompCRC32 = &HD5C45F17
+   CRC32 = &H4317A9D7
+   CompCRC32 = &H4317A9D7
    IsRoom = True
 
 [Logic3]
@@ -107,15 +107,15 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "The control room is dominated by the main terminal with its multiple displays that demonstrate various power pack features. Drew has to figure out how to turn it on, and then how to enable all the displays."
-   CRC32 = &H59054B8F
-   CompCRC32 = &H59054B8F
+   CRC32 = &H7208A6CF
+   CompCRC32 = &H7208A6CF
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &H756704FC
-   CompCRC32 = &H756704FC
+   CRC32 = &H37F8F89C
+   CompCRC32 = &H37F8F89C
    IsRoom = True
 
 [Logic10]
@@ -142,8 +142,8 @@
 [Logic13]
    ID = cp.ERIDOCC
    Description = "Emulated Rodent Input Device Option Control Console: lets you edit mouse cursors that can be exported for use in other AGI games."
-   CRC32 = &HAB9C5DB3
-   CompCRC32 = &HAB9C5DB3
+   CRC32 = &H12F0A03D
+   CompCRC32 = &H12F0A03D
    IsRoom = True
 
 [Logic14]
@@ -156,8 +156,8 @@
 [Logic15]
    ID = cp.ICAPOCC
    Description = "Indexed Chromatic Association Properties Options Control Console: lets you edit color palettes, and also export them for use in other AGI games."
-   CRC32 = &H9BE78D08
-   CompCRC32 = &H9BE78D08
+   CRC32 = &H1061EED3
+   CompCRC32 = &H1061EED3
    IsRoom = True
 
 [Logic16]
@@ -177,15 +177,15 @@
 [Logic18]
    ID = rm.DoorKeypad
    Description = "Close up of the access control keypad that controls access to the Power Pack control room."
-   CRC32 = &HFE26A627
-   CompCRC32 = &HFE26A627
+   CRC32 = &HF099172
+   CompCRC32 = &HF099172
    IsRoom = True
 
 [Logic19]
    ID = rm.SafeDoor
    Description = "Close up of the safe door that's hidden behind the picture in the Power Pack operator's office."
-   CRC32 = &H1138BF11
-   CompCRC32 = &H1138BF11
+   CRC32 = &H5548722E
+   CompCRC32 = &H5548722E
    IsRoom = True
 
 [Logic20]
@@ -205,8 +205,8 @@
 [Logic22]
    ID = lgc.ReadMagazine
    Description = "Displays the magazine in response to a 'read magazine' input."
-   CRC32 = &H1A8A374E
-   CompCRC32 = &H1A8A374E
+   CRC32 = &HFFECE30C
+   CompCRC32 = &HFFECE30C
    IsRoom = False
 
 [Logic23]
@@ -324,15 +324,15 @@
 [Logic39]
    ID = lgc.HelpText2
    Description = "Contains code to display help topic pages 5 to 8."
-   CRC32 = &HCA18B2D0
-   CompCRC32 = &HCA18B2D0
+   CRC32 = &H4D60B73E
+   CompCRC32 = &H4D60B73E
    IsRoom = False
 
 [Logic40]
    ID = lgc.HelpText3
    Description = "Contains code to display help topic pages 8 to 12."
-   CRC32 = &HBF6640D4
-   CompCRC32 = &HBF6640D4
+   CRC32 = &HBC9E4FAB
+   CompCRC32 = &HBC9E4FAB
    IsRoom = False
 
 [Logic41]
@@ -352,22 +352,22 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &H5F864B23
-   CompCRC32 = &H5F864B23
+   CRC32 = &HAEDEAE19
+   CompCRC32 = &HAEDEAE19
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &H8F9DE6D9
-   CompCRC32 = &H8F9DE6D9
+   CRC32 = &HE8CF4FF9
+   CompCRC32 = &HE8CF4FF9
    IsRoom = False
 
 [Logic52]
    ID = lgc.RoomInit
    Description = "This logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms, inlcuding setting the correct graphics mode settings."
-   CRC32 = &HD85F17EB
-   CompCRC32 = &HD85F17EB
+   CRC32 = &HEE364271
+   CompCRC32 = &HEE364271
    IsRoom = False
 
 [Logic53]
@@ -3288,10 +3288,6 @@
 
 [View42]
    ID = vw.ButtonsUp
-   Description = ""
-
-[View43]
-   ID = vw.MsgBoxColors
    Description = ""
 
 [View44]

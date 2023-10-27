@@ -42,27 +42,29 @@ if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && currentRoom != rm
     block(FADE.OUT, BYNUM, 0, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   }
   
-  
   [ enable mouse in all regular rooms
   enable.item(mouse);
 
-  [ animate and reset the ego object
-  animate.obj(ego);
-  step.size(ego, egoStepSize);
-  step.time(ego, egoStepTime);
-  cycle.time(ego, egoCycleTime);
-  observe.blocks(ego);
-  observe.objs(ego);
-  observe.horizon(ego);
-  
-  [ save current ego position
-  get.posn(ego, egoX, egoY);
-  
-  [ by default, set ego to autocycle; remember to turn it 
-  [ off when you want cycle an animation of ego when it's
-  [ not moving
-  work1 = AUTO_CYCLE;
-  set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
+  [ ego is only active in rooms 2-10
+  if (currentRoom > 1 && currentRoom < 11) {
+    [ animate and reset the ego object
+    animate.obj(ego);
+    step.size(ego, egoStepSize);
+    step.time(ego, egoStepTime);
+    cycle.time(ego, egoCycleTime);
+    observe.blocks(ego);
+    observe.objs(ego);
+    observe.horizon(ego);
+    
+    [ save current ego position
+    get.posn(ego, egoX, egoY);
+    
+    [ by default, set ego to autocycle; remember to turn it 
+    [ off when you want cycle an animation of ego when it's
+    [ not moving
+    work1 = AUTO_CYCLE;
+    set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
+  }
 
   [ turn status line on during normal game play
   status.line.on();
@@ -86,9 +88,6 @@ if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && currentRoom != rm
 }
 
 if (currentRoom == rm.Title) {
-  [ enable mouse in title room
-  enable.item(mouse);
-
   [ disable game functions; they will be re-enabled after title screen is done
   set(disableGameFunctions);
 }
@@ -134,7 +133,6 @@ if (currentRoom >= cp.Terminal && currentRoom <= cp.RANDOCC) {
   
   [ mouse is enabled by default for control rooms
   enable.item(mouse);
-
 }
 
 [ make sure input area is cleared
