@@ -139,7 +139,7 @@ if (flickerTime > 0) {
       random(1, 8, flickerTime);
       
       [ only play sound if walkman is not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
+      if (!playWalkman) {
         [ play flicker buzz sound, force 4-channel FM
         set(4channelsound);
         set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)

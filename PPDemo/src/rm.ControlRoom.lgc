@@ -302,7 +302,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     if (obj.in.room(floppydisk, work1)) {
       if (nearTerminal) {
         [ play sound if walkman not active
-        if ((currentTrack == 0 || currentTrack > 128)) {
+        if (!playWalkman) {
           call(lgc.SetSound);
           sound(s.GetItem, soundDone);
         }
@@ -685,7 +685,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         work1 = cp.Terminal;
         if (obj.in.room(floppydisk, work1)) {
           [ play sound if walkman not active
-          if ((currentTrack == 0 || currentTrack > 128)) {
+          if (!playWalkman) {
             call(lgc.SetSound);
             sound(s.GetItem, soundDone);
           }
@@ -805,8 +805,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 
 if (showMOCC) {  
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }
@@ -820,8 +820,8 @@ if (showMOCC) {
 
 if (showCAISOCC) {
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }
@@ -835,8 +835,8 @@ if (showCAISOCC) {
   
 if (showERIDOCC) {
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }
@@ -847,8 +847,8 @@ if (showERIDOCC) {
 
 if (showESADOCC) {
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }
@@ -859,8 +859,8 @@ if (showESADOCC) {
 
 if (showICAPOCC) {
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }
@@ -871,8 +871,8 @@ if (showICAPOCC) {
 
 if (showOFROCC) {
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }
@@ -883,8 +883,8 @@ if (showOFROCC) {
 
 if (showRANDOCC) {
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 128) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }

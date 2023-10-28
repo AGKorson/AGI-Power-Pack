@@ -256,6 +256,8 @@ if ((controller(cStatus) || said("inventory"))) {
 
 [ quitting is allowed
 if ((controller(cQuit) || said("quit"))) {
+  [ update the config file
+  call(lgc.SaveOptions);
   quit(0);
 }
 
@@ -279,6 +281,11 @@ if (haveInput && !haveMatch) {
         "exit the game or view your inventory.");
 }
 
+[ SOUND EFFECTS CHECK
+if (soundDone) {
+  reset(soundDone);
+  reset(playSound);
+}
 return();
 
 [***************************************

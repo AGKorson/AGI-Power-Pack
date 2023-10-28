@@ -615,7 +615,6 @@ if ((btnAction == B_OK || btnAction == B_CANCEL)) {
       cycle.time(SET.SPEED, work1); [ toggle.turbo(vMODE)
       animationInterval *= 3;
     }
-    call(lgc.SaveOptions);
     print.at("Speed setting updated.", 3, 6, 31);
   } else {
     [ restore animation interval 

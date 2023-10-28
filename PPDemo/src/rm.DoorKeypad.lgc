@@ -121,8 +121,8 @@ if (newRoom) {
   load.sound(s.WrongCode);
   load.sound(s.RightCode);
   [ stop walkman
-  if (currentTrack > 0 && currentTrack < 127) {
-    currentTrack *= -1;
+  if (playWalkman) {
+    reset(playWalkman);
     stop.sound();
     reset(musicDone);
   }

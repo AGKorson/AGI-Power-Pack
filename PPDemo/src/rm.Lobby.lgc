@@ -495,9 +495,9 @@ if (gameRestored) {
 }
 
 [ check for walkman; if in use, have player stop it
-if (currentTrack > 0 && currentTrack < 128) {
-  [ reset it
-  currentTrack *= -1;
+if (playWalkman) {
+  [ stop it
+  reset(playWalkman);
   stop.sound();
   reset(musicDone);
   if (warnWalkman) {

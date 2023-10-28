@@ -233,7 +233,7 @@ if (dripdone && !faucetfixed) {
     end.of.loop(drip, dripdone);
     start.update(drip);
     [ only play sound if walkman is not in use, and not crashing through wall
-    if ((currentTrack == 0 || currentTrack > 128)  && (fallSeq == NOFALL || fallSeq >= SITUP)) {
+    if (!playWalkman  && (fallSeq == NOFALL || fallSeq >= SITUP)) {
       [ play drip sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -448,7 +448,7 @@ if (opendoor) {
   } else {
     if (posn(ego, 97, 142, 106, 147)) {
       [ only play sound if walkman is not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
+      if (!playWalkman) {
         [ drip could be a problem
         if (playSound) {
           stop.sound();
@@ -471,7 +471,7 @@ if (closedoor) {
     if (posn(ego, 97, 142, 106, 156)) {
       reverse.loop(door, fDoorDone);
       [ only play sound if walkman is not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
+      if (!playWalkman) {
         [ drip could be a problem
         if (playSound) {
           stop.sound();

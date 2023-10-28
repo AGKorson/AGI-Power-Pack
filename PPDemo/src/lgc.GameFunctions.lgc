@@ -10,6 +10,8 @@
 [
 [*********************************************************************
 
+[ TODO: add said statements for controlling Walkman
+
 [ power pack support
 #include "powerpack.txt"
 
@@ -37,14 +39,30 @@ if (controller(cRightClick)) {
 [ check generic new room actions
 if (newRoom) {
   [ check for walkman
-  if (currentTrack > 0 && currentTrack < 128 && currentRoom != rm.Lobby) {
-    [ load it, and start it
-    set(noScript);
-    block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-    work1 = &musicDone;
-    block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
-    reset(noScript);
-  }
+  if (playWalkman) {
+    [ not allowed in lobby
+    if (currentRoom != rm.Lobby) {
+      [ skip to next track
+      ++currentTrack;
+      [ SIDE A: 1 - 41, 42 means at end of tape
+      [ SIDE B: 43 - 83, 84 means at end of tape
+      [ if side is done
+      if ((currentTrack == 42 || currentTrack == 84)) {
+        [ stop the tape
+        reset(playWalkman);
+        reset(musicDone);
+      }
+      [ if still active
+      if (playWalkman) {
+        [ load it, and start it
+        set(noScript);
+        block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+        work1 = &musicDone;
+        block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
+        reset(noScript);
+      }
+    }
+  } 
 }
 
 [ check for kicking bucket
@@ -141,8 +159,6 @@ if (controller(cCrescendo) && attenuation > 0 && soundOn) {
   [ to increase volume, lower sound attenuation variable
   if (attenuation > 0) {
     --attenuation;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
@@ -154,8 +170,6 @@ if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
   }
   if (attenuation < work1) {
     ++attenuation;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 
@@ -344,13 +358,14 @@ if (controller(cChooseItem)) {
             block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
             print("You decide it's best to comply with the receptionist's request, and put the walkman back in your pocket.");
             set(warnWalkman);
-            [ receptionistLoc = HALL            
+            [ receptionistLoc == HALL            
             if (v220 == 4) {
               print("(How did she hear that from all the way out in the hallway?)");
             }
           }
         } else {
-          if (currentTrack >0 && currentTrack < 128) {
+          :usewalkman
+          if (playWalkman) {
             [ stop and unload current track; it will get restarted
             [ after showing the walkman
             stop.sound();
@@ -362,7 +377,8 @@ if (controller(cChooseItem)) {
           call(lgc.Walkman);
           call(lgc.RedrawRoom);
           
-          if (currentTrack >0 && currentTrack < 128) {
+          [ if still active
+          if (playWalkman) {
             [ restart current track
             set(noScript);
             block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
@@ -435,10 +451,9 @@ if (controller(cChooseItem)) {
 }
 
 [ quit the game
-if ((controller(cQuit) || 
-     said("quit", "game") || 
-     said("quit"))) {
-  stop.sound();
+if ((controller(cQuit) || said("quit", "game") || said("quit"))) {
+  [ update the config file
+  call(lgc.SaveOptions);
   quit(0);
 }
 
@@ -682,6 +697,8 @@ if (haveInput && !haveMatch) {
     if (badWordCount == 3) {
       [ no more warnings
       print("Don't say I didn't warn you.");
+      [ update the config file
+      call(lgc.SaveOptions);
       quit(1);
     }
   }

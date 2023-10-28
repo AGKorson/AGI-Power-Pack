@@ -1850,9 +1850,6 @@ if (btnAction > 0) {
     egoY = egoPrevY;
     egoDir = egoPrevDir;
   
-    [ update the config file to include any changes
-    call(lgc.SaveOptions);
-
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(BYNUM, &m160, mouse); [ set.cursor(FN_MODE, MSGNUM)

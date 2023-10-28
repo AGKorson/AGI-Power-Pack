@@ -121,6 +121,7 @@
 #define skipIntro              f88 [ if true, the Intro gets skipped when game starts
 #define showHelp               f89 [ used to direct input to the help screen when it's being shown
 #define startTrace             f90 [ when set, main loop will enter trace mode
+#define playWalkman            f91 [ true when currently playing sound is a Walkman track
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string

@@ -5,6 +5,10 @@
 [ Close up of the Sony Walkman. Player can load/unload the cassette, 
 [ pause/play/rewind/fast forward sound tracks.
 [
+[ There are 82 tracks on the cassette, 41 on each side.
+[ SIDE A: 1 - 41, 42 means at end of tape
+[ SIDE B: 43 - 83, 84 means at end of tape
+[
 [*********************************************************************
 
 [ power pack support
@@ -25,6 +29,8 @@
 #define tmpCursor     v241
 #define counter1      v242
 #define counter2      v243
+#define spindleCel    v244
+#define spinDelay     v245
 
 #define coverClosed   f240
 #define mouseDown     f241
@@ -72,14 +78,17 @@ overlay.pic(work1);
 discard.pic(work1);
 show.pic();
 
+[ spindles
+load.view(vw.WalkmanArt);
+spindleCel = 0;
+spinDelay = 0;
+
 [ cover always starts closed
 set(coverClosed);
 
-[ set sound parameters
-call(lgc.SetSound);
-
-[ if currently playing, reload and restart music
-if ( currentTrack > 0 && currentTrack < 128) {
+[ if currently playing 
+if (playWalkman) {
+  [ reload and restart music
   block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
   work1 = &musicDone;
   block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
@@ -88,10 +97,37 @@ if ( currentTrack > 0 && currentTrack < 128) {
 [ fade back in
 block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 
-[ main input loop; wait until a key is pressed
+reset(mouseDown);
+
+[ main input loop; wait until a key is pressed or mouse
+[ button pressed
 :waitforit
   lastChar = 0;
-
+  
+  [ spindle
+  if (playWalkman) {
+    ++spinDelay;
+    if (spinDelay == 255) {
+      spinDelay = 0;
+      ++spindleCel;
+      if (spindleCel == 4) {
+        spindleCel = 0;
+      }
+      if (spindleCel == 0) {
+        add.to.pic(vw.WalkmanArt, 0, 0, 86, 123, 12, 4);
+      }
+      if (spindleCel == 1) {
+        add.to.pic(vw.WalkmanArt, 0, 1, 86, 123, 12, 4);
+      }
+      if (spindleCel == 2) {
+        add.to.pic(vw.WalkmanArt, 0, 2, 86, 123, 12, 4);
+      }
+      if (spindleCel == 3) {
+        add.to.pic(vw.WalkmanArt, 0, 3, 86, 123, 12, 4);
+      }
+    }
+  }
+        
   [ do nothing if flipping cassette
   if (flipCassette) {
     --counter2;
@@ -151,7 +187,11 @@ block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
         clear.lines(23, 23, BLACK);
         if (has("cassette tape")) {
           tmpCursor = C_TAPE;
-          display(23, 28, "(press SPACE to flip)");
+          if (cassetteSideB) {
+            display(23, 25, "Side B: %m11");
+          } else {
+            display(23, 25, "Side A: %m11");
+          }
         } else {
           if (cassetteLoaded) {
             tmpCursor = C_USE;
@@ -162,7 +202,7 @@ block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
       }
     }
   }
-  
+  [ adjust cursor if applicable
   if (tmpCursor != cursoricon) {
     cursoricon = tmpCursor;
     set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
@@ -174,54 +214,38 @@ block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
     [ discard current track
     block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     [ next track
+    [ SIDE A: 1 - 41, 42 means at end of tape
+    [ SIDE B: 43 - 83, 84 means at end of tape
     ++currentTrack;
-    if ((currentTrack == 43 || currentTrack == 85)) {
-      currentTrack = 0;
-    }
-    [ if another track is now active, play it
-    if (currentTrack > 0) {
+    if ((currentTrack == 42 || currentTrack == 84)) {
+      reset(playWalkman);
+    } else {
+      [ load and play the next track
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
       work2 = &musicDone;
       block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
     }
   }
   
-[[ loop until button clicked or key pressed
-if ((mouseBtn != 0 || have.key())) {
-} else {
+[ loop until button clicked or key pressed
+if (mouseBtn == 0 && !have.key()) {
   goto(waitforit);
 }
-[if (!have.key() && mouseBtn == 0) {
-[  goto(waitforit);
-[}
 
 if (lastChar == 27) {
   goto(exit);
 }
 
 [ space to flip cassette
-[if (lastChar == 32 && has("cassette tape") && !coverClosed) {
 if (lastChar == 32 && cursoricon == C_TAPE) {
   toggle(cassetteSideB);
+  helpText = -1;
   [ adjust position
-  if (currentTrack == 0) {
-    [ move to beginning of new side
-    if (cassetteSideB) {
-      currentTrack = -43;
-    } else {
-      currentTrack = -1;
-    }
-  } else {
-    [ -1=-85(0); -2=-84; ... -41=-45; -42=-44; -43=-43(0)
-    [ 
-    [ new=-86-old
-    work1 = -86;
-    if ((work1 == -43 || work1 == -85)) {
-      work1 = 0;
-    }
-    work1 -= currentTrack;
-    currentTrack = work1;
-  }
+  [ SIDE A: 1 - 41, 42 means at end of tape
+  [ SIDE B: 43 - 83, 84 means at end of tape
+  [ to flip: new = 85 - old
+  currentTrack *= -1;
+  currentTrack += 85;
   [ show a wait cursor for a bit
   set(flipCassette);
   counter1 = 255;
@@ -250,35 +274,28 @@ if (mouseBtn == 1 && !mouseDown) {
   if (work1 == 8) {
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
-      [ advance to next track, based on side
-      [ 1 - 42 means playing side A
-      [ -1 to -42 means paused/stopped side A
-      [ 43 - 84 means playing side B
-      [ -43 to -84 means paused side B
-      [ 0 means end of tape
-      if (currentTrack > 0 && currentTrack < 127) {
+      [ advance to next track
+      
+      [ currently playing?
+      if (playWalkman) {
         [ stop current track
         stop.sound();
         block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
-        [ move to next track
-        ++currentTrack;
-        if ((currentTrack == 43 || currentTrack == 85)) {
-          currentTrack = 0;
-        }
-        [ if another track is now active, play it
-        if (currentTrack > 0) {
-          block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-          work2 = &musicDone;
-          block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
-        }
-      } else {
-        if (currentTrack > 128) {
-          [ advance but don't play
-          --currentTrack;
-          if ((currentTrack == -43 || currentTrack == -85)) {
-            currentTrack = 0;
-          }
-        }
+      }
+      [ move to next track
+      [ SIDE A: 1 - 41, 42 means at end of tape
+      [ SIDE B: 43 - 83, 84 means at end of tape
+      ++currentTrack;
+      if ((currentTrack == 42 || currentTrack == 84)) {
+        [ end of this side; stop playing
+        reset(playWalkman);
+        reset(musicDone);
+      }
+      [ if another track is now active, play it
+      if (playWalkman) {
+        block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+        work2 = &musicDone;
+        block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
       }
     }
   }
@@ -287,58 +304,40 @@ if (mouseBtn == 1 && !mouseDown) {
   if (work1 == 9) {
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
-      [ go back to previous track, based on side
-      [ 1 - 42 means playing side A
-      [ -1 to -42 means paused/stopped side A
-      [ 43 - 84 means playing side B
-      [ -43 to -84 means paused side B
-      [ 0 means end of tape
-      if (currentTrack > 0 && currentTrack < 127) {
+      [ go back to previous track
+      [ SIDE A: 1 - 41, 42 means at end of tape
+      [ SIDE B: 43 - 83, 84 means at end of tape
+      
+      [ currently playing?
+      if (playWalkman) {
         [ stop current track
         stop.sound();
         block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
-        [ move to previous track
-        --currentTrack;
-        if (cassetteSideB) {
-          if (currentTrack == 42) {
-            currentTrack = 43;
-          }
-        } else {
-          if (currentTrack == 0) {
-            currentTrack = 1;
-          }
-        }
+      }
+      [ move to previous track
+      --currentTrack;
+      if (currentTrack == 0) {
+        [ stay on first track of side A
+        currentTrack = 1;
+      }
+      if (currentTrack == 42) {
+        [ stay on first track of side B
+        currentTrack = 43;
+      }
+      if (playWalkman) {
         [ play active track
         block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
         work2 = &musicDone;
         block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
-      } else {
-        [ paused - rewind but don't play
-        if (currentTrack == 0) {
-          [ at end; back up
-          if (cassetteSideB) {
-            currentTrack = -84;
-          } else {
-            currentTrack = -42;
-          }
-        } else {
-          [ rewind by moving closer to start
-          ++currentTrack;
-[          if (currentTrack == 0) {
-[            currentTrack = -1;
-[          }
-          if (currentTrack == -42) {
-            currentTrack = -43;
-          }
-        }
       }
     }
   }
-
+  
   [ stop/eject
   if (work1 == 10) {
-    if (currentTrack > 0 && currentTrack < 128) {
-      currentTrack *= -1;
+    if (playWalkman) {
+      [ stop the sound, and discard the resource
+      reset(playWalkman); 
       stop.sound();
       reset(musicDone);
       block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
@@ -372,24 +371,28 @@ if (mouseBtn == 1 && !mouseDown) {
   [ play
   if (work1 == 11) {
     [ cassette loaded, cover closed and currently paused/stopped
-    if (cassetteLoaded && coverClosed && currentTrack > 128) {
+    if (cassetteLoaded && coverClosed && !playWalkman) {
       if (!scoreWalkman) {
         set(scoreWalkman);
         work1 = 4;
         call(lgc.ScoreHandler);
       }
-      [ always turn sound on if walkman is in use
-      if (!soundOn) {
-        set(soundOn);
+      [ if not at end of track
+      [ SIDE A: 1 - 41, 42 means at end of tape
+      [ SIDE B: 43 - 83, 84 means at end of tape
+      if (currentTrack != 42 && currentTrack != 84) {
+        [ always turn sound on if walkman is in use
+        if (!soundOn) {
+          set(soundOn);
+        }
+        [ set parameters
+        call(lgc.SetSound);
+        [ now begin playing current track
+        set(playWalkman);
+        block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+        work2 = &musicDone;
+        block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
       }
-      [ enable current track
-      currentTrack *= -1;
-      [ set parameters
-      call(lgc.SetSound);
-      [ now begin playing current track
-      block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-      work2 = &musicDone;
-      block(SND.V.FN, SOUND.V, &currentTrack, &work2); [ sound.v(vSNDNUM, vDONEFLAG)
     }
   }
   
@@ -420,7 +423,11 @@ if (mouseBtn == 1 && !mouseDown) {
       discard.pic(work2);
       show.pic();
       tmpCursor = C_TAPE;
-      display(23, 28, "(press SPACE to flip)");
+      if (cassetteSideB) {
+        display(23, 25, "Side B: %m11");
+      } else {
+        display(23, 25, "Side A: %m11");
+      }
     } else {
       if (has("cassette tape")) {
         work2 = ovl.Walkman4;
@@ -449,12 +456,14 @@ if (mouseBtn == 1 && !mouseDown) {
 goto(waitforit);
 
 :exit
-[ if playing, stop before changing room
-if (currentTrack > 0 && currentTrack < 128) {
+[ if playing, stop before going back
+if (playWalkman) {
   stop.sound();
   reset(musicDone);
   block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
 }
+
+discard.view(vw.WalkmanArt);
 
 [ restore script entries
 reset(noScript);
@@ -481,3 +490,6 @@ return();
 #message 6 "%g35"
 #message 7 "%g36"
 #message 8 "%g37"
+#message 9 "Side A: %m11"
+#message 10 "Side B: %m11"
+#message 11 " (press SPACE to flip)"

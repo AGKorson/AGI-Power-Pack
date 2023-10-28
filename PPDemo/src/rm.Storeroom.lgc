@@ -240,7 +240,7 @@ if (soundDone) {
     if (hourBells) {
       reset(soundDone);
       --bellCount;
-      if ((currentTrack == 0 || currentTrack > 128)) {
+      if (!playWalkman) {
         if (bellCount > 0) {
           [ play chime sound, force 4-channel MIDI
           set(4channelsound);
@@ -287,8 +287,10 @@ if (vCheckSecond != elapsedSeconds) {
     }
     [ chimes, if not playing music
     [ only play chimes if walkman is not in use
-    if ((currentTrack == 0 || currentTrack > 128)) {
+    if (!playWalkman) {
       if ((vClockMin == 0 || vClockMin == 15 || vClockMin == 30 || vClockMin == 45)) {
+        [ cancel any sound effects
+        stop.sound();
         [ force midi
         set(4channelsound);
         set(useMIDI);
@@ -406,8 +408,8 @@ if (fInCoffin) {
     set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
     ++vCoffinDeathSeq;
     [ stop walkman if active
-    if (currentTrack > 0 && currentTrack < 128) {
-      currentTrack *= -1;
+    if (playWalkman) {
+      reset(playWalkman);
       stop.sound();
       reset(musicDone);
     }
@@ -1952,7 +1954,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ behind of podium
         if (!has("PQ idea list")) {
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.GetItem, soundDone);
           }
@@ -2008,7 +2010,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           end.of.loop(oFileDrawer, fFileDrawer);
           storeFileDrStatus = OPENING;
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.OpenDrawer, soundDone);
           }
@@ -2044,7 +2046,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           end.of.loop(oFileDrawer, fFileDrawer);
           storeFileDrStatus = OPENING;
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.OpenDrawer, soundDone);
           }
@@ -2080,7 +2082,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           end.of.loop(oFileDrawer, fFileDrawer);
           storeFileDrStatus = OPENING;
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.OpenDrawer, soundDone);
           }
@@ -2122,7 +2124,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           if (!has("cassette tape")) {
             :getcassette
             [ play sound if walkman not active and no chimes
-            if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            if (!playWalkman && !clockChiming) {
               call(lgc.SetSound);
               sound(s.GetItem, soundDone);
             }
@@ -2143,7 +2145,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         reverse.loop(oFileDrawer, fFileDrawer);
         storeFileDrStatus= CLOSING;
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.CloseDrawer, soundDone);
         }
@@ -2195,7 +2197,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         end.of.loop(oDeskDrawer, fDeskDrawer);
         storeDeskDrStatus = OPENING;
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.OpenDrawer, soundDone);
         }
@@ -2221,7 +2223,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         reverse.loop(oDeskDrawer, fDeskDrawer);
         storeDeskDrStatus= CLOSING;
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.CloseDrawer, soundDone);
         }
@@ -2301,7 +2303,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           end.of.loop(oCabinetDoor, fDoor);
           vDoorState = OPENING;
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.OpenDrawer, soundDone);
           }
@@ -2319,7 +2321,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         :getmusic
         if (!has("music sheet")) {
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.GetItem, soundDone);
           }
@@ -2345,7 +2347,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         [ if open, ego must be close enough, so just close it without further checks
         reverse.loop(oCabinetDoor, fDoor);
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.CloseDrawer, soundDone);
         }
@@ -2374,7 +2376,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           end.of.loop(oBureauDrawer, fBureauDrawer);
           storeBureauDrStatus = OPENING;
           [ play sound if walkman not active and no chimes
-          if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+          if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
             sound(s.OpenDrawer, soundDone);
           }
@@ -2415,7 +2417,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         reverse.loop(oBureauDrawer, fBureauDrawer);
         storeBureauDrStatus= CLOSING;
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.CloseDrawer, soundDone);
         }
@@ -2503,7 +2505,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         end.of.loop(oChest, fChest);
         storeChestStatus= OPENING;
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.OpenDrawer, soundDone);
         }
@@ -2529,7 +2531,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           if (!has("scroll")) {
             :getscroll
             [ play sound if walkman not active and no chimes
-            if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            if (!playWalkman && !clockChiming) {
               call(lgc.SetSound);
               sound(s.GetItem, soundDone);
             }
@@ -2547,7 +2549,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         reverse.loop(oChest, fChest);
         storeChestStatus= CLOSING;
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.CloseDrawer, soundDone);
         }
@@ -2577,7 +2579,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
             position(oCoffin, 28, 155);
             draw(oCoffin);
             [ play sound if walkman not active and no chimes
-            if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+            if (!playWalkman && !clockChiming) {
               call(lgc.SetSound);
               sound(s.OpenCoffin, soundDone);
             }
@@ -2598,7 +2600,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         vCoffinState = CLOSING;
         reverse.loop(oCoffin, fCoffin);
         [ play sound if walkman not active and no chimes
-        if ((currentTrack == 0 || currentTrack > 128) && !clockChiming) {
+        if (!playWalkman && !clockChiming) {
           call(lgc.SetSound);
           sound(s.CloseCoffin, soundDone);
         }

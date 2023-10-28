@@ -34,6 +34,8 @@ block(STR.LEFT, &s12, &s12, &work1); [ str.left(sINPUT, sRESULT, vLEN)
 [ log the error
 log("%s12");
 
+[ update the config file
+call(lgc.SaveOptions);
 [ force quit
 quit(1);
 return();

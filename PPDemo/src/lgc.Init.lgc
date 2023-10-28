@@ -530,7 +530,8 @@ patient4Loc = LOC_GONE;
 set(firstLobbyVisit);
 
 [ casette starts on side A, first track, paused
-currentTrack = -1;
+currentTrack = 1;
+reset(playWalkman);
 
 [ start safe combo on a random number
 random(0, 39, comboNumber);

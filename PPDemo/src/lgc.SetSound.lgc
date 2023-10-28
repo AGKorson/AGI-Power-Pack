@@ -60,6 +60,7 @@ if (musicmode == FM_SOUND) {
   } else {
     [ set AGI single-channel mode
     reset(4channelsound);
+    reset(useMIDI);
   }
 }
 

@@ -84,6 +84,7 @@
 #define patientVisible f228
 #define egoDying       f229
 #define playCarSound   f230
+#define doneCarSound   f231
 
 #define theDay          s12
 #define weekendMsg      s13
@@ -314,7 +315,6 @@ if (egoCarSeq) {
     work2 = CAR_INSTRUMENT;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
     sound(s.Car, soundDone);
-    set(playSound);
   }
   if (egoCarSeq == EC_PARKING && soundDone) {
     [ continue playing engine sound until final position reached
@@ -369,8 +369,8 @@ if (egoCarSeq) {
   [ ego drives away
   if (egoCarSeq == EC_LEAVE) {
     [ if walkman is in use, stop it
-    if (currentTrack > 0 && currentTrack < 128) {
-      currentTrack *= -1;
+    if (playWalkman) {
+      reset(playWalkman);
       stop.sound();
       reset(musicDone);
     }
@@ -381,23 +381,23 @@ if (egoCarSeq) {
     work1 = 0;
     work2 = CAR_INSTRUMENT;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-    sound(s.CarStart, soundDone);
+    sound(s.CarStart, doneCarSound);
     set(playSound);
     egoCarSeq = EC_STARTCAR;
   }
-  if (egoCarSeq == EC_STARTCAR && soundDone) {
+  if (egoCarSeq == EC_STARTCAR && doneCarSound) {
     [ ego drives away
     egoCarSeq = EC_LEAVING;
     start.cycling(egoCar);
     move.obj(egoCar, 143, 126, 2, carDone);
     [ (sound parameters are already set, so just play the sound)
-    sound(s.Car, soundDone);
+    sound(s.Car, doneCarSound);
     set(playSound);
   }
-  if (egoCarSeq == EC_LEAVING && soundDone) {
+  if (egoCarSeq == EC_LEAVING && doneCarSound) {
     [ keep playing car-running sound
     [ (sound parameters are already set, so just play the sound)
-    sound(s.Car, soundDone);
+    sound(s.Car, doneCarSound);
     set(playSound);
   }
   if (egoCarSeq == EC_LEAVING && carDone) {
@@ -426,7 +426,6 @@ if (newRoom && (previousRoom == 0 || previousRoom == rm.Title)) {
     print("What luck! The clinic is open on %s12! ");
   }
 }
-
 
 [ timing bug with controllers
 if (skip1) {
@@ -479,17 +478,16 @@ if (patientTimer == 0) {
       move.obj(oPatientCar, 18, 143, 2, patientDone);
     } else {
       set(2ndSpot);
-      patientSeq = P2_DRIVE_A; [ gdrive to first point
+      patientSeq = P2_DRIVE_A; [ drive to first point
       random(19, 37, work1);
       set.loop.v(oPatientCar, work1);
       position(oPatientCar, 143, 128);
       move.obj(oPatientCar, 99, 128, 2, patientDone);
     }
     draw(oPatientCar);
-  set(f10);trace.on();
-  
-    [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    
+    [ if not playing any other sounds
+    if (!playWalkman && !playSound) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -497,11 +495,12 @@ if (patientTimer == 0) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.Car, soundDone);
-      set(playSound);
+      sound(s.Car, doneCarSound);
+      [ use separate flag for car sound
+      set(playCarSound);
     } else {
       [ skip the sound
-      set(soundDone);
+      set(doneCarSound);
     }
     
     [ choose a random patient
@@ -524,7 +523,6 @@ if (patientDone) {
     [ if car sound is active, stop it
     [ (but not any other sound)
     if (playCarSound) {
-      reset(playSound);
       reset(playCarSound);
       stop.sound();
     }
@@ -543,7 +541,7 @@ if (patientDone) {
     reset(patientDone);
     patientSeq = P2_START; 
     [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    if (!playWalkman && !playSound) {
       [ play car-start sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -551,11 +549,10 @@ if (patientDone) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.CarStart, soundDone);
-      set(playSound);
+      sound(s.CarStart, doneCarSound);
       set(playCarSound);
     } else {
-      set(soundDone);
+      set(doneCarSound);
     }
   }
   if (patientSeq == P2_WALK_D) {
@@ -589,8 +586,8 @@ if (patientDone) {
     [ stop car
     reset(patientDone);
     patientSeq = P2_STOP; 
-    [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    [ if not playing any other music
+    if (!playWalkman && !playSound) {
       [ play car-stop sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -598,10 +595,10 @@ if (patientDone) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.CarStop, soundDone);
-      set(playSound);
+      sound(s.CarStop, doneCarSound);
+      set(playCarSound);
     } else {
-      set(soundDone);
+      set(doneCarSound);
     }
   }
   if (patientSeq == P2_DRIVE_C) {
@@ -631,7 +628,6 @@ if (patientDone) {
     if (playCarSound) {
       stop.sound();
       reset(playCarSound);
-      reset(playSound);
     }
     patientSeq = IDLE;
   }
@@ -652,9 +648,8 @@ if (patientDone) {
     [ start car
     reset(patientDone);
     patientSeq = P1_START;
-    [ only play sound if walkman is not in use 
-    [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    [ if not playing any other music
+    if (!playWalkman && !playSound) {
       [ play car-start sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -662,11 +657,10 @@ if (patientDone) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.CarStart, soundDone);
-      set(playSound);
+      sound(s.CarStart, doneCarSound);
       set(playCarSound);
     } else {
-      set(soundDone);
+      set(doneCarSound);
     }
   }
   if (patientSeq == P1_WALK_D) {
@@ -701,7 +695,7 @@ if (patientDone) {
     reset(patientDone);
     patientSeq = P1_STOP; 
     [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    if (!playWalkman && !playSound) {
       [ play car-stop sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -709,24 +703,25 @@ if (patientDone) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.CarStop, soundDone);
-      set(playSound);
+      sound(s.CarStop, doneCarSound);
+      set(playCarSound);
     } else {
-      set(soundDone);
+      set(doneCarSound);
     }
   }
 }
 
-if (soundDone) {
-  reset(soundDone);
+[ check for end of car sound
+if (doneCarSound) {
+  reset(doneCarSound);
   if (patientSeq == P1_START) {
     [ drive car to first point
     start.cycling(oPatientCar);
     move.obj(oPatientCar, 5, 143, 1, patientDone);
     unblock();
     patientSeq = P1_DRIVE_B;
-    [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    [ if not playing any other music
+    if (!playWalkman && !playSound) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -734,8 +729,8 @@ if (soundDone) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.Car, soundDone);
-      set(playSound);
+      sound(s.Car, doneCarSound);
+      set(playCarSound);
     }
     goto(checkdeath);
   }
@@ -754,8 +749,8 @@ if (soundDone) {
     move.obj(oPatientCar, 61, 131, 1, patientDone);
     unblock();
     patientSeq = P2_DRIVE_E;
-    [ and not playing any other music
-    if ((currentTrack == 0 || currentTrack > 128) && !playSound) {
+    [ if not playing any other music
+    if (!playWalkman && !playSound) {
       [ play car-running sound, force 4-channel FM
       set(4channelsound);
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -763,8 +758,8 @@ if (soundDone) {
       work1 = 0;
       work2 = CAR_INSTRUMENT;
       set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(s.Car, soundDone);
-      set(playSound);
+      sound(s.Car, doneCarSound);
+      set(playCarSound);
     }
     goto(checkdeath);
   }
@@ -780,8 +775,7 @@ if (soundDone) {
   
   [ if walkman not in use and not playing any other music, 
   [continue car sound effects if car is moving
-  if ((currentTrack == 0 || currentTrack > 128) && !playSound && 
-      patientSeq > 200) {
+  if (!playWalkman && !playSound && patientSeq > 200) {
     [ play car-running sound, force 4-channel FM
     set(4channelsound);
     set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
@@ -789,11 +783,7 @@ if (soundDone) {
     work1 = 0;
     work2 = CAR_INSTRUMENT;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-    sound(s.Car, soundDone);
-    set(playSound);
-    [ need to track specifically if car sound is playing
-    [ so it can be stopped correctly when car reaches 
-    [ edge of screen
+    sound(s.Car, doneCarSound);
     set(playCarSound);
   }
 }
@@ -841,36 +831,31 @@ if (!egoDying && !deathType && !kickBucket) {
       work1 = CYCLE_AT_REST;
       set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
       end.of.loop(ego, electrocuted);
-      [ only play sound effects if walkman not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
-        [ play electrify sound, force 4-channel FM
-        set(4channelsound);
-        set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-        [ use correct instrument
-        work1 = 3;
-        work2 = 129;
-        set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-        sound(s.Shock, soundDone);
-        set(playSound);
+      [ stop walkman if in use
+      if (playWalkman) {
+        reset(playWalkman);
+        stop.sound();
+        reset(musicDone);
       }
+      [ play electrify sound, force 4-channel FM
+      set(4channelsound);
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      [ use correct instrument
+      work1 = 3;
+      work2 = 129;
+      set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      sound(s.Shock, soundDone);
+      set(playSound);
     }
     if (electrocuted) {
+      reset(electrocuted);
       if (deathSeq < 5) {
         ++deathSeq;
         set.cel(ego, 0);
         end.of.loop(ego, electrocuted);
-        [ only play sound effects if walkman not in use
-        if ((currentTrack == 0 || currentTrack > 128)) {
-          [ play electrify sound, force 4-channel FM
-          set(4channelsound);
-          set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-          [ use correct instrument
-          work1 = 3;
-          work2 = 129;
-          set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-          sound(s.Shock, soundDone);
-          set(playSound);
-        }
+        [ play electrify sound again
+        sound(s.Shock, soundDone);
+        set(playSound);
       }
       if (deathSeq == 5) {
         ++deathSeq;
@@ -907,6 +892,7 @@ if (electrocuted && deathSeq == 6) {
   deathType = DT_STUNNED;
   accept.input();
   ignore.objs(oPatient);
+  ignore.objs(oPatientCar);
 }
 
 [ if dead or dying, skip player input

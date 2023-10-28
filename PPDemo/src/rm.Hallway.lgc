@@ -293,7 +293,7 @@ if (examDoorDone) {
       reverse.loop(oExamDoor, examDoorDone);
       normal.cycle(oNurse);
       [ only play sound effects if walkman not in use
-      if ((currentTrack == 0 || currentTrack > 128)) {
+      if (!playWalkman) {
         [ play door-close sound, using current sound settings
         call(lgc.SetSound);
         sound(s.DoorClose, soundDone);
@@ -310,10 +310,10 @@ if (examDoorDone) {
       set(disableGameFunctions);
       arrestSeq = COPARRIVES;
       [ if walkman in use, stop it
-      if (currentTrack >0 && currentTrack < 128) {
-        currentTrack *= -1;
+      if (playWalkman) {
+        reset(playWalkman);
         stop.sound();
-        reset(playSound);
+        reset(musicDone);
       }
       [ play call-cops music, using current sound settings
       call(lgc.SetSound);
@@ -900,7 +900,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         if (closetopen) {
           :closeclosetdoor
           [ only play sound effects if walkman not in use
-          if ((currentTrack == 0 || currentTrack > 128)) {
+          if (!playWalkman) {
             [ play door-open sound, using current sound settings
             call(lgc.SetSound);
             sound(s.DoorClose, soundDone);
@@ -910,7 +910,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         } else {
           :openclosetdoor
           [ only play sound effects if walkman not in use
-          if ((currentTrack == 0 || currentTrack > 128)) {
+          if (!playWalkman) {
             [ play door-open sound, using current sound settings
             call(lgc.SetSound);
             sound(s.DoorOpen, soundDone);
@@ -934,7 +934,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (posn(ego, 40, 132, 60, 138)) {
         :openexamdoor
         [ only play sound effects if walkman not in use
-        if ((currentTrack == 0 || currentTrack > 128)) {
+        if (!playWalkman) {
           [ play open-door sound, using current sound settings
           call(lgc.SetSound);
           sound(s.DoorOpen, soundDone);

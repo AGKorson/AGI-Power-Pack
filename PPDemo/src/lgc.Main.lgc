@@ -235,17 +235,6 @@ if (newRoom) {
       block(TOGGLE.TIMER, STOP_TIMER, 0, 0); [ toggle.timer(STATE)
     }
   }
-  
-  [ if cassette is playing (loaded and not paused or at end of side)
-  if (cassetteLoaded && currentTrack > 0 && currentTrack < 128) {
-    [ skip to next track
-    ++currentTrack;
-    [ if side is done
-    if ((currentTrack == 43 || currentTrack == 85)) {
-      [ stop the tape
-      currentTrack = 0;
-    }
-  }
 }
 
 [***************************************
@@ -565,91 +554,56 @@ if (clockOn) {
 
 [ SOUND MENU ITEMS
 if (controller(cToggleSound)) {
-  if (soundOn && currentTrack > 0 && currentTrack < 128) {
+  if (playWalkman) {
     [ turning sound off pauses walkman
-    currentTrack *= -1;
+    reset(playWalkman);
+    stop.sound();
+    reset(musicDone);
   }
+  [ toggling will automatically set done flag for any sound currently
+  [ playing
   toggle(soundOn);
   [ update the config file
   call(lgc.SaveOptions);
 }
-if (controller(cSoundPC)) {
-  [ if not already PC sound mode
-  if (musicMode != PC_SOUND) {
-    [ set musicmode to PC sound
-    musicMode = PC_SOUND;
-    [ if playing a sound or music
-    if (currentTrack > 0 && currentTrack < 128) {
-      stop.sound();
-    }
-    if (playSound) {
-      reset(playSound);
-      stop.sound();
-    }
-    
-    [ set pc sound mode
-    reset(4channelsound);
-    reset(useMIDI);
-    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    
-    [ if playing cassette,
-    if (currentTrack > 0 && currentTrack < 128) {
-      set(noScript);
-      work1 = &musicDone;
-      call(lgc.SetSound);
-      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
-      reset(noScript);
-    }
     [ update the config file
     call(lgc.SaveOptions);
-  }
+[ check for change in sound mode
+work1 = 0;
+if (controller(cSoundPC) && musicMode != PC_SOUND) {
+  [ set musicmode to PC sound
+  musicMode = PC_SOUND;
+  work1 = 1;
 }
-if (controller(cSoundFM)) {
-  [ if not already in FM mode
-  if (musicMode != FM_SOUND) {
-    [ set musicmode to FM synth
-    musicMode = FM_SOUND;
-    [ if playing a sound or music
-    if (currentTrack > 0 && currentTrack < 128) {
-      stop.sound();
-    }
-    if (playSound) {
-      reset(playSound);
-      stop.sound();
-    }
-    [ if playing cassette,
-    if (currentTrack > 0 && currentTrack < 128) {
-      call(lgc.SetSound);
-      work1 = &musicDone;
-      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
-    }
     [ update the config file
     call(lgc.SaveOptions);
-  }
+if (controller(cSoundFM) && musicMode != FM_SOUND) {
+  [ set musicmode to FM synth
+  musicMode = FM_SOUND;
+  work1 = 1;
 }
-if (controller(cSoundMIDI)) {
-  [ if not already in MIDI mode
-  if (musicmode != MIDI_SOUND) {
-    [ set musicmode to MIDI
-    musicmode = MIDI_SOUND;
-    [ if playing a sound or music
-    if (currentTrack > 0 && currentTrack < 128) {
-      stop.sound();
-    }
-    if (playSound) {
-      reset(playSound);
-      stop.sound();
-    }
-    [ if playing cassette,
-    if (currentTrack > 0 && currentTrack < 128) {
-      call(lgc.SetSound);
-      work1 = &musicDone;
-      block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
-    }
     [ update the config file
     call(lgc.SaveOptions);
+if (controller(cSoundMIDI) && musicmode != MIDI_SOUND) {
+  [ set musicmode to MIDI
+  musicmode = MIDI_SOUND;
+  work1 = 1;
+}
+if (work1) {
+  [ if playing a sound or Walkman
+  if ((playWalkman || playSound)) {
+    [ always stop sound BEFORE changing mode
+    reset(playSound);
+    stop.sound();
+  }
+  [ restart walkman, if it was playing
+  if (playWalkman) {
+    call(lgc.SetSound);
+    work1 = &musicDone;
+    block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
   }
 }
+
 [ SKIP INTRO OPTION
 if (controller(cSkipIntro)) {
   toggle(skipIntro);
@@ -885,22 +839,21 @@ if (debugging) {
 [ WALKMAN MUSIC CHECK
 if (musicDone) {
   reset(musicDone);
-  [ only if cassette is playing AND not paused or at end of side
-  if (cassetteLoaded && currentTrack > 0 && currentTrack < 128) {
+  [ is Walkman playing?
+  if (playWalkman) {
     [ discard current sound
     set(noScript);
     block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     ++currentTrack;
     [ check if end of side is reached
-    if ((currentTrack == 43 || currentTrack == 85)) {
-      currentTrack = 0;
+    [ SIDE A: 1 - 41, 42 means at end of tape
+    [ SIDE B: 43 - 83, 84 means at end of tape
+    if ((currentTrack == 42 || currentTrack == 84)) {
+      reset(playWalkman);
     } else {
-      [ make sure no sound effects are playing
-      stop.sound();
-      [ play next track
+      [ load and play next track
       set(noScript);
       block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-      call(lgc.SetSound);
       work1 = &musicDone;
       block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
     }

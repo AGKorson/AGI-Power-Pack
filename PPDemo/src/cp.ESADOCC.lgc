@@ -1528,8 +1528,6 @@ if (btnAction > 0) {
       --tmpMIDI1;
       MIDIInst2 = tmpMIDI2;
       --tmpMIDI1;
-      [ update the config file
-      call(lgc.SaveOptions);
     }
     
     [ fade out 
