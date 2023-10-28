@@ -313,11 +313,7 @@ if (!disableGameFunctions) {
             work1 *= 4;
           }
         }
-        if (attenuation != work1) {
-          [ update the config file
-          attenuation = work1;
-          call(lgc.SaveOptions);
-        }
+        attenuation = work1;
       }
       return();
     }
@@ -563,11 +559,7 @@ if (controller(cToggleSound)) {
   [ toggling will automatically set done flag for any sound currently
   [ playing
   toggle(soundOn);
-  [ update the config file
-  call(lgc.SaveOptions);
 }
-    [ update the config file
-    call(lgc.SaveOptions);
 [ check for change in sound mode
 work1 = 0;
 if (controller(cSoundPC) && musicMode != PC_SOUND) {
@@ -575,15 +567,11 @@ if (controller(cSoundPC) && musicMode != PC_SOUND) {
   musicMode = PC_SOUND;
   work1 = 1;
 }
-    [ update the config file
-    call(lgc.SaveOptions);
 if (controller(cSoundFM) && musicMode != FM_SOUND) {
   [ set musicmode to FM synth
   musicMode = FM_SOUND;
   work1 = 1;
 }
-    [ update the config file
-    call(lgc.SaveOptions);
 if (controller(cSoundMIDI) && musicmode != MIDI_SOUND) {
   [ set musicmode to MIDI
   musicmode = MIDI_SOUND;
@@ -607,8 +595,6 @@ if (work1) {
 [ SKIP INTRO OPTION
 if (controller(cSkipIntro)) {
   toggle(skipIntro);
-  [ update the config file
-  call(lgc.SaveOptions);
 }
 
 [ CLOCK MENU ITEMS
@@ -629,8 +615,6 @@ if (controller(cClock)) {
     [ status bar doesn't check for time
     set.cursor.char(" l27, v3, v7, v23, v99, f9");
   }
-  [ update the config file
-  call(lgc.SaveOptions);
 }
 if (controller(cRealClock)) {
   if (!realClock) {
@@ -639,8 +623,6 @@ if (controller(cRealClock)) {
     set.cursor.char(" l27, v3, v7, v23, v99, v78, f9");
     [ force realtime clock update
     block(GET.TIME, &currentHour, &currentMinute, &currentSecond); [ get.time(vHOUR, vMINUTE, vSECOND)
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if (controller(cGameClock)) {
@@ -648,8 +630,6 @@ if (controller(cGameClock)) {
     reset(realClock);
     [ status bar checks gametime seconds
     set.cursor.char(" l27, v3, v7, v23, v99, v11, f9");
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 
@@ -660,8 +640,6 @@ if ((controller(cSlow) ||
   [ 4/20ths of a second delay between interpreter cycles
   if (animationInterval != SLOW_SPEED) {
     animationInterval = SLOW_SPEED;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if ((controller(cNormal) || 
@@ -670,8 +648,6 @@ if ((controller(cNormal) ||
   [ 2/20ths of a second delay between interpreter cycles
   if (animationInterval != NORMAL_SPEED) {
     animationInterval = NORMAL_SPEED;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if ((controller(cFast) || 
@@ -680,8 +656,6 @@ if ((controller(cFast) ||
   [ 1/20th of a second delay between interpreter cycles
   if (animationInterval != FAST_SPEED) {
     animationInterval = FAST_SPEED;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if ((controller(cFastest) || 
@@ -690,22 +664,16 @@ if ((controller(cFastest) ||
   [ no delay between interpreter cycles
   if (animationInterval != FASTEST_SPEED) {
     animationInterval = FASTEST_SPEED;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if (controller(cSlower)) {
   if (animationInterval < SLOW_SPEED) {
     ++animationInterval;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 if (controller(cFaster)) {
   if (animationInterval > FASTEST_SPEED) {
     --animationInterval;
-    [ update the config file
-    call(lgc.SaveOptions);
   }
 }
 

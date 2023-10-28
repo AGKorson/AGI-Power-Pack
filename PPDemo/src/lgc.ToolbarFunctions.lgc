@@ -201,6 +201,8 @@ if (mouseBtn != 1) {
     set.cel(tbActionBtn, 0);
     [ take appropriate action
     if (work1 == 1 && mouseX > 31 && mouseX < 48 && mouseY < 17) {
+      [ update the config file
+      call(lgc.SaveOptions);
       quit(0);
     }
     if (work1 == 2 && mouseX > 47 && mouseX < 64 && mouseY < 17) {
