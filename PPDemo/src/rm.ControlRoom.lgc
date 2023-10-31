@@ -531,7 +531,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               "power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
-              "is not known.");
+              "is not known. A small label under the monitor says \"ERIDOCC\".");
       }
       goto(doneclick);
     }
@@ -544,7 +544,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               "is only available in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
-              "is not known.");
+              "is not known. A small label under the monitor says \"OFROCC\".");
       }
       goto(doneclick);
     }
@@ -557,7 +557,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               "settings in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
-              "is not known.");
+              "is not known. A small label under the monitor says \"ESADOCC\".");
       }
       goto(doneclick);
     }
@@ -570,7 +570,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               "palettes in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
-              "is not known.");
+              "is not known. A small label under the monitor says \"ICAPOCC\".");
       }
       goto(doneclick);
     }
@@ -583,7 +583,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               "windows in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
-              "is not known.");
+              "is not known. A small label under the monitor says \"RANDOCC\".");
       }
       goto(doneclick);
     }
@@ -596,7 +596,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
               "use in AGI power pack games.");
       } else {
         print("This display is showing an error message. It's real purpose "
-              "is not known.");
+              "is not known. A small label under the monitor says \"CAISOCC\".");
       }
       goto(doneclick);
     }
