@@ -23,102 +23,130 @@
 s1 = " Durgan";
 if (compare.strings(s1, s29)) {
   IntVersion = VERSION_2089;
-  return();
+  goto(checkversion);
 }
 
 [ s41="uit." means 2.272
 s1 = "uit.";
 if (compare.strings(s1, s41)) {
   IntVersion = VERSION_2272;
-  return();
+  goto(checkversion);
 }
 
 [ s55="ersion 2.411" means 2.411
 s1 = "ersion 2.411";
 if (compare.strings(s1, s55)) {
   IntVersion = VERSION_2411;
-  return();
+  goto(checkversion);
 }
 
 [ s55="ersion 2.425" means 2.425
 s1 = "ersion 2.425";
 if (compare.strings(s1, s55)) {
   IntVersion = VERSION_2425;
-  return();
+  goto(checkversion);
 }
 
 [ s55="ersion 2.426" means 2.426
 s1 = "ersion 2.426";
 if (compare.strings(s1, s55)) {
   IntVersion = VERSION_2426;
-  return();
+  goto(checkversion);
 }
 
 [ s55="ersion 2.435" means 2.435
 s1 = "ersion 2.435";
 if (compare.strings(s1, s55)) {
   IntVersion = VERSION_2435;
-  return();
+  goto(checkversion);
 }
 
 [ s55="ersion 2.439" means 2.439
 s1 = "ersion 2.439";
 if (compare.strings(s1, s55)) {
   IntVersion = VERSION_2439;
-  return();
+  goto(checkversion);
 }
 
 [ s55="ersion 2.440" means 2.440
 s1 = "ersion 2.440";
 if (compare.strings(s1, s55)) {
   IntVersion = VERSION_2440;
-  return();
+  goto(checkversion);
 }
 
 [ s56=".xxx" means 2.903 through 2.917
 s1 = ".903";
 if (compare.strings(s1, s56)) {
   IntVersion = VERSION_2903;
-  return();
+  goto(checkversion);
 }
 
 [ s56=".xxx" means 2.903 through 2.917
 s1 = ".911";
 if (compare.strings(s1, s56)) {
   IntVersion = VERSION_2911;
-  return();
+  goto(checkversion);
 }
 
 [ s56=".xxx" means 2.903 through 2.917
 s1 = ".912";
 if (compare.strings(s1, s56)) {
   IntVersion = VERSION_2912;
-  return();
+  goto(checkversion);
 }
 
 [ s56=".xxx" means 2.903 through 2.917
 s1 = ".915";
 if (compare.strings(s1, s56)) {
   IntVersion = VERSION_2915;
-  return();
+  goto(checkversion);
 }
 
 [ s56=".xxx" means 2.903 through 2.917
 s1 = ".917";
 if (compare.strings(s1, s56)) {
   IntVersion = VERSION_2917;
-  return();
+  goto(checkversion);
 }
 
 [ s56="ersion 2.936" means 2.936
 s1 = "ersion 2.936";
 if (compare.strings(s1, s56)) {
   IntVersion = VERSION_2936;
-  return();
+  goto(checkversion);
 }
 
 [ version unknown
 IntVersion = 0;
+
+:checkversion
+[ confirm platform is PC
+if (machineType != PC) {
+  load.logics(lgc.Error);
+  print("The AGI Power Pack Demo will only run on a PC (or in "
+        "DosBOX emulating a PC). No other platforms are "
+        "supported.\nAborting...");
+  quit(1);
+}
+      
+[ confirm this is a version that can be patched
+if (!IntVersion) {
+  load.logics(lgc.Error);
+  print("Invalid AGI version. Power Pack Demo requires a valid MSDOS "
+        "interpreter running on a PC, or in DOSBox. ScummVM and NAGI "
+        "are not supported.\n\nAborting...");
+  quit(1);
+}
+if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272)) {
+  [ these versions not supported
+  load.logics(lgc.Error);
+  print("The Power Pack does work with version 2.089 and 2.272, however "
+        "this demo game does not support them. Please use a later "
+        "version 2 interpreter to run this demo game.");
+  quit(1);
+}
+
 return();
 
 [***************************************

@@ -195,23 +195,31 @@ if (gameRestarted) {
     [                             tens = 4channel
     [                             ones = useMIDI
     [                             (00=PC; 10=FM; 11=MIDI)
-    if (tmp0 > 99) {
+    if (tmp0 > 111) {
+      [ invalid; use defaults
       set(soundOn);
-      tmp0 -= 100;
+      musicmode = FM_SOUND;
+      set.key(MIDI_MODE, 0, SET.SNDMODE);
     } else {
-      reset(soundOn);
-    }
-    if (tmp0 == 0) {
-      musicmode = PC_SOUND;
-    } else {
-      set(4channelsound);
-      if (tmp0 == 10) {
-        musicmode = FM_SOUND;
-        set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+      if (tmp0 > 99) {
+        set(soundOn);
+        tmp0 -= 100;
       } else {
-        musicmode = MIDI_SOUND;
-        set(useMIDI);
-        set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        reset(soundOn);
+      }
+      
+      if (tmp0 == 0) {
+        musicmode = PC_SOUND;
+      } else {
+        set(4channelsound);
+        if (tmp0 == 11) {
+          musicmode = MIDI_SOUND;
+          set(useMIDI);
+          set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        } else {
+          musicmode = FM_SOUND;
+          set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        }
       }
     }
     [ next two digits are attenuation
@@ -221,6 +229,9 @@ if (gameRestarted) {
     block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
     [ convert to number (4channel value)
     block(STR2BYTE, &tmpString1, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
+    if (attenuation > 63) {
+      attenuation = 63;
+    }
     [ next two digits are clock options
     work1 = 2;
     block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)

@@ -1,0 +1,29 @@
+[ ********************************************************************
+[ 
+[ lgc.ValidateVersion
+[ 
+[ ********************************************************************
+
+[ confirm video, mouse and sound settings
+if (monitorType != EGA) {
+  print("The AGI Power Pack Demo will only run in EGA mode on a PC "
+        "(or in DosBOX).\n\nAborting...");
+  quit(1);
+}
+if (!enableDblClick) {
+  print("The AGI Power Pack Demo will only run on a PC (or in DosBOX) "
+        "with a mouse driver installed.\n\nAborting...");
+  quit(1);
+}
+if (numberOfVoices != 4) {
+  print("The AGI Power Pack Demo will only run on a PC (or in DosBOX) "
+        "with an FM synthesizer card (Adlib or compatible) and a MIDI "
+        "device enabled.\n\nAborting...");
+  quit(1);
+}
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

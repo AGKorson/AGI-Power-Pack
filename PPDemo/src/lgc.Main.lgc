@@ -70,7 +70,7 @@
 [ and quit
 if (errorNumber > 0) {
   block(FADE.IN, BYNUM, 0, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
-  call(lgc.Error); 
+  call(lgc.Error);
 }
 [ check for start trace
 if (startTrace) {
@@ -102,7 +102,62 @@ if (currentRoom == 0) {
     [ call, directly from main, with no other logics loaded
     [ otherwise the message relocation functions will cause
     [ messages to be in wrong places
-    call(lgc.PowerPack);
+    
+    [ confirm this is a version that can be patched
+    call(lgc.Version2Check);
+    [ run the patch for the detected AGI version
+    if (IntVersion == VERSION_2411) {
+      call(lgc.mod2411);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2425) {
+      call(lgc.mod2425);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2426) {
+      call(lgc.mod2426);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2435) {
+      call(lgc.mod2435);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2439) {
+      call(lgc.mod2439);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2440) {
+      call(lgc.mod2440);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2903) {
+      call(lgc.mod2903);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2911) {
+      call(lgc.mod2911);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2912) {
+      call(lgc.mod2912);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2915) {
+      call(lgc.mod2915);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2917) {
+      call(lgc.mod2917);
+      goto(continue);
+    }
+    if (IntVersion == VERSION_2936) {
+      call(lgc.mod2936);
+      goto(continue);
+    }
+    :continue
+
+    [ validate system parameters
+    call(lgc.ValidateVersion);
   }
 
   [ do start/restart initialization activities
