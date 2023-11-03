@@ -6,96 +6,6 @@ General:
     STATUSBAR - done
     HELP SCREEN - done
 
-    SCORING SUMMARY:
-X       -1 pt:   touching trees
-X       -2 pts:  touching plunger
-X       +1 pt:   washing hands after touching tree
-X       +2 pts:  washing hands after touching plunger
-X       +1 pt:   washing hands in closet sink first time
-X       +2 pts:  for locking car
-X       -2 pts   unlocking car (gain it back when getting in car)
-X       +3 pts:  asking to use the bathroom to gain access to hallway
-X       +3 pts:  getting magazine from lobby table
-X       +2 pts:  reading magazine (finding password clue)
-X       +5 pts:  getting in car
-X       +5 pts:  ending game with source disk
-X       +1 pt:   1st time opening closet door
-X       +5 pts:  breaking hole in wall
-X       -1 pt:   tripping over broom (can happen multiple times)
-X       +2 pts:  moving broom after tripping
-X       +3 pts:  fixing faucet drip
-X       +6 pts:  entering correct door code for control room door
-X       -1 pt:   entering wrong code three times in a row
-X       +2 pts:  reset MOCC
-X       +5 pts:  restore BaDASS
-X       +2 pts:  restore ICAPOCC
-X       +2 pts:  restore ESADOCC
-X       +2 pts:  restore CAISOCC
-X       +2 pts:  restore ERIDOCC
-X       +2 pts:  restore OFROCC
-X       +2 pts:  restore RANDOCC
-X       +5 pts:  use ICAPOCC
-X       +5 pts:  use ESADOCC
-X       +5 pts:  use CAISOCC
-X       +5 pts:  use ERIDOCC
-X       +5 pts:  use OFROCC
-X       +5 pts:  use RANDOCC
-X       +2 pts:  putting disk in drive, 1st time
-X       -4 pts:  dropping disk (in drive)
-X       +4 pts:  taking disk out of drive
-X       +5 pts:  copying PP source to floppy
-X       +1 pt:   copying memo to floppy
-X       +3 pts:  getting memo from printer
-X       +3 pts:  getting password list from drawer
-X       +2 pts:  getting walkman from drawer
-X       +2 pts:  finding safe behind picture
-X       +3 pts:  opening safe
-X       +3 pts:  getting paper with BaDASS code
-X       +4 pts:  getting floppy disk
-X       +3 pts:  getting notebook
-X       +2 pts:  moving rug
-X       +3 pts:  getting folder
-X       -1 pt:   each time tripping on rug
-X       +3 pts:  finding pillow code
-X       +3 pts:  finding podium code
-X       +1 pt:   opening treasure chest
-X       +3 pts:  getting scroll from chest
-X       +3 pts:  getting music sheet
-X       +4 pts:  getting 80s mix tape
-X       +4 pts:  playing mix tape in walkman
-MAX SCORE: 146
-
-INVENTORY: when 'examining', show typical view with description for all items; several items need additional text, and several items need a close up for 'examining'. Most items that are read need to be 'used' to read them.
-  ITEM:           EXAMINE         USE
- 1 magazine       view, text      close up (read)      
- 2 floppy disk    view only       insert into control room console
- 3 car keyfob     view only       lock/unlock car in parking lot
- 4 cassette tape  view only       insert into walkman (in walkman closeup)
- 5 Walkman        view only       close up
- 6 memo           view, text      close up (read)
- 7 post-it note   view, close up  close up (look at)
- 8 BaDASS manual  view, text      close up (read)
- 9 notebook       view, text      close up (read)
-10 folder         view, text      close up (open/look at [inside])
-11 scroll         view, text      close up (read)
-12 music sheet    view, text      close up (look at)
-13 PQ idea list   view, close up  close up (look at)
-
-SOUNDS: Most game sounds use predefined settings. Cassette music and some game music can be changed via menu.
-custom sounds:
-  - s.Car
-  - s.CarStart
-  - s.CarStop
-  - s.Phone
-  - s.Shock
-  - s.Flicker
-  - clock chimes
-  - s.Drip
-  - s.Crumble1/2
-  - s.ButtonClick
-  - keypad tones
-use s.TunnelDoor for coffin
-
 1. Intro/Opening Credits: Show animated AGI Guy Studio logo, then animated Power Pack logo. Fade out, then fade in Demo title page - "Sierra Quest - a Power Pack Demo game"
     BACKGROUND: done
     ANIMATION ART: done
@@ -117,14 +27,14 @@ use s.TunnelDoor for coffin
     SOUND: done
     CODING: done   
 
-3. Parking Lot: Start of game. Car drives in, ego gets out. Ego can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If ego crosses in front of a moving vehicle, he can get run over, ending the game in a loss. If a patient arrives in a batmobile and ego tries to touch it, it shocks and kills him. Touching the trees will get sap on ego's hands, which costs a point; he can wash in the sink in the closet to get the point back. Ego can get back in car; this ends game (winning condition is to have disk with PP source code.)
+3. Parking Lot: Start of game. Car drives in, Drew gets out. Drew can only enter building, or get in car (which ends the game.) Every few minutes, another car arrives, patient gets out and enters building. Also, a patient may exit building, get in car and then leave. There should be 4-5 cars in the parking lot at a time. If Drew crosses in front of a moving vehicle, he can get run over, ending the game in a loss. If a patient arrives in a batmobile and Drew tries to touch it, it shocks and kills him. Touching the trees will get sap on Drew's hands, which costs a point; he can wash in the sink in the closet to get the point back. Drew can get back in car; this ends game (winning condition is to have disk with PP source code.)
     BACKGROUND: done
     ANIMATION ART: done
     SOUND: done
     SCORING: -1 for touching trees; +1 for getting run over; +1 for getting shocked by batmobile; +5 for getting in car to end game; +20 if game ends with power pack source disk
     CODING: done
 
-4. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. One to three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If ego approaches, receptionist will stop work and speak to ego. If ego asks to use restroom, permission is granted to go into hallway. If ego tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will tell a patient to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Ego should take the magazine and read it. A cone/placard warns of wet/slippery floor to left of the screen. If ego tries to go past the cone, he slips, falls and dies.
+4. Lobby: Enter lobby through sliding glass door. There is a receptionist at the desk. One to three patients wait on chairs. Occasionally, one patient will get up, ask receptionist to use bathroom, then exit into hallway. Receptionist will move around, working on computer, tending desk, etc. If Drew approaches, receptionist will stop work and speak to him. If Drew asks to use restroom, permission is granted to go into hallway. If Drew tries to go into hallway without asking, receptionist will prevent it. Every few minutes, receptionist will tell a patient to go to exam room; patient will exit into hallway. Another patient will enter and take a seat. An old computer magazine (from 1990) is on the table. It contains an article about Sierra and the rumored AGI upgrade, believed to be called the 'Power Pack'. Instead, SCI was released. Hidden in the magazine is code needed to enter the secret room at bottom of stairs. Drew should take the magazine and read it. A cone/placard warns of wet/slippery floor to left of the screen. If Drew tries to go past the cone, he slips, falls and dies.
 
     BACKGROUND: done
     ANIMATION ART: done
@@ -139,7 +49,7 @@ use s.TunnelDoor for coffin
     SCORING: n/a
     CODING: done
 
-5. Hallway: Four doors- a restroom (will never open; it's always 'occupied'), a doctor's office (never opens, doctor is always out), and an exam room (will open, but ego interrupts an exam, and the nurse will slam door shut). Repeated attempts to enter exam room will get ego thrown out of building, and game will end in a loss. Last door is a janitor closet. Ego can go through that door to enter the hallway. Failing to close the door while going further into the 'hidden' area will result in ego getting trapped (i.e. lose game).
+5. Hallway: Four doors- a restroom (will never open; it's always 'occupied'), a doctor's office (never opens, doctor is always out), and an exam room (will open, but Drew interrupts an exam, and the nurse will slam door shut). Repeated attempts to enter exam room will get Drew thrown out of building, and game will end in a loss. Last door is a janitor closet. Drew can go through that door to enter the hallway. Failing to close the door while going further into the 'hidden' area will result in getting trapped (i.e. lose game).
 
     BACKGROUND: done
     ANIMATION ART: done
@@ -147,7 +57,7 @@ use s.TunnelDoor for coffin
     SCORING: +1 for getting arrested; +1 for opening closet door
     CODING: done
 
-6. Closet: Full of 'janitor' stuff. When ego moves far enough into room, he trips over a broom. (If ego tries to pick up broom, that also starts the tripping sequence.) Tripping results in ego causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; ego can fix it to get extra points. If broom is left on floor, ego will trip again (but not actually fall over) at random time intervals. Ego can put broom in corner to get extra points. Touching the plunger will subtract points. Ego can wash hands in sink to recover lost points.
+6. Closet: Full of 'janitor' stuff. When Drew moves far enough into room, he trips over a broom. (If he tries to pick up broom, that also starts the tripping sequence.) Tripping results in Drew causing wall to collapse, revealing a hole to another room. The sink faucet has a slight drip; Drew can fix it to get extra points. If broom is left on floor, Drew will trip again (but not actually fall over) at random time intervals. Drew can put broom in corner to get extra points. Touching the plunger will subtract points. Drew can wash hands in sink to recover lost points.
 
     BACKGROUND: done
     ANIMATION ART: done
@@ -203,7 +113,7 @@ Touch tone frequencies:
     -animation speed panel
     -color palette panel
 
-When ego enters from the stairwell, the control panel fails (flash screen, sound effects), door slams shut and won't open. Terminal is only part of panel working. It's a DOS-like system. Most commands don't work; there's memory corruption. Ego has to reboot/restart system to get it working correctly. Once rebooted, the six control panels and the security system (BaDASS - Building and Digital Access Security System) need passwords to be restarted. The passwords can be found among things in the office and store room. Once BaDASS is restarted, door will unlock; ego can leave, going back to car in parking lot to end the game. Ego needs to copy the PP source code to a floppy disk in order to 'win'. 
+When Drew enters from the stairwell, the control panel fails (flash screen, sound effects), door slams shut and won't open. Terminal is only part of panel working. It's a DOS-like system. Most commands don't work; there's memory corruption. Drew has to reboot/restart system to get it working correctly. Once rebooted, the six control panels and the security system (BaDASS - Building and Digital Access Security System) need passwords to be restarted. The passwords can be found among things in the office and store room. Once BaDASS is restarted, door will unlock; Drew can leave, going back to car in parking lot to end the game. Drew needs to copy the PP source code to a floppy disk in order to 'win'. 
 
     BACKGROUND: done
     ANIMATION ART: done 
@@ -211,7 +121,7 @@ When ego enters from the stairwell, the control panel fails (flash screen, sound
     SCORING: +5 pts for each module successfully restored (30 pts total); +10 pts for restoring BaDASS; 4 pts for inserting drive; +6 for copying source files to floppy
     CODING: done
 
-10. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, gym locker, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead ego to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Ego needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
+10. Office: The PP operator's office. A desk with non-working computer/printer. On the printer is a printed memo that contains the code to the mouse control panel. In a desk drawer is a paper with series of passwords (Compuserve, gym locker, etc; also one with combo for safe.) In other desk drawer is an original Sony Walkman (audio cassette player), but no tape in it. On the wall is a picture; behind it is a safe (clue on password list should lead Drew to look behind picture). In the safe, there is a manual with password to the BaDASS. In a filing cabinet there is a box of floppy disks. Drew needs to take one in order to copy the PP source files from the terminal. There is also a notebook with a coded password to the mouse cursor panel. There is a rug in the room; underneath it is a folder that has a coded password for the sound mode panel.
 
     BACKGROUND: done
     ANIMATION ART: done 
@@ -236,7 +146,7 @@ rewind backs up one track; fast-forward moves to next track.
     SCORING: n/a
     CODING: done
 
-11. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. On top of PQ podium is a sheet listing possible PQ sequels, and a coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Ego can put it in Walkman to play some background music. If ego climbs in the coffin, lid slams shut and he dies there.
+11. Storage Room: A room full of props that inspired various Sierra games. On bottom of head pillow in coffin is coded password to color palette panel. On top of PQ podium is a sheet listing possible PQ sequels, and a coded password to animation speed panel. In the treasure chest, there is a scroll that has coded password for msgbox panel (scroll has a recipe on it with code hidden in recipe text). In cabinet by robots is music sheet with coded password to FM instrument panel. Clock will be synched with player's current time. In green PQ cabinet are some old cassettes; only one of interest is 80s mix tape. Drew can put it in Walkman to play some background music. If Drew climbs in the coffin, lid slams shut and he dies there.
 
     BACKGROUND: done
     ANIMATION art: done 
@@ -265,7 +175,7 @@ rewind backs up one track; fast-forward moves to next track.
     SCORING: n/a
     CODING: done
 
-Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version is shown, with no ability to interact. Once enabled, the panels are available. Usage info is available on main console using typical 'help file' command. Changes made by ego will be applied globally for rest of game.
+Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version is shown, with no ability to interact. Once enabled, the panels are available. Usage info is available on main console using typical 'help file' command. Changes made will be applied globally for rest of game.
 
 13. Indexed Chromatic Association Properties Options Control Console
    palette control
@@ -328,3 +238,93 @@ Control Panel Rooms: If visited before enabled, a grayed out (unpowered) version
     SOUND: n/a
     SCORING: n/a
     CODING: done
+
+INVENTORY: when 'examining', show typical view with description for all items; several items need additional text, and several items need a close up for 'examining'. Most items that are read need to be 'used' to read them.
+  ITEM:           EXAMINE         USE
+ 1 magazine       view, text      close up (read)      
+ 2 floppy disk    view only       insert into control room console
+ 3 car keyfob     view only       lock/unlock car in parking lot
+ 4 cassette tape  view only       insert into walkman (in walkman closeup)
+ 5 Walkman        view only       close up
+ 6 memo           view, text      close up (read)
+ 7 post-it note   view, close up  close up (look at)
+ 8 BaDASS manual  view, text      close up (read)
+ 9 notebook       view, text      close up (read)
+10 folder         view, text      close up (open/look at [inside])
+11 scroll         view, text      close up (read)
+12 music sheet    view, text      close up (look at)
+13 PQ idea list   view, close up  close up (look at)
+
+SOUNDS: Most game sounds use predefined settings. Cassette music and some game music can be changed via menu.
+custom sounds:
+  - s.Car
+  - s.CarStart
+  - s.CarStop
+  - s.Phone
+  - s.Shock
+  - s.Flicker
+  - clock chimes
+  - s.Drip
+  - s.Crumble1/2
+  - s.ButtonClick
+  - keypad tones
+use s.TunnelDoor for coffin
+
+    SCORING SUMMARY:
+X       -1 pt:   touching trees
+X       -2 pts:  touching plunger
+X       +1 pt:   washing hands after touching tree
+X       +2 pts:  washing hands after touching plunger
+X       +1 pt:   washing hands in closet sink first time
+X       +2 pts:  for locking car
+X       -2 pts   unlocking car (gain it back when getting in car)
+X       +3 pts:  asking to use the bathroom to gain access to hallway
+X       +3 pts:  getting magazine from lobby table
+X       +2 pts:  reading magazine (finding password clue)
+X       +5 pts:  getting in car
+X       +5 pts:  ending game with source disk
+X       +1 pt:   1st time opening closet door
+X       +5 pts:  breaking hole in wall
+X       -1 pt:   tripping over broom (can happen multiple times)
+X       +2 pts:  moving broom after tripping
+X       +3 pts:  fixing faucet drip
+X       +6 pts:  entering correct door code for control room door
+X       -1 pt:   entering wrong code three times in a row
+X       +2 pts:  reset MOCC
+X       +5 pts:  restore BaDASS
+X       +2 pts:  restore ICAPOCC
+X       +2 pts:  restore ESADOCC
+X       +2 pts:  restore CAISOCC
+X       +2 pts:  restore ERIDOCC
+X       +2 pts:  restore OFROCC
+X       +2 pts:  restore RANDOCC
+X       +5 pts:  use ICAPOCC
+X       +5 pts:  use ESADOCC
+X       +5 pts:  use CAISOCC
+X       +5 pts:  use ERIDOCC
+X       +5 pts:  use OFROCC
+X       +5 pts:  use RANDOCC
+X       +2 pts:  putting disk in drive, 1st time
+X       -4 pts:  dropping disk (in drive)
+X       +4 pts:  taking disk out of drive
+X       +5 pts:  copying PP source to floppy
+X       +1 pt:   copying memo to floppy
+X       +3 pts:  getting memo from printer
+X       +3 pts:  getting password list from drawer
+X       +2 pts:  getting walkman from drawer
+X       +2 pts:  finding safe behind picture
+X       +3 pts:  opening safe
+X       +3 pts:  getting paper with BaDASS code
+X       +4 pts:  getting floppy disk
+X       +3 pts:  getting notebook
+X       +2 pts:  moving rug
+X       +3 pts:  getting folder
+X       -1 pt:   each time tripping on rug
+X       +3 pts:  finding pillow code
+X       +3 pts:  finding podium code
+X       +1 pt:   opening treasure chest
+X       +3 pts:  getting scroll from chest
+X       +3 pts:  getting music sheet
+X       +4 pts:  getting 80s mix tape
+X       +4 pts:  playing mix tape in walkman
+MAX SCORE: 146

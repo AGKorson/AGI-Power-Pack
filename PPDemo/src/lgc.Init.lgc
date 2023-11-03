@@ -35,6 +35,9 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
+[ for testing, start with DEBUG enabled
+set(debugging);
+
 [ check for a game restart
 if (gameRestarted) {
   [ for a restart, there are a few things that need to be reset
@@ -544,7 +547,7 @@ set(firstLobbyVisit);
 currentTrack = 1;
 reset(playWalkman);
 
-[ start safe combo on a random number
+[ start safe dial on a random number
 random(0, 39, comboNumber);
 
 return();

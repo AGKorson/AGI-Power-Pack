@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/3/2023 12:08:33 PM"
+   LastEdit = "11/3/2023 12:28:42 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.1"
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &H58D9FFB0
-   CompCRC32 = &H58D9FFB0
+   CRC32 = &HAAE6BFBF
+   CompCRC32 = &HAAE6BFBF
    IsRoom = False
 
 [Logic36]
@@ -352,8 +352,8 @@
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &HD9AD32D4
-   CompCRC32 = &HD9AD32D4
+   CRC32 = &H34AAD505
+   CompCRC32 = &H34AAD505
    IsRoom = False
 
 [Logic52]
