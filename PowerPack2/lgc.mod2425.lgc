@@ -3912,7 +3912,7 @@ if (said(3, 241, 19257)){} [ 4B39
 [ process, so in these versions only, resources are fully loaded into the
 [ normal heap space, and then the message section is moved. This means there
 [ must be enough room on the regular heap for the entire logic - the memory 
-[ savings happens after the load.
+[ savings happen after the load.
 [
 [ Because of the special status of Logic 0, its message text data needs to
 [ remain in the main memory segment. You should try to minimize the amount of
