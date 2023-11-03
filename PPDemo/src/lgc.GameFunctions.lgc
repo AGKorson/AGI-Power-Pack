@@ -10,8 +10,6 @@
 [
 [*********************************************************************
 
-[ TODO: add said statements for controlling Walkman
-
 [ power pack support
 #include "powerpack.txt"
 
@@ -44,8 +42,8 @@ if (newRoom) {
     if (currentRoom != rm.Lobby) {
       [ skip to next track
       ++currentTrack;
-      [ SIDE A: 1 - 41, 42 means at end of tape
-      [ SIDE B: 43 - 83, 84 means at end of tape
+      [ SIDE A: 1 - 41, 42 means at end of side A
+      [ SIDE B: 43 - 83, 84 means at end of side B
       [ if side is done
       if ((currentTrack == 42 || currentTrack == 84)) {
         [ stop the tape
@@ -251,7 +249,8 @@ if ((controller(cRestart) ||
 }
 
 [ ask for help
-if ((controller(cHelp) || said("help"))) {
+if ((controller(cHelp) || said("help") || said("get", "help") || 
+     said("show", "help"))) {
   [ show the main help screen
   set(showHelp);
   [ use local variable 240 to initialize the help screen
@@ -271,15 +270,13 @@ if (controller(cCancelLine)) {
 
 [ pause game (showing menu is another 
 [ way to pause the game)
-if ((controller(cPause) || 
-     said("pause", "game") || 
+if ((controller(cPause) || said("pause", "game") || 
      said("pause"))) {
   pause();
 }
 
 [ check player's current inventory
-if ((controller(cStatus) || 
-     said("inventory"))) {
+if ((controller(cStatus) || said("inventory"))) {
   [ disable selection of inventory items
   reset(enableItemSelect);
   status();
@@ -364,7 +361,6 @@ if (controller(cChooseItem)) {
             }
           }
         } else {
-          :usewalkman
           if (playWalkman) {
             [ stop and unload current track; it will get restarted
             [ after showing the walkman
@@ -373,19 +369,7 @@ if (controller(cChooseItem)) {
             block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
             reset(noScript);
           }
-          [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
-          call(lgc.Walkman);
-          call(lgc.RedrawRoom);
-          
-          [ if still active
-          if (playWalkman) {
-            [ restart current track
-            set(noScript);
-            block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
-            work1 = &musicDone;
-            block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
-            reset(noScript);
-          }
+          goto(showwalkman);
         }
       }
       [ memo
@@ -460,10 +444,7 @@ if ((controller(cQuit) || said("quit", "game") || said("quit"))) {
 [ if player has provided input and no match found yet
 [ (including unknown words)
 if (haveInput && !haveMatch) {
-  [ for inventory item look statements, check if
-  [ player has the item; if so, show it with 
-  [ show.obj.v (also used by status() window)
-  
+  [ inventory item look statements
   work1 = 0;
   [ look magazine
   if (said("look", "magazine")) {
@@ -612,8 +593,9 @@ if (haveInput && !haveMatch) {
     }
   }
   
-  [ read magazine
-  if (said("read", "magazine")) {
+  [ inventory items use/read statements
+  [ magazine
+  if ((said("read", "magazine") || said("use", "magazine"))) {
     if (has("magazine")) {
       :readmag
       call(lgc.ReadMagazine);
@@ -622,6 +604,110 @@ if (haveInput && !haveMatch) {
       print("You don't have it.");
     }
   }
+  [ floppy disk
+  if (said("use", "disk")) {
+    if (has(floppydisk)) {
+      [ if in control room, it's handled there
+      print("There's nothing you can do with the floppy disk here.");
+    } else {
+      print("You don't have it.");
+    }
+  }
+  if (said("read", "disk")) {
+    if (has(floppydisk)) {
+      print("The tiny ones and zeros on the drive are much too small for you to read.");
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
+  [ keyfob
+  if (said("use", "keyfob")) {
+    if (has("car keyfob")) {
+      [ if in parking lot, it's handled there
+      print("Your car is in the parking lot. The keyfob's signal is too weak to reach it from here");
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
+  [ cassette
+  if (said("use", "cassette")) {
+    if (has("cassette tape")) {
+      print("What to you want to do with it?");
+    } else {
+      print("You don't have it.");
+    }
+  }
+  if (said("put", "tape", "in", "walkman")) {
+    if (has("cassette tape") && has("Walkman")) {
+      [ show walkman
+    } else {
+      if (!has("cassette tape")) {
+        print("You don't have a cassette tape.");
+      } else {
+        if (!has("Walkman")) {
+          print("You don't have a Walkman.");
+        }
+      }
+    }
+  }
+  
+  [ walkman
+  if (said("use", "walkman")) {
+    if (has("Walkman")) {
+      goto(showwalkman);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  if (said("play", "walkman")) {
+    if (has("Walkman")) {
+      if (cassetteLoaded && currentTrack != 42 && 
+          currentTrack != 84 && !playWalkman) {
+        [ begin playing, load and play current track
+        set(playWalkman);
+        set(noScript);
+        block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+        work1 = &musicDone;
+        block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
+      } else {
+        :showwalkman
+        [ show a closeup of walkman, player can press play/stop/ff/rewind/eject
+        call(lgc.Walkman);
+        call(lgc.RedrawRoom);
+        [ if still active
+        if (playWalkman) {
+          [ restart current track
+          set(noScript);
+          block(SND.V.FN, LOAD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+          work1 = &musicDone;
+          block(SND.V.FN, SOUND.V, &currentTrack, &work1); [ sound.v(vSNDNUM, vDONEFLAG)
+          reset(noScript);
+        }
+      }
+    } else {
+      print("You don't have it.");
+    }
+  }
+  if (said("stop", "walkman")) {
+    if (has("Walkman")) {
+      if (playWalkman) {
+        reset(playWalkman);
+        stop.sound();
+        reset(musicDone);
+        [ discard this track
+        set(noScript);
+        block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ load.sound.v(vSNDNUM)
+        reset(noScript);
+      } else {
+        print("It's already stopped.");
+      }
+    } else {
+      print("You don't have it.");
+    }
+  }
+
   [ read memo
   if (said("read", "memo")) {
     if (has("memo")) {
@@ -631,8 +717,20 @@ if (haveInput && !haveMatch) {
       print("You don't have it.");
     }
   }
-  [ read manual
-  if (said("read", "manual")) {
+  
+  [ post it note
+  if (said("read", "note")) {
+    if (has("post-it note")) {
+      work1 = 107;
+      call(lgc.ExamineItem);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
+  [ manual
+  if ((said("read", "manual") || said("use", "manual"))) {
     if (has("BaDASS manual")) {
       :readManual
       call(lgc.ReadManual);
@@ -641,8 +739,8 @@ if (haveInput && !haveMatch) {
       print("You don't have it.");
     }
   }
-  [ read notebook
-  if (said("read", "notebook")) {
+  [ notebook
+  if ((said("read", "notebook") || said("use", "notebook"))) {
     if (has("notebook")) {
       :readNotebook
       call(lgc.ReadNotebook);
@@ -651,9 +749,9 @@ if (haveInput && !haveMatch) {
       print("You don't have it.");
     }
   }
-  [ look inside folder
-  if ((said("look", "in", "folder") ||
-       said("read", "folder"))) {
+  [ folder
+  if ((said("look", "in", "folder") || said("read", "folder") ||
+       said("use", "folder"))) {
     if (has("folder")) {
       work1 = 110;
       call(lgc.ExamineItem);
@@ -662,11 +760,33 @@ if (haveInput && !haveMatch) {
       print("You don't have it.");
     }
   }
-  [ read scroll
-  if (said("read", "scroll")) {
+  [ scroll
+  if ((said("read", "scroll") || said("use", "scroll"))) {
     if (has("scroll")) {
       :readScroll
       call(lgc.ReadScroll);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
+  [ music sheet
+  if ((said("read", "music") || said("use", "music"))) {
+    if (has("music sheet")) {
+      work1 = 112;
+      call(lgc.ExamineItem);
+      call(lgc.RedrawRoom);
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
+  [ PQ idea list
+  if ((said("read", "list") || said("use", "list"))) {
+    if (has("PQ idea list")) {
+      work1 = 113;
+      call(lgc.ExamineItem);
       call(lgc.RedrawRoom);
     } else {
       print("You don't have it.");

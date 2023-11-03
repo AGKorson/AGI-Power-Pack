@@ -302,8 +302,20 @@ if (resetClicks) {
   set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
-[ if debugging, handle these debug functions before other game
-[ functions
+[ CHECK FOR GAME RESTORE
+if (isset(gameRestored)) {
+  [ make sure input area is cleared
+  clear.lines(23, 24, BLACK);
+  [ need to 're-disable menu separators)
+  disable.item(cDummy);
+  [ and redraw toolbar buttons
+  call(lgc.InitToolbar);
+  [ don't need to restore sound settings; each
+  [ sound gets settings applied as needed
+  [
+}
+
+[ DEBUG FUNCTIONS
 if (debugging) {
   if (fShowClicks) {
     [ useful to assist in creating click statements and said statements
@@ -403,7 +415,7 @@ if (!disableGameFunctions) {
       enable.item(cSoundPC);
       enable.item(cSoundFM);
       enable.item(cSoundMIDI);
-      if (4channelSound) {
+      if (4channelsound) {
         work1 = 62;
       } else {
         work1 = 14;
@@ -573,16 +585,6 @@ if (!disableGameFunctions) {
       block(SET.MSG, BYNUM, &mnu_msgDebug, &s23); [ set.msg(FN_MODE, MSGOLD, STRNEW)
     }
   }
-}
-
-[ CHECK FOR GAME RESTORE
-if (isset(gameRestored)) {
-  [ make sure input area is cleared
-  clear.lines(23, 24, BLACK);
-  [ need to 're-disable menu separators)
-  disable.item(cDummy);
-  [ and redraw toolbar buttons
-  call(lgc.InitToolbar);
 }
 
 [ CLOCK DISPLAY
@@ -869,8 +871,8 @@ if (musicDone) {
     block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     ++currentTrack;
     [ check if end of side is reached
-    [ SIDE A: 1 - 41, 42 means at end of tape
-    [ SIDE B: 43 - 83, 84 means at end of tape
+    [ SIDE A: 1 - 41, 42 means at end of side A
+    [ SIDE B: 43 - 83, 84 means at end of side B
     if ((currentTrack == 42 || currentTrack == 84)) {
       reset(playWalkman);
     } else {

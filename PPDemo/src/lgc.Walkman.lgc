@@ -6,8 +6,8 @@
 [ pause/play/rewind/fast forward sound tracks.
 [
 [ There are 82 tracks on the cassette, 41 on each side.
-[ SIDE A: 1 - 41, 42 means at end of tape
-[ SIDE B: 43 - 83, 84 means at end of tape
+[ SIDE A: 1 - 41, 42 means at end of side A
+[ SIDE B: 43 - 83, 84 means at end of side B
 [
 [*********************************************************************
 
@@ -214,8 +214,8 @@ reset(mouseDown);
     [ discard current track
     block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
     [ next track
-    [ SIDE A: 1 - 41, 42 means at end of tape
-    [ SIDE B: 43 - 83, 84 means at end of tape
+    [ SIDE A: 1 - 41, 42 means at end of side A
+    [ SIDE B: 43 - 83, 84 means at end of side B
     ++currentTrack;
     if ((currentTrack == 42 || currentTrack == 84)) {
       reset(playWalkman);
@@ -241,8 +241,8 @@ if (lastChar == 32 && cursoricon == C_TAPE) {
   toggle(cassetteSideB);
   helpText = -1;
   [ adjust position
-  [ SIDE A: 1 - 41, 42 means at end of tape
-  [ SIDE B: 43 - 83, 84 means at end of tape
+  [ SIDE A: 1 - 41, 42 means at end of side A
+  [ SIDE B: 43 - 83, 84 means at end of side B
   [ to flip: new = 85 - old
   currentTrack *= -1;
   currentTrack += 85;
@@ -283,9 +283,11 @@ if (mouseBtn == 1 && !mouseDown) {
         block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
       }
       [ move to next track
-      [ SIDE A: 1 - 41, 42 means at end of tape
-      [ SIDE B: 43 - 83, 84 means at end of tape
-      ++currentTrack;
+      [ SIDE A: 1 - 41, 42 means at end of side A
+      [ SIDE B: 43 - 83, 84 means at end of side B
+      if (currentTrack != 42 && currentTrack != 84) {
+        ++currentTrack;
+      }
       if ((currentTrack == 42 || currentTrack == 84)) {
         [ end of this side; stop playing
         reset(playWalkman);
@@ -305,8 +307,8 @@ if (mouseBtn == 1 && !mouseDown) {
     [ if cassette is loaded and cover closed
     if (cassetteLoaded && coverClosed) {
       [ go back to previous track
-      [ SIDE A: 1 - 41, 42 means at end of tape
-      [ SIDE B: 43 - 83, 84 means at end of tape
+      [ SIDE A: 1 - 41, 42 means at end of side A
+      [ SIDE B: 43 - 83, 84 means at end of side B
       
       [ currently playing?
       if (playWalkman) {
@@ -378,8 +380,8 @@ if (mouseBtn == 1 && !mouseDown) {
         call(lgc.ScoreHandler);
       }
       [ if not at end of track
-      [ SIDE A: 1 - 41, 42 means at end of tape
-      [ SIDE B: 43 - 83, 84 means at end of tape
+      [ SIDE A: 1 - 41, 42 means at end of side A
+      [ SIDE B: 43 - 83, 84 means at end of side B
       if (currentTrack != 42 && currentTrack != 84) {
         [ always turn sound on if walkman is in use
         if (!soundOn) {

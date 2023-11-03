@@ -49,6 +49,10 @@
 #define    ARRESTED     9
 #define arrestCounter  v223
 
+[ TODO: check for odd bug that sets v222
+[       I think it might be the timer in
+[       the closet
+
 [***************************************
 [ FIRST CYCLE ONLY
 [***************************************

@@ -36,6 +36,12 @@
 
 [ power pack support
 #include "powerpack.txt"
+if (skipIntro) {
+print("skip");
+}else{
+print("noskip");
+}
+[set(f10);trace.on();
 
 [***************************************
 [ LOCAL DEFINES

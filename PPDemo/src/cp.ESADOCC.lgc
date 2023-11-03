@@ -176,6 +176,21 @@ if (newRoom) {
     block(BIT.OR, BYNUM, &cpusage, 8); [ bit.or(FN_MODE, VAR, MASK)
   }
   
+  [ refresh sound settings to match current default mode
+  if (musicMode == PC_SOUND) {
+    reset(4channelsound);
+    reset(useMIDI);
+  } else {
+    set(4channelsound);
+    if (musicMode == FM_SOUND) {
+      reset(useMIDI);
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    } else {
+      set(useMIDI);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    }
+  }
+  
   [ load, draw and discard the picture resource for the current room
   load.pic(currentRoom);
   draw.pic(currentRoom);
@@ -459,9 +474,10 @@ if (dropmode == DROPDOWN) {
   [ instrument index offset (index of top item in list)
   [ (depends on mode; either FM or MIDI)
   work3 = currentInst;
-  work3 += &tmpFM0;
+  work3 += &tmpFM0; [ FM instruments stored in v229 - v233
   if (useMIDI) {
-    work3 += 14;
+    [ MIDI instruments are in v242 - 244 (difference of 13)
+    work3 += 13;
   }
   work3 = *work3;
   [ save this as the current selected instrument
@@ -639,9 +655,10 @@ if (dropmode == CHOOSING) {
     if ((lastChar == 13 || lastChar == 10)) {
       lastChar = 0;
       [ make the selection
-      work1 = &tmpFM0;
+      work1 = &tmpFM0; [ FM instruments stored in v229 - v233
       if (useMIDI) {
-        work1 += 14;
+        [ MIDI instruments are in v242 - 244 (difference of 13)
+        work1 += 13;
       }
       work1 += currentInst;
       *work1 = selinst;
@@ -688,9 +705,10 @@ if (dropmode == CHOOSING) {
     [ check for dbl click
     if (controller(cLeftDblClick)) {
       [ make the selection
-      work1 = &tmpFM0;
+      work1 = &tmpFM0; [ FM instruments stored in v229 - v233
       if (useMIDI) {
-        work1 += 14;
+        [ MIDI instruments are in v242 - 244 (difference of 13)
+        work1 += 13;
       }
       work1 += currentInst;
       *work1 = selinst;
@@ -1510,24 +1528,26 @@ if (btnAction > 0) {
     if (btnAction == B_OK) {
       [ save new instrument values
       print.at("Sound parameters updated.", 3, 6, 31);
-      [ update FM instrument settings
+      [ update FM instrument settings (subtract one to account for
+      [ message index starting at 1 [channel index starts at zero])
       FMInst0 = tmpFM0;
-      --FMInst0;
       FMInst1 = tmpFM1;
-      --FMInst1;
       FMInst2 = tmpFM2;
-      --FMInst2;
       FMInst3 = tmpFM3;
-      --FMInst3;
       FMInst4 = tmpFM4;
+      --FMInst0;
+      --FMInst1;
+      --FMInst2;
+      --FMInst3;
       --FMInst4;
-      [ update MIDI instrument settings
+      [ update MIDI instrument settings (subtract one to account for
+      [ message index starting at 1 [channel index starts at zero])
       MIDIInst0 = tmpMIDI0;
-      --tmpMIDI0;
       MIDIInst1 = tmpMIDI1;
-      --tmpMIDI1;
       MIDIInst2 = tmpMIDI2;
-      --tmpMIDI1;
+      --MIDIInst0;
+      --MIDIInst1;
+      --MIDIInst2;
     }
     
     [ fade out 
@@ -1544,9 +1564,10 @@ if (btnAction > 0) {
       [ set all music channel instruments, including noise if in FM mode
       cursorX = 0;
       :setinst      
-        work1 = &tmpFM0;
+        work1 = &tmpFM0; [ FM instruments stored in v229 - v233
         if (useMIDI) {
-          work1 += 14;
+          [ MIDI instruments are in v242 - 244 (difference of 13)
+          work1 += 13;
         }
         work1 += cursorX;
         work1 = *work1;
@@ -1587,9 +1608,10 @@ if (btnAction > 0) {
       cursorX += 6;
       [ convert selection to instrument value
       work1 = currentInst;
-      work1 += &tmpFM0;
+      work1 += &tmpFM0; [ FM instruments stored in v229 - v233
       if (useMIDI) {
-        work1 += 14;
+        [ MIDI instruments are in v242 - 244 (difference of 13)
+        work1 += 13;
       }
       work1 = *work1;
       display.v(cursorX, cursorY, work1);
@@ -1615,9 +1637,10 @@ if (btnAction > 0) {
         [ convert button to correct instrument value
         work2 = btnAction;
         work2 -= 7;
-        work2 += &tmpFM0;
+        work2 += &tmpFM0; [ FM instruments stored in v229 - v233
         if (useMIDI) {
-          work2 += 14;
+          [ MIDI instruments are in v242 - 244 (difference of 13)
+          work2 += 13;
         }
         work2 = *work2;
         [ tmp values are 1-based; convert to 0-base
@@ -1663,9 +1686,10 @@ if (btnAction > 0) {
           cursorX += 6;
           [ convert selection to instrument value
           work1 = currentInst;
-          work1 += &tmpFM0;
+          work1 += &tmpFM0; [ FM instruments stored in v229 - v233
           if (useMIDI) {
-            work1 += 14;
+            [ MIDI instruments are in v242 - 244 (difference of 13)
+            work1 += 13;
           }
           work1 = *work1;
           display.v(cursorX, cursorY, work1);
@@ -1683,9 +1707,10 @@ if (btnAction > 0) {
         cursorX += 6;
         [ convert selection to instrument value
         work1 = currentInst;
-        work1 += &tmpFM0;
+        work1 += &tmpFM0; [ FM instruments stored in v229 - v233
         if (useMIDI) {
-          work1 += 14;
+          [ MIDI instruments are in v242 - 244 (difference of 13)
+          work1 += 13;
         }
         work1 = *work1;
         display.v(cursorX, cursorY, work1);

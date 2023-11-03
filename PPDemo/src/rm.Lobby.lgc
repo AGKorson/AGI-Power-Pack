@@ -2970,7 +2970,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       distance(ego, oPatient4, work1);
       if (work1 < 24) {
         block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
-        print("\"Ooh, do that again. I like that!\"");
+        print("\"Hey! Keep your hands to yourself\"");
         block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
         print("Move closer.");
@@ -2995,8 +2995,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ desk papers
     if (posn(oPapers, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
-      distance(ego, oMagazine, work1);
-      if (work1 < 20) {
+      if (posn(ego, 16, 117, 69, 135)) {
         print("These papers probably contain sensitive information "
               "about the clinic and its patients. You shouldn't "
               "take them.");

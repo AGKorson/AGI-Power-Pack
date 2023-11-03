@@ -1288,6 +1288,8 @@ if (wallbreak && !crouch && posn(ego, 70, 139, 80, 139)) {
   set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 }
 if (crouch && fDone) {
+  [ stop drip timer
+  block(TOGGLE.TIMER, STOP_TIMER, 0, 0); [ toggle.timer(STATE)
   [ fade out, then change room
   block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
   new.room(rm.SecretRoom);  [ ##LE002##
@@ -1300,6 +1302,8 @@ if ((posn(ego, 100, 143, 100, 143) || posn(ego, 101, 144, 101, 144) ||
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
+    [ stop drip timer
+    block(TOGGLE.TIMER, STOP_TIMER, 0, 0); [ toggle.timer(STATE)
     [ fade out, then change room
     block(FADE.OUT, BYNUM, FADECOUNT, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
     new.room(rm.Hallway);  [ ##LE001##

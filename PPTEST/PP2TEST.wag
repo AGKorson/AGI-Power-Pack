@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PP2T
    Interpreter = 2.917
-   LastEdit = "10/26/2023 9:32:27 PM"
+   LastEdit = "11/3/2023 1:47:09 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -170,8 +170,8 @@
 [Logic102]
    ID = lgc.mod2272
    Description = ""
-   CRC32 = &H4708918E
-   CompCRC32 = &H4708918E
+   CRC32 = &H558A1C36
+   CompCRC32 = &H558A1C36
    IsRoom = False
    Size = 21053
 

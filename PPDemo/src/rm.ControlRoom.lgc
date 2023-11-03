@@ -292,6 +292,14 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       print("What disk?");
     }
   }
+  if (said("use", "disk")) {
+    if (has(floppydisk)) {
+      print("What do you want to do with it?");
+    } else {
+      print("You don't have it.");
+    }
+  }
+  
   [ remove/take floppy
   if ((said("eject", "disk") || said("get", "disk") || 
        said("get", "disk", "console") || said("get", "disk", "drive") ||
