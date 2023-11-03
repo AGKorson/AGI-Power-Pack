@@ -2072,7 +2072,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       goto(resetmsg);
     }
     [ ask for appointment
-    if ((said("get", "appointment") || said("set", "appointment"))) {
+    if ((said("get", "appointment") || said("set", "appointment") || 
+         said("schedule", "appointment"))) {
       print.at("\"I'm sorry, but we're booked solid until next month.\"", 6, 6, 35);
       goto(resetmsg);
     }
@@ -2276,7 +2277,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   
-  if (said("look")) {
+  if ((said("look") || said("look", "lobby"))) {
     print("This is the lobby. There is a desk and some chairs in the waiting area.");
     [ is receptionist here?
     if (receptionistLoc < HALL) {

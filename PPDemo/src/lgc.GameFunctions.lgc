@@ -884,6 +884,10 @@ if (haveInput && !haveMatch) {
     print("Be more specific. What do you want me to do with it?");
   }
 
+  if (said("touch", "rol")) {
+    print("Keep your hands to yourself!");
+  }
+  
   if (said("move", "anyword", "rol")) {
     print("Leave things be. No need to move anything here.");
   }

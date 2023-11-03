@@ -20,9 +20,9 @@
 [ commands. Most don't do anything real. Valid commands include:
 [   AMOS       CLS        CD         CHDIR   
 [   CHKDSK     DIR        COPY       DEL
-[   ERASE      EXIT       FORMAT     HELP
-[   LOGOFF     MD         MKDIR      RD
-[   RMDIR      REN        RENAME     SUDO
+[   ERASE      FORMAT     HELP       LOGOFF
+[   MD         MKDIR      RD         RMDIR
+[   REBOOT     REN        RENAME     SUDO
 [   TYPE       VER        VOL
 [*********************************************************************
 
@@ -292,7 +292,7 @@ if (lastChar == 10) {
       terminalfn = ADDLINE;
       call(lgc.TerminalFunctions);
       [ pause for a bit
-      random(3, 5, tmpCounter1);
+      random(1, 3, tmpCounter1);
       output = ".";
       :wait4
         terminalfn = DELAY_ADD;
@@ -1703,15 +1703,6 @@ if ((lastChar == 13 || lastChar == 10)) {
         [ same as 'del'
         goto(delfile);
       }
-      
-      [ EXIT
-      sTemp2 = "exit";
-      if (compare.strings(sTemp2, sCmd)) {
-        [ same as reboot
-        terminalfn = CLS;
-        call(lgc.TerminalFunctions);
-        goto(reboot);
-      }
       [ no other 'e' commands
       goto(syntaxerror);
     }
@@ -1910,6 +1901,15 @@ if ((lastChar == 13 || lastChar == 10)) {
       if (compare.strings(sTemp2, sCmd)) {
         [ same as rename
         goto(rename);
+      }
+      
+      [ REBOOT
+      sTemp2 = "reboot";
+      if (compare.strings(sTemp2, sCmd)) {
+        [ same as reboot keystroke
+        terminalfn = CLS;
+        call(lgc.TerminalFunctions);
+        goto(reboot);
       }
       [ no other 'r' commands
       goto(syntaxerror);

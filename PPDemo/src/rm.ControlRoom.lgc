@@ -138,8 +138,11 @@ if (newRoom) {
     if (work1 < 3) {
       goto(flickerit);
     }
-    print("The door slams shut, and the lights in the room flicker violently.");
-    print("The old wiring and electrical control systems appear to have malfunctioned!");
+    print("The door slams shut, and the lights in the room flicker "
+          "violently.");
+    print("The old wiring and electrical control systems appear to have "
+          "malfunctioned! You wonder what effect that might have on all "
+          "the old equipment in this part of the building.");
   }
   return();
 }
@@ -333,8 +336,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if ((said("look", "console") || said("look", "computer"))) {
     print("There are several different output monitors on the "
           "console, and a keyboard and mouse in front of the central "
-          "terminal. There are rooms leading off on both sides of "
-          "the room.");
+          "terminal.");
   }
   if (said("look", "keyboard")) {
     print("It's a standard 101 key IBM PC keyboard.");
@@ -359,10 +361,10 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if ((said("use", "keyboard") || said("type", "keyboard") ||
-       said("log", "on", "console") || said("use", "console") || 
-       said("log", "on", "computer") || said("use", "computer") ||
-       said("log", "on", "mocc") || said("use", "mocc") || 
-       said("log", "on"))) {
+       said("log on", "console") || said("use", "console") || 
+       said("log on", "computer") || said("use", "computer") ||
+       said("log on", "mocc") || said("use", "mocc") || 
+       said("log on"))) {
     if (nearTerminal) {
       set(showMOCC);
     } else {
@@ -371,18 +373,31 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("use", "mouse")) {
     if (nearTerminal) {
-      print("The mouse doesn't seem do do anything with the "
-            "text screen displayed on the main terminal. It "
-            "must be for use with the other six consoles.");
+      print("The mouse doesn't seem do do anything with the text screen "
+            "displayed on the main terminal. It must be for use with the "
+            "other six consoles.");
     } else {
       print("You need to move closer to reach the keyboard and mouse.");
     }
+  }
+  if (said("log off")) {
+    print("You aren't using the terminal right now.");
   }
   if (said("look", "screen")) {
     print("The central terminal station has a simple monocrhome text "
           "display. The six larger auxiliary panels are large color "
           "monitors, probably considered state of the art in the late "
-          "1980s through early 1990s.");
+          "1980s through early 1990s. Each monitor has a small label "
+          "plate under it.");
+  }
+  if (said("look", "label")) {
+    print("The central terminal is labeled \"MOCC\". Starting at upper "
+          "left, going clockwise, the larger monitors are labeled "
+          "\"CAISOCC\", \"RANDOCC\", \"ESADOCC\", \"ERIDOCC\", \"OFROCC\" "
+          " and \"ICAPOCC\".");
+  }
+  if (said("look", "badass")) {
+    print("The BaDASS system doesn't have a visual interface.");
   }
   if ((said("look", "MOCC") || said("look", "AMOS"))) {
     print("This looks like an old style computer terminal display. A "
@@ -406,22 +421,22 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("look", "RANDOCC")) {
     goto(lookrandocc);
   }
-  if ((said("log", "on", "CAISOCC") || said("use", "CAISOCC"))) {
+  if ((said("log on", "CAISOCC") || said("use", "CAISOCC"))) {
     goto(usecaisocc);
   }
-  if ((said("log", "on", "ERIDOCC") || said("use", "ERIDOCC"))) {
+  if ((said("log on", "ERIDOCC") || said("use", "ERIDOCC"))) {
     goto(useeridocc);
   }
-  if ((said("log", "on", "ESADOCC") || said("use", "ESADOCC"))) {
+  if ((said("log on", "ESADOCC") || said("use", "ESADOCC"))) {
     goto(useesadocc);
   }
-  if ((said("log", "on", "ICAPOCC") || said("use", "ICAPOCC"))) {
+  if ((said("log on", "ICAPOCC") || said("use", "ICAPOCC"))) {
     goto(useicapocc);
   }
-  if ((said("log", "on", "OFROCC") || said("use", "OFROCC"))) {
+  if ((said("log on", "OFROCC") || said("use", "OFROCC"))) {
     goto(useofrocc);
   }
-  if ((said("log", "on", "RANDOCC") || said("use", "RANDOCC"))) {
+  if ((said("log on", "RANDOCC") || said("use", "RANDOCC"))) {
     goto(userandocc);
   }
   if ((said("turn", "off", "computer") || said("turn", "off", "console") || 

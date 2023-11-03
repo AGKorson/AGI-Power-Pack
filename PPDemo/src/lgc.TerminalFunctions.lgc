@@ -589,9 +589,6 @@ if (terminalfn == SHOW_HELP) {
     if (!have.key()) {
       goto(wait3);
     }
-    output = "EXIT       Quits and restarts AMOS ";
-    terminalfn = ADDLINE_LF;
-    call(lgc.TerminalFunctions);
     output = "FORMAT     Formats a disk.";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
@@ -605,6 +602,9 @@ if (terminalfn == SHOW_HELP) {
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
     output = "MD/MKDIR   Creates a directory.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "REBOOT     Quits and restarts AMOS ";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
     output = "RD/RMDIR   Removes a directory.";
@@ -876,12 +876,12 @@ if (terminalfn == SHOW_HELP) {
       call(lgc.TerminalFunctions);
       return();
     }
-    sTemp2 = "EXIT";
+    sTemp2 = "REBOOT";
     if (compare.strings(input, sTemp2)) {
       output = "syntax:";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-      output = "  EXIT";
+      output = "  REBOOT";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       terminalfn = LINEFEED;
@@ -901,7 +901,7 @@ if (terminalfn == SHOW_HELP) {
       output = "pressing CTRL+SHIFT+ENTER is a short-";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-      output = "cut to the EXIT command";
+      output = "cut to the REBOOT command";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       return();
