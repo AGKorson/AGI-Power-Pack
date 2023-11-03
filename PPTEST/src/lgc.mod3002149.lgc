@@ -3885,7 +3885,7 @@ if (said(3, 239, 20128)){} [ 4EA0
 [ process, so in these versions only, resources are fully loaded into the
 [ normal heap space, and then the message section is moved. This means there
 [ must be enough room on the regular heap for the entire logic - the memory 
-[ savings happens after the load.
+[ savings happen after the load.
 [
 [ Because of the special status of Logic 0, its message text data needs to
 [ remain in the main memory segment. You should try to minimize the amount of
@@ -3910,21 +3910,22 @@ if (said(3, 239, 20128)){} [ 4EA0
             "\x83\xC4\x02\x8B\x3E\xE6\x07\x80\x7D\x03\x01\x72\x10\x8B\x5D\x08"
             "\x1E\xA1\x8F\x09\x50\x1F\x8B\x07\x1F\x29\x06\x8D\x09\xE9\x16\x30"
             [ RestorePatch
-            "\x56\x57\xB8\xAA\x0B\xA3\x9A\x07\x6A\x05\x68\x90\xE5\x0E\x68\xCD"
+            "\x56\x57\xB8\xAA\x0B\xA3\x9A\x07\x6A\x05\x68\x9F\xE5\x0E\x68\xCD"
             "\x05\x1E\xE8\x43\x79\x83\xC4\x0A\x33\xC0\xA3\x8D\x09\x8B\x1E\xE6"
             "\x07\x8B\x5F\x08\x1E\xA1\x8F\x09\x50\x1F\x33\xC0\x89\x07\x1F\x5F"
-            "\x58\xC3"
+            "\xB0\xA7\x8B\xF0\x2E\xC7\x04\x56\x57\x2E\xC7\x44\x02\x55\x8B\x58"
+            "\xC3"
             [ FormatPatch
-            "\x8B\x76\x08\x3B\x36\x91\x09\x75\x19\x56\xE8\x85\x6A\x8B\x1E\xBA"
-            "\x08\x53\x89\x5E\xF0\x40\x01\x06\xBA\x08\xE8\x90\x6A\x83\xC4\x04"
-            "\x8B\xF0\xE9\xA0\x3C"
+            "\x8B\x76\x08\x3B\x36\x91\x09\x75\x19\x56\xE8\x76\x6A\x8B\x1E\xBA"
+            "\x08\x53\x89\x5E\xF0\x40\x01\x06\xBA\x08\xE8\x81\x6A\x83\xC4\x04"
+            "\x8B\xF0\xE9\x91\x3C"
             [ FmtDonePatch
             "\x8B\x76\x08\x3B\x36\x91\x09\x75\x06\x8B\x46\xF0\xA3\xBA\x08\x8B"
             "\xC7\x8B\xE5\x5D\x5F\x5E\xC3"
             [ PatchCmdData
             "\x54\x02" [ \x00
 #message 241 "\x58\x54"
-if (said(288, 240, 58485)){} [ E475
+if (said(303, 240, 58485)){} [ E475
 [ modify LoadLogic2 to calculate msg text end
 #message 242 "\x8B\x5C\x08\x03\x1F\x53\x90\x90\x90\x90"
 if (said(10, 242, 5182)){} [ 143E
@@ -3941,10 +3942,10 @@ if (said(2, 245, 5797)){} [ 16A5
 #message 246 "\x22\xE5"
 if (said(2, 246, 1488, 0)){} [ DS:05D0
 [ patch FormatTextOut to make a local copy of message being formatted
-#message 247 "\x83\xEC\x10\x8B\x7E\x0A\xE9\x3E\xC3"
+#message 247 "\x83\xEC\x10\x8B\x7E\x0A\xE9\x4D\xC3"
 if (said(10, 247, 8717)){} [ 220D
 [ restore mem_ptr after done formatting
-#message 248 "\xE9\x20\xC1"
+#message 248 "\xE9\x2F\xC1"
 if (said(3, 248, 9302)){} [ 2456
 [ patch LogicMsg to get message text from the new segment
 #message 249 "\x39\x1E\xDC\x07\x0F\x85\x33\xC0\x8B\x05\xEB\x05"

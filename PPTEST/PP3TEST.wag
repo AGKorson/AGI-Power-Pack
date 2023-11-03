@@ -48,16 +48,16 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &H8EBB7167
-   CRC32 = &H8EBB7167
+   CompCRC32 = &HFB79BBF4
+   CRC32 = &HFB79BBF4
    ID = lgc.Main3
    IsRoom = False
    Size = 2633
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
-   CompCRC32 = &H9046EFA3
-   CRC32 = &H9046EFA3
+   CompCRC32 = &HB670569D
+   CRC32 = &HB670569D
    ID = rm.Entrance
    IsRoom = True
    Size = 937
@@ -96,8 +96,8 @@
    Size = 82
 
 [Logic90]
-   CompCRC32 = &H8604DF7F
-   CRC32 = &H8604DF7F
+   CompCRC32 = &HBAE16A04
+   CRC32 = &HBAE16A04
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 659
@@ -114,8 +114,8 @@
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &H7DC181E4
-   CompCRC32 = &H7DC181E4
+   CRC32 = &HF1F42011
+   CompCRC32 = &HF1F42011
    IsRoom = False
    Size = 56
 
@@ -130,8 +130,8 @@
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H54912018
-   CompCRC32 = &H54912018
+   CRC32 = &H6F1EF2AE
+   CompCRC32 = &H6F1EF2AE
    IsRoom = False
    Size = 409
 
@@ -152,8 +152,8 @@
    Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
 
 [Logic99]
-   CompCRC32 = &H9252512C
-   CRC32 = &H9252512C
+   CompCRC32 = &H3D181718
+   CRC32 = &H3D181718
    ID = lgc.Debug
    IsRoom = False
    Size = 1147
@@ -194,8 +194,8 @@
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &H912137A
-   CompCRC32 = &H912137A
+   CRC32 = &H7B37C608
+   CompCRC32 = &H7B37C608
    IsRoom = False
    Size = 10945
 
@@ -210,40 +210,40 @@
 [Logic101]
    ID = lgc.mod3002086
    Description = ""
-   CRC32 = &H915162F8
-   CompCRC32 = &H915162F8
+   CRC32 = &H88BFBF34
+   CompCRC32 = &H88BFBF34
    IsRoom = False
    Size = 22529
 
 [Logic102]
    ID = lgc.mod3002098
    Description = ""
-   CRC32 = &H2277DD4
-   CompCRC32 = &H2277DD4
+   CRC32 = &HAADFC3A9
+   CompCRC32 = &HAADFC3A9
    IsRoom = False
    Size = 22569
 
 [Logic103]
    ID = lgc.mod3002102
    Description = ""
-   CRC32 = &HD35646E0
-   CompCRC32 = &HD35646E0
+   CRC32 = &HEFA8E72B
+   CompCRC32 = &HEFA8E72B
    IsRoom = False
    Size = 22575
 
 [Logic104]
    ID = lgc.mod3002107
    Description = ""
-   CRC32 = &HBDA552C3
-   CompCRC32 = &HBDA552C3
+   CRC32 = &H65B90FBA
+   CompCRC32 = &H65B90FBA
    IsRoom = False
    Size = 22575
 
 [Logic105]
    ID = lgc.mod3002149
    Description = ""
-   CRC32 = &H470DAEC1
-   CompCRC32 = &H470DAEC1
+   CRC32 = &H788247D3
+   CompCRC32 = &H788247D3
    IsRoom = False
    Size = 22564
 
