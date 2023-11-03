@@ -604,6 +604,8 @@ if (teststep == 44) {
     [ palette reset to default
     if (newtest) {
       reset(newtest);
+      [ mouse resets to default - re-configure it now
+      block(CONFIGURE.MOUSE, &mouseX, &mouseY, &mouseBtn); [ configure.mouse(XVAR, YVAR, BTNVAR)
       display(24, 0, "%v63: CHECK RESTART");
       print("Palette should be reset to default.");
       [ check results
@@ -1024,6 +1026,8 @@ if (teststep == 45) {
     [ compare.strings should be binary;
     [ palette should be custom
     if (newtest) {
+      [ mouse resets to default - re-configure it now
+      block(CONFIGURE.MOUSE, &mouseX, &mouseY, &mouseBtn); [ configure.mouse(XVAR, YVAR, BTNVAR)
       display(24, 0, "%v63: CHECK SAVE/RESTORE");
       s10 = "test string";
       s11 = "TEST!string";

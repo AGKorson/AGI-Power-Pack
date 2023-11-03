@@ -112,6 +112,7 @@ if (said("jump", "test")) {
     if (teststep > 14) {
       [ check for mouse
       if (enableDblClick) {
+          block(CONFIGURE.MOUSE, &mouseX, &mouseY, &mouseBtn); [ configure.mouse(XVAR, YVAR, BTNVAR)
           set(hasMouse);
       }
     }
