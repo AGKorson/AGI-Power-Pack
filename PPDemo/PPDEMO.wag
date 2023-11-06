@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &H251B62ED
-   CompCRC32 = &H251B62ED
+   CRC32 = &H7DF05E65
+   CompCRC32 = &H7DF05E65
    IsRoom = False
 
 [Logic36]
@@ -509,6 +509,7 @@
    CRC32 = &H9A8B45E9
    CompCRC32 = &H9A8B45E9
    IsRoom = False
+
 [::END Logics::]
 
 [::BEGIN Pictures::]
