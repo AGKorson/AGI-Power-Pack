@@ -36,12 +36,6 @@
 
 [ power pack support
 #include "powerpack.txt"
-[if (skipIntro) {
-[print("skip");
-[}else{
-[print("noskip");
-[}
-[set(f10);trace.on();
 
 [***************************************
 [ LOCAL DEFINES
@@ -89,8 +83,10 @@ if (realClock) {
   tmp1 = 0;
 }
 if (skipIntro) {
+print("skip intro");
   tmp2 = 1;
 } else {
+print("don't skip intro");
   tmp2 = 0;
 }
 

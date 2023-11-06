@@ -30,13 +30,14 @@
 #define filename   s23
 [ reuse s23 as another temporary string
 #define tmpString1 s23
- 
+
 [***************************************
 [ MAIN CODE BLOCK 
 [***************************************
 
 [ for testing, start with DEBUG enabled
 set(debugging);
+set(enableTrace);
 
 [ check for a game restart
 if (gameRestarted) {
@@ -121,7 +122,7 @@ if (gameRestarted) {
   [ some things only happen during initial start
   
   [ sets up the command tracer, 
-  trace.info(lgc.traceinfo, 3, 10);
+  trace.info(lgc.TraceInfo, 3, 10);
   [ tracing should only occur in 80col rooms; so it's OK to
   [ set the horizontal position
   trace.info(TRACE.H.POSN, 33, 45); [ trace.h.posn(LEFT, WIDTH)
@@ -182,6 +183,7 @@ if (gameRestarted) {
     [ 8-9 are animationInterval
     [ 10 is skip intro flag
     [ confirm config string is 10 digits
+    
     block(STR.LEN, &tmpString0, &tmp0, 0); [ str.len(sINPUT, vRESULT)
     if (tmp0 != 10) {
       [ file is corrupt- load defaults
@@ -202,7 +204,7 @@ if (gameRestarted) {
       [ invalid; use defaults
       set(soundOn);
       musicmode = FM_SOUND;
-      set.key(MIDI_MODE, 0, SET.SNDMODE);
+      set.key(FM_MODE, 0, SET.SNDMODE);
     } else {
       if (tmp0 > 99) {
         set(soundOn);
@@ -210,7 +212,6 @@ if (gameRestarted) {
       } else {
         reset(soundOn);
       }
-      
       if (tmp0 == 0) {
         musicmode = PC_SOUND;
       } else {
@@ -396,13 +397,13 @@ if (gameRestarted) {
   
     [ don't skip intro
     reset(skipIntro);
-    
+print("no cfg file");    
     [ save a default config file
     filename = "ppdemo.cfg";
     [ clear a temp string
     tmpString0 = "                                       ";
     [ save default sound/clock/speed/intro settings
-    tmpString0 = "1110000060";
+    tmpString0 = "1100000060";
     work1 = &tmpString0;
     block(NEW.FILE, &filename, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
     [ save default instrument indices

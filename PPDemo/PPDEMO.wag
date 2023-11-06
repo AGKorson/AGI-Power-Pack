@@ -8,7 +8,7 @@
    LastEdit = "11/3/2023 12:28:42 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = "Power Pack Demo v0.1"
+   GameVersion = "Power Pack Demo v0.2"
    About = "Power Pack Demo Game\n  by Andrew Korson"
    ResDir = src
    UseResNames = True
@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H4FE58E38
-   CompCRC32 = &H4FE58E38
+   CRC32 = &H9E43C00
+   CompCRC32 = &H9E43C00
    IsRoom = True
 
 [Logic4]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &HAAE6BFBF
-   CompCRC32 = &HAAE6BFBF
+   CRC32 = &H251B62ED
+   CompCRC32 = &H251B62ED
    IsRoom = False
 
 [Logic36]
@@ -352,8 +352,8 @@
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &H34AAD505
-   CompCRC32 = &H34AAD505
+   CRC32 = &H6655245F
+   CompCRC32 = &H6655245F
    IsRoom = False
 
 [Logic52]
@@ -387,8 +387,8 @@
 [Logic56]
    ID = lgc.Debug
    Description = "When debugging, this logic handles all debug commands."
-   CRC32 = &HA52F7B65
-   CompCRC32 = &HA52F7B65
+   CRC32 = &H7103F60D
+   CompCRC32 = &H7103F60D
    IsRoom = False
 
 [Logic57]
@@ -492,8 +492,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &H9989311E
-   CompCRC32 = &H9989311E
+   CRC32 = &H29531E76
+   CompCRC32 = &H29531E76
    IsRoom = False
 
 [Logic60]

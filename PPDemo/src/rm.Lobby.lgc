@@ -85,6 +85,7 @@
 #define fSlipped       f236
 #define fPagesTurned   f237
 #define fEgoInHall     f238
+#define fLogJam        f239
 
 #define receptionistLoc v220
 #define   PHONE         1
@@ -301,26 +302,37 @@ if (newRoom) {
   [ current timer point
   tmpSec = -1;
 
-  [ patient 1 (always present)
+  [ patient 1 (always present unless still peeing)
   animate.obj(oPatient1);
   load.view(vw.Patient1); 
   set.view(oPatient1, vw.Patient1);
   set.loop(oPatient1, LP_P_SIT);
   set.cel(oPatient1, 0);
-  position(oPatient1, 106, 97);
   stop.cycling(oPatient1);
   ignore.blocks(oPatient1);
   ignore.horizon(oPatient1);
-  draw(oPatient1);
-  patient1Seq = IDLE;
-  [ idle time is random, from 4 - 8 seconds
-  random(4, 8, patient1Timer);
-  patient1Timer += elapsedSeconds;
-  if (patient1Timer > 59) {
-    patient1Timer -= 60;
+  if (patientPeeing) {
+      [ begin return, and draw patient with correct loop
+      reset(patientPeeing);
+      position(oPatient1, 12, 92);
+      patient1Seq = RTNHALL1;
+      draw(oPatient1);
+      set.loop(oPatient1, LP_MOVERIGHT);
+      start.cycling(oPatient1);
+      move.obj(oPatient1, 86, 92, 1, fP1Done);
+  } else {
+    position(oPatient1, 106, 97);
+    draw(oPatient1);
+    patient1Seq = IDLE;
+    [ idle time is random, from 4 - 8 seconds
+    random(4, 8, patient1Timer);
+    patient1Timer += elapsedSeconds;
+    if (patient1Timer > 59) {
+      patient1Timer -= 60;
+    }
+    [ patient1 is in the room
+    block(BIT.OR, BYNUM, &whosIn, 2); [ bit.or(FN_MODE, VAR, MASK)
   }
-  [ patient1 is in the room
-  block(BIT.OR, BYNUM, &whosIn, 2); [ bit.or(FN_MODE, VAR, MASK)
   
   [ to save on memory, patient 2/3/4 views are
   [ only loaded when needed; need to turn off
@@ -477,19 +489,28 @@ if (gameRestored) {
   if (patient2Loc != LOC_GONE) {
     load.view(vw.Patient2);
     set.view(oPatient2, vw.Patient2);
-    draw(oPatient2);
+    [ if not off screen, draw it
+    if (patient2Seq != ARRIVE && patient2Seq != MOVEHALL3) {
+      draw(oPatient2);
+    }
   }
   [ patient 3
   if (patient3Loc != LOC_GONE) {
     load.view(vw.Patient3);
     set.view(oPatient3, vw.Patient3);
-    draw(oPatient3);
+    [ if not off screen, draw it
+    if (patient3Seq != ARRIVE && patient3Seq != MOVEHALL3) {
+      draw(oPatient3);
+    }
   }
   [ patient 4
   if (patient4Loc != LOC_GONE) {
     load.view(vw.Patient4);
     set.view(oPatient4, vw.Patient4);
-    draw(oPatient4);
+    [ if not off screen, draw it
+    if (patient4Seq != ARRIVE && patient4Seq != MOVEHALL3) {
+      draw(oPatient4);
+    }
   }
   reset(noScript);
 }
@@ -519,13 +540,8 @@ if (playWalkman) {
 if (firstLobbyVisit && secondCtr < 60) {
   if (tmpSec != elapsedSeconds) {
     tmpSec = elapsedSeconds;
-    if (debugging) {
-      [ debug code to track timer
-      display(23, 68, "%v12|2:%v11|2 (%v237)  ");
-    }
     ++secondCtr;
     if (secondCtr == 60) {
-[    if (secondCtr == 10) {
       set(fOneMinute);
     }
   }
@@ -548,6 +564,45 @@ if ((egoX > 78 || egoY > 125)) {
     }
     reset(fEgoWaitTalk);
     reset(fEgoTalkReceptionist);
+  }
+}
+
+[ check for logjam at hall entrance
+if (egoY == 95) {
+  if (!fLogJam) {
+    ignore.objs(ego);
+    set(fLogJam);
+  }
+  [ check for a patient coming through
+  get.posn(oPatient1, work1, work2);
+  if (work2 == 95) {
+    block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
+    print("\"Pardon me.\"");
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+  }
+  get.posn(oPatient2, work1, work2);
+  if (work2 == 95) {
+    block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
+    print("\"Pardon me.\"");
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+  }
+  get.posn(oPatient3, work1, work2);
+  if (work2 == 95) {
+    block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
+    print("\"Pardon me.\"");
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+  }
+  get.posn(oPatient4, work1, work2);
+  if (work2 == 95) {
+    block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+    print("\"Pardon me.\"");
+    block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+  }
+  
+} else {
+  if (fLogJam) {
+    observe.objs(ego);
+    reset(fLogJam);
   }
 }
 
@@ -604,7 +659,7 @@ if (receptionistCtr > 0) {
     [ answering patient 1 request for bathroom
     if (patient1Seq == TALKCOUNTER1) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 8;
+      printTimeout = 12;
       print.at("\"Sure! It's through that doorway. Go left "
                "and it's the second door on the right.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
@@ -618,7 +673,7 @@ if (receptionistCtr > 0) {
     [ respond to ego or patient1 request to speak
     if ((fEgoWaitTalk || patient1Seq == WAITCOUNTER) && receptionistSeq == STANDSPEAK1) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 4;
+      printTimeout = 6;
       print.at("\"Can I help you?\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ stop receptionist from cycling
@@ -859,7 +914,7 @@ if (fRDone) {
     [ if patient 2/3/4 ready to see nurse, announce it
     if (patient2Seq == EXAMREADY) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 6;
+      printTimeout = 8;
       print.at("\"Ms. Cole, the nurse will see you now.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ patient called to exam room
@@ -871,7 +926,7 @@ if (fRDone) {
     }
     if (patient3Seq == EXAMREADY) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 6;
+      printTimeout = 8;
       print.at("\"Mr. Lowe, the nurse will see you now.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ patient called to exam room
@@ -883,7 +938,7 @@ if (fRDone) {
     }
     if (patient4Seq == EXAMREADY) {
       block(MSGBOX.COLOR, LT_MAGENTA, MAGENTA, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 6;
+      printTimeout = 8;
       print.at("\"Mr. Walls, the nurse will see you now.\"", 6, 6, 35);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ patient called to exam room
@@ -1044,7 +1099,7 @@ if (patient1Ctr > 0) {
       set.cel(oPatient1, 0);
       stop.cycling(oPatient1);
       block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 5;
+      printTimeout = 7;
       print.at("\"May I use the restroom please?\"", 8, 38, 30);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       [ set timer for receptionist to speak
@@ -1054,7 +1109,7 @@ if (patient1Ctr > 0) {
     [ ready to speak second line
     if (patient1Seq == TALKCOUNTER2) {
       block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
-      printTimeout = 4;
+      printTimeout = 6;
       print.at("\"Thank you!\"", 8, 38, 30);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       patient1Seq = MOVEHALL1;
@@ -1064,6 +1119,7 @@ if (patient1Ctr > 0) {
       receptionistSeq = STOPCONV;
       receptionistCtr = 1;
       reset(fPatient1Talking);
+      set(patientPeeing);
     }
   }
 }
@@ -1147,6 +1203,7 @@ if (patient1Timer != 255) {
       draw(oPatient1);
       set.loop(oPatient1, LP_MOVERIGHT);
       move.obj(oPatient1, 86, 92, 1, fP1Done);
+      reset(patientPeeing);
     }
   }
 }
@@ -1373,7 +1430,7 @@ if (patient2Timer != 255) {
   }
   if (patientClock > 8 && patient2Loc == LOC_EXAM) {
     [ patient returns from exam room
-    patient2Loc = LOC_GONE;
+    patient2Loc = LOC_LEAVING;
     patient2Seq = RTNHALL1;
     set.loop(oPatient2, LP_MOVERIGHT);
     normal.cycle(oPatient2);
@@ -1492,7 +1549,8 @@ if (fP2Done) {
     block(BIT.AND, BYNUM, &whosIn, 251); [ bit.and(FN_MODE, VAR, MASK)
   }
   if (patient2Seq == RTNHALL4) {
-    patient2Seq = IDLE;
+    patient2Seq = SKIP;
+    patient2Loc = LOC_GONE;
     erase(oPatient2);
     reset(fPatientAtDoor);
     [ unload view, but don't script it
@@ -1591,7 +1649,7 @@ if (patient3Timer != 255) {
   }
   if (patientClock > 14 && patient3Loc == LOC_EXAM) {
     [ patient returns from exam room
-    patient3Loc = LOC_GONE;
+    patient3Loc = LOC_LEAVING;
     patient3Seq = RTNHALL1;
     set.loop(oPatient3, LP_MOVERIGHT);
     draw(oPatient3);
@@ -1708,7 +1766,8 @@ if (fP3Done) {
     goto(p3SeqDone); 
   }
   if (patient3Seq == RTNHALL4) {
-    patient3Seq = IDLE;
+    patient3Seq = SKIP;
+    patient3Loc = LOC_GONE;
     erase(oPatient3);
     reset(fPatientAtDoor);
     [ unload view, but don't script it
@@ -1807,7 +1866,7 @@ if (patient4Timer != 255) {
   }
   if (patientClock > 18 && patient4Loc == LOC_EXAM) {
     [ patient returns from exam room
-    patient4Loc = LOC_GONE;
+    patient4Loc = LOC_LEAVING;
     patient4Seq = RTNHALL1;
     set.loop(oPatient4, LP_MOVERIGHT);
     draw(oPatient4);
@@ -1930,7 +1989,8 @@ if (fP4Done) {
     goto(p4SeqDone); 
   }
   if (patient4Seq == RTNHALL4) {
-    patient4Seq = IDLE;
+    patient4Seq = SKIP;
+    patient4Loc = LOC_GONE;
     erase(oPatient4);
     reset(fPatientAtDoor);
     [ unload view, but don't script it
@@ -2750,21 +2810,21 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (work1 == 9) {
       [ paintings are also visible
       work1 = 0;
-      if (mouseX > 15 && mouseX < 51 && mouseY > 18 && mouseY < 80) {
+      if (mouseX > 14 && mouseX < 19 && mouseY > 51 && mouseY < 80) {
         work1 = 1;
       }
-      if (mouseX > 74 && mouseX < 54 && mouseY > 79 && mouseY < 71) {
+      if (mouseX > 73 && mouseX < 80 && mouseY > 54 && mouseY < 72) {
         work1 = 1;
       }
-      if (mouseX > 103 && mouseX < 51 && mouseY > 126 && mouseY < 72) {
+      if (mouseX > 102 && mouseX < 127 && mouseY > 50 && mouseY < 73) {
         work1 = 1;
       }
-      if (mouseX > 136 && mouseX < 49 && mouseY > 141 && mouseY < 79) {
+      if (mouseX > 135 && mouseX < 142 && mouseY > 50 && mouseY < 80) {
         work1 = 1;
       }
-      if (mouseX > 144 && mouseX < 48 && mouseY > 151 && mouseY < 91) {
-        work1 = 1;
-      }
+    if (mouseX > 143 && mouseX < 152 && mouseY > 48 && mouseY < 92) {
+      work1 = 1;
+    }
       if (work1 == 1) {
         print("The floral prints hanging on the wall brighten the "
               "atmosphere of the waiting room."); 
@@ -2873,7 +2933,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         :talkpatient4
         distance(ego, oPatient4, work1);
         if (work1 < 40) {
-          block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
+          block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
           current.loop(oPatient4, work1);
           [ 0-3: walking OR idle
           if ((work1 < 4 || patient4Seq == IDLE)) {
@@ -2960,7 +3020,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (posn(oPatient3, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       distance(ego, oPatient3, work1);
       if (work1 < 24) {
-        block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+        block(MSGBOX.COLOR, LT_GREEN, GREEN, WHITE); [ msgbox.color(BORDER, FG, BG)
         print("\"Ooh, do that again. I like that!\"");
         block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {

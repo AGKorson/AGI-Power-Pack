@@ -312,7 +312,6 @@ if (isset(gameRestored)) {
   call(lgc.InitToolbar);
   [ don't need to restore sound settings; each
   [ sound gets settings applied as needed
-  [
 }
 
 [ DEBUG FUNCTIONS

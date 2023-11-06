@@ -46,6 +46,7 @@ if ((controller(cDebugHelp) || said("debug", "help"))) {
 
 [ start command tracing
 if (said("trace", "on")) {
+  set(enableTrace);
   set(startTrace);
 }
 

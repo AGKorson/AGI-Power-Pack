@@ -61,7 +61,7 @@
 #define kickBucket             f28 [ set if player enters 'kick the bucket'; starts the death sequence
 #define bucketDone             f29 [ true when bucket hits screen edge (so it can be erased)
 #define negativeScore          f30 [ set when player score is below zero
-#define firstLobby             f31 [ to track first time ego visits the lobby
+#define patientPeeing          f31 [ set when patient #1 makes a bathroom visit
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
 #define disableGameFunctions   f33 [ when set to TRUE
 #define clockOn                f34 [ set this flag to display a real-time clock of elapsed game time on top of the status bar
@@ -205,7 +205,8 @@
 #define patient4Loc            v87
 #define LOC_LOBBY                1 [ patient is in lobby, waiting
 #define LOC_EXAM                 2 [ patient is going to/at exam
-#define LOC_GONE                 3 [ patient is done exam and/or gone
+#define LOC_LEAVING              3 [ patient is done with exam and is leaving
+#define LOC_GONE                 4 [ patient is gone/not 
 #define safeStatus             v88 [ tracks opening/closing of safe
 #define paintingStatus         v89 [ tracks opening/closing of painting on office wall
 #define officeDskDrStatus      v90 [ tracks opening/closing of office desk drawers
