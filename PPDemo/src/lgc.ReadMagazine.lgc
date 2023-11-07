@@ -265,7 +265,7 @@ if (mouseBtn == 1) {
         display(12, 25, "Although the development team");
         display(13, 25, "spent over ---- hours on this");
         set.text.attribute(RED, WHITE);
-        display(13, 36, "2437"); [ code to control room door 
+        display(13, 36, "6502"); [ code to control room door 
         set.text.attribute(BLACK, WHITE);
         display(14, 25, "upgrade, Sierra management ");
         display(15, 25, "ultimately decided to go in a");

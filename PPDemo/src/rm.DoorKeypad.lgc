@@ -320,8 +320,8 @@ if (mouseBtn == 1) {
         set.cel(oIndicator, 12);
         indicatorTimer = 15;
       } else {
-        [ confirm code (2437) by comparing the digits
-        if (digit4 == 2 && digit3 == 4 && digit2 == 3 && digit1 == 7) {
+        [ confirm code (6502) by comparing the digits
+        if (digit4 == 6 && digit3 == 5 && digit2 == 0 && digit1 == 2) {
           set.cel(oIndicator, 11);
           indicatorTimer = 6;
           set(correctcode);

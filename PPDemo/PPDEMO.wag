@@ -170,8 +170,8 @@
 [Logic18]
    ID = rm.DoorKeypad
    Description = "Close up of the access control keypad that controls access to the Power Pack control room."
-   CRC32 = &HF40A206C
-   CompCRC32 = &HF40A206C
+   CRC32 = &H90444109
+   CompCRC32 = &H90444109
    IsRoom = True
 
 [Logic19]
@@ -198,8 +198,8 @@
 [Logic22]
    ID = lgc.ReadMagazine
    Description = "Displays the magazine in response to a 'read magazine' input."
-   CRC32 = &HFFECE30C
-   CompCRC32 = &HFFECE30C
+   CRC32 = &H771D5D6B
+   CompCRC32 = &H771D5D6B
    IsRoom = False
 
 [Logic23]
