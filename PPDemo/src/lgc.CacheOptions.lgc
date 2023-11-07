@@ -22,50 +22,6 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
-[ sound settings
-if (soundOn) {
-  work1 = 1;
-} else {
-  work1 = 0;
-}
-if (musicmode == PC_SOUND) {
-  work2 = 0;
-  work3 = 0;
-} else {
-  if (musicmode == FM_SOUND) {
-    work2 = 1;
-    work3 = 0;
-  } else {
-    work2 = 1;
-    work3 = 1;
-  }
-}
-s23 = "%v46%v47%v48";
-block(STR.FORMAT, &s23, &s23, 0); [ str.format(sINPUT, sRESULT)
-
-[ clock settings
-work1 = 0;
-if (clockOn) {
-  work2 = 1;
-} else {
-  work2 = 0;
-}
-if (realClock) {
-  work3 = 1;
-} else {
-  work3 = 0;
-}
-s22 = "%v46%v47%v48";
-block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
-
-[ speed setting
-s21 = "%v10";
-block(STR.FORMAT, &s21, &s21, 0); [ str.format(sINPUT, sRESULT)
-
-[ attenuation
-s20 = "%v23";
-block(STR.FORMAT, &s20, &s20, 0); [ str.format(sINPUT, sRESULT)
-
 [ instrument indices
 s12 = "%v63";
 block(STR.FORMAT, &s12, &s12, 0); [ str.format(sINPUT, sRESULT)
@@ -83,6 +39,45 @@ s18 = "%v69";
 block(STR.FORMAT, &s18, &s18, 0); [ str.format(sINPUT, sRESULT)
 s19 = "%v70";
 block(STR.FORMAT, &s19, &s19, 0); [ str.format(sINPUT, sRESULT)
+
+[ sound settings, attenuation
+if (soundOn) {
+  work1 = 1;
+} else {
+  work1 = 0;
+}
+if (musicmode == PC_SOUND) {
+  work2 = 0;
+  work3 = 0;
+} else {
+  if (musicmode == FM_SOUND) {
+    work2 = 1;
+    work3 = 0;
+  } else {
+    work2 = 1;
+    work3 = 1;
+  }
+}
+s20 = "%v46%v47%v48%v23|2";
+block(STR.FORMAT, &s20, &s20, 0); [ str.format(sINPUT, sRESULT)
+
+[ speed setting
+s21 = "%v10";
+block(STR.FORMAT, &s21, &s21, 0); [ str.format(sINPUT, sRESULT)
+
+[ clock settings
+if (clockOn) {
+  work2 = 1;
+} else {
+  work2 = 0;
+}
+if (realClock) {
+  work3 = 1;
+} else {
+  work3 = 0;
+}
+s22 = "%v47%v48";
+block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
 
 return();
 

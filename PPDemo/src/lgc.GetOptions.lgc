@@ -1,0 +1,371 @@
+[ ********************************************************************
+[ 
+[ lgc.GetOptions
+[ 
+[ ********************************************************************
+
+[ power pack support
+#include "powerpack.txt"
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+#define tmpString0    s21
+#define tmpString1    s22
+#define filename      s23
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
+[ restarting?
+if (gameRestarted) {
+  [ extract from strings
+  
+  [ s12 - s19 hold instrument indices
+  block(STR2BYTE, &s12, &FMInst0, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s13, &FMInst1, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s14, &FMInst2, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s15, &FMInst3, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s16, &FMInst4, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s17, &MIDIInst0, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s18, &MIDIInst1, 0); [ str2byte(sINPUT, vRESULT)
+  block(STR2BYTE, &s19, &MIDIInst2, 0); [ str2byte(sINPUT, vRESULT)
+
+  [ s20 is set to hold sound settings
+  [ pull attenuation off the end
+  work1 = 2;
+  block(STR.RIGHT, &s20, &s23, &work1); [ str.right(sINPUT, sRESULT, vCOUNT)
+  block(STR2BYTE, &s23, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
+  if (attenuation > 63) {
+    attenuation = 63;
+  }
+  [ rest of sound settings are first three bytes
+  work1 = 3;
+  block(STR.LEFT, &s20, &s20, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+  block(STR2BYTE, &s20, &work1, 0); [ str2byte(sINPUT, vRESULT)
+  if (work1 > 99) {
+    set(soundOn);
+    work1 -= 100;
+    enable.item(cSoundPC);
+    enable.item(cSoundFM);
+    enable.item(cSoundMIDI);
+  } else {
+    reset(soundOn);
+    disable.item(cSoundPC);
+    disable.item(cSoundFM);
+    disable.item(cSoundMIDI);
+  }
+  if (work1 == 0) {
+    musicmode = PC_SOUND;
+  } else {
+    set(4channelsound);
+    if (work1 == 10) {
+      musicmode = FM_SOUND;
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    } else {
+      musicmode = MIDI_SOUND;
+      set(useMIDI);
+      set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    }
+  }
+  
+  [ s21 holds speed
+  block(STR2BYTE, &s21, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+  
+  [ s22 holds clock 
+  block(STR2BYTE, &s22, &work1, 0); [ str2byte(sINPUT, vRESULT)
+  if (work1 > 9) {
+    [ enable clock
+    set(clockOn);
+    work1 -= 10;
+    enable.item(cRealClock);
+    enable.item(cGameClock);
+  } else {
+    disable.item(cRealClock);
+    disable.item(cGameClock);
+  }
+  if (work1) {
+    [ enable real time
+    set(realClock);
+  }
+
+} else {
+  [ for initial game start or restore, extract from file
+  
+  [ check for configuration file
+  filename = "ppdemo.cfg";
+  work1 = 0;
+  work2 = &tmpString0;
+  block(READ.STRING, &filename, &work1, &work2); [ read.string(sFILENAME, vINDEX, vSTRIN)
+  [ check v18 to see if file was found
+  if (errorParameter == 0) {
+    [ file found - tmpString0 = sound/clock/speed
+    [ ten digits -
+    [ 1-2-3 are sound settings
+    [ 4-5 are sound attenuation
+    [ 6-7 are clock settings
+    [ 8-9 are animationInterval
+    [ 10 is skip intro flag
+    [ confirm config string is 10 digits
+    
+    block(STR.LEN, &tmpString0, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 10) {
+      [ file is corrupt- load defaults
+      goto(defaultfile);
+    }
+    [ first three digits for sound
+    work1 = 3;
+    block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 7;
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
+    [ convert to number
+    block(STR2BYTE, &tmpString1, &work1, 0); [ str2byte(sINPUT, vRESULT)
+    [ options are 3-digit number: hundreds = soundOn
+    [                             tens = 4channel
+    [                             ones = useMIDI
+    [                             (00=PC; 10=FM; 11=MIDI)
+    if (work1 > 111) {
+      [ invalid; use defaults
+      set(soundOn);
+      musicmode = FM_SOUND;
+      set.key(FM_MODE, 0, SET.SNDMODE);
+    } else {
+      if (work1 > 99) {
+        set(soundOn);
+        work1 -= 100;
+      } else {
+        reset(soundOn);
+      }
+      if (work1 == 0) {
+        musicmode = PC_SOUND;
+      } else {
+        set(4channelsound);
+        if (work1 == 11) {
+          musicmode = MIDI_SOUND;
+          set(useMIDI);
+          set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        } else {
+          musicmode = FM_SOUND;
+          set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+        }
+      }
+    }
+    [ next two digits are attenuation
+    work1 = 2;
+    block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 5;
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
+    [ convert to number (4channel value)
+    block(STR2BYTE, &tmpString1, &attenuation, 0); [ str2byte(sINPUT, vRESULT)
+    if (attenuation > 63) {
+      attenuation = 63;
+    }
+    [ next two digits are clock options
+    work1 = 2;
+    block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 3;
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
+    [ convert to number
+    block(STR2BYTE, &tmpString1, &work1, 0); [ str2byte(sINPUT, vRESULT)
+    if (work1 > 9) {
+      set(clockOn);
+      work1 -= 10;
+    } else {
+      reset(clockOn);
+    }
+    if (work1) {
+      set(realClock);
+    } else {
+      reset(realClock);
+    }
+    [ next two digits are speed
+    work1 = 2;
+    block(STR.LEFT, &tmpString0, &tmpString1, &work1); [ str.left(sINPUT, sRESULT, vLEN)
+    work1 = 1;
+    block(STR.RIGHT, &tmpString0, &tmpString0, &work1); [ str.right(sINPUT, sRESULT, vLEN)
+    [ convert speed to number
+    block(STR2BYTE, &tmpString1, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+    
+    [ last digit is skip intro flag
+    [ convert to number
+    block(STR2BYTE, &tmpString0, &work1, 0); [ str2byte(sINPUT, vRESULT)
+    if (work1) {
+      set(skipIntro);
+    } else {
+      reset(skipIntro);
+    }
+    
+    [ second string is instrument indices
+    work1 = 1;
+    work2 = &tmpString0;
+    filename = "ppdemo.cfg";
+    block(READ.STRING, &filename, &work1, &work2); [ read.string(sFILENAME, vINDEX, vSTRIN)
+    [ get three digits at a time for the eight indices
+    work1 = &FMInst0;
+    :nextinst4
+      work3 = 3;
+      block(STR.LEFT, &tmpString0, &tmpString1, &work3); [ str.left(sINPUT, sRESULT, vLEN)
+      [ convert to byte value
+      block(STR2BYTE, &tmpString1, &work2, 0); [ str2byte(sINPUT, vRESULT)
+      [ save to correct instrument variable
+      *work1 = work2;
+      [ remove this value
+      block(STR.LEN, &tmpString0, &work2, 0); [ str.len(sINPUT, vRESULT)
+      work2 -= 3;
+      block(STR.RIGHT, &tmpString0, &tmpString0, &work2); [ str.right(sINPUT, sRESULT, vLEN)
+      ++work1;
+    if (work1 < 71) {
+      goto(nextinst4);
+    }
+    [ get custom instrument values
+    filename = "ppdemo.cfg";
+    [ custom instruments stored in s7-s11
+    work1 = 2;
+    work2 = &custInst0;
+    :nextinst3
+      block(READ.STRING, &filename, &work1, &work2); [ read.string(sFILENAME, vINDEX, vSTRIN)
+      ++work1;
+      ++work2;
+    if (work1 < 6) {
+      goto(nextinst3);
+    }
+    [ confirm instrument strings are valid (correct number of characters)
+    block(STR.LEN, &custInst0, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      custInst0 = m4;
+    }
+    block(STR.LEN, &custInst1, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      custInst1 = m4;
+    }
+    block(STR.LEN, &custInst2, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      custInst2 = m4;
+    }
+    block(STR.LEN, &custInst3, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      custInst3 = m4;
+    }
+    block(STR.LEN, &custInst4, &work1, 0); [ str.len(sINPUT, vRESULT)
+    if (work1 != 22) {
+      [ use default
+      custInst4 = m4;
+    }
+    [ load appropriate instruments
+    if (4channelsound) {
+      if (useMIDI) {
+        [ set MIDI instruments
+        work1 = 0;
+        set.key(&work1, &MIDIInst0, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        ++work1;
+        set.key(&work1, &MIDIInst1, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+        ++work1;
+        set.key(&work1, &MIDIInst2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+      } else {
+        [ set FM instruments
+        work1 = 0;
+        :setFMinst
+          work2 = &FMInst0;
+          work2 += work1;
+          work2 = *work2;
+          if (work2 > 130) {
+            work2 -= 124;
+            set.key(&work1, &work2, CUSTOM.INST); [ custom.inst(vCHANNEL, vENVDATASTR)
+          } else {
+            set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+          }
+        if (work1 < 4) {
+          ++work1;
+          goto(setFMinst);
+        }
+      }
+    }
+    [ not a first run
+    reset(initialRun);
+  } else {
+    [ reset v18
+    errorParameter = 0;
+    [ if no file found, use defaults
+    :defaultfile
+    [ default instruments for 4-channel sound (midi defaults are 0)
+    FMInst0 = 128;
+    FMInst1 = 128;
+    FMInst2 = 128;
+    FMInst3 = 129;
+    FMInst4 = 130;
+    [ default custom instruments
+    custInst0 = "22215909FFFF030F020000";
+    custInst1 = "22215909FFFF030F020000";
+    custInst2 = "22215909FFFF030F020000";
+    custInst3 = "2F200000FFFF0F0F00030E";
+    custInst4 = "22242100C0C00C0C000000";
+    [ enable FM synth, and set default instruments
+    set(4channelsound);
+    reset(useMIDI);
+    set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
+    musicmode = FM_SOUND;
+    work1 = 0;
+    work2 = 0;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    ++work1;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+    ++work1;
+    set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+  
+    [ set speed to normal (delay=2/20ths of a second)
+    animationInterval = NORMAL_SPEED;
+  
+    [ don't skip intro
+    reset(skipIntro);
+    [ save a default config file
+    filename = "ppdemo.cfg";
+    [ clear a temp string
+    tmpString0 = "                                       ";
+    [ save default sound/clock/speed/intro settings
+    tmpString0 = "1100000060";
+    work1 = &tmpString0;
+    block(NEW.FILE, &filename, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
+    [ save default instrument indices
+    tmpString0 = "128128128129130000000000";
+    work1 = 1;
+    work2 = &tmpString0;
+    block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+
+    [ save default custom FM instruments
+    work1 = 2;
+    tmpString0 = "                        ";
+    tmpString0 = m4;
+    work2 = &tmpString0;
+    :nextinst1
+    block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+    ++work1;
+    if (work1 < 7) {
+      goto(nextinst1);
+    }
+    [ save defaults in s18-s22 so they can be copied to logic0 messages
+    work1 = 18;
+    work2 = 4;
+    :nextinst2
+    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
+    ++work1;
+    if (work1 < 23) {
+      goto(nextinst2);
+    }
+    
+    if (currentRoom == 0) {
+      [ first run of game
+      set(initialRun);
+    }
+  }
+}
+
+return();
+
+[ **************************************
+[ DECLARED MESSAGES
+[ **************************************

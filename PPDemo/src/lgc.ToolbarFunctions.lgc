@@ -240,6 +240,8 @@ if (mouseBtn != 1) {
     }
     [ if on button3:
     if (work1 == 3 && mouseX > 63 && mouseX < 80 && mouseY < 17) {
+      [ save options before restoring
+      call(lgc.SaveOptions);
       restore.game();
     }
     

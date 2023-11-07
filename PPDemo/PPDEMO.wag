@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/3/2023 12:28:42 PM"
+   LastEdit = "11/6/2023 8:23:14 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.2"
@@ -247,8 +247,8 @@
 [Logic29]
    ID = lgc.ToolbarFunctions
    Description = "Provides all the functions for toolbar interactions."
-   CRC32 = &HA40295FC
-   CompCRC32 = &HA40295FC
+   CRC32 = &H9D06BD56
+   CompCRC32 = &H9D06BD56
    IsRoom = False
 
 [Logic30]
@@ -296,64 +296,22 @@
 [Logic36]
    ID = lgc.CacheOptions
    Description = "Caches game settings so they can be restored after a game reset."
-   CRC32 = &HEDA71809
-   CompCRC32 = &HEDA71809
-   IsRoom = False
-
-[Logic37]
-   ID = lgc.GameHelp
-   Description = "Main Help Screen. Sets the correct mode and loads the default first topic page."
-   CRC32 = &H98B2E3D4
-   CompCRC32 = &H98B2E3D4
-   IsRoom = False
-
-[Logic38]
-   ID = lgc.HelpText1
-   Description = "Contains code to display help topic pages 1 to 4."
-   CRC32 = &H5DC28DD4
-   CompCRC32 = &H5DC28DD4
-   IsRoom = False
-
-[Logic39]
-   ID = lgc.HelpText2
-   Description = "Contains code to display help topic pages 5 to 8."
-   CRC32 = &H4D60B73E
-   CompCRC32 = &H4D60B73E
-   IsRoom = False
-
-[Logic40]
-   ID = lgc.HelpText3
-   Description = "Contains code to display help topic pages 8 to 12."
-   CRC32 = &HBC9E4FAB
-   CompCRC32 = &HBC9E4FAB
-   IsRoom = False
-
-[Logic41]
-   ID = lgc.HelpText4
-   Description = "Contains code to display help topic pages 13 to 17."
-   CRC32 = &HCBFA3F8C
-   CompCRC32 = &HCBFA3F8C
-   IsRoom = False
-
-[Logic42]
-   ID = txt.Memo
-   Description = "Displays the memo in response to a 'read memo' input."
-   CRC32 = &HB37237A4
-   CompCRC32 = &HB37237A4
+   CRC32 = &H8CD5C1AD
+   CompCRC32 = &H8CD5C1AD
    IsRoom = False
 
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &H59B2628C
-   CompCRC32 = &H59B2628C
+   CRC32 = &HAE48579B
+   CompCRC32 = &HAE48579B
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &H6655245F
-   CompCRC32 = &H6655245F
+   CRC32 = &H3368E125
+   CompCRC32 = &H3368E125
    IsRoom = False
 
 [Logic52]
@@ -373,8 +331,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &H613E5133
-   CompCRC32 = &H613E5133
+   CRC32 = &H8CA1C436
+   CompCRC32 = &H8CA1C436
    IsRoom = False
 
 [Logic55]
@@ -492,8 +450,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &H29531E76
-   CompCRC32 = &H29531E76
+   CRC32 = &H65FB1657
+   CompCRC32 = &H65FB1657
    IsRoom = False
 
 [Logic60]
@@ -510,6 +468,54 @@
    CompCRC32 = &H9A8B45E9
    IsRoom = False
 
+[Logic43]
+   ID = txt.Memo
+   Description = "Displays the memo in response to a 'read memo' input."
+   CRC32 = &HB37237A4
+   CompCRC32 = &HB37237A4
+   IsRoom = False
+
+[Logic42]
+   ID = lgc.HelpText4
+   Description = "Contains code to display help topic pages 13 to 17."
+   CRC32 = &HCBFA3F8C
+   CompCRC32 = &HCBFA3F8C
+   IsRoom = False
+
+[Logic41]
+   ID = lgc.HelpText3
+   Description = "Contains code to display help topic pages 8 to 12."
+   CRC32 = &HBC9E4FAB
+   CompCRC32 = &HBC9E4FAB
+   IsRoom = False
+
+[Logic40]
+   ID = lgc.HelpText2
+   Description = "Contains code to display help topic pages 5 to 8."
+   CRC32 = &H4D60B73E
+   CompCRC32 = &H4D60B73E
+   IsRoom = False
+
+[Logic39]
+   ID = lgc.HelpText1
+   Description = "Contains code to display help topic pages 1 to 4."
+   CRC32 = &H5DC28DD4
+   CompCRC32 = &H5DC28DD4
+   IsRoom = False
+
+[Logic38]
+   ID = lgc.GameHelp
+   Description = "Main Help Screen. Sets the correct mode and loads the default first topic page."
+   CRC32 = &H98B2E3D4
+   CompCRC32 = &H98B2E3D4
+   IsRoom = False
+
+[Logic37]
+   ID = lgc.GetOptions
+   Description = ""
+   CRC32 = &HBBBA5AFD
+   CompCRC32 = &HBBBA5AFD
+   IsRoom = False
 [::END Logics::]
 
 [::BEGIN Pictures::]

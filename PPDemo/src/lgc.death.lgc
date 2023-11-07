@@ -240,6 +240,8 @@ if ((controller(cHelp) || said("help"))) {
 
 [ restoring game is allowed
 if ((controller(cRestore) || said("restore", "game") || said("restore"))) {
+  [ save options before restoring
+  call(lgc.SaveOptions);
   restore.game();
 }
 

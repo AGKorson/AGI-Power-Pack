@@ -296,22 +296,22 @@ if (newRoom) {
 [ EVERY CYCLE
 [***************************************
 
-[ check for click-resets when coming from cutscenes
-if (resetClicks) {
-  reset(resetClicks);
-  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
-}
-
 [ CHECK FOR GAME RESTORE
 if (isset(gameRestored)) {
+  [ restore settings
+  call(lgc.GetOptions);
   [ make sure input area is cleared
   clear.lines(23, 24, BLACK);
   [ need to 're-disable menu separators)
   disable.item(cDummy);
   [ and redraw toolbar buttons
   call(lgc.InitToolbar);
-  [ don't need to restore sound settings; each
-  [ sound gets settings applied as needed
+}
+
+[ check for click-resets when coming from cutscenes
+if (resetClicks) {
+  reset(resetClicks);
+  set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
 }
 
 [ DEBUG FUNCTIONS
