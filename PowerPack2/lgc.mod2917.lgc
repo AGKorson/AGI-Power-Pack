@@ -232,7 +232,13 @@ if (IntVersion != VERSION_2917) {
 [ This patch is the first step in gaining access to power pack features. It 
 [ modifies the set.string command so it can copy more than 40 characters and 
 [ fixes the bug that adds an extra null character to the end of the string.
-[ 
+[ Finally, it moves the entire data segment to a new location, which allows 
+[ the program code segment to be expanded so it can hold all the Power Pack 
+[ patch code.
+[
+[ Two utility functions, Hex2Int and Delay that are used by several other
+[ Power Pack patches are also included here.
+[
 [ put patch function in s1
 #message  1 "\xB8\x90\x90\x2E\xA3\x50\x0D\x2E\xA3\x52\x0D\xB8\x86\x3F\x2E\xA3"
             "\x65\x0D\xB0\x04\x2E\xA2\x69\x0D\x8B\xC6\xC3"
@@ -1084,7 +1090,7 @@ if (said(1, NULLMSG, 7639, 0)){} [ DS:1DD7
             "\x10\x77\xB5\x32\xE4\x50\x57\xE8\x20\xEF\x83\xC4\x02\x59\x8B\x7C"
             "\x0C\xEB\x02\x8B\x3D\xE2\xFC\x80\x7D\x0A\x01\x74\x04\x8B\x3E\x26"
             "\x1D\x81\x7E\xFE\x01\x03\x0F\x84\x17\xED\xE9\x74\xED"
-            [ ClearMouseClickStatus
+            [ MenuInitPatch
             "\x33\xC0\xA3\x29\x15\xA3\x35\x15\x80\x3E\xBF\x15\x01\x74\x07\x8B"
             "\x36\x24\x1D\xE9\xCD\xEC\x80\x3E\xB9\x1D\x08\x73\xF2\xA0\xB8\x1D"
             "\x32\xE4\xD1\xE8\x80\x3E\xC6\x15\x01\x74\x04\xD1\xE8\xEB\x01\x48"
@@ -2961,6 +2967,7 @@ if (said(97, 207, 52837)){} [ CE65
 [ player's inventory. Any other value will return the number of items that
 [ are currently assigned to that room. 
 [
+[ PATCH CODE:
 #message 208 "\xAD\x46\x33\xDB\x8A\xD8\x8A\x47\x09\x8B\xD0\x8B\x1E\x69\x09\x33"
             "\xC9\x80\xFA\x01\x72\x07\x3A\x57\x02\x74\x02\xEB\x01\x41\x43\x43"
             "\x43\x3B\x1E\x6B\x09\x72\xEA\x33\xDB\x8A\xDE\x88\x4F\x09\x8B\xC6"

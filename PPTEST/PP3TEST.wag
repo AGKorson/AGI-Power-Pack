@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PP3T
    Interpreter = 3.002086
-   LastEdit = "10/22/2023 4:10:19 PM"
+   LastEdit = "11/10/2023 11:21:54 AM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -210,40 +210,40 @@
 [Logic101]
    ID = lgc.mod3002086
    Description = ""
-   CRC32 = &H88BFBF34
-   CompCRC32 = &H88BFBF34
+   CRC32 = &HCB3E3751
+   CompCRC32 = &HCB3E3751
    IsRoom = False
    Size = 22529
 
 [Logic102]
    ID = lgc.mod3002098
    Description = ""
-   CRC32 = &HAADFC3A9
-   CompCRC32 = &HAADFC3A9
+   CRC32 = &HAAB3F258
+   CompCRC32 = &HAAB3F258
    IsRoom = False
    Size = 22569
 
 [Logic103]
    ID = lgc.mod3002102
    Description = ""
-   CRC32 = &HEFA8E72B
-   CompCRC32 = &HEFA8E72B
+   CRC32 = &H82F4FD85
+   CompCRC32 = &H82F4FD85
    IsRoom = False
    Size = 22575
 
 [Logic104]
    ID = lgc.mod3002107
    Description = ""
-   CRC32 = &H65B90FBA
-   CompCRC32 = &H65B90FBA
+   CRC32 = &H25EDD9B3
+   CompCRC32 = &H25EDD9B3
    IsRoom = False
    Size = 22575
 
 [Logic105]
    ID = lgc.mod3002149
    Description = ""
-   CRC32 = &H788247D3
-   CompCRC32 = &H788247D3
+   CRC32 = &HBD7E144F
+   CompCRC32 = &HBD7E144F
    IsRoom = False
    Size = 22564
 
