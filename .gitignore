@@ -2,18 +2,12 @@
 agi.exe
 *.exe
 *.com
+*.bat
 *.ovl
-logdir.old
-picdir.old
-snddir.old
-viewdir.old
-vol*.old
+*.old
 new_vol.*
-errlog.txt
 hgc_font
 logfile
-*.old
-*.bat
 *.sublime-project
 *.sublime-workspace
 *.agl
@@ -24,16 +18,10 @@ logfile
 *.bmp
 *.png
 agi
-fm.dat
 *_OLD.*
 LOGIC.*
-layout_errors.txt
 *.ass
 *.zip
-PPDemo/WORDS.TOK.EXTENDED
-AGI Powerpack Mods.xlsx
-AGI Powerpack Mods msgmove.xlsx
-PPDemo/PPDEMO.CFG
-PPDemo/support/**
 *.bak
 *.cfg
+PPDemo/support/**
