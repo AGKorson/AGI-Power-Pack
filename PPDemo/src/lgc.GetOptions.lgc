@@ -1,6 +1,14 @@
 [ ********************************************************************
 [ 
 [ lgc.GetOptions
+[
+[ Use this logic to retrieve game settings from the PPDEMO.CFG file
+[ at game initialization and during game restores, or from saved 
+[ string values during game restart.
+[
+[ During initial game load, if no configuration file is found, a
+[ default file is created and the game assumes it is being run for
+[ the first time.
 [ 
 [ ********************************************************************
 
