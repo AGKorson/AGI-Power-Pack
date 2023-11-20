@@ -204,7 +204,7 @@ if (newRoom) {
   stop.cycling(backpane);
   ignore.blocks(backpane);
   ignore.objs(backpane);
-  set.priority(backpane, 4);
+  set.priority(backpane, 14);
   animate.obj(frontpane);
   set.view(frontpane, vw.LobbyArt);
   set.loop(frontpane, 1);
@@ -446,18 +446,18 @@ if (newRoom) {
     set.loop(ego, 3);
     set(frontdooropen);
     set.cel(backpane, 12);
-    position(backpane, 124, 162);
+    position(backpane, 125, 162);
     ignore.objs(backpane);
     set.cel(frontpane, 12);
-    position(frontpane, 127, 160);
+    position(frontpane, 124, 162);
   } else {
     position(ego, 87, 97);
     reset(frontdooropen);
     set.cel(backpane, 0);
-    position(backpane, 112, 162);
+    position(backpane, 113, 162);
     observe.objs(backpane);
     set.cel(frontpane, 0);
-    position(frontpane, 113, 160);
+    position(frontpane, 112, 162);
   }
   egoDir = STOPPED;
   [ add ego to the room
@@ -2010,10 +2010,10 @@ if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
     set(frontdooropen);
     start.cycling(backpane);
     normal.cycle(backpane);
-    move.obj(backpane, 124, 162, 1, fPaneDone);
+    move.obj(backpane, 125, 162, 1, fPaneDone);
     start.cycling(frontpane);
     normal.cycle(frontpane);
-    move.obj(frontpane, 127, 160, 1, fPaneDone);
+    move.obj(frontpane, 124, 162, 1, fPaneDone);
     [ play door-open sound, use current sound settings
     call(lgc.SetSound);
     sound(s.DoorOpen, soundDone);
@@ -2025,10 +2025,10 @@ if ((posn(ego, 105, 157, 127, 167) || fPatientAtDoor)) {
     reset(frontdooropen);
     start.cycling(backpane);
     reverse.cycle(backpane);
-    move.obj(backpane, 112, 162, 1, fPaneDone);
+    move.obj(backpane, 113, 162, 1, fPaneDone);
     start.cycling(frontpane);
     reverse.cycle(frontpane);
-    move.obj(frontpane, 115, 160, 1, fPaneDone);
+    move.obj(frontpane, 112, 162, 1, fPaneDone);
     [ play door-open sound, use current sound settings
     call(lgc.SetSound);
     sound(s.DoorClose, soundDone);

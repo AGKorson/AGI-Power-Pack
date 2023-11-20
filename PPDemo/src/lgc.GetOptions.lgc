@@ -137,7 +137,7 @@ if (gameRestarted) {
       [ invalid; use defaults
       set(soundOn);
       musicmode = FM_SOUND;
-      set.key(FM_MODE, 0, SET.SNDMODE);
+      set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     } else {
       if (work1 > 99) {
         set(soundOn);
@@ -242,27 +242,27 @@ if (gameRestarted) {
     block(STR.LEN, &custInst0, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 22) {
       [ use default
-      custInst0 = m4;
+      custInst0 = "22215909FFFF030F020000";
     }
     block(STR.LEN, &custInst1, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 22) {
       [ use default
-      custInst1 = m4;
+      custInst1 = "22215909FFFF030F020000";
     }
     block(STR.LEN, &custInst2, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 22) {
       [ use default
-      custInst2 = m4;
+      custInst2 = "22215909FFFF030F020000";
     }
     block(STR.LEN, &custInst3, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 22) {
       [ use default
-      custInst3 = m4;
+      custInst3 = "2F200000FFFF0F0F00030E";
     }
     block(STR.LEN, &custInst4, &work1, 0); [ str.len(sINPUT, vRESULT)
     if (work1 != 22) {
       [ use default
-      custInst4 = m4;
+      custInst4 = "22242100C0C00C0C000000";
     }
     [ load appropriate instruments
     if (4channelsound) {
@@ -298,7 +298,7 @@ if (gameRestarted) {
   } else {
     [ reset v18
     errorParameter = 0;
-    [ if no file found, use defaults
+    [ no file found, use defaults
     :defaultfile
     [ default instruments for 4-channel sound (midi defaults are 0)
     FMInst0 = 128;
@@ -330,39 +330,30 @@ if (gameRestarted) {
   
     [ don't skip intro
     reset(skipIntro);
+    
     [ save a default config file
     filename = "ppdemo.cfg";
     [ clear a temp string
     tmpString0 = "                                       ";
-    [ save default sound/clock/speed/intro settings
+    [ add default sound/clock/speed/intro settings
     tmpString0 = "1100000060";
     work1 = &tmpString0;
     block(NEW.FILE, &filename, &work1, &work1); [ new.file(sFILENAME, vSTART, vEND)
-    [ save default instrument indices
+    [ add default instrument indices
     tmpString0 = "128128128129130000000000";
     work1 = 1;
     work2 = &tmpString0;
     block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
 
-    [ save default custom FM instruments
+    [ add default custom FM instruments
     work1 = 2;
-    tmpString0 = "                        ";
-    tmpString0 = m4;
-    work2 = &tmpString0;
+    work2 = &custInst0;
     :nextinst1
-    block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
-    ++work1;
+      block(SAVE.STRING, &filename, &work1, &work2); [ save.string(sFILENAME, vINDEX, vSTROUT)
+      ++work1;
+      ++work2;
     if (work1 < 7) {
       goto(nextinst1);
-    }
-    [ save defaults in s18-s22 so they can be copied to logic0 messages
-    work1 = 18;
-    work2 = 4;
-    :nextinst2
-    block(SET.STRING.V, &work1, &work2, 0); [ set.string.v(vSTR, vMSG)
-    ++work1;
-    if (work1 < 23) {
-      goto(nextinst2);
     }
     
     if (currentRoom == 0) {
@@ -377,3 +368,6 @@ return();
 [ **************************************
 [ DECLARED MESSAGES
 [ **************************************
+#message 4 "22215909FFFF030F020000"
+#message 5 "2F200000FFFF0F0F00030E"
+#message 6 "22242100C0C00C0C000000"

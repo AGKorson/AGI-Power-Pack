@@ -58,22 +58,22 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &HA07AC8EA
-   CompCRC32 = &HA07AC8EA
+   CRC32 = &HBB6016A2
+   CompCRC32 = &HBB6016A2
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H9E43C00
-   CompCRC32 = &H9E43C00
+   CRC32 = &HF9FE715E
+   CompCRC32 = &HF9FE715E
    IsRoom = True
 
 [Logic4]
    ID = rm.Hallway
    Description = "One door is bathroom; it is always occupied. Another door is the examination room; it will open, but nurse will immediately slam it shut. Closet at end of hall can be opened/entered."
-   CRC32 = &H9F829D6
-   CompCRC32 = &H9F829D6
+   CRC32 = &H7FAC1AAB
+   CompCRC32 = &H7FAC1AAB
    IsRoom = True
 
 [Logic5]
@@ -310,8 +310,8 @@
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &H3368E125
-   CompCRC32 = &H3368E125
+   CRC32 = &HBA85FA54
+   CompCRC32 = &HBA85FA54
    IsRoom = False
 
 [Logic52]
@@ -513,8 +513,8 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &HBBBA5AFD
-   CompCRC32 = &HBBBA5AFD
+   CRC32 = &H29D21284
+   CompCRC32 = &H29D21284
    IsRoom = False
 [::END Logics::]
 

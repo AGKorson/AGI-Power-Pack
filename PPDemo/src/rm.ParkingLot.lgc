@@ -451,7 +451,7 @@ if (work1 > 102 && work1 < 121 && work2 > 141 && work2 < 145) {
 [ check for random patient arriving or leaving
 if (patientTimer == 0) {
   [ reset the timer
-  random(80, 250, patientTimer);
+  random(160, 250, patientTimer);
   if (patientHere) {
     [ time for patient to leave
     position(oPatient, 55, 117);

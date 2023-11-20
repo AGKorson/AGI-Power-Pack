@@ -147,7 +147,7 @@ egoCycleTime = 1;
 maxScore = MAX_SCORE_VALUE;
 
 [ set palette to AGI default
-palette = m3;
+palette = m1;
 
 [ select ego and parked car models
 
@@ -218,9 +218,4 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 ">"
-#message 2 cursor
-#message 3 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
-#message 4 "22215909FFFF030F020000"
-#message 5 "2F200000FFFF0F0F00030E"
-#message 6 "22242100C0C00C0C000000"
+#message 1 "00000000002A002A00002A2A2A00002A002A2A15002A2A2A15151515153F153F15153F3F3F15153F153F3F3F153F3F3F"
