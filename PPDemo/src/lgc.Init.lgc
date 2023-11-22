@@ -35,9 +35,10 @@
 [ MAIN CODE BLOCK 
 [***************************************
 
-[ for testing, start with DEBUG enabled
-set(debugging);
-set(enableTrace);
+[ for testing, start with DEBUG enabled; for final release,
+[ leave DEBUG disabled at start
+[set(debugging);
+[set(enableTrace);
 
 [ check for a game restart
 if (gameRestarted) {

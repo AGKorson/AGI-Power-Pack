@@ -201,6 +201,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     print("A dimly lit stairway leads down from the secret room to a "
           "small foyer. The stairwell is illuminated by a couple of "
           "overhead lights.");
+    print("A keypad is on the wall next to the door.");
     if (!resetMOCC) {
       print("The lower light flickers a lot, as if there is something "
             "not quite right with the electrical circuit.");

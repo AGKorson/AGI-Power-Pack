@@ -561,17 +561,35 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     print("This store room is stuffed with items that look like they "
           "were used as inspiration for many Sierra AGI games.");
   }
-  
-  if ((said("look", "pillow") || said("look", "in", "coffin"))) {
+  if (said("look", "coffin")) {
+    goto(lookcoffin);
+  }
+  if (said("look", "in", "coffin")) {
+    [ on wrong side (lid is always closed)
+    if (posn(ego, 28, 141, 54, 149)) {
+      print("The lid is closed.");
+    } else {
+      [ is ego close enough?
+      if (posn(ego, 24, 156, 54, 161)) {
+        if (vCoffinState == OPEN) {
+          goto(lookcoffin);
+        } else {
+          print("The lid is closed.");
+        }
+      } else {
+        print("Move closer.");
+      }
+    }
+  }
+  if (said("look", "pillow")) {
     [ only if coffin is open
     if (vCoffinState == OPEN) {
       print("You lean over the coffin to get a closer look at the pillow.");
       goto(lookpillow);
     } else {
-      print("There's no pillow here.");
+      print("What pillow?");
     }
   }
-  
   if (said("open", "coffin")) {
     if ((vCoffinState == OPEN || vCoffinState == OPENING)) {
       print("It's already open.");
@@ -751,8 +769,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         }
       } else {
         [ is ego by bureau?
-        if ((obj.in.box(ego, 107, 122, 117, 129) || 
-             obj.in.box(ego, 108, 130, 120, 138))) {
+        if ((obj.in.box(ego, 102, 122, 119, 129) || 
+             obj.in.box(ego, 104, 130, 121, 139))) {
           if (storeBureauDrStatus == OPEN) {
             print("It's already open.");
           } else {
@@ -782,8 +800,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         }
       } else {
         [ is ego by bureau?
-        if ((obj.in.box(ego, 107, 122, 117, 129) || 
-             obj.in.box(ego, 108, 130, 120, 138))) {
+        if ((obj.in.box(ego, 102, 122, 119, 129) || 
+             obj.in.box(ego, 104, 130, 121, 139))) {
           if (storeBureauDrStatus == OPEN) {
             goto(closebureaudrawer);
           } else {
@@ -821,8 +839,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         }
       } else {
         [ is ego by bureau?
-        if ((obj.in.box(ego, 107, 122, 117, 129) || 
-             obj.in.box(ego, 108, 130, 120, 138))) {
+        if ((obj.in.box(ego, 102, 122, 119, 129) || 
+             obj.in.box(ego, 104, 130, 121, 139))) {
           if (storeBureauDrStatus == OPEN) {
             print("This drawer is empty.");
           } else {
@@ -835,7 +853,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("look", "file cabinet")) {
-    print("There are several old filing cabinets pushed against "
+    print("There are several old file cabinets pushed against "
           "the back wall.");
   }
   if (said("open", "file cabinet", "drawer")) {
@@ -1097,8 +1115,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("open", "bureau", "drawer")) {
     [ is ego by bureau?
-    if ((obj.in.box(ego, 107, 122, 117, 129) || 
-         obj.in.box(ego, 108, 130, 120, 138))) {
+    if ((obj.in.box(ego, 102, 122, 119, 129) || 
+         obj.in.box(ego, 104, 130, 121, 139))) {
       if (storeBureauDrStatus == OPEN) {
         print("It's already open.");
       } else {
@@ -1110,8 +1128,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("close", "bureau", "drawer")) {
     [ is ego by bureau?
-    if ((obj.in.box(ego, 107, 122, 117, 129) || 
-         obj.in.box(ego, 108, 130, 120, 138))) {
+    if ((obj.in.box(ego, 102, 122, 119, 129) || 
+         obj.in.box(ego, 104, 130, 121, 139))) {
       if (storeBureauDrStatus == OPEN) {
         goto(closebureaudrawer);
       } else {
@@ -1123,8 +1141,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("climb", "bureau")) {
     [ is ego by bureau?
-    if ((obj.in.box(ego, 107, 122, 117, 129) || 
-         obj.in.box(ego, 108, 130, 120, 138))) {
+    if ((obj.in.box(ego, 102, 122, 119, 129) || 
+         obj.in.box(ego, 104, 130, 121, 139))) {
       print("There is no reason for you to climb the bureau.");
     } else {
       print("Move closer.");
@@ -1132,8 +1150,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if ((said("look", "bureau", "drawer") || said("look", "in", "bureau", "drawer"))) {
     [ is ego by bureau?
-    if ((obj.in.box(ego, 107, 122, 117, 129) || 
-         obj.in.box(ego, 108, 130, 120, 138))) {
+    if ((obj.in.box(ego, 102, 122, 119, 129) || 
+         obj.in.box(ego, 104, 130, 121, 139))) {
       print("This drawer is empty.");
     } else {
       print("Move closer.");
@@ -1249,6 +1267,23 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("look", "cabinet")) {
     print("This cabinet is of the same style as furniture found in "
           "King's Quest III.");
+  }
+  if (said("look", "in", "cabinet")) {
+    [ is ego close to cabinet?
+    if ((posn(ego, 120, 146, 132, 150) || posn(ego, 122, 151, 131, 156))) {
+      if (vDoorState == OPEN) {
+        [ if door is open, ego is close enough
+        if (has("music sheet")) {
+          print("The cabinet is empty.");
+        } else {
+          print("A piece of sheet music is in this cabinet.");
+        }
+      } else {
+        print("You can't, it's closed.");
+      }
+    } else {
+      print("Move closer.");
+    }
   }
   if ((said("open", "cabinet") || said("open", "cabinet", "door"))) {
     if (vDoorState == OPEN) {
@@ -1366,9 +1401,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("look", "in", "chest")) {
     if (storeChestStatus == OPEN) {
-      goto(closechest);
+      goto(lookchest);
     } else {
-      print("It's closed.");
+      print("You can't, it's closed.");
     }
   }
   if (said("move", "chest")) {
@@ -1637,7 +1672,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     [ file cabinets
     if (mouseX > 68 && mouseX < 93 && mouseY > 79 && mouseY < 115) {
-      print("There are several old filing cabinets pushed against "
+      print("There are several old file cabinets pushed against "
             "the back wall.");
       goto(doneclick);
     }
@@ -1790,6 +1825,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (fCheckClick) {
       reset(fCheckClick);
+      :lookcoffin
       if (vCoffinState == OPEN) {
         print("The coffin is empty except for a silk pillow and a padded "
               "lining. It actually looks quite comfortable.");

@@ -65,13 +65,14 @@ if (newRoom) {
   draw.pic(currentRoom);
   discard.pic(currentRoom);
 
-  [ the horizon defines the upper limit of ego's movement
+  [ set horizon at top so it doesn't interfere with dial numbers
   set.horizon(1);
   
   [ no ego, and no input (mouse only)
   set(disableGameFunctions);
   prevent.input();
   lastChar = 0;
+  egoDir = 0;
   
   [ no statusbar
   status.line.off();
@@ -240,6 +241,9 @@ if (newRoom) {
   goto(updatenow);
 }
 
+[***************************************
+[ NON-INPUT CODE 
+[***************************************
 if (fOpening) {
   if (!openSafe) {
     ++handleCel;
@@ -303,6 +307,39 @@ if (fOpening) {
 }
 
 [***************************************
+[ PROCESS PLAYER INPUT
+[***************************************
+
+[ in this room, only non-mouse input allowed are ego direction
+[ keys (to spin dial left/right), and ENTER key to try the handle
+
+if (lastChar == 13) {
+  [ same as clicking on handle
+  goto(clickhandle);
+}
+
+if (egoDir == LEFT) {
+  [ spin once to left
+  set(spinLeft);
+  reset(spinRight);
+  egoDir = 0;
+  spinCount = 0;
+  goto(checkspin);
+} else {
+  if (egoDir == RIGHT) {
+    set(spinRight);
+    reset(spinLeft);
+    egoDir = 0;
+    spinCount = 0;
+    goto(checkspin);
+  } else {
+    egoDir = 0;
+    reset(spinLeft);
+    reset(spinRight);
+  }
+}
+
+[***************************************
 [ MOUSE INPUT
 [***************************************
 if (controller(cLeftClick)) {
@@ -312,6 +349,7 @@ if (controller(cLeftClick)) {
   
   [ check for handle click
   if (work1 == 7) {
+    :clickhandle
     [ check for correct combo
     if (comboNum1 == 36 && comboNum2 == 8 && comboRev2 == 1 &&
         comboNum3 == 14) {
@@ -414,6 +452,7 @@ if (mouseBtn == 1) {
   }
 }
 
+:checkspin
 [ spinning left
 if (spinLeft) {
   [ if setting num1, switch to num2
@@ -1162,9 +1201,10 @@ if (newRoom) {
   block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   return();
 }
+
 [ ESC or right-click to cancel;
 [ correct combo to open
-if ((openSafe || lastChar == 27 || controller(cRightClick))) {
+if ((openSafe || controller(cMenu) || controller(cRightClick))) {
   :exit
   [ save current dial position
   comboNumber = currentNum;

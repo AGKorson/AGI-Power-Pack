@@ -1027,7 +1027,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("open", "door")) {
     print("The door opens automatically when you approach it.");
   } 
-  if (said("lock", "car")) {
+  if ((said("lock", "car") || said("lock", "car", "door"))) {
     [ if already locked
     if (carLocked) {
       print("It's already locked.");
@@ -1040,7 +1040,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       call(lgc.ScoreHandler);
     }
   }
-  if (said("unlock", "car")) {
+  if ((said("unlock", "car") || said("unlock", "car", "door"))) {
     if (carLocked) {
       print("Using your keyfob, you unlock your car door.");
       reset(carLocked);

@@ -68,6 +68,10 @@ block(FADE.IN, BYNUM, 5, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
 [ main input loop; wait until a key is pressed
 [ (mouse-clicks are converted to return/escape 
 [ by the have.key command)
+[ CAN'T USE THE EGO DIRECTION KEYS!
+[ since main loop is skipped while displaying the 
+[ magazine pages, egoDir keys never get processed
+
 :waitforit
   lastChar = 0;
 if (!have.key()) {
@@ -136,6 +140,7 @@ if (mouseBtn == 1) {
     if (pageNum > 1) {
       [ add text/images for current page
       if (pageNum == 2) {
+        set.text.attribute(BLACK, WHITE);
         display( 3,  9, "      Table of Contents:");
         set.text.attribute(BLUE, WHITE);
         display( 6,  9, "  Sierra's Newest Games     3");

@@ -10,7 +10,7 @@
 [ player), but no tape in it. On the wall is a picture; behind it is a
 [ safe (clue on password list should lead ego to look behind picture).
 [ In the safe, there is a manual with password to the BaDASS. In a
-[ filing cabinet there is a box of floppy disks. Ego needs to take one
+[ file cabinet there is a box of floppy disks. Ego needs to take one
 [ in order to copy the PP source files from the terminal. There is
 [ also a notebook with a coded password to the mouse cursor panel.
 [ There is a rug in the room; underneath it is a folder that has a
@@ -501,7 +501,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   
   if (said("look", "file cabinet")) {
-    print("A large 3-drawer filing cabinet is in the corner.");
+    print("A large 3-drawer file cabinet is in the corner.");
   }
   if (said("look", "in", "file cabinet")) {
     print("The file cabinet has three drawers that you can look at more closely if you want.");
@@ -588,7 +588,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       } else {
         print("Move closer.");
       }
-    }      
+    }
   }
   if ((said("look", "desk", "drawer") || 
        said("look", "in", "desk", "drawer"))) {
@@ -731,7 +731,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     [ close to file cabinet?
     if (obj.in.box(ego, 82, 129, 105, 133)) {
       if (officeFileDrStatus == CLOSED) {
-        goto(openfiletop);
+        goto(openfilemid);
       } else {
         print("It's not safe to open more than one drawer at a time.");
       }
@@ -794,7 +794,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     [ close to desk?
     if (obj.in.box(ego, 74, 131, 101, 136)) {
       if (officeDskDrStatus == CLOSED) {
-        goto(opendesktop);
+        goto(opendeskbtm);
       } else {
         if (officeDskDrStatus == OPEN2) {
           print("It's already open.");
@@ -1313,9 +1313,9 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if ((said("move", "painting") || said("open", "painting"))) {
     if (paintingStatus == OPEN) {
-      goto(openpainting);
-    } else {
       print("The painting is already moved away from the wall.");
+    } else {
+      goto(openpainting);
     }
   }
   if (said("close", "painting")) {
@@ -1582,7 +1582,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ file cabinet
     if (mouseX > 87 && mouseX < 102 && mouseY > 95 && mouseY < 130) {
-      print("A large 3-drawer filing cabinet is in the corner.");
+      print("A large 3-drawer file cabinet is in the corner.");
       goto(doneclick);
     }
     

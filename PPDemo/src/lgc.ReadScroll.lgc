@@ -89,7 +89,7 @@ display(10, 14, "toe in the mortar");
 display(10, 38, "Power most dear to my heart.");
 display(11, 9, "II. Grind the mistle-");
 display(11, 38, "Take me now from this place");
-display(12, 14, "the mixture");
+display(12, 14, "toe mixture");
 display(12, 42, "hither,");
 display(13, 10, "IV. Kiss the stone");
 display(13, 38, "To another place far thither!");

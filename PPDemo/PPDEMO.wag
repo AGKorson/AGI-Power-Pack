@@ -58,8 +58,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &HBB6016A2
-   CompCRC32 = &HBB6016A2
+   CRC32 = &H1ED1068E
+   CompCRC32 = &H1ED1068E
    IsRoom = True
 
 [Logic3]
@@ -93,8 +93,8 @@
 [Logic7]
    ID = rm.Stairway
    Description = "At the bottom of the stairs is a locked door. Behind the door is the control room for the fabled AGI Power Pack development project."
-   CRC32 = &HFA5DBE5B
-   CompCRC32 = &HFA5DBE5B
+   CRC32 = &HCE8254DC
+   CompCRC32 = &HCE8254DC
    IsRoom = True
 
 [Logic8]
@@ -107,15 +107,15 @@
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &HEE0DF30B
-   CompCRC32 = &HEE0DF30B
+   CRC32 = &HA3872A92
+   CompCRC32 = &HA3872A92
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "Room is filled with things from various Sierra AGI games. Clues are hidden through out that Drew will need to gain access to the main console and the power point functions."
-   CRC32 = &H2DC64957
-   CompCRC32 = &H2DC64957
+   CRC32 = &H5DC8065C
+   CompCRC32 = &H5DC8065C
    IsRoom = True
 
 [Logic11]
@@ -177,15 +177,15 @@
 [Logic19]
    ID = rm.SafeDoor
    Description = "Close up of the safe door that's hidden behind the picture in the Power Pack operator's office."
-   CRC32 = &H7E519371
-   CompCRC32 = &H7E519371
+   CRC32 = &HE9047158
+   CompCRC32 = &HE9047158
    IsRoom = True
 
 [Logic20]
    ID = lgc.ReadScroll
    Description = "Displays the scroll in response to a 'read scroll' input."
-   CRC32 = &H7D7A8438
-   CompCRC32 = &H7D7A8438
+   CRC32 = &HFC3EAC78
+   CompCRC32 = &HFC3EAC78
    IsRoom = False
 
 [Logic21]
@@ -198,8 +198,8 @@
 [Logic22]
    ID = lgc.ReadMagazine
    Description = "Displays the magazine in response to a 'read magazine' input."
-   CRC32 = &H771D5D6B
-   CompCRC32 = &H771D5D6B
+   CRC32 = &H3C87A64E
+   CompCRC32 = &H3C87A64E
    IsRoom = False
 
 [Logic23]
@@ -310,8 +310,8 @@
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &HBA85FA54
-   CompCRC32 = &HBA85FA54
+   CRC32 = &HC569E11C
+   CompCRC32 = &HC569E11C
    IsRoom = False
 
 [Logic52]
@@ -513,8 +513,8 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H29D21284
-   CompCRC32 = &H29D21284
+   CRC32 = &H308CCC27
+   CompCRC32 = &H308CCC27
    IsRoom = False
 [::END Logics::]
 
