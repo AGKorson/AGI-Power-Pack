@@ -85,6 +85,7 @@
 #define egoDying       f229
 #define playCarSound   f230
 #define doneCarSound   f231
+#define doneEgoCarSnd  f232
 
 #define theDay          s12
 #define weekendMsg      s13
@@ -314,24 +315,24 @@ if (egoCarSeq) {
     work1 = 0;
     work2 = CAR_INSTRUMENT;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-    sound(s.Car, soundDone);
+    sound(s.Car, doneEgoCarSnd);
   }
-  if (egoCarSeq == EC_PARKING && soundDone) {
+  if (egoCarSeq == EC_PARKING && doneEgoCarSnd) {
     [ continue playing engine sound until final position reached
     [ (sound parameters are already set, so just play the sound)
-    sound(s.Car, soundDone);
+    sound(s.Car, doneEgoCarSnd);
   }
   if (egoCarSeq == EC_PARKING && carDone) {
     [ stop car, play engine shutdown sound
     [ (sound parameters are already set, so just play the sound)
     reset(carDone);
-    sound(s.CarStop, soundDone);
+    sound(s.CarStop, doneEgoCarSnd);
     stop.cycling(egoCar);
     egoCarSeq = EC_PARKED;
   }
-  if (egoCarSeq == EC_PARKED && soundDone) {
+  if (egoCarSeq == EC_PARKED && doneEgoCarSnd) {
     [ ego gets out
-    reset(soundDone);
+    reset(doneEgoCarSnd);
     egoCarSeq = EC_IDLE;
     position(ego, 50, 139);
     draw(ego);

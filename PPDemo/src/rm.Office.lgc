@@ -1338,7 +1338,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       if (safeStatus == OPEN) {
         if (obj.in.box(ego, 38, 126, 65, 132)) {
           if (!has("BaDASS manual")) {
-            print("The safe contains a thin paper back binder.");
+            print("In the safe you see what looks like an old computer manual.");
           } else {
             print("The safe is empty.");
           }

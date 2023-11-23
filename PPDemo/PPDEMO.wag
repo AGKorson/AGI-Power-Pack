@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/10/2023 11:22:22 AM"
+   LastEdit = "11/23/2023 8:19:09 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.2"
@@ -58,15 +58,15 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &H1ED1068E
-   CompCRC32 = &H1ED1068E
+   CRC32 = &HB4EA11C1
+   CompCRC32 = &HB4EA11C1
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &HF9FE715E
-   CompCRC32 = &HF9FE715E
+   CRC32 = &HA61DC75E
+   CompCRC32 = &HA61DC75E
    IsRoom = True
 
 [Logic4]
@@ -107,15 +107,15 @@
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &HA3872A92
-   CompCRC32 = &HA3872A92
+   CRC32 = &HE1094D57
+   CompCRC32 = &HE1094D57
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "Room is filled with things from various Sierra AGI games. Clues are hidden through out that Drew will need to gain access to the main console and the power point functions."
-   CRC32 = &H5DC8065C
-   CompCRC32 = &H5DC8065C
+   CRC32 = &HC24D262D
+   CompCRC32 = &HC24D262D
    IsRoom = True
 
 [Logic11]
@@ -3354,4 +3354,7 @@
 [View43]
    ID = vw.WalkmanArt
    Description = ""
+
+[View46]
+   ID = vw.Slipping
 [::END Views::]

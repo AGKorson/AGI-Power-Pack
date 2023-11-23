@@ -2050,9 +2050,9 @@ if (fPaneDone) {
 [ check for a slip
 if (egoHitSpecial && !fTripping) {
   set(fTripping);
-  load.view(vw.Tripping);
+  load.view(vw.Slipping);
   if (egoY > 150) {
-    set.view(ego, vw.Tripping);
+    set.view(ego, vw.Slipping);
     set.loop(ego, 0);
     fix.loop(ego);
     work1 = 150;
@@ -2068,7 +2068,7 @@ if (egoHitSpecial && !fTripping) {
 if (fFalling) {
   reset(fFalling);
   erase(ego);
-  discard.view(vw.Tripping); 
+  discard.view(vw.Slipping); 
   load.view(vw.EgoSlip);
   set.view(ego, vw.EgoSlip);
   set.loop(ego, 0);
@@ -2734,7 +2734,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     
     [ patient 4
-    if (posn(oPatient2, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+    if (posn(oPatient4, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
       :lookpatient4
       print("With those thick glasses, you wonder if this guy is here for an eye exam.");
       goto(doneclick);
@@ -2897,63 +2897,60 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
     }
     if (posn(oPatient2, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
-      [ determine which patient
-      current.view(oPatient2, work1);
-      if (work1 == vw.Patient2) {
-        :talkpatient2
-        distance(ego, oPatient2, work1);
-        if (work1 < 40) {
-          block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
-          current.loop(oPatient2, work1);
-          [ 0-3: walking OR idle
-          if ((work1 < 4 || patient2Seq == IDLE)) {
-            random(&m22, &m25, work1);
+      :talkpatient2
+      distance(ego, oPatient2, work1);
+      if (work1 < 40) {
+        block(MSGBOX.COLOR, LT_CYAN, CYAN, WHITE); [ msgbox.color(BORDER, FG, BG)
+        current.loop(oPatient2, work1);
+        [ 0-3: walking OR idle
+        if ((work1 < 4 || patient2Seq == IDLE)) {
+          random(&m22, &m25, work1);
+        } else {
+          [ 4:get up/sit down
+          if (work1 == 4) {
+            work1 = &m26;
           } else {
-            [ 4:get up/sit down
-            if (work1 == 4) {
-              work1 = &m26;
+            [ 5:talk [is this ever used??]
+            [ 6:get/stow phone
+            [ 7:using phone
+            if ((work1 == 6 || work1 == 7)) {
+              random(&m27, &m30, work1);
             } else {
-              [ 5:talk [is this ever used??]
-              [ 6:get/stow phone
-              [ 7:using phone
-              if ((work1 == 6 || work1 == 7)) {
-                random(&m27, &m30, work1);
-              } else {
-                [ 8:tap toe
-                random(&m31, &m34, work1);
-              }
+              [ 8:tap toe
+              random(&m31, &m34, work1);
             }
           }
-          print.at.v(work1, 6, 40, 35);
-          block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
-        } else {
-          print("She can't hear you from here.");
         }
+        print.at.v(work1, 6, 40, 35);
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
-        :talkpatient4
-        distance(ego, oPatient4, work1);
-        if (work1 < 40) {
-          block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
-          current.loop(oPatient4, work1);
-          [ 0-3: walking OR idle
-          if ((work1 < 4 || patient4Seq == IDLE)) {
-            random(&m35, &m38, work1);
-          } else {
-            [ 4:get up/sit down
-            if (work1 == 4) {
-              work1 = &m39;
-            } else {
-              [ 5:talk [is this ever used??]
-              [ 6:get/stow phone
-              [ 7:using phone
-              random(&m40, &m43, work1);
-            }
-          }
-          print.at.v(work1, 6, 40, 35);
-          block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+        print("She can't hear you from here.");
+      }
+    }
+    if (posn(oPatient4, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
+      :talkpatient4
+      distance(ego, oPatient4, work1);
+      if (work1 < 40) {
+        block(MSGBOX.COLOR, LT_BLUE, BLUE, WHITE); [ msgbox.color(BORDER, FG, BG)
+        current.loop(oPatient4, work1);
+        [ 0-3: walking OR idle
+        if ((work1 < 4 || patient4Seq == IDLE)) {
+          random(&m35, &m38, work1);
         } else {
-          print("He can't hear you from here.");
+          [ 4:get up/sit down
+          if (work1 == 4) {
+            work1 = &m39;
+          } else {
+            [ 5:talk [is this ever used??]
+            [ 6:get/stow phone
+            [ 7:using phone
+            random(&m40, &m43, work1);
+          }
         }
+        print.at.v(work1, 6, 40, 35);
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      } else {
+        print("He can't hear you from here.");
       }
     }
     if (posn(oPatient3, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {

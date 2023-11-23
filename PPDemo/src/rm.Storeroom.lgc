@@ -710,6 +710,18 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       print("You can't see the top of the podium from here.");
     }
   }
+  if ((said("get", "list") || said("get", "paper"))) {
+    if (has("PQ idea list")) {
+      print("You already have it.");
+    } else {
+      [ if close enough (either in front or behind podium)
+      if ((posn(ego, 58, 112, 74, 119) || posn(ego, 52, 117, 75, 125))) {
+        goto(getlist);
+      } else {
+        print("What list?");
+      }
+    }
+  }
   if (said("go", "behind", "podium")) {
     [ if behind the podium, 
     if (posn(ego, 58, 112, 74, 119)) {
@@ -1371,6 +1383,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     goto(lookchest);
   }
   if (said("get", "chest")) {
+    print("The chest is much too big for you to carry.");
   }
   if (said("open", "chest")) {
     if (storeChestStatus == CLOSED) {
@@ -1989,6 +2002,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       if (posn(ego, 58, 112, 74, 119)) {
         [ behind of podium
         if (!has("PQ idea list")) {
+          :getlist
           [ play sound if walkman not active and no chimes
           if (!playWalkman && !clockChiming) {
             call(lgc.SetSound);
@@ -2004,7 +2018,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         if (posn(ego, 52, 117, 75, 125)) {
           [ in front of podium
-          print("There is nothing you can do with front of the podium.");
+          print("There is nothing you can do with the front of the podium.");
         } else {
           print("Move closer.");
         }
