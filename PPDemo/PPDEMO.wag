@@ -8,7 +8,7 @@
    LastEdit = "11/23/2023 8:19:09 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = "Power Pack Demo v0.2"
+   GameVersion = "Power Pack Demo v0.3"
    About = "Power Pack Demo Game\n  by Andrew Korson"
    ResDir = src
    UseResNames = True
@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &HA61DC75E
-   CompCRC32 = &HA61DC75E
+   CRC32 = &H378C099B
+   CompCRC32 = &H378C099B
    IsRoom = True
 
 [Logic4]
@@ -3357,4 +3357,5 @@
 
 [View46]
    ID = vw.Slipping
+   Description = ""
 [::END Views::]

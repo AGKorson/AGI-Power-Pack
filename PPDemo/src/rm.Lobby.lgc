@@ -183,6 +183,7 @@ if (newRoom) {
   load.view(vw.ButtonsDown);
   call(lgc.InitToolbar);
   
+  [ room art
   load.view(vw.LobbyArt);
   if (obj.in.room("magazine", currentRoom)) {
     animate.obj(oMagazine);
@@ -195,7 +196,11 @@ if (newRoom) {
     draw(oMagazine);
     stop.update(oMagazine);
   } 
-    
+  
+  [ in case ego slips on  wet floor
+  load.sound(s.SlipFall);
+  load.view(vw.EgoSlip);
+  
   [ sliding glass door (two parts)
   animate.obj(backpane);
   set.view(backpane, vw.LobbyArt);
@@ -214,7 +219,7 @@ if (newRoom) {
   ignore.objs(frontpane);
   set.priority(frontpane, 15);
   
-  [ receptionist, begin on phone
+  [ receptionist
   load.view(vw.ReceptionistWalk);
   load.view(vw.ReceptionistAct);
   animate.obj(oReceptionist);
@@ -239,6 +244,8 @@ if (newRoom) {
     [ begin on phone
     set.view(oReceptionist, vw.ReceptionistAct);
     set.loop(oReceptionist, LP_R_TALKPHONE);
+    work2 = 2;
+    cycle.time(oReceptionist, work2);
     receptionistLoc = PHONE;
     receptionistSeq = IDLE;
     position(oReceptionist, 60, 96);
@@ -294,14 +301,15 @@ if (newRoom) {
   [  18  L           E  
   [  19  L               P4 EXIT
   [ 
-  [**first time ego enters lobby, patient 1 will 
+  [ *first time ego enters lobby, patient 1 will 
   [ always ask to use restroom at  1 minute mark
+  [ instead of at the 3 minute mark
   [
   [ all patients begin seated if present when
   [ room is loaded; initial actions depend on 
   [ current timer point
   tmpSec = -1;
-
+  
   [ patient 1 (always present unless still peeing)
   animate.obj(oPatient1);
   load.view(vw.Patient1); 
@@ -984,6 +992,8 @@ if (fRDone) {
   if (receptionistSeq == GETPHONE) {
     [ start talking for a random amount of time 
     set.loop(oReceptionist, LP_R_TALKPHONE);
+    work2 = 2;
+    cycle.time(oReceptionist, work2);
     normal.cycle(oReceptionist);
     receptionistSeq = IDLE;
     [ talk for 5 - 10 seconds
@@ -1051,7 +1061,9 @@ if (receptionistSeq == NEWLOCATION) {
       [ hang up before moving to next task
       receptionistSeq = HANGUP;
       set.loop(oReceptionist, LP_R_GETPHONE);
-      set.cel(oReceptionist, 6);
+      set.cel(oReceptionist, 5);
+      work2 = 1;
+      cycle.time(oReceptionist, work2);
       reverse.loop(oReceptionist, fRDone);
     } else {
       [ at desk or computer: move to next location
@@ -2051,9 +2063,9 @@ if (fPaneDone) {
 if (egoHitSpecial && !fTripping) {
   set(fTripping);
   load.view(vw.Slipping);
+  set.view(ego, vw.Slipping);
+  set.loop(ego, 0);
   if (egoY > 150) {
-    set.view(ego, vw.Slipping);
-    set.loop(ego, 0);
     fix.loop(ego);
     work1 = 150;
     work2 = 1;
@@ -2067,11 +2079,7 @@ if (egoHitSpecial && !fTripping) {
 }
 if (fFalling) {
   reset(fFalling);
-  erase(ego);
-  discard.view(vw.Slipping); 
-  load.view(vw.EgoSlip);
-  set.view(ego, vw.EgoSlip);
-  set.loop(ego, 0);
+  set.loop(ego, 1);
   set.cel(ego, 0);
   work1 = -10;
   work2 = 5;
@@ -2082,10 +2090,8 @@ if (fFalling) {
   work1 = CYCLE_AT_REST;
   set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
   stop.motion(ego);
-  draw(ego);
   
   [ play slip/fall sound
-  load.sound(s.SlipFall);
   set(4channelsound);
   set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
   [ use correct instrument
@@ -2101,7 +2107,9 @@ if (fFalling) {
 if (fSlipped) {
   reset(fSlipped);
   print("Didn't you notice that wet spot???");
-  set.loop(ego, 1);
+  set.view(ego, vw.EgoSlip);
+  discard.view(vw.Slipping); 
+  set.loop(ego, 0);
   normal.cycle(ego);
   deathType = DT_BROKE_LEG;
 }
