@@ -107,8 +107,8 @@
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &HE1094D57
-   CompCRC32 = &HE1094D57
+   CRC32 = &H8ADE95DF
+   CompCRC32 = &H8ADE95DF
    IsRoom = True
 
 [Logic10]
@@ -177,8 +177,8 @@
 [Logic19]
    ID = rm.SafeDoor
    Description = "Close up of the safe door that's hidden behind the picture in the Power Pack operator's office."
-   CRC32 = &HE9047158
-   CompCRC32 = &HE9047158
+   CRC32 = &H605E2CE2
+   CompCRC32 = &H605E2CE2
    IsRoom = True
 
 [Logic20]
@@ -254,8 +254,8 @@
 [Logic30]
    ID = lgc.TerminalFunctions
    Description = "Provides additional functions for the Terminal Control Panel logic."
-   CRC32 = &H9A2A26EC
-   CompCRC32 = &H9A2A26EC
+   CRC32 = &H4B769956
+   CompCRC32 = &H4B769956
    IsRoom = False
 
 [Logic31]
@@ -515,6 +515,13 @@
    Description = ""
    CRC32 = &H308CCC27
    CompCRC32 = &H308CCC27
+   IsRoom = False
+
+[Logic44]
+   ID = txt.SafeNote
+   Description = ""
+   CRC32 = &HE54FE767
+   CompCRC32 = &HE54FE767
    IsRoom = False
 [::END Logics::]
 

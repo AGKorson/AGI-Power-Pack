@@ -1301,12 +1301,48 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("look", "painting")) {
     goto(lookpainting);
   }
+  if ((said("look", "note", "painting") ||
+       said("look", "note", "on", "painting") ||
+       said("look", "note", "on", "back", "painting") ||
+       said("look", "painting", "note") ||
+       said("look", "back", "painting") ||
+       said("read", "note", "painting") ||
+       said("read", "note", "on", "painting") ||
+       said("read", "note", "on", "back", "painting") ||
+       said("read", "painting", "note") ||
+       said("read", "back", "painting"))) {
+    if (paintingStatus == OPEN) {
+      [ is ego close enough? 
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        call(txt.SafeNote);
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      print("How can you do that?");
+    }
+  }
+  if ((said("get", "note", "painting") ||
+       said("get", "note", "back", "painting"))) {
+    if (paintingStatus == OPEN) {
+      [ is ego close enough? 
+      if (obj.in.box(ego, 38, 126, 65, 132)) {
+        print("The note is securely taped in place. You can't "
+              "remove it.");
+      } else {
+        print("Move closer.");
+      }
+    } else {
+      print("How can you do that?");
+    }
+  }
   if (said("get", "painting")) {
     print("The painting is much to big for you to carry around.");
   }
   if (said("look", "behind", "painting")) {
     if (paintingStatus == OPEN) {
-      print("There is a wall safe behind the painting.");
+      print("There is a note taped to the back of the painting. "
+            "Behind it you see a wall safe.");
     } else {
       print("How can you, with the painting up against the wall?");
     }
@@ -1475,13 +1511,24 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ painting on wall
     if (posn(oPainting, ON.OBJ, OBJ_VISIBLE, &mouseX, &mouseY)) {
-      :lookpainting
-      if (paintingStatus == OPEN) {
-        print("The painting is hinged on the right side. "
-              "Behind it you see a wall safe.");
+      [ note on back of painting
+      if (mouseX > 61 && mouseX < 64 && mouseY > 96 && mouseY < 106 &&
+          paintingStatus == OPEN) {
+        [ clear the mouse click so the text screen doesn't
+        [ immediately return
+        set.key(CLR.CTRL, CLR.CTRL, cLeftClick); [ clear.controller(cNUM)
+        call(txt.SafeNote);
       } else {
-        print("It's a painting of a medieval tower. A very "
-              "interesting piece of artwork.");
+        [ rest of painting
+        :lookpainting
+        if (paintingStatus == OPEN) {
+            print("The painting is hinged on the right side. There "
+                  "is a note taped to the back of the painting. "
+                  "Behind it you see a wall safe.");
+        } else {
+          print("It's a painting of a medieval tower. A very "
+                "interesting piece of artwork.");
+        }
       }
       goto(doneclick);
     }   

@@ -42,6 +42,7 @@
 #define tickCounter   v229
 #define handleCel     v230
 #define viewNum       v231
+#define tryCount      v232
 
 #define setNum1       f220
 #define setNum2       f221
@@ -51,6 +52,7 @@
 #define updateCombo   f225
 #define fOpening      f226
 #define swapViews     f227
+#define tmpFlag       f228
 
 [***************************************
 [ FIRST CYCLE ONLY
@@ -418,6 +420,31 @@ if (controller(cLeftClick)) {
       sound(s.DoorOpen, soundDone);
     } else {
       print("Nothing happens. That must not be the right combination.");
+      [ if one of the post-it numbers was guessed, penalize player
+      reset(tmpFlag);
+      if (comboNum1 == 28 && comboNum2 == 32 && comboNum3 == 17) {
+        set(tmpFlag);
+      }
+      if (comboNum1 == 19 && comboNum2 == 7 && comboNum3 == 35) {
+        set(tmpFlag);
+      }
+      if (comboNum1 == 8 && comboNum2 == 22 && comboNum3 == 13) {
+        set(tmpFlag);
+      }
+      if (comboNum1 == 14 && comboNum2 == 4 && comboNum3 == 31) {
+        set(tmpFlag);
+      }
+      if (tmpFlag) {
+        ++tryCount;
+        [ one free pass
+        if (tryCount > 1) {
+          work2 = work1;
+          work1 = -3;
+          call(lgc.ScoreHandler);
+          work1 = work2;
+          print("Trying to guess the combination isn't working.");
+        }
+      }
       comboNum1 = -1;
       comboNum2 = -1;
       comboNum3 = -1;

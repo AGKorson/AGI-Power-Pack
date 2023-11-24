@@ -10,9 +10,9 @@
 [ List of valid commands:
 [ AMOS       CLS        CD         CHDIR   
 [ CHKDSK     DIR        COPY       DEL
-[ ERASE      EXIT       FORMAT     HELP
-[ LOGOFF     MD         MKDIR      RD
-[ RMDIR      REN        RENAME     SUDO
+[ ERASE      FORMAT     HELP       LOGOFF
+[ MD         MKDIR      RD         RMDIR
+[ REBOOT     REN        RENAME     SUDO
 [ TYPE       VER        VOL
 [*********************************************************************
 
@@ -598,6 +598,12 @@ if (terminalfn == SHOW_HELP) {
     output = "           commands.";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
+    output = "HELP <CMD> Display detailed help";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "           for <CMD>.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
     output = "LOGOFF     Logs a user off AMOS.";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
@@ -622,12 +628,6 @@ if (terminalfn == SHOW_HELP) {
     output = "TYPE       Displays the contents of a";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
-    output = "           text file.";
-    terminalfn = ADDLINE_LF;
-    call(lgc.TerminalFunctions);
-    output = "VER        Displays AMOS version.";
-    terminalfn = ADDLINE_LF;
-    call(lgc.TerminalFunctions);
      output = "-- pause --";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
@@ -636,6 +636,12 @@ if (terminalfn == SHOW_HELP) {
     if (!have.key()) {
       goto(wait4);
     }
+    output = "           text file.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
+    output = "VER        Displays AMOS version.";
+    terminalfn = ADDLINE_LF;
+    call(lgc.TerminalFunctions);
     output = "VOL        Displays a disk volume label";
     terminalfn = ADDLINE_LF;
     call(lgc.TerminalFunctions);
