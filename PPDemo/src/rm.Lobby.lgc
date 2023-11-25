@@ -1632,7 +1632,7 @@ if (patient3Timer != 255) {
     if (patient3Seq == USEPHONE) {
       patient3Seq = STOWPHONE;
       set.loop(oPatient3, LP_P_GETPHONE);
-      set.cel(oPatient3, 8);
+      set.cel(oPatient3, 7);
       reverse.loop(oPatient3, fP3Done);
       goto(p3SeqDone);
     }

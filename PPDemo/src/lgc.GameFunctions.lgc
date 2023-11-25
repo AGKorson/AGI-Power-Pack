@@ -371,6 +371,9 @@ if (controller(cChooseItem)) {
             block(SND.V.FN, DISCARD.SOUND.V, &currentTrack, 0); [ discard.sound.v(vSNDNUM)
             reset(noScript);
           }
+          [ show-walkman code is in 'said' parser section, so
+          [ set haveMatch to avoid 'I don't understand' comment
+          set(haveMatch);
           goto(showwalkman);
         }
       }

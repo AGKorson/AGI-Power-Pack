@@ -717,11 +717,12 @@ if (terminalfn == SHOW_HELP) {
       output = "        is started";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
-      
       output = "  open: opens a subsystem on dedicated";
       terminalfn = ADDLINE_LF;
       call(lgc.TerminalFunctions);
       output = "        monitor";
+      terminalfn = ADDLINE_LF;
+      call(lgc.TerminalFunctions);
       return();
     }
     sTemp2 = "CLS";

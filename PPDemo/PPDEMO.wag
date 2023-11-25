@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H378C099B
-   CompCRC32 = &H378C099B
+   CRC32 = &H1647E53
+   CompCRC32 = &H1647E53
    IsRoom = True
 
 [Logic4]
@@ -254,8 +254,8 @@
 [Logic30]
    ID = lgc.TerminalFunctions
    Description = "Provides additional functions for the Terminal Control Panel logic."
-   CRC32 = &H4B769956
-   CompCRC32 = &H4B769956
+   CRC32 = &H68934152
+   CompCRC32 = &H68934152
    IsRoom = False
 
 [Logic31]
@@ -303,8 +303,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &HAE48579B
-   CompCRC32 = &HAE48579B
+   CRC32 = &H790D315F
+   CompCRC32 = &H790D315F
    IsRoom = False
 
 [Logic51]
@@ -331,8 +331,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &H8CA1C436
-   CompCRC32 = &H8CA1C436
+   CRC32 = &H6411E8F4
+   CompCRC32 = &H6411E8F4
    IsRoom = False
 
 [Logic55]
