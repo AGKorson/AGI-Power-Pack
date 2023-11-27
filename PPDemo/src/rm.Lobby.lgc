@@ -737,7 +737,12 @@ if (receptionistTimer != 255) {
     
     [ if timer is up, and receptionist is not doing anything, 
     [ go to a new location
-    if ((receptionistSeq == IDLE || receptionistSeq == WAITHALL)) {
+    if (receptionistSeq == IDLE) {
+      receptionistSeq = NEWLOCATION;
+    }
+    [ in waiting in hall, only come back if ego isn't sneaking 
+    [ into hall
+    if (receptionistSeq == WAITHALL && egoY > 93) {
       receptionistSeq = NEWLOCATION;
     }
   }
@@ -1436,7 +1441,6 @@ if (patient2Timer != 255) {
   }
   if (patientClock > 5 && patientClock < 9 && patient2Loc == LOC_LOBBY) {
     [ nurse is ready for patient
-    patient2Loc = LOC_EXAM;
     patient2Seq = EXAMREADY;
     goto(p2SeqDone);
   }
@@ -1524,7 +1528,6 @@ if (fP2Done) {
   }
   if (patient2Seq == MOVEHALL2) {
     [ patient is in hallway on way to exam
-    patient2Loc = LOC_EXAM;
     patient2Seq = MOVEHALL3;
     set.loop(oPatient2, LP_MOVELEFT);
     normal.cycle(oPatient2);
@@ -1655,7 +1658,6 @@ if (patient3Timer != 255) {
   }
   if (patientClock > 11 && patientClock < 15 && patient3Loc == LOC_LOBBY) {
     [ nurse is ready for patient
-    patient3Loc = LOC_EXAM;
     patient3Seq = EXAMREADY;
     goto(p3SeqDone);
   }
@@ -1872,7 +1874,6 @@ if (patient4Timer != 255) {
   }
   if (patientClock > 15 && patientClock < 19 && patient4Loc == LOC_LOBBY) {
     [ nurse is ready for patient
-    patient4Loc = LOC_EXAM;
     patient4Seq = EXAMREADY;
     goto(p4SeqDone);
   }
@@ -3124,10 +3125,9 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
 :exit
 
 if (edgeEgoHit == TOP_EDGE) {
-  [ only if allowed past (or if receptionist is in hallway)
-  if ((allowedPastLobby || receptionistSeq == RTNHALL1 || 
-       receptionistSeq == MOVEHALL2 || receptionistSeq == MOVEHALL3 ||
-       receptionistSeq == WAITHALL)) {
+  [ only if allowed past (or if receptionist is in hallway going out)
+  if ((allowedPastLobby || receptionistSeq == MOVEHALL2 || 
+       receptionistSeq == MOVEHALL3 || receptionistSeq == WAITHALL)) {
     [ if patient 1 visited restroom, reset first visit flag
     if (fAskToPee) {
       reset(firstLobbyVisit);

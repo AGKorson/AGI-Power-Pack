@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H1647E53
-   CompCRC32 = &H1647E53
+   CRC32 = &HC7B5ABE0
+   CompCRC32 = &HC7B5ABE0
    IsRoom = True
 
 [Logic4]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &H7DF05E65
-   CompCRC32 = &H7DF05E65
+   CRC32 = &H381F21E0
+   CompCRC32 = &H381F21E0
    IsRoom = False
 
 [Logic36]
@@ -450,8 +450,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &H65FB1657
-   CompCRC32 = &H65FB1657
+   CRC32 = &HD044A4D0
+   CompCRC32 = &HD044A4D0
    IsRoom = False
 
 [Logic60]
@@ -513,8 +513,8 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H308CCC27
-   CompCRC32 = &H308CCC27
+   CRC32 = &H898E8067
+   CompCRC32 = &H898E8067
    IsRoom = False
 
 [Logic44]
