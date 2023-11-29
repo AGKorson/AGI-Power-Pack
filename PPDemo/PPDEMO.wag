@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/23/2023 8:19:09 AM"
+   LastEdit = "11/27/2023 1:57:36 AM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.3"
@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &HC7B5ABE0
-   CompCRC32 = &HC7B5ABE0
+   CRC32 = &H34801A56
+   CompCRC32 = &H34801A56
    IsRoom = True
 
 [Logic4]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &H381F21E0
-   CompCRC32 = &H381F21E0
+   CRC32 = &HF06236D3
+   CompCRC32 = &HF06236D3
    IsRoom = False
 
 [Logic36]
@@ -303,15 +303,15 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &H790D315F
-   CompCRC32 = &H790D315F
+   CRC32 = &HB03907AA
+   CompCRC32 = &HB03907AA
    IsRoom = False
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &HC569E11C
-   CompCRC32 = &HC569E11C
+   CRC32 = &HDCCE0D01
+   CompCRC32 = &HDCCE0D01
    IsRoom = False
 
 [Logic52]
@@ -450,8 +450,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &HD044A4D0
-   CompCRC32 = &HD044A4D0
+   CRC32 = &HEEB37514
+   CompCRC32 = &HEEB37514
    IsRoom = False
 
 [Logic60]
@@ -478,8 +478,8 @@
 [Logic42]
    ID = lgc.HelpText4
    Description = "Contains code to display help topic pages 13 to 17."
-   CRC32 = &HCBFA3F8C
-   CompCRC32 = &HCBFA3F8C
+   CRC32 = &H491956B8
+   CompCRC32 = &H491956B8
    IsRoom = False
 
 [Logic41]
@@ -513,8 +513,8 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H898E8067
-   CompCRC32 = &H898E8067
+   CRC32 = &H9ED6B6FE
+   CompCRC32 = &H9ED6B6FE
    IsRoom = False
 
 [Logic44]

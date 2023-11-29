@@ -106,55 +106,9 @@ if (currentRoom == 0) {
     [ confirm this is a version that can be patched
     call(lgc.Version2Check);
     [ run the patch for the detected AGI version
-    if (IntVersion == VERSION_2411) {
-      call(lgc.mod2411);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2425) {
-      call(lgc.mod2425);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2426) {
-      call(lgc.mod2426);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2435) {
-      call(lgc.mod2435);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2439) {
-      call(lgc.mod2439);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2440) {
-      call(lgc.mod2440);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2903) {
-      call(lgc.mod2903);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2911) {
-      call(lgc.mod2911);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2912) {
-      call(lgc.mod2912);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2915) {
-      call(lgc.mod2915);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2917) {
-      call(lgc.mod2917);
-      goto(continue);
-    }
-    if (IntVersion == VERSION_2936) {
-      call(lgc.mod2936);
-      goto(continue);
-    }
-    :continue
+    work1 = IntVersion;
+    work1 += 59;
+    call.v(work1);
 
     [ validate system parameters
     call(lgc.ValidateVersion);
@@ -786,38 +740,53 @@ oldDays = elapsedDays;
 [ who visit the facility
 if (elapsedMinutes != oldMinutes) {
   oldMinutes = elapsedMinutes;
-  ++patientClock;
-  [ convert game time into 20 minute timer intervals
-  if (patientClock == 20) {
-    patientClock = 0;
-  }
-  [ update patient locations 
+  
+  [ update patient locations if not in lobby
+  [ (lobby manages this separately)
   if (currentRoom != rm.Lobby) {
-    if (patientClock > 0 && patientClock < 6) {
-      patient2Loc = LOC_LOBBY;
-    } else {
-      if (patientClock > 5 && patientClock < 10) {
+    --eventMin;
+    if (eventMin == 0) {
+      [ set time to next event
+      if (patientEvent == P2_ARRIVE) {
+        patient2Loc = LOC_LOBBY;
+        eventMin = 4;
+      }
+      if (patientEvent == P3_ARRIVE) {
+        patient3Loc = LOC_LOBBY;
+        eventMin = 1;
+      }
+      if (patientEvent == P2_EXAM) {
         patient2Loc = LOC_EXAM;
-      } else {
+        eventMin = 3;
+      }
+      if (patientEvent == P2_EXIT) {
         patient2Loc = LOC_GONE;
+        eventMin = 2;
       }
-    }
-    if (patientClock > 4 && patientClock < 12) {
-      patient3Loc = LOC_LOBBY;
-    } else {
-      if (patientClock > 11 && patientClock < 15) {
+      if (patientEvent == P4_ARRIVE) {
+        patient4Loc = LOC_LOBBY;
+        eventMin = 1;
+      }
+      if (patientEvent == P3_EXAM) {
         patient3Loc = LOC_EXAM;
-      } else {
-        patient3Loc = LOC_GONE;
+        eventMin = 3;
       }
-    }
-    if (patientClock > 10 && patientClock < 16) {
-      patient4Loc = LOC_LOBBY;
-    } else {
-      if (patientClock > 15 && patientClock < 19) {
+      if (patientEvent == P3_EXIT) {
+        patient3Loc = LOC_GONE;
+        eventMin = 1;
+      }
+      if (patientEvent == P4_EXAM) {
         patient4Loc = LOC_EXAM;
-      } else {
+        eventMin = 3;
+      }
+      if (patientEvent == P4_EXIT) {
         patient4Loc = LOC_GONE;
+        eventMin = 2;
+      }
+      [ move to next event
+      ++patientEvent;
+      if (patientEvent == 9) {
+        patientEvent = 0;
       }
     }
   }

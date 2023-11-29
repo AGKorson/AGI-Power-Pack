@@ -116,7 +116,7 @@ if (selectedTopic == 15) {
   display(5, 23, "Click on a button to select a function. Right-double-");
   display(6, 23, "click to cycle options. Available functions include:");
   display(8, 23, "DEFAULT: The mouse has no in-game function.");
-  display(10, 23, "QUIT/SAVE/RESTORE/RESTART: These don't chage the mouse");
+  display(10, 23, "QUIT/SAVE/RESTORE/RESTART: These don't change the mouse");
   display(11, 23, "function, they run the selected command. If ego dies,");
   display(12, 23, "the SAVE button is replaced with the RESTART button.");
   display(14, 23, "WALK: Enables 'point-and-click' movement. Right-");

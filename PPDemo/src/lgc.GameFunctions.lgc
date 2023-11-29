@@ -332,7 +332,7 @@ if (controller(cChooseItem)) {
             call(lgc.ScoreHandler);
           }
         } else {
-          print("You are too far fromy your vehicle for the keyfob to work.");
+          print("You are too far from your vehicle for the keyfob to work.");
         }
       }
       [ cassette
@@ -756,7 +756,7 @@ if (haveInput && !haveMatch) {
   }
   [ folder
   if ((said("look", "in", "folder") || said("read", "folder") ||
-       said("use", "folder"))) {
+       said("use", "folder") || said("open", "folder"))) {
     if (has("folder")) {
       work1 = 110;
       call(lgc.ExamineItem);

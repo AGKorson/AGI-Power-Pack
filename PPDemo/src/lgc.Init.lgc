@@ -214,6 +214,14 @@ reset(playWalkman);
 [ start safe dial on a random number
 random(0, 39, comboNumber);
 
+[ first patient event is patient2 arrival, with one minute timer
+patientEvent = P2_ARRIVE;
+eventMin = 1;
+eventSec = 0;
+patient2Loc = LOC_GONE;
+patient3Loc = LOC_GONE;
+patient4Loc = LOC_GONE;
+
 return();
 
 [***************************************
