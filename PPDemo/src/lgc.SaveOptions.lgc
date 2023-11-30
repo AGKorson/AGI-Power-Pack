@@ -89,11 +89,11 @@ if (skipIntro) {
 } else {
   tmp2 = 0;
   [ TODO: something is causing skipIntro flag to reset????
-  pause();
-  pause();
-  pause();
-  print("DAMMIT! how the FUCK is this flag getting reset?????");
-  pause();
+[  pause();
+[  pause();
+[  pause();
+[  print("DAMMIT! how the FUCK is this flag getting reset?????");
+[  pause();
 }
 
 [ blank the output string

@@ -138,10 +138,12 @@ if (!IntVersion) {
         "are not supported.\n\nAborting...");
   quit(1);
 }
-if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272)) {
+[ confirm the version is one that will run the demo
+if ((IntVersion == VERSION_2089 || IntVersion == VERSION_2272 ||
+     IntVersion == VERSION_2411)) {
   [ these versions not supported
   load.logics(lgc.Error);
-  print("The Power Pack does work with version 2.089 and 2.272, however "
+  print("The Power Pack does work with version 2.089, 2.272 and 2.411, however "
         "this demo game does not support them. Please use a later "
         "version 2 interpreter to run this demo game.");
   quit(1);

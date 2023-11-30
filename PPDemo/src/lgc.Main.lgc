@@ -107,7 +107,7 @@ if (currentRoom == 0) {
     call(lgc.Version2Check);
     [ run the patch for the detected AGI version
     work1 = IntVersion;
-    work1 += 59;
+    work1 += 58;
     call.v(work1);
 
     [ validate system parameters
