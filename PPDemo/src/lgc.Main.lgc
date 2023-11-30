@@ -758,6 +758,7 @@ if (elapsedMinutes != oldMinutes) {
       if (patientEvent == P2_EXAM) {
         patient2Loc = LOC_EXAM;
         eventMin = 3;
+        reset(askToPee);
       }
       if (patientEvent == P2_EXIT) {
         patient2Loc = LOC_GONE;

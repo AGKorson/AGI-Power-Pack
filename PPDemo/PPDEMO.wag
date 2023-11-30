@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/27/2023 1:57:36 AM"
+   LastEdit = "11/29/2023 3:02:35 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.3"
@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H34801A56
-   CompCRC32 = &H34801A56
+   CRC32 = &H6D225DE
+   CompCRC32 = &H6D225DE
    IsRoom = True
 
 [Logic4]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &HF06236D3
-   CompCRC32 = &HF06236D3
+   CRC32 = &H55C0847B
+   CompCRC32 = &H55C0847B
    IsRoom = False
 
 [Logic36]
@@ -450,8 +450,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &HEEB37514
-   CompCRC32 = &HEEB37514
+   CRC32 = &H28D49215
+   CompCRC32 = &H28D49215
    IsRoom = False
 
 [Logic60]
@@ -513,8 +513,8 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H9ED6B6FE
-   CompCRC32 = &H9ED6B6FE
+   CRC32 = &H308CCC27
+   CompCRC32 = &H308CCC27
    IsRoom = False
 
 [Logic44]

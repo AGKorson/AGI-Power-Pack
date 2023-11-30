@@ -123,6 +123,7 @@
 #define startTrace             f90 [ when set, main loop will enter trace mode
 #define playWalkman            f91 [ true when currently playing sound is a Walkman track
 #define nextEvent              f92 [ when set, move to next lobby patient event
+#define askToPee               f93 [ tracks whether patient 1 has used bathroom in each patient event cycle
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
@@ -199,7 +200,7 @@
 #define rugStatus              v80 [ tracks whether rug corner is up or down
 #define timerMin               v81 [ used by Power Pack timer function
 #define timerSec               v82 [ used by Power Pack timer function
-#define patientClock           v83 [ twenty minute timer cycle to track patient locations
+#define comboNumber            v83 [ last position of combination lock
 #define patient1Loc            v84 [ indicates where patients are currently located
 #define patient2Loc            v85
 #define patient3Loc            v86
@@ -230,8 +231,7 @@
 #define PC_SOUND                 0
 #define FM_SOUND                 1
 #define MIDI_SOUND               2
-#define comboNumber           v100 [ last position of combination lock
-#define patientEvent          v101 [ determines the next lobby patient event (arrive, exam, exit)
+#define patientEvent          v100 [ determines the next lobby patient event (arrive, exam, exit)
 #define P2_ARRIVE                0 [ patient 2 arrives in lobby
 #define P3_ARRIVE                1 [ patient 3 arrives in lobby
 #define P2_EXAM                  2 [ patient 2 goes to exam
@@ -241,6 +241,6 @@
 #define P3_EXIT                  6 [ patient 3 leaves
 #define P4_EXAM                  7 [ patient 4 goes to exam
 #define P4_EXIT                  8 [ patient 4 leaves
-#define eventMin              v102 [ timer value until next patient event
-#define eventSec              v103 [ timer value until next patient event
+#define eventMin              v101 [ timer value until next patient event
+#define eventSec              v102 [ timer value until next patient event
 #define FADECOUNT               20 [ controls the speed of fade in/fade out between rooms

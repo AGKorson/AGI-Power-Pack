@@ -73,7 +73,7 @@
 #define fP3Done        f224
 #define fP4Done        f225
 #define fPaneDone      f226
-#define fAskToPee      f227
+#define fLogJam        f227
 #define fOneMinute     f228
 #define fEgoWaitTalk   f229
 #define fPatient1Talking      f230
@@ -85,7 +85,6 @@
 #define fSlipped       f236
 #define fPagesTurned   f237
 #define fEgoInHall     f238
-#define fLogJam        f239
 
 #define receptionistLoc v220
 #define   PHONE         1
@@ -167,6 +166,10 @@
 #define   MOVEEXIT2    39
 #define   STOPCONV     40
 #define   EXAMREADY    41
+
+[ TODO: some events are still taking nearly a minute- need to track down
+[ what's going on there
+[ TODO:  patient 1 doesn't animate correctly when speaking
 
 [***************************************
 [ FIRST CYCLE ONLY
@@ -1158,8 +1161,6 @@ if (patient1Ctr > 0) {
   if (patient1Ctr == 0) {
     [ ready to speak first line
     if (patient1Seq == TALKCOUNTER1) {
-      [ set flag so there will not be another request
-      set(fAskToPee);
       set.cel(oPatient1, 0);
       stop.cycling(oPatient1);
       block(MSGBOX.COLOR, LT_RED, RED, WHITE); [ msgbox.color(BORDER, FG, BG)
@@ -1169,6 +1170,8 @@ if (patient1Ctr > 0) {
       [ set timer for receptionist to speak
       receptionistCtr = 10;
       start.cycling(oReceptionist);
+      [ reset first visit flag
+      reset(firstLobbyVisit);
     }
     [ ready to speak second line
     if (patient1Seq == TALKCOUNTER2) {
@@ -1199,21 +1202,23 @@ if (patient1Timer != 255) {
       [ take precedence)
       work1 = 0;
       [ if a bathroom break has not happened yet
-      if (!fAskToPee) { 
+      if (!askToPee) {
         [ force request if this is first visit to the lobby AND
         [ one minute has passed by
         if (fOneMinute && firstLobbyVisit) {
           work1 = 4;
         }
-        [ if not first time in the room, only ask if the 3 minute
-        [ point of patient timer is reached
-        if (patientClock == 3) {
+        [ OR if not first time in the room, ask approximately
+        [ two minutes after patient 3 shows up
+        if (patientEvent == P3_ARRIVE && eventMin <= 2) {
           work1 = 4;
         }
       }
       [ if forcing a request
       if (work1 == 4) {
-        [ reset the one minute flag so it doesn't trigger again
+        [ set flag so it doesn't trigger again
+        set(askToPee);
+        [ the one minute timer is no longer needed
         reset(fOneMinute);
         [ patient1 stands up
         set.loop(oPatient1, LP_P_SIT);
@@ -2047,6 +2052,9 @@ if (nextEvent) {
     patient2Seq = EXAMREADY;
     [ three minutes to next event
     eventMin = 2; [3;
+    [ reset patient 1's need to use bathroom
+    [ for next cycle
+    reset(askToPee);
   }
   if (patientEvent == P2_EXIT) {
     [ patient 2 returns from exam room
@@ -3233,10 +3241,6 @@ if (edgeEgoHit == TOP_EDGE) {
   [ only if allowed past (or if receptionist is in hallway going out)
   if ((allowedPastLobby || receptionistSeq == MOVEHALL2 || 
        receptionistSeq == MOVEHALL3 || receptionistSeq == WAITHALL)) {
-    [ if patient 1 visited restroom, reset first visit flag
-    if (fAskToPee) {
-      reset(firstLobbyVisit);
-    }
     [ show wait cursor
     cursoricon = C_WAIT;
     set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
@@ -3274,10 +3278,6 @@ if (fEgoInHall) {
 }
 
 if (edgeEgoHit == BOTTOM_EDGE) {
-  [ if patient 1 visited restroom, reset first visit flag
-  if (fAskToPee) {
-    reset(firstLobbyVisit);
-  }
   [ show wait cursor
   cursoricon = C_WAIT;
   set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
