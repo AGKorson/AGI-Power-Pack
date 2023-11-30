@@ -1979,7 +1979,7 @@ if (said(68, 140, 5357, 0)){} [ DS:14ED
             [ StateReloadPatch
             "\xE8\x21\x5F\xA0\x4E\x15\x3C\x01\x72\x0C\xA2\xA7\x1A\x30\xE4\x50"
             "\xE8\x26\x5C\x83\xC4\x02\xC3"
-if (said(608, 143, 45752)){} [ B2B8
+if (said(631, 143, 45752)){} [ B2B8
 [ patch savegame to use the patch
 #message 144 "\xE9\xD9\x8A"
 if (said(3, 144, 10204)){} [ 27DC
