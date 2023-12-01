@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "11/29/2023 10:25:28 PM"
+   LastEdit = "12/1/2023 2:00:05 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = "Power Pack Demo v0.4"
@@ -65,8 +65,8 @@
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H6D225DE
-   CompCRC32 = &H6D225DE
+   CRC32 = &H77941D92
+   CompCRC32 = &H77941D92
    IsRoom = True
 
 [Logic4]

@@ -169,7 +169,6 @@
 
 [ TODO: some events are still taking nearly a minute- need to track down
 [ what's going on there
-[ TODO:  patient 1 doesn't animate correctly when speaking
 
 [***************************************
 [ FIRST CYCLE ONLY
@@ -708,6 +707,8 @@ if (receptionistCtr > 0) {
       if (patient1Seq == WAITCOUNTER) {
         set.loop(oPatient1, LP_P_SPEAK);
         start.cycling(oPatient1);
+        work1 = CYCLE_AT_REST;
+        set.upper.left(&oPatient1, &work1);  [ auto.cycle(oSOBJ, vMODE)
         patient1Seq = TALKCOUNTER1;
         patient1Ctr = 10;
         set(fPatient1Talking);
@@ -1179,6 +1180,8 @@ if (patient1Ctr > 0) {
       printTimeout = 6;
       print.at("\"Thank you!\"", 8, 38, 30);
       block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+      work1 = AUTO_CYCLE;
+      set.upper.left(&oPatient1, &work1);  [ auto.cycle(oSOBJ, vMODE)
       patient1Seq = MOVEHALL1;
       set.loop(oPatient1, LP_MOVERIGHT);
       move.obj(oPatient1, 86, 107, 1, fP1Done);
