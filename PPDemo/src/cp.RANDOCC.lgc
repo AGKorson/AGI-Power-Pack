@@ -30,10 +30,10 @@
 #define LP_OPT      0 [ option button states
 #define LP_CF_OPT   1 [ cursor frame for mouse/keyb and right-click option buttons
 #define LP_CF_CMD   2 [    "     "    "  OK, Cancel, Reset command buttons
-#define LP_CF_LT_PAL_H   3 [    horizontal frame for bright palette color selection
-#define LP_CF_DK_PAL_H   4 [    horizontal frame for dark palette color selection
-#define LP_CF_LT_PAL_V   5 [    vertical frame for bright palette color selection
-#define LP_CF_DK_PAL_V   6 [    vertical frame for dark palette color selection
+#define LP_CF_LT_PAL_H   3 [    horizontal frame for bright color selection
+#define LP_CF_DK_PAL_H   4 [    horizontal frame for dark color selection
+#define LP_CF_LT_PAL_V   5 [    vertical frame for bright color selection
+#define LP_CF_DK_PAL_V   6 [    vertical frame for dark color selection
 
 #define tmpBG        v220
 #define tmpFG        v221
@@ -203,7 +203,7 @@ if (newRoom) {
   
   btnAction = 0;
 
-  [ update the sample messagebox and palette
+  [ use default values as starting point
   tmpBG = msgBoxBG;
   tmpFG = msgBoxFG;
   tmpBorder = msgBoxBorder;

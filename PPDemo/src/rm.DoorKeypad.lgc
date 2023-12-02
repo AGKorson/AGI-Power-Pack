@@ -100,7 +100,7 @@ if (newRoom) {
   set.priority(oIndicator, 15);
   draw(oIndicator);
   
-  [ no ego, and no input (mouse only)
+  [ no ego, and no input (mouse/keyboard only)
   set(disableGameFunctions);
   prevent.input();
   
@@ -205,7 +205,7 @@ if (have.key()) {
   }
 } 
 
-[ check for keypad button presses
+[ check for click on keypad button
 if (mouseBtn == 1) { 
   if (pressButton == -1) {
     block(GET.PIXEL, &mouseX, &mouseY, &pressButton); [ get.pixel(vX, vY, vRESULT) 

@@ -125,7 +125,7 @@ if (deathType < DT_SEQ_DONE) {
 
 [ if kicking bucket, make sure it goes away
 [ when it gets to edge of screen
-if (v4 == &oBucket) {
+if (objHitEdge == &oBucket) {
   erase(oBucket);
 }
 

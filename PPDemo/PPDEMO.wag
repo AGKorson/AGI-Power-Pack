@@ -121,15 +121,15 @@
 [Logic11]
    ID = cp.Terminal
    Description = "The main terminal screen. Needed to reboot the security system, so Drew can leave, and to load the modules that run the power pack functions."
-   CRC32 = &HD91C3849
-   CompCRC32 = &HD91C3849
+   CRC32 = &H59088510
+   CompCRC32 = &H59088510
    IsRoom = True
 
 [Logic12]
    ID = cp.CAISOCC
    Description = "Custom Acoustic Instrument Settings Option Control Console: lets you edit the FM synthesizer sound channels."
-   CRC32 = &H45D5545F
-   CompCRC32 = &H45D5545F
+   CRC32 = &HBE1701B3
+   CompCRC32 = &HBE1701B3
    IsRoom = True
 
 [Logic13]
@@ -163,15 +163,15 @@
 [Logic17]
    ID = cp.RANDOCC
    Description = "Rectangular Alpha-Numeric Display Options Control Console: lets you modify the color settings for message box displays."
-   CRC32 = &HA204031E
-   CompCRC32 = &HA204031E
+   CRC32 = &H63C634D2
+   CompCRC32 = &H63C634D2
    IsRoom = True
 
 [Logic18]
    ID = rm.DoorKeypad
    Description = "Close up of the access control keypad that controls access to the Power Pack control room."
-   CRC32 = &H90444109
-   CompCRC32 = &H90444109
+   CRC32 = &H305BC409
+   CompCRC32 = &H305BC409
    IsRoom = True
 
 [Logic19]
@@ -226,8 +226,8 @@
 [Logic26]
    ID = lgc.Walkman
    Description = "Close up of the Sony Walkman. Player can load/unload the cassette, pause/play/rewind/fast forward sound tracks."
-   CRC32 = &HF1E5B801
-   CompCRC32 = &HF1E5B801
+   CRC32 = &HE8601CCC
+   CompCRC32 = &HE8601CCC
    IsRoom = False
 
 [Logic27]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &HF8EB75AF
-   CompCRC32 = &HF8EB75AF
+   CRC32 = &H873EBB56
+   CompCRC32 = &H873EBB56
    IsRoom = False
 
 [Logic36]
@@ -303,8 +303,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &H598F3720
-   CompCRC32 = &H598F3720
+   CRC32 = &HE7C580EC
+   CompCRC32 = &HE7C580EC
    IsRoom = False
 
 [Logic51]
@@ -317,22 +317,22 @@
 [Logic52]
    ID = lgc.RoomInit
    Description = "This logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms, inlcuding setting the correct graphics mode settings."
-   CRC32 = &HEE364271
-   CompCRC32 = &HEE364271
+   CRC32 = &HE003FF35
+   CompCRC32 = &HE003FF35
    IsRoom = False
 
 [Logic53]
    ID = lgc.RedrawRoom
    Description = "After close up logics are done, this logic handles restoring appropriate settings based on which room called for the close up."
-   CRC32 = &HBB5C367
-   CompCRC32 = &HBB5C367
+   CRC32 = &H6B1B8F7D
+   CompCRC32 = &H6B1B8F7D
    IsRoom = False
 
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &H6411E8F4
-   CompCRC32 = &H6411E8F4
+   CRC32 = &HB8CA6195
+   CompCRC32 = &HB8CA6195
    IsRoom = False
 
 [Logic55]
@@ -366,8 +366,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &H538A7872
-   CompCRC32 = &H538A7872
+   CRC32 = &H3C4FB8FF
+   CompCRC32 = &H3C4FB8FF
    IsRoom = False
 
 [Logic60]

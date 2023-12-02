@@ -24,7 +24,8 @@
 
 [ for all rooms except the control panels and title, set screen to 80 col mode 
 [ (control panels manage that separately)
-if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && currentRoom != rm.Title) {
+if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && 
+     currentRoom != rm.Title) {
   if (!column80) {
     [ before switching to 80 col mode, need to clear the 
     [ existing picture (or it will display again after the switch, which 
@@ -84,7 +85,6 @@ if ((currentRoom < cp.Terminal || currentRoom > cp.RANDOCC) && currentRoom != rm
   [ use straightline mode
   work1 = MOVE_DIRECT;
   step.size(ego, work1); [ set.click2move.mode(vMODE)
-
 }
 
 if (currentRoom == rm.Title) {

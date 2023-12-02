@@ -5,7 +5,7 @@
 [ Custom Acoustic Instrument Setting Options Control Console
 [ 
 [ This console allows the player to customize the FM instruments. It
-[ mimics a MSDOS application called IEDIT.EXE, "Instrument editor 
+[ mimics an MSDOS application called IEDIT.EXE, "Instrument editor 
 [ v1.0", (c) 1998 by Steven Don (https://www.shdon.com/dos/sound)
 [
 [ There are five custom instruments that can be edited. You can copy

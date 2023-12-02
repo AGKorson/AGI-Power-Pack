@@ -2,7 +2,7 @@
 [ 
 [ lgc.RedrawRoom
 [ 
-[ After close up logics are done, this logic handles restoring 
+[ After close-up logics are done, this logic handles restoring 
 [ appropriate settings based on which room called for the close up.
 [
 [ Room-specific views don't need to be loaded, since they are already

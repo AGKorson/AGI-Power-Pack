@@ -804,7 +804,7 @@ if (haveInput && !haveMatch) {
   
   [ wegup is not a word
   if (said("wegup")) {
-    print("That is not a valid word.");
+    print("That is not a valid wordle word.");
   }
   
   [ if player says any dirty words

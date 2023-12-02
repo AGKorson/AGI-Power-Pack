@@ -9,6 +9,10 @@
 [ SIDE A: 1 - 41, 42 means at end of side A
 [ SIDE B: 43 - 83, 84 means at end of side B
 [
+[ The main game loop is not activated while the walkman is displayed
+[ so a custom loop, using add.to.pic(), is used to cycle the spindles
+[ when playing a sound.
+[
 [*********************************************************************
 
 [ power pack support
