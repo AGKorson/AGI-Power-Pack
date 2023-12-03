@@ -191,8 +191,8 @@
 [Logic21]
    ID = lgc.ReadNotebook
    Description = "Displays the notebook in response to a 'read notebook' input."
-   CRC32 = &HC8F373CD
-   CompCRC32 = &HC8F373CD
+   CRC32 = &H3EECA68D
+   CompCRC32 = &H3EECA68D
    IsRoom = False
 
 [Logic22]

@@ -97,7 +97,7 @@ if (mouseBtn == 1) {
   if ((work2 == 6 || work2 == 5)) {
     if (work2 == 6) {
       :pageright
-      if (pageNum == 4) {
+      if (pageNum == 5) {
         print.at("The last few pages are blank.", 1, 27, 35);
         goto(waitforit);
       }
@@ -136,7 +136,6 @@ if (mouseBtn == 1) {
     }
     
     if (pageNum == 2) {
-    [ display( 2,  9, "3456789012345678901234");
       set.text.attribute(BLACK, WHITE);
       display( 4, 13, "4/11/88");
       display( 5, 13, "AMOS Kickoff meeting.");
@@ -147,7 +146,6 @@ if (mouseBtn == 1) {
       display(10, 13, "new features that");
       display(11, 13, "should be incorporated");
       display(12, 13, "into AGI.");
-
       display(14, 13, "Initial development of");
       display(15, 13, "AMOS will be led by");
       display(16, 13, "Jeff and Chris. Held a");
@@ -155,19 +153,14 @@ if (mouseBtn == 1) {
       display(18, 13, "on potential modules");
       display(19, 13, "to include:");
 
-    [ display( 2,  9, "7890123456789012345678");
       display( 4, 48, "- mouse and cursor");
       display( 5, 50, "support;");
-
       display( 7, 48, "- soundboard/midi");
       display( 8, 50, "support;");
-
       display(10, 48, "- 80 column text mode");
-
       display(12, 48, "- improved text");
       display(13, 50, "support (extended");
       display(14, 50, "characters?);");
-
       display(16, 48, "- support for the new");
       display(17, 50, "MSDOS code page");
       display(18, 50, "feature (for inter-");
@@ -176,7 +169,6 @@ if (mouseBtn == 1) {
     }
     
     if (pageNum == 3) {
-    [ display( 2,  9, "3456789012345678901234");
       set.text.attribute(BLACK, WHITE);
       display( 4, 14, "- improved color");
       display( 5, 16, "options - dynamic");
@@ -184,23 +176,60 @@ if (mouseBtn == 1) {
       display( 7, 16, "fade options, more");
       display( 8, 16, "display/message");
       display( 9, 16, "box color choices;");
-
       display(11, 14, "- reconfigure memory");
       display(12, 16, "model (more than");
       display(13, 16, "256K is becoming");
       display(14, 16, "standard)");
-
-    [ display( 2,  9, "7890123456789012345678");
+      display(16, 13, "4/25/88");
+      display(17, 13, "The AMOS Team has de-");
+      display(18, 13, "cided to develop six");
+      display(19, 13, "AMOS modules that will");
+      display(20, 13, "be used to deveop and");
+      
+      display(4, 47, "test new AGI features:");
+      display(6, 47, "CAISOCC: Custom Acous-");
+      display(7, 47, "tic Instrument Setting");
+      display(8, 47, "Options Control Console");
+      display(9, 47, "to create customized");
+      display(10, 47, "FM sound instruments");
+      display(12, 47, "ERIDOCC: Emulated Rod-");
+      display(13, 47, "ent Input Device Option");
+      display(14, 47, "Control Console to edit");
+      display(15, 47, "mouse cursors");
+      display(17, 47, "ESADOCC: Electronic");
+      display(18, 47, "Synthesized Audio Data");
+      display(19, 47, "Options Control Console");
+      display(20, 47, "to change sound output");
+    }
+    
+    if (pageNum == 4) {
+      set.text.attribute(BLACK, WHITE);
+      display(4, 13, "ICAPOCC: Indexed Chro-");
+      display(5, 13, "matic Association Prop-");
+      display(6, 13, "erties Options Control");
+      display(7, 13, "Console to create cus-");
+      display(8, 13, "tom color palettes");
+      display(10, 13, "OFROCC: Overall Frame-");
+      display(11, 13, "rate Options Control");
+      display(12, 13, "Console to adjust game");
+      display(13, 13, "speed");
+      display(15, 13, "RANDOCC: Rectangular");
+      display(16, 13, "Alpha-Numeric Display");
+      display(17, 13, "Options Control Console");
+      display(18, 13, "for changing the color");
+      display(19, 13, "options in message box");
+      display(20, 13, "text");
+      
       display( 4, 47, "5/23/88");
-      display( 5, 47, "New or updated module");
-      display( 6, 47, "gets default password");
-      display( 7, 47, "of first four letters");
-      display( 8, 47, "of module followed by");
-      display( 9, 47, "six digit date");
-      display(10, 47, "(mmddyy), period (.)");
-      display(11, 47, "then letter of current");
-      display(12, 47, "major version (version");
-      display(13, 47, "1 = 'a', etc.)");
+      display( 5, 47, "New or updated modules");
+      display( 6, 47, "get default password of");
+      display( 7, 47, "first four letters of");
+      display( 8, 47, "module followed by six");
+      display( 9, 47, "digit date (mmddyy),");
+      display(10, 47, "period (.) then letter");
+      display(11, 47, "of current major ver-");
+      display(12, 47, "sion (version 1 = 'a',");
+      display(13, 47, " etc.)");
       display(14, 47, "The password should");
       display(15, 47, "automatically force");
       display(16, 47, "an update after the");
@@ -209,8 +238,7 @@ if (mouseBtn == 1) {
       display(19, 47, "working.");
     }
     
-    if (pageNum == 4) {
-    [ display( 2,  9, "3456789012345678901234");
+    if (pageNum == 5) {
       set.text.attribute(BLACK, WHITE);
       display( 4, 13, "7/31/89");
       display( 5, 13, "The bug that is not");
@@ -222,26 +250,22 @@ if (mouseBtn == 1) {
       display(11, 13, "reset passwords after");
       display(12, 13, "installing a new");
       display(13, 13, "module version.");
-
       display(15, 13, "8/7/89");
       display(16, 13, "Ken requested that he");
       display(17, 13, "and Roberta be added");
       display(18, 13, "as AMOS users so they");
       display(19, 13, "could evaluate");
 
-    [ display( 2,  9, "7890123456789012345678");
       display( 4, 47, "progress before a");
       display( 5, 47, "final decision gets");
       display( 6, 47, "made on whether or not");
       display( 7, 47, "to continue with AMOS");
       display( 8, 47, "or abandon it to focus");
       display( 9, 47, "exclusively on SCI.");
-
       display(11, 47, "8/14/89");
       display(12, 47, "AK reports ERIDOCC");
       display(13, 47, "module version 1.04");
       display(14, 47, "is ready for testing.");
-
       display(16, 47, "8/15/89");
       display(17, 47, "Canceled! Looks like");
       display(18, 47, "SCI wins. :-(");
