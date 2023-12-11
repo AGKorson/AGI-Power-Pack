@@ -978,14 +978,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
 
   [ get tree/bush/branch
   if ((said("get", "tree") || said("get", "bush"))) {
-    print("The trees and bushes are covered in sap. You should probably wash your hands when you get a chance.");
-    reset(handsWashed);
-    if (!touchTrees) {
-      set(touchTrees);
-      [ lose 1 point
-      work1 = -1;
-      call(lgc.ScoreHandler);
-    }
+    goto(touchtree);
   }
   
   [ drive away, leave, go home
@@ -1453,14 +1446,31 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
 
     if (work1 > 239) {
-      [ foreground tree
-      print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
-      reset(handsWashed);
-      if (!touchTrees) {
-        set(touchTrees);
-        [ lose 1 point
-        work1 = -1;
-        call(lgc.ScoreHandler);
+      :touchtree
+      [ foreground trees - check if close enough
+      [ approximate a line along the tree boundaries; if
+      [ ego is inside the tree boundary, it's close enough
+      
+      [ left tree
+      work1 = egoY;
+      work1 /= 4;
+      work1 -= 14;
+      [ right tree
+      work2 = egoY;
+      work2 /= 10;
+      work2 *= -3;
+      work2 += 176;
+      if (egoX > work1 && egoX < work2) {
+        print("Move closer.");
+      } else {
+        print("The trees are covered in sap. You should probably wash your hands when you get a chance.");
+        reset(handsWashed);
+        if (!touchTrees) {
+          set(touchTrees);
+          [ lose 1 point
+          work1 = -1;
+          call(lgc.ScoreHandler);
+        }
       }
       goto(doneclick);
     }

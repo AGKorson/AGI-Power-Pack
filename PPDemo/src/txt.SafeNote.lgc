@@ -27,8 +27,8 @@ display(13, 4, "past SECOND number once, then stop");
 display(14, 4, "at SECOND number the next time.");
 display(16, 1, "4. Spin dial in starting direction");
 display(17, 4, "and stop on THIRD number.");
-display(19, 1, "5. Pull handle clockwise up to open");
-display(20, 4, "the safe.");
+display(19, 1, "5. Pull handle counter-clockwise up");
+display(20, 4, "to open the safe.");
 display(22, 1, "PROTECT YOUR COMBINATION FROM UNAUTH-");
 display(23, 1, "ORIZED DISCLOSURE- KEEP IT SAFE!");
 

@@ -104,6 +104,9 @@ if (newRoom) {
   set(disableGameFunctions);
   prevent.input();
   
+  [ no statusbar
+  status.line.off();
+  
   [ no button pressed to start
   pressButton = -1;
   
@@ -206,8 +209,10 @@ if (have.key()) {
 } 
 
 [ check for click on keypad button
-if (mouseBtn == 1) { 
-  if (pressButton == -1) {
+if (mouseBtn == 1) {
+  [ only allow clicks on keypad
+  
+  if (pressButton == -1 && mouseY > 30 && mouseY < 160) {
     block(GET.PIXEL, &mouseX, &mouseY, &pressButton); [ get.pixel(vX, vY, vRESULT) 
     [ priority value indicates button
     pressButton /= 16;
@@ -378,6 +383,8 @@ if ((unlockdoor || controller(cMenu) ||
   } else {
     work2 = 0;
   }
+  [ restore statusline
+  status.line.on();
   [ reenable input
   accept.input();
   reset(disableGameFunctions);

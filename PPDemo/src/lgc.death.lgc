@@ -358,9 +358,13 @@ if ((controller(cQuit) || said("quit"))) {
   quit(0);
 }
 
-[ showing 'about' message is allowed
+[ showing about/version message is allowed
 if (controller(cAbout)) {
   print(gameAboutMsg);
+}
+if (controller(cVersion)) {
+  print(gameVersionMsg);
+  version();
 }
 
 [ toggling sound is allowed

@@ -873,6 +873,46 @@ if (haveInput && !haveMatch) {
     set(kickBucket);
     return();
   }
+  
+  [ UNKNOWN WORD CHECK
+  if (unknownWordNum > 0) {
+    set(haveMatch);
+    [copy word to a string
+    if (unknownWordNum == 1) {
+      word.to.string(unknownWord, w1);
+    }
+    if (unknownWordNum == 2) {
+      word.to.string(unknownWord, w2);
+    }
+    if (unknownWordNum == 3) {
+      word.to.string(unknownWord, w3);
+    }
+    if (unknownWordNum == 4) {
+      word.to.string(unknownWord, w4);
+    }
+    if (unknownWordNum == 5) {
+      word.to.string(unknownWord, w5);
+    }
+    if (unknownWordNum == 6) {
+      word.to.string(unknownWord, w6);
+    }
+    if (unknownWordNum == 7) {
+      word.to.string(unknownWord, w7);
+    }
+    if (unknownWordNum == 8) {
+      word.to.string(unknownWord, w8);
+    }
+    if (unknownWordNum == 9) {
+      word.to.string(unknownWord, w9);
+    }
+    if (unknownWordNum == 10) {
+      word.to.string(unknownWord, w10);
+    }
+    [choose a random unknown word response
+    random(&m38, &m40, rndNum);
+    print.v(rndNum);
+  }
+  
   [ hit/punch/kill/shoot/kick anything
   if ((said("hit", "rol") || said("kick", "rol"))) {
     print("Unprovoked violence is never acceptable.");
@@ -939,45 +979,6 @@ if (haveInput && !haveMatch) {
     print("Since your pockets are so ridiculously large, and can carry "
           "more than your average pack mule, there's no reason to drop "
           "anything. It's best to keep it all.");
-  }
-  
-  [ UNKNOWN WORD CHECK
-  if (unknownWordNum > 0) {
-    set(haveMatch);
-    [copy word to a string
-    if (unknownWordNum == 1) {
-      word.to.string(unknownWord, w1);
-    }
-    if (unknownWordNum == 2) {
-      word.to.string(unknownWord, w2);
-    }
-    if (unknownWordNum == 3) {
-      word.to.string(unknownWord, w3);
-    }
-    if (unknownWordNum == 4) {
-      word.to.string(unknownWord, w4);
-    }
-    if (unknownWordNum == 5) {
-      word.to.string(unknownWord, w5);
-    }
-    if (unknownWordNum == 6) {
-      word.to.string(unknownWord, w6);
-    }
-    if (unknownWordNum == 7) {
-      word.to.string(unknownWord, w7);
-    }
-    if (unknownWordNum == 8) {
-      word.to.string(unknownWord, w8);
-    }
-    if (unknownWordNum == 9) {
-      word.to.string(unknownWord, w9);
-    }
-    if (unknownWordNum == 10) {
-      word.to.string(unknownWord, w10);
-    }
-    [choose a random unknown word response
-    random(&m38, &m40, rndNum);
-    print.v(rndNum);
   }
   
   [ finally, if there is input that still hasn't been recognized

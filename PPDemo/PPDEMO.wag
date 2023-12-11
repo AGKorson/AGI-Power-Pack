@@ -5,10 +5,10 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/3/2023 7:36:27 PM"
+   LastEdit = "12/10/2023 10:05:30 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = "Power Pack Demo v0.4"
+   GameVersion = "Power Pack Demo v0.5"
    About = "  Power Pack Demo Game\n    by Andrew Korson\n\nShowcasing the incredibly\n powerful features of the\n     AGI Power Pack!"
    ResDir = src
    UseResNames = True
@@ -58,15 +58,15 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &HB4EA11C1
-   CompCRC32 = &HB4EA11C1
+   CRC32 = &H67479848
+   CompCRC32 = &H67479848
    IsRoom = True
 
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H77941D92
-   CompCRC32 = &H77941D92
+   CRC32 = &HAFBC79A2
+   CompCRC32 = &HAFBC79A2
    IsRoom = True
 
 [Logic4]
@@ -93,8 +93,8 @@
 [Logic7]
    ID = rm.Stairway
    Description = "At the bottom of the stairs is a locked door. Behind the door is the control room for the fabled AGI Power Pack development project."
-   CRC32 = &HCE8254DC
-   CompCRC32 = &HCE8254DC
+   CRC32 = &H6E014046
+   CompCRC32 = &H6E014046
    IsRoom = True
 
 [Logic8]
@@ -170,8 +170,8 @@
 [Logic18]
    ID = rm.DoorKeypad
    Description = "Close up of the access control keypad that controls access to the Power Pack control room."
-   CRC32 = &H305BC409
-   CompCRC32 = &H305BC409
+   CRC32 = &HD342B901
+   CompCRC32 = &HD342B901
    IsRoom = True
 
 [Logic19]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &H873EBB56
-   CompCRC32 = &H873EBB56
+   CRC32 = &HCDCF27B8
+   CompCRC32 = &HCDCF27B8
    IsRoom = False
 
 [Logic36]
@@ -303,8 +303,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &HE7C580EC
-   CompCRC32 = &HE7C580EC
+   CRC32 = &H3637C064
+   CompCRC32 = &H3637C064
    IsRoom = False
 
 [Logic51]
@@ -331,8 +331,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &HB8CA6195
-   CompCRC32 = &HB8CA6195
+   CRC32 = &HF6B15ADB
+   CompCRC32 = &HF6B15ADB
    IsRoom = False
 
 [Logic55]
@@ -366,8 +366,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &H3C4FB8FF
-   CompCRC32 = &H3C4FB8FF
+   CRC32 = &HE8F074AF
+   CompCRC32 = &HE8F074AF
    IsRoom = False
 
 [Logic60]
@@ -429,15 +429,15 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H330DECE6
-   CompCRC32 = &H330DECE6
+   CRC32 = &H7FAEC9CF
+   CompCRC32 = &H7FAEC9CF
    IsRoom = False
 
 [Logic44]
    ID = txt.SafeNote
    Description = ""
-   CRC32 = &HE54FE767
-   CompCRC32 = &HE54FE767
+   CRC32 = &H79A4CF7D
+   CompCRC32 = &H79A4CF7D
    IsRoom = False
 
 [Logic62]

@@ -24,8 +24,7 @@
 
 #define fDoorDone    f220
 #define fDoorOpen    f221
-#define doorUnlocked f222
-#define lightOn      f223
+#define lightOn      f222
 
 [***************************************
 [ FIRST CYCLE ONLY
@@ -236,12 +235,16 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("look", "door")) {
-    print("This sturdy door must be protecting something very important.");
+    if (fDoorOpen) {
+      print("The sturdy door is open, allowing access to the room beyond.");
+    } else {
+      print("This sturdy door must be protecting something very important.");
+    }
   }
   if (said("open", "door")) {
     if (posn(ego, 26, 154, 43, 156)) {
-      if (doorUnlocked) {
-        doorSeq = 1;
+      if (fDoorOpen) {
+        print("It's already open.");
       } else {
         print("The door is locked.");
       }
@@ -258,11 +261,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("unlock", "door")) {
     if (posn(ego, 26, 154, 43, 156)) {
-      if (doorUnlocked) {
-        print("The door is already unlocked.");
-      } else {
-        print("The door lock is controlled by the keypad.");
-      }
+      print("The door lock is controlled by the keypad.");
     } else {
       print("Move closer.");
     }
@@ -335,7 +334,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     
     [ door
     if (mouseX > 30 && mouseX < 44 && mouseY > 117 && mouseY < 154) {
-      print("This sturdy door must be protecting something very important.");
+      if (fDoorOpen) {
+        print("The sturdy door is open, allowing access to the room beyond.");
+      } else {
+        print("This sturdy door must be protecting something very important.");
+      }
       goto(doneclick);
     }
     
@@ -415,12 +418,8 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           [ close it
           doorSeq = 2;
         } else {
-          [ open it (if not locked)
-          if (doorUnlocked) {
-            doorSeq = 1;
-          } else {
-            print("The door is locked.");
-          }
+          [ door is always locked when shut
+          print("The door is locked.");
         }
       } else {
         print("Move closer.");

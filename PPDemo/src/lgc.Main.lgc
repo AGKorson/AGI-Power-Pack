@@ -508,24 +508,16 @@ if (!disableGameFunctions) {
     block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
     block(SET.MSG, BYNUM, &mnu_msgSpeedFastest, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
 
-    [ make sure skip intro menu matches skipIntro value 
-    s22 = mnu_msgSkipIntro;
-    block(STR.LEN, &s22, &work1, 0); [ str.len(sINPUT, vRESULT)
+    [ make sure skip intro menu matches skipIntro value
     if (skipIntro) {
-      if (work1 == 15) {
-        work1 = 7; [ ascii value for bullet symbol
-        block(BYTE2CHAR, &s23, &work1, 0); [ byte2char(sRESULT, vCHAR)
-        block(STR.CONCAT, &s22, &s23, 0); [ str.concat(sINPUT, sADD)
-        block(SET.MSG, BYNUM, &mnu_msgSkipIntro, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-      }
+      s23 = "On ";
     } else {
-      if (work1 == 16) {
-        work1 = 15;
-        block(STR.LEFT, &s22, &s22, &work1); [ str.left(sINPUT, sRESULT, vLEN)
-        block(SET.MSG, BYNUM, &mnu_msgSkipIntro, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
-      }
+      s23 = "Off";
     }
-    
+    s22 = "Skip Intro:  %s23";
+    block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
+    block(SET.MSG, BYNUM, &mnu_msgSkipIntro, &s22); [ set.msg(FN_MODE, MSGOLD, STRNEW)
+        
     [ debug menu only available in debug mode
     s23 = mnu_msgDebug;
     block(STR.LEN, &s23, &work1, 0); [ str.len(sINPUT, vRESULT)
@@ -969,7 +961,7 @@ return();
 #message 11 " Slow   "
 #message 12 " Fast   "
 #message 13 " Fastest"
-#message 14 "Skip Intro     \x07"
+#message 14 "Skip Intro:  Off"
 #message 15 "Debug"
 #message 16 "Log Input:      Off"
 #message 17 "Display Clicks: Off"

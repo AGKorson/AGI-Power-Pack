@@ -349,6 +349,9 @@ if (newRoom) {
     }
     [ patient1 is in the room
     block(BIT.OR, BYNUM, &whosIn, 2); [ bit.or(FN_MODE, VAR, MASK)
+    [ reset flag so patient will ask again at next
+    [ time it comes up in the sequence
+    reset(askToPee);
   }
   
   [ to save on memory, patient 2/3/4 views are
@@ -3187,6 +3190,17 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       }
       goto(doneclick);
     }
+
+    [ floor sign 2, 125, 8, 140
+    if (mouseX > 1 && mouseX < 9 && mouseY > 124 && mouseY < 141) {
+      [ if approaching from north, ego can get close enough
+      if (posn(ego, 3, 132, 12, 143)) {
+        print("If you move the sign, other people won't see the warning.");
+      } else {
+        print("Move closer.");
+      }
+    }
+    goto(doneclick);
    
     [ paintings (on the walls)
     block(GET.PIXEL, &mouseX, &mouseY, &work1); [ get.pixel(vX, vY, vRESULT)
@@ -3221,14 +3235,6 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       print("The glass entrance door opens and closes automatically.");
       goto(doneclick);
     }
-    
-    [ floor sign 2, 125, 8, 140
-    if (mouseX > 1 && mouseX < 9 && mouseY > 124 && mouseY < 141) {
-      [ ego can never get close enough (he'll slip when he gets
-      [ close to the cone)
-      print("Move closer.");
-    }
-    goto(doneclick);
   }
   
   :doneclick
