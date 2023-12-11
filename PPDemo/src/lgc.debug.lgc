@@ -117,10 +117,15 @@ if (said("set", "var", "rol")) {
   } else {
     set(haveMatch);
     word.to.string(tmpStr, w3);
-    block(STR2BYTE, &tmpStr, &tmpVarB, 0); [ str2byte(sINPUT, vRESULT)
+    block(STR2BYTE, &tmpStr, &tmpVarA, 0); [ str2byte(sINPUT, vRESULT)
   }
-  get.num("v%254 new value: ", tmpVarB);
-  *tmpVarA = tmpVarB;
+  [ NOT v0 - room changes use 'tp'
+  if (tmpVarA > 0) {
+    get.num("v%v254 new value: ", tmpVarB);
+    *tmpVarA = tmpVarB;
+  } else {
+    print("v0 is current room. Use 'TP' to change it.");
+  }
 }
 
 [ show value of a flag (enable inline flag number)
