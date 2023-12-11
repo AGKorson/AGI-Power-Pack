@@ -109,9 +109,9 @@ if (selectedTopic == 8) {
   display(11, 26, "pressing any key or clicking a mouse button.");
   display(13, 26, "If you want to always skip the introduction when");
   display(14, 26, "running the game, select the 'Skip Intro' menu");
-  display(15, 26, "item. When selected (indicated by '') the");
-  display(16, 26, "game will automatically go to the start screen");
-  display(17, 26, "every time you start it.");
+  display(15, 26, "item. When 'ON' the game will automatically");
+  display(16, 26, "skip the introduction when loading and go right");
+  display(17, 26, "to the game's starting room.");
 }
 
 return();

@@ -148,6 +148,7 @@ if (work1 < 255) {
 }
 
 [ now check for any controllers that may have been activated
+[ (dynamic menus are checked in main menu)
 if (controller(cAbout)) {
   print(gameAboutMsg);
 }
@@ -172,6 +173,47 @@ if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
   }
   if (attenuation < work1) {
     ++attenuation;
+  }
+}
+
+[ SPEED (from parser; menus handled in lgc.Main)
+if ((said("slow") || 
+     said("slow", "speed"))) {
+  [ 4/20ths of a second delay between interpreter cycles
+  if (animationInterval != SLOW_SPEED) {
+    animationInterval = SLOW_SPEED;
+  }
+}
+if ((said("normal") || 
+     said("normal", "speed"))) {
+  [ 2/20ths of a second delay between interpreter cycles
+  if (animationInterval != NORMAL_SPEED) {
+    animationInterval = NORMAL_SPEED;
+  }
+}
+if ((said("fast") || 
+     said("fast", "speed"))) {
+  [ 1/20th of a second delay between interpreter cycles
+  if (animationInterval != FAST_SPEED) {
+    animationInterval = FAST_SPEED;
+  }
+}
+if ((said("fastest") || 
+     said("fastest", "speed"))) {
+  [ no delay between interpreter cycles
+  if (animationInterval != FASTEST_SPEED) {
+    animationInterval = FASTEST_SPEED;
+  }
+}
+[ speed adjustments
+if (controller(cSlower)) {
+  if (animationInterval < SLOW_SPEED) {
+    ++animationInterval;
+  }
+}
+if (controller(cFaster)) {
+  if (animationInterval > FASTEST_SPEED) {
+    --animationInterval;
   }
 }
 

@@ -173,6 +173,13 @@ if (newRoom) {
   work1 = 4;
   work2 = 1;
   set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
+  
+  if (!initialRun) {
+    [ inform player that they can skip if desired
+    set.text.attribute(DK_GRAY, BLACK);
+    display(23, 6, "PRESS ANY KEY TO SKIP INTRO");
+    set.text.attribute(WHITE, BLACK);
+  }
 }
 
 [***************************************
@@ -932,6 +939,12 @@ if (titleTimer > 0) {
       creditline = CR_PPDESIGN;
       creditstep = 0;
       ++titleSeq;
+      if (initialRun) {
+        [ inform player that they can skip if desired
+        set.text.attribute(DK_GRAY, BLACK);
+        display(23, 5, "PRESS ANY KEY TO SKIP CREDITS");
+        set.text.attribute(WHITE, BLACK);
+      }
     }
   }
 }
@@ -960,8 +973,9 @@ if (logoDone) {
 [***************************************
 :getkey
 [ check for a keypress (including ESC) or mouse button to
-[ move to start room
-if (!initialRun && (have.key() || controller(cMenu) || 
+[ move to start room (only if NOT first run, OR past initial
+[ animation sequence)
+if ((titleSeq > 20 || !initialRun) && (have.key() || controller(cMenu) || 
     controller(cLeftClick) || controller(cRightClick))) {
   :continue
   [ fade out to black

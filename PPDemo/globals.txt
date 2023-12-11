@@ -243,4 +243,5 @@
 #define P4_EXIT                  8 [ patient 4 leaves
 #define eventMin              v101 [ timer value until next patient event
 #define eventSec              v102 [ timer value until next patient event
+#define endCreditSeq          v103 [ controls end of game credit sequence
 #define FADECOUNT               20 [ controls the speed of fade in/fade out between rooms
