@@ -318,6 +318,8 @@ if (deathTimer == 1) {
         }
       }
     }
+    [ begin end game credits
+    endCreditSeq = 2;
   } else {
     print("Thank you for playing this game. Better luck next time!");
   }
@@ -326,11 +328,36 @@ if (deathTimer == 1) {
 [ limited toolbar functionality
 call(lgc.ToolbarFunctions);
 
-[ looking at help screen is allowed
-if ((controller(cHelp) || said("help"))) {
-  [ use local variable 240 to initialize the help screen
-  set(f240);
-  call(lgc.GameHelp);
+[ dynamic menus (sound mode, skip intro, clock, speed) handled
+[ in main logic; other menu items skipped during debug so are
+[ checked here:
+
+[ showing about/version message is allowed
+if (controller(cAbout)) {
+  print(gameAboutMsg);
+}
+if (controller(cVersion)) {
+  print(gameVersionMsg);
+  version();
+}
+
+[ allow sound volume control
+if (controller(cCrescendo) && attenuation > 0 && soundOn) {
+  [ to increase volume, lower sound attenuation variable
+  if (attenuation > 0) {
+    --attenuation;
+  }
+}
+if (controller(cDecrescendo) && attenuation < 63 && soundOn) {
+  [ to decrease volume, raise sound attenuation variable
+  if (4channelsound) {
+    work1 = 63;
+  } else {
+    work1 = 15;
+  }
+  if (attenuation < work1) {
+    ++attenuation;
+  }
 }
 
 [ restoring game is allowed
@@ -346,6 +373,13 @@ if ((controller(cRestart) || said("restart", "game") || said("restart"))) {
   restart.game();
 }
 
+[ looking at help screen is allowed
+if ((controller(cHelp) || said("help"))) {
+  [ use local variable 240 to initialize the help screen
+  set(f240);
+  call(lgc.GameHelp);
+}
+
 [ looking at inventory is allowed
 if ((controller(cStatus) || said("inventory"))) {
   status();
@@ -356,20 +390,6 @@ if ((controller(cQuit) || said("quit"))) {
   [ update the config file
   call(lgc.SaveOptions);
   quit(0);
-}
-
-[ showing about/version message is allowed
-if (controller(cAbout)) {
-  print(gameAboutMsg);
-}
-if (controller(cVersion)) {
-  print(gameVersionMsg);
-  version();
-}
-
-[ toggling sound is allowed
-if (controller(cToggleSound)) {
-  toggle(soundOn);
 }
 
 [ run current room logic (animations only)

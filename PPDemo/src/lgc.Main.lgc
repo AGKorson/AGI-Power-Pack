@@ -290,16 +290,6 @@ if (debugging) {
       }
     }
   }
-  [ score testing functions
-  if (said("test", "get")) {
-    get.num("add to score: ", work1);
-    call(lgc.ScoreHandler);
-  }
-  if (said("test", "drop")) {
-    get.num("sub from score: ", work1);
-    work1 *= -1;
-    call(lgc.ScoreHandler);
-  }
 }
 
 [***************************************
@@ -636,46 +626,28 @@ if (controller(cGameClock)) {
 }
 
 [ SPEED MENU ITEMS
-if ((controller(cSlow) || 
-     said("slow") || 
-     said("slow", "speed"))) {
+if (controller(cSlow)) {
   [ 4/20ths of a second delay between interpreter cycles
   if (animationInterval != SLOW_SPEED) {
     animationInterval = SLOW_SPEED;
   }
 }
-if ((controller(cNormal) || 
-     said("normal") || 
-     said("normal", "speed"))) {
+if (controller(cNormal)) {
   [ 2/20ths of a second delay between interpreter cycles
   if (animationInterval != NORMAL_SPEED) {
     animationInterval = NORMAL_SPEED;
   }
 }
-if ((controller(cFast) || 
-     said("fast") || 
-     said("fast", "speed"))) {
+if (controller(cFast)) {
   [ 1/20th of a second delay between interpreter cycles
   if (animationInterval != FAST_SPEED) {
     animationInterval = FAST_SPEED;
   }
 }
-if ((controller(cFastest) || 
-     said("fastest") || 
-     said("fastest", "speed"))) {
+if (controller(cFastest)) {
   [ no delay between interpreter cycles
   if (animationInterval != FASTEST_SPEED) {
     animationInterval = FASTEST_SPEED;
-  }
-}
-if (controller(cSlower)) {
-  if (animationInterval < SLOW_SPEED) {
-    ++animationInterval;
-  }
-}
-if (controller(cFaster)) {
-  if (animationInterval > FASTEST_SPEED) {
-    --animationInterval;
   }
 }
 

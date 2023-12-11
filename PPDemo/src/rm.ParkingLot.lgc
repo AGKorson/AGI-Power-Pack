@@ -27,6 +27,7 @@
 #define oPatientCar   o3
 #define btnYes        o4
 #define btnNo         o5
+#define oCredits      o7
 
 #define egoCarSeq    v220
 #define   EC_IDLE      0
@@ -72,6 +73,15 @@
 #define carY         v224
 #define deathSeq     v225
 #define weekday      v226
+#define creditline        v227
+  #define CR_PPDESIGN      0
+  #define CR_DEMODESIGN    1
+  #define CR_BKGD_ART      2
+  #define CR_ANIMATION     3
+  #define CR_ADDL_ART      4
+  #define CR_MUSIC         5
+  #define CR_SOUND         6
+#define creditstep        v228
 
 #define carDone      f220
 #define patientDone  f221
@@ -82,10 +92,11 @@
 #define skip1        f226
 #define electrocuted  f227
 #define patientVisible f228
-#define egoDying       f229
-#define playCarSound   f230
-#define doneCarSound   f231
-#define doneEgoCarSnd  f232
+#define patientCarVisible f229
+#define egoDying       f230
+#define playCarSound   f231
+#define doneCarSound   f232
+#define doneEgoCarSnd  f233
 
 #define theDay          s12
 #define weekendMsg      s13
@@ -171,10 +182,6 @@ if (newRoom) {
   [ done with temp variables; reset module variables as needed
   patientSeq = IDLE;
   
-  [ tiny ego view
-  load.view(vw.EgoSmall);
-  set.view(ego, vw.EgoSmall);
-  
   [ patient car
   animate.obj(oPatientCar);
   set.view(oPatientCar, vw.Cars);
@@ -190,6 +197,10 @@ if (newRoom) {
   load.view(vw.SmallPerson6);
   load.view(vw.SmallPerson7);
   [ don't draw until needed
+  
+  [ tiny ego view
+  load.view(vw.EgoSmall);
+  set.view(ego, vw.EgoSmall);
   
   [ buttons for end game msgbox
   load.view(vw.ParkingLotArt);
@@ -277,6 +288,287 @@ if (newRoom) {
 [***************************************
 [ NON-INPUT CODE 
 [***************************************
+
+[ check for end credit sequence
+if (endCreditSeq) {
+  [ starting playing the credits
+  if (endCreditSeq == 1) {
+    [ add the credits object and begin movement
+    animate.obj(oCredits);
+    load.view(vw.Credits);
+    set.view(oCredits, vw.Credits);
+    set.loop(oCredits, 0);
+    set.cel(oCredits, 0);
+    stop.cycling(oCredits);
+    position(oCredits, 52, 162);
+    set.priority(oCredits, 14);
+    ignore.horizon(oCredits);
+    ignore.objs(oCredits);
+    ignore.blocks(oCredits);
+    draw(oCredits);
+    work1 = 1;
+    step.time(oCredits, work1);
+    work1 = UP;
+    set.dir(oCredits, work1);
+    creditline = CR_PPDESIGN;
+    creditstep = 0;
+    ++endCreditSeq;
+  } 
+  
+  [ if credits are playing, update as needed
+  if (endCreditSeq == 2) {
+    [ credit events are based on which line, its position and state/step
+    get.posn(oCredits, work1, work2);
+    if (creditstep == 0) {
+      [ showing only top line of credit
+      if (creditline == CR_PPDESIGN) {
+        if (work2 == 142) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 22; [ 23; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_DEMODESIGN) {
+        if (work2 == 142) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 21; [ 22; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_BKGD_ART) {
+        if (work2 == 147) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 12; [ 13; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_ANIMATION) {
+        if (work2 == 144) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 13; [ 14; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_ADDL_ART) {
+        if (work2 == 144) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 14; [ 15; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_MUSIC) {
+        if (work2 == 144) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 14; [ 15; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_SOUND) {
+        if (work2 == 144) {
+          [ show next line
+          creditstep = 1;
+          set.cel(oCredits, 1);
+          work1 = 0;
+          work2 = 14; [ 15; [ adjust by one to smooth out movmement
+          reposition(oCredits, work1, work2);
+        }
+      }
+    }
+    if (creditstep == 1) {
+      [ showing top two lines of 3-line credit
+      [ showing both lines of 2-line credit
+      if (creditline == CR_PPDESIGN) {
+        if (work2 == 147) {
+          [ show next line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+          work1 = 0;
+          work2 = 12; [ 13;  [ adjust by one to smooth out movement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_DEMODESIGN) {
+        if (work2 == 146) {
+          [ show next line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+          work1 = 0;
+          work2 = 13; [ 14;  [ adjust by one to smooth out movement
+          reposition(oCredits, work1, work2);
+        }
+      }
+      if (creditline == CR_BKGD_ART) {
+        if (work2 == 30) {
+          [ remove top line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+        }
+      }
+      if (creditline == CR_ANIMATION) {
+        if (work2 == 30) {
+          [ remove top line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+        }
+      }
+      if (creditline == CR_ADDL_ART) {
+        if (work2 == 30) {
+          [ remove top line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+        }
+      }
+      if (creditline == CR_MUSIC) {
+        if (work2 == 30) {
+          [ remove top line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+        }
+      }
+      if (creditline == CR_SOUND) {
+        if (work2 == 30) {
+          [ remove top line
+          creditstep = 2;
+          set.cel(oCredits, 2);
+        }
+      }
+    }
+    if (creditstep == 2) {
+      [ showing all lines of 3-line credit
+      [ showing bottom line of 2-line credit
+      if (creditline == CR_PPDESIGN) {
+        if (work2 == 48) {
+          [ remove top line
+          creditstep = 3;
+          set.cel(oCredits, 3);
+        }
+      }
+      if (creditline == CR_DEMODESIGN) {
+        if (work2 == 48) {
+          [ remove top line
+          creditstep = 3;
+          set.cel(oCredits, 3);
+        }
+      }
+      if (creditline == CR_BKGD_ART) {
+        if (work2 == 12) {
+          [ restart with next credit line, at bottom
+          creditline = CR_ANIMATION;
+          creditstep = 0;
+          set.loop(oCredits, CR_ANIMATION);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 48, 164);
+          return();
+        }
+      }
+      if (creditline == CR_ANIMATION) {
+        if (work2 == 12) {
+          [ restart with next credit line, at bottom
+          creditline =  CR_ADDL_ART;
+          creditstep = 0;
+          set.loop(oCredits, CR_ADDL_ART);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 46, 164);
+          return();
+        }
+      }
+      if (creditline == CR_ADDL_ART) {
+        if (work2 == 12) {
+          [ restart with next credit line, at bottom
+          creditline = CR_MUSIC;
+          creditstep = 0;
+          set.loop(oCredits, CR_MUSIC);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 48, 162);
+          return();
+        }
+      }
+      if (creditline == CR_MUSIC) {
+        if (work2 == 12) {
+          [ restart with next credit line, at bottom
+          set.loop(oCredits, CR_SOUND);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 43, 162);
+          creditline = CR_SOUND;
+          creditstep = 0;
+          return();
+        }
+      }
+      if (creditline == CR_SOUND) {
+        if (work2 == 12) {
+          [ restart at beginning
+          set.loop(oCredits, 0);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 52, 162);
+          creditline = CR_PPDESIGN;
+          creditstep = 0;
+          return();
+        }
+      }
+    }
+    if (creditstep == 3) {
+      [ showing bottom two lines of 3-credit line
+      if (creditline == CR_PPDESIGN) {
+        if (work2 == 30) {
+          [ show only bottom line
+          creditstep = 4;
+          set.cel(oCredits, 4);
+        }
+      }
+      if (creditline == CR_DEMODESIGN) {
+        if (work2 == 30) {
+          [ show only bottom line
+          creditstep = 4;
+          set.cel(oCredits, 4);
+        }
+      }
+    }
+    if (creditstep == 4) {
+      [ showing bottom line of 3-credit line
+      if (creditline == CR_PPDESIGN) {
+        if (work2 == 12) {
+          [ restart with next credit line, at bottom
+          set.loop(oCredits, CR_DEMODESIGN);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 32, 162);
+          creditline = CR_DEMODESIGN;
+          creditstep = 0;
+          return();
+        }
+      }
+      if (creditline == CR_DEMODESIGN) {
+        if (work2 == 12) {
+          [ restart with next credit line, at bottom
+          creditline = CR_BKGD_ART;
+          creditstep = 0;
+          set.loop(oCredits, CR_BKGD_ART);
+          set.cel(oCredits, 0);
+          reposition.to(oCredits, 46, 167);
+        }
+      }
+    }      
+  }
+  [ during end credits, no other room actions occur
+  return();
+}
 
 [*******************
 [ DREW'S CAR
@@ -411,8 +703,64 @@ if (egoCarSeq) {
     egoCarSeq = EC_IDLE;
     erase(egoCar);
     print("You drive away, your visit to Sierra On-Line is over.");
-    [ set deathType
+    [ disable scripting during resource loads/unloads
+    set(noScript);
+    
+    [ if patient/patient car visible, add them to pic
+    [ before erasing them
+    if (patientVisible) {
+      current.view(oPatient, tmpView);
+      current.loop(oPatient, tmpLoop);
+      current.cel(oPatient, tmpCel);
+      get.posn(oPatient, tmpX, tmpY);
+      get.priority(oPatient, tmpPri);
+      tmpMgn = 15;
+      add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+      erase(oPatient);
+    }
+    if (patientCarVisible) {
+      current.view(oPatientCar, tmpView);
+      current.loop(oPatientCar, tmpLoop);
+      current.cel(oPatientCar, tmpCel);
+      get.posn(oPatientCar, tmpX, tmpY);
+      get.priority(oPatientCar, tmpPri);
+      tmpMgn = 15;
+      add.to.pic.v(tmpView, tmpLoop, tmpCel, tmpX, tmpY, tmpPri, tmpMgn);
+      erase(oPatientCar);
+    }
+    
+    [ remove all unneeded views and sounds 
+    [ !BE SURE to unload in exact opposite order they were loaded
+    work1 = s.Shock;
+    block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
+    work1 = s.CarStop;
+    block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
+    work1 = s.CarStart;
+    block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
+    work1 = s.Car;
+    block(SND.V.FN, DISCARD.SOUND.V, &work1, 0); [ discard.sound.v(vSNDNUM)
+    discard.view(vw.ParkingLotArt);
+    discard.view(vw.EgoSmall);
+    discard.view(vw.SmallPerson7);
+    discard.view(vw.SmallPerson6);
+    discard.view(vw.SmallPerson5);
+    discard.view(vw.SmallPerson4);
+    discard.view(vw.SmallPerson3);
+    discard.view(vw.SmallPerson2);
+    discard.view(vw.SmallPerson1);
+    discard.view(vw.Cars);
+    
+    [ remove blocks around parked cars
+    s22 = "F1F204F433A7A442A733F42E9B983D9B2EF45C9A976B9A5CF46A8D8A798D6AF41A9C99299C1AFF";
+    block(PIC.DRAW, AGI_FILL, &s22, 0); [ pic.draw(FILLSTYLE, sCMDS)
+    [ add pri 15 screen to hide the arrival of the credits
+    s22 = "F1F20FF520A480A320A280A120A0809F209E809D209C809B209A809920988097209680FF";
+    block(PIC.DRAW, AGI_FILL, &s22, 0); [ pic.draw(FILLSTYLE, sCMDS)
+    
+    [ set deathType to begin final ending sequence
     deathType = DT_DRIVE_AWAY;
+    endCreditSeq = 1;
+    return();
   }
 }
 
@@ -486,6 +834,7 @@ if (patientTimer == 0) {
       move.obj(oPatientCar, 99, 128, 2, patientDone);
     }
     draw(oPatientCar);
+    set(patientCarVisible);
     
     [ if not playing any other sounds
     if (!playWalkman && !playSound) {
@@ -519,6 +868,7 @@ if (patientDone) {
   if (patientSeq == P2_DRIVE_F) {
     [ car has left 
     erase(oPatientCar);
+    reset(patientCarVisible);
     reset(patientHere);
     reset(patientDone);
     [ if car sound is active, stop it
@@ -622,6 +972,7 @@ if (patientDone) {
   if (patientSeq == P1_DRIVE_D) {
     [ car has left
     erase(oPatientCar);
+    reset(patientCarVisible);
     reset(patientHere);
     reset(patientDone);
     [ if car sound is playing, stop it

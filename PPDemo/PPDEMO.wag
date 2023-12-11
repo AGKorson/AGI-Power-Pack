@@ -5,10 +5,10 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/10/2023 10:05:30 PM"
+   LastEdit = "12/11/2023 2:35:02 PM"
    LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Power Pack Demo Game showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = "Power Pack Demo v0.5"
+   GameVersion = "Power Pack Demo v0.6"
    About = "  Power Pack Demo Game\n    by Andrew Korson\n\nShowcasing the incredibly\n powerful features of the\n     AGI Power Pack!"
    ResDir = src
    UseResNames = True
@@ -51,15 +51,15 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro"
-   CRC32 = &H87476C24
-   CompCRC32 = &H87476C24
+   CRC32 = &H65ACD556
+   CompCRC32 = &H65ACD556
    IsRoom = True
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &H67479848
-   CompCRC32 = &H67479848
+   CRC32 = &H4F40EA3C
+   CompCRC32 = &H4F40EA3C
    IsRoom = True
 
 [Logic3]
@@ -289,8 +289,8 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &HCDCF27B8
-   CompCRC32 = &HCDCF27B8
+   CRC32 = &H48A19E02
+   CompCRC32 = &H48A19E02
    IsRoom = False
 
 [Logic36]
@@ -303,8 +303,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &H3637C064
-   CompCRC32 = &H3637C064
+   CRC32 = &H242943A9
+   CompCRC32 = &H242943A9
    IsRoom = False
 
 [Logic51]
@@ -331,8 +331,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &HF6B15ADB
-   CompCRC32 = &HF6B15ADB
+   CRC32 = &H30A55E3A
+   CompCRC32 = &H30A55E3A
    IsRoom = False
 
 [Logic55]
@@ -345,8 +345,8 @@
 [Logic56]
    ID = lgc.Debug
    Description = "When debugging, this logic handles all debug commands."
-   CRC32 = &H7103F60D
-   CompCRC32 = &H7103F60D
+   CRC32 = &HB977CBB6
+   CompCRC32 = &HB977CBB6
    IsRoom = False
 
 [Logic57]
@@ -366,8 +366,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &HE8F074AF
-   CompCRC32 = &HE8F074AF
+   CRC32 = &H56AD7D2D
+   CompCRC32 = &H56AD7D2D
    IsRoom = False
 
 [Logic60]
@@ -408,8 +408,8 @@
 [Logic40]
    ID = lgc.HelpText2
    Description = "Contains code to display help topic pages 5 to 8."
-   CRC32 = &H4D60B73E
-   CompCRC32 = &H4D60B73E
+   CRC32 = &H34989E41
+   CompCRC32 = &H34989E41
    IsRoom = False
 
 [Logic39]
@@ -429,8 +429,8 @@
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H7FAEC9CF
-   CompCRC32 = &H7FAEC9CF
+   CRC32 = &H308CCC27
+   CompCRC32 = &H308CCC27
    IsRoom = False
 
 [Logic44]
