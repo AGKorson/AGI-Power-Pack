@@ -88,7 +88,6 @@ if (skipIntro) {
   tmp2 = 1;
 } else {
   tmp2 = 0;
-[ TODO: something is causing skipIntro flag to reset
 }
 
 [ blank the output string
