@@ -12,6 +12,15 @@
 [ power pack support
 #include "powerpack.txt"
 
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 prevent.input();
 configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
 set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
@@ -106,36 +115,7 @@ graphics();
 accept.input();
 return();
 
-[ Messages
+[***************************************
+[ DECLARED MESSAGES
+[***************************************
 #message 1 "�"
-#message 2 "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커"
-#message 3 "To:   All Agi Mainframe OS Users"
-#message 4 "Subj: Password Management"
-#message 5 "1. As you know, the AMOS project has been developed "
-#message 6 "to assist the AGI Power Pack development team in "
-#message 7 "creating an enhanced AGI engine that will improve "
-#message 8 "the graphics, sound and input capabilities of AGI. "
-#message 9 "Although the emergence of the Sierra Creative "
-#message 10 "Interpreter (SCI) has cast doubt on the ultimate "
-#message 11 "future of the Power Pack, we will continue working as "
-#message 12 "hard as we can as long as the project is funded."
-#message 13 "2. There have been a few modifications made to AMOS to "
-#message 14 "improve system security. All project members have been "
-#message 15 "reissued new userids. Your new userid will be your "
-#message 16 "initials and your employee IDnumber (which is based on "
-#message 17 "seniority in the company, for example 'jd123'). "
-#message 18 "3. Every account has been assigned the same temporary "
-#message 19 "password (Temp123!). You need to logon as soon as "
-#message 20 "possible and choose another password that meets the "
-#message 21 "new security requirements. Passwords must now be at "
-#message 22 "least 8 characters long, and must include at least one "
-#message 23 "upper case letter, lower case letter, number, and "
-#message 24 "special character. "
-#message 25 "4. Please note that ALL employees, including senior "
-#message 26 "managers and company executives who have accounts, "
-#message 27 "must reset their passwords. System security depends on "
-#message 28 "all of us complying with the policies we have put in "
-#message 29 "place to protect our work."
-#message 30 "5. If you have any questions, please call one of the "
-#message 31 "AMOS System Administrators."
-#message 32 "읕컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴켸"

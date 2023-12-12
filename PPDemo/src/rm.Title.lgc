@@ -15,67 +15,67 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oLogo              o1
-#define oDrew              o2
-#define oCat               o3
+#define oLogo                        o1
+#define oDrew                        o2
+#define oCat                         o3
 
-#define sText             s12
-#define sChar             s13
-#define sColor1           s14
-#define sColor2           s15
-#define sColor3           s16
-#define sColor4           s17
-#define sColor5           s18
-#define sColor6           s19
-#define sColor7           s20
-#define sColor8           s21
-#define sColor9           s22
-#define sColor10          s23
+#define sText                       s12
+#define sChar                       s13
+#define sColor1                     s14
+#define sColor2                     s15
+#define sColor3                     s16
+#define sColor4                     s17
+#define sColor5                     s18
+#define sColor6                     s19
+#define sColor7                     s20
+#define sColor8                     s21
+#define sColor9                     s22
+#define sColor10                    s23
 
-#define tmpSpeed          v220
-#define titleSeq          v221
-  #define TS_FADEIN_AG      0
-  #define TS_SALUTE         1
-  #define TS_SALUTE_UP      2
-  #define TS_SALUTE_WAIT    3
-  #define TS_SALUTE_DOWN    4
-  #define TS_PAUSE1         5
-  #define TS_FADEOUT_AG     6
-  #define TS_FADEIN_WIN     7
-  #define TS_PAUSE2         8
-  #define TS_WIN_SOUND      9
-  #define TS_FADEOUT_WIN   10
-  #define TS_WAIT_AGI      11
-  #define TS_ANIMATE_AGI   12
-  #define TS_MOVE_AGI      13
-  #define TS_EXPLODE       14
-  #define TS_EXPLODED      15
-  #define TS_FADEWHITE     16
-  #define TS_PPACK         17
-  #define TS_PP_SHIFT      18
-  #define TS_FADEOUT_PP    19
-  #define TS_FADEIN_SQ     20
-  #define TS_START_CREDITS 21
-  #define TS_SCROLLCREDS   22
-  #define TS_FINISHED      23
-#define titleTimer        v222
-#define letterIndex       v223
-#define delaycounter      v224
-#define wordcount         v225
-#define musicDelay        v226
-#define creditline        v227
-  #define CR_PPDESIGN      0
-  #define CR_DEMODESIGN    1
-  #define CR_BKGD_ART      2
-  #define CR_ANIMATION     3
-  #define CR_ADDL_ART      4
-  #define CR_MUSIC         5
-  #define CR_SOUND         6
-#define creditstep        v228
-#define tmpSeconds        v229
+#define tmpSpeed                   v220
+#define titleSeq                   v221
+  #define TS_FADEIN_AG           0
+  #define TS_SALUTE              1
+  #define TS_SALUTE_UP           2
+  #define TS_SALUTE_WAIT         3
+  #define TS_SALUTE_DOWN         4
+  #define TS_PAUSE1              5
+  #define TS_FADEOUT_AG          6
+  #define TS_FADEIN_WIN          7
+  #define TS_PAUSE2              8
+  #define TS_WIN_SOUND           9
+  #define TS_FADEOUT_WIN        10
+  #define TS_WAIT_AGI           11
+  #define TS_ANIMATE_AGI        12
+  #define TS_MOVE_AGI           13
+  #define TS_EXPLODE            14
+  #define TS_EXPLODED           15
+  #define TS_FADEWHITE          16
+  #define TS_PPACK              17
+  #define TS_PP_SHIFT           18
+  #define TS_FADEOUT_PP         19
+  #define TS_FADEIN_SQ          20
+  #define TS_START_CREDITS      21
+  #define TS_SCROLLCREDS        22
+  #define TS_FINISHED           23
+#define titleTimer                 v222
+#define letterIndex                v223
+#define delaycounter               v224
+#define wordcount                  v225
+#define musicDelay                 v226
+#define creditline                 v227
+  #define CR_PPDESIGN            0
+  #define CR_DEMODESIGN          1
+  #define CR_BKGD_ART            2
+  #define CR_ANIMATION           3
+  #define CR_ADDL_ART            4
+  #define CR_MUSIC               5
+  #define CR_SOUND               6
+#define creditstep                 v228
+#define tmpSeconds                 v229
 
-#define logoDone          f220
-#define themeMusicDone    f221
+#define logoDone                   f220
+#define themeMusicDone             f221
 
 [***************************************
 [ FIRST CYCLE ONLY

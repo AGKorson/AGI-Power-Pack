@@ -18,57 +18,57 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oCursorB       o1  [ need four objects for cursor otherwise
-#define oCursorT       o2  [ text gets erased
-#define oCursorL       o3
-#define oCursorR       o4
-#define optCursor      o5
-#define oSlider        o6
-#define oCheck         o7
-#define oTest          o8
+#define oCursorB                     o1  [ need four objects for cursor otherwise
+#define oCursorT                     o2  [ text gets erased
+#define oCursorL                     o3
+#define oCursorR                     o4
+#define optCursor                    o5
+#define oSlider                      o6
+#define oCheck                       o7
+#define oTest                        o8
 
 [ loop values assigned to cursor objects
-#define LP_OPT      0 [ option button states
-#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons
-#define LP_CF_CMD   2 [    "     "    "  OK, Cancel, and preset command buttons
-#define LP_CF_CHK   3 [    "     "    "  checkbox button
-#define LP_SLIDER   4 [ speed control slider button
-#define LP_CHECK    5 [ turbo mode checkbox button
-#define LP_TESTVIEW 6 [ test view to show effect of speed setting
+#define LP_OPT                        0 [ option button states
+#define LP_CF_OPT                     1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_CMD                     2 [    "     "    "  OK, Cancel, and preset command buttons
+#define LP_CF_CHK                     3 [    "     "    "  checkbox button
+#define LP_SLIDER                     4 [ speed control slider button
+#define LP_CHECK                      5 [ turbo mode checkbox button
+#define LP_TESTVIEW                   6 [ test view to show effect of speed setting
 
-#define tmpInterval   v220
-#define cursorpos     v221
-#define    CP_MOUSE   1
-#define    CP_KEYB    2
-#define    CP_TURBO   3
-#define    CP_OK      4
-#define    CP_CANCEL  5
-#define    CP_SLIDER  6
-#define    CP_SLOW    7
-#define    CP_NORMAL  8
-#define    CP_FAST    9
-#define    CP_FASTEST 10
-#define newpos       v222
-#define cursorX      v223
-#define cursorY      v224
-#define btnAction    v225
-#define    B_TURBO    1
-#define    B_OK       2
-#define    B_CANCEL   3
-#define    B_SLIDER   4
-#define    B_SLOW     5
-#define    B_NORMAL   6
-#define    B_FAST     7
-#define    B_FASTEST  8
-#define slideoffset  v226
-#define egoPrevX     v227
-#define egoPrevY     v228
-#define egoPrevDir   v229
+#define tmpInterval                v220
+#define cursorpos                  v221
+  #define CP_MOUSE               1
+  #define CP_KEYB                2
+  #define CP_TURBO               3
+  #define CP_OK                  4
+  #define CP_CANCEL              5
+  #define CP_SLIDER              6
+  #define CP_SLOW                7
+  #define CP_NORMAL              8
+  #define CP_FAST                9
+  #define CP_FASTEST            10
+#define newpos                     v222
+#define cursorX                    v223
+#define cursorY                    v224
+#define btnAction                  v225
+  #define B_TURBO                1
+  #define B_OK                   2
+  #define B_CANCEL               3
+  #define B_SLIDER               4
+  #define B_SLOW                 5
+  #define B_NORMAL               6
+  #define B_FAST                 7
+  #define B_FASTEST              8
+#define slideoffset                v226
+#define egoPrevX                   v227
+#define egoPrevY                   v228
+#define egoPrevDir                 v229
 
-#define update       f220
-#define tmpTurbo     f221
-#define cursormode   f222
-#define sliding      f223
+#define update                     f220
+#define tmpTurbo                   f221
+#define cursormode                 f222
+#define sliding                    f223
 
 [***************************************
 [ ERROR CHECK

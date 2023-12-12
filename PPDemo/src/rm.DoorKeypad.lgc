@@ -13,30 +13,30 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oDigit1           o1
-#define oDigit2           o2
-#define oDigit3           o3
-#define oDigit4           o4
-#define oIndicator        o5
+#define oDigit1                      o1
+#define oDigit2                      o2
+#define oDigit3                      o3
+#define oDigit4                      o4
+#define oIndicator                   o5
 
-#define pressButton     v220
-#define btnColor        v221
-#define digitcount      v222
-#define digit1          v223
-#define digit2          v224
-#define digit3          v225
-#define digit4          v226
-#define vMsg            v227
-#define indicatorTimer  v228
-#define tryCount        v229
+#define sFillCommand                s12
+#define sFillColor                  s13
 
-#define unlockdoor      f220
-#define correctcode     f221
-#define pressAsterisk   f222
-#define pressPound      f223
+#define pressButton                v220
+#define btnColor                   v221
+#define digitcount                 v222
+#define digit1                     v223
+#define digit2                     v224
+#define digit3                     v225
+#define digit4                     v226
+#define vMsg                       v227
+#define indicatorTimer             v228
+#define tryCount                   v229
 
-#define sFillCommand    s12
-#define sFillColor      s13
+#define unlockdoor                 f220
+#define correctcode                f221
+#define pressAsterisk              f222
+#define pressPound                 f223
 
 [***************************************
 [ FIRST CYCLE ONLY

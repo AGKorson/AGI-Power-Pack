@@ -40,13 +40,13 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define tmp0    v240
-#define tmp1    v241
-#define tmp2    v242
+#define tmpStr1                     s21
+#define tmpStr2                     s22
+#define filename                    s23
 
-#define tmpStr1   s21
-#define tmpStr2   s22
-#define filename  s23
+#define tmp0                       v240
+#define tmp1                       v241
+#define tmp2                       v242
 
 [***************************************
 [ MAIN CODE BLOCK 

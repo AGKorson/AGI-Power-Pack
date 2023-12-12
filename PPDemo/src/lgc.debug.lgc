@@ -12,12 +12,12 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define xPos            v240
-#define yPos            v241
-#define tmpVarA         v254
-#define tmpVarB         v255
+#define tmpStr                      s20 
 
-#define tmpStr           s20 
+#define xPos                       v240
+#define yPos                       v241
+#define tmpVarA                    v254
+#define tmpVarB                    v255
 
 [***************************************
 [ MAIN CODE BLOCK 

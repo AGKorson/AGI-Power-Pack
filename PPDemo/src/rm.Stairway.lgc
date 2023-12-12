@@ -16,15 +16,15 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define lightshadow   o1
-#define door          o2
+#define lightshadow                  o1
+#define door                         o2
 
-#define doorSeq      v220
-#define flickerTime  v221
+#define doorSeq                    v220
+#define flickerTime                v221
 
-#define fDoorDone    f220
-#define fDoorOpen    f221
-#define lightOn      f222
+#define fDoorDone                  f220
+#define fDoorOpen                  f221
+#define lightOn                    f222
 
 [***************************************
 [ FIRST CYCLE ONLY

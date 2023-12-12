@@ -15,8 +15,8 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define pageNum     v250
-#define pageImg     v251
+#define pageNum                    v250
+#define pageImg                    v251
 
 [***************************************
 [ MAIN CODE BLOCK 

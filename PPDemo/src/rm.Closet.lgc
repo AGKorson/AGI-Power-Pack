@@ -20,49 +20,58 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define wall        o1
-#define broom       o2
-#define drip        o3
-#define door        o4
+#define wall                         o1
+#define broom                        o2
+#define drip                         o3
+#define door                         o4
+#define oBucket                      o5
 
-#define fDone           f220
-#define fFalling        f221
-#define clickbroom      f222
-#define clickmops       f223
-#define dripping        f224
-#define dripdone        f225
-#define cantrip         f226
-#define crouch          f227
-#define uncrouch        f228
-#define opendoor        f229
-#define closedoor       f230
-#define fDoorDone       f231
-#define fEgoDead        f232
-#define fDoneWash       f233
+#define fallSeq                    v220
+  #define NOFALL                 0
+  #define STARTFALL              1
+  #define MOVE2WALL1             2
+  #define MOVE2WALL2             3
+  #define FALLDOWN               4
+  #define BREAKWALL              5
+  #define SITUP                  6
+  #define FALLDONE               7
+  #define STANDUP                8
+#define movebroomstatus            v221
+  #define NOMOVE                 0
+  #define MOVE2CORNER            1
+  #define PLACEBROOM             2
+#define driptimerM                 v222
+#define driptimerS                 v223
+#define triptimer                  v224
+#define tmpLoop                    v225
+#define washSeq                    v226
+  #define MOVESINK1              1
+  #define MOVESINK2              2
+  #define WASHING                3
+#define kickSeq                    v227
+  #define MOVEMIDDLE             1
+  #define STARTKICK              2
+  #define KICKING                3
+  #define DONEKICK               4
+  
+#define fDone                      f220
+#define fFalling                   f221
+#define clickbroom                 f222
+#define clickmops                  f223
+#define dripping                   f224
+#define dripdone                   f225
+#define cantrip                    f226
+#define crouch                     f227
+#define uncrouch                   f228
+#define opendoor                   f229
+#define closedoor                  f230
+#define fDoorDone                  f231
+#define fEgoDead                   f232
+#define fDoneWash                  f233
+#define kickBucket                 f234
+#define bucketDone                 f235
 
-#define fallSeq         v220
-#define    NOFALL        0
-#define    STARTFALL     1
-#define    MOVE2WALL1    2
-#define    MOVE2WALL2    3
-#define    FALLDOWN      4
-#define    BREAKWALL     5
-#define    SITUP         6
-#define    FALLDONE      7
-#define    STANDUP       8
-#define movebroomstatus v221
-#define    NOMOVE        0
-#define    MOVE2CORNER   1
-#define    PLACEBROOM    2
-#define driptimerM      v222
-#define driptimerS      v223
-#define triptimer       v224
-#define    TRIPDELAY     80
-#define tmpLoop         v225
-#define washSeq         v226
-#define    MOVESINK1     1
-#define    MOVESINK2     2
-#define    WASHING       3
+#define TRIPDELAY                    80
 
 [***************************************
 [ FIRST CYCLE ONLY
@@ -274,7 +283,7 @@ if (uncrouch) {
 }
 
 [ trip and fall into wall
-if (egoHitSpecial && !wallbreak && fallSeq == NOFALL) {
+if (egoHitSpecial && !wallbreak && fallSeq == NOFALL && !kickSeq) {
   [ fall, and break wall
   print("Look out for that broom!");
   fallSeq = STARTFALL;
@@ -381,7 +390,8 @@ if (fDone && fallSeq == STANDUP) {
 [ BROOM TRIP
 [*******************
 [ trip over broom even after first fall, unless it's been moved
-if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && movebroomstatus == NOMOVE) {
+if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && 
+    movebroomstatus == NOMOVE && !kickSeq) {
   print("You trip over the broom again!");
   work1 = -1;
   call(lgc.ScoreHandler);
@@ -561,6 +571,73 @@ if (fDoneWash) {
   }
 }
 
+[*******************
+[ KICK BUCKET
+[*******************
+if (kickSeq) {
+  if (kickSeq == MOVEMIDDLE && kickBucket) {
+    reset(kickBucket);
+    ++kickSeq;
+    [ begin kick sequence
+    work1 = CYCLE_AT_REST;
+    set.upper.left(&ego, &work1);  [ auto.cycle(oSOBJ, vMODE)
+    [ start by showing kicking loop
+    load.view(vw.KickBucket);
+    set.view(ego, vw.KickBucket);
+    set.loop(ego, 0);
+    set.cel(ego, 0);
+    end.of.loop(ego, bucketDone);
+    [ remove bucket from corner
+    add.to.pic(vw.KickBucket, 3, 0, 50, 141, 0, 15);
+    [ add the bucket object
+    animate.obj(oBucket);
+    get.posn(ego, work1, work2);
+    work1 += 8;
+    position.v(oBucket, work1, work2);
+    set.view(oBucket, vw.KickBucket);
+    set.loop(oBucket, 2);
+    fix.loop(oBucket);
+    set.priority(oBucket, 15);
+    ignore.blocks(oBucket);
+    ignore.objs(oBucket);
+    ignore.horizon(oBucket);
+    work1 = 3;
+    step.size(oBucket, work1);
+    draw(oBucket);
+  }
+
+  if (kickSeq == STARTKICK) {
+    [ during kick cycle, begin moving bucket at cel 2
+    current.cel(ego, work1);
+    if (work1 == 2) {
+      work1 = UP_RIGHT;
+      set.dir(oBucket, work1);
+      ++kickSeq;
+    }
+  }
+
+  if (kickSeq == KICKING && bucketDone) {
+    [ after kicking, switch to falling
+    set.loop(ego, 1);
+    set.cel(ego, 0);
+    end.of.loop(ego, bucketDone);
+    ++kickSeq;
+  }
+  
+  if (kickSeq == DONEKICK && bucketDone) {
+      [ after falling, end the sequence
+      reset(kickBucket);
+      ++kickSeq;
+      deathType = DT_KICK_BUCKET;
+      return();
+  }
+  
+  [ if bucket reaches right edge, erase it
+  if (objHitEdge == &oBucket) {
+    erase(oBucket);
+  }
+}
+
 [ if ego is dead, skip player input
 if (deathType) {
   return();
@@ -654,6 +731,15 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       print("You don't have a bucket.");
     }
   }
+  if (said("kick", "bucket")) {
+    print("OK.");
+    [ stop ego, have him kick a bucket
+    program.control();
+    prevent.input();
+    kickSeq = MOVEMIDDLE;
+    move.obj(ego, 60, 148, 1, kickbucket);
+  }
+  
   if (said("look", "broom")) {
     if (broommoved) {
       s12 = ", including that stupid broom you tripped over earlier.";

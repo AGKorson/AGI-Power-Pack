@@ -29,143 +29,142 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oCursorB       o1  [ need four objects for cursor otherwise
-#define oCursorT       o2  [ text gets erased
-#define oCursorL       o3
-#define oCursorR       o4
-#define oMode          o5
-#define oScrlBox       o6
-#define oScrlBkgd      o7
+#define oCursorB                     o1  [ need four objects for cursor otherwise
+#define oCursorT                     o2  [ text gets erased
+#define oCursorL                     o3
+#define oCursorR                     o4
+#define oMode                        o5
+#define oScrlBox                     o6
+#define oScrlBkgd                    o7
 
 [ loop values assigned to cursor objects
-#define LP_OPT      0 [ option button states
-#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons
-#define LP_CF_CMD1  2 [    "     "    "  OK, Test command buttons
-#define LP_CF_CMD2  3 [    "     "    "  Save, Reset command buttons
-#define LP_CF_CMD3  4 [    "     "    "  Copy Instrument command button
-#define LP_CF_PNL1  5 [    "     "    "  display instrument listbox
-#define LP_CF_PNL2  6 [    "     "    "  select instrument listbox
-#define LP_CF_TEXT1 7 [ text cursor for check boxes
-#define LP_CF_TEXT2 8 [ text cursor for edit boxes
-#define LP_SCROLL   9 [ scroll bar components
+#define LP_OPT                        0 [ option button states
+#define LP_CF_OPT                     1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_CMD1                    2 [    "     "    "  OK, Test command buttons
+#define LP_CF_CMD2                    3 [    "     "    "  Save, Reset command buttons
+#define LP_CF_CMD3                    4 [    "     "    "  Copy Instrument command button
+#define LP_CF_PNL1                    5 [    "     "    "  display instrument listbox
+#define LP_CF_PNL2                    6 [    "     "    "  select instrument listbox
+#define LP_CF_TEXT1                   7 [ text cursor for check boxes
+#define LP_CF_TEXT2                   8 [ text cursor for edit boxes
+#define LP_SCROLL                     9 [ scroll bar components
 
-#define tmpVal       v220
-#define selinst      v221
-#define cursorX      v222
-#define cursorY      v223
-#define cursorpos    v224
-#define  CP_MOUSE     1
-#define  CP_KEYB      2
-#define  CP_INST      3
-#define  CP_DONE      4
-#define  CP_TEST      5
-#define  CP_COPY      6
-#define  CP_SAVE      7
-#define  CP_RESET     8
-#define  CP_M_TREM    9
-#define  CP_M_VIB    10
-#define  CP_M_SNDSUS 11
-#define  CP_M_KEYB   12
-#define  CP_M_FREQ   13
-#define  CP_M_KSL    14
-#define  CP_M_LVL    15
-#define  CP_M_ATTK   16
-#define  CP_M_DECAY  17
-#define  CP_M_SUST   18
-#define  CP_M_REL    19
-#define  CP_M_SHAPE  20
-#define  CP_FDBACK   21
-#define  CP_C_TREM   22
-#define  CP_C_VIB    23
-#define  CP_C_SNDSUS 24
-#define  CP_C_KEYB   25
-#define  CP_C_FREQ   26
-#define  CP_C_KSL    27
-#define  CP_C_LVL    28
-#define  CP_C_ATTK   29
-#define  CP_C_DECAY  30
-#define  CP_C_SUST   31
-#define  CP_C_REL    32
-#define  CP_C_SHAPE  33
-#define  CP_CONN     34
-#define newpos       v225
-#define btnAction    v226
-#define   B_MOUSE     1
-#define   B_KYBD      2
-#define   B_DONE      3
-#define   B_TEST      4
-#define   B_COPY      5
-#define   B_SAVE      6
-#define   B_RESET     7
-#define   B_STOP      8
-#define    SC_UP      9
-#define    SC_DOWN   10
-#define    SC_PGUP   11
-#define    SC_PGDN   12
-#define egoPrevX     v227
-#define egoPrevY     v228
-#define egoPrevDir   v229
-#define tmpRow       v230
-#define tmpCol       v231
-#define dropmode     v232
-#define    NODROP     0
-#define    DROPDOWN   1
-#define    CHOOSING   2
-#define    DROPUP     3
-#define listindex    v233 [ inst index of currently selected instrument
-                          [ in the dropdown list
+#define strInst                     s12
+#define strByte                     s13
+#define sTemp                       s14 [ and s15
+#define sTemp2                      s16
+
+#define tmpVal                     v220
+#define selinst                    v221
+#define cursorX                    v222
+#define cursorY                    v223
+#define cursorpos                  v224
+  #define CP_MOUSE               1
+  #define CP_KEYB                2
+  #define CP_INST                3
+  #define CP_DONE                4
+  #define CP_TEST                5
+  #define CP_COPY                6
+  #define CP_SAVE                7
+  #define CP_RESET               8
+  #define CP_M_TREM              9
+  #define CP_M_VIB              10
+  #define CP_M_SNDSUS           11
+  #define CP_M_KEYB             12
+  #define CP_M_FREQ             13
+  #define CP_M_KSL              14
+  #define CP_M_LVL              15
+  #define CP_M_ATTK             16
+  #define CP_M_DECAY            17
+  #define CP_M_SUST             18
+  #define CP_M_REL              19
+  #define CP_M_SHAPE            20
+  #define CP_FDBACK             21
+  #define CP_C_TREM             22
+  #define CP_C_VIB              23
+  #define CP_C_SNDSUS           24
+  #define CP_C_KEYB             25
+  #define CP_C_FREQ             26
+  #define CP_C_KSL              27
+  #define CP_C_LVL              28
+  #define CP_C_ATTK             29
+  #define CP_C_DECAY            30
+  #define CP_C_SUST             31
+  #define CP_C_REL              32
+  #define CP_C_SHAPE            33
+  #define CP_CONN               34
+#define newpos                     v225
+#define btnAction                  v226
+  #define B_MOUSE                1
+  #define B_KYBD                 2
+  #define B_DONE                 3
+  #define B_TEST                 4
+  #define B_COPY                 5
+  #define B_SAVE                 6
+  #define B_RESET                7
+  #define B_STOP                 8
+  #define SC_UP                  9
+  #define SC_DOWN               10
+  #define SC_PGUP               11
+  #define SC_PGDN               12
+#define egoPrevX                   v227
+#define egoPrevY                   v228
+#define egoPrevDir                 v229
+#define tmpRow                     v230
+#define tmpCol                     v231
+#define dropmode                   v232
+  #define NODROP                 0
+  #define DROPDOWN               1
+  #define CHOOSING               2
+  #define DROPUP                 3
+#define listindex                  v233 [ inst index of currently selected instrument
+                                        [ in the dropdown list
 [ v234 - v242 are used as instrument data variables
-#define topinst      v243 [ index of instrument at top row of dropdown list
-#define listrow      v244 [ row index (0-4) of currently selected list item
-                          [ (topinst + listrow = listindex)
+#define topinst                    v243 [ index of instrument at top row of dropdown list
+#define listrow                    v244 [ row index (0-4) of currently selected list item
+                                        [ (topinst + listrow = listindex)
 [ v247 - v254
 [ are used as instrument data variables
 
-#define update           f220
-#define loadinst         f221
-#define cursormode       f222
-#define inTextBox        f223
-#define toggleCheck      f224
-#define typeText         f225
-#define sndTest          f226
-#define selectItem       f227
-#define redrawList       f228
-#define instDirty        f229
+#define update                     f220
+#define loadinst                   f221
+#define cursormode                 f222
+#define inTextBox                  f223
+#define toggleCheck                f224
+#define typeText                   f225
+#define sndTest                    f226
+#define selectItem                 f227
+#define redrawList                 f228
+#define instDirty                  f229
 
 [ instrument parameter flags and variables
-#define modTremolo       f230
-#define modVibrato       f231
-#define modSustain       f232
-#define modKyScale       f233
-#define modFreqMult      v234
-#define modKSL           v235
-#define modLevel         v236
-#define modAttack        v237
-#define modDecay         v238
-#define modSusLvl        v239
-#define modRelease       v240
-#define modWaveForm      v241
-#define feedback         v242
+#define modTremolo                 f230
+#define modVibrato                 f231
+#define modSustain                 f232
+#define modKyScale                 f233
+#define modFreqMult                v234
+#define modKSL                     v235
+#define modLevel                   v236
+#define modAttack                  v237
+#define modDecay                   v238
+#define modSusLvl                  v239
+#define modRelease                 v240
+#define modWaveForm                v241
+#define feedback                   v242
 
-#define carTremolo       f243
-#define carVibrato       f244
-#define carSustain       f245
-#define carKyScale       f246
-#define carFreqMult      v247
-#define carKSL           v248
-#define carLevel         v249
-#define carAttack        v250
-#define carDecay         v251
-#define carSusLvl        v252
-#define carRelease       v253
-#define carWaveForm      v254
-#define connect          f255
-
-[ strings
-#define strInst       s12
-#define strByte       s13
-#define sTemp         s14 [ and s15
-#define sTemp2        s16
+#define carTremolo                 f243
+#define carVibrato                 f244
+#define carSustain                 f245
+#define carKyScale                 f246
+#define carFreqMult                v247
+#define carKSL                     v248
+#define carLevel                   v249
+#define carAttack                  v250
+#define carDecay                   v251
+#define carSusLvl                  v252
+#define carRelease                 v253
+#define carWaveForm                v254
+#define connect                    f255
 
 [***************************************
 [ ERROR CHECK

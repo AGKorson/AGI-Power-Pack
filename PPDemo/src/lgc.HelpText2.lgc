@@ -17,14 +17,14 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define selectedTopic  v240
-#define prevItem       v241
-#define oldEgoDir      v242
+#define topicTitle                  s20
 
-#define initScreen     f240
-#define moveSelection  f241
+#define selectedTopic              v240
+#define prevItem                   v241
+#define oldEgoDir                  v242
 
-#define topicTitle      s20
+#define initScreen                 f240
+#define moveSelection              f241
 
 [***************************************
 [ MAIN CODE BLOCK 

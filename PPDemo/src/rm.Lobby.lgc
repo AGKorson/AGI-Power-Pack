@@ -38,137 +38,133 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define backpane         o1
-#define frontpane        o2
-#define oReceptionist    o3
-#define   LP_R_SIT       0
-#define   LP_R_GETPHONE  1
-#define   LP_R_TALKPHONE 2
-#define   LP_R_SPEAK     3
-#define   LP_TYPING      4
-#define   LP_FLIPPING    5
-#define oPatient1        o4
-#define oPatient2        o5
-#define oPatient3        o6
-#define oPatient4        o7
-#define   LP_MOVERIGHT  0
-#define   LP_MOVELEFT   1
-#define   LP_MOVEDOWN   2
-#define   LP_MOVEUP     3
-#define   LP_P_SIT      4
-#define   LP_P_SPEAK    5
-#define   LP_P_GETPHONE 6
-#define   LP_USEPHONE   7
-#define   LP_GETBOOK    8
-#define   LP_READBOOK   9
-#define   LP_TAPTOE     8
+#define backpane                     o1
+#define frontpane                    o2
+#define oReceptionist                o3
+  #define LP_R_SIT               0
+  #define LP_R_GETPHONE          1
+  #define LP_R_TALKPHONE         2
+  #define LP_R_SPEAK             3
+  #define LP_TYPING              4
+  #define LP_FLIPPING            5
+#define oPatient1                    o4
+#define oPatient2                    o5
+#define oPatient3                    o6
+#define oPatient4                    o7
+  #define LP_MOVERIGHT           0
+  #define LP_MOVELEFT            1
+  #define LP_MOVEDOWN            2
+  #define LP_MOVEUP              3
+  #define LP_P_SIT               4
+  #define LP_P_SPEAK             5
+  #define LP_P_GETPHONE          6
+  #define LP_USEPHONE            7
+  #define LP_GETBOOK             8
+  #define LP_READBOOK            9
+  #define LP_TAPTOE              8
+#define oMagazine                    o8
+#define oPapers                      o9
 
-#define oMagazine       o8
-#define oPapers         o9
+#define receptionistLoc            v220
+  #define PHONE                  1
+  #define COMPUTER               2
+  #define DESK                   3
+  #define HALL                   4
+  #define SPEAKING               5
+#define receptionistSeq            v221
+#define receptionistTimer          v222
+#define receptionistCtr            v223
+[ patient 1 controls
+#define patient1Seq                v224 [ sequence marker
+#define patient1Timer              v225 [ timer for events, uses delta from gameclock seconds
+#define patient1Ctr                v226 [ counter, used for events measured in cycles
+#define bookcycles                 v227
+[ patient 2 controls
+#define patient2Seq                v228
+#define patient2Timer              v229
+#define patient2Ctr                v230
+[ patient 3 controls
+#define patient3Seq                v231
+#define patient3Timer              v232
+#define patient3Ctr                v233
+[ patient 4 controls
+#define patient4Seq                v234 [ patient 2 and 4 are never on screen at same time
+#define patient4Timer              v235
+#define patient4Ctr                v236
 
-#define frontdooropen  f220
-#define fRDone         f221
-#define fP1Done        f222
-#define fP2Done        f223
-#define fP3Done        f224
-#define fP4Done        f225
-#define fPaneDone      f226
-#define fLogJam        f227
-#define fOneMinute     f228
-#define fEgoWaitTalk   f229
-#define fPatient1Talking      f230
-#define fEgoTalkReceptionist  f231
-#define checktalk      f232
-#define fPatientAtDoor f233
-#define fTripping      f234
-#define fFalling       f235
-#define fSlipped       f236
-#define fPagesTurned   f237
-#define fEgoInHall     f238
+#define tmpSec                     v237
+#define secondCtr                  v238
+#define whosIn                     v239 [ bitflag showing which actors are actually in the room
+                                        [ bit0 = receptionist
+                                        [ bit1 = patient1
+                                        [ bit2 = patient2
+                                        [ bit3 = patient3
+                                        [ bit4 = patient4
 
-#define receptionistLoc v220
-#define   PHONE         1
-#define   COMPUTER      2
-#define   DESK          3
-#define   HALL          4
-#define   SPEAKING      5
-#define receptionistSeq    v221
-#define receptionistTimer  v222
-#define receptionistCtr v223
-
-#define patient1Seq    v224 [ sequence marker
-#define patient1Timer  v225 [ timer for events, uses delta from gameclock seconds
-#define patient1Ctr    v226 [ counter, used for events measured in cycles
-#define bookcycles     v227
-
-#define patient2Seq    v228
-#define patient2Timer  v229
-#define patient2Ctr    v230
-
-#define patient3Seq    v231
-#define patient3Timer  v232
-#define patient3Ctr    v233
-
-#define patient4Seq    v234 [ patient 2 and 4 are never on screen at same time
-#define patient4Timer  v235
-#define patient4Ctr    v236
-
-#define tmpSec         v237
-#define secondCtr      v238
-#define whosIn         v239 [ bitflag showing which actors are actually in the room
-                            [ bit0 = receptionist
-                            [ bit1 = patient1
-                            [ bit2 = patient2
-                            [ bit3 = patient3
-                            [ bit4 = patient4
+#define frontdooropen              f220
+#define fRDone                     f221
+#define fP1Done                    f222
+#define fP2Done                    f223
+#define fP3Done                    f224
+#define fP4Done                    f225
+#define fPaneDone                  f226
+#define fLogJam                    f227
+#define fOneMinute                 f228
+#define fEgoWaitTalk               f229
+#define fPatient1Talking           f230
+#define fEgoTalkReceptionist       f231
+#define checktalk                  f232
+#define fPatientAtDoor             f233
+#define fTripping                  f234
+#define fFalling                   f235
+#define fSlipped                   f236
+#define fPagesTurned               f237
+#define fEgoInHall                 f238
 
 [ sequence actions for receptionist and patients
-#define   SKIP         -1
-#define   IDLE          0
-#define   MOVEPHONE     1
-#define   SITDOWN       2
-#define   GETPHONE      3
-#define   TALKPHONE     4
-#define   HANGUP        5
-#define   STANDUP       6
-#define   MOVESPEAK     7
-#define   STANDSPEAK1   8
-#define   STANDSPEAK2   9
-#define   MOVECOMP     10
-#define   R_MOVEDESK   11
-#define   MOVEHALL1    12
-#define   MOVEHALL2    13
-#define   MOVEHALL3    14
-#define   MOVEHALL4    15
-#define   WAITHALL     16
-#define   RTNHALL1     17
-#define   RTNHALL2     18
-#define   RTNHALL3     19
-#define   RTNHALL4     20
-#define   WAITDESK     21
-#define   WAITPHONE    22
-#define   NEWLOCATION  23
-#define   ARRIVE       24
-#define   MOVECOUNTER  25
-#define   WAITCOUNTER  26
-#define   TALKCOUNTER1 27
-#define   TALKCOUNTER2 28
-#define   MOVESEAT1    29
-#define   MOVESEAT2    30
-#define   MOVESEAT3    31
-#define   USEPHONE     32
-#define   STOWPHONE    33
-#define   GETBOOK      34
-#define   READBOOK     35
-#define   STOWBOOK     36
-#define   TAPTOE       37
-#define   MOVEEXIT1    38
-#define   MOVEEXIT2    39
-#define   STOPCONV     40
-#define   EXAMREADY    41
-
-[ TODO: some events are still taking nearly a minute- need to track down
-[ what's going on there
+#define   SKIP                       -1
+#define   IDLE                        0
+#define   MOVEPHONE                   1
+#define   SITDOWN                     2
+#define   GETPHONE                    3
+#define   TALKPHONE                   4
+#define   HANGUP                      5
+#define   STANDUP                     6
+#define   MOVESPEAK                   7
+#define   STANDSPEAK1                 8
+#define   STANDSPEAK2                 9
+#define   MOVECOMP                   10
+#define   R_MOVEDESK                 11
+#define   MOVEHALL1                  12
+#define   MOVEHALL2                  13
+#define   MOVEHALL3                  14
+#define   MOVEHALL4                  15
+#define   WAITHALL                   16
+#define   RTNHALL1                   17
+#define   RTNHALL2                   18
+#define   RTNHALL3                   19
+#define   RTNHALL4                   20
+#define   WAITDESK                   21
+#define   WAITPHONE                  22
+#define   NEWLOCATION                23
+#define   ARRIVE                     24
+#define   MOVECOUNTER                25
+#define   WAITCOUNTER                26
+#define   TALKCOUNTER1               27
+#define   TALKCOUNTER2               28
+#define   MOVESEAT1                  29
+#define   MOVESEAT2                  30
+#define   MOVESEAT3                  31
+#define   USEPHONE                   32
+#define   STOWPHONE                  33
+#define   GETBOOK                    34
+#define   READBOOK                   35
+#define   STOWBOOK                   36
+#define   TAPTOE                     37
+#define   MOVEEXIT1                  38
+#define   MOVEEXIT2                  39
+#define   STOPCONV                   40
+#define   EXAMREADY                  41
 
 [***************************************
 [ FIRST CYCLE ONLY

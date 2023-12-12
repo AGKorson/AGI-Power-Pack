@@ -23,79 +23,79 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oCursorB       o1  [ need four objects for cursor otherwise
-#define oCursorT       o2  [ text gets erased
-#define oCursorL       o3
-#define oCursorR       o4
-#define optCursor      o5
-#define oSliderRed     o6
-#define oSliderGreen   o7
-#define oSliderBlue    o8
+#define oCursorB                     o1  [ need four objects for cursor otherwise
+#define oCursorT                     o2  [ text gets erased
+#define oCursorL                     o3
+#define oCursorR                     o4
+#define optCursor                    o5
+#define oSliderRed                   o6
+#define oSliderGreen                 o7
+#define oSliderBlue                  o8
 
 [ loop values assigned to cursor objects
-#define LP_OPT      0 [ option button states
-#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons
-#define LP_CF_CMD1  2 [    "     "    "  OK, Cancel, Restore, Set, Reset command buttons
-#define LP_CF_CMD2  3 [    "     "    "  Preview Palette command button
-#define LP_CF_IDX   4 [    "     "    "  Index up/down buttons
-#define LP_SLIDER   5 [ slider button states
+#define LP_OPT                        0 [ option button states
+#define LP_CF_OPT                     1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_CMD1                    2 [    "     "    "  OK, Cancel, Restore, Set, Reset command buttons
+#define LP_CF_CMD2                    3 [    "     "    "  Preview Palette command button
+#define LP_CF_IDX                     4 [    "     "    "  Index up/down buttons
+#define LP_SLIDER                     5 [ slider button states
 
-#define colorIndex   v220
-#define newIndex     v221
-#define tmpRow       v222
-#define tmpCol       v223
-#define tmpVal       v224
-#define redpos       v225
-#define greenpos     v226
-#define bluepos      v227
-#define sliding      v228
-#define cursorpos    v229
-#define    CP_MOUSE  1
-#define    CP_KEYB   2
-#define    CP_IDX_DN 3
-#define    CP_IDX_UP 4
-#define    CP_RED    5
-#define    CP_GREEN  6
-#define    CP_BLUE   7
-#define    CP_OK     8
-#define    CP_CANCEL 9
-#define    CP_RESET 10
-#define    CP_PREVP 11
-#define    CP_RESTORE 12
-#define newpos       v230
-#define cursorX      v231
-#define cursorY      v232
-#define btnAction    v233
-#define    B_OK       1
-#define    B_CANCEL   2
-#define    B_RESET    3
-#define    B_IDX_DN   4
-#define    B_IDX_UP   5
-#define    B_PREV_PAL 6
-#define    B_RESTORE  7
-#define egoPrevX     v234
-#define egoPrevY     v235
-#define egoPrevDir   v236
-#define slideoffset  v237
-#define oldSpeed     v238
+#define defColHex                   s12  [ default hex value of color being edited 
+#define curColHex                   s13  [ current hex value of color being edited
+#define editPal                     s14  [ holds the palette currently being edited
+                                         [ (uses s14, s15, s16)
+#define copyPal                     s17  [ temp copy of edit palette, used when changing color values
+                                         [ (uses s17, s18, s19)
+#define strTemp                     s20
 
-#define update       f220
-#define cursormode   f221
-#define refresh      f222 [ used to redraw text on screen when the screen is first displayed
+#define colorIndex                 v220
+#define newIndex                   v221
+#define tmpRow                     v222
+#define tmpCol                     v223
+#define tmpVal                     v224
+#define redpos                     v225
+#define greenpos                   v226
+#define bluepos                    v227
+#define sliding                    v228
+#define cursorpos                  v229
+  #define CP_MOUSE               1
+  #define CP_KEYB                2
+  #define CP_IDX_DN              3
+  #define CP_IDX_UP              4
+  #define CP_RED                 5
+  #define CP_GREEN               6
+  #define CP_BLUE                7
+  #define CP_OK                  8
+  #define CP_CANCEL              9
+  #define CP_RESET              10
+  #define CP_PREVP              11
+  #define CP_RESTORE            12
+#define newpos                     v230
+#define cursorX                    v231
+#define cursorY                    v232
+#define btnAction                  v233
+  #define B_OK                   1
+  #define B_CANCEL               2
+  #define B_RESET                3
+  #define B_IDX_DN               4
+  #define B_IDX_UP               5
+  #define B_PREV_PAL             6
+  #define B_RESTORE              7
+#define egoPrevX                   v234
+#define egoPrevY                   v235
+#define egoPrevDir                 v236
+#define slideoffset                v237
+#define oldSpeed                   v238
 
-#define defColHex     s12  [ default hex value of color being edited 
-#define curColHex     s13  [ current hex value of color being edited
-#define editPal       s14  [ holds the palette currently being edited
-                           [ (uses s14, s15, s16)
-#define copyPal       s17  [ temp copy of edit palette, used when changing color values
-                           [ (uses s17, s18, s19)
-#define strTemp       s20
+#define update                     f220
+#define cursormode                 f221
+#define refresh                    f222 [ used to redraw text on screen when the screen is first displayed
 
-#define displayPal    m20  [ formatted text that holds the special room palette used to
-                           [ display the current color being edited
-#define prevPal       m21  [ formatted text that points to the edit palette
-#define defaultPal    m22  [ default AGI palette
-#define gamePal       m23  [ main palette used in rest of game
+#define displayPal                  m20  [ formatted text that holds the special room palette used to
+                                         [ display the current color being edited
+#define prevPal                     m21  [ formatted text that points to the edit palette
+#define defaultPal                  m22  [ default AGI palette
+#define gamePal                     m23  [ main palette used in rest of game
 
 [***************************************
 [ ERROR CHECK

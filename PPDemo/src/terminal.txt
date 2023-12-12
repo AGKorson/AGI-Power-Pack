@@ -1,0 +1,73 @@
+[ The terminal room and supporting function logic use a common
+[ set of defines.
+
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+#define input                       s12
+#define char                        s13
+#define output                      s14
+#define userid                      s15
+#define sCmd                        s16
+#define sTemp2                      s17
+#define sTemp3                      s18
+
+#define cursor_row                 v240
+#define cursor_col                 v241
+#define cursor_char                v242
+#define cursor_toggle              v243
+#define inputmode                  v244
+  #define IM_USERID              0 [ wait for userid
+  #define IM_PASSWORD            1 [ wait for pw
+  #define IM_CMDLINE             2 [ wait for commandline
+  #define IM_ARGINPUT            3 [ wait for additional args/input
+#define terminalfn                 v245
+  #define LINEFEED               1
+  #define DELAY                  2
+  #define DELAY_LF               3
+  #define ADDLINE                4
+  #define ADDLINE_LF             5
+  #define CLS                    6
+  #define DELAY_ADD              7
+  #define NO_ACCESS              8
+  #define SHOW_DIR               9
+  #define CHKDSK_A              10
+  #define CHKDSK_C              11
+  #define FORMAT_A              12
+  #define TYPE_PP               13
+  #define SHOW_HELP             14
+#define outputvar                  v246
+#define tmpCounter1                v247
+#define tmpCounter2                v248
+#define PWfunction                 v249
+  #define PW_LOGON               0
+  #define PW_BADASS              1
+  #define PW_CAISOCC             2
+  #define PW_ERIDOCC             3
+  #define PW_ESADOCC             4
+  #define PW_ICAPOCC             5
+  #define PW_OFROCC              6
+  #define PW_RANDOCC             7
+  #define PW_SUDO                8
+  #define PW_CHANGE              9
+#define vCurDir                    v250
+  #define C_ROOT                 0 [ c:\
+  #define C_USERS                1 [ c:\USERS\
+  #define C_KW002                2 [ c:\USERS\KW002
+  #define A_ROOT                 3 [ a:
+#define vShowDir                   v251
+  
+#define cursorstate                f241
+#define loggedon                   f242
+#define validmodule                f243
+#define validPW                    f244
+#define tmpFlag                    f245
+#define defaultPW                  f246
+
+#define charmsg                      m3
+#define outputmsg                    m4
+
+#define TOPROW                        4
+#define BTMROW                       18
+#define LEFTCOL                       9
+#define RIGHTCOL                     48

@@ -10,6 +10,15 @@
 [ power pack support
 #include "powerpack.txt"
 
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 prevent.input();
 set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 set.text.attribute(BLACK, WHITE);

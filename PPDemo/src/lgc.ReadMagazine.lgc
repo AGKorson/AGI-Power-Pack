@@ -16,9 +16,10 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define pageNum     v250
-#define pageImg     v251
-#define PAGES         5
+#define pageNum                    v250
+#define pageImg                    v251
+
+#define PAGES                         5
 
 [***************************************
 [ MAIN CODE BLOCK 

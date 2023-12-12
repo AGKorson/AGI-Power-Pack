@@ -17,19 +17,19 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define tmp0      v220
-#define tmp1      v221
-#define tmp2      v222
-#define tmp3      v223
-#define tmp4      v224
-#define tmp5      v225
-#define vRnd      v232
-#define vStyle    v233
-
-#define tmpString0 s22
-#define filename   s23
+#define tmpString0                  s22
+#define filename                    s23
 [ reuse s23 as another temporary string
-#define tmpString1 s23
+#define tmpString1                  s23
+
+#define tmp0                       v220
+#define tmp1                       v221
+#define tmp2                       v222
+#define tmp3                       v223
+#define tmp4                       v224
+#define tmp5                       v225
+#define vRnd                       v232
+#define vStyle                     v233
 
 [***************************************
 [ MAIN CODE BLOCK 

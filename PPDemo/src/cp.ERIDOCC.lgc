@@ -29,95 +29,93 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oCursorB       o1  [ need four objects for cursor otherwise
-#define oCursorT       o2  [ text gets erased
-#define oCursorL       o3
-#define oCursorR       o4
-#define optCursor      o5
-#define gridCursor     o6
+#define oCursorB                     o1  [ need four objects for cursor otherwise
+#define oCursorT                     o2  [ text gets erased
+#define oCursorL                     o3
+#define oCursorR                     o4
+#define optCursor                    o5
+#define gridCursor                   o6
 
 [ loop values assigned to cursor objects
-#define LP_OPT      0 [ option button states
-#define LP_CF_OPT   1 [ cursor frame for mouse/keyb option buttons
-#define LP_CF_CMD   2 [    "     "    "  OK, cancel, etc. command buttons
-#define LP_CF_IDX   3 [    "     "    "  index buttons
-#define LP_CF_TXT   4 [    "     "    "  textboxes
+#define LP_OPT                        0 [ option button states
+#define LP_CF_OPT                     1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_CMD                     2 [    "     "    "  OK, cancel, etc. command buttons
+#define LP_CF_IDX                     3 [    "     "    "  index buttons
+#define LP_CF_TXT                     4 [    "     "    "  textboxes
 
-#define cursorpos    v220
-#define newpos       v221
-#define    CP_MOUSE   1
-#define    CP_KEYB    2
-#define    CP_IDX_DN  3
-#define    CP_IDX_UP  4
-#define    CP_PREVIEW 5
-#define    CP_SAVE    6
-#define    CP_RESTORE 7
-#define    CP_EXPORT  8
-#define    CP_EXIT    9
-#define    CP_GRID   10
-#define    CP_HOTX   11
-#define    CP_HOTY   12
-#define gridX        v222
-#define gridY        v223
-#define gridmode     v224
-#define tmpX         v225
-#define tmpY         v226
-#define cIndex       v227
-#define newIndex     v228
-#define cursorX      v229  [ location of selected button/grid item
-#define cursorY      v230
-#define btnAction    v231
-#define    B_IDX_UP   1
-#define    B_IDX_DN   2
-#define    B_PREVIEW  3
-#define    B_SAVE     4
-#define    B_RESTORE  5
-#define    B_EXPORT   6
-#define    B_EXIT     7
-#define    B_SETGRID  8
-#define    B_RSTGRID  9
-#define    B_HOTX    10
-#define    B_HOTY    11
-#define egoPrevX     v232
-#define egoPrevY     v233
-#define egoPrevDir   v234
-#define vView        v235
-#define vLoop        v236
-#define vCel         v237
-#define vPri         v238
-#define vMgn         v239
-#define byteval      v240
-#define bitctr       v241
-#define strctr       v242
-#define hotX         v243
-#define hotY         v244
-#define hotXraw      v245
-#define hotYraw      v246
-#define oldHotval    v247
-#define tmpRow       v248
-#define tmpCol       v249
-#define oldSpeed     v250
+#define sTemp                       s12 [ uses s12, s13, s14, s15
+#define sCursor                     s16 [ uses s16, s17, s18, s19
+#define sByte                       s20 [ contains byte currently being modified
+#define sHotspot                    s21 [ used to help set/display cursor hotspot
+#define sFilename                   s21 [ re-use hotspot string
+#define sBadChars                   s22
+#define sTempFile                   s23
 
-#define update       f220
-#define cursormode   f221
-#define refresh      f222 [ used to redraw text on screen when the screen is first displayed
-#define updategrid   f223
-#define fOnGrid      f224
-#define fChgCursor   f225
-#define tmpFlag      f226
-#define flipbyte     f227
-#define maskgrid     f228
-#define prevcursor   f229
+#define cursorpos                  v220
+#define newpos                     v221
+  #define CP_MOUSE               1
+  #define CP_KEYB                2
+  #define CP_IDX_DN              3
+  #define CP_IDX_UP              4
+  #define CP_PREVIEW             5
+  #define CP_SAVE                6
+  #define CP_RESTORE             7
+  #define CP_EXPORT              8
+  #define CP_EXIT                9
+  #define CP_GRID               10
+  #define CP_HOTX               11
+  #define CP_HOTY               12
+#define gridX                      v222
+#define gridY                      v223
+#define gridmode                   v224
+#define tmpX                       v225
+#define tmpY                       v226
+#define cIndex                     v227
+#define newIndex                   v228
+#define cursorX                    v229  [ location of selected button/grid item
+#define cursorY                    v230
+#define btnAction                  v231
+  #define B_IDX_UP               1
+  #define B_IDX_DN               2
+  #define B_PREVIEW              3
+  #define B_SAVE                 4
+  #define B_RESTORE              5
+  #define B_EXPORT               6
+  #define B_EXIT                 7
+  #define B_SETGRID              8
+  #define B_RSTGRID              9
+  #define B_HOTX                10
+  #define B_HOTY                11
+#define egoPrevX                   v232
+#define egoPrevY                   v233
+#define egoPrevDir                 v234
+#define vView                      v235
+#define vLoop                      v236
+#define vCel                       v237
+#define vPri                       v238
+#define vMgn                       v239
+#define byteval                    v240
+#define bitctr                     v241
+#define strctr                     v242
+#define hotX                       v243
+#define hotY                       v244
+#define hotXraw                    v245
+#define hotYraw                    v246
+#define oldHotval                  v247
+#define tmpRow                     v248
+#define tmpCol                     v249
+#define oldSpeed                   v250
 
-#define sTemp         s12 [ uses s12, s13, s14, s15
-#define sCursor       s16 [ uses s16, s17, s18, s19
-#define sByte         s20 [ contains byte currently being modified
-#define sHotspot      s21 [ used to help set/display cursor hotspot
-
-
-#define sFilename     s21 [ re-use hotspot string
-#define sBadChars     s22
-#define sTempFile     s23
+#define update                     f220
+#define cursormode                 f221
+#define refresh                    f222 [ used to redraw text on screen when the screen is first displayed
+#define updategrid                 f223
+#define fOnGrid                    f224
+#define fChgCursor                 f225
+#define tmpFlag                    f226
+#define flipbyte                   f227
+#define maskgrid                   f228
+#define prevcursor                 f229
 
 [***************************************
 [ ERROR CHECK

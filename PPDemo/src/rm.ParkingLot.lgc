@@ -22,86 +22,85 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define egoCar        o1
-#define oPatient      o2
-#define oPatientCar   o3
-#define btnYes        o4
-#define btnNo         o5
-#define oCredits      o7
+#define egoCar                       o1
+#define oPatient                     o2
+#define oPatientCar                  o3
+#define btnYes                       o4
+#define btnNo                        o5
+#define oCredits                     o7
 
-#define egoCarSeq    v220
-#define   EC_IDLE      0
-#define   EC_ARRIVE    1
-#define   EC_PARKING   2
-#define   EC_PARKED    3
-#define   EC_LEAVE    10
-#define   EC_STARTCAR 11
-#define   EC_LEAVING  12
+#define theDay                      s12
+#define weekendMsg                  s13
 
-#define patientSeq   v221
-#define   IDLE         0
-[ patient 1 arriving
-#define   P1_DRIVE_A 201
-#define   P1_STOP    202
-#define   P1_WALK_A    3
-#define   P1_WALK_B    4
-[ patient 1 leaving
-#define   P1_WALK_C  105
-#define   P1_WALK_D  106
-#define   P1_WALK_E  107
-#define   P1_START   208
-#define   P1_DRIVE_B 209
-#define   P1_DRIVE_C 210
-#define   P1_DRIVE_D 211
-[ patient 2 arriving
-#define   P2_DRIVE_A 212
-#define   P2_DRIVE_B 213
-#define   P2_DRIVE_C 214
-#define   P2_DRIVE_D 215
-#define   P2_STOP    216
-#define   P2_WALK_A   17
-#define   P2_WALK_B   18
-[ patient 2 leaving
-#define   P2_WALK_C  119
-#define   P2_WALK_D  120
-#define   P2_WALK_E  121
-#define   P2_START   222
-#define   P2_DRIVE_E 223
-#define   P2_DRIVE_F 224
-#define patientTimer v222
-#define carX         v223
-#define carY         v224
-#define deathSeq     v225
-#define weekday      v226
-#define creditline        v227
-  #define CR_PPDESIGN      0
-  #define CR_DEMODESIGN    1
-  #define CR_BKGD_ART      2
-  #define CR_ANIMATION     3
-  #define CR_ADDL_ART      4
-  #define CR_MUSIC         5
-  #define CR_SOUND         6
-#define creditstep        v228
+#define egoCarSeq                  v220
+  #define EC_IDLE                0
+  #define EC_ARRIVE              1
+  #define EC_PARKING             2
+  #define EC_PARKED              3
+  #define EC_LEAVE              10
+  #define EC_STARTCAR           11
+  #define EC_LEAVING            12
+#define patientSeq                 v221
+  #define IDLE                   0
+  [ patient 1 arriving
+  #define P1_DRIVE_A           201
+  #define P1_STOP              202
+  #define P1_WALK_A              3
+  #define P1_WALK_B              4
+  [ patient 1 leaving
+  #define P1_WALK_C            105
+  #define P1_WALK_D            106
+  #define P1_WALK_E            107
+  #define P1_START             208
+  #define P1_DRIVE_B           209
+  #define P1_DRIVE_C           210
+  #define P1_DRIVE_D           211
+  [ patient 2 arriving
+  #define P2_DRIVE_A           212
+  #define P2_DRIVE_B           213
+  #define P2_DRIVE_C           214
+  #define P2_DRIVE_D           215
+  #define P2_STOP              216
+  #define P2_WALK_A             17
+  #define P2_WALK_B             18
+  [ patient 2 leaving
+  #define P2_WALK_C            119
+  #define P2_WALK_D            120
+  #define P2_WALK_E            121
+  #define P2_START             222
+  #define P2_DRIVE_E           223
+  #define P2_DRIVE_F           224
+#define patientTimer               v222
+#define carX                       v223
+#define carY                       v224
+#define deathSeq                   v225
+#define weekday                    v226
+#define creditline                 v227
+  #define CR_PPDESIGN            0
+  #define CR_DEMODESIGN          1
+  #define CR_BKGD_ART            2
+  #define CR_ANIMATION           3
+  #define CR_ADDL_ART            4
+  #define CR_MUSIC               5
+  #define CR_SOUND               6
+#define creditstep                 v228
 
-#define carDone      f220
-#define patientDone  f221
-#define patientHere  f222
-#define 2ndSpot      f223
-#define runOver      f224
-#define clickOn      f225
-#define skip1        f226
-#define electrocuted  f227
-#define patientVisible f228
-#define patientCarVisible f229
-#define egoDying       f230
-#define playCarSound   f231
-#define doneCarSound   f232
-#define doneEgoCarSnd  f233
+#define carDone                    f220
+#define patientDone                f221
+#define patientHere                f222
+#define 2ndSpot                    f223
+#define runOver                    f224
+#define clickOn                    f225
+#define skip1                      f226
+#define electrocuted               f227
+#define patientVisible             f228
+#define patientCarVisible          f229
+#define egoDying                   f230
+#define playCarSound               f231
+#define doneCarSound               f232
+#define doneEgoCarSnd              f233
 
-#define theDay          s12
-#define weekendMsg      s13
-
-#define CAR_INSTRUMENT   41  [ 41 = viola
+#define CAR_INSTRUMENT               41  [ 41 = viola
 
 [***************************************
 [ FIRST CYCLE ONLY
@@ -1141,7 +1140,7 @@ if (doneCarSound) {
 }
 
 :checkdeath
-if (!egoDying && !deathType && !kickBucket) {
+if (!egoDying && !deathType) {
   [ check for ego getting run over
   get.posn(oPatientCar, carX, carY);
   work1 = carY;

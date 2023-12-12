@@ -18,9 +18,9 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define tmpString0    s21
-#define tmpString1    s22
-#define filename      s23
+#define tmpString0                  s21
+#define tmpString1                  s22
+#define filename                    s23
 
 [***************************************
 [ MAIN CODE BLOCK 

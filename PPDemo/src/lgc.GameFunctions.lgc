@@ -16,11 +16,11 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define entryDelay   v240
-#define rndNum       v241
+#define tmpStr1                     s20
+#define tmpStr2                     s21
 
-#define tmpStr1       s20
-#define tmpStr2       s21
+#define entryDelay                 v240
+#define rndNum                     v241
 
 [***************************************
 [ MAIN CODE BLOCK 
@@ -61,50 +61,6 @@ if (newRoom) {
       }
     }
   } 
-}
-
-[ check for kicking bucket
-if (kickBucket) {
-  if (currentRoom == rm.ParkingLot) {
-    [ in parking lot, end the sequence after the death loop
-    [ finishes
-    if (bucketDone) {
-      reset(kickBucket);
-      deathType = DT_KICK_BUCKET;
-    }
-    return();
-  }
-  [ in all other rooms, check ego loop to determine next 
-  [ action in the sequence
-  current.loop(ego, work1);
-  if (bucketDone) {
-    [ when each loop finishes, move to next sequence
-    if (work1 == 0) {
-      [ after kicking, switch to falling
-      set.loop(ego, 1);
-      set.cel(ego, 0);
-      end.of.loop(ego, bucketDone);
-    } else {
-      [ after falling, end the sequence
-      reset(kickBucket);
-      deathType = DT_KICK_BUCKET;
-      return();
-    }
-  } else {
-    [ during kick cycle, check for the right time
-    [ to start the bucket moving
-    if (work1 == 0) {
-      current.cel(ego, work1);
-      if (work1 == 2) {
-        work1 = UP_RIGHT;
-        set.dir(oBucket, work1);
-      }
-    }
-  }
-  [ if bucket reaches right edge, erase it
-  if (v4 == &oBucket) {
-    erase(oBucket);
-  }
 }
 
 [***************************************
@@ -875,45 +831,7 @@ if (haveInput && !haveMatch) {
   }
   
   if (said("kick", "bucket")) {
-    print("OK.");
-    [ stop ego, have him kick a bucket
-    egoDir = STOPPED;
-    work1 = CYCLE_AT_REST;
-    set.upper.left(&ego, &work1);  [ auto.cycle(oSOBJ, vMODE)
-    if (currentRoom == rm.ParkingLot) {
-      [ in parking lot, ego is tiny - so skip 
-      [ the kicking animation, just die
-      load.view(vw.EgoDead);
-      set.view(ego, vw.EgoDead);
-      set.cel(ego, 0);
-      end.of.loop(ego, bucketDone);
-    } else {
-      [ start by showing kicking loop
-      load.view(vw.KickBucket);
-      set.view(ego, vw.KickBucket);
-      set.loop(ego, 0);
-      set.cel(ego, 0);
-      end.of.loop(ego, bucketDone);
-      [ add the bucket
-      animate.obj(oBucket);
-      get.posn(ego, work1, work2);
-      work1 += 8;
-      position.v(oBucket, work1, work2);
-      set.view(oBucket, vw.KickBucket);
-      set.loop(oBucket, 2);
-      fix.loop(oBucket);
-      set.priority(oBucket, 15);
-      ignore.blocks(oBucket);
-      ignore.objs(oBucket);
-      ignore.horizon(oBucket);
-      work1 = 3;
-      step.size(oBucket, work1);
-      draw(oBucket);
-    }
-    program.control();
-    prevent.input();
-    set(kickBucket);
-    return();
+    print("There is no bucket here.");
   }
   
   [ UNKNOWN WORD CHECK

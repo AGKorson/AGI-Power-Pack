@@ -19,72 +19,71 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oCursorB       o1  [ need four objects for cursor otherwise
-#define oCursorT       o2  [ text gets erased
-#define oCursorL       o3
-#define oCursorR       o4
-#define optRightBtn    o5
-#define optCursor      o6
+#define oCursorB                     o1  [ need four objects for cursor otherwise
+#define oCursorT                     o2  [ text gets erased
+#define oCursorL                     o3
+#define oCursorR                     o4
+#define optRightBtn                  o5
+#define optCursor                    o6
 
 [ loop values assigned to cursor objects
-#define LP_OPT      0 [ option button states
-#define LP_CF_OPT   1 [ cursor frame for mouse/keyb and right-click option buttons
-#define LP_CF_CMD   2 [    "     "    "  OK, Cancel, Reset command buttons
-#define LP_CF_LT_PAL_H   3 [    horizontal frame for bright color selection
-#define LP_CF_DK_PAL_H   4 [    horizontal frame for dark color selection
-#define LP_CF_LT_PAL_V   5 [    vertical frame for bright color selection
-#define LP_CF_DK_PAL_V   6 [    vertical frame for dark color selection
+#define LP_OPT                        0 [ option button states
+#define LP_CF_OPT                     1 [ cursor frame for mouse/keyb and right-click option buttons
+#define LP_CF_CMD                     2 [    "     "    "  OK, Cancel, Reset command buttons
+#define LP_CF_LT_PAL_H                3 [    horizontal frame for bright color selection
+#define LP_CF_DK_PAL_H                4 [    horizontal frame for dark color selection
+#define LP_CF_LT_PAL_V                5 [    vertical frame for bright color selection
+#define LP_CF_DK_PAL_V                6 [    vertical frame for dark color selection
 
-#define tmpBG        v220
-#define tmpFG        v221
-#define tmpBorder    v222
-#define cRow         v223
-#define cCol         v224
-#define cInit        v225
-#define palFG        v226
-#define palBG        v227
-#define colorindex   v228
-#define cursorpos    v229
-#define    CP_MOUSE  1
-#define    CP_KEYB   2
-#define    CP_RT_BG  3
-#define    CP_RT_BD  4
-#define    CP_OK     5
-#define    CP_CANCEL 6
-#define    CP_RESET  7
-[ 8 and above are color choices
+#define sTemp                       s12 [ includes s13
+#define hexBG                       s14
+#define hexBD                       s15
 
-#define newpos       v230
-#define cursorX      v231
-#define cursorY      v232
-#define btnAction    v233
-#define    B_OK      1
-#define    B_CANCEL  2
-#define    B_RESET   3
-#define    B_PAL_FG  4
-#define    B_PAL_BG  5
-#define    B_PAL_BD  6
-#define    B_OP_BG   7
-#define    B_OP_BD   8
-#define egoPrevX     v234
-#define egoPrevY     v235
-#define egoPrevDir   v236
-#define chgElement   v237
-#define   CHG_BG     1
-#define   CHG_FG     2
-#define   CHG_BD     3
-#define   CHG_ALL    4
-#define oldColor     v238
+#define tmpBG                      v220
+#define tmpFG                      v221
+#define tmpBorder                  v222
+#define cRow                       v223
+#define cCol                       v224
+#define cInit                      v225
+#define palFG                      v226
+#define palBG                      v227
+#define colorindex                 v228
+#define cursorpos                  v229
+  #define CP_MOUSE               1
+  #define CP_KEYB                2
+  #define CP_RT_BG               3
+  #define CP_RT_BD               4
+  #define CP_OK                  5
+  #define CP_CANCEL              6
+  #define CP_RESET               7
+  [ 8 and above are color choices
+#define newpos                     v230
+#define cursorX                    v231
+#define cursorY                    v232
+#define btnAction                  v233
+  #define B_OK                   1
+  #define B_CANCEL               2
+  #define B_RESET                3
+  #define B_PAL_FG               4
+  #define B_PAL_BG               5
+  #define B_PAL_BD               6
+  #define B_OP_BG                7
+  #define B_OP_BD                8
+#define egoPrevX                   v234
+#define egoPrevY                   v235
+#define egoPrevDir                 v236
+#define chgElement                 v237
+  #define CHG_BG                 1
+  #define CHG_FG                 2
+  #define CHG_BD                 3
+  #define CHG_ALL                4
+#define oldColor                   v238
 
-#define update       f220
-#define rightmode    f221   [ when true, rightclick sets border
-                            [ when false, rightclick sets bg
-#define cursormode   f222
-#define drawbtns     f223   [ forces button text to redraw
-
-#define sTemp        s12  [ includes s13
-#define hexBG        s14
-#define hexBD        s15
+#define update                     f220
+#define rightmode                  f221 [ when true, rightclick sets border
+                                        [ when false, rightclick sets bg
+#define cursormode                 f222
+#define drawbtns                   f223 [ forces button text to redraw
 
 [***************************************
 [ ERROR CHECK

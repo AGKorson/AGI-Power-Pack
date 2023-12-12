@@ -21,24 +21,24 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define helpText      v240
-#define   H_BLANK       4
-#define   H_EXIT        7
-#define   H_FASTFWD     8
-#define   H_REWIND      9
-#define   H_STOP_EJ    10
-#define   H_PLAY       11
-#define   H_COVER      12
-#define   H_INSIDE     13
-#define tmpCursor     v241
-#define counter1      v242
-#define counter2      v243
-#define spindleCel    v244
-#define spinDelay     v245
+#define helpText                   v240
+  #define H_BLANK                4
+  #define H_EXIT                 7
+  #define H_FASTFWD              8
+  #define H_REWIND               9
+  #define H_STOP_EJ             10
+  #define H_PLAY                11
+  #define H_COVER               12
+  #define H_INSIDE              13
+#define tmpCursor                  v241
+#define counter1                   v242
+#define counter2                   v243
+#define spindleCel                 v244
+#define spinDelay                  v245
 
-#define coverClosed   f240
-#define mouseDown     f241
-#define flipCassette  f242
+#define coverClosed                f240
+#define mouseDown                  f241
+#define flipCassette               f242
 
 [***************************************
 [ MAIN CODE BLOCK 

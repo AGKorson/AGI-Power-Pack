@@ -17,42 +17,43 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oBlank1        o1
-#define oBlank2        o2
-#define oNum00         o3
-#define oNum05         o4
-#define oNum10         o5
-#define oNum15         o6
-#define oNum20         o7
-#define oNum25         o8
-#define oNum30         o9
-#define oNum35        o10
-#define oDialCenter   o11
+#define oBlank1                      o1
+#define oBlank2                      o2
+#define oNum00                       o3
+#define oNum05                       o4
+#define oNum10                       o5
+#define oNum15                       o6
+#define oNum20                       o7
+#define oNum25                       o8
+#define oNum30                       o9
+#define oNum35                      o10
+#define oDialCenter                 o11
 
-#define currentNum    v220
-#define comboNum1     v221
-#define comboNum2     v222
-#define comboNum3     v223
-#define spinCount     v224
-#define SPIN_DELAY     3
-#define comboRev1     v225
-#define comboRev2     v226
-#define comboRev3     v227
-#define startNum      v228
-#define tickCounter   v229
-#define handleCel     v230
-#define viewNum       v231
-#define tryCount      v232
+#define currentNum                 v220
+#define comboNum1                  v221
+#define comboNum2                  v222
+#define comboNum3                  v223
+#define spinCount                  v224
+#define comboRev1                  v225
+#define comboRev2                  v226
+#define comboRev3                  v227
+#define startNum                   v228
+#define tickCounter                v229
+#define handleCel                  v230
+#define viewNum                    v231
+#define tryCount                   v232
 
-#define setNum1       f220
-#define setNum2       f221
-#define setNum3       f222
-#define spinLeft      f223
-#define spinRight     f224
-#define updateCombo   f225
-#define fOpening      f226
-#define swapViews     f227
-#define tmpFlag       f228
+#define setNum1                    f220
+#define setNum2                    f221
+#define setNum3                    f222
+#define spinLeft                   f223
+#define spinRight                  f224
+#define updateCombo                f225
+#define fOpening                   f226
+#define swapViews                  f227
+#define tmpFlag                    f228
+
+#define SPIN_DELAY                    3
 
 [***************************************
 [ FIRST CYCLE ONLY

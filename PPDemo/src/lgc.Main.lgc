@@ -40,27 +40,27 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define mnu_msgUseItem              m1
-#define mnu_msgSndToggle            m2
-#define mnu_msgSoundPC              m3
-#define mnu_msgSoundFM              m4
-#define mnu_msgSoundMIDI            m5
-#define mnu_msgClockToggle          m6
-#define mnu_msgGameTime             m7
-#define mnu_msgRealTime             m8
-#define mnu_msgSpeed                m9
-#define mnu_msgSpeedSlow           m10
-#define mnu_msgSpeedNorm           m11
-#define mnu_msgSpeedFast           m12
-#define mnu_msgSpeedFastest        m13
-#define mnu_msgSkipIntro           m14
-#define mnu_msgDebug               m15
-#define mnu_msgDbgLog              m16
-#define mnu_msgDbgClick            m17
-#define msgSpeed                   m18
-#define msgExamine                 m19
-#define msgUse                     m20
-#define msgDebug                   m21
+#define mnu_msgUseItem               m1
+#define mnu_msgSndToggle             m2
+#define mnu_msgSoundPC               m3
+#define mnu_msgSoundFM               m4
+#define mnu_msgSoundMIDI             m5
+#define mnu_msgClockToggle           m6
+#define mnu_msgGameTime              m7
+#define mnu_msgRealTime              m8
+#define mnu_msgSpeed                 m9
+#define mnu_msgSpeedSlow            m10
+#define mnu_msgSpeedNorm            m11
+#define mnu_msgSpeedFast            m12
+#define mnu_msgSpeedFastest         m13
+#define mnu_msgSkipIntro            m14
+#define mnu_msgDebug                m15
+#define mnu_msgDbgLog               m16
+#define mnu_msgDbgClick             m17
+#define msgSpeed                    m18
+#define msgExamine                  m19
+#define msgUse                      m20
+#define msgDebug                    m21
 
 [***************************************
 [ ERROR CHECK

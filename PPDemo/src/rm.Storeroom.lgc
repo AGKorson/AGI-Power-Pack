@@ -22,37 +22,37 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oClockHour      o1
-#define oClockMinute    o2
-#define oPendulum       o3
-#define oCoffin         o4
-#define oCabinetDoor    o4 [ reuse o4 for cabinet door
-#define oChest          o5
-#define oBureauDrawer   o6
-#define oFileDrawer     o7 [ green file cabinet
-#define oDeskDrawer     o8 [ under mirror
+#define oClockHour                   o1
+#define oClockMinute                 o2
+#define oPendulum                    o3
+#define oCoffin                      o4
+#define oCabinetDoor                 o4 [ reuse o4 for cabinet door
+#define oChest                       o5
+#define oBureauDrawer                o6
+#define oFileDrawer                  o7 [ green file cabinet
+#define oDeskDrawer                  o8 [ under mirror
 
-#define vCheckSecond  v220
-#define vClockHour    v221
-#define vClockMin     v222
-#define vClockSec     v223
-#define vCoffinState  v224 [ coffin and cabinet door close automatically
-#define vDoorState    v225 [ so only local variables needed to track state
-#define vCoffinDeathSeq  v226
-#define vCoffinCount  v227
-#define bellCount     v228
+#define vCheckSecond               v220
+#define vClockHour                 v221
+#define vClockMin                  v222
+#define vClockSec                  v223
+#define vCoffinState               v224 [ coffin and cabinet door close automatically
+#define vDoorState                 v225 [ so only local variables needed to track state
+#define vCoffinDeathSeq            v226
+#define vCoffinCount               v227
+#define bellCount                  v228
 
-#define fCoffin       f220
-#define fCheckClick   f221
-#define fDoor         f222
-#define fFileDrawer   f223
-#define fDeskDrawer   f224
-#define fBureauDrawer f225
-#define fChest        f226
-#define fEgoBackup    f227
-#define fInCoffin     f228
-#define clockChiming  f229
-#define hourBells     f230
+#define fCoffin                    f220
+#define fCheckClick                f221
+#define fDoor                      f222
+#define fFileDrawer                f223
+#define fDeskDrawer                f224
+#define fBureauDrawer              f225
+#define fChest                     f226
+#define fEgoBackup                 f227
+#define fInCoffin                  f228
+#define clockChiming               f229
+#define hourBells                  f230
 
 [***************************************
 [ FIRST CYCLE ONLY

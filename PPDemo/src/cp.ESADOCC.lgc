@@ -25,113 +25,112 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oCursorB       o1  [ need four objects for cursor otherwise
-#define oCursorT       o2  [ text gets erased
-#define oCursorL       o3
-#define oCursorR       o4
-#define oMode          o5
-#define oChannels      o6
-#define oCheck         o7
-#define oTest          o8
-#define oScrlBox       o9
-#define oScrlBkgd     o10
-#define oVolSlider    o11
+#define oCursorB                     o1  [ need four objects for cursor otherwise
+#define oCursorT                     o2  [ text gets erased
+#define oCursorL                     o3
+#define oCursorR                     o4
+#define oMode                        o5
+#define oChannels                    o6
+#define oCheck                       o7
+#define oTest                        o8
+#define oScrlBox                     o9
+#define oScrlBkgd                   o10
+#define oVolSlider                  o11
 
 [ loop values assigned to cursor objects
-#define LP_OPT      0 [ option button states
-#define LP_CF_OPT1  1 [ cursor frame for mouse/keyb option buttons
-#define LP_CF_OPT2  2 [    "     "    "  channel mode option buttons
-#define LP_CF_CMD1  3 [    "     "    "  OK, Cancel command buttons
-#define LP_CF_CMD2  4 [    "     "    "  Test All command button
-#define LP_CF_CMD3  5 [    "     "    "  channel Test command buttons
-#define LP_CF_PNL   6 [    "     "    "  listbox panel
-#define LP_CF_TXT   7 [    "     "    "  textboxes
-#define LP_SCROLL   8 [ scroll bar components
-#define LP_SLIDER   9 [ slider button for volume control
+#define LP_OPT                        0 [ option button states
+#define LP_CF_OPT1                    1 [ cursor frame for mouse/keyb option buttons
+#define LP_CF_OPT2                    2 [    "     "    "  channel mode option buttons
+#define LP_CF_CMD1                    3 [    "     "    "  OK, Cancel command buttons
+#define LP_CF_CMD2                    4 [    "     "    "  Test All command button
+#define LP_CF_CMD3                    5 [    "     "    "  channel Test command buttons
+#define LP_CF_PNL                     6 [    "     "    "  listbox panel
+#define LP_CF_TXT                     7 [    "     "    "  textboxes
+#define LP_SCROLL                     8 [ scroll bar components
+#define LP_SLIDER                     9 [ slider button for volume control
 
-#define currentInst   v220
-#define cursorpos     v221
-#define    CP_MOUSE   1
-#define    CP_KEYB    2
-#define    CP_1CHAN   3
-#define    CP_4CHFM   4
-#define    CP_4CHMD   5
-#define    CP_OK      6
-#define    CP_CANCEL  7
-#define    CP_TESTALL 8
-#define    CP_TEST0   9
-#define    CP_TEST1  10
-#define    CP_TEST2  11
-#define    CP_TEST3  12
-#define    CP_TEST4  13
-#define    CP_INST0  14
-#define    CP_INST1  15
-#define    CP_INST2  16
-#define    CP_INST3  17
-#define    CP_INST4  18
-#define    CP_VOLUME 19
-#define newpos       v222
-#define cursorX      v223 [ used byref!!!
-#define cursorY      v224
-#define btnAction    v225
-#define    B_1CHAN    1
-#define    B_4CHFM    2
-#define    B_4CHMD    3
-#define    B_OK       4
-#define    B_CANCEL   5
-#define    B_TESTALL  6
-#define    B_TEST0    7
-#define    B_TEST1    8
-#define    B_TEST2    9
-#define    B_TEST3   10
-#define    B_TEST4   11
-#define    B_INST0   12
-#define    B_INST1   13
-#define    B_INST2   14
-#define    B_INST3   15
-#define    B_INST4   16
-#define    B_VOLUME  17
-#define    B_UNSEL   18
-#define    SC_UP     19
-#define    SC_DOWN   20
-#define    SC_PGUP   21
-#define    SC_PGDN   22
-#define egoPrevX     v226
-#define egoPrevY     v227
-#define egoPrevDir   v228
-#define tmpFM0       v229
-#define tmpFM1       v230
-#define tmpFM2       v231
-#define tmpFM3       v232
-#define tmpFM4       v233
-#define dropmode     v234
-#define    NODROP     0
-#define    DROPDOWN   1
-#define    CHOOSING   2
-#define    DROPUP     3
-#define listrow      v235
-#define selinst      v236 [ instrument index of selected instrument
-#define selrow       v237 [ text row of selected instrument
-#define offsetinst   v238 [ instrument index of top row of listbox
-#define offsetrow    v239 [ top row of listbox
+#define currentInst                v220
+#define cursorpos                  v221
+  #define CP_MOUSE               1
+  #define CP_KEYB                2
+  #define CP_1CHAN               3
+  #define CP_4CHFM               4
+  #define CP_4CHMD               5
+  #define CP_OK                  6
+  #define CP_CANCEL              7
+  #define CP_TESTALL             8
+  #define CP_TEST0               9
+  #define CP_TEST1              10
+  #define CP_TEST2              11
+  #define CP_TEST3              12
+  #define CP_TEST4              13
+  #define CP_INST0              14
+  #define CP_INST1              15
+  #define CP_INST2              16
+  #define CP_INST3              17
+  #define CP_INST4              18
+  #define CP_VOLUME             19
+#define newpos                     v222
+#define cursorX                    v223 [ used byref!!!
+#define cursorY                    v224
+#define btnAction                  v225
+  #define B_1CHAN                1
+  #define B_4CHFM                2
+  #define B_4CHMD                3
+  #define B_OK                   4
+  #define B_CANCEL               5
+  #define B_TESTALL              6
+  #define B_TEST0                7
+  #define B_TEST1                8
+  #define B_TEST2                9
+  #define B_TEST3               10
+  #define B_TEST4               11
+  #define B_INST0               12
+  #define B_INST1               13
+  #define B_INST2               14
+  #define B_INST3               15
+  #define B_INST4               16
+  #define B_VOLUME              17
+  #define B_UNSEL               18
+  #define SC_UP                 19
+  #define SC_DOWN               20
+  #define SC_PGUP               21
+  #define SC_PGDN               22
+#define egoPrevX                   v226
+#define egoPrevY                   v227
+#define egoPrevDir                 v228
+#define tmpFM0                     v229
+#define tmpFM1                     v230
+#define tmpFM2                     v231
+#define tmpFM3                     v232
+#define tmpFM4                     v233
+#define dropmode                   v234
+  #define NODROP                 0
+  #define DROPDOWN               1
+  #define CHOOSING               2
+  #define DROPUP                 3
+#define listrow                    v235
+#define selinst                    v236 [ instrument index of selected instrument
+#define selrow                     v237 [ text row of selected instrument
+#define offsetinst                 v238 [ instrument index of top row of listbox
+#define offsetrow                  v239 [ top row of listbox
 [ a few more variable are needed than normally assigned to rooms
 [ the dynamic variables (240-255) can be safely used here
+#define slideoffset                v240
+#define mode                       v241
+  #define 1CHAN                  0
+  #define FMSYNTH                1
+  #define MIDI                   2
+#define tmpMIDI0                   v242
+#define tmpMIDI1                   v243
+#define tmpMIDI2                   v244
 
-#define slideoffset  v240
-#define mode         v241
-#define     1CHAN     0
-#define     FMSYNTH   1
-#define     MIDI      2
-#define tmpMIDI0     v242
-#define tmpMIDI1     v243
-#define tmpMIDI2     v244
-
-#define update       f220
-#define cursormode   f221
-#define sndTest      f222
-#define sndDone      f223
-#define redrawList   f224
-#define sliding      f225
+#define update                     f220
+#define cursormode                 f221
+#define sndTest                    f222
+#define sndDone                    f223
+#define redrawList                 f224
+#define sliding                    f225
 
 [***************************************
 [ ERROR CHECK

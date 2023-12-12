@@ -123,12 +123,6 @@ if (deathType < DT_SEQ_DONE) {
   }
 }
 
-[ if kicking bucket, make sure it goes away
-[ when it gets to edge of screen
-if (objHitEdge == &oBucket) {
-  erase(oBucket);
-}
-
 [ decrement timer
 if (deathTimer > 0) {
   deathTimer--;

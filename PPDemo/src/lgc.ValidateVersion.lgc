@@ -4,6 +4,15 @@
 [ 
 [ ********************************************************************
 
+[***************************************
+[ LOCAL DEFINES
+[***************************************
+[ none
+
+[***************************************
+[ MAIN CODE BLOCK 
+[***************************************
+
 [ confirm video, mouse and sound settings
 if (monitorType != EGA) {
   print("The AGI Power Pack Demo will only run in EGA mode on a PC "

@@ -8,7 +8,6 @@
 #define NORMAL_SPEED             6 [ turbo is 3x standard speed
 #define SLOW_SPEED              12 [ turbo is 3x standard speed
 #define cursor                "_"
-#define oBucket                o14 [ it's for ego to kick
 #define tbStateBtn             o15 [ represents the pressed button for the current cursor mode
 #define tbActionBtn            o16 [ represents the save or restore button when pressed down
 #define floppydisk              i2 [ need to use a define, because the item text is dynamic
@@ -58,8 +57,8 @@
 #define trapped                f25 [ if too much time passes in secret room with closet door open, ego gets trapped inside
 #define closetTimerDone        f26 [ timer end flag; initiates the trapped sequence
 #define realClock              f27 [ if true, status bar shows real time; otherwise it shows game time
-#define kickBucket             f28 [ set if player enters 'kick the bucket'; starts the death sequence
-#define bucketDone             f29 [ true when bucket hits screen edge (so it can be erased)
+#define askToPee               f28 [ tracks whether patient 1 has used bathroom in each patient event cycle
+#define nextEvent              f29 [ when set, move to next lobby patient event
 #define negativeScore          f30 [ set when player score is below zero
 #define patientPeeing          f31 [ set when patient #1 makes a bathroom visit
 #define debugging              f32 [ set this flag to TRUE to enable debug menu and debug mode
@@ -69,7 +68,7 @@
 #define soundDone              f36 [ use this when playing sound effects if no specific action is needed after the sound ends
 #define musicDone              f37 [ use this when playing music if no specific action is needed after the music ends
 #define resetBaDASS            f38 [ door leading back to hidden room won't open until BaDASS is reset
-#define terminalOn             f39 [ when true, terminal is active; need to disable printing, menus, help, etc to preserve the display
+#define playWalkman            f39 [ true when currently playing sound is a Walkman track
 #define saveCursor             f40 [ when set, the current cursor gets saved in logic 0
 #define restoreCursor          f41 [ when set, the default data for current cursor is restored
 #define turboMode              f42 [ when true, turbo option is set
@@ -121,9 +120,6 @@
 #define skipIntro              f88 [ if true, the Intro gets skipped when game starts
 #define showHelp               f89 [ used to direct input to the help screen when it's being shown
 #define startTrace             f90 [ when set, main loop will enter trace mode
-#define playWalkman            f91 [ true when currently playing sound is a Walkman track
-#define nextEvent              f92 [ when set, move to next lobby patient event
-#define askToPee               f93 [ tracks whether patient 1 has used bathroom in each patient event cycle
 #define fLogInput             f218 [ logs all input to LOGFILE
 #define fShowClicks           f219 [ shows various debug status lines on screen
 #define unknownWord             s1 [ when an unknown word is entered by player, store it in this string
@@ -198,6 +194,11 @@
 #define currentMinute          v78 [ minute value of real time
 #define currentSecond          v79 [ second value of real time
 #define rugStatus              v80 [ tracks whether rug corner is up or down
+#define RUG_DOWN                 0
+#define RUG_UP                   1
+#define RUG_FLAT                 2
+#define RUG_LIFTING              3
+#define RUG_LOWERING             4
 #define timerMin               v81 [ used by Power Pack timer function
 #define timerSec               v82 [ used by Power Pack timer function
 #define comboNumber            v83 [ last position of combination lock

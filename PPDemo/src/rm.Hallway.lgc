@@ -19,35 +19,35 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oClosetDoor    o1
-#define oExamDoor      o2
-#define oReceptionist  o3
-#define oNurse         o4
-#define oSecurity      o3 [ receptionist and security guard never on screen at same time
+#define oClosetDoor                  o1
+#define oExamDoor                    o2
+#define oReceptionist                o3
+#define oNurse                       o4
+#define oSecurity                    o3 [ receptionist and security guard never on screen at same time
 
-#define fDoorDone      f220
-#define clickOn        f221
-#define examDoorDone   f222
+#define examDoorSeq                v220
+  #define SHUT                   0
+  #define OPENED                 1
+  #define NURSETURN              2
+  #define NURSETALK              3
+  #define OPEN4                  4
+#define gExamCount                 v221
+#define arrestSeq                  v222
+  #define NOARREST               0
+  #define COPARRIVES             1
+  #define GOTOEGO                2
+  #define TURNTOEGO              3
+  #define CUFFEGO                4
+  #define EGOWALKS               5
+  #define ESCORT1                6
+  #define SHUTDOOR               7
+  #define ESCORT2                8
+  #define ARRESTED               9
+#define arrestCounter              v223
 
-#define examDoorSeq    v220
-#define    SHUT         0
-#define    OPENED       1
-#define    NURSETURN    2
-#define    NURSETALK    3
-#define    OPEN4        4
-#define gExamCount     v221
-#define arrestSeq      v222
-#define    NOARREST     0
-#define    COPARRIVES   1
-#define    GOTOEGO      2
-#define    TURNTOEGO    3
-#define    CUFFEGO      4
-#define    EGOWALKS     5
-#define    ESCORT1      6
-#define    SHUTDOOR     7
-#define    ESCORT2      8
-#define    ARRESTED     9
-#define arrestCounter  v223
+#define fDoorDone                  f220
+#define clickOn                    f221
+#define examDoorDone               f222
 
 [***************************************
 [ FIRST CYCLE ONLY

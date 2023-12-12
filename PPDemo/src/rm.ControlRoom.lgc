@@ -33,14 +33,14 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define showMOCC         f220
-#define showCAISOCC      f221
-#define showRANDOCC      f222
-#define showICAPOCC      f223
-#define showESADOCC      f224
-#define showOFROCC       f225
-#define showERIDOCC      f226
-#define nearTerminal     f227
+#define showMOCC                   f220
+#define showCAISOCC                f221
+#define showRANDOCC                f222
+#define showICAPOCC                f223
+#define showESADOCC                f224
+#define showOFROCC                 f225
+#define showERIDOCC                f226
+#define nearTerminal               f227
 
 [***************************************
 [ FIRST CYCLE ONLY
