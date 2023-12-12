@@ -331,8 +331,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &H5593FAD4
-   CompCRC32 = &H5593FAD4
+   CRC32 = &H2060FF72
+   CompCRC32 = &H2060FF72
    IsRoom = False
 
 [Logic55]
