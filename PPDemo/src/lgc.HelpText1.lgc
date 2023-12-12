@@ -34,13 +34,11 @@ if (selectedTopic == 1) {
   display(3, 2, "About PPDemo");
   [ add details
   set.text.attribute(BLACK, LT_GRAY);
-  topicTitle = "About PPDemo";
-  block(STR.UPPER, &topicTitle, &topicTitle, 0); [ str.upper(sINPUT, sRESULT)
-  display(2, 43, "%s20");
-  display(4, 31, "Version: 0.1");
-  display(4, 57, "09/01/2023");
-  display(6, 25, "The Power Pack Demo Game was written to showcase");
-  display(7, 25, "the features of the AGI Power Pack.");
+  display(2, 36, "ABOUT SIERRA QUEST: PPDEMO");
+  display(4, 31, "Version: 1.0");
+  display(4, 57, "12/15/2023");
+  display(6, 25, "Sierra Quest: Power Pack Demo Game was written to");
+  display(7, 25, "showcase the features of the AGI Power Pack.");
   display(9, 25, "The AGI Power Pack is a set of logics that modify");
   display(10, 25, "the AGI engine, allowing new functionality such");
   display(11, 25, "as mouse support, multichannel sound, and more.");
@@ -74,8 +72,8 @@ if (selectedTopic == 2) {
   display(11, 60, "Additional Sound");
   display(12, 26, "Sound Effects by");
   display(12, 63, "Effects by");
-  display(14, 43, "AGI Power Pack");
-  display(15, 44, "programmed by");
+  display(15, 26, "Playtesters:");
+  display(17, 28, "AGI Power Pack programmed by");
   display(19, 26, "Power Pack Demo was designed and created in the");
   display(20, 35, "WinAGI Game Development System");
   set.text.attribute(BLUE, LT_GRAY);
@@ -85,7 +83,8 @@ if (selectedTopic == 2) {
   display(9, 62, "Andrew Korson");
   display(13, 27, "Andrew Korson");
   display(13, 64, "doomlazer");
-  display(16, 44, "Andrew Korson");
+  display(17, 57, "Andrew Korson");
+  display(15, 39, "doomlazer, lance.ewing, Threepwang");
   display(22, 24, "http://agiwiki.sierrahelp.com/index.php?title=WinAGI");
   return();
 }
@@ -103,7 +102,7 @@ if (selectedTopic == 3) {
   display(8, 25, "The first time you play the game, the introduction");
   display(9, 25, "is not optional; after that you can skip the");
   display(10, 25, "introduction by pressing any key or mouse button.");
-  display(11, 25, "(See 'Skip Intro' topic.)");
+  display(11, 25, "(See '          ' topic.)");
   display(13, 25, "You can save, restore or restart just like any AGI");
   display(14, 25, "game, by typing the appropriate command in the");
   display(15, 25, "text parser or using menu/toolbar options.");
