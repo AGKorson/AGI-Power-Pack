@@ -328,3 +328,12 @@ X       +3 pts:  getting music sheet
 X       +4 pts:  getting 80s mix tape
 X       +4 pts:  playing mix tape in walkman
 MAX SCORE: 146
+
+[ temp debug code to check game end (use debug set-var command to enable it)
+if (v230 > 0) {
+  v230 = 0;
+  [ setup for win
+  v3 = 136;
+  get(floppydisk);
+  floppyfiles = 3;
+}

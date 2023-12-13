@@ -6,9 +6,8 @@
    GameID = PPDEMO
    Interpreter = 2.917
    LastEdit = "12/12/2023 3:15:40 PM"
-   LastEdit = "11/2/2022 5:57:17 PM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = " Sierra Quest:\nPower Pack Demo\n  Version 1.0\n  12/12/2023"
+   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0a\n  12/12/2023"
    About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
    ResDir = src
    UseResNames = True
@@ -58,8 +57,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &HC28A271A
-   CompCRC32 = &HC28A271A
+   CRC32 = &H7E3E7514
+   CompCRC32 = &H7E3E7514
    IsRoom = True
 
 [Logic3]
@@ -289,22 +288,22 @@
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &H75646AAB
-   CompCRC32 = &H75646AAB
+   CRC32 = &HECC1E3D
+   CompCRC32 = &HECC1E3D
    IsRoom = False
 
 [Logic36]
    ID = lgc.CacheOptions
    Description = "Caches game settings so they can be restored after a game reset."
-   CRC32 = &H8CD5C1AD
-   CompCRC32 = &H8CD5C1AD
+   CRC32 = &H5318124A
+   CompCRC32 = &H5318124A
    IsRoom = False
 
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &H369533C8
-   CompCRC32 = &H369533C8
+   CRC32 = &HEA0B9DA7
+   CompCRC32 = &HEA0B9DA7
    IsRoom = False
 
 [Logic51]
@@ -331,8 +330,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &H2060FF72
-   CompCRC32 = &H2060FF72
+   CRC32 = &H5C3BA8CB
+   CompCRC32 = &H5C3BA8CB
    IsRoom = False
 
 [Logic55]
@@ -366,8 +365,8 @@
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &HA3D3EF0A
-   CompCRC32 = &HA3D3EF0A
+   CRC32 = &HAA0BD610
+   CompCRC32 = &HAA0BD610
    IsRoom = False
 
 [Logic60]
@@ -394,43 +393,43 @@
 [Logic42]
    ID = lgc.HelpText4
    Description = "Contains code to display help topic pages 13 to 17."
-   CRC32 = &HD192C520
-   CompCRC32 = &HD192C520
+   CRC32 = &H4058AA4D
+   CompCRC32 = &H4058AA4D
    IsRoom = False
 
 [Logic41]
    ID = lgc.HelpText3
    Description = "Contains code to display help topic pages 8 to 12."
-   CRC32 = &H4C327E2D
-   CompCRC32 = &H4C327E2D
+   CRC32 = &H10D70C70
+   CompCRC32 = &H10D70C70
    IsRoom = False
 
 [Logic40]
    ID = lgc.HelpText2
    Description = "Contains code to display help topic pages 5 to 8."
-   CRC32 = &H8AE416F0
-   CompCRC32 = &H8AE416F0
+   CRC32 = &H8C3C5066
+   CompCRC32 = &H8C3C5066
    IsRoom = False
 
 [Logic39]
    ID = lgc.HelpText1
    Description = "Contains code to display help topic pages 1 to 4."
-   CRC32 = &HECFFE870
-   CompCRC32 = &HECFFE870
+   CRC32 = &HCC3E2C5
+   CompCRC32 = &HCC3E2C5
    IsRoom = False
 
 [Logic38]
    ID = lgc.GameHelp
    Description = "Main Help Screen. Sets the correct mode and loads the default first topic page."
-   CRC32 = &H6576A4E1
-   CompCRC32 = &H6576A4E1
+   CRC32 = &HB2E7CDF8
+   CompCRC32 = &HB2E7CDF8
    IsRoom = False
 
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H2A9376C3
-   CompCRC32 = &H2A9376C3
+   CRC32 = &H52CBA40C
+   CompCRC32 = &H52CBA40C
    IsRoom = False
 
 [Logic44]

@@ -58,7 +58,7 @@ if (deathType < DT_SEQ_DONE) {
   
   [ start a timer to provide a delay after death announcement
   [ before player is shown final 'thanks for playing' message
-  deathTimer = 25;
+  deathTimer = 15;
 
   [ check deathtype to display initial death message:
   
@@ -386,8 +386,8 @@ if ((controller(cRestart) || said("restart", "game") || said("restart"))) {
 
 [ looking at help screen is allowed
 if ((controller(cHelp) || said("help"))) {
-  [ use local variable 240 to initialize the help screen
-  set(f240);
+  [ initialize and show the help screen
+  set(initHelp);
   call(lgc.GameHelp);
 }
 

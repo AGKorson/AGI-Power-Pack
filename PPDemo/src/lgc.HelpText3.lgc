@@ -23,8 +23,7 @@
 #define prevItem                   v241
 #define oldEgoDir                  v242
 
-#define initScreen                 f240
-#define moveSelection              f241
+#define moveSelection              f240
 
 [***************************************
 [ MAIN CODE BLOCK 

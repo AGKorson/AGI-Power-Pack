@@ -257,8 +257,8 @@ if ((controller(cHelp) || said("help") || said("get", "help") ||
      said("show", "help"))) {
   [ show the main help screen
   set(showHelp);
-  [ use local variable 240 to initialize the help screen
-  set(f240);
+  [ initialize and show the help screen
+  set(initHelp);
   call(lgc.GameHelp);
 }
 

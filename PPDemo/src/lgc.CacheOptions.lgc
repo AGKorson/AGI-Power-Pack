@@ -79,6 +79,13 @@ if (realClock) {
 s22 = "%v47%v48";
 block(STR.FORMAT, &s22, &s22, 0); [ str.format(sINPUT, sRESULT)
 
+[ skip intro setting
+if (skipIntro) {
+  s23 = "1";
+} else {
+  s23 = "0";
+}
+
 return();
 
 [***************************************

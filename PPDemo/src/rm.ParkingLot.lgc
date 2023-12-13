@@ -291,7 +291,7 @@ if (newRoom) {
 [ check for end credit sequence
 if (endCreditSeq) {
   [ starting playing the credits
-  if (endCreditSeq == 1) {
+  if (endCreditSeq == 2) {
     [ add the credits object and begin movement
     animate.obj(oCredits);
     load.view(vw.Credits);
@@ -315,7 +315,7 @@ if (endCreditSeq) {
   } 
   
   [ if credits are playing, update as needed
-  if (endCreditSeq == 2) {
+  if (endCreditSeq == 3) {
     [ credit events are based on which line, its position and state/step
     get.posn(oCredits, work1, work2);
     if (creditstep == 0) {
@@ -376,7 +376,7 @@ if (endCreditSeq) {
           creditstep = 1;
           set.cel(oCredits, 1);
           work1 = 0;
-          work2 = 14; [ 15; [ adjust by one to smooth out movmement
+          work2 = 13; [ 14; [ adjust by one to smooth out movmement
           reposition(oCredits, work1, work2);
         }
       }

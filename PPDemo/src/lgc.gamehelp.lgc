@@ -23,15 +23,14 @@
 #define prevItem                   v241
 #define oldEgoDir                  v242
 
-#define initScreen                 f240
-#define moveSelection              f241
+#define moveSelection              f240
 
 [***************************************
 [ INITIALIZATION CODE 
 [***************************************
 [ first time through, set the mode and draw the main frame
-if (initScreen) {
-  reset(initScreen);
+if (initHelp) {
+  reset(initHelp);
   
   [ pause game clock
   block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(MODE)

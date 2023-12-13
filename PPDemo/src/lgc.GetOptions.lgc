@@ -98,6 +98,13 @@ if (gameRestarted) {
     set(realClock);
   }
 
+  [ s23 holds skipIntro
+  s22 = "0";
+  if (compare.strings(s22, s23)) {
+    reset(skipIntro);
+  } else {
+    set(skipIntro);
+  }
 } else {
   [ for initial game start or restore, extract from file
   
