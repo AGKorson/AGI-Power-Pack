@@ -130,12 +130,12 @@ if (newRoom) {
     shake.screen(1);
     work1 = 0;
     :flickerit
-      block(FADE.OUT, BYNUM, 2, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 1, BLACK); [ fade.out(FN_MODE, DELAY, COLOR)
       block(FADE.IN, BYNUM, 1, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
-      block(FADE.OUT, BYNUM, 2, WHITE); [ fade.out(FN_MODE, DELAY, COLOR)
+      block(FADE.OUT, BYNUM, 1, WHITE); [ fade.out(FN_MODE, DELAY, COLOR)
       block(FADE.IN, BYNUM, 1, WHITE); [ fade.in(FN_MODE, DELAY, COLOR)
       ++work1;
-    if (work1 < 3) {
+    if (work1 < 2) {
       goto(flickerit);
     }
     print("The door slams shut, and the lights in the room flicker "

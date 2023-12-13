@@ -30,7 +30,9 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-[ none
+#define themeCount                 v240
+
+#define winSoundDone               f240
 
 [***************************************
 [ MAIN CODE BLOCK 
@@ -123,6 +125,17 @@ if (deathType < DT_SEQ_DONE) {
   }
 }
 
+[ check for theme sound end
+if (winSoundDone) {
+[set(f10);trace.on();
+  reset(winSoundDone);
+  ++themeCount;
+  [ play theme two times, then stop
+  if (themeCount < 2) {
+    sound(m.Winner, winSoundDone);
+  }
+}
+
 [ decrement timer
 if (deathTimer > 0) {
   deathTimer--;
@@ -168,7 +181,8 @@ if (deathTimer == 1) {
       ++work3;
       work2 = 67; [ baritone sax
       set.key(&work3, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)
-      sound(m.Winner, soundDone);
+      sound(m.Winner, winSoundDone);
+      themeCount = 0;
       set(playSound);
       print("Your vist to Oakhurst was a big success! You managed "
             "to find a copy of the source files for the AGI Power "

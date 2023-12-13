@@ -1571,11 +1571,13 @@ if ((lastChar == 13 || lastChar == 10)) {
           if (compare.strings(input, sTemp2)) {
             if (!floppyInserted) {
               output = "Drive not ready";
+              terminalfn = ADDLINE_LF;
               call(lgc.TerminalFunctions);
               goto(getInput);
             } else {
               if (!floppyFormatted) {
                 output = "Disk read error";
+                terminalfn = ADDLINE_LF;
                 call(lgc.TerminalFunctions);
                 goto(getInput);
               } else {
@@ -1583,7 +1585,6 @@ if ((lastChar == 13 || lastChar == 10)) {
               }
             }
           }
-          
           
           [ valid dir values from c:\
           [ users, users\kw002
