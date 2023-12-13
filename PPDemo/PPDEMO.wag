@@ -7,7 +7,7 @@
    Interpreter = 2.917
    LastEdit = "12/12/2023 11:43:38 PM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0b\n  12/12/2023"
+   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0c\n  12/13/2023"
    About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
    ResDir = src
    UseResNames = True
@@ -330,8 +330,8 @@
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &H56988EA
-   CompCRC32 = &H56988EA
+   CRC32 = &HB438EA83
+   CompCRC32 = &HB438EA83
    IsRoom = False
 
 [Logic55]
