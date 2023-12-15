@@ -1026,7 +1026,7 @@ if (egoHitSpecial) {
     new.room(rm.Closet);  [ ##LE002##
   } else {
     [ don't let ego go through the door
-    if (egoDir > 5 && egoDir < 8) {
+    if (egoDir > 5 && egoDir < 9) {
       egoDir = STOPPED;
     }
   }

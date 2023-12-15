@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/12/2023 11:43:38 PM"
+   LastEdit = "12/13/2023 11:39:41 AM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0c\n  12/13/2023"
    About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
@@ -71,8 +71,8 @@
 [Logic4]
    ID = rm.Hallway
    Description = "One door is bathroom; it is always occupied. Another door is the examination room; it will open, but nurse will immediately slam it shut. Closet at end of hall can be opened/entered."
-   CRC32 = &HC64EDC41
-   CompCRC32 = &HC64EDC41
+   CRC32 = &HDC692A51
+   CompCRC32 = &HDC692A51
    IsRoom = True
 
 [Logic5]
