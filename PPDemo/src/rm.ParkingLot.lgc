@@ -7,7 +7,7 @@
 [ another car arrives, patient gets out and enters building. Also, a
 [ patient may exit building, get in car and then leave. There should
 [ be 4-5 cars in the parking lot at a time. if ego crosses in front of 
-[ a moving vehicle, he can get run over, ending the game in a loss. if 
+[ a moving vehicle, he can get run over, ending the game in a loss. If 
 [ a patient arrives in a batmobile and ego tries to touch it, it
 [ shocks and kills him. Touching the trees will get sap on ego's
 [ hands, which costs a point; he can wash in the sink in the closet

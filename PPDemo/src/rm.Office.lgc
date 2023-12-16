@@ -433,11 +433,6 @@ if (fFileDrawer) {
   }
 }
 
-[ if ego is dead, skip player input
-if (deathType) {
-  return();
-}
-
 [***************************************
 [ PROCESS PLAYER INPUT
 [***************************************

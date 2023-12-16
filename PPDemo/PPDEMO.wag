@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/13/2023 11:39:41 AM"
+   LastEdit = "12/12/2023 11:43:38 PM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
    GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0c\n  12/13/2023"
    About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
@@ -57,8 +57,8 @@
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &H7E3E7514
-   CompCRC32 = &H7E3E7514
+   CRC32 = &H6A6ACB5F
+   CompCRC32 = &H6A6ACB5F
    IsRoom = True
 
 [Logic3]
@@ -85,29 +85,29 @@
 [Logic6]
    ID = rm.SecretRoom
    Description = "This room is just a bridge between the closet and the stairwell entrance to the secret control room."
-   CRC32 = &HE7A1B5C8
-   CompCRC32 = &HE7A1B5C8
+   CRC32 = &H657CA873
+   CompCRC32 = &H657CA873
    IsRoom = True
 
 [Logic7]
    ID = rm.Stairway
    Description = "At the bottom of the stairs is a locked door. Behind the door is the control room for the fabled AGI Power Pack development project."
-   CRC32 = &HDB05B68E
-   CompCRC32 = &HDB05B68E
+   CRC32 = &H63483220
+   CompCRC32 = &H63483220
    IsRoom = True
 
 [Logic8]
    ID = rm.ControlRoom
    Description = "The control room is dominated by the main terminal with its multiple displays that demonstrate various power pack features. Drew has to figure out how to turn it on, and then how to enable all the displays."
-   CRC32 = &H1654EB01
-   CompCRC32 = &H1654EB01
+   CRC32 = &HAC217CAD
+   CompCRC32 = &HAC217CAD
    IsRoom = True
 
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &H5711CF3F
-   CompCRC32 = &H5711CF3F
+   CRC32 = &HF3A5E613
+   CompCRC32 = &HF3A5E613
    IsRoom = True
 
 [Logic10]
