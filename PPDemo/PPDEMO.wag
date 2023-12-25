@@ -176,8 +176,8 @@
 [Logic19]
    ID = rm.SafeDoor
    Description = "Close up of the safe door that's hidden behind the picture in the Power Pack operator's office."
-   CRC32 = &HA80BBA0E
-   CompCRC32 = &HA80BBA0E
+   CRC32 = &H41ED9C23
+   CompCRC32 = &H41ED9C23
    IsRoom = True
 
 [Logic20]

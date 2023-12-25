@@ -17,8 +17,6 @@
 [***************************************
 [ LOCAL DEFINES
 [***************************************
-#define oBlank1                      o1
-#define oBlank2                      o2
 #define oNum00                       o3
 #define oNum05                       o4
 #define oNum10                       o5
@@ -206,22 +204,6 @@ if (newRoom) {
   set.priority(oDialCenter, 15);
   position(oDialCenter, 32, 98);
   draw(oDialCenter);
-  
-  [ blanks, to clear areas during view swaps
-  animate.obj(oBlank1);
-  set.view(oBlank1, vw.SafeDial);
-  set.loop(oBlank1, 1);
-  stop.cycling(oBlank1);
-  ignore.objs(oBlank1);
-  position(oBlank1, 136, 167);
-  draw(oBlank1);
-  animate.obj(oBlank2);
-  set.view(oBlank2, vw.SafeDial);
-  set.loop(oBlank2, 1);
-  stop.cycling(oBlank2);
-  ignore.objs(oBlank2);
-  position(oBlank2, 136, 167);
-  draw(oBlank2);
   
   [ select correct palette to show tick marks correctly
   tickCounter = currentNum;
@@ -602,22 +584,16 @@ if (spinRight) {
 [ update numbers as the dial spins
 if (updateCombo) {
   sound(s.SafeDial, soundDone);
+  
   :updatenow
-
   work1 = currentNum;
   [ check that correct view is set
   if (currentNum > 19) {
     work1 -= 20;
     if (viewNum == vw.SafeNumbers1) {
+      [ need to swap views
       viewNum =vw.SafeNumbers2;
-      position(oNum00, 136, 167);
-      position(oNum05, 136, 167);
-      position(oNum10, 136, 167);
-      position(oNum15, 136, 167);
-      position(oNum20, 136, 167);
-      position(oNum25, 136, 167);
-      position(oNum30, 136, 167);
-      position(oNum35, 136, 167);
+      [ erase the dial numbers first
       erase(oNum00);
       erase(oNum05);
       erase(oNum10);
@@ -626,21 +602,27 @@ if (updateCombo) {
       erase(oNum25);
       erase(oNum30);
       erase(oNum35);
+      [ then temporarily move them out of sight
+      [ (this reduces flicker to a minimum)
+      position(oNum00, 136, 167);
+      position(oNum05, 136, 167);
+      position(oNum10, 136, 167);
+      position(oNum15, 136, 167);
+      position(oNum20, 136, 167);
+      position(oNum25, 136, 167);
+      position(oNum30, 136, 167);
+      position(oNum35, 136, 167);
+      [ toss the old view, and load the new view
       discard.view(vw.SafeNumbers1);
       load.view(vw.SafeNumbers2);
+      [ now that objects are erased, it's OK to swap
+      [ the view 
       set(swapViews);
     }
   } else {
     if (viewNum == vw.SafeNumbers2) {
+      [ need to swap views
       viewNum =vw.SafeNumbers1;
-      position(oNum00, 136, 167);
-      position(oNum05, 136, 167);
-      position(oNum10, 136, 167);
-      position(oNum15, 136, 167);
-      position(oNum20, 136, 167);
-      position(oNum25, 136, 167);
-      position(oNum30, 136, 167);
-      position(oNum35, 136, 167);
       erase(oNum00);
       erase(oNum05);
       erase(oNum10);
@@ -649,13 +631,30 @@ if (updateCombo) {
       erase(oNum25);
       erase(oNum30);
       erase(oNum35);
+      [ then temporarily move them out of sight
+      [ (this reduces flicker to a minimum)
+      position(oNum00, 136, 167);
+      position(oNum05, 136, 167);
+      position(oNum10, 136, 167);
+      position(oNum15, 136, 167);
+      position(oNum20, 136, 167);
+      position(oNum25, 136, 167);
+      position(oNum30, 136, 167);
+      position(oNum35, 136, 167);
+      [ toss the old view, and load the new view
       discard.view(vw.SafeNumbers2);
       load.view(vw.SafeNumbers1);
+      [ now that objects are erased, it's OK to swap
+      [ the view 
       set(swapViews);
     }
   }
+  [ check if views are being swapped
   if (swapViews) {
     reset(swapViews);
+    [ when view changes, need to re-assign view 
+    [ for dial number objects, and redraw the screen
+    [ (there's a bit of a flicker, but it's not too bad)
     set.view.v(oNum00, viewNum);
     set.view.v(oNum05, viewNum);
     set.view.v(oNum10, viewNum);
@@ -664,6 +663,7 @@ if (updateCombo) {
     set.view.v(oNum25, viewNum);
     set.view.v(oNum30, viewNum);
     set.view.v(oNum35, viewNum);
+    [ redraw the objects
     draw(oNum00);
     draw(oNum05);
     draw(oNum10);
@@ -672,41 +672,10 @@ if (updateCombo) {
     draw(oNum25);
     draw(oNum30);
     draw(oNum35);
-    draw(oBlank1);
-    draw(oBlank2);
-    if (currentNum == 39) {
-      set.cel(oBlank1, 0);
-      set.cel(oBlank2, 1);
-      reposition.to(oBlank1, 39, 29);
-      reposition.to(oBlank2, 16, 52);
-      goto(movenumbers);
-    }
-    if (currentNum == 0) {
-      set.cel(oBlank1, 2);
-      set.cel(oBlank2, 3);
-      reposition.to(oBlank1, 24, 35);
-      reposition.to(oBlank2, 11, 75);
-      goto(movenumbers);
-    }
-    if (currentNum == 19) {
-      set.cel(oBlank1, 4);
-      set.cel(oBlank2, 5);
-      reposition.to(oBlank1, 35, 31);
-      reposition.to(oBlank2, 18, 52);
-      goto(movenumbers);
-    }
-    if (currentNum == 20) {
-      set.cel(oBlank1, 6);
-      set.cel(oBlank2, 7);
-      reposition.to(oBlank1, 25, 34);
-      reposition.to(oBlank2, 10, 85);
-    }
-  } else {
-    [ erase the blanks
-    erase(oBlank1);
-    erase(oBlank2);
   }
   :movenumbers
+  [ when changing dial position, update object loop to show the numbers
+  [ with correct orientation
   reset(updateCombo);
   set.loop.v(oNum00, work1);
   set.loop.v(oNum05, work1);
@@ -716,14 +685,16 @@ if (updateCombo) {
   set.loop.v(oNum25, work1);
   set.loop.v(oNum30, work1);
   set.loop.v(oNum35, work1);
-  [
+  [ also update the dial center to correct orientation
   set.cel.v(oDialCenter, currentNum);
+  [ set correct palette so tick marks are shown correctly
   work1 = 0;
   if (newRoom) {
     ++work1;
   }
   block(SET.PALETTE, BYVAR, &tickCounter, &work1); [ set.palette(FN_MODE, PALETTE, LOADONLY)
   
+  [ now set each dial number's position based on current dial number
   if (currentNum < 20) {
     if (currentNum < 10) {
       if (currentNum == 0) {
