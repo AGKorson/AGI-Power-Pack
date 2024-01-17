@@ -300,6 +300,21 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   
+  [ look disk
+  if (said("look", "disk")) {
+    if (has(floppyDisk)) {
+      [ let game functions handle it
+      reset(haveMatch);
+    } else {
+      [ is it in the disk drive?
+      if (floppyInserted) {
+        print("The disk is in the drive.");
+      } else {
+        print("You don't see that here.");
+      }
+    }
+  }
+  
   [ remove/take floppy
   if ((said("eject", "disk") || said("get", "disk") || 
        said("get", "disk", "console") || said("get", "disk", "drive") ||

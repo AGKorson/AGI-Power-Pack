@@ -106,15 +106,15 @@
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &HF3A5E613
-   CompCRC32 = &HF3A5E613
+   CRC32 = &H97B5B04
+   CompCRC32 = &H97B5B04
    IsRoom = True
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "Room is filled with things from various Sierra AGI games. Clues are hidden through out that Drew will need to gain access to the main console and the power point functions."
-   CRC32 = &H6C16DCBD
-   CompCRC32 = &H6C16DCBD
+   CRC32 = &HF1FC71F9
+   CompCRC32 = &HF1FC71F9
    IsRoom = True
 
 [Logic11]
@@ -302,8 +302,8 @@
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &HEA0B9DA7
-   CompCRC32 = &HEA0B9DA7
+   CRC32 = &HF91D3FF0
+   CompCRC32 = &HF91D3FF0
    IsRoom = False
 
 [Logic51]

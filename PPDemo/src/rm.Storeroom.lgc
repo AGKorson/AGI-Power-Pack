@@ -185,7 +185,7 @@ if (newRoom) {
     }
     if (storeFileDrStatus == OPEN3) { 
       position(oFileDrawer, 76, 118);
-      if (has("cassette tape")) {
+      if ((has("cassette tape") || cassetteLoaded)) {
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
       } else {
@@ -494,7 +494,7 @@ if (fFileDrawer) {
         storeFileDrStatus = OPEN2;
       } else {
         storeFileDrStatus = OPEN3;
-        if (!has("cassette tape")) {
+        if (!has("cassette tape") && !cassetteLoaded) {
           set.loop(oFileDrawer, 11);
           set.cel(oFileDrawer, 0);
           force.update(oFileDrawer);
@@ -832,7 +832,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         print("The drawer is empty.");
       } else {
         if (storeFileDrStatus == OPEN3) {
-          if (has("cassette tape")) {
+          if ((has("cassette tape") || cassetteLoaded)) {
             print("This drawer is empty.");
           } else {
             print("Someone left an 80s mix tape in this drawer.");
@@ -983,7 +983,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         print("This drawer is empty.");
       } else {
         if (storeFileDrStatus == OPEN3) {
-          if (has("cassette tape")) {
+          if ((has("cassette tape") || cassetteLoaded)) {
             print("This drawer is empty.");
           } else {
             print("Someone left an 80s mix tape in this drawer.");
@@ -1039,7 +1039,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     [ is ego close enough?
     if (obj.in.box(ego, 73, 117, 93, 122)) {
       if (storeFileDrStatus == OPEN3) {
-        if (has("cassette tape")) {
+        if ((has("cassette tape") || cassetteLoaded)) {
           print("This drawer is empty.");
         } else {
           print("Someone left an 80s mix tape in this drawer.");
@@ -1052,15 +1052,20 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("look", "cassette")) {
-    [ if close enough, and drawer is open, and not taken yet
     if (has("cassette tape")) {
       [ let game functions logic handle it
       reset(haveMatch);
     } else {
-      if (obj.in.box(ego, 73, 117, 93, 122) && storeFileDrStatus == OPEN3) {
-        print("There is a mix tape in the bottom file cabinet drawer.");
+      [ is it in the walkman?
+      if (cassetteLoaded) {
+        print("The mix tape is in the Walkman.");
       } else {
-        print("You don't see that here.");
+        [ if close enough, and drawer is open
+        if (obj.in.box(ego, 73, 117, 93, 122) && storeFileDrStatus == OPEN3) {
+          print("There is a mix tape in the bottom file cabinet drawer.");
+        } else {
+          print("You don't see that here.");
+        }
       }
     }
   }
@@ -1069,15 +1074,19 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     if (has("cassette tape")) {
       print("You already have it.");
     } else {
-      if (storeFileDrStatus == OPEN3) {
-        [ if close enough
-        if (obj.in.box(ego, 73, 117, 93, 122)) {
-          goto(getcassette);
-        } else {
-          print("Move closer.");
-        }
+      [ is it in the walkman?
+      if (cassetteLoaded) {
+        print("The mix tape is in the Walkman.");
       } else {
-        print("You don't see one of those here.");
+        if (storeFileDrStatus == OPEN3) {
+          if (obj.in.box(ego, 73, 117, 93, 122)) {
+            goto(getcassette);
+          } else {
+            print("Move closer.");
+          }
+        } else {
+          print("You don't see one of those here.");
+        }
       }
     }
   }

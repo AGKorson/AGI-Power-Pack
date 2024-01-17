@@ -466,7 +466,11 @@ if (haveInput && !haveMatch) {
     if (has(floppydisk)) {
       work1 = 2;
     } else {
-      print("You don't have it.");
+      if (floppyInserted) {
+        print("It's in the disk drive, in the control room.");
+      } else {
+        print("You don't have it.");
+      }
     }
   }
   [ look keyfob
@@ -482,7 +486,11 @@ if (haveInput && !haveMatch) {
     if (has("cassette tape")) {
       work1 = 4;
     } else {
-      print("You don't have it.");
+      if (cassetteLoaded) {
+        print("The cassette is in the Walkman.");
+      } else {
+        print("You don't have it.");
+      }
     }
   }
   [ look Walkman
@@ -617,14 +625,22 @@ if (haveInput && !haveMatch) {
       [ if in control room, it's handled there
       print("There's nothing you can do with the floppy disk here.");
     } else {
-      print("You don't have it.");
+      if (floppyInserted) {
+        print("It's in the disk drive, in the control room.");
+      } else {
+        print("You don't have it.");
+      }
     }
   }
   if (said("read", "disk")) {
     if (has(floppydisk)) {
       print("The tiny ones and zeros on the drive are much too small for you to read.");
     } else {
-      print("You don't have it.");
+      if (floppyInserted) {
+        print("It's in the disk drive, in the control room.");
+      } else {
+        print("You don't have it.");
+      }
     }
   }
   
@@ -643,7 +659,11 @@ if (haveInput && !haveMatch) {
     if (has("cassette tape")) {
       print("What to you want to do with it?");
     } else {
-      print("You don't have it.");
+      if (cassetteLoaded) {
+        print("The cassette is in the Walkman.");
+      } else {
+        print("You don't have it.");
+      }
     }
   }
   if (said("put", "tape", "in", "walkman")) {
@@ -651,7 +671,12 @@ if (haveInput && !haveMatch) {
       [ show walkman
     } else {
       if (!has("cassette tape")) {
-        print("You don't have a cassette tape.");
+        [ if already in the walkman
+        if (cassetteLoaded) {
+          print("The cassette is already in the Walkman.");
+        } else {
+          print("You don't have a cassette tape.");
+        }
       } else {
         if (!has("Walkman")) {
           print("You don't have a Walkman.");

@@ -208,7 +208,7 @@ if (newRoom) {
     }
     if (officeFileDrStatus == OPEN3) { 
       position(oFileDrawer, 93, 130);
-      if (has(floppydisk)) {
+      if ((has(floppydisk) || floppyInserted)) {
         set.loop(oFileDrawer, 3);
         set.cel(oFileDrawer, 2);
       } else {
@@ -423,7 +423,7 @@ if (fFileDrawer) {
         }
       } else {
         officeFileDrStatus = OPEN3;
-        if (!has(floppydisk)) {
+        if (!has(floppydisk) && !floppyInserted) {
           set.loop(oFileDrawer, 5);
           set.cel(oFileDrawer, 6);
           force.update(oFileDrawer);
@@ -1097,21 +1097,37 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       [ let game functions logic handle it
       reset(haveMatch);
     } else {
-      if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN3) {
-        print("There is a box of floppy disks in the bottom file cabinet drawer.");
+      [ is it in the drive?
+      if (floppyInserted) {
+        print("You put it in the disk drive, in the control room.");
       } else {
-        print("You don't see that here.");
+        [ if close enough and drawer is open
+        if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN3) {
+          print("There is a box of floppy disks in the bottom file cabinet drawer.");
+        } else {
+          print("You don't see that here.");
+        }
       }
     }
   }
+  
   if (said("get", "disk")) {
     if (has(floppydisk)) {
       print("You already have it.");
     } else {
-      if (obj.in.box(ego, 82, 129, 105, 133) && officeFileDrStatus == OPEN3) {
-        goto(getdisk);
+      [ is it in the drive?
+      if (floppyInserted) {
+        print("You put it in the disk drive, in the control room.");
       } else {
-        print("You don't see that here.");
+        if (officeFileDrStatus == OPEN3) {
+          if (obj.in.box(ego, 82, 129, 105, 133)) {
+            goto(getdisk);
+          } else {
+            print("Move closer.");
+          }
+        } else {
+          print("You don't see that here.");
+        }
       }
     }
   }
@@ -1596,7 +1612,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
         }
       } else {
         if (officeFileDrStatus == OPEN3) {
-          if (!has(floppydisk)) {
+          if (!has(floppydisk) && !floppyInserted) {
             print("There is a box of floppy disks in this file cabinet drawer.");
           } else {
             print("The file cabinet drawer is empty.");
@@ -1931,7 +1947,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           goto(doneclick);
         }
         if (officeFileDrStatus == OPEN3 && mouseY < 123) {
-          if (!has(floppydisk)) {
+          if (!has(floppydisk) && !floppyInserted) {
             :getdisk
             [ play sound if walkman not active
             if (!playWalkman) {
