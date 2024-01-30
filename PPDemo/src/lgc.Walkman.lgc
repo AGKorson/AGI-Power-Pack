@@ -64,7 +64,7 @@ cursoricon = C_DEFAULT;
 tmpCursor = C_DEFAULT;
 set.key(BYVAR, &cursoricon, mouse); [ set.cursor(FN_MODE, MSGNUM)
 
-[ hide objects while showing manual
+[ hide objects while showing walkman
 block(HIDE.OBJS, HIDE_OBJS, 0, 0); [ hide.objs(MODE)
 
 [ display correct walkman picture

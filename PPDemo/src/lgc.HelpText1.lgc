@@ -34,8 +34,8 @@ if (selectedTopic == 1) {
   [ add details
   set.text.attribute(BLACK, LT_GRAY);
   display(2, 36, "ABOUT SIERRA QUEST: PPDEMO");
-  display(4, 31, "Version: 1.0");
-  display(4, 57, "12/15/2023");
+  display(4, 31, "Version: 1.0d");
+  display(4, 57, "01/29/2024");
   display(6, 25, "Sierra Quest: Power Pack Demo Game was written to");
   display(7, 25, "showcase the features of the AGI Power Pack.");
   display(9, 25, "The AGI Power Pack is a set of logics that modify");

@@ -5,9 +5,9 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "12/12/2023 11:43:38 PM"
+   LastEdit = "1/17/2024 9:54:34 PM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0c\n  12/13/2023"
+   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0d\n 01/29/2024"
    About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
    ResDir = src
    UseResNames = True
@@ -99,8 +99,8 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "The control room is dominated by the main terminal with its multiple displays that demonstrate various power pack features. Drew has to figure out how to turn it on, and then how to enable all the displays."
-   CRC32 = &HAC217CAD
-   CompCRC32 = &HAC217CAD
+   CRC32 = &H187083FE
+   CompCRC32 = &H187083FE
    IsRoom = True
 
 [Logic9]
@@ -225,8 +225,8 @@
 [Logic26]
    ID = lgc.Walkman
    Description = "Close up of the Sony Walkman. Player can load/unload the cassette, pause/play/rewind/fast forward sound tracks."
-   CRC32 = &HE61A9CBE
-   CompCRC32 = &HE61A9CBE
+   CRC32 = &H5EA8306D
+   CompCRC32 = &H5EA8306D
    IsRoom = False
 
 [Logic27]
@@ -414,8 +414,8 @@
 [Logic39]
    ID = lgc.HelpText1
    Description = "Contains code to display help topic pages 1 to 4."
-   CRC32 = &HCC3E2C5
-   CompCRC32 = &HCC3E2C5
+   CRC32 = &H95585E66
+   CompCRC32 = &H95585E66
    IsRoom = False
 
 [Logic38]
