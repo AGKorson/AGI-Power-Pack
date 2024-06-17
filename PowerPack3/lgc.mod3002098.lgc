@@ -2,7 +2,7 @@
 [
 [ lgc.mod3002098
 [
-[ Power Pack v1.0 source code (for AGI version 3.002.098)
+[ Power Pack v1.1 source code (for AGI version 3.002.098)
 [
 [ These modifications are possible because AGI doesn't validate the string 
 [ number passed to set.string command, which means using values greater than 
@@ -3926,7 +3926,9 @@ if (said(3, 233, 20617)){} [ 5089
             "\xC7\x8B\xE5\x5D\x5F\x5E\xC3"
             [ PatchCmdData
             "\x41\x56"
-if (said(285, 234, 58439)){} [ E447
+            [ patch reset function
+            "\xB8\x01\x01\x32\xE4\xA3\x77\x09\x8B\xC6\xC3"
+if (said(296, 234, 58439)){} [ E447
 [ modify LoadLogic2 to calculate msg text end
 #message 235 "\x8B\x5C\x08\x03\x1F\x53\x90\x90\x90\x90"
 if (said(10, 235, 5253)){} [ 1485
