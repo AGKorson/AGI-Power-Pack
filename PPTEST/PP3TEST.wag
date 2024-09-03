@@ -5,7 +5,7 @@
    WinAGIVersion = 2.3
    GameID = PP3T
    Interpreter = 3.002086
-   LastEdit = "11/10/2023 11:21:54 AM"
+   LastEdit = "9/2/2024 12:42:39 PM"
    Description = "WinAGI v2 Template Game"
    GameVersion = "AGI Game version 0.0"
    About = "AGI Game by <author>"
@@ -16,7 +16,7 @@
    PlatformType = 1
    Platform = "C:\Program Files (x86)\DOSBox-0.74-3\DOSBoxDB.exe"
    DOSExec = agi.exe
-   PlatformOpts = ""
+   PlatformOpts = -exit
    CodePage = 437
    SierraSyntax = False
    SourceFileExt = .lgc
@@ -56,8 +56,8 @@
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
 
 [Logic1]
-   CompCRC32 = &HB670569D
-   CRC32 = &HB670569D
+   CompCRC32 = &H1EF46B9A
+   CRC32 = &H1EF46B9A
    ID = rm.Entrance
    IsRoom = True
    Size = 937
@@ -138,8 +138,8 @@
 [Logic96]
    ID = lgc.TraceInfo
    Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
-   CRC32 = &HDA038642
-   CompCRC32 = &HDA038642
+   CRC32 = &HFCB75392
+   CompCRC32 = &HFCB75392
    IsRoom = False
    Size = 2617
 
@@ -162,8 +162,8 @@
 [Logic97]
    ID = lgc.traceinfo160
    Description = ""
-   CRC32 = &H3E6A6B20
-   CompCRC32 = &H3E6A6B20
+   CRC32 = &H3F7834A2
+   CompCRC32 = &H3F7834A2
    IsRoom = False
    Size = 2238
 
@@ -178,24 +178,24 @@
 [Logic7]
    ID = lgc.TestPart1
    Description = ""
-   CRC32 = &H2189DBFB
-   CompCRC32 = &H2189DBFB
+   CRC32 = &HE65EFC43
+   CompCRC32 = &HE65EFC43
    IsRoom = False
    Size = 10626
 
 [Logic8]
    ID = lgc.TestPart2
    Description = ""
-   CRC32 = &HE7C7605F
-   CompCRC32 = &HE7C7605F
+   CRC32 = &H4E6195AB
+   CompCRC32 = &H4E6195AB
    IsRoom = False
    Size = 11089
 
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &H7B37C608
-   CompCRC32 = &H7B37C608
+   CRC32 = &HF9540667
+   CompCRC32 = &HF9540667
    IsRoom = False
    Size = 10945
 
@@ -210,40 +210,40 @@
 [Logic101]
    ID = lgc.mod3002086
    Description = ""
-   CRC32 = &HCB3E3751
-   CompCRC32 = &HCB3E3751
+   CRC32 = &HC5847828
+   CompCRC32 = &HC5847828
    IsRoom = False
    Size = 22529
 
 [Logic102]
    ID = lgc.mod3002098
    Description = ""
-   CRC32 = &HAAB3F258
-   CompCRC32 = &HAAB3F258
+   CRC32 = &HB63EE20C
+   CompCRC32 = &HB63EE20C
    IsRoom = False
    Size = 22569
 
 [Logic103]
    ID = lgc.mod3002102
    Description = ""
-   CRC32 = &H82F4FD85
-   CompCRC32 = &H82F4FD85
+   CRC32 = &H53342680
+   CompCRC32 = &H53342680
    IsRoom = False
    Size = 22575
 
 [Logic104]
    ID = lgc.mod3002107
    Description = ""
-   CRC32 = &H25EDD9B3
-   CompCRC32 = &H25EDD9B3
+   CRC32 = &H73D22CDB
+   CompCRC32 = &H73D22CDB
    IsRoom = False
    Size = 22575
 
 [Logic105]
    ID = lgc.mod3002149
    Description = ""
-   CRC32 = &HBD7E144F
-   CompCRC32 = &HBD7E144F
+   CRC32 = &H20AD4353
+   CompCRC32 = &H20AD4353
    IsRoom = False
    Size = 22564
 

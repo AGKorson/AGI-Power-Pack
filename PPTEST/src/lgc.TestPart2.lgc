@@ -136,8 +136,10 @@ if (teststep == 22) {
       reset(newtest);
       work1 = TURBO_SPEED;
       cycle.time(SET.SPEED, work1); [ SET.SPEED(vMODE)
+      [ adjust ego to move/cycle at 1/20
       work1 = 3;
       step.time(ego, work1);
+      cycle.time(ego, work1);
       dblClickDelay = 12;
     }
     if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
@@ -157,6 +159,7 @@ if (teststep == 22) {
       cycle.time(SET.SPEED, work1); [ SET.SPEED(vMODE)
       work1 = 1;
       step.time(ego, work1);
+      cycle.time(ego, work1);
       dblClickDelay = 4;
       maxCPS = 0;
     }
@@ -166,8 +169,7 @@ if (teststep == 22) {
       [ use turbo for rest of tests
       work1 = TURBO_SPEED;
       cycle.time(SET.SPEED, work1); [ SET.SPEED(vMODE)
-      work1 = 3;
-      step.time(ego, work1);
+      animationInterval = 6; [ NORMAL_SPEED;
       dblClickDelay = 12;
       goto(nexttest);
     }

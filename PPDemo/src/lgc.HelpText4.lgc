@@ -119,7 +119,7 @@ if (selectedTopic == 15) {
   display(11, 23, "function, they run the selected command. If ego dies,");
   display(12, 23, "the SAVE button is replaced with the RESTART button.");
   display(14, 23, "WALK: Enables 'point-and-click' movement. Right-");
-  display(15, 23, "clickking will cancel and stop ego.");
+  display(15, 23, "clicking will cancel and stop ego.");
   display(17, 23, "LOOK: Same as typing \"look at ...\" on the input line.");
   display(19, 23, "TALK: Click on a character to start a conversation.");
   display(21, 23, "USE: Lets you pick up or manipulate an item or object");

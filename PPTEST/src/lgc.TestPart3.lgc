@@ -391,7 +391,7 @@ if (teststep == 39) {
 [ TEST40: message text relocation
 if (teststep == 40) {
   if (newtest) {
-    display(24, 0, "%v63: RESTART TEST");
+    display(24, 0, "%v63: MESSAGE TEXT RELOCATION");
     reset(newtest);
     print("Message text is now stored in a separate memory segment. "
           "Loading a logic with large amount of text should not reduce "
@@ -418,6 +418,8 @@ if (teststep == 40) {
 if (teststep == 41) {
   if (subteststep == 0) {
     if (newtest) {
+    clear.lines(24, 24, BLACK);
+    display(24, 0, "%v63: HIDING OBJECTS");
       reset(newtest);
       print("Hiding ego. Confirm he's gone. "
             "Press CTRL+Z or enter 'continue' when done testing."); 
@@ -430,7 +432,6 @@ if (teststep == 41) {
       get.string(strAnswer, "Did ego disappear? ", 22, 0, 3);
       goto(nextsubtest);
     }
-    return();
   }
   if (subteststep == 1) {
     if (newtest) {
@@ -446,32 +447,44 @@ if (teststep == 41) {
       get.string(strAnswer, "Did ego reappear? ", 22, 0, 3);
       goto(nexttest);
     }
-    return();
   }
+  return();
 }
 
 [ TEST42: pause clock
 if (teststep == 42) {
-  if (newtest) {
-    display(24, 0, "%v63: PAUSE CLOCK TEST");
-    reset(newtest);
-    print("Enter 'pause clock' to pause internal clock, 'start clock' to restart it. "
-          "Press CTRL+Z or enter 'continue' when done testing."); 
+  if (subteststep == 0) {
+    if (newtest) {
+      display(24, 0, "%v63: PAUSE CLOCK TEST");
+      reset(newtest);
+      print("Pausing the internal clock. "
+            "Press CTRL+Z or enter 'continue' after confirming it stops."); 
+      block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(mode)
+    }
+    [ check for continue
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      get.string(strAnswer, "Did the clock stop? ", 22, 0, 3);
+      goto(nextsubtest);
+    }
   }
-  if (said("pause", "clock")) {
-    block(PAUSE.CLOCK, PAUSE_CLOCK, 0, 0); [ pause.clock(mode)
-  }
-  if (said("start", "clock")) {
-    block(PAUSE.CLOCK, START_CLOCK, 0, 0); [ pause.clock(mode)
+  if (subteststep == 1) {
+    if (newtest) {
+      display(24, 0, "%v63: PAUSE CLOCK TEST");
+      reset(newtest);
+      print("Restarting the internal clock. "
+            "Press CTRL+Z or enter 'continue' after confirming it has restarted."); 
+      block(PAUSE.CLOCK, START_CLOCK, 0, 0); [ pause.clock(mode)
+    }
+    [ check for continue
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      get.string(strAnswer, "Did the clock restart? ", 22, 0, 3);
+      goto(nexttest);
+    }
   }
   display(23, 0, "clock: %v13|2:%v12|2:%v11|2");
-  
-  [ check for continue
-  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-    [ check results
-    get.string(strAnswer, "Did clock pause/restart correctly? ", 22, 0, 3);
-    goto(nexttest);
-  }
+  return();
 }
 
 [ TEST43: variable sound functions
@@ -899,6 +912,7 @@ if (teststep == 45) {
       [ adjust ego speed to account for faster cycle time
       work1 = 3;
       step.time(ego, work1);
+      cycle.time(ego, work1);
       [ adjust dblclick speed for turbo
       dblClickDelay = 12;
       [ load and discard a sound resource by var

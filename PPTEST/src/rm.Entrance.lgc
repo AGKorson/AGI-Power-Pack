@@ -188,8 +188,7 @@ if (ppTesting) {
   [ if past mouse test (but not testing restart)
   [ enable mouse for all other tests
   if (teststep > 14) {
-    if ((teststep != 41 || subteststep != 8) && hasMouse) {
-    
+    if ((teststep != 44 || subteststep != 8) && hasMouse) {
       if (IntVersion > VERSION_2272) {
         enable.item(mouse); [ show.mouse()
       } else {

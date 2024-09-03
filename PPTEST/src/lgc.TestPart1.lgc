@@ -381,7 +381,7 @@ if (teststep == 9) {
 
 [ TEST10: 'auto-cycle' feature
 if (teststep == 10) {
-  if (newtest) {
+  if (newtest && subteststep == 0) {
     display(24, 0, "%v63: AUTOCYCLE TEST");
     reset(newtest);
     print("Enabling auto-cycle for ego. He should not cycle "
@@ -396,13 +396,36 @@ if (teststep == 10) {
     } else {
       set.upper.left(&ego, &work1); [ auto.cycle(oSOBJ, vMODE)
     }
+    subteststep = 1;
   }
-  [ check for continue
-  if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
-    unblock();
-    [ check results
-    get.string(strAnswer, "Did ego cycle correctly? ", 22, 0, 3);
-    goto(nexttest);
+  [ subtest 1: stepsize of 1
+  if (subteststep == 1) {
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      [ check results
+      get.string(strAnswer, "Did ego cycle correctly? ", 22, 0, 3);
+      clear.lines(24, 24, BLACK);
+      goto(nextsubtest);
+    }
+  }
+  if (subteststep == 2) {
+    if (newtest) {
+      work1 = 3;
+      cycle.time(ego, work1);
+      step.time(ego, work1);
+      reset(newtest);
+      print("Next test will change step time and cycle time. Press CTRLZ+Z "
+            "or enter 'continue' when you are ready to move on.");
+    }
+    [ check for continue
+    if ((said("continue") || controller(cNext) || controller(cRightDblClick))) {
+      work1 = 1;
+      cycle.time(ego, work1);
+      step.time(ego, work1);
+      unblock();
+      [ check results
+      get.string(strAnswer, "Did ego cycle correctly again? ", 22, 0, 3);
+      goto(nexttest);
+    }
   }
   return();
 }
@@ -1071,10 +1094,9 @@ accept.input();
 [display(24, 0, "%s3, %s4, %s5");
 if (!compare.strings(strAnswer, strN) && !compare.strings(strAnswer, strNo)) {
   [ if successful, move to next test
-  print("Moving on to next test.");
+  print("Moving on to next subtest.");
   show.pic();
   ++subteststep;
-[print("new subteststep: %v64  %v63");
   set(newtest);
 } else {
   set.text.attribute(LT_RED, BLACK);

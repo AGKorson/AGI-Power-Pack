@@ -5,9 +5,9 @@
    WinAGIVersion = 2.3
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "1/17/2024 9:54:34 PM"
+   LastEdit = "9/2/2024 4:47:57 PM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0d\n 01/29/2024"
+   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0e\n 09/02/2024"
    About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
    ResDir = src
    UseResNames = True
@@ -99,8 +99,8 @@
 [Logic8]
    ID = rm.ControlRoom
    Description = "The control room is dominated by the main terminal with its multiple displays that demonstrate various power pack features. Drew has to figure out how to turn it on, and then how to enable all the displays."
-   CRC32 = &H187083FE
-   CompCRC32 = &H187083FE
+   CRC32 = &H9F6EC432
+   CompCRC32 = &H9F6EC432
    IsRoom = True
 
 [Logic9]
@@ -393,8 +393,8 @@
 [Logic42]
    ID = lgc.HelpText4
    Description = "Contains code to display help topic pages 13 to 17."
-   CRC32 = &H4058AA4D
-   CompCRC32 = &H4058AA4D
+   CRC32 = &H785DA86
+   CompCRC32 = &H785DA86
    IsRoom = False
 
 [Logic41]
@@ -442,78 +442,78 @@
 [Logic62]
    ID = lgc.mod2425
    Description = "Patch code for AGI version 2.425."
-   CRC32 = &HD0592489
-   CompCRC32 = &HD0592489
+   CRC32 = &H36DB06B3
+   CompCRC32 = &H36DB06B3
    IsRoom = False
 
 [Logic63]
    ID = lgc.mod2426
    Description = "Patch code for AGI version 2.426."
-   CRC32 = &HF407AC19
-   CompCRC32 = &HF407AC19
+   CRC32 = &H6FB0D645
+   CompCRC32 = &H6FB0D645
    IsRoom = False
 
 [Logic64]
    ID = lgc.mod2435
    Description = "Patch code for AGI version 2.435."
-   CRC32 = &H4AA0F43A
-   CompCRC32 = &H4AA0F43A
+   CRC32 = &H39538791
+   CompCRC32 = &H39538791
    IsRoom = False
 
 [Logic65]
    ID = lgc.mod2439
    Description = "Patch code for AGI version 2.439."
-   CRC32 = &H2ECF2D20
-   CompCRC32 = &H2ECF2D20
+   CRC32 = &H5FA6BFD1
+   CompCRC32 = &H5FA6BFD1
    IsRoom = False
 
 [Logic66]
    ID = lgc.mod2440
    Description = "Patch code for AGI version 2.440."
-   CRC32 = &HF8C3BA55
-   CompCRC32 = &HF8C3BA55
+   CRC32 = &H47874FBF
+   CompCRC32 = &H47874FBF
    IsRoom = False
 
 [Logic67]
    ID = lgc.mod2903
    Description = "Patch code for AGI version 2.903."
-   CRC32 = &H24CCAE28
-   CompCRC32 = &H24CCAE28
+   CRC32 = &HF1E3DD29
+   CompCRC32 = &HF1E3DD29
    IsRoom = False
 
 [Logic68]
    ID = lgc.mod2911
    Description = "Patch code for AGI version 2.911."
-   CRC32 = &H29FED6D0
-   CompCRC32 = &H29FED6D0
+   CRC32 = &H92E28C0D
+   CompCRC32 = &H92E28C0D
    IsRoom = False
 
 [Logic69]
    ID = lgc.mod2912
    Description = "Patch code for AGI version 2.912."
-   CRC32 = &HE2F0164D
-   CompCRC32 = &HE2F0164D
+   CRC32 = &H33214A2B
+   CompCRC32 = &H33214A2B
    IsRoom = False
 
 [Logic70]
    ID = lgc.mod2915
    Description = "Patch code for AGI version 2.915."
-   CRC32 = &HECD79657
-   CompCRC32 = &HECD79657
+   CRC32 = &HCE75CE39
+   CompCRC32 = &HCE75CE39
    IsRoom = False
 
 [Logic71]
    ID = lgc.mod2917
    Description = "Patch code for AGI version 2.917."
-   CRC32 = &H724153DF
-   CompCRC32 = &H724153DF
+   CRC32 = &H676AA7D8
+   CompCRC32 = &H676AA7D8
    IsRoom = False
 
 [Logic72]
    ID = lgc.mod2936
    Description = "Patch code for AGI version 2.936."
-   CRC32 = &H3B9883AD
-   CompCRC32 = &H3B9883AD
+   CRC32 = &H561CE588
+   CompCRC32 = &H561CE588
    IsRoom = False
 [::END Logics::]
 

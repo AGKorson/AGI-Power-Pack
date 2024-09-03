@@ -411,44 +411,44 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if (said("look", "badass")) {
     print("The BaDASS system doesn't have a visual interface.");
   }
-  if ((said("look", "MOCC") || said("look", "AMOS"))) {
+  if ((said("look", "mocc") || said("look", "amos"))) {
     print("This looks like an old style computer terminal display. A "
           "floppy disk drive is located to the right of the display.");
   }
-  if (said("look", "CAISOCC")) {
+  if (said("look", "caisocc")) {
     goto(lookcaisocc);
   }
-  if (said("look", "ERIDOCC")) {
+  if (said("look", "eridocc")) {
     goto(lookeridocc);
   }
-  if (said("look", "ESADOCC")) {
+  if (said("look", "esadocc")) {
     goto(lookesadocc);
   }
-  if (said("look", "ICAPOCC")) {
+  if (said("look", "icapocc")) {
     goto(lookicapocc);
   }
-  if (said("look", "OFROCC")) {
+  if (said("look", "ofrocc")) {
     goto(lookofrocc);
   }
-  if (said("look", "RANDOCC")) {
+  if (said("look", "randocc")) {
     goto(lookrandocc);
   }
-  if ((said("log on", "CAISOCC") || said("use", "CAISOCC"))) {
+  if ((said("log on", "caisocc") || said("use", "caisocc"))) {
     goto(usecaisocc);
   }
-  if ((said("log on", "ERIDOCC") || said("use", "ERIDOCC"))) {
+  if ((said("log on", "eridocc") || said("use", "eridocc"))) {
     goto(useeridocc);
   }
-  if ((said("log on", "ESADOCC") || said("use", "ESADOCC"))) {
+  if ((said("log on", "esadocc") || said("use", "esadocc"))) {
     goto(useesadocc);
   }
-  if ((said("log on", "ICAPOCC") || said("use", "ICAPOCC"))) {
+  if ((said("log on", "icapocc") || said("use", "icapocc"))) {
     goto(useicapocc);
   }
-  if ((said("log on", "OFROCC") || said("use", "OFROCC"))) {
+  if ((said("log on", "ofrocc") || said("use", "ofrocc"))) {
     goto(useofrocc);
   }
-  if ((said("log on", "RANDOCC") || said("use", "RANDOCC"))) {
+  if ((said("log on", "randocc") || said("use", "randocc"))) {
     goto(userandocc);
   }
   if ((said("turn", "off", "computer") || said("turn", "off", "console") || 
@@ -469,10 +469,10 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
       print("Move closer.");
     }
   }
-  if ((said("hack", "computer") || said("hack", "console") || said("hack", "MOCC") || 
-       said("hack", "CAISOCC") || said("ERIDOCC") ||
-       said("hack", "ESADOCC") || said("ICAPOCC") ||
-       said("hack", "OFROCC") || said("RANDOCC"))) {
+  if ((said("hack", "computer") || said("hack", "console") || said("hack", "mocc") || 
+       said("hack", "caisocc") || said("eridocc") ||
+       said("hack", "esadocc") || said("icapocc") ||
+       said("hack", "ofrocc") || said("randocc"))) {
     print("If you actually had any computer skills, maybe you could do that. "
           "But face it, you have trouble just turning on a computer, let "
           "alone hacking one.");
