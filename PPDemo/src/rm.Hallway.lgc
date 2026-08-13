@@ -12,6 +12,9 @@
 [ result in ego getting trapped (i.e. lose game).
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -121,7 +124,7 @@ if (newRoom) {
   [ ego  
   if (previousRoom == rm.Closet) {
     position(ego, 22, 141);
-    egodir = STOPPED;
+    egoDir = STOPPED;
     set.loop(ego, 0);
   } else {
     [ if ego is in hall without permission
@@ -136,7 +139,7 @@ if (newRoom) {
       draw(oReceptionist);
     }
     position(ego, 151, 139);
-    egodir = STOPPED;
+    egoDir = STOPPED;
     set.loop(ego, 1);
   }
   

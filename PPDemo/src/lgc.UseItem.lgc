@@ -6,6 +6,9 @@
 [ the player clicks on an item in inventory in the 'use-item' mode.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -22,7 +25,7 @@
 [ check for mouse clicks
 if (controller(cLeftClick)) {
   [ floppy disk
-  if (selectedItem == &floppydisk) {
+  if (selectedItem == &floppyDisk) {
     [ only valid in control room (which is checked before this
     [ logic is called)
     if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
@@ -30,7 +33,7 @@ if (controller(cLeftClick)) {
         print("You insert the disk and flip the latch to secure it.");
         set(floppyInserted);
         work1 = cp.Terminal;
-        put(floppydisk, work1);
+        put(floppyDisk, work1);
         [ first time awards bonus points
         if (scoreFloppy) {
           [ temporarily lose four points for dropping the floppy

@@ -33,6 +33,9 @@
 [ loaded.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -139,7 +142,7 @@ if (currentRoom == 0) {
     set.menu("File");
     set.menu.item("Save     <F5>", cSave);
     set.menu.item("Restore  <F7>", cRestore);
-    set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
+    set.menu.item("â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€", cDummy);
     set.menu.item("Restart  <F9>", cRestart);
     set.menu.item("Quit  <Alt-Z>", cQuit);
     set.menu("Action");
@@ -149,7 +152,7 @@ if (currentRoom == 0) {
     set.menu.item(mnu_msgSndToggle, cToggleSound); [ "Sound: On   <F2>"
     set.menu.item("Quieter         ", cDecrescendo);
     set.menu.item("Louder          ", cCrescendo);
-    set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
+    set.menu.item("â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€", cDummy);
     set.menu.item(mnu_msgSoundPC, cSoundPC);    [ " PC Speaker     "
     set.menu.item(mnu_msgSoundFM, cSoundFM);    [ " FM Synth       "
     set.menu.item(mnu_msgSoundMIDI, cSoundMIDI);  [ " MIDI           "
@@ -157,12 +160,12 @@ if (currentRoom == 0) {
     set.menu.item(mnu_msgClockToggle, cClock);  [ "Clock: Off  <F6>"
     set.menu.item(mnu_msgGameTime, cGameClock); [ " Game Time      "
     set.menu.item(mnu_msgRealTime, cRealClock); [ " Real Time      "
-    set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
+    set.menu.item("â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€", cDummy);
     set.menu.item("Pause      <Esc>", cPause);
     set.menu(mnu_msgSpeed);  [ "Speed"
     set.menu.item( "Slower  ", cSlower);
     set.menu.item( "Faster  ", cFaster);
-    set.menu.item( "ÄÄÄÄÄÄÄÄ", cDummy);
+    set.menu.item( "â”€â”€â”€â”€â”€â”€â”€â”€", cDummy);
     set.menu.item(mnu_msgSpeedSlow, cSlow); [ " Slow   "
     set.menu.item(mnu_msgSpeedNorm, cNormal); [ " Normal "
     set.menu.item(mnu_msgSpeedFast, cFast); [ " Fast   "
@@ -303,7 +306,7 @@ if (!disableGameFunctions) {
     [ check for click on sound bar (but no controller)
     if (mouseX > 137 && !controller(cMenu)) {
       [ only in non-PC modes
-      if (musicmode != PC_SOUND) {
+      if (musicMode != PC_SOUND) {
         [ adjust sound volume based on clicked position
         work1 = mouseX;
         work1 -= 138; [ 0-21
@@ -564,9 +567,9 @@ if (controller(cSoundFM) && musicMode != FM_SOUND) {
   musicMode = FM_SOUND;
   work1 = 1;
 }
-if (controller(cSoundMIDI) && musicmode != MIDI_SOUND) {
+if (controller(cSoundMIDI) && musicMode != MIDI_SOUND) {
   [ set musicmode to MIDI
-  musicmode = MIDI_SOUND;
+  musicMode = MIDI_SOUND;
   work1 = 1;
 }
 if (work1) {
@@ -890,7 +893,7 @@ return();
 [ "File"
 [     "Save     <F5>"
 [     "Restore  <F7>"
-[     "ÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+[     "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€"
 [     "Restart  <F9>"
 [     "Quit  <Alt-Z>"
 [ "Action"
@@ -899,7 +902,7 @@ return();
 [ "Sound"
 [     "Quieter         "
 [     "Louder          "
-[     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+[     "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€"
 [     "Sound: On   <F2>" or "Sound: Off   <F2>"
 [     " PC Speaker     "
 [     " FM Synth       "
@@ -908,12 +911,12 @@ return();
 [     "Clock: Off  <F6>" or "Clock: On   <F6>"
 [     " Game Time      "
 [     " Real Time      "
-[     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+[     "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€"
 [     "Pause      <Esc>"
 [ "Speed"
 [     "Slower  "
 [     "Faster  "
-[     "ÄÄÄÄÄÄÄÄ"
+[     "â”€â”€â”€â”€â”€â”€â”€â”€"
 [     " Normal "
 [     " Slow   "
 [     " Fast   "

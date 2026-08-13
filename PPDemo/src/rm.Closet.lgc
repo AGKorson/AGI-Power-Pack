@@ -13,6 +13,9 @@
 [ sink to recover lost points.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -348,7 +351,7 @@ if (fallSeq == BREAKWALL) {
     ignore.objs(wall);
     set.loop(ego, 3);
     set.cel(ego, 0);
-    end.of.loop(ego, fDONE);
+    end.of.loop(ego, fDone);
   }
 }
 if (fDone && fallSeq == SITUP) {
@@ -390,7 +393,7 @@ if (fDone && fallSeq == STANDUP) {
 [ BROOM TRIP
 [*******************
 [ trip over broom even after first fall, unless it's been moved
-if (egoHitSpecial && !broommoved && cantrip && egodir != STOPPED && 
+if (egoHitSpecial && !broommoved && cantrip && egoDir != STOPPED && 
     movebroomstatus == NOMOVE && !kickSeq) {
   print("You trip over the broom again!");
   work1 = -1;
@@ -737,7 +740,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     program.control();
     prevent.input();
     kickSeq = MOVEMIDDLE;
-    move.obj(ego, 60, 148, 1, kickbucket);
+    move.obj(ego, 60, 148, 1, kickBucket);
   }
   
   if (said("look", "broom")) {
@@ -815,11 +818,8 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("look", "shelves")) {
-      print("There are an assortment of typical cleaning supplies on "
-            "the sturdy metal shelves in the closet. shelf.");
-      print("The sturdy metal shelves have an assortment of typical cleaning supplies on this "
-      "shelf.");
-      print("This is a study metal shelf unit.");
+    print("The sturdy metal shelves are stocked with an assortment "
+    "of typical cleaning supplies.");
   }
   if (said("climb", "shelves")) {
     print("There is no reason to climb the shelves.");

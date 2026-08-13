@@ -1,31 +1,24 @@
-23
-22
-4|78.125|2.9|1
--2.4|-0.5|6.600053|10.4
--290|-62|-290|-100|599|-100
-170|682|114|457
-R|1|True|3|True|-2.3|9.5|001:2:5:0:0:0
-C|1|True|4|-2.4|-0.5|4.9|1.4|Layout for Power Pack Demo.&crlf&crlfStory is you are visiting Sierra HQ Bldg, and find a hidden room. You discover a terminal, with cryptic instruction. You need to unlock six control panels to discover the long lost AGI Power Pack features.
-R|2|True|6|True|5.8|9.5|001:3:5:0:0:0
-C|2|True|1|-2.4|8.6|2.2|1.8|Game Start - check for correct hardware configuration; if not OK, warn user, and exit
-R|3|True|7|True|5.8|8.2|001:4:5:0:0:0|002:2:3:0:0:0
-C|3|True|0|-2.399947|0.9998666|9|2.2|Power Pack Control Panels
-R|4|True|8|True|4.7|7|002:5:5:0:0:0|001:3:5:0:0:0
-R|5|True|9|True|3.3|7|002:6:5:0:0:0|001:4:5:0:0:0
-R|6|True|10|True|3.3|5.5|002:7:3:0:0:0|001:5:5:0:0:0
-R|7|True|11|True|1.6|6.7|001:18:5:0:0:0|002:6:2:0:0:0|003:8:5:0:0:0
-R|8|True|2|True|1.6|3.6|005:11:5:0:0:0|002:12:5:0:0:0|012:13:5:0:0:0|008:14:5:0:0:0|009:15:5:0:0:0|011:16:5:0:0:0|010:17:5:0:0:0|004:10:5:0:0:0|003:9:5:0:0:0|007:7:3:0:0:0
-R|9|True|18|True|-0.1|3.6|002:19:5:0:0:0|001:8:5:0:0:0
-R|10|True|19|True|3.4|3.6|001:8:5:0:0:0
-R|11|True|16|True|1.6|1.1|001:8:5:0:0:0|002:12:5:0:0:0|003:13:5:0:0:0|004:14:5:0:0:0|005:15:5:0:0:0|006:16:5:0:0:0|007:17:5:0:0:0
-R|12|True|12|True|2.7|2.2|001:8:5:0:0:0|002:8:5:0:0:0
-R|13|True|13|True|-2.2|2.2|001:8:5:0:0:0
-R|14|True|17|True|4|2.2|001:8:5:0:0:0|002:8:5:0:0:0
-R|15|True|15|True|-0.7|2.2|001:8:5:0:0:0
-R|16|True|5|True|5.5|2.2|001:8:5:0:0:0|002:8:5:0:0:0
-R|17|True|14|True|0.5|2.2|001:8:5:0:0:0
-R|18|True|20|True|0.3|6|001:7:5:0:0:0
-R|19|True|21|True|-1.5|4.6|001:9:5:0:0:0
-U|9|True|002:19:5:0|001:8:5:0
-U|10|True|001:8:5:0
-U|8|True|005:11:5:0|002:12:5:0|012:13:5:0|008:14:5:0|009:15:5:0|011:16:5:0|010:17:5:0|004:10:5:0|003:9:5:0|007:7:3:0
+﻿{"Name":"WinAGI Layout File","Version":"3.0","DrawScale":3,"Offset":{"IsEmpty":false,"X":160,"Y":-274}}
+{"$type":"Comment","Loc":{"IsEmpty":false,"X":-2.399947,"Y":0.9998666},"Size":{"IsEmpty":false,"Width":9,"Height":2.2},"Text":"Power Pack Control Panels","Index":3,"Visible":true}
+{"$type":"Comment","Loc":{"IsEmpty":false,"X":-2.4,"Y":8.6},"Size":{"IsEmpty":false,"Width":2.2,"Height":1.8},"Text":"Game Start - check for correct hardware configuration; if not OK, warn user, and exit","Index":2,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":1.6,"Y":3.6},"Exits":[{"ID":"LE005","Room":11,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":12,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE012","Room":13,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE008","Room":14,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE009","Room":15,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE011","Room":16,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE010","Room":17,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE004","Room":10,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE003","Room":9,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE007","Room":7,"Reason":3,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":8,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":-2.3,"Y":9.5},"Exits":[{"ID":"LE001","Room":2,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":1,"Visible":true}
+{"$type":"Comment","Loc":{"IsEmpty":false,"X":-2.4,"Y":-0.5},"Size":{"IsEmpty":false,"Width":4.9,"Height":1.4},"Text":"Layout for Power Pack Demo.\r\n\r\nStory is you are visiting Sierra HQ Bldg, and find a hidden room. You discover a terminal, with cryptic instruction. You need to unlock six control panels to discover the long lost AGI Power Pack features.","Index":1,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":5.5,"Y":2.2},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":16,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":5.8,"Y":9.5},"Exits":[{"ID":"LE001","Room":3,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":2,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":5.8,"Y":8.2},"Exits":[{"ID":"LE001","Room":4,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":2,"Reason":3,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":3,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":4.7,"Y":7},"Exits":[{"ID":"LE002","Room":5,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE001","Room":3,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":4,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":3.3,"Y":7},"Exits":[{"ID":"LE002","Room":6,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE001","Room":4,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":5,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":3.3,"Y":5.5},"Exits":[{"ID":"LE002","Room":7,"Reason":3,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE001","Room":5,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":6,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":1.6,"Y":6.7},"Exits":[{"ID":"LE001","Room":18,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":6,"Reason":2,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE003","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":7,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":2.7,"Y":2.2},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":12,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":-2.2,"Y":2.2},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":13,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":0.5,"Y":2.2},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":17,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":-0.7,"Y":2.2},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":15,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":1.6,"Y":1.1},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":12,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE003","Room":13,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE004","Room":14,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE005","Room":15,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE006","Room":16,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE007","Room":17,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":11,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":4,"Y":2.2},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE002","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":14,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":-0.1,"Y":3.6},"Exits":[{"ID":"LE002","Room":19,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":9,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":3.4,"Y":3.6},"Exits":[{"ID":"LE001","Room":8,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":10,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":0.3,"Y":6},"Exits":[{"ID":"LE001","Room":7,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":18,"Visible":true}
+{"$type":"Room","ShowPic":true,"Loc":{"IsEmpty":false,"X":-1.5,"Y":4.6},"Exits":[{"ID":"LE001","Room":9,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":19,"Visible":true}
+{"$type":"Update","ShowPic":true,"Exits":[{"ID":"LE002","Room":6,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false},{"ID":"LE001","Room":4,"Reason":5,"Style":0,"Type":0,"TypeIndex":0,"Leg":0,"Status":0,"Hidden":false}],"Index":5,"Visible":true}

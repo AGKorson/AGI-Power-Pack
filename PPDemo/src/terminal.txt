@@ -39,7 +39,7 @@
 #define outputvar                  v246
 #define tmpCounter1                v247
 #define tmpCounter2                v248
-#define PWfunction                 v249
+#define PWFunction                 v249
   #define PW_LOGON               0
   #define PW_BADASS              1
   #define PW_CAISOCC             2

@@ -12,6 +12,9 @@
 [ a WHITE background with RED border).
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -661,7 +664,7 @@ if (btnAction ==  B_OP_BD) {
 }
 
 [ always reset button action
-btnaction = 0;
+btnAction = 0;
   
 :checkupdate
 [ if colors have changed, update the palette and sample
@@ -672,7 +675,7 @@ if (update) {
   set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   
   [ if picture is not visible yet, show it now 
-  if (newroom) {
+  if (newRoom) {
     show.pic();
     [ add button text
     set.text.attribute(BLACK, WHITE);
@@ -830,7 +833,7 @@ if (update) {
   [ pop display colors
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
-  if (newroom) {
+  if (newRoom) {
     block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   }
 }

@@ -6,6 +6,9 @@
 [ correct images to the tool bar template at the top of the screen.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

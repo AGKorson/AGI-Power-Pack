@@ -22,6 +22,9 @@
 [ to help identify it.)
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -109,7 +112,7 @@
 #define update                     f220
 #define cursormode                 f221
 #define refresh                    f222 [ used to redraw text on screen when the screen is first displayed
-#define updategrid                 f223
+#define updateGrid                 f223
 #define fOnGrid                    f224
 #define fChgCursor                 f225
 #define tmpFlag                    f226
@@ -326,7 +329,7 @@ if ((newRoom || refresh)) {
   [ pop display colors
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
-  if (newroom) {
+  if (newRoom) {
     [ force cursor update
     cIndex = -1;
     newIndex = 0;
@@ -367,7 +370,7 @@ if (cursormode) {
         gridmode = 0;
         gridX = 13;
         gridY = 15;
-        set(updategrid);
+        set(updateGrid);
       }
       
       if (cursorpos == CP_HOTY) {
@@ -375,7 +378,7 @@ if (cursormode) {
         gridmode = 1;
         gridX = 8;
         gridY = 15;
-        set(updategrid);
+        set(updateGrid);
       }
     }
     
@@ -428,11 +431,11 @@ if (cursormode) {
             gridmode = 1;
             gridX = 0;
           }
-          set(updategrid);
+          set(updateGrid);
         } else {
           if (gridX < 15) {
             ++gridX;
-            set(updategrid);
+            set(updateGrid);
           }
         }
       }
@@ -449,14 +452,14 @@ if (cursormode) {
         gridmode = 0;
         gridX = 10;
         gridY = 0;
-        set(updategrid);
+        set(updateGrid);
       }
       if (cursorpos == CP_IDX_UP) {
         newpos = CP_GRID;
         gridmode = 1;
         gridX = 6;
         gridY = 0;
-        set(updategrid);
+        set(updateGrid);
       }
       
       if (cursorpos > CP_IDX_UP && cursorpos < CP_EXIT) {
@@ -473,7 +476,7 @@ if (cursormode) {
         }
         if (gridY < 15) {
           ++gridY;
-          set(updategrid);
+          set(updateGrid);
         }
       }
     } [ down
@@ -500,7 +503,7 @@ if (cursormode) {
         if (gridmode == 0) {
           if (gridX > 0) {
             --gridX;
-            set(updategrid);
+            set(updateGrid);
           } else {
             if (gridY < 6) {
               newpos = CP_KEYB;
@@ -523,7 +526,7 @@ if (cursormode) {
             gridmode = 0;
             gridX = 15;
           }
-          set(updategrid);
+          set(updateGrid);
         }
       } [ grid
     } [ left
@@ -659,8 +662,8 @@ if (cursormode) {
     }
     
     [ did grid cursor move?
-    if (updategrid) {
-      reset(updategrid);
+    if (updateGrid) {
+      reset(updateGrid);
       tmpX = gridX;
       tmpX *= 3;
       tmpX += 57;
@@ -670,7 +673,7 @@ if (cursormode) {
       tmpY = gridY;
       tmpY *= 6;
       tmpY += 44;
-      reposition.to.v(gridcursor, tmpX, tmpY);
+      reposition.to.v(gridCursor, tmpX, tmpY);
       
       [ update coordinate display
       set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
@@ -1554,7 +1557,7 @@ if (newIndex != cIndex) {
 
   cIndex = newIndex;
   
-  if (newroom) {
+  if (newRoom) {
     [ remember to fade in to be able to see the screen again
     block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   }

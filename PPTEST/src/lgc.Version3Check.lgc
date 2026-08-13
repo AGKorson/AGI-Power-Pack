@@ -3,6 +3,9 @@
 [ lgc.Version2Check
 [ 
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"

@@ -3,6 +3,9 @@
 [ lgc.Version2Check
 [ 
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 #include "powerpack.txt"
 
@@ -21,6 +24,16 @@ if (compare.strings(s1, s29)) {
   IntVersion = VERSION_2089;
   return();
 }
+
+[ until a powerpack logic is created, don't 
+[ check for version 2.230 (it's extremely rare anyway)
+
+[[ s33="d" means 2.230
+[s1 = "d";
+[if (compare.strings(s1, s33)) {
+[    IntVersion = VERSION_2230;
+[  return();
+[}
 
 [ s41="uit." means 2.272
 s1 = "uit.";

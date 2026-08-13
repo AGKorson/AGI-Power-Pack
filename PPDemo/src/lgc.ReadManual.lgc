@@ -8,6 +8,9 @@
 [ terminal to enable the door to re-open.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

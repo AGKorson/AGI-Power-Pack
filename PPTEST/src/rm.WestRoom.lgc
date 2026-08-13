@@ -6,6 +6,9 @@
 [ and an item that can be picked up by ego.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"

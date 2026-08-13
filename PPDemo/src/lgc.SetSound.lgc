@@ -9,6 +9,9 @@
 [ settings correctly.
 [ 
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -23,7 +26,7 @@
 [***************************************
 
 [ set sound parameters for current mode
-if (musicmode == FM_SOUND) {
+if (musicMode == FM_SOUND) {
   [ set FM sound mode
   set(4channelsound);
   reset(useMIDI);
@@ -45,7 +48,7 @@ if (musicmode == FM_SOUND) {
     goto(setFMinst);
   }
 } else {
-  if (musicmode == MIDI_SOUND) {
+  if (musicMode == MIDI_SOUND) {
     [ set MIDI sound mode
     set(4channelsound);
     set(useMIDI);

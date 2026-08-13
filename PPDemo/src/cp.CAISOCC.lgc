@@ -22,6 +22,9 @@
 [ displayed.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -1278,10 +1281,10 @@ if (loadinst) {
   set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
   if (selectItem) {
     set.text.attribute(BLACK, WHITE);
-    set(instdirty);
+    set(instDirty);
   } else {
     set.text.attribute(LT_GRAY, WHITE);
-    reset(instdirty);
+    reset(instDirty);
   }
   display(3, 60, "Save");
   display(3, 71, "Reset");

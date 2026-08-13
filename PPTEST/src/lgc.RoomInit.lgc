@@ -7,6 +7,9 @@
 [ of the common items that are done for all rooms.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"

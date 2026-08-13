@@ -2,43 +2,46 @@
 # WinAGI Game Property File
 #
 [General]
-   WinAGIVersion = 2.3
+   WinAGIVersion = 3.0
    GameID = PPDEMO
    Interpreter = 2.917
-   LastEdit = "9/2/2024 4:47:57 PM"
+   LastEdit = "8/11/2026 8:42:09 PM"
    Description = "Sierra Quest: Power Pack Demo showcases Power Pack capabilities. The source code includes detailed descriptions of all power pack commands."
-   GameVersion = " Sierra Quest:\nPower Pack Demo\n Version 1.0e\n 09/02/2024"
-   About = "Sierra Quest: Power Pack Demo\n        by Andrew Korson\n\n  Showcasing the incredibly\n   powerful features of the\n       AGI Power Pack!"
+   GameVersion = " Sierra Quest:\\nPower Pack Demo\\n Version 1.3\\n 08/11/2026"
+   About = "Sierra Quest: Power Pack Demo\\n        by Andrew Korson\\n\\n  Showcasing the incredibly\\n   powerful features of the\\n       AGI Power Pack!"
    ResDir = src
-   UseResNames = True
-   Author = "Andrew Korson"
    PlatformType = 1
-   Platform = "C:\Program Files (x86)\DOSBox-0.74-3\DOSBoxDB.exe"
+   Platform = "C:\\Program Files (x86)\\DOSBox-0.74-3\\DOSBoxDB.exe"
    PlatformOpts = -exit
    DOSExec = agi.exe
    UseLE = True
    CodePage = 437
    SierraSyntax = False
-   SourceFileExt = .lgc
+   SourceFileExt = lgc
    PowerPack = True
+   Designer = "Andrew Korson"
+   IncludeReserved = True
+   IncludeIDs = True
+   IncludeGlobals = True
+   Warnings = H4sIAAAAAAAACs3RMQuCUBQF4PnRn7hjDcYzM7NNDKIpQdreInq1R/qeXK9l/74cG4MEt7OcwwfHFb7cSRFbw2TrGgkyqvoGDcMjq3sE3YGxDE/NN20AhxZzxgIoMxXCUoID23AlfE+09onUZvl9zQOL+KCuHVKnIlO81MXgkfQDVXQ6Q8p9WY7JScaKk3w6KkmO2FjVUa6+hhbuf4BuEM5duJezF7pTCmUgUiZtqt91G2/UhXPWhXN/d+NNJXwDxW52rGQEAAA=
    
 [Palette]
-   Color0 = &H00000000
-   Color1 = &H00AA0000
-   Color2 = &H0000AA00
-   Color3 = &H00AAAA00
-   Color4 = &H000000AA
-   Color5 = &H00AA00AA
-   Color6 = &H000055AA
-   Color7 = &H00AAAAAA
-   Color8 = &H00555555
-   Color9 = &H00FF5555
-   Color10 = &H0055FF00
-   Color11 = &H00FFFF55
-   Color12 = &H005555FF
-   Color13 = &H00FF55FF
-   Color14 = &H0055FFFF
-   Color15 = &H00FFFFFF
+   Color0 = "0x00, 0x00, 0x00"
+   Color1 = "0x00, 0x00, 0xaa"
+   Color2 = "0x00, 0xaa, 0x00"
+   Color3 = "0x00, 0xaa, 0xaa"
+   Color4 = "0xaa, 0x00, 0x00"
+   Color5 = "0xaa, 0x00, 0xaa"
+   Color6 = "0xaa, 0x55, 0x00"
+   Color7 = "0xaa, 0xaa, 0xaa"
+   Color8 = "0x55, 0x55, 0x55"
+   Color9 = "0x55, 0x55, 0xff"
+   Color10 = "0x00, 0xff, 0x55"
+   Color11 = "0x55, 0xff, 0xff"
+   Color12 = "0xff, 0x55, 0x55"
+   Color13 = "0xff, 0x55, 0xff"
+   Color14 = "0xff, 0xff, 0x55"
+   Color15 = "0xff, 0xff, 0xff"
 
 [WORDS.TOK]
    Description = ""
@@ -50,471 +53,538 @@
 [Logic1]
    ID = rm.Title
    Description = "Opening/intro"
-   CRC32 = &H8DDC104
-   CompCRC32 = &H8DDC104
+   CRC32 = 0x6c11c149
+   CompCRC32 = 0x6c11c149
    IsRoom = True
+   Warnings = H4sIAAAAAAAACr2cT2+bSBiHz2i/xBzbw3YNNgNo1UhVtYeq0vbQVkqOxJ46KBgiwGn77Tt2/2n5+bS8T26JbD/v+IH5zQDjSZN8VZXJv2FfT81jcN3xcBuG0dVDcNu+ewzDFHZu6t2xG5t9F//OxvjC4aENh9BN7rFujyGp1slwePGhmdqQ/JFGZLZK3nXB9YM79JF02/bb+/ixftg1XT2F7/z+0yc3bocQOvfs2l25NK9c3e3+ip+6Of3ri+dKztPkOnN/uuvUjXf9sd252+CuXrrs9FF3c3rpZv7S3266a8YfrfjctK3r+im+eFfHb1yPLnx5CNv4PbWaXyWv+24a+rYNQ2z0/vj7W7uIPHE+N5He/YK4oe72wT1bxZZsqudJukoJ6GYGXX4Q03w1P4pV8nFsun18bxsPyvlt4/lAuUP91Z31HbuHIeya7VTftsENYTy203iBZdG+kjrLFI2eZlrO4pQoiPOsmJ9nPk/GML24D1/dQz3UhzD9PJInXH2iNzv36v3rN2/iodidj87bf27Of1/CWbSxsG3jHLf81N1o17I6dRWNnrpazsCO5+wImrUj5QzsFDlmR9CsHSlnYKecJ4qdHUGzdqScgZ1qnmV2dgTN2pFyFnawCYWiYTvzchZ2Ks7OHA3bmZdbbidfYWOWolE7Ws7CjufszNGwnXk5CztYKisatmOfyvkKS2VFw3bsUzkyODtPmspazsBOis2VFc3akXIWdrhUFjRsB0jllEtlQcN2gFROuVQWNGwHSOUMuwpVNGtHylnY4VJZ0LAdIJUzLpUFDdsBUjnjUlnQsB0gldfYgzdFs3aknIUdLpUFDdsBUnnNpbKgYTtAKq+5VBY0bAdI5U2G2RE0a0fKWdjhUlnQsB0glTdcKgsatgOk8oZLZUHDdoBUzudrHOzsCJq1I+Us7HCpLGjYDpDKOZfKgobtAKmcc6ksaNgOkMrcChVFs3aAFSq551JZ0LAdIJU9l8qChu0Aqey5VBY0bAdIZc897RM0bAd42ldwqSxo1o6Us7DDpbKgYTtAKhdcKgsatgOksqzTNrTztLNBKWdgp+RyR9CsHSm33I732JNiRaN2tJyFHWxEVzRsx35E99yIrmjWDjCie25EVzRsx35E99yIrmjYjv2I7gvsOkvRsB376yzPzXcUDduxn+947hdIiobt2D+T8AX2pFjRsB37J8Vefk1paOdJ1+9oOQs73FxZ0LAdYK7MXWcpmrUj5Qx+91zIT1NMoPNZ/aIfU1/AGbQxnc+PlrVRcRZtnI80C9toP3AV3NJKRaPdS8tZHME10WdlmeOy00JxFm2UXFnWRiKm1rYxJTiD7sWtxlA0272A1RiFx664FM3akXIW57fcerSA6g4xizoNseFMYbvhzAWcRRtNN5xR3PLuVWbYhYWi0e6l5QzsyNBuZ0fQrB1iklLKyk0TqCTakk5zAWfQRlmUuayNirNoo2lAKs6ge3F34hXNdi/gTnzJ3RFTNGwHGLi4/ZwUzdoB9nOqZC9Ju402Bc3utCnlLOxw25AKGrZj/4yrSjk7gmbtSDmDcbWSLSVMoKa3KS7gDNqYmd5NvYCzaKPp3VTFGXQvbuBSNNu9pJzFESztny1WJXaRq2hYuf1FblXJc+n/vZ3zf1jfAKh1WyMzXAAA
 
 [Logic2]
    ID = rm.ParkingLot
    Description = "Parking lot of the Sierra building. Game starts here."
-   CRC32 = &H6A6ACB5F
-   CompCRC32 = &H6A6ACB5F
+   CRC32 = 0x41458bc6
+   CompCRC32 = 0x41458bc6
    IsRoom = True
+   Warnings = H4sIAAAAAAAACr2bS3PbNhRG15z+CeycLpoSfHPymOlousg0rTtJO5WWsHgtccyHCoJ29e8LyHFSp/cqC96rnW0Z5wMPiTelozxO0+jqPkniK9VOynQWTHNUDdy2AzTq5qiuYDeujP0If19FOskj27/83di7dti9H130nf6C0CTiYFwLg/vEKM4wkm8x/mh7sIFSnqGkJGVr7DqUrs6Uzs6V3oTS9ZnSOVm6AeP2jw7S+AyhIAkPAHeNOQaAxgB1Ff0GOy/qHtQw9zdgPceC2o7DPVjnKW5U8zC1u0BMJv9Bf+ig917VvelmiHSG3p0kjq4HUKNV/eh5N924vfOFR9u0g3HwmDLe3qppawEG9WKt3iqd18oMzY++1Cb8WpTfU/xcR+tE/aDWWk37ce785YJ6+0YlAaA24aPN1x+9Um7vPT3W5aHtOjWMzn+4N/7qzaTgnwNs/TVTmQyyCvQu8MnC+bKy8EwGWSXa5vhk4XxZWXjmcllJmYnKIviisohMDllof8woC+ULy0IzizhajYOzY9eB9Rewm794CINGoD20PmP4jFLWDDtQL2Jfn6z2V1OhYzgDOa/RG8xALuJUjIyODRxkjY7xRR5N4F7ewVEdjDU9uKcHPjBNiGgb9dPH1bt3/mFtTs/vLz9vTj+TTIbapui98032V5gms3vkzP6B9UU6GHZu7wtlYje8FLvhJTpxXHZbcObynq1MZWdjBF+0ZyMyOWTJTjAIvrAsoQlGmaE9CZ8snC8rC8/kkJUIy0L5wrLQTAZZuXCfhfNlZeGZHLJkp64EX1gWmskgq0InBWLgRXMCirl8BlOJzbqqDB1tFnmgmAy1raWWSDWx3FjigWIy1DaTWtDVGW54kQeCuby2Oo6lHjUda3S0XGSChHLUN5fqIzyav5MgoRz1raTWzB6NW16mgoAy1FfHYm1Pa/4uk4Ry1Bff7+BBCzQQCspR31pq/PBo/gGEgjKcUKRSM1ed1kJTV50l6CBSJs9WEH7N4ELhPszvkYXEt4/tiJg0eraGeP1GrT8tIr768+ZpAfGsKueP7fBMFmloa+KXhsfIShPaMdIZPqdgl0bEiErDM1mO09HOlV0aESMqDc9kkJZr2dNPKkD2rJgI5fCVo1Nc7oeMipF8yIhMFmnonh6/NDxGVprUCy95cZHZBhUjKg3PZJEm/E4VESDcneGhHL5KdGBh9IUHCPvCQzl84TsG7I2SiBFtlHgmx6t7yUWkUTGS0ohMDmkpflxVR39O/g++ROev/vTP08mI6s1RnWo4DwcLTbt15qYDZWGaOzdRxLBRtZrt5GGHcWpdOw5hy+G/jfvD9V8+IcmelK+u3/vf07DrUEgdbXoyuoxfcv04kWPzpcB32jk0iC2XCPKyDSPB6haX6USIGNFOBM9kkYa+LcUvDY+RlSb0Ipgu9UV2rKgYSWlEJoe0y4zxVIyoNLExvkwvsmNFxYhKwzM5pNXSX27AA4S/3YCHMviq8JM9DnIiRs6lnh6CvGzWQ0EZZpaV2NK/KoTbEREg247+H/ovOCIN0nk5AAA=
 
 [Logic3]
    ID = rm.Lobby
    Description = "In the lobby, Drew has to figure out how to get past the receptionist into the hallway."
-   CRC32 = &H8590267D
-   CompCRC32 = &H8590267D
+   CRC32 = 0x8d0fe601
+   CompCRC32 = 0x8d0fe601
    IsRoom = True
+   Warnings = H4sIAAAAAAAACr2dXXPTRhiFrz39EzvcBKaUSivrawrMMJShmdJyUTpNLhVbJC62lJHtBP/7rgJpi85Oe+H34c7g+JzdZ/fd75XSWZ7U1ezX9rLZrW5a1+03F+2wdc3QukXf3bTDrl26Xe/23XZ12YXPfhu+2Fyv203b7dxNs963syzNZ8PmyZv+4uIw+yYNmj6Zve1a1w9u0wepi3W/+BB+1w/LVdfs2k8G/fv3brsY2rZzD8/cc5fmtWu65ffhV+fjP4vyUUQ6T2dn3n3nzlK3ver366W7aN3zZ86Pv3Xn41fn069+cLur1fZzMm5X67Xr+l348qoJeW62rv143S5CTiN2FnQqe815jREXaYPkFoBmNcVqh0Ckj0/uPEntNUOOIQQqbZDcLLPXzD2GQKSPT26ezKnkqjTaUqpdkcxe9t1u6NfrdgjJvtz/k3EXNEeh21WQ7/5WcUPTXbbuYRKSMq/HPJT2yPOpph1ykWaRi11Rzd5dtW7TbrdN4HjRf3Sb5nD3++XQ3IZMDUP47frgVu/dy7dv3NOQkpCDh+Pnb90vL87+OP3x3U+PQoayOujbN3t5jnVUKg3Tt+/DigTrw1QapaN2BnRSrHtTaZaO2FnQwboSlYbpTO0s6BQcnak0TGdqZ0CHGziqNEsHGKcWHhtTqjRMx34IW3guskQapkNEFtejizRMB+jRi+kk2I6OSLN0xM52LF4UQOQW0/m3If2pNEx/amdMv7SfhxYVNg9VaZa+2BnTr4E+veZaHpFm6Yvd8XRKWZw0o6PSKB21s62bZWK/hllyi4IqDdO3n8mVBdZuqjRLR+yOp1PNsa03lT4+uXVmX0Hquf1AtS6xSY5Ko5VO7WwbxLok6GOLxioN07dfNK65jU+VZumInXHdBAaSNTeQVGmWPjCQTJMEW1mMaKN8In621TMY2E/ygyg2y49o0yVgP9oOotM22WDnOk0qWZIwUZWpdj7btrsnH9qDu26GZtPu7hGMes0ov1q6F7+9PD0NeV/eFfvPr87vPsf0DICmBdYhRbTZGqd+xjGflvZ9UhDFOqWINlwC4mcBqOK6JdWGAYmfdRWtgG4plfbRsgS+brekfgaAsgpbBYpoGyR4LqMXuwSrtkGC8xRbSYpoWyQ44zpW1WZjRv0sABVczKi2RYJLLmZUGy5R8bMABHbUqm2R4BpbKYxomyTYfkkqLcCmVbXZeq1+BoBKEJBqWyQY7HtUmy1R9bMAxJ2miGhbJBicJKo2XKLEJLHkth0i2hYJrrnhj2qbJBgIxIo76hvRZuu1+hkAqkFAqm2R4DnXtKo2W6LqZwEIXHFVbYsEc/vpEW24RMXPAhC4+qPaFgmWaYRhgoEpiif2knzCNa0RbbReR/zm+ez37aq7DFm5aZ/0F3+6vnPtZe+a/a7fBHCLZr0+uPf9sAgZux76y6HZjPjGTa/wo2UglAJ78N7L8qDBZpv3cg/JRlV2lI7ZwovpWaTSy7nJ41IpehbFPueiTbXZaFM/212cYDBtRKtsdvLg0O8fnIy1onGvh35/7RJ3G3A9drdXq8XV3Rfr2+awdaEcAtKQs4N78fr0sdv2brX7nKc2lNiY5WWoFHfVKfzRLqT9ZNuslidjyW0Co5CGnM4kfCXae/imQTCQ0wjGBuX0GKe1AbwfGQzoHEgfZW4A5yDTDtHagD0X4TPtfK0N7IftPuMu0ka02R5J/SwAzbF5TUQbBiR+FoC4qXxEGwYELB34rMKWrSPaMCDxswDErQJHtGFAwKqzn6dcDVJtFpD6WQDKsFMJEW0YkPhZAMqxBemINgxI/AwAFdyx/4g2C0j9LAB5rpFWbRiQ+FkAyrADEhFtGJD4WQDKwRATbRiQ+FkA4i4KR7RhQMBVYV9wFwcj2jAg4BGtvpSbQXaAVJsFpH4GgPR4Qum/ABSQ7O6Xf2Oc/hdTxCGbfUHo6TN39hnR5L/P7/F8kYr/pESct/CV7H2YU1IHlBKxmVP5aRNnT0kcWEpAm13JLo45JXVAKQGPF/eV7DOZU1IHlJLYWVCSvSxzSuqAUgKOyfpKLmiaU1IHlBJw49RXckfQnJI6oJSAS4++5l6MEdFmB5TqZwEIXBZRbRgQsSyiD0wyBCTaMCDg4U9eDzdaN0QRB7IhIk5rBlF6GBlxYCkBw8haricYBptow8EmfrbnKbKEeK1RknLvNVJt9lVS6mcByE97YeNAjjmAgRyxM6EEViPRhquR+FkHMrAYn41QsBIQbbgExM8EELxkEXNAAxlYssjGs+1YNRJtuBqJn3UgAxeTgii2qxbRhksAeKx7ltArITEHNJCBlZAgil3diGjD1Uj8jAM5BZ5+FESxM0wRbfgtrcBdvixN6UCOOJCBrHYmlOBtu5gDSwnoFFJ6CzjmgFICtoCDKLa4GdGGmyRg9TeIcr2matOAgNFpKqd9zeNMHdA4A44vB1Hw/eyiDVcj8TMBxE1yVJsGRPRn8hQT8zhTBzTOgMeyBFGwuf6699MjfiaAsA2WiDYNCNj/SOVyhnmcqQMaZ8BtkyAKxplow9WIWDZN5U3uloC+cpwBb6XPUnm4r3mcqQMaZ8DTirNUrquaU1IHlBJw/zbz3Ov7ItpssKmfBaAM2AhX0aMeWBTTO/6xSpmX7s/gmVqZl50kC6AFN0lUbbgai5/xCr0vgF7bcxfYItp0CUheitmrUM2Xq5HzKlT6RdN9+rULYev2d0ExPkRqDOLwV/ctetAqp42SSRABT+TNvOydGRahaMNFKH4mLSLwPMAgCmIXbRj7v/3+Avl7IhKgkQAA
 
 [Logic4]
    ID = rm.Hallway
    Description = "One door is bathroom; it is always occupied. Another door is the examination room; it will open, but nurse will immediately slam it shut. Closet at end of hall can be opened/entered."
-   CRC32 = &HDC692A51
-   CompCRC32 = &HDC692A51
+   CRC32 = 0x5303925f
+   CompCRC32 = 0x5303925f
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWZ32/aMBDHn6P9E/dGq2ldfhGI1laqukmr9qPS2mnwaIiBrImNHAfK/vqd23UT9W17wPcGMf5+7z7nXByTRMM4y6KBzgZQdyAaI0W1g0ouaiUrmO1goL/IuVzbWqu6s4MoHUemPXkvmmYrdtGLBAXyJLqR1tZqCXYlYaVN/UMraGTX4QWhICmceK/6rhdNVOSeQjmOPsulsPVGgurbmTQYi5Ew12ojjcVIrMb5Xb10UaUdDrTrRrZSWdiIppdRMkw81TSOrpUEbaDVKDZr9PwOZ2pT1UpY+WihFwvo5kZKBUcTOIdkWIJQ1WucNXVfi9ExKY6XJim8gkkC3Ur3DcKScH4GqZsNUzc0fT70BnEgiMdAtnXTgNIWB1cC8xYdyPu1nGO2pGERR5daWaObRhoMfdn/Sd/hdVLbGg3Ubx0wQi0lHMUYTF66PFjQFxkjekKcFz1hGILRkJORL87MyDfMh9HXzrWAVm/kiZ59B2wBcqlB9Fa3yG6Ov97BQps5prY2emlE6wi6FY2TKhmlSckim/rRBriZ0pzjZkpHfn8NtlAocdaFQhkGQJ8lfns8HH1GrJNg6ClxVvSU4eGM8iLlY0SJszKiDItxdIubmBY3LwLX3EzfQyt2DwqVEVtMzBicjT2nXsDl9Uc4xVgwiyP3+SV8uph8u3p7+/4Yk8pKdOB4muTEFipgFXxx5ipwNNJhWfAxosRZGVGGYVfqsByxVIHxcUaJM1fBNzyc0TiOPdVRuscIqVg3sXVJEKj+R4q0yKI9SKdnMPlF6dnl6ROhvTD+BYryCwBq7DfT0KAoC05QhF8AUKXfUUODoiw4QRF+h4Mq+W890oIRFOUXAFTm7yZDg6IsOEERfgFAcb7oU+KsDzzKMOy2oyz8jU2IKvibmYBV8MWZq8CxNUvihOWki5LFZdRJe3Ind7AWRrTSPgm7lIWbWldwcXN5dYWK1UOVPrybPnz+i2KA09CY5RUZZRkXH6nOe9hHOQbBn/nHfSHw55z/BFDqzPj3HX8Cqwogn7IZAAA=
 
 [Logic5]
    ID = rm.Closet
    Description = "Walkng past or trying to pick up broom will cause Drew to fall and break wall.\nAfter wall breaks, broom remains a tripping hazard until it's picked up.\nSearching boxes and shelves reveals nothing useful."
-   CRC32 = &H3AA1C944
-   CompCRC32 = &H3AA1C944
+   CRC32 = 0xca2c8eb7
+   CompCRC32 = 0xca2c8eb7
    IsRoom = True
+   Warnings = H4sIAAAAAAAACr2YTW/bMAyGz8L+BNFLOqDrLH/ENrYWKIqhKAZsh2JAclRs1fFqS4EkJ8t+/ei03dZa2A4Ve3Oi6H2pRwxJmLMsSjm7kc61qgG3lrDWpv2pFXTSWvxCKOBzaC0MarCD6FhRMNOfXnbaSsfecBQoC/ZFNsK1Wwlq6FfSWBBGQqXVVhona3Aat9u2UfgcW1zoN53spXKwFd0gGc/5c9E4Yl+VBG2g16i16nR1hxu1qVslnLx30Le3YCsjpYLjBZwDz0oQqn6Pu5bjx3n+1qedcbaI4R0sONi1HroaVhLOzyAeN8NyXFo+X/qALJDCfRy7tutAaYeLa4GnFhbkj42s8Kw+v5cDivmcDJBHmxSQx28esUutnNFdJw0G3gx/zj7m3qi0a1Ff/ZYBI1Qj4TjCWNISTxHHBNjxv0GGfapNi33qFwJ7FpGophPVjOHz6Z3cw0YY0Uv3eJ2jnhjl2xoubi6vr/E66sMNff60PDx79QJEWUxU04x9s2Ml7fVWnurVd8BKKhsNYnC6x1SsRNft4VabClNlY3SDRxkTcgwEN2GsSURBNIkSilh5TBFrkgS9fZ9egCjnBHU+QYnwoaacAkAa5wQplfGSQDVPJ4laJGx2hIX6aDaeV8CV0cMGIthhKT+B3bqt1oeFbif2FvDKsNxj1d3DxdX1CVgNrXuotxIvdyzHNWblART+aJykZla09Wy85B7rNysigoQps4loHj/pUNiT3GMMvkb1vz7lc0jYkxb18QwWDz3q2dfLx/70JIp/tSmPXQhKOTml/HUp5QRTeFSUxJi8FoScfH4BQPHpsBkalM+CEpTHLwSoaesNDspjQQpq6hcEFPlfz2dBC4qik3NeUIwdPE4mY3cYWYpsiXMK1SSjKAEe1RdN817Bl0+zPKFhmud0b7Y84rSvtjyGQRiVlIzK12ZUkqQnySCTlIQvXj3ixOinhkEYTQpDSEYTcWpGfxv+AtFLwe0AGAAA
 
 [Logic6]
    ID = rm.SecretRoom
    Description = "This room is just a bridge between the closet and the stairwell entrance to the secret control room."
-   CRC32 = &H657CA873
-   CompCRC32 = &H657CA873
+   CRC32 = 0xb0b4a872
+   CompCRC32 = 0xb0b4a872
    IsRoom = True
+   Warnings = H4sIAAAAAAAACr2Wy07DMBBF1xY/MUtYAHXSpEQ8JIRYICSQ6KZZus2QWjh2ZTvl8fWMeaoQw4KEnRNrzp25N7LDWTYaczZF76WuwS8RlsbKJ6NBoXP0QmjgOUgHrW5dKxRLU2abvSkuLPobYxq2xQlSHLArrIWXawTdNnO0DoRFWBi9RuuxAm8I4WStaZ042mhWChvUHtZCtcjycRc3GbFrjWAsNIZwc2UWd1RrbCW18PgqYm5vwVEdatiewQnwrAChq32qKsNjPtmJ4DPOZgnswoyDW5pWVTBHODmGJNRDGbbKr1uH5Ar58drKvVQKtPG0uRQ0u3CADytc0MQRyXzEzoz21iiFltqv208Tgs8Bdi9JQn+QwApdI2yPqJ1xQbMUA4GLZJhsOfXWAZ4kG+FSnD7UNsH7jox/izimkrKNeI+OYfaW75fX5Xu2G538FHFEsgfHis6M+3YsojKkY92Sf3cs4f/xjcVUBnQsItmHY5N/BecZc+j37vARVsKKBv07OkwuQrGs4HR6dnFBzOoltMvz8mUdZf790EvSofxNO4/T3q60CH/QOy2i2UcM46EOhqzzj6W/GLr5w8bwTfMZ3z4KwcoJAAA=
 
 [Logic7]
    ID = rm.Stairway
    Description = "At the bottom of the stairs is a locked door. Behind the door is the control room for the fabled AGI Power Pack development project."
-   CRC32 = &H63483220
-   CompCRC32 = &H63483220
+   CRC32 = 0x337d949a
+   CompCRC32 = 0x337d949a
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrVXy27bMBA8E/2JRS5OgTTVy3KMNgGCoAiMAunBF/tIWxuLiEQaJGXX/fqunLiF3W17MHmTRHFmONodUqkYJkUqpui90ivwNUJtrPphNDToHD2QGtISlINOd66TjaDXbXs99VLZrdyJdylBjG/EE66kVxsE3bULtA6kRVgavUHrsQJvCMCplabrzNFAu26wRe1hI5sORZqWf8JmifimEYyF1hDaojHLF5pqbKW09PjKYZ6fwS0toobLGdxBOhyD1NVHmjXvb8vRex59mIpZBh9gloKrTddUsEC4u4Wsnw7zfmh+OvSJHCEvXpVsVdOANp4Ga0krlw7w+xqXtF6esUzEg9HemqZBS+JX3W8Heot7rK0iBv0LCKzUK4TLhNQU434l4zi4RSS9w4TBHQqH/voFd7CWVrboDwXTI8qeQFVwP32YTOhzV/sK+Pplvr/+C2IIpVlwpRxiCKVFcKUcYgilo+BKGcSbXAwuKAcuBr0uCY/WdGtIYEtJcQXbWi3r/UBDMxxQCFGaUEvv4P5xcgXOgPJvzYwUV32vVyRqvyB6qQ/FgZOqGvSx1VI4iDxh/Do/BPOMWdwoOwpBij1/0MFl4f+ikOfIxVEKfr6F2VsMnjyeHyLwSMe/kpAlDODViImBYBsGix51w2AZA9g0HsYvKZYjZklxhOd7VSTMHhjYK54jolcsYYBoL/IobV3kzPkmWFuz6FHbmmUMYBN3CIoEe9Z+zSMGKL8yym9IUeYxy49Dj1t+HGMI++PsVsWIOTGHs59Dj2v/CeNPVBjPQG8PAAA=
 
 [Logic8]
    ID = rm.ControlRoom
    Description = "The control room is dominated by the main terminal with its multiple displays that demonstrate various power pack features. Drew has to figure out how to turn it on, and then how to enable all the displays."
-   CRC32 = &H9F6EC432
-   CompCRC32 = &H9F6EC432
+   CRC32 = 0x20ca8b45
+   CompCRC32 = 0x20ca8b45
    IsRoom = True
+   Warnings = H4sIAAAAAAAACu2ZUW/aMBDHn619iVNf6KSuSwIJibZWqqqpQpM6aXuBR0NciJrYyHFgfPtdKN0E820P+Pa0txCT+939L/7bmFikUZGLR7WUrtoo0F0zV7YFaRUsjN4o61QJzkCn22qp8TppcaBZ16pR2sFG1p0ScRIL21zfG+2sqb8a04g3MUZOIvFFKzAWGoMB57VZPOPTxpaVlk69YMzTE7QLq5SGyyncQpwWIHX5Hp+a9R+z8VsSkMZimsA7mMbQrkxXlzBXcHsDSR8BZv3Q7HToA7hV1R6S2VZ1Ddo4HFxJrF+2oL6v1QKrJqFZJA73amWxhGX3SwrAyH24bYUQ/TMWWKmXCi4jTGhU9PWMvKEDtGKYMreCAPC2goCG0Cvj1ssPYNbLDw2h15hbLz+AWS8/NIReObdefgCzXn5oPhSDC8z6YtAboYQHa7o1RLDFuq5gu6oWq/1AvZW7FlA1rB3pO7h7mFxBa6ByB65Cffu0SuVeHBS/5FYKBq2sykGvc4N1iCTjMtIEa+GK7J+c/1y8Ufo/kdNEuHwAi/FGHidHPoAz371m47ODv7kBiRmKIyP4eAPTgxOc3J69usBRKn8yA4oZQLTUPweDmScFYDVPCnq+XlnKvA+nAKx6UdAAehGrRzi9CACvXmxrYlb439zAJkZiGE2MYp4v2jjytyOwaCSGUTSKGUC0lHlmUgDWmUlBz9crZ/uBTEXOUtEqd/2sdrCWVja4sTrE7ouX/dNVCXff7icTDFrue/b502x/zZku9xJIAVhfHAoa4CgqZ9uN5Bnz0QoF4G0FAQ3RioxrI53n3LOCAPC2goAG0IvYDYTTiwDw6sW2xyki5lNnCsCqFwUNoFfMfIpKAXj1IqAB9EoKZr0IAK9eBDTAUlKw/QFQcB9oUwDeVhDQEK0YsbnIiNtFCABvKwhoiFakbK0gDo7DtYIA8Lbid+gPTdfuWjEgAAA=
 
 [Logic9]
    ID = rm.Office
    Description = "The office has lots of clues that are needed to gain access to the Power Pack functions on the main console in the control room."
-   CRC32 = &H97B5B04
-   CompCRC32 = &H97B5B04
+   CRC32 = 0x3d4aaff4
+   CompCRC32 = 0x3d4aaff4
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWZTW/bMAyGz8b+BNFLOqDrbMV2HGwtUBTDUAxYD8WA5KjYSuLVtgJ/JOt+/eh+bGtJbIeStzSq3pd6RMkMHQVJGEfBjev7stlAv3Ww9W350zdQua7DL2wDUQplB0MzdIOtgjQO2vr0er0ucxe8iVBgngVf3cb25d5BM9Qr13ZgWwe5b/au7V0BvcfpXblp8LPpcKDeVa52TQ97Ww0umE1fapowuG4c+BZqj1Kryue3OM+3RdnY3j0Y+PUaurx1roHjBZxDlMzBNsV7nLUc/0xnbxnpJAoWBt7BIoJu64eqgJWD8zMw41xYjkPLl0MfkAQyeAjjUFYVNL7Hwa3FNdsO3I+dy3GljJ0AnUSPDpHWpUPsBOjM9OgQaV06xE6ATqZHh0jr0iF2AnTmenSItC4dYvd6OlmoRodKq9Khdq+nY2I9PIy2Kh/GLw2DS9/0ra8q12Lgm+HP2sdyYFQ6lKjf/JaB1jYbB8chxhLPx1WQh2GcBN+6sdKo/d6d+tV3wErDbTzYofc1bkduq+oO1r7NEdeu9ZvW1uOmjIHgpMIF09DIb+aUhiogmpJDmU2DyRFmwNFkZGjhc+uHHYRwwBw5gcO2zLf3A9XB3nWA0phHuJ13cPH56gQ6D2X/uJEOgxj3uXD9A3z8p7F8m3S2LCZjMDUmRhDFmcLNECUR4TUzz5If071/ioI7A/87AqzFNHiW/h/PYPGY/y++Xj7l/rMw/nUEOD8RUAS/PChqoQtKJaOMQm3IqaZJ0Ln+9Nbdwc7i7YLn51F3XLAdZ5YFXNxcXl2hYHG/UV8+Le8/q4VJrx/xLGEsVLNE40aNkoxc/uKgGAtVUNRPAFQakh8T0qA4C01QjJ8EKP2jx1moglI5eilWoFr1LieuWvByhhKMZqkiIyquzIgaijDSa0lw4tqMFNoSUTrXPGtUXJkRNRRhpNc05sS1GWnc2bNQr3XMiesyYgwlGBn1Somz0CwAGD8JUFNy1YmDYixUQVE/CVAxeUUmDoqxUAVF/QRAZYY8GKRBcRaaoBg/AVBzQyoxaVCchSYoxk+gOWzCGelkS8hG9NEjIjslECT67pHG2yATZXpFKSeu+8aDMRRgZIxeUcqJ6zJiDCUYTRWqE071VZ1eVlDgbJpYoeQwJlF8GcmIK+cdNRRhRBqtkoyIuDajvw1/Aa5JMWvIJQAA
 
 [Logic10]
    ID = rm.StoreRoom
    Description = "Room is filled with things from various Sierra AGI games. Clues are hidden through out that Drew will need to gain access to the main console and the power point functions."
-   CRC32 = &HF1FC71F9
-   CompCRC32 = &HF1FC71F9
+   CRC32 = 0x3d420e2e
+   CompCRC32 = 0x3d420e2e
    IsRoom = True
+   Warnings = H4sIAAAAAAAACs2bT2/bRhDFz0S+xCAXpUDi8I8oimgTIDCKwCjQAg0KWEdaWktsKK5AUlb17TuU4xZO3zYHzVN7s0TzveFvZ2a5SyqJ8jjLoomfTqTupWo6V62OsnL3detWcneUib/29/ppEmVJ1G2vPg2+c796v41eJHpyOY9+dutqqB+ctPvtnetUpXOy9O2D6wbVGLzs275ej3pprwe2u8ZtXTvIQ9XsXZTEGdBN4+iX1onvZKvfy13jl5/1XN+t6rYa3KOJBib9snOulVe38l6SvJSqXb3Vsxbjx1nxXUDeIOzZjBo2lM+T6DaVN3KbSL/x+0ZHyMn7d5KO58tiPLT4+tD3Mmx0aB9DOdRNI60f9OCm0muvenF/7NxSrzhgeT6pNJ0zSWF5KilsOYuja98OnW8a12n46/3fEMbiGsUOtVq0fylJV7VrJ69iDWda6rXAGrMQzmOW8BQJ51HvhqvP7ii7qqu2bnhKm1GyGh3qlXz4dH1zo2O+OqXBTz8uTn+HJC1iRQl+ZqxQ0iDWsuQIZ7AfngUhIGkRa24fK5I8v8llWcpscljeIOyiIOmiDmmgW3JuQrKSw3cac3Rz7pyK5alzKrY0IJVRby+xPJcUtJzm0W993a71gh7clb/7Xbw21rWXaj/4rRJcVk1zlHvfLfXydp1fa+scOY4dWk/S3jhL0Jwz1+XBS0Xx8nGFIB87v99JLAeF9VoOm3q5eVw6HKpjLzoQevZp5fDh481r6b3Uw5fLcTpk49WutGOf2r3+07BxMumrejUZh26reKIZvFf5D8JAreYUxuAvFkWSzf8Xg5LkM059alEhzkX6rEC1JIenWFCdfnM5FXDJomcl+sM7uf1So199vXiqz2eR/OtyCluaEEMpYbf0xPrctSf2tFimx1xYWJ+8UIeeFrBS8qYG1CfDgp4WsDJyZkF9MizoaQFrjm6Erbt8wIXZ5bGlAbEiQStVa2IBFyYxbGlBLEM3jnYFifW5BYk9LWDBXTbz9MIu1PSClhbEZmivxDC9oD45vaCnCSzqBkVAnw2LtAQq4C6ceS1iF2otkrYXk2LOvVHF+uT0gp4msMiNC+qzYZEyax6jUbCuxYALsxaxpQWxFE24dumF9bnphT0tYGXcxoX1ybCgpwksbuPC+mxYrMY1vcRNRMCF2rigpQGx8iKtPuDCJIYtLYgl3FaP9bkFiT0tYJHnRaxPhsWaF8spelhiCAvqk2FBTwtYOdqlNW9c2IXauKClBTHy3g3WJ6cXa++mhKt2Q1hQnwyLtRNRluQuD/XJsKCnwZvASXGBZ/0hF2LjClhavDtdXOC5WciFSQxbGhDLYupToIA+931z7Gnwylc6hS8wGwzDFP6awDpxAy7MxMWWFsS4M0lAn5u42NMEFnqIbAkL6bNhcR6Mpzn3tZ6APhcW9rSAxV2JBvTJsEgrURWm/uwhoM+GRbozyfMLvNETcmFOidjSgtj8IsSwC5UYtDQgViSkSsfC5/14LqBp8Ou5IiXVcMHd1A3ocxvePzz/BGJa4n8WPgAA
 
 [Logic11]
    ID = cp.Terminal
    Description = "The main terminal screen. Needed to reboot the security system, so Drew can leave, and to load the modules that run the power pack functions."
-   CRC32 = &H4839A4D0
-   CompCRC32 = &H4839A4D0
+   CRC32 = 0x31999804
+   CompCRC32 = 0x31999804
    IsRoom = True
+   Warnings = H4sIAAAAAAAACsWcz2/bNhiGz8L+Cd6SHLLpp2WhWC87dwXWDUiOssw42mQpkOQk/e9HO0ELtC9qpP6e5NbC0fuSD8mP5EeJSVTEVR598NNUb/zkHtr51vnH2fdrv3bNbT3WzezHyZ0n6fIyLYoL5x6G/mx263a66+rPrhnG0Tdz99m1vdsO0+yadmx222mu+8ZPUZoUSdTc/fq3H7dtX3fRL8lreKZv4Jm9gWf+Bp6L7z3jMvo0j22/cfW42W19P7v7utt5106uH+ZDOYKef7wL2qEkY91vvDuP3aVLs4toIZprEUd/DP08Dl3nx5fL5tVFVCo6y+hPv6nn9t67frdd7WHUow/17u/9uBeZB7frp3bTh3+nU/hhe9f5r95RKeqfVtE/0776zdAN49MfTu69Swq3DVBv6+C26+9Gv26buV513o1+2nXzJNVOpLmsiGoniejfaRx97L0LVd4OQW3VDc1/4dFhXIe/mf2Tx3Bz46Zm9L5351cHKJWr+/Vv4anr/X8X5YVWD5HjKg2VukrcdDvsurVbeff+d5fuH3fX+5+uv/3pnQtspueSPLRddyC28ocmqKcv0LSjAaa0JDEpdRaTciy/hJhDl9yFx0Pv63y/mW9DIXPRpw3IFjFJVqmzZGV9iuis9w9/DcP2zJ3fhPh8GPPjtu5CSK5D2KjXl0Mf/n3T1Zt3+5Deb/aRog2B+lCM51jzNTg8Bxo5Dx9pyEJEkngRfVz9G7SfmzFUqPF+PbkP9eOnA+Tnn59CVphpFkGpZAZbyYS6IGEY4qXc6aVMY9GgZuNBqqPjQToaYErE4sIOk1JnMSlHA0yp6vNmmJQ6i0k5/lTsSiskdmWJWJ2aAZfqKHDpeDqmPCYxSXUUk3T88TScJyIwnrhHyNWy7lTNTAyUI1UrgaqVomoGHbEi5xGpznZE5Xg6pgIdr1IdxSQdLTCpLIIdJqEOY0L2fEEDxSTUYUzIhqVAczNSncXE5GaKhMzNSHUYEzLTFSmZaJHqLCblaIEJDeFKHcbEhPCMXDdJdRaTcjz1/GOJLDIWFTl7SnUUvXQ0ONBBE2lSHcUkHS0wkQNZqsOYkA1QiS4ypDqLiVlklAkZm6Q6jImJTSm5spfqLCblaIGJOepPC5S+UIfpC0cLTGjIe/Uzb+logQkNeUodxsSEvAxdjil1FpNytMCEzgxKHcb04tODMmOifoaGM6UOk2XC2YLM9Et1FpNytMBEHqxLdRgT8jZLWZJJR6nOYlKOFpjQTbhShzEhm/ClmhnMMEl1FJN0tMBEprClOowJSWEvMzKES3UYk3D88VJrWSFriCont0RSHSUrHQ0wqXd37TApdRaT/CbIABO5JZLqMCbmrekYPeDV8uyr9NLSglRGJgC1PExKWZqQQr97kfI0KWTKC7rknKflaVLMZxixjOc//x2G1DMpJxsllDzcosrSgpTMGZ3QokzOJuiSGyMtD7eosrQgVaq+f0KLKj2TcrLzk5KHW5R5zz2Jl6YfOGs9k3KSu3ItD7eosrQgpTbvp7QokwwIuuzK6NVfWNOWFt/ix7ZfqEo9i3Im6E5TysO3BihLC1I5mbHW8jApZWlBCk2GaXmYFJMOS+Q1OJakXvu0SFuakGJHn5KnSVGjD90ZSXmalLA8cjFGCu07swydL6U8S1daWpDK0ZyLlIdJKUsTUsz+K8vR/ZeUp1uAWQVn7M1FUh4mpSxNSKErFilPk2JWLBm7YpHyNKkX34wRnmEyETmb0ZfyLF1paXIpG9oPX//CB21pQSpHL1CU8jApZWlBCr7p7w2u+oPmy4LNhUh5mhSTCynQd4O0PE2KGn3o3CflaVLQ3AetPgrmxrlkETMcFupKwiMrtwWUn4I+V07KlIlLS3X3td1ok/LsaJOWR3rDUp1lH3umEnPqkWcq5uQyjUv09kwpD1/GqiwtSFXk7KLlYVLK0oQUeRqu5WlSyGl4msTkfkHLw3f8fmP5P59TgRmoYwAA
 
 [Logic12]
    ID = cp.CAISOCC
    Description = "Custom Acoustic Instrument Settings Option Control Console: lets you edit the FM synthesizer sound channels."
-   CRC32 = &HEA7A3952
-   CompCRC32 = &HEA7A3952
+   CRC32 = 0x1d42087b
+   CompCRC32 = 0x1d42087b
    IsRoom = True
+   Warnings = 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
 
 [Logic13]
    ID = cp.ERIDOCC
    Description = "Emulated Rodent Input Device Option Control Console: lets you edit mouse cursors that can be exported for use in other AGI games."
-   CRC32 = &HEBD8E3E6
-   CompCRC32 = &HEBD8E3E6
+   CRC32 = 0x2b501f8e
+   CompCRC32 = 0x2b501f8e
    IsRoom = True
+   Warnings = H4sIAAAAAAAACr2cS2/bRhRG10T/xOxkL9LyJVFE0GzcAu2mAYoWsJeUNJaIUqRAUk797zu04wQNv1V0j3YJZJ57eTicF2cmiZZxlkWLIU0Wrh5c1fS+2j27nX+sW79zm2e3GH7rxuHUjYtomUbb04+//vn7Lx/v7qIfkuniPFpsz/3Q9cdu518Y3ZPv+3pXt3tXuX3TbarmMy9KkjmhXEd/+H011k/etefjxvchjd67bdcG0BiSGDt3bod6PyWUDuGH46nxR9+O7qlqzoEa7uBbalpGfw9TCtuu6frXPxzcB5cs3bF6docqRDu3p97v6u1YbRrvej+cm3GQNIscV6Y5zmkWORbzHOPoY+tdSO/YBdim6bb/hCu7PjzfavSvIbrHRzdse+9bd3P/cgOlq9rdT+Gqh+m/q+JWwpdJdJ+6d+4+ccOhOzehvHn34WeXTle7h+mnh29/eu/GQyhkr4l8qpvGtd0YfnyxVQ3O/3vy23C3MqCBo1yUNTNHAs46EgENHC2XoCMBZx2JgBaOStLRHA47mgdcxdFd14591zS+D6nvz19vf2omJtSnOgRov3BcX7V7727ikExe3kZpQbzC6Vqo/+6qWNEuzzFLLXNUNIMckYZymSeGd65oFjmKCu6CHIkKZlWsDXNUNIMcy9gyR0EzqISKhChCxdqyz6poFjmK/uAFOc5pFo9HPPXLb32dWD4eRTPIMbWshRTNIMeMeHnW2XwYaVCU1iuimSzFqNmsp6fgaE9PBbRwJEbHdo7mcNgRMTovyRGDgsOOkHdtJTqPZo4EnHUkAlo4yklHczjsaB7QwpHoPNs5msNhR0TnvVyT5UjAWUcioIEjNcAxcyTgrCOkq12WZP9IwGFHyBeOOAYbNkln5wtVRBNNYFmSdFoTVJrIjxiKTmtCPmPEKVqaBB3WJCIaDJuTmBmOBy7y5SVGP70oOvxYkaFUMj1CUJOgw5pERBNNaMt87TGnjGiiCW1yBJ3WxDQ5BapJ0GFNIqKFpjX60gk6rElEtNBEDj8lHdaEDEADFrGfxOAEiaSz9lVEE03g3L+k05qQtXmhjkA1XXlOUka00JSQVZ6iw5pERBNNTJWXkitIFR22LyJaaFKLge00CTqsiVmOnOTouyzosCYR0ULTynKZjsRZZGm66lLiLLIsTZfpK5xBlqlanWT2Yig6+2KoiCaayA64otOakA54mpKDaUWHNYmIJprIrwGKTmuaR0yKaNFUw3h3qPqFu3lKytvXyfr+WDXNs6vctD3sXdeGfz9VfT3Vdu/d9lC1+6mCrMdw81Myn+vErzP7bxViiqx1DlhycKTo8LMRES00FWSHStFhTSKixTY4dEZC0eGNcMyMRBaj2wUFndaEdHwzdEZC0WFNzIxEJmYkLDVduxeiIppsdSZ7IYoOaxIRTTSRXX9FpzUhXf8MnYhSdFoT09KhE1GKDmtiJqKyHK2bBJ3WxNRNBdrSCTp9zgLT0hVoaRJ0WhNUmsi5QEWnNTHHrxTkmRSKTmtCJlKyAu0QCDqtCToohz0p5/pH5TBD3xKtmwQd1iQimmhC6yZBpzUxdVOJvnSCTmtiDqhCtwopOnxEFbNVKEf3wCg6rWkeMZj7a7o83P1xivF2Q+1Y1e30WeftlyFcnyKfHHJ1Xtr3f1BXOIssl2TVouhwYRARTTSRn9kUndbElHl0g5Gi05qQtTb5ihzgKzqsSUQ00YQ2VFffOaMimmgiO9GKTmtCOtH5ihzgKzqtCRng5+oAkAu6LcgJHElueoicxFlkqdZU2hU5QYeLHLOoMy/RzpWg05qQMr9MyeZQ0eGTc0VEC03otmRFhzX9P+J/qhdSobheAAA=
 
 [Logic14]
    ID = cp.ESADOCC
    Description = "Electronic Synthesized Audio Data Options Control Console: lets you switch between AGI standard sound, FM synthesizer and MIDI output modes. You can also change the instruments. "
-   CRC32 = &H2D92F9CC
-   CompCRC32 = &H2D92F9CC
+   CRC32 = 0x18a197c1
+   CompCRC32 = 0x18a197c1
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWZTW/bMAyGz8b+BG/tDutsx3ZsDCtQZD0UGxZgxYDkqNhsYlSRAklu1/36yck+gIq7xNQtieJHL1+RlGxnSZnOiuSiHYzVZq87vIDegn5CY/quV1sQsJV6IyR0+NArTLJZlrSHq9v7m0/LxSJ5k3lCUydfcStc/4Sghv0GjQVhEFqtPMhhB07DoGy/Vf5zbv3A/iBxj8rBk5CDpxZ1QM2b5LsdJbRaanP6o4VryErYixfYCT/boA4Gu751YiMRDNpBOkvSGDSWYeQTNBI0Do15qDFNlgrBy9trD9tI3T76K7Xx6yscnqbQDw9gW4Oo4HJ1DKABobr3/qr1+LWavyXhPopVDu9glYHd6UF2sEG4/gj5eDWsx6H166EP4HY+yU5CnnspQWnnB49uCQv444Ctj5ackMMjItf4PArhkT2KkuvzWUSPCHhcj4gJOTyax/QohEf2KJywSpOFVs5oKdF46dvhX/jjNjGinns/gfrLASPUFuEy9WKKxsdRh+nJgW3C7llkyT06N3Zjt0PYadP/1AokWut/EMobO9IHNdhByCRPYyRF3jQRqLM8oGapd3H5Zfntt2/ax2xOcaZjmM6gGNF+jbMymRXh6jLIKlPGHZGiMWicR9wRKXjUKiWjOd9xojinO17MwhI4XyNFm67RdwtGjRSNQSPR4yZoJGjTNVZEBp2vkaJN1zhPOWuGok3XWKcx+nNdESeUsyOnaAwaa84sp2jTNTZ5FeUQkxNndxZulDrKikg2FE3YPjm4ZRbn9rEsY94/EvTIN5DEjCz2z4nsLhOL7uoRX+AgjNij+7MAI1GME/Qd3Nwv7u68fd3R0c+36+Pn/xA5lNZhokxUShA5Uq/h3MpIHItKokCmqAxxDCor1iMgieNQmXEepkkch8qcKCCGwqyoDXJSYZJEDqUVdwuhiBxLRXSmKQkVp9FVDefJlcRxPAAkHiFNUEnhOFRmrO9WKByHypxXJYFjeSzO+g7oFe4XFsNtkY4bAAA=
 
 [Logic15]
    ID = cp.ICAPOCC
    Description = "Indexed Chromatic Association Properties Options Control Console: lets you edit color palettes, and also export them for use in other AGI games."
-   CRC32 = &HBE2816F6
-   CompCRC32 = &HBE2816F6
+   CRC32 = 0xde13b565
+   CompCRC32 = 0xde13b565
    IsRoom = True
+   Warnings = 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
 
 [Logic16]
    ID = cp.OFROCC
    Description = "Overall Frame Rate Options Control Console: lets you experiment with the turbo mode speed setting."
-   CRC32 = &HF58FA8A9
-   CompCRC32 = &HF58FA8A9
+   CRC32 = 0x41d4916a
+   CompCRC32 = 0x41d4916a
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWVQY/bIBCFz6h/Ym6bHNoaEpNYVfcSqbc2UqtKyRHbE8cthghwdvvvi5NVV104JXCzNeabx5tnoKQsFkvy0IzGajPoFh+gt6DPaEzf9qoDAZ3UtZDQ4qFXSFaMNKcP2y/ft5sNeUf9+mpNvmEnXH9GUONQo7EgDEKjlcc4bMFpGJXtO+WfmfWF4SRxQOXgLOSIZM3fMllFftqpfaOlNtfPLDwCLWEQf+AofK9RnQy2feNELREM2lE6G2El0Fcl1Bew7tdXFYG+gmwVgpc2aI+qpW5++3Xa+JkKh9cG+nAA2xhEBbPdRXwFQrUf/ar99MpX8wi6pGTH4D3sKNijHmULNcLjZ2DTWthPpf3b0idwRx+rq4ynXkpQ2vnixSdhAZ9P2PidRtolcCdMVzJ3AnRedzJkm1KazZ4IO6s/kX4pDCozGhSwMxsU9OMF2WjljJYSjRfeja97n66CifTUe776hwEjVIcwK7yWZTUnjAXU+21ni0W6QzcCS6CwTHgtRGAJFPLgsk4W3Qg7a3Qj/RJEd5mHul6lH2ZZhefQzXGLwO5XyIswbjcrjMAKTrb1L+/4iz7vf4PYWvgqnn9c4vpSvs4KZpTPCafBLG7jsAwz5YsAmuwHjbCz/qCRfrcZvVyn4ZQZznzOE95KEdj9CldsmU7h/7C/xMutXy0OAAA=
 
 [Logic17]
    ID = cp.RANDOCC
    Description = "Rectangular Alpha-Numeric Display Options Control Console: lets you modify the color settings for message box displays."
-   CRC32 = &HEF8BC5C3
-   CompCRC32 = &HEF8BC5C3
+   CRC32 = 0xde38cce8
+   CompCRC32 = 0xde38cce8
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWWwY6bMBCGz1ZfYm67e2gLDhBQ1ZWq9LwrVaqUHA1MCKqxI9tk27ev2UitWuaU9dwSGX//+LPNkIsy2xTirpudt26yPd7B6MFe0LmxH80ACgZtW6Whx+NoUNRb0Z0/fPvy9PV5txPv8ghoavGEgwrjBcHMU4vOg3IInTWRE7CHYGE2fhxM/C19HJjOGic0AS5KzyjyLF9RZSO++6WCzmrrrg96eIS8hEn9gpOKabM5O+zHLqhWIzj0sw6epKWosUha45qWosZyXWMmng1CLG+yEdZq2/2IM62L26sCXiPs8Qi+c4gG7vevC2hAmf5jnHVY/lbbBxJe5mIv4T3sc/AnO+seWoTHzyCX2XBYhg7/D32CcIpn7FrIy6g1GBvi4Kst5QF/nrGLqyUDEzjKibOWzBEB53VEBCZwJCtGRwSc1xERmMDRJmN0RMB5HRGBVSZ21gRntUYXSx/mv8tfusSCehljgPnDAafMgHCfxWKK5kHITHJgi03NsKNFw9HbSslitmRRUFYcr5OyXp+CZFeFgrNeFSowgaOGsS1RcF5HRODbHVXZhs8RBWd1RAWmcMTYuik4syOO1l1tU37Kp6Vts3UTegMtT0oriLN1O61K6o3qMTfTaupNcztNctz0Wq6/AJLddArOetOpwASONkn3kaClqJHxjU3Beffx38DfdcLF/2ESAAA=
 
 [Logic18]
    ID = rm.DoorKeypad
    Description = "Close up of the access control keypad that controls access to the Power Pack control room."
-   CRC32 = &H5B0CBE55
-   CompCRC32 = &H5B0CBE55
+   CRC32 = 0x40fc5fa9
+   CompCRC32 = 0x40fc5fa9
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWWO2/bMBSFZ6J/4o7p0ETUw7YQJECQdggCJEMWe6StG5kIRRok5TT99b1K0AZoqcm8GyWC37k8hy8pmqKW4glj1LaHuEfYO69/OQsGQ6AfyoJcgA4w2jGMyoimFn44/+6cv8e3g+rEF0mQdiUesFdRHxHsOGzRB1AeYefsEX3EDqIjRNC9pXYZqGM4GBzQRjgqM6KQsuICL1LgshCPFsF5GBzxtsbtXmiw8522KuKHint+hrDziBbO1nANsmlB2e6CRm2mz8Xy6xy/kWJdwjdYSwh7N5oOtgjXV1BOANhMXZt/uy7JcLL6o5ZXbQxYF6lzr2j2KgD+POCO5jynmcGsUvKalebzmpXWXBTi1tnonTHoaQL9+OnDtOAn2qsmDfsXBV7ZHuGsoHrqlmZTLbnIdbrmRgSM5y/4Bgfl1YDxT8QTU00SuoObp9u7O4qne0/s/sfmvT3LzFFtcu+eWC3XeVCv2GxomUpumHdlms+7K9OaGcxaMqVQyuRuzwFOrshs8c7wWeOd0cxg1jJ5LuQzK83nNSutebpZVcG7smb4rGbNaGYwS5ZcYKbXWiWTR12+eNN83njTmhnMIlt47v2qZboYqpY53zSfN9+05ulm1QXvI2mGz2rW/5q/AUcIiGGyDwAA
 
 [Logic19]
    ID = rm.SafeDoor
    Description = "Close up of the safe door that's hidden behind the picture in the Power Pack operator's office."
-   CRC32 = &H41ED9C23
-   CompCRC32 = &H41ED9C23
+   CRC32 = 0xe526925c
+   CompCRC32 = 0xe526925c
    IsRoom = True
+   Warnings = H4sIAAAAAAAACrWXP2/bMBDFZ6Jf4sZkaCLKov6gaIAi7RAUaAcv9khLZ0mIRBok5bT99KUctEHa61TeJpvg7z29I4+UFCorpNhiCKPpIQwIg3XjD2tgQu/jH9qALGH0sJjFL3oSVS7cfLPVR/xorRNvZESUmbi3Jjg7TehAu36Z0QQ462nBda6xAZ7GMIwG8NsJ24AdOG16hKsM3kLRXIumZsHKjLKrhMdw84jf4aSdnjGg85GPF6JeBcYOPmzvHx6gtR2CdfD50/7y/A9iCqcquVOCGHP+gr0O4zkylvnwi9dac0a3+go21tqPvYnPuY8D82nCl9cRuWz+xuaZ+Gou8rONtMNk28c41bpuNDrgs4Y9HsG3DtHA1Q7uQKoGtOlu46z9+rOsrmm6kmKXx5x2Evxgl6mDA8Lde8jX6bBfh/Z/Dr2Lizcm/+zkaZymS2QHHHR8c+1/14FWTBBTjIQFK3mwxKpOgC143BYlC1bxuFU8bksetyWP24rHbcXjtuZxW7O43Ww2jB2ZpLN2ZFIxRUws5yGJ/a+Dm8lokVcsWJ5qFZuCB8uTrSJO+2RbkKSzbkFSMUFMNcs1o6h5lmDNsgSVZNmHShKfUCmwLNdjVfC4rVi2t6pYSlY2BDZZ1yDprF2DVEzxbZxnLO0ocol+lKwANJ61ArRkkhJIlmYYucSdOGEJKDxzCSjJJEkRLTNlUgSeO6nXkj8BOhKT548UAAA=
 
 [Logic20]
    ID = lgc.ReadScroll
    Description = "Displays the scroll in response to a 'read scroll' input."
-   CRC32 = &HFC3EAC78
-   CompCRC32 = &HFC3EAC78
+   CRC32 = 0xac0f0946
+   CompCRC32 = 0xac0f0946
    IsRoom = False
+   Warnings = H4sIAAAAAAAACsWWP2/bMBDFZ6Jf4sZkSCsq8h+haBavRQ0kCGqPtHSRiVKkQVJO8+1zcpq0SMXJvHaTRPH37t4TeJJiVtRL8Q07FfURwQ79Dn0A5REaZ4/oI7YQHQw26M7SdRlooT8Y7NFGOCozoCjnwnTNx1tU7V3jnTHigyRwWYi1RXAeeke8nXHND9rsfKutivii4h4eIDQe0cLFBm5AzmpQtv1Eu7bj7XxxmeLPpNiUcAUbCWHvBtPCDuHmC5QjALbj0vb90meIex1+1fKojQHrIi3uFXWvAuDPAzbUc0rzfLOuZ9Nm1eI+aNvRBkO9n94NJz+gV09wqm+wB4+tbqLaGQSPYTAxpIAZKl3yxprgs8aa0JwXYuVsHB+gpwa64bcPQOCR9qhJw76hwCvbIVwUVE9VX4pKMsVQVbwxJPisMSQ0M5i1+LfgfClM83lTYDOrZjZrms9r1qSmLGqxGnyg6g4u6KidHc+LP5u4XX+nusvqtYvV+ivdX9ORsZg8jM5CLovsyHpyvpyFlAXXdJVy0oB8n15KgPXbS4lm8KssM/+OpIg5amWehCkB3mwTojn84jrfU+SMSfyHccjpF/NATAkw+/WX6DNd95wwUA4AAA==
 
 [Logic21]
    ID = lgc.ReadNotebook
    Description = "Displays the notebook in response to a 'read notebook' input."
-   CRC32 = &HF5D81DBA
-   CompCRC32 = &HF5D81DBA
+   CRC32 = 0xdb7711ac
+   CompCRC32 = 0xdb7711ac
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWZS2/bMBCEz0L/xB4TFG2llWWFaBugSA8t0MZAkCLOkbYYWwhNGqSUx78v5T5RdE/03CTImiFn8VFcuiqaUp0Vl2ajh/7BkBt3KxMi6WBo7d2DCYPpaPA0uthvXLrmmB7s9tbsjBvoQdvRFHxW2M369ZXR3aUfzMr7++JFlaS5LBbOkA+080lxZf36Pr3uQ9c7PZgfPv7ujuI6GOPoZEnnVDWKtOvepLdup9t5eyo7NFWxZHpFy4ri1o+2o5Wh8/fEkwTdTo9u/330loZtH3+O5rG3lpwf0sOtTgnoSOZpb9Zp3rJrfmR1K0Wmim+xd5v0ik0JHH4dD6nQTj/TYYyj2wfT9etBr6yhYOJohyhL5o92NkMXWHSAFlh0nZfFhXdD8NaakCaxGf+kQUl60nvsk4v7LUZBu42hkzKNaKbSjIRyVKUqLsYQ0+z3PvZD792k+HdIV4ublAvPfqV0sfiS7usk2jCsxk2DrrHoAK2x6Jof2VyE+FiRiQ7QyETX/MhUjY5MdIBGJrrOz4rrraGdiVGn5WHlnw7r+CTTBf2YphhCkrDP1N8dQH+XBpTmczJdv6SvH5Y3nz9efzo9LABFVUo++aWpyjm6NrIFtDiy7RFSq/CpiRbY1CTbrC9Y1QibqkxVhVBN2wCEagVRFbYGmarCepOpKuy7MlWFL32mKoQC6RObqQphaw5hq4WwpSBsKQhb0p4hUxXCloKwpSBsKQhbCsKWQrDFJYItLhFscYlgi6V9cqYqgi1mBFvMCLaYEWyxdNCWqQphq4awVUPYqiFs1RC2aghbNYStGsKWdICbqQphq4awNYOwBem3GNJvMaTfYki/xZB+iyH9FkP6LYb0WwzptxjSb3ELYauFsNXizk65hZ8CyhbY/0BF2yOkJnXrR0xNtMCm9j/b74YV7FltHwAA
 
 [Logic22]
    ID = lgc.ReadMagazine
    Description = "Displays the magazine in response to a 'read magazine' input."
-   CRC32 = &H360E1C87
-   CompCRC32 = &H360E1C87
+   CRC32 = 0x9f0a477f
+   CompCRC32 = 0x9f0a477f
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrVZTW/UMBA9R/yJudEeCrY3yW6E6KVXSqVKiPboTdxsRNZe2U5L+fXMFigIdU7uu23k9Xv2m3njL101qttUn91o83TvyC/7rYuJbHTUB3/vYnYD5UCLT9Po+bdJ3LA/zG7vfKZ7Oy+uWulqHvt3184Ol3a0PybvqjeaoY2qrryjEGkfGHE7h/4bdw9xmLzN7hdPuLuj1EfnPJ3c0DnppiPrh/fc6/b42a5PZYZGVzeGzuhGU9qFZR5o6+j8I5kjBN0em27/b/pAeTel36N5mOaZfMjcuLOsgE3kvh9cz/OWWcslq5UkWVd9SZMfucvMCjz9Oz2pQnv7SE9jXPwhumHqs93OjqJLy5yTDFk+2sagAywyQAMssraqugg+xzDPLvIkxuWvGsTQR7yHiVn8MxhF60dHJ4pHVHc8o+ZlbK266mKJiWd/CGnKU/BHxH9Fur76yrqY+o9KF1ef+HvFoC0uxu0KHWORARpjkfUVJOvgkkkMWMkk1nLJGAEsmcgAlUxkLZdMqzVaM5kCKppIW1QjtcY5XpsaHguRAhsLibYsFqsWgQpZW3UDycZGqAyFqEKJLkOVtheFqMI2uhBV2LsVogq1oxAVkq8txFstxAUtxAXSRqUMdQ1xwRrigjXEBWshX1VXV5cuJTvygnY8//D6kZ0feLXsdzZaXkl4ST3RZnNmmuaU6CH4t5mGKR1mPrz2IUZebeZH4nPTPqRM/RT7ZZ+y9b1Lld5A3NchssQoRJYYhcgSoxBZYhQiWkYh9iFGISqwUYgKbCC7YqMQFdgoiLc0xFsa4i0N8ZZ0hilEhXhLQ1wgXWcWokKiVUOiVUOiVUMqYY3JAUglrCGVsIZUwgbiggZSCaXb9EJUiLcaiLcg9xKmgXgLctthgA8UZgO/O5YpoHdvMu0rvM1Ku/RXfJwVKbCvsy/R/gQ4FYx40R4AAA==
 
 [Logic23]
    ID = lgc.ReadManual
    Description = "Displays the security system manual in response to a 'read manual' input."
-   CRC32 = &HD219851C
-   CompCRC32 = &HD219851C
+   CRC32 = 0x11e33d77
+   CompCRC32 = 0x11e33d77
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrVaTY/TMBA9R/yJOS4HIJ581ULspdeFSpUQu0e39bYRqV0lThf+Pc6yfAjsk/1ujVy/8Ty/N/HIEUVTylXxSR+V66+azHze6XEiNWraW3PVo9MHcpZmM/VH43/z5AfOl0GftXF0VcOsC14Vw3H/dqvV4aMysxqKV8IDc1lsjCY70tl6vN1g91/9ZDseeqOc/hnFPj7StB+1NnRzT7ckGknKHN75WQ/LY9u9juE3orhnekP3gqaTnYcD7TTdfiBeAOhhGXr4d+g9uVM/vazlqR8GMtb5wZPy2auJ9LeL3vucYzHTyaq6MFmy+Dz15ugnDD735/9Oz3zQWX2n5/XN5jLqQ793ajdoGvU0D26KAaavtK6x2xrBh25rJGZbFmtr3GiHQY8+geP8hwfywAvaU+9jmN9QNCpz1HRT+vXU0mcT3AZRymI9j5PP+2Kn3vXWLHh/07PdfPGMcP2Ln/Xmzj9XHrJh0M42DXZnI/jQnY3ETCerFViyIvhQsiIx08laRapbLrIi+FCywjGTnC3KCoAZrG2JmEFXJWK2AEzEHqGOAEKAS0osANQmsaAZ+OLwizAfX5EAWL7CQUXpzyKbu8325fRh3ckfSdxJGSoX8bpRq4U0DyWaQtRlfuHXgOIUPnglYgKKUw0oToCjoaiDxSkRU+bHbAD6bIKFJg2zjZgxCRPgoxbgoxbgoxbgoxbgoxbgoxbgow7gow7gow7gow7gow7gow7gow7gow6g+RWAzxUg9xUid4DfJcDvEuB3CfC7BPhdAvQpAX6XAM1LwHtTAnwk8/uIy/w+4jK/j5jz65M5vz6Z8+uTOb8+OXx/k4gJ0GcF0GcF0GeVv85zlb/OcwXwUQXwUQXwUQXQfAPQfPj2IREToCVAr82AXpsBvTYDem0G9NoM6LUZ0GszoNdmQK/NgF6bAb02A3ptBvTaHO61s3x0A75EigUAf3aDukTicGeVka9IACxf/wf9AaYZU2XUJQAA
 
 [Logic24]
    ID = lgc.Podium
    Description = "Close up of the podium top. Will show the PQ note if it hasn't been picked up yet."
-   CRC32 = &H616582E6
-   CompCRC32 = &H616582E6
+   CRC32 = 0x8d59972f
+   CompCRC32 = 0x8d59972f
    IsRoom = False
+   Warnings = H4sIAAAAAAAACr2XTY/TMBCGzxZ/Yo67ByBOk24txF56RRQhIdqjm8ymFo5d+aML/55J+VziE7H3Fsv2M6/fiScTztpKbNh7HGRQFwQTxyM6D9IhdNZc0AXsIViIxqvB0HPtaWI8axzRBLhIHZHVd0wP3asPtldxZC84QeuK7QyCdTBaYh217b7QRut6ZWTAHxHswwP4ziEauNnDPfBWgDT9a9p1mIbru9sUu+VsX8NL2HPwJxt1D0eE+7dQT5vhME0d/p16A+Gk/E8dj0prMDbQ5EnSqaUH/HrGjs6airfcoNV6bpBgn7wyAy3WdN7rOn/1AEb5Da66ojk77FUX5FEjOPRRB5+CZVAoyqUwwS6awkS8dcW21gRntUZHwof45+xA0In0qIhvfmPASTMg3FSkpRG3rKkL2N605WxPsIvanoiXwaDN80DzuT5nl3W9hEFtVc6gBLuoQfN4vBJsG50nVWfrVVDWTDXgb/Efd59Jb938Ur/dvaPxisrAZpUX1+TFzb4Ny3Czl2sRTuRNheB5cbMCvww3y2yGiykKVq4Eu+jFTMRbbhDnidL1361WipZD47yVyJbFFLxoGlMBc3hUoptIUTM6/8wNVymPCv7NpeCFPXoS8DuQrd9k8A4AAA==
 
 [Logic25]
    ID = lgc.Pillow
    Description = "Close up of the pillow in the coffin. There's a clue stitched in the lower left corner."
-   CRC32 = &H9C813BA0
-   CompCRC32 = &H9C813BA0
+   CRC32 = 0x028ebbe0
+   CompCRC32 = 0x028ebbe0
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWQMU/DMBCFZ4s/8cYyQJPQpo0QXdiBsR3d5JpEOOfKdhp+PheBQCBvlTdbp/vevS9X66zaqhdqdegvBB6HIzkP7Qi15Qu5QA2Cxci+b1nehZfBcDY0EAdctBlJFRtl2vr+rTfGTuomF2iRqVcmWIfBCutobP0ui9Y1PetAXwn2dIKvHRFjsccO+bqC5mYpW4f5W25uY+x1rvYF7rDP4Ts7mgZHwu4JxbyMwzw6/B89InS9/75jEhjYBhl2WlprD/o4Uy1dY3nXC3oo0wmKsJMKiuSVmXq2HJw1hpwc3o6/3SHQmTT1wucfDJzmlrDI5JZVJS2qBNpXRTrtEXZS7ZG86wXJxckERdhJBUXyrhdUbtMJirCTCvqb9wlr7qhK+gUAAA==
 
 [Logic26]
    ID = lgc.Walkman
    Description = "Close up of the Sony Walkman. Player can load/unload the cassette, pause/play/rewind/fast forward sound tracks."
-   CRC32 = &H5EA8306D
-   CompCRC32 = &H5EA8306D
+   CRC32 = 0xb45d3c22
+   CompCRC32 = 0xb45d3c22
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWZwXLaMBRF157+xFsmizbYYAPTaTbZp6tOYSnMi/FElhjJJu3fV9BOO5O5q1p3B8g61+8gnmVTFvViuymetTNjf1Fx03DQEMUElda7i4ZRjzJ6mVzsO5deVzENDGerg7pRLsZOmhiF7dpP3419HYwrPpTpk2pRfHUqPsjgE+xgffuaZvpw7J0Z9XeEf3mR2AZVJ3c7eZSy3opxx4c0a39926zvIbwui10lH2VXSjz5yR7loPL4RarrbNlfh/bvhz7LeOrjnxN5660V58c0eDKpbhNFf5y1TdXCwAyOtkxHAM51BALnO2pK4GhbfIu969LRNpV8OzDeNMhgfsrtzCZ3Dnrs29EcrErQONkxQlqzKJ68G4O3VkM6u276Fy+p8mu5b32S4P7WKsG4TuVukYSttvdFs2aUvmb+hBCcujxQ4HxHicBzhOBURyhwvqNywVxIkE61BBNzaFpRNQE6WRNIzNDsyhWl25V1zdSP6Fz9KDGD/qoEX+t8/VWFLrS59EM6VT9MzKBpyeylkM7VhBJzaKqomgCdrAkkZtC0olzwq3rJaT0NZ7FsmPdBkM5dLChxvqYldX8C6VRNMDGHpoaqCdDJmkBiBk0V6BH5NCE6VxNKzKBpCTa7+TQhOlcTSsyhidnCIZ2sidPCa+YmG9K5mlBiBk1r5u4R0rmaUOJ8TSvqcx1Ip2qCiTk0MVcTpJM1cVZTzdxeQjpXE0rMoGnNbOGQztWEEjNo2lB7E6JzNaHEHJrQzcp//731HvcLxucUQMsdAAA=
 
 [Logic27]
    ID = lgc.Statusbar
    Description = "Manages the PPDemo status bar, to include game score, clocks, sound settings."
-   CRC32 = &H4F280782
-   CompCRC32 = &H4F280782
+   CRC32 = 0x2c6e0b60
+   CompCRC32 = 0x2c6e0b60
    IsRoom = False
+   Warnings = H4sIAAAAAAAACsWWwW7bMAyGz8JegqetPSyL5Hi10a2XnAZ0K5Bi2FmRGUeALAUila5vXwZFgWFzT3Xmm0QT//fbpChrVS/bRv3A3rI/IsQybDET2IzgUjxiZuyAE5RIvo+yNiQPhkPAASPD0YaCqmpU6N3ini0X2tqs3mnRNa36ST72kh9Sfk4luAFdw2AfYW+FV+IhY+cd221AyEglML2id7VU36Ko+A5cySSSh0SefYov2juJuYA2Lxh/8yKj45PZwcbuGjYa3sPGwFCIYYvw5atZXcP6FF3/Ga1aVa9G+HrZqvVfXE+QdjsglxEjXGzufsn7mRUI8JPkre9uZV+1l0q8T61YTa3YTO6xGfM4Qb81n6ftt3G9/9dvTTsvvzWjdVqp70hkeyE9eN6DMDB2UhO3t9k6PhXuQpvmo6nrS4CHFD8wdJ4OQT63S/nkJzyCjzAkoTmfXRmIbXRISi9ngdZzQEfH2ZmhWs8BHRucZ4dezQA1Y8Py7NA5jkw1+UWjq/FT+OZ7QU/9I/Kv4BP3tj97MQkAAA==
 
 [Logic28]
    ID = lgc.InitToolbar
    Description = "Sets up the main toolbar when a room is first loaded."
-   CRC32 = &HD23F85B6
-   CompCRC32 = &HD23F85B6
+   CRC32 = 0x1f06545c
+   CompCRC32 = 0x1f06545c
    IsRoom = False
+   Warnings = ""
 
 [Logic29]
    ID = lgc.ToolbarFunctions
    Description = "Provides all the functions for toolbar interactions."
-   CRC32 = &H74ECAB72
-   CompCRC32 = &H74ECAB72
+   CRC32 = 0x8644f415
+   CompCRC32 = 0x8644f415
    IsRoom = False
+   Warnings = H4sIAAAAAAAACsXQQUvDQBAF4PPin5ijHixJaFJzlGKhFLzoxeM2GbaLm5kwOxv137sRxFNPteQ2MPC9xytNXTSF2TKpcAgoYMWlAUlhsiEh+AjECh9eT54AP0fsFHsQSw7htoB7WLd3Zt2a4LrVK3M4Wtkl6tQzRXNT/o+fifN++2Ce0Vn1EwKl4YgScwpCxzShzJoyJIreUb6rmB/DGPCvhNk0y/FNbSLq6h2/YLRiB9TfgHkXOxO+h8eX7X6f5R6BBQ5Pbz/3tYuX1WZB/6Jlrl29qssF/YumOUt/A8jLo9ANBAAA
 
 [Logic30]
    ID = lgc.TerminalFunctions
    Description = "Provides additional functions for the Terminal Control Panel logic."
-   CRC32 = &H78783FF9
-   CompCRC32 = &H78783FF9
+   CRC32 = 0x9beebb3a
+   CompCRC32 = 0x9beebb3a
    IsRoom = False
+   Warnings = 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
 
 [Logic31]
    ID = lgc.UseItem
    Description = "Contains functions to interact with items in player's inventory."
-   CRC32 = &H3DD32BB2
-   CompCRC32 = &H3DD32BB2
+   CRC32 = 0x88c9d419
+   CompCRC32 = 0x88c9d419
    IsRoom = False
+   Warnings = H4sIAAAAAAAACjPkNDWwtOD0S01PLMksS1XIK81NSi0qVkgsSlVIzs8rSy0qSU1RKMlXKM0rzkzPA7KNioESuQU5qbmpeSUKZYk5pamcxpacOenJeqHFqZ4lqbmc3IZUMdXECMVUADMAxvSrAAAA
 
 [Logic32]
    ID = lgc.ExamineItem
    Description = "Contains functions to display full picure images of certain items in player's inventory."
-   CRC32 = &HAB13F3D6
-   CompCRC32 = &HAB13F3D6
+   CRC32 = 0x18fc44fb
+   CompCRC32 = 0x18fc44fb
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWUy07DMBBF1xY/McuyAOL0RYTopmKBhKiEhGiXbjKkFs64sp0Cf8+kPIXqVeNdrLHvnTm5thTjrLgU91iroHcI1DZrdB6UQygt7dAFrCBYaMnrmvg791xotgYbpAA7ZVoU+VSYujy/eVONJrwN2IgTycp5JhaEYB00lgXXxpYvfNq6SpMK+Gljn5/Blw6RYLCEGchxAYqqCz616paT6WnUYCzFMoczWErwG9uaCtYIs2vIOwVYdaXV/9IVhI32X828amOAbODiRvH8ygO+bbHkqaOmx/MaZol5xQyS8oqZ9sCriPAqxKPXVPMJw+PvN/s9EmjUO+w7bGnrsNJlUGuD4NC3Jvio4iQTc0vBWWPQcZd1+9sGMIVu9FfNQOhnbnCKaoRBxvBGxakYDVNhmESUe4tNzCBpbGKmPfC67Ds2EUWZFWLeOs9iW+t10Ja6sPxF/rB4Yod89M18vrjj9ZDzMj18bY7TlAk08wSah//9cZqjVHmajvvOU0zx+F6lTP1YRB2SvhZR1x6Q5YdvTY/IYg5pkR1w/QDXfFhj+AkAAA==
 
 [Logic33]
    ID = lgc.ScoreHandler
    Description = "Manages player score. Score can go below zero."
-   CRC32 = &H8BB1820
-   CompCRC32 = &H8BB1820
+   CRC32 = 0x32f42726
+   CompCRC32 = 0x32f42726
    IsRoom = False
+   Warnings = H4sIAAAAAAAACq3MOwqAMBBF0XpwE7MCUUHRHVjZuIIYH0FIJjL5rF97W7sLF05PY7fMtMGZfFWwlHBAExsF2ygVmnFyjlwkXU7eHtI7wu0RIJmr8QU0DuSdbXcbFauR00Op6X+hp/lLP+S3r8a1AAAA
 
 [Logic34]
    ID = lgc.SetSound
    Description = "Needed to set the sound parameters for sounds that use the default "
-   CRC32 = &HC30437CB
-   CompCRC32 = &HC30437CB
+   CRC32 = 0xc114060d
+   CompCRC32 = 0xc114060d
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrXSPQ+CMBCA4bnxT9yogwTkwzAa4kAcmRwbesHG0pJy+PHvVUZTJ87tpufeXC4ReVzEonKWvDMGPUjfTT1agps0E4IewTqCu6aLtoCPAVtCBV7aDmEdwxayciPSnTBdGzVIjZusEquEx82SkJuLESm64hMG6WWPhH58+ziL8rNAKzg0VV1D6xSC83A6nuf5h8hQmrKXBsXlpXn2J3fPfYGwyFBaspcGxeWlBfv/f4svdnMMvAEEAAA=
 
 [Logic35]
    ID = lgc.SaveOptions
    Description = "Writes game settings to the PPDEMO.CFG file so they can be restored next time the game is run."
-   CRC32 = &HECC1E3D
-   CompCRC32 = &HECC1E3D
+   CRC32 = 0x0e129401
+   CompCRC32 = 0x0e129401
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrXQsVLEIBCA4ZrxJbbUQg1o9DKO9wheYZOUXLKXMBLIAIk+vmS0ctyO7cjssD/5pKir5iDecNTJbAhunc8YIuiA0Hu3YUg4QPKwumhGl88q5sG8WJzRJdi0XVHIqhJ27O/e9YanJRnvoriSebWqxMkh+ACzzxvP1vcf+boPg3E64U/HXy4Q+4Do4LqFI8i6Ae2G+3yr2z+fnm/oQi1Fq+AWWglx8qsd4IxwfAW1r4BuH3V/Ry+QJhN/X/NprAXnUx5OeTnoCPi1YJ//m66WIHtgJyMKzGREtQRZw05GFJjJiGoBMqm4yagCLxlVLUH2yE5GFJjJiGoJsgM7GVFgJiOqBchUzU1GFXjJ/ql+Awa256tkCAAA
 
 [Logic36]
    ID = lgc.CacheOptions
    Description = "Caches game settings so they can be restored after a game reset."
-   CRC32 = &H5318124A
-   CompCRC32 = &H5318124A
+   CRC32 = 0xa51d6d45
+   CompCRC32 = 0xa51d6d45
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrXUsW6DMBCA4dnqS9zYDm0DCQmoapbuzQqjgQtYNTayDe3j16idqt4U3wY62T98w2Wi2FWleMdBBrUimGVq0XmQDqGzZkUXsIdgYTFeDSY+5z4OplnjhCbAKvWCIq+EHrqnN9mNeJmDssaLuyxene/ExSBYB5ONN7badh/xuHW9MjLgT8der+A7h2jgvoYzZEUF0vTP8VSzvR5PD3ShyESdwyPUGfjRLrqHFuH8Cvl2BTTbqPk7eoEwKv/7NZ9KazA2xOEoo4D0gF8zdvG/6ertZPuMm4wssJKR1QRke3YyqsBLRlUTkBXsZFSBl4yqJiA7sZNRBV4yqpqAjH39kwVeMr71f2Bf/2SBlYysJiBjX/9kgZeMb/0fD9xkZIGVjKwmICvZyagCLxlVvZ2szLnJyAIr2X/Vb/nsZW8wDQAA
 
 [Logic50]
    ID = lgc.GameFunctions
    Description = "Game-specific functions."
-   CRC32 = &HF91D3FF0
-   CompCRC32 = &HF91D3FF0
+   CRC32 = 0x521c17f6
+   CompCRC32 = 0x521c17f6
    IsRoom = False
+   Warnings = H4sIAAAAAAAACs2YXWvbMBSGr8X+xKE3SVjb+aOJE7oVxj66wLbCVmh6qdhKImZLQZKT5t/vyG47GJNv4lN2ZyPrvO95dHSQHLNxlEzYp7WGQhqRO6kV5Fwp7WApwAoHtZVqDW7TvJ3jV5DrquKqYOmYlev8/JpX4nOtmrmWvYox5GzKvos1d3InQNXVUhgL3AicqXbCOFGA01ArK9cKnxPrQ25LUQnlYMfLWrDxLBQ7idiNEqANVBpDLkud/8L52hRScSdaIb1agc2NEAqGC7iCeDwDtPwGZ93710k26pAYx2yRwBksYrAbXZeFZ3H1DhIfA+790P3fQ5eISNpHO3tZltAy3HBkwC2Ihy3iFUWH7PHUJjE5tbAEKbWw7PHUsotgSgmbr+DHzV1jdtzsgq3B+Q6sM35foPnC8L0C7iCvjfFRnXhoXixyw8R4s6mGS+02TShP48PNVzS5rr2L1i7aw4UpRh1uesh0Sl4fYQnS+gjLHk9tmpBTC0uQUgvLHk9tRt+LwhKk1MKyPVDL/qdeFHbTQ6b0vSgsQVsfhL0ojiJybB0apNw6dKOM/WyL/KlSWx6+5n20vUQN9RwKDFdrAcMI/SSpzyi4ZacpG5wglZOBj8Xh2uh6CxHskdsp7Dcy3zQD5Z4f7NPOgOUB3l/PT8FqkO4xKYFL6HMuhGtN4Ed+kw4sl8Xg+dSchLM8vjzSJFh7ccYGVpSNtbkT1QCGu2Q8agmaipflAdM3ghdnWuHzjhvJl6W4hHyDNJsGg62kWdlm6Wr1B7ewdeksSy8mhLm9wJ2gQ4O09Dt0J1N2i1VUCWs51vRSP0DFD00g3+0xTeMvbrhictX08rdoCXMa+ufX8O394m7+8fbLCFNMZyydUFbfC9w/OjRoV4jyBpJmwat0f+DCGrTgwrrYlW99kMfW+Jycclwq35aeRiybkF6LInr8HRq0F6Owbh/gggfEHsGFj8S04AgPv1n8AuDCGrTgwrp9gKM/BHRoEIMj/DWYhf/W9gcurEEL7p+6vwGaHbhd3BYAAA==
 
 [Logic51]
    ID = lgc.Init
    Description = "Initialization - this logic is called once, when the game first starts."
-   CRC32 = &H2105635A
-   CompCRC32 = &H2105635A
+   CRC32 = 0x1363ff5e
+   CompCRC32 = 0x1363ff5e
    IsRoom = False
+   Warnings = H4sIAAAAAAAACm2RQU/CQBCFzxv/xLsVDyrbphVi5GaEg5KoiXDctlNY3e6S7hbh3zsLxBjCsXmdb958K0U+zDKR+DRLoD2U6UjVe9TUaEs1yj2SRhuyqqVEpLkwq+p2ZnUQV5JHi0x8rAlv808oW2P6NHuefqBybamtCtpZ+A1VutGM+tHGwLqARgdwEnjQVx2RFfnojDseiVdaMWFLsH1bUsfVOmKy3VIXmBYceuv1KpZMfVy5MdSSDdgq05OQqTxjpkMxtwTXoXWMKo2rvnnOdXXsSscFrmlOpTBYYAKZj+Nldzy1jJ/F/fUFdC7FIsUNFhJ+7XrD3giTR6QHK8sYLc+jBxbAwo81/tyUtFZ8s/KgHZvjSy+sGxZiXn5xenLD/1ZEtceL2r0fyp/igwpgIIvY+t/j/QLOs3Zg9wEAAA==
 
 [Logic52]
    ID = lgc.RoomInit
    Description = "This logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms, inlcuding setting the correct graphics mode settings."
-   CRC32 = &HE003FF35
-   CompCRC32 = &HE003FF35
+   CRC32 = 0xf1afa48b
+   CompCRC32 = 0xf1afa48b
    IsRoom = False
+   Warnings = H4sIAAAAAAAACs1WUWvbMBB+FvsT99hBu1mukyaUFcbYQ2CkZUkheZTtiy0mn4wkJ+t+/WSl26Cobxbdm2Xpvvvuu+9scTbLlgu2xkY4eUSgoSvRWBAGodJ0ROOwBqdhICsb8s+59Rtdr7BDcnAUakB2PWeqqT5817pbkXTsHU8Hm2fsnhC0gU57tFLp6ocP1aaWJByec+jDAWxlEAkudnAHfLYEQfVHH7Ufl/Ob93H0GWe7HK5gx8G2elA1lAh3nyAfw2E/bu1fbt2Ca6V9ZnKSSgFp5zdb4SsXFvBnj5WvN5VMRR6BLQq2vX/wSM0QjnqCTmtQ/gXeQq+Nk5qsF8qTR+iVeBqzijP/Mih4dVbwMpTeGNG3srJwGKg6x/45OlBvsJaVE6V6hc0ERc5SeiGKntQL0YzzjH3R5IxWCs2/3gUFxg6OWCfpM9BfIDCCGoSLzLMplr6SZRL5F4sksDyLyZAKdzK7xOGT+iWdUrGP0pt9PeJ0pigzNhcTGiIGn9gQaSad80RGi+JO14EofNoOJFPq/xrJOJ0FW60fHrffVuuvAW+z/bx93JyXvtyRhBUdXsLJZ2lHuoMdhFJPQc4arTRBw0TzzmM/rAndFoNP7LZYyoKzDTonqQmKt9rIX5pAofX2aAV5ukF6CuIznhdprh38+iZNH1/eZ34DBTNmjLEMAAA=
 
 [Logic53]
    ID = lgc.RedrawRoom
    Description = "After close up logics are done, this logic handles restoring appropriate settings based on which room called for the close up."
-   CRC32 = &H6B1B8F7D
-   CompCRC32 = &H6B1B8F7D
+   CRC32 = 0xc47507fb
+   CompCRC32 = 0xc47507fb
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWSMU/DMBCFZ4s/8cZ2AJJA20SILuwgVUJqRye5phbOubKdFv49TkAgQTO13myd77133zkVs6TIxTM10qsDgbu2JOsgLaEyfCDrqYY36NiphsM5c6HQ7jW1xB4HqTsSi1ToprpZUW3lcWVMK67SIJwl4oUJxqI1Qa/UpnoLzcbWiqWnLxez3cJVlogxWWOJdFZAcn0bujb9db6YjumfHzyfxw0+oj9PxJNhb43WZINY0/1mgnJg43FUfqcY9L6nqh/FSm4IkwTXuC+mIshHYpIu7uJCGTOYpWKdhfHWKdzOdLpGSVg+IusVsOlLm7+lBwRK7jvMUWk9sCtpJ8P80v3gGzW9BK/In2jMIDKv06aX4FWc5lWIV6e4CR06jD88dgMStPIDQ8KO95ZqVXlZaoIl12nvRhUvkDXPI+92xCDubv+bfgKG7PhYCAYAAA==
 
 [Logic54]
    ID = lgc.Death
    Description = "This logic runs when the player dies. The commands and options available are limited when a player dies."
-   CRC32 = &HB438EA83
-   CompCRC32 = &HB438EA83
+   CRC32 = 0x6347cbb8
+   CompCRC32 = 0x6347cbb8
    IsRoom = False
+   Warnings = H4sIAAAAAAAACsWaTW+cMBCGz6h/Ym7dPSQFDLuLqkaq0h6iqu2hqpQ9OuCwKGBWtsnHv6/Z5qOtp6eFN7eNLL/vPNieAWeSKI+LTfRN1dI1t4r00F0pY0kaRWWvb5VxqiLX06BtU2v/O7V+oNu3qlPa0a1sBxXlWdTW5eknJd0uepN4zTSOvmtFvaGu91JXbV/e+Hm9qRotnfpt0F9fky2NUpoWl3RGSV6Q1NU7P2s7/rlaLxnpPIkuUzqhy4Tsrh/aiq4UnX2gdJxL23Fo++/Qe3K7xj6Gcde0Lene+cGd9MzSkrrfq9KTMnarODrvtTN92yrjw66HF3DymqPQXePl9bMKGalrRYvYh5IVyyhZ57OoFoFqHlnlTm/UA+2lkZ1yT2s56slRvqno44/ziwu/GNVhfb583h5+s3oTRLlJp42S0ZsiynCFjosy0CtE9NM2uh6P1RgrlTsvWx5UN+PkRJCPsFPWSh+aU/fu9041yg6tG8caXfbGeID2garG7lv54FEeZ9gojdeBaRZ9fRw+PAL/AJzSlZ/1h/siSTcnaZ4vie56/dY9adOL2xhYbx2VjSmHzjqpy/8YAiiDbTo3ZWg4P2WSgCkZQwClQFOGhgDKMBnMTPka2SdBZx/GEECJzj6M4fyU/vUNS8kYAijROZYxBFAGL0xzU8IN0VUkDb4S5jbcgA0FOgGI1yjMYoWmhBuiy1WGPvwZ+ixm4RrOv1Mz+Dq+xmtHji7IjCGAEl2uGEMAJfqjhzEEUKI/ehhDACU6+zCG81Ou0NmHMQRQorMPYwigRGcfxhBAic4+jCGAEp19GMP5Kdfo7MMYAijR2YcxBFCisw9jCKBEZx/GEECJzj6M4fyUG/R9D2MIoETnWMYQQIm+gmEMAZToSsIYAijRt1uMIYASXS/xhsGl4frZ8NCjMvgHtoipVbp2u6WfgC6uBboCFOg0VaDPUoG+7S/A/yYSMXjTiBi8aUQM3jQiBm8age4aEzF8l4Jf4UWCPhZM89bRTb0i7K+ZrKuX0Z61rZfxm6BrVIT9HJOoTtuLyulNEWVwio+MMtSbIEoRrtBRUf6l9wvyXJ+4PS8AAA==
 
 [Logic55]
    ID = lgc.Error
    Description = "hen AGI traps an error, this logic will display information on the error and then quit AGI."
-   CRC32 = &H7B6C6F0C
-   CompCRC32 = &H7B6C6F0C
+   CRC32 = 0xc78ffb20
+   CompCRC32 = 0xc78ffb20
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWQsVLEIBRFa8afuKUWakCz647jdrbaJiUhbxNGAjtAop8vGS0c2TJ0vLnzzuUdzurq8MTeaJBRLwQ7Tx35AOkJytmFfKQe0WG2QQ82vUVIwXQ2NJGNWKSZiT1UzAzq7tV759kVT0xRsXdLcB6TS6jOOPWR9pzvtZWRfgrc6YSgPJHFdYMjeH2AtP192mrXcbe/uYCuOWsEbtFwhNHNpkdHOL5ArLto16j9Hz0jjjr8fuNTGwPrYgpHmW6WAfR1JpUuvVC3gR1ezk6GLmsnq9vAjihnJ0OXtZPVbWDnsZydDF3WTla3gZ1dOTsZuqydv3XfpO96UJUFAAA=
 
 [Logic56]
    ID = lgc.Debug
    Description = "When debugging, this logic handles all debug commands."
-   CRC32 = &HB67F0965
-   CompCRC32 = &HB67F0965
+   CRC32 = 0x79f1f920
+   CompCRC32 = 0x79f1f920
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWYPW/bMBRFZ6F/4o3J0EZiLH+gaJZ2KdDWQJfaIyU9y0Jl0iApJz+/lL0UedzMu1kgeO7lAZ5pqyrqcrMufnGvw3BhMtOpYedJO6bWmgu7wB0FS5PxQ2/iZ+Xjwuk88olNoIseJy6Wi2Ls20/fuJn64kMVmbUqvh/o9/YPvXwhVVM4Mp1d3BfIBzeYngZPndOvhnSgdnJupgV+uz5462i0baxkDT00NhyvKG06+rr9Ecv105x+qxlrWcfdY6JFhpPV75mqLLaGKTY8xVhqYs+/cZ913WB04FuAPRzIt4451t/RC1X1Zm7/FHft58fl6jGBrqtip+gj7SryRzuNHTV89Xc9+X5e2r9f+hzVRpW3Gq/DOJKxIS4edTyz9sRvZ27jSRNxGeyscHYEGmtHxGWws8HZEWisHRF3v51VCbMj0VA7Mi6DHYWzI9BYOyIugx3cZEk01g5gstbPMDsSDbUj4+63U5VrmJ4EG+onkZdBkMJ99yTYWEEyL4OgRYUTJNlYQTIvg6AaOGKSjRUk8zIIAl7vCTZWEOKCr9ZLnCDJxgqSefcLUiXuJ1CCDRWUyMsgqMKNWIKNFSTzMghSuBFLsLGCZF4GQcBrPsHGCkJc82qJ+6ORYGMFybz7BT0vcCOWYEMFJfJyCMK9QEywwYJE3mpR/GTvdc/z224zxc0PJY1s+nCMBev/r71/P83qFokXAAA=
 
 [Logic57]
    ID = lgc.DebugHelp
    Description = "Displays a help screen that explains the available debug commands when debug mode is active."
-   CRC32 = &HE7444CF9
-   CompCRC32 = &HE7444CF9
+   CRC32 = 0xe4e838da
+   CompCRC32 = 0xe4e838da
    IsRoom = False
+   Warnings = H4sIAAAAAAAACsVYTU/cMBA9R/0TcytI0K69m7ARKlJFKxWJsqgsKhy9yZBE9dqR7UD590yyReqHc2kMvm3W9ntvxuNna1iSzvJlcoGVcM09guq2GzQWhEEotLpH47AEp6FTtqkU/eaWBratxC0qB/dCdpjwo0RWxbtPuOmqLyjb5A0jXD5LVgpBG9hqgttIXfygtdqUjRIOdyT67g5sYRAV7N3ACbA0B6HK97Tqtv/MjvZH4FOW3HA4hBsGttadLGGDcPIBeL8ebvuh27+HjsHVjf0l5aGREpR2NFgLil1YwJ8tFhTxCOX0TM0zb6by5No2qqL5kgIfptohGbAVjzCo61RrsGwKJzYSwaDtpLMjeNN1LrgPd7FI1qtLgqq6YS6l0mkNkv7AY2i1cY1WlvaU0ozQStJOtGKX6c2w2Ye7zT4YNqkyoq2bwsJdp4rd2uepf4Q7JmeZnF1cXq/Pzy4+D3hX64/r66vdJ4Xbi7BiiwfwQCx1L7eznZDycdj2Em1DHCPg+SL5itaKCntRrqbacKhKyldRCyOoSiipe4wvD3ma7gM8aPWWMBs7hF1oY6iSiKlRVP7WQdGYottaJ1SBNiHpr8+Zvz5nOovAySJwRqihdB6BcxGBM43A6ffVl+X03zkvyxnBh9IIPpRF8KHM50NsliennbF0zbfaNv2l199Lvz+Dvq2+093PF8/voNPVOX3P8/0ki+AyWQSXySK4TBbBZbIILpNFcJksgstkEVzmyOcyk0780hfFJMQ8uMY8uM/lPp+bhuhzsWmIPo+ahuhzoGmIPn+ZhMiY7yhPhAxe44wHL3LGg1c548HLnPHgdc548EJnPHilMx6+1L09oImQ4U8PD3965uFPzzz86Zn7H8OTW19s4e0f/H+PbgQwgFJ/p2OC0pHWSQCl3hd9sA7xCP6Ltoj/5XwCVYjKbU0XAAA=
 
 [Logic58]
    ID = lgc.TraceInfo
    Description = "This logic includes the text of agi commands used by AGI's trace function."
-   CRC32 = &HCF9EE49D
-   CompCRC32 = &HCF9EE49D
+   CRC32 = 0xdf9b7b28
+   CompCRC32 = 0xdf9b7b28
    IsRoom = False
+   Warnings = ""
 
 [Logic0]
    ID = lgc.Main
    Description = ""
-   CRC32 = &HAA0BD610
-   CompCRC32 = &HAA0BD610
+   CRC32 = 0xf392bd63
+   CompCRC32 = 0xf392bd63
    IsRoom = False
+   Warnings = H4sIAAAAAAAACr2bTU/bQBRF11b/xNsFFlB/21FVJIpYoApaURZkVRl7SCycMbIdaP59x6BUlW9FF3mXHciZc+3jmcnzeBJ4iR9F3mwdzKTupWg6U1Rbqcx9bU0ld1uZnX27/H56ff7z5vz2ZubFidcsy+PLorbeh2DXOvxv6y8XV6fXC9c+nbSf596VWRZD/WTEbtZ3pnOgzkjZ2ifTDQ4ztLKxfb0ckWHvDqwfG7M2dpCnotkYL4snyND3vlkjbSfr1pHumrZ8cM3arqptMZhXfnt/L33ZGWPl4FZOJEjmUtjqo2u1GP9Ns0MkJ4F3G8qR3AbSr9pN467RyMlnCcemshgPLaaHPsmwcnJez+K5bhqx7eAOrgp3xUUv5tejKd11Ytr+aoJwznKDaKocjJvH3qXp+2LpTvq5Hlbus4OxlTNRroqucK2croMgzI/CJDkUeW7tbJCq7h+bYusuuescudlKbZ2KfpCy7srNuh8KW5reC2K4G9y85J3z0vCd87JJXvYnb5w77Mbd+wNfGmOXw8p1ryzXHw0ZbzQAmjsaIG5/O2EEPWJ/ZhywjCOaahzjNOxMvwwV7UzRZDv6X+th5r8DM0283gzHD2Yrj26WW5thRx0vtRjb1ZWc/ji7uHC46uXefD1fvPz9D9zbk1o4n3YiP/BuRsXuTNfjfdjdcTu4jzhAuzvSe5GvXx9EYaTPjAjnGen3L2Tu1RcopwjVttoEgWjqBIFxCnaS6ejTswNorh2IU7CTTwsuPTuA5tqBOA070/JS0c4UTbajXyhHc17fATTXDsRp2OH1HUCT7ej3ndinFbWIptrBOA07tJGFaLId/ZEVB7R6B9FcOxCnYYc3sgBNtkMYWbylTkRz7eBS5/52IlqtjGiuHYjTsMPrO4Am2yH0nZjXdwDNtQNxGnamy6aKdqZosh39BeA4ni4wKdqZosl29JfK4phXDQKabIdQDfLWdxDNtQNxb68Txwmhr8ELRkWb7/qeHOMU7PA2ESCaa4ewjSDOeM9lgCbbITyX5bzvOEBz7UCchh3eyAI02Q5hZM151SOguXYgTsMOb2QBmmxHf2QlPq0+QjTVDsZp2KFtPUE02Y7+1pMk4PUdQHPtQJyGHV7fATTZDqPv0KpBRJPt6FeDSUB7O4hosp1p3NtPrUlI6GshrT5CNNcmxCnYiWj1EaK5diBOwU7Om6cAzbUDcfvbSX1a30E01Q7GKdgJaG+EEM21A3EKdlLam2hEc+1AnIYd2qo+osl29Ff1U96PMBDNtUP4EUaa057LEM21A3FvV49Zpl89ZhmtekQ097eBELe/nZy3Uw/RVDsYp2CHt9sK0Vw7hN1WOe8pF9FkO/p7YHPenhBEc+0Q9oTkvDfRiObaIbyJzhPevANosh3CvJPQqkdEk+3oV495+lcN9Rvq0eRJ20EAAA==
 
 [Logic60]
    ID = lgc.Version2Check
    Description = "This logic scans the loaded game's memory to determine which AGI version is running."
-   CRC32 = &HCDA3F77F
-   CompCRC32 = &HCDA3F77F
+   CRC32 = 0xbb575e0b
+   CompCRC32 = 0xbb575e0b
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrXTMQ7CIBQG4Jl4iTfqoOFBKe3sEUzcCb5QYqWGUvX4XsDN/Bf4to+V09qrS6u5JAo1bQ8pjV5h3oTySmVp9M5tyoXk85TY5EY1lCS013QkYw/K9GpO8XSVuualmPMk8a52/D9sLQjuNAr2INh1ILhnFDyAYO9A8GBQ8AiCR9Q81qh6zKh7zL/yfQGSo1qi4AQAAA==
 
 [Logic61]
    ID = lgc.ValidateVersion
    Description = ""
-   CRC32 = &HA37830AC
-   CompCRC32 = &HA37830AC
+   CRC32 = 0xf821aa24
+   CompCRC32 = 0xf821aa24
    IsRoom = False
+   Warnings = ""
 
 [Logic43]
    ID = txt.Memo
    Description = "Displays the memo in response to a 'read memo' input."
-   CRC32 = &H4E8BD777
-   CompCRC32 = &H4E8BD777
+   CRC32 = 0xe3739539
+   CompCRC32 = 0xe3739539
    IsRoom = False
+   Warnings = H4sIAAAAAAAACr2WTY/aMBCGz1b/xJz6Ie2iJJACoq20QntA3YXVAoceTTIkVhM78tiw/PtOQEjd0FNDuCX+eOad15NxQhEH44F4RiKZIcFeuRzwzaFOMYUkl1YmDi3B5zAa3Udx/AVgb/QnB6miqpAHSIy1mLjiAEpDachBomziS3JSJ0gijPrCvbneM5ZGfAjreCMxx0w6tUPQvtzUeGmRSXqH1nFcZ8BrUpnm54h4oqwKLFE72MnCo4iGDeRgIFaLF6Zk/rhMETMMFDyAE6iMdcpoArMFlyMcdXNEyekWBWyQJ7b3lFhEfQdSp5BZWeUqIdh6nZz2npd6XVlMVeLkpviXkpGYzV/Wq6fZ/PGIWq4eVuvl6ZWTrOOTLPEO9hwgr5V68rJg/7RhV5EU4y+5VzBt1EBGY7EmpTNeWhh7WkXwA8IYSjYol7tGtmCRfOHoEjUMxEwzQHHNeEtMqwyp2rgzdstjSYHS9hyXV68umVpiyRZN4DWEj/AaQem5fNjjb9+jwQSm9ej079H+WPSDpjGdVm8/vPo5DC8yuD7yaywIXe83HqBiE0p0Z2hdZBJOR/WwnM5mTEv5A7Dw8/HX8bkTgR3Y2ES2y7kDgVH3yHY5N2m3+4qH8fW9Gb9HhkEgpounxetpHgx3XsvtV2oIjvcD9/+aK4kb3sXuG3oxuqiTTjvauNm721sfBrdgtqr1biQ2i6YLZsu0O5AYXv9+uGS2S7sTic3/2P//f3rH+gN3s+wGgwsAAA==
 
 [Logic42]
    ID = lgc.HelpText4
    Description = "Contains code to display help topic pages 13 to 17."
-   CRC32 = &H785DA86
-   CompCRC32 = &H785DA86
+   CRC32 = 0xc779ec3d
+   CompCRC32 = 0xc779ec3d
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWUTUsDMRCGz8E/MbfqQd3sR+si9lIFD2JBhLbH7O50G8wmS5Kt/flOLYKU9LTkljDM+/EQwlmRZDmbGNW8tOZZ2glIB2aP1spG6hYEtMpUQkGDW6mRpTOm2vruFVX/iQefsytOEuUDe8dWeLlH0ENXoXUgLEJtNEl5bMAbGLSTraZz6mjQ9Qo71B72Qg3Ich7STRO21AjGQmdIrlKm/qJdYymb8HgyMdstuNoiarhewxx4UYLQzT1tbY7X6ezmgnzB2TqFW1hzcDszqAYqhPkTpMd92BxHm/PRI/gdITpF+ZZKgTaehjtB3YUDPPRYU+OwJU9Kthiso2y9cdJLo3+B/6vwsVxR6jT/67BYvtE9K6lEGod9mURlH5aPyj5oOYp9GXxA49lznkeFf0E/Kv2w5yj8nBeR+GfTuPzD+nH5Bz3H8c8i/fu8yOLyD+vH5R/0HMd/es7/B3/HXYu6BwAA
 
 [Logic41]
    ID = lgc.HelpText3
    Description = "Contains code to display help topic pages 8 to 12."
-   CRC32 = &H10D70C70
-   CompCRC32 = &H10D70C70
+   CRC32 = 0xb8677e55
+   CompCRC32 = 0xb8677e55
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWTz0vDMBTHz8F/4t2mB7Xpr62Iu0zBgzgQYdsxbd+6YJqUJJ37831zCDKyU+0t4fG+Pz4hnGVRkrKJUfVzY56knYB0YPZoraylbkBAo0wpFNS4lRpZnDPVVHcvqLoPPPiEXXGSKGbsDRvh5R5B922J1oGwCJXRJOWxBm+g1042ms6xo0HbKWxRe9gL1SNLo5BuHLGlRjAWWkNypTLVJ+0aS9mEx5OJ2W7BVRZRw/Ua5sCzAoSu72lrc7zm05sL8hln6xhuYc3B7UyvaigR5o8QH/dhcxxtzkcP4HeE6BTlSyoF2nga7gR1Fw7w0GFFjcOWPCrYoreOsnXGSS+N/gH+p8L7ckWp4/S3w2L5SvekoBJ8HPZ5Mir7sPyo7IOWg9jn6Tjsp8Wo7MPyo7IPWg5iPwt+3uHseRR81H+Df0F/VPphz0H4eZSdSX4Djdjt+DYGAAA=
 
 [Logic40]
    ID = lgc.HelpText2
    Description = "Contains code to display help topic pages 5 to 8."
-   CRC32 = &H8C3C5066
-   CompCRC32 = &H8C3C5066
+   CRC32 = 0x43157c2f
+   CompCRC32 = 0x43157c2f
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWQTUsDMRCGz8E/Mbfag7rJfthF7KUKHsSCCLbH7O50G8wmS5Kt/flOLYKU7ankljDM8877cJYnacYmVjfPrX1SbgLKg92hc6pRpgUJrbaV1NDgRhlkomC6rW9fUPcfuA+CXXFClDP2hq0Maodghq5C50E6hNoaQgVsIFgYjFetobfwNOh6jR2aADupB2RpOcYVCVsaBOugs4SrtK2/aNc6uk0GPIbYzQZ87RANXK9gDjwvQZrmjrbWh29xPz2DzzlbCbiBFQe/tYNuoEKYP4I47MP6MFqfjh4gbEnR8ZRvpTUYG2i4ldRdesB9jzU1Ho/kSckWg/N0W2+9CsqaX+H/KrwvP+lqkf11WCxf6Z+WU5YlcdwXWVT34/io7kcjL3Jf5HHcz+K6H8dHdT8aeZH7WST3PBFR5Z/hR7U/nnmRfp6kJ8gfmVIDZTYGAAA=
 
 [Logic39]
    ID = lgc.HelpText1
    Description = "Contains code to display help topic pages 1 to 4."
-   CRC32 = &H95585E66
-   CompCRC32 = &H95585E66
+   CRC32 = 0x3730fe9a
+   CompCRC32 = 0x3730fe9a
    IsRoom = False
+   Warnings = H4sIAAAAAAAACrWVP0/DMBDFZ4svcVvpAMTOfyG6FCQGRCWERDs6yTW1cOzIdko/Pi4ICVXpVGeLdfbv3j1bL5SkUZyQmZbNU6sfhZmBsKD3aIxohGqBQyt1xSU0uBUKCcuIbOvbZ5T9Ox4cJVeUpDQqyXIwVhvotRVOaPWD2W7B1gZRwfXb6gMWwBLgqrnz+5arF7+OyzlJohFiVBbkFVvuxB5BDV2FxgI3CLVWXpzDBpyGQVnRKv/NrC90vcQOlYM9lwOSjI1xWURWCsEr6LTHVVLXn/6sNn5a7vC3yX/hay+TpuWf7s1xmeXzM/iUkjWDG1hTsDs9yAYqhMUDsON52BxLm9PSPbidd+tXypeQEpR2vrjjfnZuAQ891n7i8ZYXeZ/FwYlpcGIenFiGJuY0ODH4zeTBb6YI/h6LJDgxeF4VY+8xQF6Vo9xgeTWOnzSvRlte5L13eRLvKZv2Z3GGP6n74z0vsp+y4KlE49Mw/gYjfxVZkwgAAA==
 
 [Logic38]
    ID = lgc.GameHelp
    Description = "Main Help Screen. Sets the correct mode and loads the default first topic page."
-   CRC32 = &HB2E7CDF8
-   CompCRC32 = &HB2E7CDF8
+   CRC32 = 0xcc427fa4
+   CompCRC32 = 0xcc427fa4
    IsRoom = False
+   Warnings = H4sIAAAAAAAACr1WXU/bMBR9tvYn7tMACbomTUqrDiTUoa0aowiKRB9d5za1cOzIdtrx73edCGkf3hMtb4kdn3N8znGShOX9QcaOjCquS/NF2iOQDswWrZWF1CVwKJVZcQUFrqVGlg6ZKkXvK6/wG6qafUgIYZyxH+gcL9HBTvoN4E+PusACxIZbLjxaB8dJOjpL8/wEYGf0kYdCulrxFxDGWhRevYDUUBnnQUgrmsp5rgU6lmbnMc4Ru8WSe7lF0E21ChTcIqFpUu+J2xtotJOlpuvU0URVK6xQe9hy1SAbjCKwaZ/NNYKxpITQVsqIZ1pqLLnBPXYcZr0GJyyihuMnuIQkHwPXxSdatQy3w/OTOHqesKcUzuApAbcxjSpghXB5AWlYDsswtfx7agJ+Q5l0SnZSKdDG0+SG0865I69rcg+LOOPbbSLNEZvG7NGFfgijaNftk651AiqKtNXW6NpiIYXnK4Vg0TXKuzjcHlTmEdgsY4v5HSGVTfso2eiNAUUDOIHaWC+NprqvyWKEtozEyjuXV23OZ13Op21ApeX1RgoH60aLbu3ro39s9j9qRmx2e/e4uJndXrdwD4urxeNDd0ubDRocrTiFHZFsgtrGNVzRwQiJF+gkUcSxD3sCh9HMDko5TiOU530205S3JI7GOipebZwMQbw2cE1jQiG3PU9yeoEidKUiuydwn8BHuE+halw4QPD5Is0mMA2j099HB2OWxPiTfp9N5zfz+44NDCVmKTauod92i7oTukqHMsnjEHtoepoO3hF3mDOHvveML1BTqhX6V+TQSQ5dGlcP09mMIIv2zfn9etleH1Bq9o64b7TgUFKjr4ED4b7RggNJHfT3+mWK4+1BZxbVua8fjTj8Qf80/qH8BZOfHfJHCgAA
 
 [Logic37]
    ID = lgc.GetOptions
    Description = ""
-   CRC32 = &H52CBA40C
-   CompCRC32 = &H52CBA40C
+   CRC32 = 0xa3582b81
+   CompCRC32 = 0xa3582b81
    IsRoom = False
+   Warnings = H4sIAAAAAAAACr2bQW+bMBiGz2h/4ru1lbYOk5AQTas0VdNUTVoPuyRHStwElZgITLv9+5m0VaXN74nv3S0tyvuYx9h8NsEkeboqkh92V/r60YobDne266XsrFSte7Sdt1vxrQyur3cufM76cOBwbOzBOi+PZTPYZLZIml11+c3626OvW9cn70wIztLk1llpOzm0Ie+uaauH8OW229au9PaZ0t7fS1911jo5X8uVmHwlpdt+DN/ajH8ulhcoPzfJOpMPsjbS79uh2cqdlavPko0BshkPbf4+9En8vu5f2vJUN4241oeD+zKcfdmL/XW0VThnxFSQtSTLiudzZcWZCrIKsqx4PldWnKkga0WWFc/nyoozp8uap1xZIJ8qCzAVZBmyrHg+V1acqSArI8uK53NlxZkKsmZkWfF8rqw4U0EWuc4C+VxZrDorz7myQD5VFmBOl7Ukz1kgnyoLMBVkkSt4kM+Vxargl+QKHuRzZcWZpkjOSu+tG8rxv2cv8e5sDAkBL5bKZzOn83k/Ghjca7J0th8a3z/T26oauqRgFXXFnNszIJ/aM4CpIIt8NwH5XFlx5iJNrlvnu7ZpbBdOYDe8eZAQPKY91YHh5O26Ld3Oynka2jNfXSQmjfeDSjRr+WwMeapCAGonI6iCrxl5CY0AXF8AquGLXDcgANkXq3Iw7P0sBCD7Yu1oGfYuDQJwfQGoxq0kjw91jegF7966oE3oS3JFiADcCwhANXyR92MQgOyLtSNj2GtBBCD7+p+rQUNbDhr2ehABuL1DWxGagj36AYDsizb6C/boBwCyL9bdOEvJe7IIQPWFoBq+yPMXApB9seavLCXPXwhA9sWavzJD3u5AAK4vAFXwlZGXowjA9QWgGr7Y4xEAyL5o4zEj1xMIQPZFqydm7HoCALi+AFTDF7ueAACyL1o9MSc/IkMAri8AVfCVs8cjAHB9AaiGL/LjEwQg+2I9PskW7OsLALi+AFTDF/v6AgCyL9r1xf7NGAJwfQGowoObrADRedJbf/lgf8ux7MqD9a+dMYae9ofrrXz5eX1zEzxuT2q/f92cPuNQjfaCH3FMay/tlyEZ2Lqc2F4QqtDeFaO9KFSjvfGlycT2gtDp7Z2BpZRGNFh1TFIBQzXaSxjKMFSjvYShgUIVXrzKyVtdCMB99QpANXyxXxgFALIv2vXFLuURgPyG7T/QPxZOTYuPPAAA
 
 [Logic44]
    ID = txt.SafeNote
    Description = ""
-   CRC32 = &H33F43372
-   CompCRC32 = &H33F43372
+   CRC32 = 0xd3f9a49b
+   CompCRC32 = 0xd3f9a49b
    IsRoom = False
+   Warnings = H4sIAAAAAAAACr2UwUrEMBCGz8GXmAfQxZZ2tQiCiIdFWIXVg8fZdtoG06Qkk+q+veMue1B663ZvQ+afb/4/hCQqvy5u1ZoaZD0Q2NhtyQdAT1A6O5BnqoAdRBt0Y6VOgzS63lBHlmFAE0mlueJvXmywprVjUheJYNNCvQdtG5Eb5w/KAPeQ5NDhDlqUddH2nipdMm4NgacQDYdx3Alc3oxgs0y9vbwKqYl7qQ7CcWDkgO6gd561swFcDdwS9Eacy1aEL20MbEka9VUoPZG9BLQVNB77VpcB6mjLw+xR+ifsuJvpIfPsfNhlrgLx4pN20KPHjvgIto4Bf0d1BQ+bx9VKiJVclofnp499PZvRed7OKHZa/pmMLs+HnZZ/JqPFSb+i/7gf/W//CDAFAAA=
 
 [Logic62]
    ID = lgc.mod2425
    Description = "Patch code for AGI version 2.425."
-   CRC32 = &H36DB06B3
-   CompCRC32 = &H36DB06B3
+   CRC32 = 0x39eb5313
+   CompCRC32 = 0x39eb5313
    IsRoom = False
+   Warnings = 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
 
 [Logic63]
    ID = lgc.mod2426
    Description = "Patch code for AGI version 2.426."
-   CRC32 = &H6FB0D645
-   CompCRC32 = &H6FB0D645
+   CRC32 = 0x367bd27a
+   CompCRC32 = 0x367bd27a
    IsRoom = False
+   Warnings = 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
 
 [Logic64]
    ID = lgc.mod2435
    Description = "Patch code for AGI version 2.435."
-   CRC32 = &H39538791
-   CompCRC32 = &H39538791
+   CRC32 = 0x3bd49662
+   CompCRC32 = 0x3bd49662
    IsRoom = False
+   Warnings = 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
 
 [Logic65]
    ID = lgc.mod2439
    Description = "Patch code for AGI version 2.439."
-   CRC32 = &H5FA6BFD1
-   CompCRC32 = &H5FA6BFD1
+   CRC32 = 0xc1067217
+   CompCRC32 = 0xc1067217
    IsRoom = False
+   Warnings = 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
 
 [Logic66]
    ID = lgc.mod2440
    Description = "Patch code for AGI version 2.440."
-   CRC32 = &H47874FBF
-   CompCRC32 = &H47874FBF
+   CRC32 = 0x592fee66
+   CompCRC32 = 0x592fee66
    IsRoom = False
+   Warnings = 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
 
 [Logic67]
    ID = lgc.mod2903
    Description = "Patch code for AGI version 2.903."
-   CRC32 = &HF1E3DD29
-   CompCRC32 = &HF1E3DD29
+   CRC32 = 0x1d878662
+   CompCRC32 = 0x1d878662
    IsRoom = False
+   Warnings = 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
 
 [Logic68]
    ID = lgc.mod2911
    Description = "Patch code for AGI version 2.911."
-   CRC32 = &H92E28C0D
-   CompCRC32 = &H92E28C0D
+   CRC32 = 0x0b31f65c
+   CompCRC32 = 0x0b31f65c
    IsRoom = False
+   Warnings = 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
 
 [Logic69]
    ID = lgc.mod2912
    Description = "Patch code for AGI version 2.912."
-   CRC32 = &H33214A2B
-   CompCRC32 = &H33214A2B
+   CRC32 = 0x06deefa8
+   CompCRC32 = 0x06deefa8
    IsRoom = False
+   Warnings = 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
 
 [Logic70]
    ID = lgc.mod2915
    Description = "Patch code for AGI version 2.915."
-   CRC32 = &HCE75CE39
-   CompCRC32 = &HCE75CE39
+   CRC32 = 0x319faa08
+   CompCRC32 = 0x319faa08
    IsRoom = False
+   Warnings = H4sIAAAAAAAACsWdz3Jdtw3G15q+xNk5mUkzh+D/ZVaZrts+gCzdyprKVxlJjpu3L+VOusnvDASgvVpaFj99AEEQBEGcdFX3vV/99eXp/ny3XT/dffl8Or9sv14/fDlt98/b+fFl+3r/8un+vJ3+9cvp5uV0uz1dn+9O23f79udN8vdXUverh7ubHz8/3spM9epP6f+Fma7+9mmNv3n8/Pn6fLt9fHi8+ef61/nl+v78Cvv7/zxfyYTxaV79/Xx7+sf9ef3Br49Pt9vd0+OXX7bzl88fT0/fpdnq99si9Xx9f/vfP7Kg2h+hRr76sH94FeZ6+/kbyP4N8Yft66f7m0/f/uPh6/Vvz9v93fnxaf29j79tP/38lx+258ft/lX8h4ftfPr19LR9PG23p5f/aGH90sun0/bhlcGH3ykwA5MyYLyijNxBFTnFZgXHK0Qkl4lU5J1nBRmYlAHjFWWUff0KaUNyjAuN17nMQVxqzFpxvLp0a0WDrTPIBcbrXBpyaUF7ofHqHLWEq2emGBcar+mFnGuedsPLvaB+Ccokk52KVBKqrNFm7exTaKYQyyCVh8uRVI51mXLe34plksrO5Uiq7pGqvBnLJJWdy5FUwyNV5bkCLJNUDi77LMhFYgEIjtd9KOu4x3wojtdc3553QS4lyAXG61xGQy7BVUDjVS6tk/ese2xPwPGqvYxSiEsweMbx6joaGBfVFLMXHK8G8kjE4X73gYEnYpmEcrhfFErsK1vQZBxAy40LuU7EsmjHw2W5cZwpCZofjde4lNrJjVcJWg2NV/XS2V3l4BzReN1dTbS9ETuu4HjVjRfBORqxIBjHq1xGxsUdPDrheHWOZqFjf5OYXnC8wqVhkqyLPcgraa8UzCCWQSoPl7z3QsFMD65IHK9xGX2nTbvnmNfE8Z40YM+OCG10dL+IZRLKw4WIFHt4tYRCf4VYFqE8XGbC1GAvsRAYxytcxhCmEpxrGq9RmRhZ9RJLDOJ41VqELa/Gdlocr/le2tp6dWyTI+HWhFgmoexc8NjVHSncPHY24GA62cOlpJ7ICY8U44LjNS60RQ6xm1+qiXZ+hLLI5KBSe2YqMfvF8RqVgqelETyh4HhtgtqgBTBybGPD8SqVSWelkYO2QuPVCRq4FHPQVmi8li9IgyKPkSH2vei1KDIwKcORLl4mTjmPUWLRO47XuQzaXEcwDsPxmpHMHVP6owW50HiVS9ppfx4tdhWE47X9vVXcyVpwS6XxmlrGbLj/9KB7o/FqqDHxdmEGz2g4XpuijFmpGTxZ4Xg1Gqy0Ac3ggsbxKpVGhjtLbAPC8SqVSRHCDJ7xcLx6B4qmQiVkClJvGaeaoC66qyIDi1odyhiJotGUHBcBRXa8MWcwg1wuNgeFfgsLEmQXnWamYNOHJ8lXsDhngcViOQbQ2UxycikFc7EMoKf4sILltQYkysYxU6N38roLLOZ2GUBnk3imgrs0A7whGUvRywKLhVIMoF994s37AovaDQGol8JS2W5KLPpmAJ0NBncLLOpvCEC/AD2YqeCeywA6m8a6CWaJGUD1xWOnw+wCi0WcDKDHeQchSTAvywBqxcacrJtgYRgDaGuqV0x/L7Cov3HUhqXeD/xNj/obAlCt+GCeot6GAFQuDYuXUhpRb0MAOpvOO/iIHW4ZQM1p4q3LwnrvFzhMwaYPu90WGQ0tV4JPTxhAW9N57nQ4XmDBvQABVA8zMAG+wIKrGgE0y8XahrR+7Jj0ifd9DGYSzMFmDRoYVEvUeSKAzgaTTuuYGdxyEUBlcxDiywhuuQigLs+dj4YygkdDBNDZYFnAAguGagigzxQWMq2fRx0pAai6EaxJebWnKBvHCs+l8iYzoyucAHQ2eMW67Cm4whFATynwQTXvwZlCALVGMeFNeIo+y2UAjQ2nDLOj7LfkNHGTQTCTYJ4iZAzP8/DE+riwEMomlZ3L+gvIJVjNzADafI8DLsFtEwFUh1PTAZvgtokA+iMFfPeWyh5c4gjguldbUPajXW/p7ViXPdohBZtqPQ+HD9Rht+DesAaZsS6t2uCK9uijYWlhqo5DZskVK/EZzCKYh01vHFJXOrBedqKRgk0fjlixTTT86Es3BlA9N98pR5+6MYC22Q++CYu+dWMAlUzCMKgGa0kZQN3uOzbEWGDBXQABVDZD2L/kYLoRAdRStMyhUM3BMzsCqGwKR+I1ep2LANqmInxCqcHKKwZQ3zmkAyPuUSMmAHWidj6y1+hdDwKom4JgH5UFFjViAlCrGNGEu+P0vyZd3g5mEczD5qiEqu/vHosgBZs+PM1T8OlGWnufY6YFS4IZzCKZh43sHctfF1hweSOAejvSDsgEV7fnOVTLGI9PR4FOaXPHi1gEswjmYZP2gm9JU7S6lwEUNrNP3F+iNbEMoJHJ+DBqYQXXJgJoa7MdJK9msAcfA2iqKXxYntHqHARQyfAGNYNd+BhACwNWAMxW04J7NwKobIQLbGcL7pwIoE3UOLCaaBUVAmhuuFe+KJzB5oIMoGeDOwYCM9gQlgFUZzMaG/GMrm8CUC/DBJuHyL7HFjgD6O+ZmYsjsi4Fi34YzCaYq/7jiE3MVzCAepzC9SB7ivkKBlBT+BSJSvK0jOsV7wMYzCKYh40sNjjnaQ/2oUYAbc4l44F+gcXcDgPozxLxiaSkYEkeA7hukRaU53IBa5kY67Ldz5GCTbWuWnNWh92Cl2opN8BYl1ZtdEV7mgKvSIL0IY4ubWVULGBmMItkHjYiB58QiFa9MYDGJnMXm8UyuF0igPrmvuD7/wUWy3AwgJrhqJhIWmCxDAcDqLoRPMevGQx+BgMBVDY5od3kaGiNADob7Ge6wIJ2gwAqm4T5nwUW9KQIoFpxwwuGBRb0NwigzxS2FZPolzIYQO/xgZ8JWGDBnQEB9BXOx9UcrJxgAJ0N5qMWWNRuHGn0ZTeYbV6Bf3CfQoA3zBTuU9FvrDDAG2aK11SwPxkDqJnDwYmOdUSLsnHYTR2dV3jwaT4DqGwmn5pz8Gk+A6jPozC6yZ539Y2L4BjMJJiDzdHi9DTTqR07dTGYTbD/1adkFpRns+GvrjCYTTBPZgFvsyXTe/TLHn+Rgkkfjjf1vWMp/sJ690wLUrDpw2EffecYtoLbu7Q+oq6bAFR9YD234LfILq2P6DbvuMntHa/kZB3F3l0fRMGkDwLQCyPZPqgp46X1Ed04PY0lBzZzXFjv70+D1/sMoOqDb+xye39/ShRs+nB0Bxx8aZipW+el9RH1p66Oo/j8TjLVS1xYH8GaDwbQ9cHxB9VCX1ofUX/qqOdOma+rigOrTP4WGoNZJHOxQSrVkXitSfgaGMEscnnY5ISfSF5YwdwiAujPEYlLdzyPWVrGLw4wmEUwD5s0B19E9GDHcwbQao8rvgaQHmx5zgDqk0tcWcPxkZT6Whj0ZjCLYD42DV/SyYwW5iCA2k+gcV5nRr0OAuhPQPgSYQbbUTCAOlP8zSGJlqwzgMpmJrTiGfw4KgPobDAEznvwcQEDaPFWSqibBRbzowzgyifnvboO5rQ6GeuigSRTMKnWoY+64hJWSLA/FgOoZodcPJ2Gl2BYBMBgFsF8bARLoHIKVokzgFquievJUxVTM7clZzCLYB42WNqQPTeFgu/hXVB1HfAo9Gcwi4p8guHce+4vXwuXKOvLYDbBHGz2hmQ839sVtmkP1Jp9bM7IYBYl+QRDL1QdhtQ6vihnLJtcHqs+4GK3ozawRSNj2eRyGDVHYdVz/psDvRBimeRykBHsjbCgHK2VEkeHiGWTy2GHmH1YUB5/JlinzGA2wRxs8OCWq+N1bssHCyz4VNhFRjB1kJujEWWtA1N8DGYRzMNGBAOY5qinFc7wMZZNLhcZ5OLoF1PbfjD7we41LjaCFQW5OTr7L8EGz1jwOwMuNiIHXBwfiuan9Ixlk8vjEjHmWPuRY8IS1gswmEUwDxvBrPWCclw04DUmQ9nEcmSR8Ili7o7644HvUhjKJJaDy0FyrDta0q1fxKWKWJdNjiEFm2od+sBMfu6Ovhu1HbmLYBcQFxvBpjjZ9Rn2paQDwWJ3QS42gt8Jz2N3ZLaa4NsUBrMI5mEjGcO54biFkdawTx6DmQTzsMnovoaj005tGauqGMwkmKfvT8YdfTiWa04ZHyYxmE0wj/PATWI4lmualY8pCGYTzM6m8E2I5xvAguWwLqjaKu8c0W8bOwXD2HC6vjA4OCJDMJtgHqs+4OL5Ak5iP4RgNsEcYe+BVTuSJUmOtBRN3bjYoH91tWjDnt0uqFLxKSBj2TTkkQt3DU/fuDKwHRlj2eRyrFW+5/O0oKtysFSjG5CHjGDxY/Z0szvo/cpYlz3KRbv7ufQhnF/xtOYbB8m1aJ9AF5mD1Kynyd9onff2YMdBF5mDs5enX+DofCiMNi/8A8C/AaHyGoGnpwAA
 
 [Logic71]
    ID = lgc.mod2917
    Description = "Patch code for AGI version 2.917."
-   CRC32 = &H676AA7D8
-   CompCRC32 = &H676AA7D8
+   CRC32 = 0xda73cd30
+   CompCRC32 = 0xda73cd30
    IsRoom = False
+   Warnings = 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
 
 [Logic72]
    ID = lgc.mod2936
    Description = "Patch code for AGI version 2.936."
-   CRC32 = &H561CE588
-   CompCRC32 = &H561CE588
+   CRC32 = 0x1f58d3d0
+   CompCRC32 = 0x1f58d3d0
    IsRoom = False
+   Warnings = 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
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -522,91 +592,109 @@
    ID = pic.Title
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture2]
    ID = pic.ParkingLot
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture3]
    ID = pic.Lobby
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture4]
    ID = pic.Hallway
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture5]
    ID = pic.Closet
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture6]
    ID = pic.SecretRoom
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture7]
    ID = pic.Stairway
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture8]
    ID = pic.ControlRoom
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture9]
    ID = pic.Office
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture10]
    ID = pic.StoreRoom
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture11]
    ID = pic.cp.Terminal
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture12]
    ID = pic.cp.CAISOCC
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture13]
    ID = pic.cp.ERIDOCC
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture14]
    ID = pic.cp.ESADOCC
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture15]
    ID = pic.cp.ICAPOCC
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture16]
    ID = pic.cp.OFROCC
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture17]
    ID = pic.cp.RANDOCC
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture18]
    ID = pic.DoorKeypad
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture19]
    ID = pic.SafeDoor
@@ -616,6 +704,7 @@
    BkgdPosn = 0|0|0|0
    BkgdSize = 320|168|2562|1343
    BkgdShow = False
+   BkgdImgFile = ""
 
 [Picture20]
    ID = pic.Scroll
@@ -625,46 +714,55 @@
    BkgdPosn = 0|2|3|0
    BkgdSize = 319|166|957|498
    BkgdShow = False
+   BkgdImgFile = ""
 
 [Picture21]
    ID = pic.NotebookCover
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture22]
    ID = pic.NotebookPages
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture23]
    ID = pic.MagazineCover
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture24]
    ID = pic.MagazinePages
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture25]
    ID = pic.MagazineEnd
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture26]
    ID = pic.ManualCover
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture27]
    ID = pic.ManualPages
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture28]
    ID = pic.PodiumTopPaper
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture29]
    ID = pic.PodiumTopClear
@@ -674,6 +772,7 @@
    BkgdPosn = 0|33|3|0
    BkgdSize = 319|120|957|504
    BkgdShow = False
+   BkgdImgFile = ""
 
 [Picture30]
    ID = pic.Pillow
@@ -683,6 +782,7 @@
    BkgdPosn = 0|0|0|0
    BkgdSize = 320|168|1600|840
    BkgdShow = False
+   BkgdImgFile = ""
 
 [Picture31]
    ID = pic.Walkman
@@ -692,91 +792,109 @@
    BkgdPosn = ""
    BkgdSize = ""
    BkgdShow = ""
+   BkgdImgFile = ""
 
 [Picture32]
    ID = ovl.Walkman1
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture33]
    ID = ovl.Walkman2
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture34]
    ID = ovl.Walkman3
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture35]
    ID = ovl.Walkman4
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture36]
    ID = pic.PQList
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture37]
    ID = pic.FolderInterior
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture38]
    ID = pic.MusicSheet
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture39]
    ID = pic.ComboList
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture40]
    ID = pic.PowerPackLogo
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture41]
    ID = pic.Explode1
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture42]
    ID = pic.Explode2
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture43]
    ID = pic.Explode3
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture44]
    ID = pic.Explode4
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture45]
    ID = pic.Explode5
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture46]
    ID = pic.Explode6
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture47]
    ID = pic.Explode7
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture48]
    ID = pic.cp.Error
    Description = ""
    BkgdImg = ""
+   BkgdImgFile = ""
 [::END Pictures::]
 
 [::BEGIN Sounds::]
@@ -3358,3 +3476,12 @@
    ID = vw.Slipping
    Description = ""
 [::END Views::]
+
+[ResDefOverrides]
+   Count = 0
+
+[Includes]
+   IncludeReserved = True
+   IncludeIDs = True
+   IncludeGlobals = True
+   FileList = resourceids.txt,reserved.txt,globals.txt,powerpack.txt

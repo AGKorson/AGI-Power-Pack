@@ -15,6 +15,9 @@
 [ (winning condition is to have disk with PP source code.)
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -263,7 +266,7 @@ if (newRoom) {
       [ coming from lobby
       position(ego, 54, 121);
     }
-    egodir = STOPPED;
+    egoDir = STOPPED;
     draw(ego);
   }
   
@@ -1410,7 +1413,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     (mouseX < 14 || mouseX > 145 || mouseY > 17)) {
   [ ignore borders, off screen
   if (mouseY > 167) {
-    goto(doneclick);
+    goto(doneClick);
   }
   if (cursormode == C_LOOK) {
     [ same as 'look'
@@ -1419,7 +1422,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ ego
     if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("Yes, Drew is a handsome fellow. Easy on the eyes.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ ego car
@@ -1445,7 +1448,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
         }
       }
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ patient
@@ -1456,7 +1459,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         print("This person must have an appointment. They seem to be in a hurry.");
       }
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ patient car
@@ -1482,7 +1485,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
         }
       }
-      goto(doneclick);
+      goto(doneClick);
     }
 
     [ parked cars
@@ -1504,7 +1507,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (clickOn) {
       print("There are a several cars in the parking lot. Only one is yours. This is not the one.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ then check background
@@ -1514,18 +1517,18 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (work1 > 239) {
       [ foreground tree
       print("Giant evergreen trees surround the parking lot.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     if (work1 > 111) { 
       [ forest/mountain/sky
       print("The forest and mountain are beautiful to look at.");
-      goto(doneclick);
+      goto(doneClick);
     }
     if (work1 > 95) {
       [ lawn/sidewalk
       print("The lawn and shrubbery is well maintained.");
-      goto(doneclick);
+      goto(doneClick);
     }
     if (work1 > 79) {
       [ building, door
@@ -1534,11 +1537,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         print("The building looks almost the same as it did thirty years ago.");
       }
-      goto(doneclick);
+      goto(doneClick);
     }
     [ if nothing else, must be parking lot
     print("It's a parking lot. What else do you want me to say?");
-    goto(doneclick);
+    goto(doneClick);
   }
 
   if (cursormode == C_TALK) {
@@ -1547,13 +1550,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     [ ego
     if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("You have nothing to say to yourself.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ ego car
     if (posn(egoCar, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("Your car has nothing to say.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ patient
@@ -1570,12 +1573,12 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           random(13, 16, work1);
           print.v(work1); [ m13 - m16
         }
-        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgboxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
+        block(MSGBOX.COLOR.V, &msgBoxBorder, &msgBoxFG, &msgBoxBG); [ msgbox.color.v(vBORDER, vFG, vBG)
       } else {
         print("The person is too far away to hear you.");
       }
       
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ patient car
@@ -1586,7 +1589,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         print("There is no one in the car to talk to.");
       }
-      goto(doneclick);
+      goto(doneClick);
     }
 
     [ parked cars
@@ -1608,11 +1611,11 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (clickOn) {
       print("There is no one in the car to talk to.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ ignore anything else that's clicked on
-    goto(doneclick);
+    goto(doneClick);
   }
 
   if (cursormode == C_USE) {
@@ -1709,13 +1712,13 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         print("You are too far away to get in your vehicle from here.");
       }
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ ego
     if (posn(ego, ON.OBJ, OBJ_FRAME, &mouseX, &mouseY)) {
       print("Please don't touch yourself in public. There may be children watching.");
-      goto(doneclick);
+      goto(doneClick);
     }
 
     [ patient
@@ -1726,7 +1729,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
       } else {
         print("You are too far away to touch that person.");
       }
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ patient car
@@ -1766,7 +1769,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           print("You are too far away to touch that vehicle.");
         }
       }
-      goto(doneclick);
+      goto(doneClick);
     }
 
     [ parked cars
@@ -1788,7 +1791,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     }
     if (clickOn) {
       print("There's nothing you can do with this car.");
-      goto(doneclick);
+      goto(doneClick);
     }
     
     [ then check background
@@ -1822,18 +1825,18 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           call(lgc.ScoreHandler);
         }
       }
-      goto(doneclick);
+      goto(doneClick);
     }
     
     if (work1 > 111) { 
       [ forest/mountain/sky
       [ nothing
-      goto(doneclick);
+      goto(doneClick);
     }
     if (work1 > 95) {
       [ lawn/sidewalk
       print("There's nothing you can do with the shrubbery or lawn. Leave it be.");
-      goto(doneclick);
+      goto(doneClick);
     }
     if (work1 > 79) {
       [ building

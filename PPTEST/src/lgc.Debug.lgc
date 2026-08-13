@@ -5,6 +5,9 @@
 [ When debugging, use this logic to handle debug commands.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"

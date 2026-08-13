@@ -8,6 +8,9 @@
 [ item's picture without interfering with current game state.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

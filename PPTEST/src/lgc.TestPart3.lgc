@@ -3,6 +3,9 @@
 [ lgc.TestPart3
 [ 
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"
@@ -331,10 +334,10 @@ if (teststep == 38) {
     if (newtest) {
       display(24, 0, "%v63: EXTENDED CHAR WORDS TEST");
       reset(newtest);
-      print("Now testing extended characters. Enter '€' "
+      print("Now testing extended characters. Enter 'Ã‡Ã¼' "
             "on input line.");
     }
-    if (said("‡")) { 
+    if (said("Ã§Ã¼")) { 
       print("Extended character words are working correctly.");
       [ set answer to 'yes'
       strAnswer = "y";
@@ -709,7 +712,7 @@ if (teststep == 44) {
       }
       [ set hasFM and hasMIDI
       if (numberOfVoices > 1) {
-        if ((numberofVoices == 2 || numberOfVoices == 4)) {
+        if ((numberOfVoices == 2 || numberOfVoices == 4)) {
           set(hasFM);
         }
         if ((numberOfVoices == 3 || numberOfVoices == 4)) {
@@ -1141,7 +1144,7 @@ if (teststep == 45) {
       }
       [ hasFM and hasMIDI should be the same
       if (numberOfVoices > 1) {
-        if ((numberofVoices == 2 || numberOfVoices == 4)) {
+        if ((numberOfVoices == 2 || numberOfVoices == 4)) {
           if (!hasFM) {
             print("Sound FM setting failed.");
             goto(fail);

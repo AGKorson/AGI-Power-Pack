@@ -2,43 +2,46 @@
 # WinAGI Game Property File
 #
 [General]
-   WinAGIVersion = 2.3
+   WinAGIVersion = 3.0
    GameID = PP3T
    Interpreter = 3.002086
-   LastEdit = "9/2/2024 12:42:39 PM"
+   LastEdit = "8/11/2026 8:44:04 PM"
    Description = "WinAGI v2 Template Game"
-   GameVersion = "AGI Game version 0.0"
-   About = "AGI Game by <author>"
+   GameVersion = "AGIv3 PowerPack Tester Version 1.3"
+   About = "AGI Game by <designer>"
    ResDir = src
-   UseResNames = True
-   Author = "Andrew Korson"
    UseLE = True
    PlatformType = 1
-   Platform = "C:\Program Files (x86)\DOSBox-0.74-3\DOSBoxDB.exe"
+   Platform = "C:\\Program Files (x86)\\DOSBox-0.74-3\\DOSBoxDB.exe"
    DOSExec = agi.exe
    PlatformOpts = -exit
    CodePage = 437
    SierraSyntax = False
-   SourceFileExt = .lgc
+   SourceFileExt = lgc
    PowerPack = False
+   Designer = "Andrew Korson"
+   IncludeReserved = True
+   IncludeIDs = True
+   IncludeGlobals = True
+   Warnings = ""
 
 [Palette]
-   Color0 = &H00000000
-   Color1 = &H00A00000
-   Color2 = &H0000A000
-   Color3 = &H00A0A000
-   Color4 = &H000000A0
-   Color5 = &H00A00080
-   Color6 = &H000050A0
-   Color7 = &H00A0A0A0
-   Color8 = &H00505050
-   Color9 = &H00FF5050
-   Color10 = &H0050FF00
-   Color11 = &H00FFFF50
-   Color12 = &H005050FF
-   Color13 = &H00FF50FF
-   Color14 = &H0050FFFF
-   Color15 = &H00FFFFFF
+   Color0 = "0x00, 0x00, 0x00"
+   Color1 = "0x00, 0x00, 0xa0"
+   Color2 = "0x00, 0xa0, 0x00"
+   Color3 = "0x00, 0xa0, 0xa0"
+   Color4 = "0xa0, 0x00, 0x00"
+   Color5 = "0x80, 0x00, 0xa0"
+   Color6 = "0xa0, 0x50, 0x00"
+   Color7 = "0xa0, 0xa0, 0xa0"
+   Color8 = "0x50, 0x50, 0x50"
+   Color9 = "0x50, 0x50, 0xff"
+   Color10 = "0x00, 0xff, 0x50"
+   Color11 = "0x50, 0xff, 0xff"
+   Color12 = "0xff, 0x50, 0x50"
+   Color13 = "0xff, 0x50, 0xff"
+   Color14 = "0xff, 0xff, 0x50"
+   Color15 = "0xff, 0xff, 0xff"
 
 [WORDS.TOK]
    Description = ""
@@ -48,220 +51,247 @@
 
 [::BEGIN Logics::]
 [Logic0]
-   CompCRC32 = &HFB79BBF4
-   CRC32 = &HFB79BBF4
+   CompCRC32 = 0xd8adacfb
+   CRC32 = 0xd8adacfb
    ID = lgc.Main3
    IsRoom = False
    Size = 2633
    Description = "This logic runs in every interpreter cycle and calls other logics as needed."
+   Warnings = H4sIAAAAAAAACrXROw7CMBAE0HrFJbaEBtlOyOcQ4Q4mrIwle4P8O39cImgo4m6l2XnNSLiJsYeFYtSG0Ebk7ByeBTpik14XkIMAZ9broi13cJJ/FKbvwjzBnYxOtlB99w8KEXUgXDcuFBI9MW2YOVrD9VaxBv7tyBMnLNplAjXLFmjfAh2PRzvxM8IBqGqCqhZog6E6NXygOyU+f0AJAwAA
 
 [Logic1]
-   CompCRC32 = &H1EF46B9A
-   CRC32 = &H1EF46B9A
+   CompCRC32 = 0x82b3e76e
+   CRC32 = 0x82b3e76e
    ID = rm.Entrance
    IsRoom = True
    Size = 937
    Description = "An example room with several exits."
+   Warnings = H4sIAAAAAAAACrWPQQ7CMBADzys+sS+oSBC0PKBX/pCmVojUbFCy6fsJ3BBHxM2WrZFt6Hy8TnRDcBp3sLS0oFR2Beyz7CiKlTVzkxqDdG1rD9JjQ4Io725rIGNGKmmYRYsTDzqYjrUXmkPmNRZ4jVnYO5GsvIArlFuNEljvbzf01gubnKxkxumb9vtIa0//wX5+fwI4nfxcUgEAAA==
 
 [Logic2]
    ID = rm.Outside
    Description = "An example room with an automatic door and sound effects."
-   CRC32 = &HDE29E40E
-   CompCRC32 = &HDE29E40E
+   CRC32 = 0xeb420b2c
+   CompCRC32 = 0xeb420b2c
    IsRoom = True
    Size = 494
+   Warnings = ""
 
 [Logic3]
    ID = rm.WestRoom
    Description = "An example room."
-   CRC32 = &H4C2A5B8D
-   CompCRC32 = &H4C2A5B8D
+   CRC32 = 0xcb5b2e70
+   CompCRC32 = 0xcb5b2e70
    IsRoom = True
    Size = 921
+   Warnings = ""
 
 [Logic4]
    ID = rm.NorthRoom
    Description = "An example room."
-   CRC32 = &HF44CCBA3
-   CompCRC32 = &HF44CCBA3
+   CRC32 = 0x53d8d857
+   CompCRC32 = 0x53d8d857
    IsRoom = True
    Size = 82
+   Warnings = ""
 
 [Logic5]
    ID = rm.EastRoom
    Description = "An example room."
-   CRC32 = &HFB6B44B5
-   CompCRC32 = &HFB6B44B5
+   CRC32 = 0x1f1f5367
+   CompCRC32 = 0x1f1f5367
    IsRoom = True
    Size = 82
+   Warnings = ""
 
 [Logic90]
-   CompCRC32 = &HBAE16A04
-   CRC32 = &HBAE16A04
+   CompCRC32 = 0xb58f90b0
+   CRC32 = 0xb58f90b0
    ID = lgc.GameFunctions
    IsRoom = False
    Size = 659
    Description = "Game-specific functions\n\nYou should use this logic to perform any game specific functions, such as counting down timers, etc and processing player input related to the game (such as examining/using inventory items) and any other things that are required in several rooms that you don't want to duplicate in each room. \n\nThis logic is called from logic 0, on every cycle, unless disableGameFunctions is set.\n\nSierra did not use a separate logic for all this - they just did it all from logic 0. I find it is neater this way, as you can keep your game specific processing separate from other system-related things (although these may require some modification for your game). Also, this makes logic 0 easier to manage."
+   Warnings = ""
 
 [Logic91]
-   CompCRC32 = &HA7A054DA
-   CRC32 = &HA7A054DA
+   CompCRC32 = 0x75831a4c
+   CRC32 = 0x75831a4c
    IsRoom = False
    ID = lgc.Init
    Size = 155
    Description = "Initialization\n\nThis logic should only be called once, when the game first starts. See the 'Keyboard Controller' topic in the Help file for details on key assignments."
+   Warnings = ""
 
 [Logic92]
    ID = lgc.RoomInit
    Description = "Room Initialization\n\nThis logic is called by room logics when they are executed for the first time when a new.room() command is encountered. It takes care of the common items that are done for all rooms."
-   CRC32 = &HF1F42011
-   CompCRC32 = &HF1F42011
+   CRC32 = 0xc0285d9e
+   CompCRC32 = 0xc0285d9e
    IsRoom = False
    Size = 56
+   Warnings = ""
 
 [Logic94]
    ID = lgc.DebugHelp
    Description = "Debug mode help screen\n\nDisplays a help screen with typical debug mode commands."
-   CRC32 = &HD7CB0DF8
-   CompCRC32 = &HD7CB0DF8
+   CRC32 = 0xb3216800
+   CompCRC32 = 0xb3216800
    IsRoom = False
    Size = 1077
+   Warnings = ""
 
 [Logic95]
    ID = lgc.Death
    Description = "Death handler\n\nThis logic is run when the player dies. The death message displayed depends on the value of certain.death."
-   CRC32 = &H6F1EF2AE
-   CompCRC32 = &H6F1EF2AE
+   CRC32 = 0x8cafa310
+   CompCRC32 = 0x8cafa310
    IsRoom = False
    Size = 409
+   Warnings = ""
 
 [Logic96]
    ID = lgc.TraceInfo
    Description = "Tracer Info\n\nThis logic includes the text of agi commands so the trace window will display the command text instead of just numbers."
-   CRC32 = &HFCB75392
-   CompCRC32 = &HFCB75392
+   CRC32 = 0x0bf361e1
+   CompCRC32 = 0x0bf361e1
    IsRoom = False
    Size = 2617
+   Warnings = ""
 
 [Logic98]
-   CompCRC32 = &HD67BD4FE
-   CRC32 = &HD67BD4FE
+   CompCRC32 = 0x21b5d00b
+   CRC32 = 0x21b5d00b
    ID = lgc.Error
    IsRoom = False
    Size = 821
    Description = "Error Handler\n\nWhen AGI traps an error, this logic will display information on the error and then quit AGI."
+   Warnings = ""
 
 [Logic99]
-   CompCRC32 = &H3D181718
-   CRC32 = &H3D181718
+   CompCRC32 = 0x0523b0f9
+   CRC32 = 0x0523b0f9
    ID = lgc.Debug
    IsRoom = False
    Size = 1147
    Description = "Debug mode\n\nWhen debugging, use this logic to handle debug commands."
+   Warnings = ""
 
 [Logic97]
-   ID = lgc.traceinfo160
+   ID = lgc.TraceInfo160
    Description = ""
-   CRC32 = &H3F7834A2
-   CompCRC32 = &H3F7834A2
+   CRC32 = 0x6f9fc5d0
+   CompCRC32 = 0x6f9fc5d0
    IsRoom = False
    Size = 2238
+   Warnings = ""
 
 [Logic6]
    ID = lgc.StatusLine
    Description = ""
-   CRC32 = &HD61A80D9
-   CompCRC32 = &HD61A80D9
+   CRC32 = 0x088309f2
+   CompCRC32 = 0x088309f2
    IsRoom = False
    Size = 200
+   Warnings = H4sIAAAAAAAACq2QQUsDMRCFz8E/8U4el+62tV2qXnoSxEPFH5DNjmsgmSyZyaL/3hQRBPWkt+HNm28erzXbVb83DzRZ9QuBSxwoC2wmuMQLZaURmlBY/MR17qQu4hwoEisWGwqZ9ZUJk2se1WqRe89kLtoK7nrzJJ6nehBS/vAKbtFuEe0bXmx9WHjONHqndgiETFKCym/A3crcccX4Ea5kqcw5iVef+BP+XDUXyOZG6VWbTE7PcaPl8YBTi0ucOsQiioFwfdNtDjie1eNXdd2bzf7HAH+vavffVX0HvgOU/kn/1AEAAA==
 
 [Logic7]
    ID = lgc.TestPart1
    Description = ""
-   CRC32 = &HE65EFC43
-   CompCRC32 = &HE65EFC43
+   CRC32 = 0xa9d211d4
+   CompCRC32 = 0xa9d211d4
    IsRoom = False
    Size = 10626
+   Warnings = H4sIAAAAAAAACs2YTW/bMAyGz8L+BI8b0BX+iGMbAwYEQTEE69qiTQ87Kg7jGJOlQJJb5N+PdtrDBvkyS0tuTmI9fEmKosKYZVFZsDusuW1eEGTXblAb4BqhUvIFtcUtWAWdNE0t6Tkx9EN7ENiitPDCRYcsTmMm6up6jcY+cG1j9iEOCZ5nzKC9/oVHOHDNW7TvaKks8H5xs4XF03K1IuYWQWn4fvNzeA4pNvmv4IlRcDHjKGLL+9v7x5NlUHaPGuyeS4igMWA18l4xNxBnLIlzD4wyTNCSxIODToYXcTMP4lyMKCnZs2lkTUYFJXwgGfhKK6DlR9hzEt3Jg8ZtU1m+EQgaTSesYUmeBvK2dOZ4glI3cLrSNHKG4N+VjgA9KA1VN2kyDwUOpXiWucCzGVvfPxCr7oaX+wJSCgR9gV/goLRtlDSgdlRhCAdBiSS7HF4bIWBD1bfbfTaVRpRXwOUWas0P+6YysOtkdVr7/uofuR/VU7DV3cPz+nZ1dzMAn9aL9fPT6SM53KswdIpfwSuZ2fd6O9NxIY7Deb5F05CRMbqHMGbOrXq+MLr1eHB07jzVz+eoW08+Yz/QGF5jL0V2tPRjBAJlbfefaJGr9/qITn5h1TSix1M1uell/Hbgt1HfbTm0b5k4NeZBacU7g2QaUGulWZYESkg2InEyeO5uIWfL9IgeD44mxWU5OqLHz5YeoU8PYx5d1n4Z0ePB0dh5BTqfoyN6/OyXEbqHMGbOPyjnC6NbjwdHL+xCMabH035x06eHsQg1mCnSQDfJInWWzqTBTOm+R0xjplEApjOo05iZ/3Ff6a76icwAOSqc3WwaswwwOIzcA4KpUP/ex9HIQDZnS9W2dAISakdEAmm0nZZ9hfffDxa4eOVHA1T9io492Bxh8W1F0NzdRaZBy7+L6Tf5AnktmRcAAA==
 
 [Logic8]
    ID = lgc.TestPart2
    Description = ""
-   CRC32 = &H4E6195AB
-   CompCRC32 = &H4E6195AB
+   CRC32 = 0x8352a64c
+   CompCRC32 = 0x8352a64c
    IsRoom = False
    Size = 11089
+   Warnings = H4sIAAAAAAAACsVbTY/bNhA9C/0TPO4CaSFSJEWhaIEgCJIFkt1F1kHPtEzbKmTJkKj9+Pel7N1eOo4Alg+52ZL5+GY4fDP8MM9Unuvsbv23qz3rpsPaDcw9185tRvbVPj/Ug3Pd6+tH206OsSuurzMu86zd1b+t3Ojv7eBF9guPxtI8HVZZJMMSuaCwKpPdup31zaN7RRuZHRyr++7RDd5tmO/Z1I3NrgufxRheHI6tO7juFT4TgjQ4BbBCARsQMD32SmQ3W/bt7i/25x9MKOb3jh2H0Niz0Q9Nt2PNyDaDfeqY9ayehmGG9O759GXsB9b2deDVd+xq3fv9Ccp2G/bh7ktguJtmCmeugVs/uM31JSopbCRj8ufYSFIJT1eh9zeAzx9vPn1ezYasm+7cw3h0dbNtgoVPTduyrvds23gW3sy0x9MUyoSpMB4sOBnXUmaru/t/bZ395fueteGB+50d+2GmPrJ+e/Zta1/mfu3ZhLULL7a/nqm/O9m9G+xx39Qj205dfW779tOpOwYHNrW36/Yin0RuLHgJcmNBjv7Pc+MFPia7ub3/vvpyc/vxBPiwer/6/nD+Ggw+ucoe3Dv2FLrZz3yncbJt+3Jy6MaNTejkEnoCNypSDEuZfXXjaHduZtRNweKrnLWu2/n9dVbQMy8BGy0j2NBpMgGbkmSTANjEmAkTpIosf1IAg+a+zCOCVtI6l4AN1yBgAYo/WZCuWPCfBFWQUoLmr1SgIkii9E+WKB8blCtQ4iErkNwpWjwSAKNKHSVAAqNidEChpquSEVlRKdCMUYo0c4ENShiUjhkplJooujBaYIOSIGViRgqlW6oinf5jNjoHsdE56fQlNiDp1Zw0c4ENB+m15qSZC2wESOQ1vSu1wKaImIi6AKUTXZC+WWBDp5OlRqBaXkvSNwts6By01AhU3GsVkSo0vV+41AiU7XTMNoBGZTsdk+00KtvpmGynUdlOR2U7VGlf0tkuATAHRXopQANTovJUSaecFMAgTS8lKipQOyKlBJU8pUTNPI1yBUrVSwMDjigrS9RWqaFXFj9mY1ALAMMjygyD0kgjIpKXKVBsUEc8BiVTJqZ0NyhtMyhtMypmCtHnagnYoJTWVKD8W+XprrFUObk+i8QiNTcSixzuSCxQIFccFDoVLaRx1tPXfiKxEkYLXVBHYoHEoSpQI4yq+ivUGR3PUWs2nqM20HhuQIHB8wrFmdPyngIZFc2co/YPociwEUSdoXGOukHDOb0NlgQZxxk2gvQ2XBJklDcEXTQkQQYVUFwUKH0WMN0QqIMGDrtkzEUJWmQHZFhswGa3QK3MeHHhXwFl9qE/HGwX6li79aGqtWxwfhq6GWN+furItk/2ZXy7kM3WL+z9p5sAeuEezP8D/c/Z4j9DiRL17zEAAA==
 
 [Logic9]
    ID = lgc.TestPart3
    Description = ""
-   CRC32 = &HF9540667
-   CompCRC32 = &HF9540667
+   CRC32 = 0x0a7c5476
+   CompCRC32 = 0x0a7c5476
    IsRoom = False
    Size = 10945
+   Warnings = H4sIAAAAAAAACs2ZTW/bMAyGz8L+BG9tgLXz9we6FSiCYgjWNcWSbs1RsZXEmyMFlp02/36U0wzYJl8Wc+0pjm09pF+RlEy7LHTShN2KJa+LrQDZrOei0sArAZmSW1HVIodaQSN1sZR47Gm8sN6UYi1kDVteNoJFMSuX2flU6PqOV7XP3ri9cGOXiBsQcYl0SIj8dV0ih10vJAL7ZGAqKfyUCBx4RODQJwLHVJOXEE2e5yREYI8opT2qcPOiiApMpXFMFMdeTOSxH1onL/bYWApQFawV8mq8asauuczxV1V5ITmebI2pxUJnlRASTh/gEtwwBbztHY6dmb9RPOi04rMHF/RKNWUOcwHvP8CDZwbD7I/TM+8C6lWhf/fksShLkKrGm1YcJeAaxNNGZPjgXSZ7UCz+L4p1WKFUzG7yeMUCjyh4g4Ao3YKIqFYGVBqH9l1KELDp+A5Zy6a92cSDUlDiCXEBG1XVhZIaAxJjRcCm5Dtjl+/jZN5G6tk+VN+2Ubas+GZVZBoWjcz2Yw+3NnJTibzIaj4vu/1J2Oj27n56M7q9boGT6dX0frL/a9IGvdB8Ld7CI5pZGX8b3fCy3LVRmwtdoJEueh8yWpf1F5SRaJsRhkQRHoZUHkfWzacTsfH8O1awZyzWs0yIXMNn/jRpJX++3FIATt1ogCwqJxOiHXLkEJW6yKMC26V4sVTq8KePB7Wm0gs+qN2ffkpvB70HGdNXFi8d/vQko53eQ0PIoeoIJda3sRebny5/+pmfDnofMr6uHUaHP8c/aOoQFYrUHuH/tBFIXaI0TKmW1ZSqjZP6DhE4tG7Wo5BpUZ//EDvY8Aozsj6gTR5yM7jI4WoyHI2Qmbev1p+uZ+0xSyMKpvU19Tim/XvCcczEOlFHMq3heiSTqISm9rXTjdnJHjhefFVFJvQJnG49b2CKqVTVui3yHLBs5mdK4vGWV4UpgheQrbhcFnIJhemVmC5K2x5p5KE7gqN0U9YajVN9GXGotvhIJvM5IJpj17F27l0nZcOm0hhnG6ULs7CZ2cXVDw4dtS/jb3AJXnBoqQ3HN/jfTwfMRSEImERfDN2uzzgxG+67eUhcYEK2IV03lfzV5TOGePnIdxqQr3C1h/kOrj6OmNvVoT4O+ldC/gRljHdv5R0AAA==
 
 [Logic93]
    ID = lgc.GameHelp
    Description = ""
-   CRC32 = &H43D4B0D2
-   CompCRC32 = &H43D4B0D2
+   CRC32 = 0x2fb94854
+   CompCRC32 = 0x2fb94854
    IsRoom = False
    Size = 1363
+   Warnings = H4sIAAAAAAAACq2OMQ7CMBAEa4tP3AtQHBQgDS2p6HjAJVkZS/Yl8tmR+D2WKKGDbqVdzY41XdOfzQ2Os99AUuKIpMQJNC2yIWXMlBcqot5Jza3WIq4BEZJp41BgDicT3LS/csSAsJqdrdi2N3f14uo8LOm9VLqQ7Sjykx5c74qsCbOfMo8BlKAlZP2O+93SNse/an7wXhw1nsxNAQAA
 
 [Logic101]
    ID = lgc.mod3002086
    Description = ""
-   CRC32 = &HC5847828
-   CompCRC32 = &HC5847828
+   CRC32 = 0x33f0e599
+   CompCRC32 = 0x33f0e599
    IsRoom = False
    Size = 22529
+   Warnings = ""
 
 [Logic102]
    ID = lgc.mod3002098
    Description = ""
-   CRC32 = &HB63EE20C
-   CompCRC32 = &HB63EE20C
+   CRC32 = 0xde35e242
+   CompCRC32 = 0xde35e242
    IsRoom = False
    Size = 22569
+   Warnings = ""
 
 [Logic103]
    ID = lgc.mod3002102
    Description = ""
-   CRC32 = &H53342680
-   CompCRC32 = &H53342680
+   CRC32 = 0x012b3cda
+   CompCRC32 = 0x012b3cda
    IsRoom = False
    Size = 22575
+   Warnings = ""
 
 [Logic104]
    ID = lgc.mod3002107
    Description = ""
-   CRC32 = &H73D22CDB
-   CompCRC32 = &H73D22CDB
+   CRC32 = 0x77fc409f
+   CompCRC32 = 0x77fc409f
    IsRoom = False
    Size = 22575
+   Warnings = ""
 
 [Logic105]
    ID = lgc.mod3002149
    Description = ""
-   CRC32 = &H20AD4353
-   CompCRC32 = &H20AD4353
+   CRC32 = 0xa9bc5adc
+   CompCRC32 = 0xa9bc5adc
    IsRoom = False
    Size = 22564
+   Warnings = ""
 
 [Logic100]
    ID = lgc.Version3Check
    Description = ""
-   CRC32 = &H422472D9
-   CompCRC32 = &H422472D9
+   CRC32 = 0x0e9cb596
+   CompCRC32 = 0x0e9cb596
    IsRoom = False
    Size = 6
+   Warnings = ""
 
 [Logic10]
    ID = lgc.MsgMemTest
    Description = ""
-   CRC32 = &H1319C685
-   CompCRC32 = &H1319C685
+   CRC32 = 0xdd132718
+   CompCRC32 = 0xdd132718
    IsRoom = False
    Size = 6
+   Warnings = ""
 [::END Logics::]
 
 [::BEGIN Pictures::]
@@ -270,30 +300,35 @@
    Description = ""
    Size = 251
    BkgdImg = ""
+   BkgdImgFile = ""
 
 [Picture2]
    ID = pic.Outside
    Description = ""
    BkgdImg = ""
    Size = 954
+   BkgdImgFile = ""
 
 [Picture3]
    ID = pic.WestRoom
    Description = ""
    BkgdImg = ""
    Size = 165
+   BkgdImgFile = ""
 
 [Picture4]
    ID = pic.NorthRoom
    Description = ""
    BkgdImg = ""
    Size = 125
+   BkgdImgFile = ""
 
 [Picture5]
    ID = pic.EastRoom
    Description = ""
    BkgdImg = ""
    Size = 169
+   BkgdImgFile = ""
 
 [::END Pictures::]
 
@@ -420,3 +455,12 @@
    Description = "it's handy to keep cels and loops that are added to a room's picture in one view"
    Size = 168
 [::END Views::]
+
+[ResDefOverrides]
+   Count = 0
+
+[Includes]
+   IncludeReserved = True
+   IncludeIDs = True
+   IncludeGlobals = True
+   FileList = resourceids.txt,reserved.txt,globals.txt,powerpack.txt

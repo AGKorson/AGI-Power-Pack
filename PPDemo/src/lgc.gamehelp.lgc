@@ -10,6 +10,9 @@
 [ text of that topic's details will be displayed in the details panel.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -56,7 +59,7 @@ if (initHelp) {
   lastChar = 0;
   
   [ draw the main grid
-  display(0, 0, "ษออออออออออออออออออหออออออออออออออออPower Pack Demo Helpอออออออออออออออออออออออป");
+  display(0, 0, "โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฆโ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•Power Pack Demo Helpโ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—");
   work1 = 1;
   work3 = &m1;
   :drawedge
@@ -87,7 +90,7 @@ if (initHelp) {
   display(20, 4, "Tool Bar");
   display(21, 4, "Viewing Items");
   display(22, 4, "Using Items");
-  display(24, 0, "ศออออออออออออออออออสอออออออออออออออArrow Up/Down to Scroll Topicsออออออออออออออผ");
+  display(24, 0, "โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฉโ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•Arrow Up/Down to Scroll Topicsโ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•");
  
   [ initial topic is 'About PPDemo'
   selectedTopic = 1;
@@ -242,4 +245,4 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "บ"
+#message 1 "โ•‘"

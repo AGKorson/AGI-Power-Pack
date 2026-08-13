@@ -6,6 +6,9 @@
 [ error, log it to LOGFILE and then quit AGI.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

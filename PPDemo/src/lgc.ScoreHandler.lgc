@@ -7,6 +7,9 @@
 [ currentScore is treated as positive or negative.
 [ 
 [ Maximum positive value is 250 and maximum negative value is -250.
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ When adjusting scores, maximum increase/decrease must be no more 
 [ than +/-5 (otherwise the adjustment may interfere with the 

@@ -5,6 +5,9 @@
 [ An example room with several exits.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"
@@ -172,8 +175,8 @@ if (ppTesting) {
       display(23, 29, "   R-CLICK");
       msgTimer = 1;
       [ cancel ptc movement
-      egodir = 0;
-      set.dir(ego, egodir); [ cancel.click2move 
+      egoDir = 0;
+      set.dir(ego, egoDir); [ cancel.click2move 
     }
     if (controller(cLeftDblClick)) {
       display(23, 29, "L-DB-CLICK");

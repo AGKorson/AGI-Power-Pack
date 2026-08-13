@@ -33,6 +33,9 @@
 [ STRING2 - STRING6: custom FM instruments
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

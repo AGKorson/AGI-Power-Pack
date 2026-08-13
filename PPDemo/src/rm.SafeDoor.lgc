@@ -10,6 +10,9 @@
 [ swaps them in and out of memory as needed.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

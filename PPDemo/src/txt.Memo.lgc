@@ -8,6 +8,9 @@
 [ click advances to second half/closes the display.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -26,7 +29,7 @@ configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
 set.text.attribute(PUSH.ATTRIBUTES, 0); [ push.attributes()
 set.text.attribute(BLACK, WHITE);
 clear.text.rect(1, 4, 24, 75, WHITE);
-display(1, 5, "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿");
+display(1, 5, "â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”");
 display(5, 13, "To:   All Agi Mainframe OS Users");
 display(6, 13, "Subj: Password Management");
 display(8, 13, "1. As you know, the AMOS project has been developed ");
@@ -92,8 +95,8 @@ display(13, 13, "all of us complying with the policies we have put in ");
 display(14, 13, "place to protect our work.");
 display(16, 13, "5. If you have any questions, please call one of the ");
 display(17, 13, "AMOS System Administrators.");
-display(23, 5, "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
-        "ÄÄÄÄÄÙ");
+display(23, 5, "â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€"
+        "â”€â”€â”€â”€â”€â”˜");
 
 [ wait for any key (including ESC) or any mouse click
 lastChar = 0;
@@ -118,4 +121,4 @@ return();
 [***************************************
 [ DECLARED MESSAGES
 [***************************************
-#message 1 "³"
+#message 1 "â”‚"

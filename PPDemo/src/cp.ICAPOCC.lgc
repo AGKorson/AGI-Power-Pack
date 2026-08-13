@@ -16,6 +16,9 @@
 [ Reset to restore all colors to default.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -364,7 +367,7 @@ if ((newRoom || refresh)) {
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
   
   [ if first time through
-  if (newroom) {
+  if (newRoom) {
     [ fade in
     block(FADE.IN, BYNUM, FADECOUNT, BLACK); [ fade.in(FN_MODE, DELAY, COLOR)
   } else {

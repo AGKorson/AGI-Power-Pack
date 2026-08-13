@@ -25,6 +25,9 @@
 [ loaded.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -67,7 +70,7 @@ if (currentRoom == 0) {
     }
           
     [ run the powerpack mod BEFORE DOING ANYTHING ELSE
-    call(lgc.Version2Check);
+    call(100);
     if (!IntVersion) {
       print("Invalid AGI version. Power Pack Demo requires a valid "
             "MSDOS interpreter running on a PC, or in DOSBox. "
@@ -75,59 +78,59 @@ if (currentRoom == 0) {
       quit(1);
     }
     if (IntVersion == VERSION_2089) {
-      call(lgc.mod2089);
+      call(101);
       goto(continue);
     }
     if (IntVersion == VERSION_2272) {
-      call(lgc.mod2272);
+      call(102);
       goto(continue);
     }
     if (IntVersion == VERSION_2411) {
-      call(lgc.mod2411);
+      call(103);
       goto(continue);
     }
     if (IntVersion == VERSION_2425) {
-      call(lgc.mod2425);
+      call(104);
       goto(continue);
     }
     if (IntVersion == VERSION_2426) {
-      call(lgc.mod2426);
+      call(105);
       goto(continue);
     }
     if (IntVersion == VERSION_2435) {
-      call(lgc.mod2435);
+      call(106);
       goto(continue);
     }
     if (IntVersion == VERSION_2439) {
-      call(lgc.mod2439);
+      call(107);
       goto(continue);
     }
     if (IntVersion == VERSION_2440) {
-      call(lgc.mod2440);
+      call(108);
       goto(continue);
     }
     if (IntVersion == VERSION_2903) {
-      call(lgc.mod2903);
+      call(109);
       goto(continue);
     }
     if (IntVersion == VERSION_2911) {
-      call(lgc.mod2911);
+      call(110);
       goto(continue);
     }
     if (IntVersion == VERSION_2912) {
-      call(lgc.mod2912);
+      call(111);
       goto(continue);
     }
     if (IntVersion == VERSION_2915) {
-      call(lgc.mod2915);
+      call(112);
       goto(continue);
     }
     if (IntVersion == VERSION_2917) {
-      call(lgc.mod2917);
+      call(113);
       goto(continue);
     }
     if (IntVersion == VERSION_2936) {
-      call(lgc.mod2936);
+      call(114);
       goto(continue);
     }
   
@@ -235,12 +238,12 @@ if (currentRoom == 0) {
       [ next build the game menu (again, before doing anything
       [ else to keep room.0 memory block as small as possible)
       set.menu("AGI");
-      set.menu.item("About€     ", cAbout);
+      set.menu.item("AboutÃ‡     ", cAbout);
       set.menu.item("Help   <F1>", cHelp);
       set.menu("File");
       set.menu.item("Save     <F5>", cSave);
       set.menu.item("Restore  <F7>", cRestore);
-      set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
+      set.menu.item("â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€", cDummy);
       set.menu.item("Restart  <F9>", cRestart);
       set.menu.item("Quit  <Alt-Z>", cQuit);
       set.menu("Action");
@@ -369,7 +372,7 @@ if (changeMenu) {
 #message 42 "Pause            <Esc>"
 #message 43 "Speed"
 #message 44 "TEST"
-#message 45 "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+#message 45 "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€"
 #message 46 "Halt             <Esc>"
 #message 47 ""
 

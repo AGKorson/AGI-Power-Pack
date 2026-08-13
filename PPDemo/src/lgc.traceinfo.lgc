@@ -6,6 +6,9 @@
 [ function.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [***************************************
 [ LOCAL DEFINES

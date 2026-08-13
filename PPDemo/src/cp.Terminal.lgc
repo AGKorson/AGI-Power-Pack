@@ -25,6 +25,9 @@
 [   REBOOT     REN        RENAME     SUDO
 [   TYPE       VER        VOL
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -99,12 +102,12 @@ if (resetMOCC) {
   display(12, 13, m28); [ "  (c) 1986 Sierra Online, Inc."
 } else {
   display(5, 15, m15);  [ "  *    *   *   **\x08    ****"
-  display(6, 15, m16);  [ " * *  ú** **  *   *  *"
-  display(7, 15, m17);  [ "*****  * * *  *   Ó   ***"
-  display(8, 15, m18);  [ "ÅÑ  *  *   *  *   *      *"
-  display(9, 15, m19);  [ "*   *  *  #*   ***   **±*"
+  display(6, 15, m16);  [ " * *  ¬£** **  *   *  *"
+  display(7, 15, m17);  [ "*****  * * *  *   Œµ   ***"
+  display(8, 15, m18);  [ "√º√§  *  *   *  *   *      *"
+  display(9, 15, m19);  [ "*   *  *  #*   ***   **‚ñí*"
   display(11, 11, m20); [ "AGI Mainframe Operating S?stem v1.0"
-  display(12, 13, m21); [ "  (c) 1´86 Sierra Online, Inc."
+  display(12, 13, m21); [ "  (c) 1¬Ω86 Sierra Online, Inc."
 }
 
 [ if a major holiday, add it
@@ -401,7 +404,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     [ userid entered; get password
     block(STR.COPY, &input, &userid, 0); [ str.copy(sINPUT, sRESULT)
     inputmode = IM_PASSWORD;
-    PWfunction = PW_LOGON;
+    PWFunction = PW_LOGON;
     output = "password: ";
     terminalfn = ADDLINE;
     call(lgc.TerminalFunctions);
@@ -412,7 +415,7 @@ if ((lastChar == 13 || lastChar == 10)) {
   
   [ process password
   if (inputmode == IM_PASSWORD) {
-    if (PWfunction == PW_LOGON) {
+    if (PWFunction == PW_LOGON) {
       [ assume not valid
       reset(loggedon);
       [ validate userid/password
@@ -475,7 +478,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     set.string(SET.CMPMODE, COMPARE_BINARY); [ set.cmpmode(MODE)
     
     [ changing password
-    if (PWfunction == PW_CHANGE) {
+    if (PWFunction == PW_CHANGE) {
       [ can't be same as default
       if (compare.strings(input, kwpassword)) {
         output = "invalid: password cannot match default";
@@ -566,7 +569,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     }
     
     [ check for sudo
-    if (PWfunction == PW_SUDO) {
+    if (PWFunction == PW_SUDO) {
       [ never valid
       output = "invalid password";
       terminalfn = ADDLINE_LF;
@@ -577,7 +580,7 @@ if ((lastChar == 13 || lastChar == 10)) {
     
     [ check for loading subsystem
     reset(validPW);
-    if (PWfunction == PW_BADASS) {
+    if (PWFunction == PW_BADASS) {
       sCmd = "W7tg49@qd";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -589,7 +592,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    if (PWfunction == PW_CAISOCC) {
+    if (PWFunction == PW_CAISOCC) {
       sCmd = "G#Am7Dsus";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -601,7 +604,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    if (PWfunction == PW_ERIDOCC) {
+    if (PWFunction == PW_ERIDOCC) {
       sCmd = "ERID081489.a";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -613,7 +616,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    if (PWfunction == PW_ESADOCC) {
+    if (PWFunction == PW_ESADOCC) {
       sCmd = "Snd4chan$";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -625,7 +628,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    if (PWfunction == PW_ICAPOCC) {
+    if (PWFunction == PW_ICAPOCC) {
       sCmd = "Drac@1897";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -637,7 +640,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    if (PWfunction == PW_OFROCC) {
+    if (PWFunction == PW_OFROCC) {
       sCmd = "PqII:10-36";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -649,7 +652,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         set(validPW);
       }
     }
-    if (PWfunction == PW_RANDOCC) {
+    if (PWFunction == PW_RANDOCC) {
       sCmd = "GrGt5!VI";
       if (compare.strings(input, sCmd)) {
         [ ok
@@ -839,49 +842,49 @@ if ((lastChar == 13 || lastChar == 10)) {
         sTemp2 = "badass";
         if (compare.strings(sCmd, sTemp2)) {
           [get BaDASS password
-          PWfunction = PW_BADASS;
+          PWFunction = PW_BADASS;
           set(validmodule);
           goto(checkmodule2);
         }
         sTemp2 = "caisocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get CAISOCC password
-          PWfunction = PW_CAISOCC;
+          PWFunction = PW_CAISOCC;
           set(validmodule);
           goto(checkmodule2);
         }
         sTemp2 = "eridocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get ERIDOCC password
-          PWfunction = PW_ERIDOCC;
+          PWFunction = PW_ERIDOCC;
           set(validmodule);
           goto(checkmodule2);
         }
         sTemp2 = "esadocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get ESADOCC password
-          PWfunction = PW_ESADOCC;
+          PWFunction = PW_ESADOCC;
           set(validmodule);
           goto(checkmodule2);
         }
         sTemp2 = "icapocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get ICAPOCC password
-          PWfunction = PW_ICAPOCC;
+          PWFunction = PW_ICAPOCC;
           set(validmodule);
           goto(checkmodule2);
         }
         sTemp2 = "ofrocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get OFROCC password
-          PWfunction = PW_OFROCC;
+          PWFunction = PW_OFROCC;
           set(validmodule);
           goto(checkmodule2);
         }
         sTemp2 = "randocc";
         if (compare.strings(sCmd, sTemp2)) {
           [get RANDOCC password
-          PWfunction = PW_RANDOCC;
+          PWFunction = PW_RANDOCC;
           set(validmodule);
         }
         
@@ -1861,16 +1864,16 @@ if ((lastChar == 13 || lastChar == 10)) {
         if (work1 == 0) {
           output = "no command specified";
           terminalfn = ADDLINE_LF;
-          call(lgc.Terminalfunctions);
+          call(lgc.TerminalFunctions);
           goto(getInput);
         } else {
           [ get an admin password 
           [ (which will never work)
           inputmode = IM_PASSWORD;
-          PWfunction = PW_SUDO;
+          PWFunction = PW_SUDO;
           output = "admin password: ";
           terminalfn = ADDLINE;
-          call(lgc.Terminalfunctions);
+          call(lgc.TerminalFunctions);
           [ get more input (no prompt)
           input = "";
           goto(getKey);
@@ -1889,7 +1892,7 @@ if ((lastChar == 13 || lastChar == 10)) {
         if (compare.strings(input, sTemp2)) {
           output = "no file specified";
           terminalfn = ADDLINE_LF;
-          call(lgc.Terminalfunctions);
+          call(lgc.TerminalFunctions);
           goto(getInput);
         }
         [ PWRPACK.TXT in c:\users\kw002 or (a: if copied)
@@ -1940,11 +1943,11 @@ if ((lastChar == 13 || lastChar == 10)) {
         if (tmpFlag) {
           reset(tmpFlag);
           terminalfn = TYPE_PP;
-          call(lgc.Terminalfunctions);
+          call(lgc.TerminalFunctions);
         } else {
           output = "file not found or invalid file format";
           terminalfn = ADDLINE_LF;
-          call(lgc.Terminalfunctions);
+          call(lgc.TerminalFunctions);
         }
         goto(getInput);
       }
@@ -1959,33 +1962,33 @@ if ((lastChar == 13 || lastChar == 10)) {
       if (compare.strings(sTemp2, sCmd)) {
         output = "AGI Mainframe Operating System v2.3";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "Build 244, 08/06/89";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         terminalfn = LINEFEED;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "Power Pack module versions:";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "  CAISOCC    1.22a";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "  ERIDOCC    1.04";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "  ESADOCC    2.22";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "  ICAPOCC    1.10";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "  OFROCC     1.01";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         output = "  RANDOCC    2.00";
         terminalfn = ADDLINE_LF;
-        call(lgc.Terminalfunctions);
+        call(lgc.TerminalFunctions);
         goto(getInput);
       }
       
@@ -2146,12 +2149,12 @@ return();
 #message 13 "randocc"
 #message 14 "\\\\"
 #message 15 "  *    *   *   **\x08    ****"
-#message 16 " * *  ú** **  *   *  *"
-#message 17 "*****  * * *  *   Ó   ***"
-#message 18 "ÅÑ  *  *   *  *   *      *"
-#message 19 "*   *  *  #*   ***   **±*"
+#message 16 " * *  ¬£** **  *   *  *"
+#message 17 "*****  * * *  *   Œµ   ***"
+#message 18 "√º√§  *  *   *  *   *      *"
+#message 19 "*   *  *  #*   ***   **‚ñí*"
 #message 20 "AGI Mainframe Operating S?stem v2.3"
-#message 21 "  (c) 1´86 Sierra Online, Inc."
+#message 21 "  (c) 1¬Ω86 Sierra Online, Inc."
 
 #message 22 "  *    *   *   ***    ****"
 #message 23 " * *   ** **  *   *  *"

@@ -9,6 +9,9 @@
 [ be restored after a game is restarted.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -46,11 +49,11 @@ if (soundOn) {
 } else {
   work1 = 0;
 }
-if (musicmode == PC_SOUND) {
+if (musicMode == PC_SOUND) {
   work2 = 0;
   work3 = 0;
 } else {
-  if (musicmode == FM_SOUND) {
+  if (musicMode == FM_SOUND) {
     work2 = 1;
     work3 = 0;
   } else {

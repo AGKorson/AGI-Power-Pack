@@ -9,6 +9,9 @@
 [ page.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -178,7 +181,7 @@ if (mouseBtn == 1) {
         set.text.attribute(LT_BLUE, WHITE);
         display( 3,  9, "President's");
         display( 4,  9, "Corner");
-        display( 5,  9, "อออออออออออ   ");
+        display( 5,  9, "โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•   ");
         set.text.attribute(BLACK, WHITE);
         display( 6,  9, "When Roberta");
         display( 7,  9, "and I started");

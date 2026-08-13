@@ -15,6 +15,9 @@
 [ ego climbs in the coffin, lid slams shut and he dies there.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

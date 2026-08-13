@@ -25,6 +25,9 @@
 [ loaded.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"
@@ -186,12 +189,12 @@ if (currentRoom == 0) {
     [ next build the game menu (again, before doing anything
     [ else to keep room.0 memory block as small as possible)
     set.menu("AGI");
-    set.menu.item("About€     ", cAbout);
+    set.menu.item("AboutÃ‡     ", cAbout);
     set.menu.item("Help   <F1>", cHelp);
     set.menu("File");
     set.menu.item("Save     <F5>", cSave);
     set.menu.item("Restore  <F7>", cRestore);
-    set.menu.item("ÄÄÄÄÄÄÄÄÄÄÄÄÄ", cDummy);
+    set.menu.item("â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€", cDummy);
     set.menu.item("Restart  <F9>", cRestart);
     set.menu.item("Quit  <Alt-Z>", cQuit);
     set.menu("Action");
@@ -308,7 +311,7 @@ if (changeMenu) {
 #message 42 "Pause            <Esc>"
 #message 43 "Speed"
 #message 44 "TEST"
-#message 45 "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+#message 45 "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€"
 #message 46 "Halt             <Esc>"
 #message 47 ""
 

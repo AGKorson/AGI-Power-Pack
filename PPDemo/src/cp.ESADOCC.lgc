@@ -18,6 +18,9 @@
 [ will sound like (it plays the theme from King's Quest I).
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -583,7 +586,7 @@ if (dropmode == DROPDOWN) {
   [ needs to be redrawn because cursor covered its 
   [ top line of pixels
   if (cursormode) {
-    set(redrawlist);
+    set(redrawList);
   }
   
   set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
@@ -1430,7 +1433,7 @@ if (cursormode) {
   }
   
   [ check for dblclick (only if in 4channel mode)
-  if (controller(cLeftDblClick) && 4channelSound) {
+  if (controller(cLeftDblClick) && 4channelsound) {
     [ instrument 0 [75, 39, - 152, 48]
     if (mouseX > 74 && mouseX < 153 && mouseY > 38 && mouseY < 49) {
       dropmode = DROPDOWN;

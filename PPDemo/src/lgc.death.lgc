@@ -23,6 +23,9 @@
 [ 255: winning sequence complete
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -48,8 +51,8 @@ if (deathType < DT_SEQ_DONE) {
   program.control();
   
   [ freeze game clock (re-use s5 (volumelabel)
-  s5 = "%v13|2:%v12|2:%v11|2 ";
-  block(STR.FORMAT, &s5, &s5, 0); [ str.format(sINPUT, sRESULT)
+  floppylabel = "%v13|2:%v12|2:%v11|2 ";
+  block(STR.FORMAT, &floppylabel, &floppylabel, 0); [ str.format(sINPUT, sRESULT)
   
   [ change save button to restart
   set(noScript);
@@ -166,7 +169,7 @@ if (deathTimer == 1) {
       ++work1;
     }
     [ if player has floppy with source code, it's a win
-    if (has(floppydisk) && (floppyfiles == 2 || floppyfiles == 3)) {
+    if (has(floppyDisk) && (floppyfiles == 2 || floppyfiles == 3)) {
       stop.sound();
       load.sound(m.Winner);
       set(4channelsound);

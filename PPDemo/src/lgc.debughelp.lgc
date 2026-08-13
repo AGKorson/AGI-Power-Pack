@@ -6,6 +6,9 @@
 [ when debug mode is active.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -43,29 +46,29 @@ configure.screen(SCREEN.MODE, TEXTMODE, 80COL); [ screen.mode(MODE, WIDTH)
 lastChar = 0;
 
 display(1, 31, "DEBUG MODE HELP");
-display(2, 0, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-display(3, 39, "³");
-display(4, 39, "³");
-display(5, 39, "³");
-display(6, 39, "³");
-display(7, 39, "³");
-display(8, 39, "³");
-display(9, 39, "³");
-display(10, 39, "³");
-display(11, 39, "³");
-display(12, 39, "³");
-display(13, 39, "³");
-display(14, 39, "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-display(15, 39, "³");
+display(2, 0, "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€");
+display(3, 39, "â”‚");
+display(4, 39, "â”‚");
+display(5, 39, "â”‚");
+display(6, 39, "â”‚");
+display(7, 39, "â”‚");
+display(8, 39, "â”‚");
+display(9, 39, "â”‚");
+display(10, 39, "â”‚");
+display(11, 39, "â”‚");
+display(12, 39, "â”‚");
+display(13, 39, "â”‚");
+display(14, 39, "â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€");
+display(15, 39, "â”‚");
 display(15, 54, "MENU ITEMS");
-display(16, 39, "³");
-display(17, 39, "³");
-display(18, 39, "³");
-display(19, 39, "³");
-display(20, 39, "³");
-display(21, 39, "³");
-display(22, 39, "³");
-display(23, 39, "³");
+display(16, 39, "â”‚");
+display(17, 39, "â”‚");
+display(18, 39, "â”‚");
+display(19, 39, "â”‚");
+display(20, 39, "â”‚");
+display(21, 39, "â”‚");
+display(22, 39, "â”‚");
+display(23, 39, "â”‚");
 
 set.text.attribute(MAGENTA, LT_GRAY);
 display( 3, 0, "game version");

@@ -11,6 +11,9 @@
 [ the first time.
 [ 
 [ ********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -40,6 +43,35 @@ if (gameRestarted) {
   block(STR2BYTE, &s18, &MIDIInst1, 0); [ str2byte(sINPUT, vRESULT)
   block(STR2BYTE, &s19, &MIDIInst2, 0); [ str2byte(sINPUT, vRESULT)
 
+  [ s23 holds skipIntro (0 , 1)
+  block(STR2BYTE, &s23, &work1, 0); [ str2byte(sINPUT, vRESULT)
+  if (work1 == 0) {
+    reset(skipIntro);
+  }
+  else {
+    set(skipIntro);
+  }
+  
+  [ s22 holds clock (00, 01, 10, 11)
+  block(STR2BYTE, &s22, &work1, 0); [ str2byte(sINPUT, vRESULT)
+  if (work1 > 9) {
+    [ enable clock
+    set(clockOn);
+    work1 -= 10;
+    enable.item(cRealClock);
+    enable.item(cGameClock);
+  } else {
+    disable.item(cRealClock);
+    disable.item(cGameClock);
+  }
+  if (work1) {
+    [ enable real time
+    set(realClock);
+  }
+  
+  [ s21 holds speed
+  block(STR2BYTE, &s21, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
+
   [ s20 is set to hold sound settings
   [ pull attenuation off the end
   work1 = 2;
@@ -65,45 +97,17 @@ if (gameRestarted) {
     disable.item(cSoundMIDI);
   }
   if (work1 == 0) {
-    musicmode = PC_SOUND;
+    musicMode = PC_SOUND;
   } else {
     set(4channelsound);
     if (work1 == 10) {
-      musicmode = FM_SOUND;
+      musicMode = FM_SOUND;
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     } else {
-      musicmode = MIDI_SOUND;
+      musicMode = MIDI_SOUND;
       set(useMIDI);
       set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     }
-  }
-  
-  [ s21 holds speed
-  block(STR2BYTE, &s21, &animationInterval, 0); [ str2byte(sINPUT, vRESULT)
-  
-  [ s22 holds clock 
-  block(STR2BYTE, &s22, &work1, 0); [ str2byte(sINPUT, vRESULT)
-  if (work1 > 9) {
-    [ enable clock
-    set(clockOn);
-    work1 -= 10;
-    enable.item(cRealClock);
-    enable.item(cGameClock);
-  } else {
-    disable.item(cRealClock);
-    disable.item(cGameClock);
-  }
-  if (work1) {
-    [ enable real time
-    set(realClock);
-  }
-
-  [ s23 holds skipIntro
-  s22 = "0";
-  if (compare.strings(s22, s23)) {
-    reset(skipIntro);
-  } else {
-    set(skipIntro);
   }
 } else {
   [ for initial game start or restore, extract from file
@@ -143,7 +147,7 @@ if (gameRestarted) {
     if (work1 > 111) {
       [ invalid; use defaults
       set(soundOn);
-      musicmode = FM_SOUND;
+      musicMode = FM_SOUND;
       set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
     } else {
       if (work1 > 99) {
@@ -153,15 +157,15 @@ if (gameRestarted) {
         reset(soundOn);
       }
       if (work1 == 0) {
-        musicmode = PC_SOUND;
+        musicMode = PC_SOUND;
       } else {
         set(4channelsound);
         if (work1 == 11) {
-          musicmode = MIDI_SOUND;
+          musicMode = MIDI_SOUND;
           set(useMIDI);
           set.key(MIDI_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         } else {
-          musicmode = FM_SOUND;
+          musicMode = FM_SOUND;
           set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
         }
       }
@@ -323,7 +327,7 @@ if (gameRestarted) {
     set(4channelsound);
     reset(useMIDI);
     set.key(FM_MODE, 0, SET.SNDMODE); [ set.sndmode(MODE)
-    musicmode = FM_SOUND;
+    musicMode = FM_SOUND;
     work1 = 0;
     work2 = 0;
     set.key(&work1, &work2, SET.INST); [ set.inst(vCHANNEL, vINSTRUMENT)

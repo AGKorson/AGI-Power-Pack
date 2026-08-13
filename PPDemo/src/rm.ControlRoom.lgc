@@ -26,6 +26,9 @@
 [ a floppy disk in order to 'win'. 
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -193,7 +196,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("close", "door")) {
     if (posn(ego, 67, 153, 88, 166)) {
-      if (resetBadASS) {
+      if (resetBaDASS) {
         print("There is no need to close the door. It will close automatically "
               "when you leave.");
       } else {
@@ -205,7 +208,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("unlock", "door")) {
     if (posn(ego, 67, 153, 88, 166)) {
-      if (resetBadASS) {
+      if (resetBaDASS) {
         print("The door is open, so there is no need to unlock it.");
       } else {
         print("The lock is controlled by the electronic access control "
@@ -218,7 +221,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   if ((said("break", "down", "door") || said("break", "door", "down") || 
        said("smash", "door") || said("hit", "door"))) {
     if (posn(ego, 67, 153, 88, 166)) {
-      if (resetBadASS) {
+      if (resetBaDASS) {
         print("The door is open. Why bother trying to break it down?");
       } else {
         print("the massive door is much too strong for you to cause any "
@@ -230,7 +233,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
   }
   if (said("kick", "door")) {
     if (posn(ego, 67, 153, 88, 166)) {
-      if (resetBadASS) {
+      if (resetBaDASS) {
         print("The door is open. Why bother kicking it?");
       } else {
         print("You'll break your foot before doing any damage to this "
@@ -269,12 +272,12 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
        said("put", "disk", "in", "console") || 
        said("put", "disk", "in", "drive") || said("insert", "disk") || 
        said("insert", "disk", "drive"))) {
-    if (has(floppydisk)) {
+    if (has(floppyDisk)) {
       if (nearTerminal) {
         print("You insert the disk and flip the latch to secure it.");
         set(floppyInserted);
         work1 = cp.Terminal;
-        put(floppydisk, work1);
+        put(floppyDisk, work1);
         [ first time awards bonus points
         if (scoreFloppy) {
           [ temporarily lose four points for dropping the floppy
@@ -293,7 +296,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
     }
   }
   if (said("use", "disk")) {
-    if (has(floppydisk)) {
+    if (has(floppyDisk)) {
       print("What do you want to do with it?");
     } else {
       print("You don't have it.");
@@ -322,7 +325,7 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
        said("remove", "disk", "drive")
        )) {
     work1 = cp.Terminal;
-    if (obj.in.room(floppydisk, work1)) {
+    if (obj.in.room(floppyDisk, work1)) {
       if (nearTerminal) {
         [ play sound if walkman not active
         if (!playWalkman) {
@@ -331,14 +334,14 @@ if (haveInput && !haveMatch && unknownWordNum == 0) {
         }
         print("Ok.");
         reset(floppyInserted);
-        get(floppydisk);
+        get(floppyDisk);
         work1 = 4;
         call(lgc.ScoreHandler);
       } else {
         print("Move closer.");
       }
     } else {
-      if (has(floppydisk)) {
+      if (has(floppyDisk)) {
         print("You already have the disk.");
       } else {
         print("What disk?");
@@ -718,7 +721,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
     if (mouseX > 82 && mouseX < 104 && mouseY > 82 && mouseY < 105) {
       if (obj.in.box(ego, 64, 133, 104, 138)) {
         work1 = cp.Terminal;
-        if (obj.in.room(floppydisk, work1)) {
+        if (obj.in.room(floppyDisk, work1)) {
           [ play sound if walkman not active
           if (!playWalkman) {
             call(lgc.SetSound);
@@ -726,7 +729,7 @@ if (cursoricon > C_WALK && cursoricon < C_WAIT &&
           }
           print("You undo the door latch and remove the disk.");
           reset(floppyInserted);
-          get(floppydisk);
+          get(floppyDisk);
           work1 = 4;
           call(lgc.ScoreHandler);
         } else {

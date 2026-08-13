@@ -9,6 +9,9 @@
 [ lights along the stairway. One of them flickers every few seconds.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

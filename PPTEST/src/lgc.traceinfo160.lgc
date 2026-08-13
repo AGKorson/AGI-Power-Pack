@@ -1,6 +1,6 @@
 [*********************************************************************
 [
-[ lgc.traceinfo160
+[ lgc.TraceInfo160
 [
 [ This logic includes the text of agi commands so the trace window
 [ will display the command text instead of just numbers. For versions
@@ -8,6 +8,9 @@
 [ 220
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [***************************************
 [ LOCAL DEFINES

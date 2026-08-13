@@ -7,6 +7,9 @@
 [ password to the RANDOCC module is hidden in the scroll.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

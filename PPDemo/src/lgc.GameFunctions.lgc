@@ -9,6 +9,9 @@
 [ disableGameFunctions is set.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -463,7 +466,7 @@ if (haveInput && !haveMatch) {
   }
   [ look floppy disk
   if (said("look", "floppy disk")) {
-    if (has(floppydisk)) {
+    if (has(floppyDisk)) {
       work1 = 2;
     } else {
       if (floppyInserted) {
@@ -621,7 +624,7 @@ if (haveInput && !haveMatch) {
   }
   [ floppy disk
   if (said("use", "disk")) {
-    if (has(floppydisk)) {
+    if (has(floppyDisk)) {
       [ if in control room, it's handled there
       print("There's nothing you can do with the floppy disk here.");
     } else {
@@ -633,7 +636,7 @@ if (haveInput && !haveMatch) {
     }
   }
   if (said("read", "disk")) {
-    if (has(floppydisk)) {
+    if (has(floppyDisk)) {
       print("The tiny ones and zeros on the drive are much too small for you to read.");
     } else {
       if (floppyInserted) {

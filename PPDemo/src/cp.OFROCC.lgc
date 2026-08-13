@@ -11,6 +11,9 @@
 [ be controlled with/without the turbo option.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -722,7 +725,7 @@ if (btnAction == B_FASTEST) {
 set.text.attribute(0, POP.ATTRIBUTES); [ pop.attributes()
 
 [ always reset button action
-btnaction = 0;
+btnAction = 0;
 
 return();
 

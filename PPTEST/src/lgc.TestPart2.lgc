@@ -3,7 +3,10 @@
 [ lgc.TestPart2
 [ 
 [*********************************************************************
-
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
+ 
 [ power pack defines file
 #include "powerpack.txt"
 
@@ -280,14 +283,15 @@ if (teststep == 25) {
       load.logics(lgc.TraceInfo);
       trace.info(lgc.TraceInfo, 3, 15);
     } else {
-      load.logics(lgc.traceinfo160);
-      trace.info(lgc.traceinfo160, 3, 15);
+      load.logics(lgc.TraceInfo160);
+      trace.info(lgc.TraceInfo160, 3, 15);
     }
     [ set left/width (l >3, l+w <77)
     trace.info(0, 3, 34); [ trace.h.posn(LEFT, WIDTH) [
     set(enableTrace);
     print("Testing trace mode. Try the new interactive features "
           "(CTRL+V/F/O; ego direction keys/INS for input.");
+    print("CTRL+BKSPC to exit trace mode.");
     trace.on();
     [ confirm second trace.on() doesn't crash agi
     trace.on();
@@ -317,8 +321,8 @@ if (teststep == 26) {
       load.logics(lgc.TraceInfo);
       trace.info(lgc.TraceInfo, 3, 9);
     } else {
-      load.logics(lgc.traceinfo160);
-      trace.info(lgc.traceinfo160, 3, 9);
+      load.logics(lgc.TraceInfo160);
+      trace.info(lgc.TraceInfo160, 3, 9);
     }
     trace.on();
   }

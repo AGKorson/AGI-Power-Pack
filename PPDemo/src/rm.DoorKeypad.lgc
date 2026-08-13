@@ -6,6 +6,9 @@
 [ the control room. If player enters correct code, the door will open. 
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"

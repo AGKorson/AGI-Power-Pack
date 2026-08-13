@@ -19,6 +19,9 @@
 [ Score: xxx of yyy       AGI Power Pack Demo Game         hh:mm AM   |ssssssss| ]
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack support
 #include "powerpack.txt"
@@ -93,31 +96,31 @@ if (clockOn) {
 [ sound status
 if (soundOn) {
   set.text.attribute(RED, WHITE);
-  if (musicmode == PC_SOUND) {
+  if (musicMode == PC_SOUND) {
    s23 = "---------- ";
   } else {
     if (attenuation < 8) {
-      s23 = "ÆÍÍÍÍÍÍÍ\x0Eµ ";
+      s23 = "â•žâ•â•â•â•â•â•â•\x0Eâ•¡ ";
     } else {
       if (attenuation < 16) {
-        s23 = "ÆÍÍÍÍÍÍ\x0EÍµ ";
+        s23 = "â•žâ•â•â•â•â•â•\x0Eâ•â•¡ ";
       } else {
         if (attenuation < 24) {
-          s23 = "ÆÍÍÍÍÍ\x0EÍÍµ ";
+          s23 = "â•žâ•â•â•â•â•\x0Eâ•â•â•¡ ";
         } else {
           if (attenuation < 32) {
-            s23 = "ÆÍÍÍÍ\x0EÍÍÍµ ";
+            s23 = "â•žâ•â•â•â•\x0Eâ•â•â•â•¡ ";
           } else {
             if (attenuation < 40) {
-              s23 = "ÆÍÍÍ\x0EÍÍÍÍµ ";
+              s23 = "â•žâ•â•â•\x0Eâ•â•â•â•â•¡ ";
             } else {
               if (attenuation < 48) {
-                s23 = "ÆÍÍ\x0EÍÍÍÍÍµ ";
+                s23 = "â•žâ•â•\x0Eâ•â•â•â•â•â•¡ ";
               } else {
                 if (attenuation < 56) {
-                  s23 = "ÆÍ\x0EÍÍÍÍÍÍµ ";
+                  s23 = "â•žâ•\x0Eâ•â•â•â•â•â•â•¡ ";
                 } else {
-                  s23 = "Æ\x0EÍÍÍÍÍÍÍµ ";
+                  s23 = "â•ž\x0Eâ•â•â•â•â•â•â•â•¡ ";
                 }
               }
             }
@@ -128,7 +131,7 @@ if (soundOn) {
   }
 } else {
   set.text.attribute(LT_GRAY, WHITE);
-  s23 = "ÆÍÍÍÍÍÍÍÍµ ";
+  s23 = "â•žâ•â•â•â•â•â•â•â•â•¡ ";
 }
 display(0, 69, "%s23");
 

@@ -2,7 +2,7 @@
 [
 [ lgc.mod3002107
 [
-[ Power Pack v1.2 source code (for AGI version 3.002.107)
+[ Power Pack v1.3 source code (for AGI version 3.002.107)
 [
 [ These modifications are possible because AGI doesn't validate the string 
 [ number passed to set.string command, which means using values greater than 

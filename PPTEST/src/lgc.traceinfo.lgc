@@ -6,6 +6,9 @@
 [ will display the command text instead of just numbers.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [***************************************
 [ LOCAL DEFINES

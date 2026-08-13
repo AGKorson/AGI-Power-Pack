@@ -18,6 +18,9 @@
 [ this makes logic 0 easier to manage.
 [
 [*********************************************************************
+#include "resourceids.txt"
+#include "reserved.txt"
+#include "globals.txt"
 
 [ power pack defines file
 #include "powerpack.txt"
