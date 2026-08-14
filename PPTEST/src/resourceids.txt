@@ -1,10 +1,10 @@
-[ Resource ID Defines for PP2T
+[ Resource ID Defines for PP3T
 [
 [ WinAGI generated code required for IncludeResourceIDs support - 
 [ do not modify the contents of this file with the code editor.
 
 [ Logics
-#define lgc.Main             0
+#define lgc.Main3            0
 #define rm.Entrance          1
 #define rm.Outside           2
 #define rm.WestRoom          3
@@ -25,21 +25,12 @@
 #define lgc.TraceInfo160    97
 #define lgc.Error           98
 #define lgc.Debug           99
-#define lgc.Version2Check  100
-#define lgc.mod2089        101
-#define lgc.mod2272        102
-#define lgc.mod2411        103
-#define lgc.mod2425        104
-#define lgc.mod2426        105
-#define lgc.mod2435        106
-#define lgc.mod2439        107
-#define lgc.mod2440        108
-#define lgc.mod2903        109
-#define lgc.mod2911        110
-#define lgc.mod2912        111
-#define lgc.mod2915        112
-#define lgc.mod2917        113
-#define lgc.mod2936        114
+#define lgc.Version3Check  100
+#define lgc.mod3002086     101
+#define lgc.mod3002098     102
+#define lgc.mod3002102     103
+#define lgc.mod3002107     104
+#define lgc.mod3002149     105
 
 [ Pictures
 #define pic.Entrance         1
